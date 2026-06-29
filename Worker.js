@@ -12,20 +12,20 @@ export default {
 
     try {
       const requestData = await request.json();
-      
-      const testAstrologyData = {
-        status: "success",
-        message: "Test data received successfully!",
-        input_received: requestData,
-        analysis: {
-          sun_sign: "Leo",
-          moon_sign: "Scorpio",
-          rising_sign: "Sagittarius",
-          interpretation: "This is a free test response! Your frontend connection to GitHub works perfectly."
-        }
-      };
 
-      return new Response(JSON.stringify(testAstrologyData), {
+      // This talks to your astrology company
+      const apiResponse = await fetch("https://astrologyprovider.com", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${env.ASTROLOGY_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestData)
+      });
+
+      const data = await apiResponse.json();
+
+      return new Response(JSON.stringify(data), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
@@ -38,4 +38,5 @@ export default {
     }
   }
 };
+
 
