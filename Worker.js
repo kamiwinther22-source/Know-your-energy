@@ -2,30 +2,50 @@ export default {
   async fetch(request, env) {
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
     };
 
+    // Handle browser preflight checks
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders });
     }
 
     try {
-      const requestData = await request.json();
+      // 1. Get birth parameters from your frontend input fields
+      const { year, month, date, hours, minutes, latitude, longitude, timezone } = await request.json();
 
-      // This talks to your astrology company
-      const apiResponse = await fetch("https://astrologyprovider.com", {
+      // 2. Safely call Free Astrology API's native planets endpoint
+      const apiResponse = await fetch("https://json.freeastrologyapi.com/planets", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${env.ASTROLOGY_API_KEY}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "x-api-key": env.ASTROLOGY_API_KEY // Cloudflare injects your secret key here automatically
         },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify({
+          year: parseInt(year),
+          month: parseInt(month),
+          date: parseInt(date),
+          hours: parseInt(hours),
+          minutes: parseInt(minutes),
+          seconds: 0,
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+          timezone: parseFloat(timezone),
+          settings: {
+            observation_point: "topocentric",
+            ayanamsha: "lahiri"
+          }
+        })
       });
 
-      const data = await apiResponse.json();
+      const rawCalculations = await apiResponse.json();
 
-      return new Response(JSON.stringify(data), {
+      // 3. Clean and map data dynamically to return only pure planet and house lists
+      return new Response(JSON.stringify({
+        status: "success",
+        placements: rawCalculations
+      }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
