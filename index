@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Know Your Energy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --moon:#ddeeff;
+  --moon2:#e6f0ff;
+  --f:#ff33cc;
+  --k:#00ffba;
+  --ink:#07070f;
+  --txt:#0a0a1a;
+  --mid:#1a1a30;
+  --dim:#2a2a44;
+}
+body{background:var(--moon);color:var(--txt);font-family:'Playfair Display',serif;font-weight:700;min-height:100vh;font-size:12px;}
+.wrap{max-width:680px;margin:0 auto;padding:0 1rem 2.5rem;}
+
+/* HEADER */
+header{text-align:center;padding:1.1rem 1rem 0.8rem;}
+.brand{font-size:clamp(1.3rem,4vw,2rem);font-weight:800;font-style:italic;color:var(--f);line-height:1;letter-spacing:0.02em;}
+.rule{width:40px;height:2px;background:linear-gradient(90deg,var(--f),var(--k));margin:0.4rem auto;}
+.desc{font-size:0.7rem;color:var(--mid);line-height:1.5;max-width:320px;margin:0 auto;font-style:italic;font-weight:700;}
+.tagline-q{font-size:0.75rem;color:var(--f);font-style:italic;font-weight:800;line-height:1.45;margin:0.45rem auto 0.15rem;max-width:360px;}
+.tagline-s{font-size:0.68rem;color:var(--mid);font-style:italic;font-weight:700;line-height:1.45;max-width:360px;margin:0 auto;}
+
+/* SECTION LABEL */
+.slbl{font-size:0.6rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--f);display:block;margin-bottom:0.5rem;font-family:'DM Sans',sans-serif;font-weight:500;}
+
+/* PRICING — compact single lines */
+.price-list{margin-bottom:0.8rem;}
+.price-line{display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0.7rem;border-radius:4px;cursor:pointer;transition:background 0.15s;border:1px solid transparent;}
+.price-line:hover{background:rgba(255,51,204,0.04);}
+.price-line.selected{background:rgba(255,51,204,0.06);border-color:rgba(255,51,204,0.2);}
+.price-check{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,51,204,0.4);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.price-line.selected .price-check{background:var(--f);border-color:var(--f);box-shadow:0 0 8px rgba(255,51,204,0.4);}
+.price-check-dot{width:6px;height:6px;border-radius:50%;background:#fff;display:none;}
+.price-line.selected .price-check-dot{display:block;}
+.price-text{font-size:0.82rem;color:var(--mid);font-style:italic;font-weight:700;}
+.price-text strong{color:var(--f);}
+.price-free-note{font-size:0.68rem;color:var(--dim);font-style:italic;padding:0 0.7rem;margin-bottom:0.6rem;font-weight:700;}
+
+/* FORM — hidden until plan selected */
+#form-wrap{display:none;}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.75rem;}
+.tlbl{font-size:0.75rem;font-style:italic;font-weight:700;color:var(--dim);transition:color 0.18s;}
+.tlbl.active{color:var(--f);}
+.tog{position:relative;width:36px;height:19px;cursor:pointer;flex-shrink:0;}
+.tog input{opacity:0;width:0;height:0;position:absolute;}
+.tog-track{position:absolute;inset:0;background:rgba(255,51,204,0.12);border:1px solid rgba(255,51,204,0.3);border-radius:100px;transition:all 0.2s;}
+.tog input:checked~.tog-track{background:rgba(255,51,204,0.18);border-color:var(--f);}
+.tog-thumb{position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--f);transition:transform 0.2s;box-shadow:0 0 7px rgba(255,51,204,0.45);}
+.tog input:checked~.tog-track .tog-thumb{transform:translateX(17px);}
+
+/* REL PILLS */
+.rel-row{display:flex;flex-wrap:wrap;gap:0.3rem;justify-content:center;margin-bottom:0.75rem;}
+.rp{padding:0.22rem 0.6rem;border:1px solid rgba(255,51,204,0.22);border-radius:100px;background:transparent;color:var(--mid);font-family:'Playfair Display',serif;font-size:0.68rem;font-style:italic;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.rp.active{border-color:var(--f);color:var(--f);background:rgba(255,51,204,0.05);}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.65rem;}
+@media(max-width:460px){.cards{grid-template-columns:1fr;}}
+.card{background:var(--moon2);border:1px solid rgba(255,51,204,0.15);border-radius:5px;padding:0.8rem 0.75rem;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,51,204,0.4),transparent);}
+.cttl{font-size:0.82rem;font-style:italic;font-weight:800;color:var(--f);margin-bottom:0.6rem;padding-bottom:0.38rem;border-bottom:1px solid rgba(255,51,204,0.1);}
+
+/* FIELDS */
+.f{margin-bottom:0.42rem;}.f:last-child{margin-bottom:0;}
+.f3{display:grid;grid-template-columns:2fr 1fr 2fr;gap:0.32rem;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0.32rem;}
+.time-row{display:grid;grid-template-columns:1fr auto;gap:0.32rem;align-items:end;}
+label{display:block;font-family:'DM Sans',sans-serif;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:0.16rem;font-weight:500;}
+.opt{color:var(--f);font-size:0.46rem;letter-spacing:0.05em;text-transform:none;margin-left:0.15rem;opacity:0.75;}
+input,select{width:100%;background:var(--moon);border:1px solid rgba(255,51,204,0.18);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-size:0.8rem;font-weight:700;font-style:italic;padding:0.38rem 0.52rem;outline:none;transition:border-color 0.18s;-webkit-appearance:none;appearance:none;}
+input:focus,select:focus{border-color:var(--f);}
+input::placeholder{color:rgba(10,10,26,0.28);font-size:0.75rem;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23ff33cc'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.4rem center;padding-right:1.4rem;cursor:pointer;}
+.ampm-sel{width:auto;min-width:56px;}
+.tnote{font-family:'DM Sans',sans-serif;font-size:0.56rem;color:var(--dim);font-style:italic;margin-top:0.4rem;line-height:1.4;font-weight:400;}
+
+/* ERROR */
+.err{display:none;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#aa0066;margin-bottom:0.45rem;padding:0.38rem 0.55rem;background:rgba(255,51,204,0.06);border-radius:3px;border:1px solid rgba(255,51,204,0.16);font-weight:400;}
+
+/* GENERATE BUTTON */
+.gen-btn{width:100%;padding:0.72rem;background:var(--k);border:none;border-radius:4px;color:var(--ink);font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;font-weight:800;letter-spacing:0.06em;cursor:pointer;transition:all 0.22s;box-shadow:0 0 16px rgba(0,255,186,0.35);}
+.gen-btn:hover{box-shadow:0 0 28px rgba(0,255,186,0.55);background:#00e8a8;}
+.gen-btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* LOADING */
+.loading{display:none;text-align:center;padding:3rem 1rem;}
+.lr{width:40px;height:40px;position:relative;margin:0 auto 1rem;}
+.lr::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--f);animation:spin 1.4s linear infinite;box-shadow:0 0 10px rgba(255,51,204,0.35);}
+.lr::after{content:'';position:absolute;inset:7px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--k);animation:spin 2s linear infinite reverse;box-shadow:0 0 8px rgba(0,255,186,0.3);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ll{font-size:0.95rem;font-style:italic;font-weight:700;color:var(--mid);}
+
+/* READING */
+.rout{display:none;}
+.back-btn{background:none;border:none;color:var(--dim);font-family:'DM Sans',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;margin-bottom:1rem;padding:0;display:block;transition:color 0.18s;font-weight:500;}
+.back-btn:hover{color:var(--f);}
+.r-head{text-align:center;margin-bottom:1rem;}
+.r-rel{font-family:'DM Sans',sans-serif;font-size:0.55rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);margin-bottom:0.28rem;font-weight:500;}
+.r-names{font-size:clamp(1.3rem,4vw,2rem);font-weight:800;font-style:italic;color:var(--txt);}
+.r-names .amp{color:var(--f);margin:0 0.2rem;}
+.r-hl{font-size:0.85rem;font-style:italic;font-weight:700;color:var(--mid);line-height:1.6;max-width:420px;margin:0.45rem auto 0;}
+
+/* PANELS */
+.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.42rem;margin-bottom:0.42rem;}
+.pmid{margin-bottom:0.42rem;}
+.pbot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.42rem;}
+@media(max-width:460px){.ptop,.pbot{grid-template-columns:1fr;}}
+.dp{background:var(--moon2);border:1px solid rgba(255,51,204,0.13);border-radius:4px;overflow:hidden;cursor:pointer;transition:all 0.15s;}
+.dp:hover{border-color:var(--f);}
+.dp.p2{border-color:rgba(0,255,186,0.13);}
+.dp.p2:hover{border-color:var(--k);}
+.dph{padding:0.32rem 0.55rem;font-family:'DM Sans',sans-serif;font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--f);border-bottom:1px solid rgba(255,51,204,0.07);background:rgba(255,51,204,0.02);display:flex;justify-content:space-between;font-weight:500;}
+.dph.p2{color:var(--k);border-bottom-color:rgba(0,255,186,0.07);background:rgba(0,255,186,0.02);}
+.dpr{display:flex;justify-content:space-between;padding:0.22rem 0.55rem;border-bottom:1px solid rgba(255,51,204,0.04);font-size:0.67rem;}
+.dpr:last-child{border-bottom:none;}
+.dprl{font-family:'DM Sans',sans-serif;color:var(--dim);font-size:0.52rem;text-transform:uppercase;letter-spacing:0.04em;font-weight:500;}
+.dprv{color:var(--txt);font-style:italic;font-weight:700;}
+.dprv.pend{color:var(--f);font-style:italic;opacity:0.7;font-size:0.58rem;}
+
+/* REPORT PANEL */
+.rpan{background:var(--moon2);border:1px solid rgba(255,51,204,0.18);border-left:2px solid var(--f);border-radius:4px;cursor:pointer;overflow:hidden;transition:all 0.15s;box-shadow:0 0 10px rgba(255,51,204,0.05);}
+.rpan:hover{box-shadow:0 0 18px rgba(255,51,204,0.12);}
+.rpanh{padding:0.44rem 0.8rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,51,204,0.07);}
+.rpant{font-size:0.85rem;font-style:italic;font-weight:800;color:var(--f);}
+.rpanh-hint{font-family:'DM Sans',sans-serif;font-size:0.48rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--f);opacity:0.5;font-weight:500;}
+.rpanv{padding:0.52rem 0.8rem;font-size:0.72rem;font-style:italic;font-weight:700;line-height:1.6;color:var(--mid);max-height:50px;overflow:hidden;position:relative;}
+.rpanv::after{content:'';position:absolute;bottom:0;left:0;right:0;height:25px;background:linear-gradient(transparent,var(--moon2));}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(190,210,238,0.95);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
+.modal.open{display:block;}
+.mbox{background:var(--moon2);border:1px solid rgba(255,51,204,0.18);border-radius:6px;max-width:600px;margin:0 auto;overflow:hidden;}
+.mtop{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0.85rem;border-bottom:1px solid rgba(255,51,204,0.1);}
+.mttl{font-size:0.92rem;font-style:italic;font-weight:800;color:var(--f);}
+.mx{background:none;border:none;color:var(--dim);font-size:0.92rem;cursor:pointer;padding:0 0.25rem;}
+.mx:hover{color:var(--f);}
+.mbody{padding:0.85rem;font-size:0.78rem;line-height:1.78;color:var(--mid);font-style:italic;font-weight:700;}
+.mbody p{margin-bottom:0.75rem;}.mbody p:last-child{margin-bottom:0;}
+.mbody strong{color:var(--txt);}
+.rs{margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(255,51,204,0.07);}
+.rs:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.rsey{font-family:'DM Sans',sans-serif;font-size:0.5rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);margin-bottom:0.28rem;font-weight:500;}
+.rsttl{font-size:1.05rem;font-weight:800;font-style:italic;color:var(--txt);margin-bottom:0.45rem;line-height:1.2;}
+.rstag{display:inline-block;font-family:'DM Sans',sans-serif;font-size:0.48rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.1rem 0.42rem;border-radius:100px;margin-bottom:0.55rem;font-weight:500;}
+.ti{background:rgba(255,51,204,0.08);color:var(--f);border:1px solid rgba(255,51,204,0.2);}
+.tr{background:rgba(60,180,130,0.07);color:#1a7050;border:1px solid rgba(60,180,130,0.18);}
+.tc{background:rgba(180,80,60,0.07);color:#7a2010;border:1px solid rgba(180,80,60,0.16);}
+.tf{background:rgba(100,80,200,0.07);color:#4422aa;border:1px solid rgba(100,80,200,0.16);}
+.sig{background:var(--ink);border:1px solid rgba(255,51,204,0.25);border-left:2px solid var(--f);border-radius:4px;padding:0.8rem 0.95rem;margin-top:1rem;box-shadow:0 0 14px rgba(255,51,204,0.14);}
+.sigl{font-family:'DM Sans',sans-serif;font-size:0.48rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--f);opacity:0.7;margin-bottom:0.38rem;font-weight:500;}
+.sigt{font-size:0.9rem;font-style:italic;font-weight:700;color:#fff;line-height:1.55;}
+
+/* CONTACT FORM */
+.cff{margin-bottom:0.5rem;}
+.cfinput{width:100%;background:var(--moon);border:1px solid rgba(255,51,204,0.16);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-size:0.78rem;font-weight:700;font-style:italic;padding:0.38rem 0.52rem;outline:none;-webkit-appearance:none;}
+.cfinput:focus{border-color:var(--f);}
+.cfta{width:100%;background:var(--moon);border:1px solid rgba(255,51,204,0.16);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-size:0.78rem;font-weight:700;font-style:italic;padding:0.38rem 0.52rem;outline:none;resize:vertical;min-height:65px;}
+.cfta:focus{border-color:var(--f);}
+.sbtn{background:var(--k);border:none;border-radius:3px;color:var(--ink);font-family:'Playfair Display',serif;font-size:0.75rem;font-style:italic;font-weight:800;letter-spacing:0.05em;padding:0.42rem 1.1rem;cursor:pointer;box-shadow:0 0 10px rgba(0,255,186,0.3);transition:all 0.18s;}
+.sbtn:hover{box-shadow:0 0 18px rgba(0,255,186,0.5);}
+
+/* GRAD RULE */
+.gr{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,51,204,0.18),rgba(0,255,186,0.12),transparent);margin:1rem 0;}
+
+/* FOOTER */
+footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,51,204,0.07);margin-top:1.5rem;}
+.flinks{font-family:'DM Sans',sans-serif;font-size:0.56rem;letter-spacing:0.08em;color:var(--dim);font-weight:400;}
+.flinks a{color:var(--dim);text-decoration:none;cursor:pointer;transition:color 0.15s;}
+.flinks a:hover{color:var(--f);}
+.fprivacy{font-family:'DM Sans',sans-serif;font-size:0.54rem;color:var(--dim);line-height:1.5;max-width:360px;margin:0.3rem auto 0;font-weight:400;}
+</style>
+</head>
+<body>
+
+<div class="modal" id="modal">
+  <div class="mbox">
+    <div class="mtop"><div class="mttl" id="mttl"></div><button class="mx" onclick="closeMod()">✕</button></div>
+    <div class="mbody" id="mbody"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header>
+  <div class="brand">Know Your Energy</div>
+  <div class="rule"></div>
+  <div class="desc">Full Western Astrology, Human Design, and Numerology charts with a reading across all three — for individuals or any two people.</div>
+  <div class="tagline-q">"Why is this relationship so easy and talking to this person feels so hard?"</div>
+  <div class="tagline-s">A user manual when communicating with someone who has a different operating system.</div>
+</header>
+
+<!-- PRICING — compact, one line each, select before form appears -->
+<div id="pricing-wrap">
+  <span class="slbl">Select a plan to begin</span>
+  <div class="price-list">
+    <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>Free</strong> — one reading, no account required</div>
+    </div>
+    <div class="price-line" id="pl-single" onclick="selPlan('single')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>$5</strong> — single reading</div>
+    </div>
+    <div class="price-line" id="pl-monthly" onclick="selPlan('monthly')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>$10 / month</strong> — unlimited readings</div>
+    </div>
+    <div class="price-line" id="pl-annual" onclick="selPlan('annual')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
+    </div>
+  </div>
+  <button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button>
+</div>
+
+<!-- FORM — appears after plan selected -->
+<div id="form-wrap" style="display:none;">
+
+  <div class="gr"></div>
+
+  <!-- Individual / Two People toggle -->
+  <div class="toggle-row">
+    <span class="tlbl active" id="lind">Individual</span>
+    <label class="tog">
+      <input type="checkbox" id="ttype" onchange="togType()">
+      <div class="tog-track"><div class="tog-thumb"></div></div>
+    </label>
+    <span class="tlbl" id="ltwo">Two People</span>
+  </div>
+
+  <!-- Relationship type -->
+  <div id="relwrap" style="display:none;">
+    <div class="rel-row">
+      <button class="rp active" onclick="selRel(this,'parent-child')">Parent · Child</button>
+      <button class="rp" onclick="selRel(this,'romantic')">Romantic</button>
+      <button class="rp" onclick="selRel(this,'friends')">Friends</button>
+      <button class="rp" onclick="selRel(this,'siblings')">Siblings</button>
+      <button class="rp" onclick="selRel(this,'colleagues')">Colleagues</button>
+      <button class="rp" onclick="selRel(this,'other')">Other</button>
+    </div>
+  </div>
+
+  <div class="cards">
+    <!-- PERSON 1 -->
+    <div class="card">
+      <div class="cttl" id="p1ttl">Your Information</div>
+      <div class="f"><div class="f3">
+        <div><label>First</label><input type="text" id="p1f" placeholder="First"></div>
+        <div><label>Mid <span class="opt">opt</span></label><input type="text" id="p1m" placeholder="Mid"></div>
+        <div><label>Last</label><input type="text" id="p1l" placeholder="Last"></div>
+      </div></div>
+      <div class="f"><label>Date of birth</label><input type="text" id="p1d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
+      <div class="f"><div class="f2">
+        <div>
+          <label>Birth time <span class="opt">if known</span></label>
+          <div class="time-row">
+            <input type="text" id="p1t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)">
+            <select class="ampm-sel" id="p1ap"><option value="AM">AM</option><option value="PM">PM</option></select>
+          </div>
+        </div>
+        <div><label>City</label><input type="text" id="p1c" placeholder="City"></div>
+      </div></div>
+      <div class="f"><label>Country</label><input type="text" id="p1co" placeholder="Country"></div>
+      <div class="tnote">Birth time required for Rising sign and houses. If unknown, those fields will show as unavailable — not estimated.</div>
+    </div>
+
+    <!-- PERSON 2 -->
+    <div class="card" id="p2card" style="display:none;">
+      <div class="cttl">Person Two</div>
+      <div class="f"><div class="f3">
+        <div><label>First</label><input type="text" id="p2f" placeholder="First"></div>
+        <div><label>Mid <span class="opt">opt</span></label><input type="text" id="p2m" placeholder="Mid"></div>
+        <div><label>Last</label><input type="text" id="p2l" placeholder="Last"></div>
+      </div></div>
+      <div class="f"><label>Date of birth</label><input type="text" id="p2d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
+      <div class="f"><div class="f2">
+        <div>
+          <label>Birth time <span class="opt">if known</span></label>
+          <div class="time-row">
+            <input type="text" id="p2t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)">
+            <select class="ampm-sel" id="p2ap"><option value="AM">AM</option><option value="PM">PM</option></select>
+          </div>
+        </div>
+        <div><label>City</label><input type="text" id="p2c" placeholder="City"></div>
+      </div></div>
+      <div class="f"><label>Country</label><input type="text" id="p2co" placeholder="Country"></div>
+      <div class="tnote">Birth time required for Rising sign and houses. If unknown, those fields will show as unavailable — not estimated.</div>
+    </div>
+  </div>
+
+  <div class="err" id="err">Please enter first name, last name, and date of birth for all required people.</div>
+  <button class="gen-btn" onclick="generate()">Generate Reading</button>
+
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="lr"></div>
+  <div class="ll">Reading the energy…</div>
+</div>
+
+<!-- READING OUTPUT -->
+<div class="rout" id="rout">
+  <button class="back-btn" onclick="showForm()">← New reading</button>
+  <div id="rcontent"></div>
+</div>
+
+<footer>
+  <div class="flinks"><a onclick="openContact()">Contact</a> &nbsp;·&nbsp; Privacy</div>
+  <div class="fprivacy">No data is stored, sold, or shared. Birth data is used only to generate your reading. Payments processed by Stripe.</div>
+</footer>
+
+</div>
+
+<script>
+const W='https://know-your-energy.kwdoanchor.workers.dev';
+let rtype='individual',rel='parent-child',plan='free';
+const rls={'parent-child':'Parent · Child','romantic':'Romantic Partners','friends':'Friends','siblings':'Siblings','colleagues':'Colleagues','other':'Connection'};
+const tc={resonant:'tr',complex:'tc',intense:'ti',foundational:'tf'};
+
+// ── PLAN SELECTION ──
+function selPlan(p){
+  document.querySelectorAll('.price-line').forEach(l=>l.classList.remove('selected'));
+  document.getElementById('pl-'+p).classList.add('selected');
+  plan=p;
+}
+
+function confirmPlan(){
+  if(plan!=='free'){
+    openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Stripe payment coming soon. Plan: <strong style="color:var(--f)">${plan}</strong>.</p>`);
+    return;
+  }
+  document.getElementById('pricing-wrap').style.display='none';
+  document.getElementById('form-wrap').style.display='block';
+}
+
+// ── TYPE TOGGLE ──
+function togType(){
+  const two=document.getElementById('ttype').checked;
+  rtype=two?'two-person':'individual';
+  document.getElementById('p2card').style.display=two?'block':'none';
+  document.getElementById('relwrap').style.display=two?'flex':'none';
+  document.getElementById('p1ttl').textContent=two?'Person One':'Your Information';
+  document.getElementById('lind').classList.toggle('active',!two);
+  document.getElementById('ltwo').classList.toggle('active',two);
+}
+
+function selRel(el,r){
+  document.querySelectorAll('.rp').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');rel=r;
+}
+
+// ── DATE FORMAT ──
+function fmtDate(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length>2&&v.length<=4)v=v.slice(0,2)+'/'+v.slice(2);
+  else if(v.length>4)v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4,8);
+  el.value=v;
+}
+
+// ── TIME FORMAT — auto colon after HH ──
+function fmtTime(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length>2)v=v.slice(0,2)+':'+v.slice(2,4);
+  el.value=v;
+}
+
+function vd(d){return /^\d{2}\/\d{2}\/\d{4}$/.test(d);}
+const g=id=>document.getElementById(id)?.value?.trim()||'';
+
+function showForm(){
+  document.getElementById('pricing-wrap').style.display='none';
+  document.getElementById('form-wrap').style.display='block';
+  document.getElementById('loading').style.display='none';
+  document.getElementById('rout').style.display='none';
+}
+
+// ── MODAL ──
+function openMod(t,h){
+  document.getElementById('mttl').textContent=t;
+  document.getElementById('mbody').innerHTML=h;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMod(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── CONTACT ──
+function openContact(){
+  openMod('Contact',`
+    <div class="cff"><label style="display:block;font-family:'DM Sans',sans-serif;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:0.16rem;font-weight:500;">Email</label><input class="cfinput" type="email" id="ce" placeholder="your@email.com"></div>
+    <div class="cff"><label style="display:block;font-family:'DM Sans',sans-serif;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:0.16rem;font-weight:500;">Message</label><textarea class="cfta" id="cm" placeholder="How can we help?"></textarea></div>
+    <button class="sbtn" onclick="subContact()">Send</button>
+    <div id="cs" style="display:none;margin-top:0.45rem;font-family:'DM Sans',sans-serif;font-size:0.68rem;color:var(--mid);font-style:normal;"></div>`);
+}
+function subContact(){
+  const e=document.getElementById('ce')?.value?.trim();
+  if(!e)return;
+  document.getElementById('cs').textContent='Message received. We\'ll respond within 24 hours.';
+  document.getElementById('cs').style.display='block';
+}
+
+// ── GENERATE ──
+async function generate(){
+  const p1f=g('p1f'),p1l=g('p1l'),d1=g('p1d');
+  if(!p1f||!p1l||!vd(d1)){document.getElementById('err').style.display='block';return;}
+  if(rtype==='two-person'){
+    const p2f=g('p2f'),p2l=g('p2l'),d2=g('p2d');
+    if(!p2f||!p2l||!vd(d2)){document.getElementById('err').style.display='block';return;}
+  }
+  document.getElementById('err').style.display='none';
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('loading').style.display='block';
+  document.getElementById('rout').style.display='none';
+
+  const getTime=(tid,aid)=>{const t=g(tid),ap=g(aid);return t?t+' '+ap:'';};
+  const p1={first:p1f,mid:g('p1m'),last:p1l,dob:d1,time:getTime('p1t','p1ap'),city:g('p1c'),country:g('p1co')};
+  const p2=rtype==='two-person'?{first:g('p2f'),mid:g('p2m'),last:g('p2l'),dob:g('p2d'),time:getTime('p2t','p2ap'),city:g('p2c'),country:g('p2co')}:null;
+
+  try{
+    const calls=[fa(p1)];if(p2)calls.push(fa(p2));
+    const[a1,a2]=await Promise.all(calls);
+    p1.astro=a1;if(p2)p2.astro=a2;
+    const r=await air(p1,p2);
+    render(p1,p2,r);
+  }catch(e){render(p1,p2,demo(p1,p2));}
+}
+
+async function fa(p){
+  const[m,d,y]=p.dob.split('/').map(Number);
+  let hr=null,mn=null;
+  if(p.time&&p.time.trim()){
+    const parts=p.time.split(' ');
+    const hm=parts[0].split(':');
+    const ap=parts[1]||'AM';
+    let h=parseInt(hm[0])||0;const mi=parseInt(hm[1])||0;
+    if(ap==='PM'&&h<12)h+=12;if(ap==='AM'&&h===12)h=0;
+    hr=h;mn=mi;
+  }
+  const body={subject:{name:[p.first,p.mid,p.last].filter(Boolean).join(' '),year:y,month:m,day:d,city:p.city||'Unknown',nation:p.country||'US',...(hr!==null?{hour:hr,minute:mn}:{})}};
+  try{const r=await fetch(W+'/astrology',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return await r.json();}
+  catch(e){return null;}
+}
+
+async function air(p1,p2){
+  const n1=[p1.first,p1.last].join(' ');
+  const n2=p2?[p2.first,p2.last].join(' '):null;
+  const prompt=p2
+    ?`You are an expert in Western astrology and Pythagorean numerology. Generate a two-person relationship reading using ONLY astrology and numerology — do NOT reference Human Design as that data is not yet available.
+
+RELATIONSHIP: ${rls[rel]}
+PERSON 1: ${n1} DOB: ${p1.dob}${p1.time?' @ '+p1.time:''} ${p1.city?'born in '+p1.city:''}
+Raw astrology data: ${JSON.stringify(p1.astro)}
+
+PERSON 2: ${n2} DOB: ${p2.dob}${p2.time?' @ '+p2.time:''} ${p2.city?'born in '+p2.city:''}
+Raw astrology data: ${JSON.stringify(p2.astro)}
+
+Read the full astrology data for both people. Describe the cross-chart dynamics — sun/moon overlays, planetary aspects between the two charts, house influences where available, Mercury for communication patterns, Saturn for authority and structural dynamics, Venus for relational warmth or friction, slower outer planets for generational or karmic themes. Also read the Pythagorean numerology from their birth dates and full names — life path interaction, expression numbers, soul urge comparison, pinnacles, challenges, personal years, karmic lessons and debts where visible. Describe what is most likely to be FELT and VISIBLE between these two people in daily life. Name power differentials directly where relationship type warrants it. Be specific to the actual chart data — no generic statements that could apply to anyone. No advice. Describe what is. Do not mention Human Design.
+
+Return ONLY valid JSON: {"headline":"string","sections":[{"eyebrow":"Astrology","title":"string","tag":"resonant|complex|intense|foundational","body":"3-4 paragraphs separated by \\n\\n"},{"eyebrow":"Numerology","title":"string","tag":"resonant|complex|intense|foundational","body":"2-3 paragraphs separated by \\n\\n"},{"eyebrow":"Where Both Systems Agree","title":"string","tag":"foundational|intense|complex","body":"1-2 paragraphs — the theme both astrology and numerology independently confirm"}],"signature":"one sentence — the single most defining feature of this relationship's energy"}`
+    :`You are an expert in Western astrology and Pythagorean numerology. Generate an individual reading using ONLY astrology and numerology — do NOT reference Human Design as that data is not yet available.
+
+PERSON: ${n1} DOB: ${p1.dob}${p1.time?' @ '+p1.time:''} ${p1.city?'born in '+p1.city:''}
+Raw astrology data: ${JSON.stringify(p1.astro)}
+
+Read the full astrology data. Describe sun sign, moon sign, rising if available, and the significant planetary placements — Mercury for how they think and communicate, Venus for what they value and how they connect, Mars for how they act and assert, Saturn for what disciplines or burdens them, outer planets for generational themes. Also read the Pythagorean numerology from their birth date and full name — life path, expression, soul urge, personality, pinnacles, challenges, personal year. Describe who this person is in practical terms — how they actually move through the world, what their internal experience is like, how they are likely perceived versus who they actually are. Be specific to the chart data. No advice. Describe what is. Do not mention Human Design.
+
+Return ONLY valid JSON: {"headline":"string","sections":[{"eyebrow":"Astrology","title":"string","tag":"resonant|complex|intense|foundational","body":"3-4 paragraphs separated by \\n\\n"},{"eyebrow":"Numerology","title":"string","tag":"resonant|complex|intense|foundational","body":"2-3 paragraphs separated by \\n\\n"},{"eyebrow":"The Synthesis","title":"string","tag":"foundational|intense","body":"1-2 paragraphs — what both systems independently confirm about this person"}],"signature":"one sentence — the single most defining quality of this person's energy"}`;
+
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:'Expert astrology/numerology/HD reader. Precise, non-repetitive. Never give advice. Respond ONLY with valid JSON.',messages:[{role:'user',content:prompt}]})});
+  const data=await res.json();
+  const raw=data.content?.map(c=>c.text||'').join('')||'';
+  return JSON.parse(raw.replace(/```json|```/g,'').trim());
+}
+
+function arow(l,v){return `<div class="dpr"><span class="dprl">${l}</span><span class="dprv">${v}</span></div>`;}
+function apend(v){return `<div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div>`;}
+
+function ar(astro,p){
+  if(!astro||astro.detail||!astro.subject)return apend('API connecting…');
+  const s=astro.subject;const pls=astro.planets||astro.data?.planets||[];
+  let h='';
+  if(s.sun_sign)h+=arow('Sun',s.sun_sign);
+  if(s.moon_sign)h+=arow('Moon',s.moon_sign);
+  if(s.rising_sign)h+=arow('Rising',s.rising_sign);
+  else if(!p.time)h+=`<div class="dpr"><span class="dprl">Rising</span><span class="dprv pend">time needed</span></div>`;
+  pls.slice(0,4).forEach(pl=>{if(pl.name&&pl.sign)h+=arow(pl.name,pl.sign);});
+  return h||apend('Loading…');
+}
+function nr(){return apend('API connecting soon');}
+function hdr(){return apend('API connecting soon');}
+
+function pan(nm,sys,rows,isP2){
+  const c=isP2?'p2':'';
+  return `<div class="dp ${c}" onclick="panMod('${nm}','${sys}')">
+    <div class="dph ${c}">${nm} · ${sys}<span>↗</span></div>${rows}</div>`;
+}
+
+function render(p1,p2,r){
+  const n1=p1.first+(p1.last?' '+p1.last:'');
+  const rk=btoa(unescape(encodeURIComponent(JSON.stringify(r))));
+  const prev=r.sections[0]?.body?.split('\n\n')[0]||'';
+
+  let h=`<div class="r-head">
+    ${p2?`<div class="r-rel">${rls[rel]}</div>`:''}
+    <div class="r-names">${p2?`${p1.first}<span class="amp"> &amp; </span>${p2.first}`:n1}</div>
+    <div class="r-hl">"${r.headline}"</div>
+  </div>`;
+
+  if(p2){
+    h+=`<div class="ptop">
+      ${pan(p1.first,'Astrology',ar(p1.astro,p1),false)}
+      ${pan(p1.first,'Numerology',nr(),false)}
+      ${pan(p1.first,'Human Design',hdr(),false)}
+    </div>
+    <div class="pmid"><div class="rpan" onclick="showR('${rk}')">
+      <div class="rpanh"><div class="rpant">Combined Reading — ${p1.first} &amp; ${p2.first}</div><span class="rpanh-hint">tap to read</span></div>
+      <div class="rpanv">${prev}</div>
+    </div></div>
+    <div class="pbot">
+      ${pan(p2.first,'Astrology',ar(p2.astro,p2),true)}
+      ${pan(p2.first,'Numerology',nr(),true)}
+      ${pan(p2.first,'Human Design',hdr(),true)}
+    </div>`;
+  } else {
+    h+=`<div class="ptop">
+      ${pan(p1.first,'Astrology',ar(p1.astro,p1),false)}
+      ${pan(p1.first,'Numerology',nr(),false)}
+      ${pan(p1.first,'Human Design',hdr(),false)}
+    </div>
+    <div class="pmid"><div class="rpan" onclick="showR('${rk}')">
+      <div class="rpanh"><div class="rpant">Individual Reading — ${n1}</div><span class="rpanh-hint">tap to read</span></div>
+      <div class="rpanv">${prev}</div>
+    </div></div>`;
+  }
+
+  document.getElementById('rcontent').innerHTML=h;
+  document.getElementById('loading').style.display='none';
+  document.getElementById('rout').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function showR(rk){
+  const r=JSON.parse(decodeURIComponent(escape(atob(rk))));
+  let h=r.sections.map(s=>`<div class="rs">
+    <div class="rsey">${s.eyebrow}</div>
+    <div class="rsttl">${s.title}</div>
+    <span class="rstag ${tc[s.tag]||'tf'}">${s.tag}</span>
+    ${s.body.split('\n\n').map(p=>`<p>${p}</p>`).join('')}
+  </div>`).join('');
+  h+=`<div class="sig"><div class="sigl">Signature Dynamic</div><div class="sigt">"${r.signature}"</div></div>`;
+  openMod('Reading',h);
+}
+
+function panMod(n,s){
+  openMod(`${n} · ${s}`,`<p style="font-style:italic;">${s} API connecting soon. Full chart data will appear here.</p>`);
+}
+
+function demo(p1,p2){
+  if(!p2)return{headline:"A Scorpio Sun with a Capricorn Moon — intensity internalized and channeled into structure.",sections:[{eyebrow:"Astrology",title:"The Depth That Doesn't Show",tag:"intense",body:"The Scorpio Sun describes someone who experiences life at full depth. Nothing is surface level — everything is felt fully and held privately. The Capricorn Moon adds emotional containment that means the interior world is rarely what others see. This combination produces someone simultaneously more intense and more private than they appear.\n\nThe Gemini Rising presents a lighter, more communicative face to the world — which can register as inconsistency to people who sense the depth underneath but only encounter the agile surface. Mercury in Scorpio sharpens perception into something probing and precise. This person notices what isn't said as much as what is, and rarely speaks without purpose.\n\nSaturn's placement describes where the heaviest sense of duty and structure lives. Venus shows what is valued and how connection is formed — in a Scorpio chart, neither is given lightly or taken back easily once extended."},{eyebrow:"Numerology",title:"Life Path 22 — The Master Builder",tag:"foundational",body:"A Life Path 22 is not here for small things. The rarest and highest voltage of the Life Paths — designed to construct something that outlasts a single lifetime. This number carries both the visionary quality of the 11 and the structural capacity of the 4.\n\nThe Expression 6 grounds this in responsibility and care for others. The Soul Urge 11 carries a private visionary frequency that runs deeper than is typically shown. The Personality 4 presents to the world as stable and reliable — accurate to the surface, but not revealing the interior voltage.\n\nThe Pinnacle and Challenge numbers describe the specific life phases shaping how this purpose moves through time. Currently in a Personal Year that describes the active themes of this particular season."},{eyebrow:"The Synthesis",title:"More Than They Show, Building More Than Others Know",tag:"foundational",body:"Both systems describe the same person: someone carrying more than they show, building more intentionally than others realize, and experiencing the world at a depth not visible on the surface.\n\nThe Scorpio intensity and the 22 Life Path voltage point toward someone who works best when fully engaged and has little patience for the superficial once committed to something real."}],signature:"The still water that runs deepest — what appears controlled on the surface is an ocean underneath."};
+  return{headline:"A Scorpio mother and Aquarius son — she feels everything he refuses to name, and he needs space she experiences as distance.",sections:[{eyebrow:"Astrology",title:"She Is What He Feels Most Deeply",tag:"intense",body:"Kami's Scorpio Sun lands directly on Samuel's Scorpio Moon. In synastry this is one of the most potent overlays in a parent-child pairing: the parent's core identity becomes the child's emotional interior. What Kami is, Samuel feels. Her intensity, her perceptiveness, her capacity for depth — these don't exist for him as traits he observes from outside. They live in him as his own emotional experience of reality.\n\nHis Aquarius Sun sits in square tension with her Scorpio placements. Aquarius needs air, detachment, freedom to think independently. Her emotional depth can feel like a pressure he cannot discharge — so he discharges it sideways as withdrawal or opposition. This is not indifference. It is the only tool available when the pressure has nowhere else to go.\n\nHer Capricorn Moon and his Scorpio Moon are in sextile — a quiet functional harmony neither is likely aware of. Both moons are private, neither performs feeling readily, and both experience emotion as heavy and real. The distance between them is not about what they feel. It is about how they handle what they feel.\n\nMercury placements between these two charts will show specifically where communication breaks and rebuilds. Saturn's cross-chart influence describes where authority becomes the friction point — which in a parent-child pairing with this much Scorpio is where the daily experience of the relationship actually lives."},{eyebrow:"Numerology",title:"Two Master Builders, Opposite Expressions",tag:"foundational",body:"Both Kami and Samuel carry Life Path 22 — the rarest Life Path. Two 22s in a parent-child pairing share the same foundational frequency. At the core of what each is here to do, they are in resonance. The conflict lives in how that purpose moves through each of them.\n\nKami's Expression 6 grounds her 22 in responsibility and care for others. Samuel's Expression 9 is the Humanitarian — wired for completion, release, and service to the whole. She holds what he is designed to let go. His Soul Urge 7 requires solitude and internal processing — it is not a number that shares its inner world easily, which compounds the Scorpio Moon's already-private emotional register.\n\nHis Personality 11 and Birthday 11 give him three Master Number activations in a single chart. This describes someone carrying a voltage that is genuinely difficult to inhabit at a young age — one that can make him feel fundamentally different from everyone around him, including his own family. The Challenge numbers of 1 point to a recurring life theme around self-definition and independence that runs directly into the structure a 22/6 parent naturally creates."},{eyebrow:"Where Both Systems Agree",title:"A Child Who Absorbs Her Depth and Must Create Distance to Survive It",tag:"intense",body:"Astrology says his Moon carries her Sun — she lives inside him emotionally whether either of them chooses it. Numerology says two 22 Life Paths share the same foundational frequency while his Expression 9 is designed to release what her Expression 6 holds, and his Soul Urge 7 requires a private interior life that resists being witnessed.\n\nBoth systems describe the same thing: Samuel is more attuned to Kami than she may know — and the intensity of that attunement requires him to create distance as a regulatory strategy, not rejection. When a teenager with a Scorpio Moon, a 22 Life Path, three Master Number activations, and a Challenge of 1 goes silent and pulls away, it is almost never indifference. The friction is generated by how much is felt rather than how little."}],signature:"He carries her emotional world inside him as his own — and the only way he knows to get relief from its weight is to go somewhere she can't follow."};
+}
+</script>
+</body>
+</html>
