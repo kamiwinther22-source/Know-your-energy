@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Know Your Energy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --moon:#ddeeff;
+  --moon2:#e6f0ff;
+  --f:#ff33cc;
+  --k:#00ffba;
+  --ink:#07070f;
+  --txt:#0a0a1a;
+  --mid:#1a1a30;
+  --dim:#2a2a44;
+}
+body{background:var(--moon);color:var(--txt);font-family:'Playfair Display',serif;font-weight:700;min-height:100vh;font-size:12px;}
+.wrap{max-width:680px;margin:0 auto;padding:0 1rem 2.5rem;}
+
+header{text-align:center;padding:1.1rem 1rem 0.8rem;}
+.brand{font-size:clamp(1.3rem,4vw,2rem);font-weight:800;font-style:italic;color:var(--f);line-height:1;letter-spacing:0.02em;}
+.rule{width:40px;height:2px;background:linear-gradient(90deg,var(--f),var(--k));margin:0.4rem auto;}
+.desc{font-size:0.7rem;color:var(--mid);line-height:1.5;max-width:320px;margin:0 auto;font-style:italic;font-weight:700;}
+.tagline-q{font-size:0.75rem;color:var(--f);font-style:italic;font-weight:800;line-height:1.45;margin:0.45rem auto 0.15rem;max-width:360px;}
+.tagline-s{font-size:0.68rem;color:var(--mid);font-style:italic;font-weight:700;line-height:1.45;max-width:360px;margin:0 auto;}
+
+.slbl{font-size:0.6rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--f);display:block;margin-bottom:0.5rem;font-family:'DM Sans',sans-serif;font-weight:500;}
+
+.price-list{margin-bottom:0.8rem;}
+.price-line{display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0.7rem;border-radius:4px;cursor:pointer;transition:background 0.15s;border:1px solid transparent;}
+.price-line:hover{background:rgba(255,51,204,0.04);}
+.price-line.selected{background:rgba(255,51,204,0.06);border-color:rgba(255,51,204,0.2);}
+.price-check{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,51,204,0.4);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.price-line.selected .price-check{background:var(--f);border-color:var(--f);box-shadow:0 0 8px rgba(255,51,204,0.4);}
+.price-check-dot{width:6px;height:6px;border-radius:50%;background:#fff;display:none;}
+.price-line.selected .price-check-dot{display:block;}
+.price-text{font-size:0.82rem;color:var(--mid);font-style:italic;font-weight:700;}
+.price-text strong{color:var(--f);}
+
+#form-wrap{display:none;}
+
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.75rem;}
+.tlbl{font-size:0.75rem;font-style:italic;font-weight:700;color:var(--dim);transition:color 0.18s;}
+.tlbl.active{color:var(--f);}
+.tog{position:relative;width:36px;height:19px;cursor:pointer;flex-shrink:0;}
+.tog input{opacity:0;width:0;height:0;position:absolute;}
+.tog-track{position:absolute;inset:0;background:rgba(255,51,204,0.12);border:1px solid rgba(255,51,204,0.3);border-radius:100px;transition:all 0.2s;}
+.tog input:checked~.tog-track{background:rgba(255,51,204,0.18);border-color:var(--f);}
+.tog-thumb{position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--f);transition:transform 0.2s;box-shadow:0 0 7px rgba(255,51,204,0.45);}
+.tog input:checked~.tog-track .tog-thumb{transform:translateX(17px);}
+
+.rel-row{display:flex;flex-wrap:wrap;gap:0.3rem;justify-content:center;margin-bottom:0.75rem;}
+.rp{padding:0.22rem 0.6rem;border:1px solid rgba(255,51,204,0.22);border-radius:100px;background:transparent;color:var(--mid);font-family:'Playfair Display',serif;font-size:0.68rem;font-style:italic;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.rp.active{border-color:var(--f);color:var(--f);background:rgba(255,51,204,0.05);}
+
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.65rem;}
+@media(max-width:460px){.cards{grid-template-columns:1fr;}}
+.card{background:var(--moon2);border:1px solid rgba(255,51,204,0.15);border-radius:5px;padding:0.8rem 0.75rem;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,51,204,0.4),transparent);}
+.cttl{font-size:0.82rem;font-style:italic;font-weight:800;color:var(--f);margin-bottom:0.6rem;padding-bottom:0.38rem;border-bottom:1px solid rgba(255,51,204,0.1);}
+
+.f{margin-bottom:0.42rem;}.f:last-child{margin-bottom:0;}
+.f3{display:grid;grid-template-columns:2fr 1fr 2fr;gap:0.32rem;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0.32rem;}
+.time-row{display:grid;grid-template-columns:1fr auto;gap:0.32rem;align-items:end;}
+label{display:block;font-family:'DM Sans',sans-serif;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:0.16rem;font-weight:500;}
+.opt{color:var(--f);font-size:0.46rem;letter-spacing:0.05em;text-transform:none;margin-left:0.15rem;opacity:0.75;}
+input,select{width:100%;background:var(--moon);border:1px solid rgba(255,51,204,0.18);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-size:0.8rem;font-weight:700;font-style:italic;padding:0.38rem 0.52rem;outline:none;transition:border-color 0.18s;-webkit-appearance:none;appearance:none;}
+input:focus,select:focus{border-color:var(--f);}
+input::placeholder{color:rgba(10,10,26,0.28);font-size:0.75rem;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23ff33cc'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.4rem center;padding-right:1.4rem;cursor:pointer;}
+.ampm-sel{width:auto;min-width:56px;}
+.tnote{font-family:'DM Sans',sans-serif;font-size:0.56rem;color:var(--dim);font-style:italic;margin-top:0.4rem;line-height:1.4;font-weight:400;}
+.tnote-tight{font-family:'DM Sans',sans-serif;font-size:0.54rem;color:var(--dim);font-style:italic;margin:0 0 0.25rem;line-height:1.4;font-weight:400;}
+
+.err{display:none;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#aa0066;margin-bottom:0.45rem;padding:0.38rem 0.55rem;background:rgba(255,51,204,0.06);border-radius:3px;border:1px solid rgba(255,51,204,0.16);font-weight:400;}
+
+.gen-btn{width:100%;padding:0.72rem;background:var(--k);border:none;border-radius:4px;color:var(--ink);font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;font-weight:800;letter-spacing:0.06em;cursor:pointer;transition:all 0.22s;box-shadow:0 0 16px rgba(0,255,186,0.35);}
+.gen-btn:hover{box-shadow:0 0 28px rgba(0,255,186,0.55);background:#00e8a8;}
+.gen-btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+.loading{display:none;text-align:center;padding:3rem 1rem;}
+.lr{width:40px;height:40px;position:relative;margin:0 auto 1rem;}
+.lr::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--f);animation:spin 1.4s linear infinite;box-shadow:0 0 10px rgba(255,51,204,0.35);}
+.lr::after{content:'';position:absolute;inset:7px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--k);animation:spin 2s linear infinite reverse;box-shadow:0 0 8px rgba(0,255,186,0.3);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ll{font-size:0.95rem;font-style:italic;font-weight:700;color:var(--mid);}
+
+.rout{display:none;}
+.back-btn{background:none;border:none;color:var(--dim);font-family:'DM Sans',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;margin-bottom:1rem;padding:0;display:block;transition:color 0.18s;font-weight:500;}
+.back-btn:hover{color:var(--f);}
+.r-head{text-align:center;margin-bottom:1rem;}
+.r-rel{font-family:'DM Sans',sans-serif;font-size:0.55rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);margin-bottom:0.28rem;font-weight:500;}
+.r-names{font-size:clamp(1.3rem,4vw,2rem);font-weight:800;font-style:italic;color:var(--txt);}
+.r-names .amp{color:var(--f);margin:0 0.2rem;}
+.r-hl{font-size:0.85rem;font-style:italic;font-weight:700;color:var(--mid);line-height:1.6;max-width:420px;margin:0.45rem auto 0;}
+
+.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.42rem;margin-bottom:0.42rem;}
+.pmid{margin-bottom:0.42rem;}
+.pbot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.42rem;}
+@media(max-width:460px){.ptop,.pbot{grid-template-columns:1fr;}}
+.dp{background:var(--moon2);border:1px solid rgba(255,51,204,0.13);border-radius:4px;overflow:hidden;max-height:220px;display:flex;flex-direction:column;}
+.dp.p2{border-color:rgba(0,255,186,0.13);}
+.dph{padding:0.32rem 0.55rem;font-family:'DM Sans',sans-serif;font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--f);border-bottom:1px solid rgba(255,51,204,0.07);background:rgba(255,51,204,0.02);flex-shrink:0;font-weight:500;}
+.dph.p2{color:var(--k);border-bottom-color:rgba(0,255,186,0.07);background:rgba(0,255,186,0.02);}
+.dplist{overflow-y:auto;flex:1;}
+.dpr{display:flex;justify-content:space-between;gap:0.4rem;padding:0.22rem 0.55rem;border-bottom:1px solid rgba(255,51,204,0.04);font-size:0.63rem;}
+.dpr:last-child{border-bottom:none;}
+.dprl{font-family:'DM Sans',sans-serif;color:var(--dim);font-size:0.5rem;text-transform:uppercase;letter-spacing:0.03em;font-weight:500;flex-shrink:0;}
+.dprv{color:var(--txt);font-style:italic;font-weight:700;text-align:right;}
+.dprv.pend{color:var(--f);font-style:italic;opacity:0.7;font-size:0.58rem;}
+
+.rpan{background:var(--moon2);border:1px solid rgba(255,51,204,0.18);border-left:2px solid var(--f);border-radius:4px;cursor:pointer;overflow:hidden;transition:all 0.15s;box-shadow:0 0 10px rgba(255,51,204,0.05);}
+.rpan:hover{box-shadow:0 0 18px rgba(255,51,204,0.12);}
+.rpanh{padding:0.44rem 0.8rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,51,204,0.07);}
+.rpant{font-size:0.85rem;font-style:italic;font-weight:800;color:var(--f);}
+.rpanh-hint{font-family:'DM Sans',sans-serif;font-size:0.48rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--f);opacity:0.5;font-weight:500;}
+.rpanv{padding:0.52rem 0.8rem;font-size:0.72rem;font-style:italic;font-weight:700;line-height:1.6;color:var(--mid);max-height:50px;overflow:hidden;position:relative;}
+.rpanv::after{content:'';position:absolute;bottom:0;left:0;right:0;height:25px;background:linear-gradient(transparent,var(--moon2));}
+
+.modal{position:fixed;inset:0;background:rgba(190,210,238,0.95);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
+.modal.open{display:block;}
+.mbox{background:var(--moon2);border:1px solid rgba(255,51,204,0.18);border-radius:6px;max-width:600px;margin:0 auto;overflow:hidden;}
+.mtop{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0.85rem;border-bottom:1px solid rgba(255,51,204,0.1);}
+.mttl{font-size:0.92rem;font-style:italic;font-weight:800;color:var(--f);}
+.mx{background:none;border:none;color:var(--dim);font-size:0.92rem;cursor:pointer;padding:0 0.25rem;}
+.mx:hover{color:var(--f);}
+.mbody{padding:0.85rem;font-size:0.78rem;line-height:1.78;color:var(--mid);font-style:italic;font-weight:700;}
+.mbody p{margin-bottom:0.75rem;}.mbody p:last-child{margin-bottom:0;}
+.mbody strong{color:var(--txt);}
+.rs{margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(255,51,204,0.07);}
+.rs:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.rsey{font-family:'DM Sans',sans-serif;font-size:0.5rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);margin-bottom:0.28rem;font-weight:500;}
+.rsttl{font-size:1.05rem;font-weight:800;font-style:italic;color:var(--txt);margin-bottom:0.45rem;line-height:1.2;}
+.rstag{display:inline-block;font-family:'DM Sans',sans-serif;font-size:0.48rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.1rem 0.42rem;border-radius:100px;margin-bottom:0.55rem;font-weight:500;}
+.ti{background:rgba(255,51,204,0.08);color:var(--f);border:1px solid rgba(255,51,204,0.2);}
+.tr{background:rgba(60,180,130,0.07);color:#1a7050;border:1px solid rgba(60,180,130,0.18);}
+.tc{background:rgba(180,80,60,0.07);color:#7a2010;border:1px solid rgba(180,80,60,0.16);}
+.tf{background:rgba(100,80,200,0.07);color:#4422aa;border:1px solid rgba(100,80,200,0.16);}
+.sig{background:var(--ink);border:1px solid rgba(255,51,204,0.25);border-left:2px solid var(--f);border-radius:4px;padding:0.8rem 0.95rem;margin-top:1rem;box-shadow:0 0 14px rgba(255,51,204,0.14);}
+.sigl{font-family:'DM Sans',sans-serif;font-size:0.48rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--f);opacity:0.7;margin-bottom:0.38rem;font-weight:500;}
+.sigt{font-size:0.9rem;font-style:italic;font-weight:700;color:#fff;line-height:1.55;}
+
+.cff{margin-bottom:0.5rem;}
+.cfinput{width:100%;background:var(--moon);border:1px solid rgba(255,51,204,0.16);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-size:0.78rem;font-weight:700;font-style:italic;padding:0.38rem 0.52rem;outline:none;-webkit-appearance:none;}
+.cfinput:focus{border-color:var(--f);}
+.cfta{width:100%;background:var(--moon);border:1px solid rgba(255,51,204,0.16);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-size:0.78rem;font-weight:700;font-style:italic;padding:0.38rem 0.52rem;outline:none;resize:vertical;min-height:65px;}
+.cfta:focus{border-color:var(--f);}
+.sbtn{background:var(--k);border:none;border-radius:3px;color:var(--ink);font-family:'Playfair Display',serif;font-size:0.75rem;font-style:italic;font-weight:800;letter-spacing:0.05em;padding:0.42rem 1.1rem;cursor:pointer;box-shadow:0 0 10px rgba(0,255,186,0.3);transition:all 0.18s;}
+.sbtn:hover{box-shadow:0 0 18px rgba(0,255,186,0.5);}
+
+.gr{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,51,204,0.18),rgba(0,255,186,0.12),transparent);margin:1rem 0;}
+
+footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,51,204,0.07);margin-top:1.5rem;}
+.flinks{font-family:'DM Sans',sans-serif;font-size:0.56rem;letter-spacing:0.08em;color:var(--dim);font-weight:400;}
+.flinks a{color:var(--dim);text-decoration:none;cursor:pointer;transition:color 0.15s;}
+.flinks a:hover{color:var(--f);}
+.fprivacy{font-family:'DM Sans',sans-serif;font-size:0.54rem;color:var(--dim);line-height:1.5;max-width:360px;margin:0.3rem auto 0;font-weight:400;}
+</style>
+</head>
+<body>
+
+<div class="modal" id="modal">
+  <div class="mbox">
+    <div class="mtop"><div class="mttl" id="mttl"></div><button class="mx" onclick="closeMod()">✕</button></div>
+    <div class="mbody" id="mbody"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header>
+  <div class="brand">Know Your Energy</div>
+  <div class="rule"></div>
+  <div class="desc">Full Western Astrology, Human Design, and Numerology charts with a reading across all three — for individuals or any two people.</div>
+  <div class="tagline-q">"Why is this relationship so easy and talking to this person feels so hard?"</div>
+  <div class="tagline-s">A user manual when communicating with someone who has a different operating system.</div>
+</header>
+
+<div id="pricing-wrap">
+  <span class="slbl">Select a plan to begin</span>
+  <div class="price-list">
+    <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>Free</strong> — one reading, no account required</div>
+    </div>
+    <div class="price-line" id="pl-single" onclick="selPlan('single')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>$5</strong> — single reading</div>
+    </div>
+    <div class="price-line" id="pl-monthly" onclick="selPlan('monthly')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>$10 / month</strong> — unlimited readings</div>
+    </div>
+    <div class="price-line" id="pl-annual" onclick="selPlan('annual')">
+      <div class="price-check"><div class="price-check-dot"></div></div>
+      <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
+    </div>
+  </div>
+  <button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button>
+</div>
+
+<div id="form-wrap" style="display:none;">
+
+  <div class="gr"></div>
+
+  <div class="toggle-row">
+    <span class="tlbl active" id="lind">Individual</span>
+    <label class="tog">
+      <input type="checkbox" id="ttype" onchange="togType()">
+      <div class="tog-track"><div class="tog-thumb"></div></div>
+    </label>
+    <span class="tlbl" id="ltwo">Two People</span>
+  </div>
+
+  <div id="relwrap" style="display:none;">
+    <div class="rel-row">
+      <button class="rp active" onclick="selRel(this,'parent-child')">Parent · Child</button>
+      <button class="rp" onclick="selRel(this,'romantic')">Romantic</button>
+      <button class="rp" onclick="selRel(this,'friends')">Friends</button>
+      <button class="rp" onclick="selRel(this,'siblings')">Siblings</button>
+      <button class="rp" onclick="selRel(this,'colleagues')">Colleagues</button>
+      <button class="rp" onclick="selRel(this,'other')">Other</button>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="cttl" id="p1ttl">Your Information</div>
+      <div class="f"><div class="f3">
+        <div><label>First</label><input type="text" id="p1f" placeholder="First"></div>
+        <div><label>Mid <span class="opt">opt</span></label></div>
+        <div><label>Last</label><input type="text" id="p1l" placeholder="Last"></div>
+      </div></div>
+      <div class="tnote-tight">No spaces between multiple middle names, not case sensitive.</div>
+      <div class="f"><input type="text" id="p1m" placeholder="Mid"></div>
+      <div class="f"><label>Date of birth</label><input type="text" id="p1d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
+      <div class="f"><div class="f2">
+        <div>
+          <label>Birth time <span class="opt">if known</span></label>
+          <div class="time-row">
+            <input type="text" id="p1t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)">
+            <select class="ampm-sel" id="p1ap"><option value="AM">AM</option><option value="PM">PM</option></select>
+          </div>
+        </div>
+        <div><label>City</label><input type="text" id="p1c" placeholder="City"></div>
+      </div></div>
+      <div class="f"><label>Country</label><input type="text" id="p1co" placeholder="Country"></div>
+      <div class="tnote">Birth time required for Rising sign and houses. If unknown, those fields will show as unavailable — not estimated.</div>
+    </div>
+
+    <div class="card" id="p2card" style="display:none;">
+      <div class="cttl">Person Two</div>
+      <div class="f"><div class="f3">
+        <div><label>First</label><input type="text" id="p2f" placeholder="First"></div>
+        <div><label>Mid <span class="opt">opt</span></label></div>
+        <div><label>Last</label><input type="text" id="p2l" placeholder="Last"></div>
+      </div></div>
+      <div class="tnote-tight">No spaces between multiple middle names, not case sensitive.</div>
+      <div class="f"><input type="text" id="p2m" placeholder="Mid"></div>
+      <div class="f"><label>Date of birth</label><input type="text" id="p2d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
+      <div class="f"><div class="f2">
+        <div>
+          <label>Birth time <span class="opt">if known</span></label>
+          <div class="time-row">
+            <input type="text" id="p2t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)">
+            <select class="ampm-sel" id="p2ap"><option value="AM">AM</option><option value="PM">PM</option></select>
+          </div>
+        </div>
+        <div><label>City</label><input type="text" id="p2c" placeholder="City"></div>
+      </div></div>
+      <div class="f"><label>Country</label><input type="text" id="p2co" placeholder="Country"></div>
+      <div class="tnote">Birth time required for Rising sign and houses. If unknown, those fields will show as unavailable — not estimated.</div>
+    </div>
+  </div>
+
+  <div class="err" id="err">Please enter first name, last name, and date of birth for all required people.</div>
+  <button class="gen-btn" onclick="generate()">Generate Reading</button>
+
+</div>
+
+<div class="loading" id="loading">
+  <div class="lr"></div>
+  <div class="ll">Reading the energy…</div>
+</div>
+
+<div class="rout" id="rout">
+  <button class="back-btn" onclick="showForm()">← New reading</button>
+  <div id="rcontent"></div>
+</div>
+
+<footer>
+  <div class="flinks"><a onclick="openContact()">Contact</a> &nbsp;·&nbsp; Privacy</div>
+  <div class="fprivacy">No data is stored, sold, or shared. Birth data is used only to generate your reading. Payments processed by Stripe.</div>
+</footer>
+
+</div>
+
+<script>
+const W='https://know-your-energy.kwdoanchor.workers.dev';
+let rtype='individual',rel='parent-child',plan='free';
+const rls={'parent-child':'Parent · Child','romantic':'Romantic Partners','friends':'Friends','siblings':'Siblings','colleagues':'Colleagues','other':'Connection'};
+const tc={resonant:'tr',complex:'tc',intense:'ti',foundational:'tf'};
+
+function selPlan(p){
+  document.querySelectorAll('.price-line').forEach(l=>l.classList.remove('selected'));
+  document.getElementById('pl-'+p).classList.add('selected');
+  plan=p;
+}
+
+function confirmPlan(){
+  if(plan!=='free'){
+    openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Stripe payment coming soon. Plan: <strong style="color:var(--f)">${plan}</strong>.</p>`);
+    return;
+  }
+  document.getElementById('pricing-wrap').style.display='none';
+  document.getElementById('form-wrap').style.display='block';
+}
+
+function togType(){
+  const two=document.getElementById('ttype').checked;
+  rtype=two?'two-person':'individual';
+  document.getElementById('p2card').style.display=two?'block':'none';
+  document.getElementById('relwrap').style.display=two?'flex':'none';
+  document.getElementById('p1ttl').textContent=two?'Person One':'Your Information';
+  document.getElementById('lind').classList.toggle('active',!two);
+  document.getElementById('ltwo').classList.toggle('active',two);
+}
+
+function selRel(el,r){
+  document.querySelectorAll('.rp').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');rel=r;
+}
+
+function fmtDate(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length>2&&v.length<=4)v=v.slice(0,2)+'/'+v.slice(2);
+  else if(v.length>4)v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4,8);
+  el.value=v;
+}
+
+function fmtTime(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length>2)v=v.slice(0,2)+':'+v.slice(2,4);
+  el.value=v;
+}
+
+function vd(d){return /^\d{2}\/\d{2}\/\d{4}$/.test(d);}
+const g=id=>document.getElementById(id)?.value?.trim()||'';
+
+function showForm(){
+  document.getElementById('pricing-wrap').style.display='none';
+  document.getElementById('form-wrap').style.display='block';
+  document.getElementById('loading').style.display='none';
+  document.getElementById('rout').style.display='none';
+}
+
+function openMod(t,h){
+  document.getElementById('mttl').textContent=t;
+  document.getElementById('mbody').innerHTML=h;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMod(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function openContact(){
+  openMod('Contact',`
+    <div class="cff"><label style="display:block;font-family:'DM Sans',sans-serif;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:0.16rem;font-weight:500;">Email</label><input class="cfinput" type="email" id="ce" placeholder="your@email.com"></div>
+    <div class="cff"><label style="display:block;font-family:'DM Sans',sans-serif;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:0.16rem;font-weight:500;">Message</label><textarea class="cfta" id="cm" placeholder="How can we help?"></textarea></div>
+    <button class="sbtn" onclick="subContact()">Send</button>
+    <div id="cs" style="display:none;margin-top:0.45rem;font-family:'DM Sans',sans-serif;font-size:0.68rem;color:var(--mid);font-style:normal;"></div>`);
+}
+function subContact(){
+  const e=document.getElementById('ce')?.value?.trim();
+  if(!e)return;
+  document.getElementById('cs').textContent='Message received. We\'ll respond within 24 hours.';
+  document.getElementById('cs').style.display='block';
+}
+
+// ── GENERATE ──
+async function generate(){
+  const p1f=g('p1f'),p1l=g('p1l'),d1=g('p1d');
+  if(!p1f||!p1l||!vd(d1)){document.getElementById('err').style.display='block';return;}
+  if(rtype==='two-person'){
+    const p2f=g('p2f'),p2l=g('p2l'),d2=g('p2d');
+    if(!p2f||!p2l||!vd(d2)){document.getElementById('err').style.display='block';return;}
+  }
+  document.getElementById('err').style.display='none';
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('loading').style.display='block';
+  document.getElementById('rout').style.display='none';
+
+  const getTime=(tid,aid)=>{const t=g(tid),ap=g(aid);return t?t+' '+ap:'';};
+  const p1={first:p1f,mid:g('p1m'),last:p1l,dob:d1,time:getTime('p1t','p1ap'),city:g('p1c'),country:g('p1co')};
+  const p2=rtype==='two-person'?{first:g('p2f'),mid:g('p2m'),last:g('p2l'),dob:g('p2d'),time:getTime('p2t','p2ap'),city:g('p2c'),country:g('p2co')}:null;
+
+  try{
+    const res=await fetch(W+'/report',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({rtype, relLabel:rls[rel], p1, p2})
+    });
+    if(!res.ok) throw new Error('Request failed: '+res.status);
+    const result=await res.json();
+
+    p1.numerology=result.p1.numerology;
+    p1.astro=result.p1.astrology;
+    p1.hd=result.p1.humanDesign;
+    if(p2 && result.p2){
+      p2.numerology=result.p2.numerology;
+      p2.astro=result.p2.astrology;
+      p2.hd=result.p2.humanDesign;
+    }
+
+    render(p1,p2,result.report);
+  }catch(e){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('form-wrap').style.display='block';
+    document.getElementById('err').textContent='Something went wrong generating your reading. Please try again.';
+    document.getElementById('err').style.display='block';
+  }
+}
+
+function arow(l,v){return `<div class="dpr"><span class="dprl">${l}</span><span class="dprv">${v}</span></div>`;}
+function apend(v){return `<div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div>`;}
+
+// ── ASTROLOGY LIST ──
+// Displays whatever planet/position data actually came back. Field names
+// are defensive (checked against a few likely shapes) since the exact
+// response shape from the astrology vendor has not yet been confirmed
+// against real, non-simulated output.
+function ar(astro){
+  if(!astro || astro.error) return apend('Unavailable');
+  const planets = astro.planets || astro.data?.planets || astro.positions || [];
+  if(!planets.length) return apend('Unavailable');
+  let h='';
+  planets.forEach(p=>{
+    const name = p.name || p.planet;
+    const sign = p.sign || p.zodiac_sign;
+    if(name && sign) h+=arow(name, sign);
+  });
+  return h || apend('Unavailable');
+}
+
+// ── NUMEROLOGY LIST ──
+// Every field the calculator produced and that Claude was given — nothing summarized.
+function nr(num){
+  if(!num) return apend('Unavailable');
+  let h='';
+  h+=arow('Life Path', num.lifePath);
+  h+=arow('Expression', num.expression);
+  h+=arow('Soul Urge', num.soulUrge);
+  h+=arow('Personality', num.personality);
+  h+=arow('Birthday', num.birthday);
+  h+=arow('Attitude', num.attitude);
+  h+=arow('Balance', num.balance);
+  h+=arow('Maturity', num.maturity);
+  h+=arow('Personal Year', num.personalYear);
+  h+=arow('Personal Month', num.personalMonth);
+  h+=arow('Personal Day', num.personalDay);
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')', num.essenceCycle.value);
+  h+=arow('Pinnacle 1', num.pinnacles.pinnacle1.value+' ('+num.pinnacles.pinnacle1.ageRange+')');
+  h+=arow('Pinnacle 2', num.pinnacles.pinnacle2.value+' ('+num.pinnacles.pinnacle2.ageRange+')');
+  h+=arow('Pinnacle 3', num.pinnacles.pinnacle3.value+' ('+num.pinnacles.pinnacle3.ageRange+')');
+  h+=arow('Pinnacle 4', num.pinnacles.pinnacle4.value+' ('+num.pinnacles.pinnacle4.ageRange+')');
+  h+=arow('Challenge 1', num.challengeNumbers.challenge1);
+  h+=arow('Challenge 2', num.challengeNumbers.challenge2);
+  h+=arow('Challenge 3', num.challengeNumbers.challenge3);
+  h+=arow('Challenge 4', num.challengeNumbers.challenge4);
+  h+=arow('Karmic Lessons', num.karmicLessons.length ? num.karmicLessons.join(', ') : 'None');
+  h+=arow('Karmic Debt', num.karmicDebtNumbers.length ? num.karmicDebtNumbers.join(', ') : 'None');
+  return h;
+}
+
+// ── HUMAN DESIGN LIST ──
+function hdr(hd){
+  if(!hd || hd.error) return apend('Unavailable');
+  let h='';
+  if(hd.type) h+=arow('Type', hd.type);
+  if(hd.profile) h+=arow('Profile', hd.profile);
+  if(hd.authority) h+=arow('Authority', hd.authority);
+  if(hd.incarnation_cross) h+=arow('Incarnation Cross', hd.incarnation_cross);
+  if(hd.gates && hd.gates.length) h+=arow('Gates', hd.gates.join(', '));
+  return h || apend('Unavailable');
+}
+
+function pan(nm,sys,rows,isP2){
+  const c=isP2?'p2':'';
+  return `<div class="dp ${c}">
+    <div class="dph ${c}">${nm} · ${sys}</div>
+    <div class="dplist">${rows}</div>
+  </div>`;
+}
+
+function render(p1,p2,r){
+  const n1=p1.first+(p1.last?' '+p1.last:'');
+  const rk=btoa(unescape(encodeURIComponent(JSON.stringify(r))));
+  const prev=r.sections[0]?.body?.split('\n\n')[0]||'';
+
+  let h=`<div class="r-head">
+    ${p2?`<div class="r-rel">${rls[rel]}</div>`:''}
+    <div class="r-names">${p2?`${p1.first}<span class="amp"> &amp; </span>${p2.first}`:n1}</div>
+    <div class="r-hl">"${r.headline}"</div>
+  </div>`;
+
+  if(p2){
+    h+=`<div class="ptop">
+      ${pan(p1.first,'Astrology',ar(p1.astro),false)}
+      ${pan(p1.first,'Numerology',nr(p1.numerology),false)}
+      ${pan(p1.first,'Human Design',hdr(p1.hd),false)}
+    </div>
+    <div class="pmid"><div class="rpan" onclick="showR('${rk}')">
+      <div class="rpanh"><div class="rpant">Combined Reading — ${p1.first} &amp; ${p2.first}</div><span class="rpanh-hint">tap to read</span></div>
+      <div class="rpanv">${prev}</div>
+    </div></div>
+    <div class="pbot">
+      ${pan(p2.first,'Astrology',ar(p2.astro),true)}
+      ${pan(p2.first,'Numerology',nr(p2.numerology),true)}
+      ${pan(p2.first,'Human Design',hdr(p2.hd),true)}
+    </div>`;
+  } else {
+    h+=`<div class="ptop">
+      ${pan(p1.first,'Astrology',ar(p1.astro),false)}
+      ${pan(p1.first,'Numerology',nr(p1.numerology),false)}
+      ${pan(p1.first,'Human Design',hdr(p1.hd),false)}
+    </div>
+    <div class="pmid"><div class="rpan" onclick="showR('${rk}')">
+      <div class="rpanh"><div class="rpant">Individual Reading — ${n1}</div><span class="rpanh-hint">tap to read</span></div>
+      <div class="rpanv">${prev}</div>
+    </div></div>`;
+  }
+
+  document.getElementById('rcontent').innerHTML=h;
+  document.getElementById('loading').style.display='none';
+  document.getElementById('rout').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function showR(rk){
+  const r=JSON.parse(decodeURIComponent(escape(atob(rk))));
+  let h=r.sections.map(s=>`<div class="rs">
+    <div class="rsey">${s.eyebrow}</div>
+    <div class="rsttl">${s.title}</div>
+    <span class="rstag ${tc[s.tag]||'tf'}">${s.tag}</span>
+    ${s.body.split('\n\n').map(p=>`<p>${p}</p>`).join('')}
+  </div>`).join('');
+  h+=`<div class="sig"><div class="sigl">Signature Dynamic</div><div class="sigt">"${r.signature}"</div></div>`;
+  openMod('Reading',h);
+}
+</script>
+</body>
+</html>
