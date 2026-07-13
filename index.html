@@ -115,6 +115,27 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .dprv{color:var(--txt);font-style:italic;font-weight:700;text-align:right;}
 .dprv.pend{color:var(--f);font-style:italic;opacity:0.7;font-size:0.58rem;}
 
+.dprow:nth-child(odd){background:rgba(10,10,26,0.025);}
+.dprow:nth-child(even){background:rgba(10,10,26,0.065);}
+.dprow .dpr{border-bottom:none;}
+.dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
+.dprl.term:hover{color:var(--f);}
+.dp.p2 .dprl.term:hover{color:var(--k);}
+.dpdef{padding:0 0.55rem 0.42rem;font-family:'DM Sans',sans-serif;font-size:0.56rem;line-height:1.55;color:var(--mid);font-style:italic;font-weight:400;}
+.dpdef[hidden]{display:none;}
+
+.gates-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.28rem;padding:0.15rem 0.55rem 0.42rem;}
+@media(max-width:380px){.gates-grid{grid-template-columns:repeat(3,1fr);}}
+.gate-chip{border:1px solid rgba(255,51,204,0.2);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-weight:700;font-style:italic;font-size:0.62rem;padding:0.24rem 0;cursor:pointer;text-align:center;transition:all 0.15s;}
+.gate-chip:nth-child(odd){background:rgba(10,10,26,0.03);}
+.gate-chip:nth-child(even){background:rgba(10,10,26,0.075);}
+.gate-chip:hover,.gate-chip.active{border-color:var(--f);color:var(--f);}
+.dp.p2 .gate-chip{border-color:rgba(0,255,186,0.22);}
+.dp.p2 .gate-chip:hover,.dp.p2 .gate-chip.active{border-color:var(--k);color:#1a7050;}
+.gate-def{margin:0 0.55rem 0.45rem;padding:0.38rem 0.5rem;background:rgba(255,51,204,0.05);border-left:2px solid var(--f);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.58rem;line-height:1.5;color:var(--mid);font-style:italic;font-weight:400;}
+.dp.p2 .gate-def{background:rgba(0,255,186,0.05);border-left-color:var(--k);}
+.gate-def[hidden]{display:none;}
+
 .rpan{background:var(--moon2);border:1px solid rgba(255,51,204,0.18);border-left:2px solid var(--f);border-radius:4px;cursor:pointer;overflow:hidden;transition:all 0.15s;box-shadow:0 0 10px rgba(255,51,204,0.05);}
 .rpan:hover{box-shadow:0 0 18px rgba(255,51,204,0.12);}
 .rpanh{padding:0.44rem 0.8rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,51,204,0.07);}
@@ -464,8 +485,130 @@ async function generate(){
   }
 }
 
-function arow(l,v){return `<div class="dpr"><span class="dprl">${l}</span><span class="dprv">${v}</span></div>`;}
-function apend(v){return `<div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div>`;}
+const GLOSSARY={
+  sun:"Your core identity — how you express your basic sense of self.",
+  moon:"Your emotional world and instinctive reactions; what makes you feel safe.",
+  mercury:"How you think, process information, and communicate.",
+  venus:"What you value, how you love, and what you find beautiful.",
+  mars:"How you take action, assert yourself, and pursue what you want.",
+  jupiter:"Where you seek growth, meaning, and expansion.",
+  saturn:"Where you meet structure, discipline, and long-term lessons.",
+  uranus:"Where you seek freedom, disruption, and individuality.",
+  neptune:"Where you dream, idealize, and sometimes lose clarity.",
+  pluto:"Where you experience deep transformation and power dynamics.",
+  ascendant:"The mask you wear and the first impression you give others.",
+  mc:"Your public reputation, career direction, and life's aim.",
+  ic:"Your private foundation — home, family, and inner roots.",
+  descendant:"What you seek in partners and one-on-one relationships.",
+  northnode:"The growth direction your path is moving toward.",
+  southnode:"Familiar patterns and comfort zones from your past.",
+  chiron:"Your core wound — and where you're capable of deep healing.",
+  lilith:"Your raw, untamed instincts and what you refuse to suppress.",
+
+  lifepath:"Your overall life direction and central lesson.",
+  expression:"Your natural talents and how you express them in the world.",
+  soulurge:"Your inner motivation — what your heart truly wants.",
+  personality:"How others perceive you before they know you well.",
+  birthday:"A special natural talent tied to the day you were born.",
+  attitude:"Your instinctive first reaction to new situations.",
+  balance:"How you regain composure and cope during hard times.",
+  maturity:"Who you're growing into from mid-life onward.",
+  personalyear:"The overarching theme of your current year-long cycle.",
+  personalmonth:"The theme of the current month within this year's cycle.",
+  personalday:"The theme of today within this month's cycle.",
+  essence:"The vibration you're living through at your current age.",
+  pinnacle:"A multi-year chapter of life and the opportunity it offers.",
+  challenge:"A recurring obstacle to work through during that chapter.",
+  karmiclessons:"Traits missing from your name that you're here to develop.",
+  karmicdebt:"A number marking a lesson carried over for you to resolve.",
+
+  hdtype:"Your energetic strategy for engaging with the world.",
+  hdprofile:"The role your personality plays out — your life's ‘costume’.",
+  hdauthority:"How you're energetically built to make sound decisions.",
+  hdcross:"Your life's overarching theme and sense of purpose."
+};
+
+const GATES={
+  1:"Self-Expression — the drive to creatively express who you are.",
+  2:"The Direction of the Self — innate sense of direction for yourself and others.",
+  3:"Ordering — finding workable order out of new beginnings' chaos.",
+  4:"Formulization — the need to answer and make sense of things.",
+  5:"Fixed Rhythms — comfort in patience and consistent routine.",
+  6:"Friction — the gateway to (or from) intimacy and conflict.",
+  7:"The Role of the Self — quiet leadership through direction-setting.",
+  8:"Contribution — holding a group together by individual example.",
+  9:"Focus — determination to see small details through to completion.",
+  10:"Behavior of the Self — self-love and authentic conduct.",
+  11:"Ideas — generating concepts and seeking peace through sharing them.",
+  12:"Caution — careful articulation; knowing when to speak or stay silent.",
+  13:"The Listener — a fellowship built on hearing others' secrets.",
+  14:"Power Skills — competence that generates resources and possessions.",
+  15:"Extremes — modesty and acceptance of every kind of person.",
+  16:"Skills — enthusiasm and talent honed through repeated practice.",
+  17:"Opinions — logical, forward-looking views meant to be followed.",
+  18:"Correction — spotting flaws and the drive to fix what's broken.",
+  19:"Wanting — sensitivity to what's needed for support and belonging.",
+  20:"The Now — presence and acting from contemplation in the moment.",
+  21:"Control — the will to take charge and manage resources.",
+  22:"Openness — emotional grace and social receptivity.",
+  23:"Assimilation — simplifying complex ideas so others can grasp them.",
+  24:"Rationalization — returning to and reworking a thought until it's clear.",
+  25:"Innocence — universal love, unattached to any single outcome.",
+  26:"The Egoist — persuasion and confident salesmanship.",
+  27:"Caring — nourishment and responsibility for others' wellbeing.",
+  28:"The Game Player — the search for meaning through risk.",
+  29:"Perseverance — the commitment to say yes and see it through.",
+  30:"Feelings — desire and the recognition of emotional experience.",
+  31:"Influence — leadership earned through others' recognition.",
+  32:"Continuity — sensing what will or won't endure.",
+  33:"Privacy — retreat, reflection, and remembering the past.",
+  34:"Power — raw energy and the strength to act.",
+  35:"Change — restlessness that pushes progress through experience.",
+  36:"Crisis — emotional experience through turbulence and new terrain.",
+  37:"Friendship — bonds built through family, agreements, and warmth.",
+  38:"Opposition — the fighter's spirit; standing for what matters.",
+  39:"Provocation — stirring others to reveal what's really going on.",
+  40:"Aloneness — earning rest and deliverance through providership.",
+  41:"Contraction — the first stirrings of fantasy and new desire.",
+  42:"Growth — bringing cycles to completion and increase.",
+  43:"Insight — sudden breakthroughs of individual knowing.",
+  44:"Alertness — instinctive read on people and patterns from the past.",
+  45:"Gatherer — leadership through the sharing of resources.",
+  46:"Determination — love of the body and being in the right place.",
+  47:"Realization — making sense of past confusion and oppression.",
+  48:"Depth — the well of knowledge and fear of inadequacy.",
+  49:"Principles — the values that define acceptance or rejection.",
+  50:"Values — the responsibility of upholding law and tradition.",
+  51:"Shock — the jolt that initiates and awakens.",
+  52:"Stillness — focused inaction that precedes concentrated action.",
+  53:"Beginnings — the drive to start, though not always finish.",
+  54:"Ambition — drive to rise and transform one's circumstances.",
+  55:"Spirit — emotional abundance and shifting moods.",
+  56:"Stimulation — the wanderer's gift for storytelling and experience.",
+  57:"Intuition — instant clarity and gentle, penetrating awareness.",
+  58:"Vitality — the joy and stamina to correct and improve.",
+  59:"Sexuality — breaking down barriers to create intimacy.",
+  60:"Acceptance — working within limitation to create something new.",
+  61:"Mystery — inner truth and the need to know why.",
+  62:"Details — precision and facts expressed in small, clear terms.",
+  63:"Doubt — questioning what's already been completed.",
+  64:"Confusion — a flood of impressions awaiting order and meaning."
+};
+
+function arow(l,v,defKey){
+  const def=defKey&&GLOSSARY[defKey];
+  const lbl=def?`<span class="dprl term" data-def="${defKey}">${l}</span>`:`<span class="dprl">${l}</span>`;
+  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${v}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
+}
+function apend(v){return `<div class="dprow"><div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div></div>`;}
+
+const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mars',Jupiter:'jupiter',Saturn:'saturn',
+  Uranus:'uranus',Neptune:'neptune',Pluto:'pluto',
+  Mean_Node:'northnode',True_Node:'northnode',Mean_South_Node:'southnode',True_South_Node:'southnode',
+  Chiron:'chiron',Mean_Lilith:'lilith',Lilith:'lilith',
+  Ascendant:'ascendant',Medium_Coeli:'mc',Descendant:'descendant',Imum_Coeli:'ic'};
+const ASTRO_LABEL={Mean_Node:'North Node',True_Node:'North Node',Mean_South_Node:'South Node',True_South_Node:'South Node',
+  Medium_Coeli:'Midheaven',Imum_Coeli:'IC',Mean_Lilith:'Lilith',Ascendant:'Rising'};
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
@@ -475,7 +618,7 @@ function ar(astro){
   planets.forEach(p=>{
     const name=p.name||p.planet;
     const sign=p.sign||p.zodiac_sign;
-    if(name&&sign)h+=arow(name,sign);
+    if(name&&sign)h+=arow(ASTRO_LABEL[name]||name,sign,ASTRO_KEY[name]);
   });
   return h||apend('Unavailable');
 }
@@ -483,39 +626,43 @@ function ar(astro){
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
-  h+=arow('Life Path',num.lifePath);
-  h+=arow('Expression',num.expression);
-  h+=arow('Soul Urge',num.soulUrge);
-  h+=arow('Personality',num.personality);
-  h+=arow('Birthday',num.birthday);
-  h+=arow('Attitude',num.attitude);
-  h+=arow('Balance',num.balance);
-  h+=arow('Maturity',num.maturity);
-  h+=arow('Personal Year',num.personalYear);
-  h+=arow('Personal Month',num.personalMonth);
-  h+=arow('Personal Day',num.personalDay);
-  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value);
-  h+=arow('Pinnacle 1',num.pinnacles.pinnacle1.value+' ('+num.pinnacles.pinnacle1.ageRange+')');
-  h+=arow('Pinnacle 2',num.pinnacles.pinnacle2.value+' ('+num.pinnacles.pinnacle2.ageRange+')');
-  h+=arow('Pinnacle 3',num.pinnacles.pinnacle3.value+' ('+num.pinnacles.pinnacle3.ageRange+')');
-  h+=arow('Pinnacle 4',num.pinnacles.pinnacle4.value+' ('+num.pinnacles.pinnacle4.ageRange+')');
-  h+=arow('Challenge 1',num.challengeNumbers.challenge1);
-  h+=arow('Challenge 2',num.challengeNumbers.challenge2);
-  h+=arow('Challenge 3',num.challengeNumbers.challenge3);
-  h+=arow('Challenge 4',num.challengeNumbers.challenge4);
-  h+=arow('Karmic Lessons',num.karmicLessons.length?num.karmicLessons.join(', '):'None');
-  h+=arow('Karmic Debt',num.karmicDebtNumbers.length?num.karmicDebtNumbers.join(', '):'None');
+  h+=arow('Life Path',num.lifePath,'lifepath');
+  h+=arow('Expression',num.expression,'expression');
+  h+=arow('Soul Urge',num.soulUrge,'soulurge');
+  h+=arow('Personality',num.personality,'personality');
+  h+=arow('Birthday',num.birthday,'birthday');
+  h+=arow('Attitude',num.attitude,'attitude');
+  h+=arow('Balance',num.balance,'balance');
+  h+=arow('Maturity',num.maturity,'maturity');
+  h+=arow('Personal Year',num.personalYear,'personalyear');
+  h+=arow('Personal Month',num.personalMonth,'personalmonth');
+  h+=arow('Personal Day',num.personalDay,'personalday');
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence');
+  h+=arow('Pinnacle 1',num.pinnacles.pinnacle1.value+' ('+num.pinnacles.pinnacle1.ageRange+')','pinnacle');
+  h+=arow('Pinnacle 2',num.pinnacles.pinnacle2.value+' ('+num.pinnacles.pinnacle2.ageRange+')','pinnacle');
+  h+=arow('Pinnacle 3',num.pinnacles.pinnacle3.value+' ('+num.pinnacles.pinnacle3.ageRange+')','pinnacle');
+  h+=arow('Pinnacle 4',num.pinnacles.pinnacle4.value+' ('+num.pinnacles.pinnacle4.ageRange+')','pinnacle');
+  h+=arow('Challenge 1',num.challengeNumbers.challenge1,'challenge');
+  h+=arow('Challenge 2',num.challengeNumbers.challenge2,'challenge');
+  h+=arow('Challenge 3',num.challengeNumbers.challenge3,'challenge');
+  h+=arow('Challenge 4',num.challengeNumbers.challenge4,'challenge');
+  h+=arow('Karmic Lessons',num.karmicLessons.length?num.karmicLessons.join(', '):'None','karmiclessons');
+  h+=arow('Karmic Debt',num.karmicDebtNumbers.length?num.karmicDebtNumbers.join(', '):'None','karmicdebt');
   return h;
 }
 
 function hdr(hd){
   if(!hd||hd.error)return apend('Unavailable');
   let h='';
-  if(hd.type)h+=arow('Type',hd.type);
-  if(hd.profile)h+=arow('Profile',hd.profile);
-  if(hd.authority)h+=arow('Authority',hd.authority);
-  if(hd.incarnation_cross)h+=arow('Incarnation Cross',hd.incarnation_cross);
-  if(hd.gates&&hd.gates.length)h+=arow('Gates',hd.gates.join(', '));
+  if(hd.type)h+=arow('Type',hd.type,'hdtype');
+  if(hd.profile)h+=arow('Profile',hd.profile,'hdprofile');
+  if(hd.authority)h+=arow('Authority',hd.authority,'hdauthority');
+  if(hd.incarnation_cross)h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');
+  if(hd.gates&&hd.gates.length){
+    h+=`<div class="dprow"><div class="dpr"><span class="dprl">Gates</span></div>
+    <div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div>
+    <div class="gate-def" hidden></div></div>`;
+  }
   return h||apend('Unavailable');
 }
 
@@ -567,6 +714,27 @@ function render(p1,p2,r){
   document.getElementById('rout').style.display='block';
   window.scrollTo(0,0);
 }
+
+document.addEventListener('click',function(e){
+  const term=e.target.closest('.term');
+  if(term){
+    const def=term.closest('.dprow')?.querySelector('.dpdef');
+    if(def)def.hidden=!def.hidden;
+    return;
+  }
+  const chip=e.target.closest('.gate-chip');
+  if(chip){
+    const wrap=chip.closest('.dprow');
+    const box=wrap?.querySelector('.gate-def');
+    if(!box)return;
+    const wasActive=chip.classList.contains('active');
+    wrap.querySelectorAll('.gate-chip').forEach(c=>c.classList.remove('active'));
+    if(wasActive){box.hidden=true;return;}
+    chip.classList.add('active');
+    box.textContent='Gate '+chip.dataset.gate+' — '+(GATES[chip.dataset.gate]||'No description available.');
+    box.hidden=false;
+  }
+});
 
 function showR(rk){
   const r=JSON.parse(decodeURIComponent(escape(atob(rk))));
