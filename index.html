@@ -469,7 +469,7 @@ function apend(v){return `<div class="dpr"><span class="dprl">Status</span><span
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
-  const planets=astro.planets||astro.data?.planets||astro.positions||[];
+  const planets=astro.data?.positions||astro.planets||astro.data?.planets||astro.positions||[];
   if(!planets.length)return apend('Unavailable');
   let h='';
   planets.forEach(p=>{
