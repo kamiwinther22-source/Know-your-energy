@@ -104,9 +104,9 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 .rout{display:none;}
 body.results-mode{background:#f2f2f2;}
-.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-bottom:0.7rem;}
+.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;margin-bottom:0.7rem;}
 .pmid{margin-bottom:0.7rem;display:flex;justify-content:center;}
-.pbot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;}
+.pbot{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;}
 .dp{
   --card-bg:var(--moon2);--card-text:var(--txt);--card-dim:var(--dim);--card-mid:var(--mid);--card-accent:var(--f);
   --card-a1:rgba(255,51,204,0.13);--card-a2:rgba(255,51,204,0.07);--card-a3:rgba(255,51,204,0.02);--card-a4:rgba(255,51,204,0.05);
@@ -613,8 +613,9 @@ function dpsec(l){return `<div class="dpsec">${l}</div>`;}
 const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mars',Jupiter:'jupiter',Saturn:'saturn',
   Uranus:'uranus',Neptune:'neptune',Pluto:'pluto'};
 const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','Mars']],['Social',['Jupiter','Saturn']],['Outer',['Uranus','Neptune','Pluto']]];
-const PLANET_GLYPH={Sun:'☉',Moon:'☽',Mercury:'☿',Venus:'♀',Mars:'♂',Jupiter:'♃',Saturn:'♄',Uranus:'♅',Neptune:'♆',Pluto:'♇'};
-const SIGN_GLYPH={Ari:'♈',Tau:'♉',Gem:'♊',Can:'♋',Leo:'♌',Vir:'♍',Lib:'♎',Sco:'♏',Sag:'♐',Cap:'♑',Aqu:'♒',Pis:'♓'};
+const VS='︎';
+const PLANET_GLYPH={Sun:'☉'+VS,Moon:'☽'+VS,Mercury:'☿'+VS,Venus:'♀'+VS,Mars:'♂'+VS,Jupiter:'♃'+VS,Saturn:'♄'+VS,Uranus:'♅'+VS,Neptune:'♆'+VS,Pluto:'♇'+VS};
+const SIGN_GLYPH={Ari:'♈'+VS,Tau:'♉'+VS,Gem:'♊'+VS,Can:'♋'+VS,Leo:'♌'+VS,Vir:'♍'+VS,Lib:'♎'+VS,Sco:'♏'+VS,Sag:'♐'+VS,Cap:'♑'+VS,Aqu:'♒'+VS,Pis:'♓'+VS};
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
