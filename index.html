@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know Your Energy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -125,14 +125,14 @@ body.results-mode{background:#f2f2f2;}
 .dp.p2.hd{--card-bg:#241c14;--card-text:#f0e6d2;--card-dim:#a08e6c;--card-mid:#d8c9a8;--card-accent:#c99a4a;--card-a1:rgba(201,154,74,0.3);--card-a2:rgba(201,154,74,0.15);--card-a3:rgba(201,154,74,0.08);--card-a4:rgba(201,154,74,0.1);--card-stripe-odd:rgba(255,255,255,0.02);--card-stripe-even:rgba(255,255,255,0.06);}
 .dp.p2.num{--card-bg:#e8dfc0;--card-text:#3a3016;--card-dim:#8c7d50;--card-mid:#5c4f26;--card-accent:#8a9c3d;--card-a1:rgba(138,156,61,0.3);--card-a2:rgba(138,156,61,0.15);--card-a3:rgba(138,156,61,0.08);--card-a4:rgba(138,156,61,0.12);--card-stripe-odd:rgba(0,0,0,0.02);--card-stripe-even:rgba(0,0,0,0.05);}
 
-.dph{padding:0.2rem 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:500;}
+.dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
 .dpr{display:flex;justify-content:space-between;gap:0.3rem;padding:0.09rem 0.4rem;font-size:0.5rem;}
-.dprl{font-family:'DM Sans',sans-serif;color:var(--card-dim);font-size:0.4rem;text-transform:uppercase;letter-spacing:0.02em;font-weight:500;flex-shrink:0;}
-.dprv{color:var(--card-text);font-style:italic;font-weight:700;text-align:right;}
-.dprv.pend{color:var(--card-accent);font-style:italic;opacity:0.85;font-size:0.46rem;}
+.dprl{font-family:'Barlow Condensed',sans-serif;color:var(--card-dim);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.01em;font-weight:700;flex-shrink:0;}
+.dprv{font-family:'Barlow Condensed',sans-serif;color:var(--card-text);font-style:normal;font-weight:800;text-align:right;}
+.dprv.pend{color:var(--card-accent);opacity:0.85;font-size:0.46rem;}
 
-.dpsec{padding:0.18rem 0.4rem 0.05rem;font-family:'DM Sans',sans-serif;font-size:0.36rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--card-accent);opacity:0.85;font-weight:500;margin-top:0.05rem;}
+.dpsec{padding:0.18rem 0.4rem 0.05rem;font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--card-accent);opacity:0.85;font-weight:700;margin-top:0.05rem;}
 .dpsec:first-child{margin-top:0;}
 
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
@@ -144,7 +144,7 @@ body.results-mode{background:#f2f2f2;}
 
 .gates-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.2rem;padding:0.1rem 0.4rem 0.3rem;}
 @media(max-width:380px){.gates-grid{grid-template-columns:repeat(3,1fr);}}
-.gate-chip{border:1px solid var(--card-a1);border-radius:3px;color:var(--card-text);font-family:'Playfair Display',serif;font-weight:700;font-style:italic;font-size:0.5rem;padding:0.16rem 0;cursor:pointer;text-align:center;transition:all 0.15s;
+.gate-chip{border:1px solid var(--card-a1);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:normal;font-size:0.52rem;padding:0.16rem 0;cursor:pointer;text-align:center;transition:all 0.15s;
   box-shadow:0 1px 0 rgba(255,255,255,0.15) inset,0 2px 4px rgba(0,0,0,0.14);
 }
 .gate-chip:active{transform:translateY(1px);box-shadow:0 1px 2px rgba(0,0,0,0.18) inset;}
