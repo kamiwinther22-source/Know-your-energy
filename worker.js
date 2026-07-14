@@ -148,7 +148,7 @@ async function getAstrology(env, dob, timeStr, ampm, city, state, country) {
         tradition: "universal",
         detail_level: "standard",
         zodiac_type: "Tropic",
-        active_points: ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Mean_Node", "Mean_South_Node", "Chiron", "Mean_Lilith", "Ascendant", "Medium_Coeli", "Descendant", "Imum_Coeli"],
+        active_points: ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"],
         precision: 2
       }
     })

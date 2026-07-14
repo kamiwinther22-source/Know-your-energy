@@ -496,14 +496,6 @@ const GLOSSARY={
   uranus:"Where you seek freedom, disruption, and individuality.",
   neptune:"Where you dream, idealize, and sometimes lose clarity.",
   pluto:"Where you experience deep transformation and power dynamics.",
-  ascendant:"The mask you wear and the first impression you give others.",
-  mc:"Your public reputation, career direction, and life's aim.",
-  ic:"Your private foundation — home, family, and inner roots.",
-  descendant:"What you seek in partners and one-on-one relationships.",
-  northnode:"The growth direction your path is moving toward.",
-  southnode:"Familiar patterns and comfort zones from your past.",
-  chiron:"Your core wound — and where you're capable of deep healing.",
-  lilith:"Your raw, untamed instincts and what you refuse to suppress.",
 
   lifepath:"Your overall life direction and central lesson.",
   expression:"Your natural talents and how you express them in the world.",
@@ -603,12 +595,7 @@ function arow(l,v,defKey){
 function apend(v){return `<div class="dprow"><div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div></div>`;}
 
 const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mars',Jupiter:'jupiter',Saturn:'saturn',
-  Uranus:'uranus',Neptune:'neptune',Pluto:'pluto',
-  Mean_Node:'northnode',True_Node:'northnode',Mean_South_Node:'southnode',True_South_Node:'southnode',
-  Chiron:'chiron',Mean_Lilith:'lilith',Lilith:'lilith',
-  Ascendant:'ascendant',Medium_Coeli:'mc',Descendant:'descendant',Imum_Coeli:'ic'};
-const ASTRO_LABEL={Mean_Node:'North Node',True_Node:'North Node',Mean_South_Node:'South Node',True_South_Node:'South Node',
-  Medium_Coeli:'Midheaven',Imum_Coeli:'IC',Mean_Lilith:'Lilith',Ascendant:'Rising'};
+  Uranus:'uranus',Neptune:'neptune',Pluto:'pluto'};
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
@@ -618,7 +605,7 @@ function ar(astro){
   planets.forEach(p=>{
     const name=p.name||p.planet;
     const sign=p.sign||p.zodiac_sign;
-    if(name&&sign)h+=arow(ASTRO_LABEL[name]||name,sign,ASTRO_KEY[name]);
+    if(name&&sign)h+=arow(name,sign,ASTRO_KEY[name]);
   });
   return h||apend('Unavailable');
 }
