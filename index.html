@@ -108,15 +108,12 @@ body.results-mode{background:#f2f2f2;}
 .pmid{margin-bottom:400px;display:flex;justify-content:center;}
 .pbot{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;}
 .dp{
-  --card-hi:#f0f0f0;--card-bg:#c0c0c0;--card-lo:#707078;--card-text:#202024;--card-dim:#40404a;--card-mid:#2a2a30;--card-accent:#4a4a54;
+  --card-bg:#d8dade;--card-text:#202024;--card-dim:#40404a;--card-mid:#2a2a30;--card-accent:#4a4a54;
   --card-a1:rgba(255,255,255,0.4);--card-a2:rgba(0,0,0,0.14);--card-a3:rgba(255,255,255,0.15);--card-a4:rgba(0,0,0,0.08);
   --card-stripe-odd:rgba(255,255,255,0.1);--card-stripe-even:rgba(0,0,0,0.07);
-  background:
-    linear-gradient(105deg, transparent 0%, transparent 16%, rgba(255,255,255,0.95) 25%, rgba(255,255,255,0.1) 34%, transparent 42%),
-    linear-gradient(105deg, transparent 58%, rgba(255,255,255,0.6) 68%, transparent 78%),
-    linear-gradient(160deg, var(--card-hi) 0%, var(--card-bg) 45%, var(--card-lo) 100%);
+  background:var(--card-bg);
   color:var(--card-text);border:1px solid var(--card-a1);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:0 1px 0 rgba(255,255,255,0.7) inset,0 -2px 5px rgba(0,0,0,0.28) inset,0 18px 34px -14px rgba(10,10,26,0.5),0 6px 14px rgba(10,10,26,0.24);
+  box-shadow:0 1px 0 rgba(255,255,255,0.7) inset,0 -1px 0 rgba(0,0,0,0.08) inset,0 18px 34px -14px rgba(10,10,26,0.35),0 6px 14px rgba(10,10,26,0.16);
   transition:transform 0.16s ease,box-shadow 0.16s ease;
   animation:cardIn 0.55s cubic-bezier(0.2,0.7,0.3,1) both;
   height:400px;cursor:pointer;position:relative;
@@ -132,12 +129,12 @@ body.results-mode{background:#f2f2f2;}
 .pbot .dp:nth-child(3){animation-delay:0.45s;}
 .dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.2) inset;}
 @media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.18) inset,0 -1px 0 rgba(0,0,0,0.12) inset,0 24px 40px -14px rgba(10,10,26,0.5),0 8px 16px rgba(10,10,26,0.24);}}
-.dp.astro{--card-hi:#f7e9b8;--card-bg:#d4af37;--card-lo:#8a6d1f;--card-text:#3a2c0a;--card-dim:#5c4818;--card-mid:#4a3810;--card-accent:#5c4614;--card-a1:rgba(255,255,255,0.5);--card-a2:rgba(0,0,0,0.16);--card-a3:rgba(255,255,255,0.2);--card-a4:rgba(0,0,0,0.1);--card-stripe-odd:rgba(255,255,255,0.14);--card-stripe-even:rgba(0,0,0,0.08);}
-.dp.hd{--card-hi:#f2cfa6;--card-bg:#c87f4a;--card-lo:#7a4020;--card-text:#2e1808;--card-dim:#5c341a;--card-mid:#452612;--card-accent:#5a3418;--card-a1:rgba(255,255,255,0.5);--card-a2:rgba(0,0,0,0.16);--card-a3:rgba(255,255,255,0.2);--card-a4:rgba(0,0,0,0.1);--card-stripe-odd:rgba(255,255,255,0.14);--card-stripe-even:rgba(0,0,0,0.08);}
-.dp.num{--card-hi:#f2f4f6;--card-bg:#b8bcc4;--card-lo:#63656c;--card-text:#202124;--card-dim:#45474c;--card-mid:#333438;--card-accent:#45474e;--card-a1:rgba(255,255,255,0.5);--card-a2:rgba(0,0,0,0.16);--card-a3:rgba(255,255,255,0.2);--card-a4:rgba(0,0,0,0.1);--card-stripe-odd:rgba(255,255,255,0.14);--card-stripe-even:rgba(0,0,0,0.08);}
-.dp.p2.astro{--card-hi:#fbf3d8;--card-bg:#e8ca6a;--card-lo:#a8863a;--card-text:#3a2c0a;--card-dim:#6c5620;--card-mid:#4a3810;--card-accent:#6c5620;--card-a1:rgba(255,255,255,0.55);--card-a2:rgba(0,0,0,0.14);--card-a3:rgba(255,255,255,0.22);--card-a4:rgba(0,0,0,0.09);--card-stripe-odd:rgba(255,255,255,0.16);--card-stripe-even:rgba(0,0,0,0.07);}
-.dp.p2.hd{--card-hi:#f7ddc0;--card-bg:#dba578;--card-lo:#8a5836;--card-text:#2e1808;--card-dim:#6c4426;--card-mid:#452612;--card-accent:#6c4426;--card-a1:rgba(255,255,255,0.55);--card-a2:rgba(0,0,0,0.14);--card-a3:rgba(255,255,255,0.22);--card-a4:rgba(0,0,0,0.09);--card-stripe-odd:rgba(255,255,255,0.16);--card-stripe-even:rgba(0,0,0,0.07);}
-.dp.p2.num{--card-hi:#fafbfc;--card-bg:#d8dce2;--card-lo:#8a8d94;--card-text:#202124;--card-dim:#54565c;--card-mid:#333438;--card-accent:#54565c;--card-a1:rgba(255,255,255,0.6);--card-a2:rgba(0,0,0,0.12);--card-a3:rgba(255,255,255,0.25);--card-a4:rgba(0,0,0,0.08);--card-stripe-odd:rgba(255,255,255,0.18);--card-stripe-even:rgba(0,0,0,0.06);}
+.dp.astro{--card-bg:#e8d9a8;--card-text:#3a2c0a;--card-dim:#7a6224;--card-mid:#5c4818;--card-accent:#8a6a1e;--card-a1:rgba(138,106,30,0.25);--card-a2:rgba(138,106,30,0.12);--card-a3:rgba(138,106,30,0.06);--card-a4:rgba(138,106,30,0.1);--card-stripe-odd:rgba(255,255,255,0.35);--card-stripe-even:rgba(0,0,0,0.04);}
+.dp.hd{--card-bg:#e8c4a8;--card-text:#3a2415;--card-dim:#7a5638;--card-mid:#5c3a20;--card-accent:#8a5a34;--card-a1:rgba(138,90,52,0.25);--card-a2:rgba(138,90,52,0.12);--card-a3:rgba(138,90,52,0.06);--card-a4:rgba(138,90,52,0.1);--card-stripe-odd:rgba(255,255,255,0.35);--card-stripe-even:rgba(0,0,0,0.04);}
+.dp.num{--card-bg:#d8dade;--card-text:#202124;--card-dim:#5c5e64;--card-mid:#3a3b40;--card-accent:#4a4a52;--card-a1:rgba(74,74,82,0.25);--card-a2:rgba(74,74,82,0.12);--card-a3:rgba(74,74,82,0.06);--card-a4:rgba(74,74,82,0.1);--card-stripe-odd:rgba(255,255,255,0.4);--card-stripe-even:rgba(0,0,0,0.035);}
+.dp.p2.astro{--card-bg:#f2e8c4;--card-text:#3a2c0a;--card-dim:#8a7238;--card-mid:#5c4818;--card-accent:#8a6a1e;--card-a1:rgba(138,106,30,0.2);--card-a2:rgba(138,106,30,0.1);--card-a3:rgba(138,106,30,0.05);--card-a4:rgba(138,106,30,0.08);--card-stripe-odd:rgba(255,255,255,0.45);--card-stripe-even:rgba(0,0,0,0.03);}
+.dp.p2.hd{--card-bg:#f2d8c0;--card-text:#3a2415;--card-dim:#8a6c50;--card-mid:#5c3a20;--card-accent:#8a5a34;--card-a1:rgba(138,90,52,0.2);--card-a2:rgba(138,90,52,0.1);--card-a3:rgba(138,90,52,0.05);--card-a4:rgba(138,90,52,0.08);--card-stripe-odd:rgba(255,255,255,0.45);--card-stripe-even:rgba(0,0,0,0.03);}
+.dp.p2.num{--card-bg:#e8eaec;--card-text:#202124;--card-dim:#6c6e74;--card-mid:#3a3b40;--card-accent:#4a4a52;--card-a1:rgba(74,74,82,0.2);--card-a2:rgba(74,74,82,0.1);--card-a3:rgba(74,74,82,0.05);--card-a4:rgba(74,74,82,0.08);--card-stripe-odd:rgba(255,255,255,0.5);--card-stripe-even:rgba(0,0,0,0.025);}
 
 .dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
@@ -634,7 +631,6 @@ function ar(astro){
   ASTRO_GROUPS.forEach(([label,names])=>{
     const rows=names.map(n=>byName[n]).filter(Boolean);
     if(!rows.length)return;
-    h+=dpsec(label);
     rows.forEach(p=>{
       const name=p.name||p.planet;
       const sign=p.sign||p.zodiac_sign;
@@ -651,27 +647,22 @@ function ar(astro){
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
-  h+=dpsec('Core');
   h+=arow('Life Path',num.lifePath,'lifepath');
   h+=arow('Expression',num.expression,'expression');
   h+=arow('Soul Urge',num.soulUrge,'soulurge');
   h+=arow('Personality',num.personality,'personality');
   h+=arow('Birthday',num.birthday,'birthday');
-  h+=dpsec('Character');
   h+=arow('Attitude',num.attitude,'attitude');
   h+=arow('Balance',num.balance,'balance');
   h+=arow('Maturity',num.maturity,'maturity');
-  h+=dpsec('Timing');
   h+=arow('Personal Year',num.personalYear,'personalyear');
   h+=arow('Personal Month',num.personalMonth,'personalmonth');
   h+=arow('Personal Day',num.personalDay,'personalday');
   h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence');
-  h+=dpsec('Pinnacles');
   h+=arow('Pinnacle 1',num.pinnacles.pinnacle1.value+' ('+num.pinnacles.pinnacle1.ageRange+')','pinnacle');
   h+=arow('Pinnacle 2',num.pinnacles.pinnacle2.value+' ('+num.pinnacles.pinnacle2.ageRange+')','pinnacle');
   h+=arow('Pinnacle 3',num.pinnacles.pinnacle3.value+' ('+num.pinnacles.pinnacle3.ageRange+')','pinnacle');
   h+=arow('Pinnacle 4',num.pinnacles.pinnacle4.value+' ('+num.pinnacles.pinnacle4.ageRange+')','pinnacle');
-  h+=dpsec('Challenges');
   h+=arow('Challenge 1',num.challengeNumbers.challenge1,'challenge');
   h+=arow('Challenge 2',num.challengeNumbers.challenge2,'challenge');
   h+=arow('Challenge 3',num.challengeNumbers.challenge3,'challenge');
@@ -688,8 +679,8 @@ function hdr(hd){
   if(hd.type)core.push(arow('Type',hd.type,'hdtype'));
   if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile'));
   if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority'));
-  if(core.length){h+=dpsec('Core');h+=core.join('');}
-  if(hd.incarnation_cross){h+=dpsec('Design');h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
+  if(core.length){h+=core.join('');}
+  if(hd.incarnation_cross){h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
   if(hd.gates&&hd.gates.length){
     h+=dpsec('Gates');
     h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
