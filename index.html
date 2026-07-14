@@ -104,36 +104,43 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .pmid{margin-bottom:0.42rem;}
 .pbot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.42rem;}
 @media(max-width:460px){.ptop,.pbot{grid-template-columns:1fr;}}
-.dp{background:var(--moon2);border:1px solid rgba(255,51,204,0.13);border-radius:4px;overflow:hidden;max-height:220px;display:flex;flex-direction:column;}
-.dp.p2{border-color:rgba(0,255,186,0.13);}
-.dph{padding:0.32rem 0.55rem;font-family:'DM Sans',sans-serif;font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--f);border-bottom:1px solid rgba(255,51,204,0.07);background:rgba(255,51,204,0.02);flex-shrink:0;font-weight:500;}
-.dph.p2{color:var(--k);border-bottom-color:rgba(0,255,186,0.07);background:rgba(0,255,186,0.02);}
-.dplist{overflow-y:auto;flex:1;}
-.dpr{display:flex;justify-content:space-between;gap:0.4rem;padding:0.22rem 0.55rem;border-bottom:1px solid rgba(255,51,204,0.04);font-size:0.63rem;}
-.dpr:last-child{border-bottom:none;}
-.dprl{font-family:'DM Sans',sans-serif;color:var(--dim);font-size:0.5rem;text-transform:uppercase;letter-spacing:0.03em;font-weight:500;flex-shrink:0;}
-.dprv{color:var(--txt);font-style:italic;font-weight:700;text-align:right;}
-.dprv.pend{color:var(--f);font-style:italic;opacity:0.7;font-size:0.58rem;}
+.dp{
+  --card-bg:var(--moon2);--card-text:var(--txt);--card-dim:var(--dim);--card-mid:var(--mid);--card-accent:var(--f);
+  --card-a1:rgba(255,51,204,0.13);--card-a2:rgba(255,51,204,0.07);--card-a3:rgba(255,51,204,0.02);--card-a4:rgba(255,51,204,0.05);
+  --card-stripe-odd:rgba(10,10,26,0.025);--card-stripe-even:rgba(10,10,26,0.065);
+  background:var(--card-bg);color:var(--card-text);border:1px solid var(--card-a1);border-radius:4px;overflow:hidden;max-height:260px;display:flex;flex-direction:column;
+}
+.dp.astro{--card-bg:#16213f;--card-text:#e8ecfb;--card-dim:#9aa5d4;--card-mid:#c4cbe8;--card-accent:#7c9eff;--card-a1:rgba(124,158,255,0.28);--card-a2:rgba(124,158,255,0.14);--card-a3:rgba(124,158,255,0.08);--card-a4:rgba(124,158,255,0.1);--card-stripe-odd:rgba(255,255,255,0.02);--card-stripe-even:rgba(255,255,255,0.06);}
+.dp.hd{--card-bg:#f3e9d2;--card-text:#3a2b16;--card-dim:#8a7350;--card-mid:#5a4526;--card-accent:#a67c3d;--card-a1:rgba(166,124,61,0.3);--card-a2:rgba(166,124,61,0.15);--card-a3:rgba(166,124,61,0.08);--card-a4:rgba(166,124,61,0.12);--card-stripe-odd:rgba(0,0,0,0.02);--card-stripe-even:rgba(0,0,0,0.055);}
+.dp.num{--card-bg:#122a20;--card-text:#dff0e6;--card-dim:#7fae95;--card-mid:#bcdcc9;--card-accent:#3ecf8e;--card-a1:rgba(62,207,142,0.28);--card-a2:rgba(62,207,142,0.14);--card-a3:rgba(62,207,142,0.08);--card-a4:rgba(62,207,142,0.1);--card-stripe-odd:rgba(255,255,255,0.02);--card-stripe-even:rgba(255,255,255,0.06);}
+.dp.p2.astro{--card-bg:#e4defa;--card-text:#2b204a;--card-dim:#7a6ea3;--card-mid:#4a3b73;--card-accent:#7c5cd6;--card-a1:rgba(124,92,214,0.28);--card-a2:rgba(124,92,214,0.14);--card-a3:rgba(124,92,214,0.08);--card-a4:rgba(124,92,214,0.12);--card-stripe-odd:rgba(0,0,0,0.02);--card-stripe-even:rgba(0,0,0,0.05);}
+.dp.p2.hd{--card-bg:#241c14;--card-text:#f0e6d2;--card-dim:#a08e6c;--card-mid:#d8c9a8;--card-accent:#c99a4a;--card-a1:rgba(201,154,74,0.3);--card-a2:rgba(201,154,74,0.15);--card-a3:rgba(201,154,74,0.08);--card-a4:rgba(201,154,74,0.1);--card-stripe-odd:rgba(255,255,255,0.02);--card-stripe-even:rgba(255,255,255,0.06);}
+.dp.p2.num{--card-bg:#e8dfc0;--card-text:#3a3016;--card-dim:#8c7d50;--card-mid:#5c4f26;--card-accent:#8a9c3d;--card-a1:rgba(138,156,61,0.3);--card-a2:rgba(138,156,61,0.15);--card-a3:rgba(138,156,61,0.08);--card-a4:rgba(138,156,61,0.12);--card-stripe-odd:rgba(0,0,0,0.02);--card-stripe-even:rgba(0,0,0,0.05);}
 
-.dprow:nth-child(odd){background:rgba(10,10,26,0.025);}
-.dprow:nth-child(even){background:rgba(10,10,26,0.065);}
-.dprow .dpr{border-bottom:none;}
+.dph{padding:0.32rem 0.55rem;font-family:'DM Sans',sans-serif;font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:500;}
+.dplist{overflow-y:auto;flex:1;}
+.dpr{display:flex;justify-content:space-between;gap:0.4rem;padding:0.22rem 0.55rem;font-size:0.63rem;}
+.dprl{font-family:'DM Sans',sans-serif;color:var(--card-dim);font-size:0.5rem;text-transform:uppercase;letter-spacing:0.03em;font-weight:500;flex-shrink:0;}
+.dprv{color:var(--card-text);font-style:italic;font-weight:700;text-align:right;}
+.dprv.pend{color:var(--card-accent);font-style:italic;opacity:0.85;font-size:0.58rem;}
+
+.dpsec{padding:0.32rem 0.55rem 0.12rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--card-accent);opacity:0.85;font-weight:500;margin-top:0.1rem;}
+.dpsec:first-child{margin-top:0;}
+
+.dprow:nth-child(odd){background:var(--card-stripe-odd);}
+.dprow:nth-child(even){background:var(--card-stripe-even);}
 .dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
-.dprl.term:hover{color:var(--f);}
-.dp.p2 .dprl.term:hover{color:var(--k);}
-.dpdef{padding:0 0.55rem 0.42rem;font-family:'DM Sans',sans-serif;font-size:0.56rem;line-height:1.55;color:var(--mid);font-style:italic;font-weight:400;}
+.dprl.term:hover{color:var(--card-accent);}
+.dpdef{padding:0 0.55rem 0.42rem;font-family:'DM Sans',sans-serif;font-size:0.56rem;line-height:1.55;color:var(--card-mid);font-style:italic;font-weight:400;}
 .dpdef[hidden]{display:none;}
 
 .gates-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.28rem;padding:0.15rem 0.55rem 0.42rem;}
 @media(max-width:380px){.gates-grid{grid-template-columns:repeat(3,1fr);}}
-.gate-chip{border:1px solid rgba(255,51,204,0.2);border-radius:3px;color:var(--txt);font-family:'Playfair Display',serif;font-weight:700;font-style:italic;font-size:0.62rem;padding:0.24rem 0;cursor:pointer;text-align:center;transition:all 0.15s;}
-.gate-chip:nth-child(odd){background:rgba(10,10,26,0.03);}
-.gate-chip:nth-child(even){background:rgba(10,10,26,0.075);}
-.gate-chip:hover,.gate-chip.active{border-color:var(--f);color:var(--f);}
-.dp.p2 .gate-chip{border-color:rgba(0,255,186,0.22);}
-.dp.p2 .gate-chip:hover,.dp.p2 .gate-chip.active{border-color:var(--k);color:#1a7050;}
-.gate-def{margin:0 0.55rem 0.45rem;padding:0.38rem 0.5rem;background:rgba(255,51,204,0.05);border-left:2px solid var(--f);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.58rem;line-height:1.5;color:var(--mid);font-style:italic;font-weight:400;}
-.dp.p2 .gate-def{background:rgba(0,255,186,0.05);border-left-color:var(--k);}
+.gate-chip{border:1px solid var(--card-a1);border-radius:3px;color:var(--card-text);font-family:'Playfair Display',serif;font-weight:700;font-style:italic;font-size:0.62rem;padding:0.24rem 0;cursor:pointer;text-align:center;transition:all 0.15s;}
+.gate-chip:nth-child(odd){background:var(--card-stripe-odd);}
+.gate-chip:nth-child(even){background:var(--card-stripe-even);}
+.gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);}
+.gate-def{margin:0 0.55rem 0.45rem;padding:0.38rem 0.5rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.58rem;line-height:1.5;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def[hidden]{display:none;}
 
 .rpan{background:var(--moon2);border:1px solid rgba(255,51,204,0.18);border-left:2px solid var(--f);border-radius:4px;cursor:pointer;overflow:hidden;transition:all 0.15s;box-shadow:0 0 10px rgba(255,51,204,0.05);}
@@ -593,19 +600,28 @@ function arow(l,v,defKey){
   return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${v}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
 }
 function apend(v){return `<div class="dprow"><div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div></div>`;}
+function dpsec(l){return `<div class="dpsec">${l}</div>`;}
 
 const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mars',Jupiter:'jupiter',Saturn:'saturn',
   Uranus:'uranus',Neptune:'neptune',Pluto:'pluto'};
+const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','Mars']],['Social',['Jupiter','Saturn']],['Outer',['Uranus','Neptune','Pluto']]];
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
   const planets=astro.data?.positions||astro.planets||astro.data?.planets||astro.positions||[];
   if(!planets.length)return apend('Unavailable');
+  const byName={};
+  planets.forEach(p=>{const name=p.name||p.planet;if(name)byName[name]=p;});
   let h='';
-  planets.forEach(p=>{
-    const name=p.name||p.planet;
-    const sign=p.sign||p.zodiac_sign;
-    if(name&&sign)h+=arow(name,sign,ASTRO_KEY[name]);
+  ASTRO_GROUPS.forEach(([label,names])=>{
+    const rows=names.map(n=>byName[n]).filter(Boolean);
+    if(!rows.length)return;
+    h+=dpsec(label);
+    rows.forEach(p=>{
+      const name=p.name||p.planet;
+      const sign=p.sign||p.zodiac_sign;
+      if(name&&sign)h+=arow(name,sign,ASTRO_KEY[name]);
+    });
   });
   return h||apend('Unavailable');
 }
@@ -613,22 +629,27 @@ function ar(astro){
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
+  h+=dpsec('Core');
   h+=arow('Life Path',num.lifePath,'lifepath');
   h+=arow('Expression',num.expression,'expression');
   h+=arow('Soul Urge',num.soulUrge,'soulurge');
   h+=arow('Personality',num.personality,'personality');
   h+=arow('Birthday',num.birthday,'birthday');
+  h+=dpsec('Character');
   h+=arow('Attitude',num.attitude,'attitude');
   h+=arow('Balance',num.balance,'balance');
   h+=arow('Maturity',num.maturity,'maturity');
+  h+=dpsec('Timing');
   h+=arow('Personal Year',num.personalYear,'personalyear');
   h+=arow('Personal Month',num.personalMonth,'personalmonth');
   h+=arow('Personal Day',num.personalDay,'personalday');
   h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence');
+  h+=dpsec('Pinnacles');
   h+=arow('Pinnacle 1',num.pinnacles.pinnacle1.value+' ('+num.pinnacles.pinnacle1.ageRange+')','pinnacle');
   h+=arow('Pinnacle 2',num.pinnacles.pinnacle2.value+' ('+num.pinnacles.pinnacle2.ageRange+')','pinnacle');
   h+=arow('Pinnacle 3',num.pinnacles.pinnacle3.value+' ('+num.pinnacles.pinnacle3.ageRange+')','pinnacle');
   h+=arow('Pinnacle 4',num.pinnacles.pinnacle4.value+' ('+num.pinnacles.pinnacle4.ageRange+')','pinnacle');
+  h+=dpsec('Challenges');
   h+=arow('Challenge 1',num.challengeNumbers.challenge1,'challenge');
   h+=arow('Challenge 2',num.challengeNumbers.challenge2,'challenge');
   h+=arow('Challenge 3',num.challengeNumbers.challenge3,'challenge');
@@ -641,21 +662,22 @@ function nr(num){
 function hdr(hd){
   if(!hd||hd.error)return apend('Unavailable');
   let h='';
-  if(hd.type)h+=arow('Type',hd.type,'hdtype');
-  if(hd.profile)h+=arow('Profile',hd.profile,'hdprofile');
-  if(hd.authority)h+=arow('Authority',hd.authority,'hdauthority');
-  if(hd.incarnation_cross)h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');
+  const core=[];
+  if(hd.type)core.push(arow('Type',hd.type,'hdtype'));
+  if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile'));
+  if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority'));
+  if(core.length){h+=dpsec('Core');h+=core.join('');}
+  if(hd.incarnation_cross){h+=dpsec('Design');h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
   if(hd.gates&&hd.gates.length){
-    h+=`<div class="dprow"><div class="dpr"><span class="dprl">Gates</span></div>
-    <div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div>
-    <div class="gate-def" hidden></div></div>`;
+    h+=dpsec('Gates');
+    h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
   }
   return h||apend('Unavailable');
 }
 
-function pan(nm,sys,rows,isP2){
-  const c=isP2?'p2':'';
-  return `<div class="dp ${c}"><div class="dph ${c}">${nm} · ${sys}</div><div class="dplist">${rows}</div></div>`;
+function pan(nm,sys,rows,isP2,kind){
+  const c=(isP2?'p2 ':'')+kind;
+  return `<div class="dp ${c}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div></div>`;
 }
 
 function render(p1,p2,r){
@@ -671,24 +693,24 @@ function render(p1,p2,r){
 
   if(p2){
     h+=`<div class="ptop">
-      ${pan(p1.first,'Astrology',ar(p1.astro),false)}
-      ${pan(p1.first,'Numerology',nr(p1.numerology),false)}
-      ${pan(p1.first,'Human Design',hdr(p1.hd),false)}
+      ${pan(p1.first,'Astrology',ar(p1.astro),false,'astro')}
+      ${pan(p1.first,'Numerology',nr(p1.numerology),false,'num')}
+      ${pan(p1.first,'Human Design',hdr(p1.hd),false,'hd')}
     </div>
     <div class="pmid"><div class="rpan" onclick="showR('${rk}')">
       <div class="rpanh"><div class="rpant">Combined Reading — ${p1.first} &amp; ${p2.first}</div><span class="rpanh-hint">open</span></div>
       <div class="rpanv">${prev}</div>
     </div></div>
     <div class="pbot">
-      ${pan(p2.first,'Astrology',ar(p2.astro),true)}
-      ${pan(p2.first,'Numerology',nr(p2.numerology),true)}
-      ${pan(p2.first,'Human Design',hdr(p2.hd),true)}
+      ${pan(p2.first,'Astrology',ar(p2.astro),true,'astro')}
+      ${pan(p2.first,'Numerology',nr(p2.numerology),true,'num')}
+      ${pan(p2.first,'Human Design',hdr(p2.hd),true,'hd')}
     </div>`;
   }else{
     h+=`<div class="ptop">
-      ${pan(p1.first,'Astrology',ar(p1.astro),false)}
-      ${pan(p1.first,'Numerology',nr(p1.numerology),false)}
-      ${pan(p1.first,'Human Design',hdr(p1.hd),false)}
+      ${pan(p1.first,'Astrology',ar(p1.astro),false,'astro')}
+      ${pan(p1.first,'Numerology',nr(p1.numerology),false,'num')}
+      ${pan(p1.first,'Human Design',hdr(p1.hd),false,'hd')}
     </div>
     <div class="pmid"><div class="rpan" onclick="showR('${rk}')">
       <div class="rpanh"><div class="rpant">Individual Reading — ${n1}</div><span class="rpanh-hint">open</span></div>
