@@ -103,12 +103,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .ll{font-size:0.95rem;font-style:italic;font-weight:700;color:var(--mid);}
 
 .rout{display:none;}
-.back-btn{background:none;border:none;color:var(--dim);font-family:'DM Sans',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;margin-bottom:1rem;padding:0;display:block;transition:color 0.18s;font-weight:500;}
-.back-btn:hover{color:var(--f);}
-.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.3rem;margin-bottom:0.3rem;}
-.pmid{margin-bottom:0.3rem;}
-.pbot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.3rem;}
-@media(max-width:460px){.ptop,.pbot{grid-template-columns:1fr;}}
+body.results-mode{background:#141414;}
+.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.22rem;margin-bottom:0.22rem;}
+.pmid{margin-bottom:0.22rem;min-height:34vh;display:flex;align-items:center;}
+.pmid .rpan{width:100%;}
+.pbot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.22rem;}
 .dp{
   --card-bg:var(--moon2);--card-text:var(--txt);--card-dim:var(--dim);--card-mid:var(--mid);--card-accent:var(--f);
   --card-a1:rgba(255,51,204,0.13);--card-a2:rgba(255,51,204,0.07);--card-a3:rgba(255,51,204,0.02);--card-a4:rgba(255,51,204,0.05);
@@ -222,7 +221,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
 <div class="wrap">
 
-<header>
+<header id="pageHeader">
   <div class="brand">Know Your Energy</div>
   <div class="rule"></div>
   <div class="desc">Full Western Astrology, Human Design, and Numerology charts with a reading across all three — for individuals or any two people.</div>
@@ -338,7 +337,6 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 </div>
 
 <div class="rout" id="rout">
-  <button class="back-btn" onclick="showForm()">← New reading</button>
   <div id="rcontent"></div>
 </div>
 
@@ -412,6 +410,8 @@ function showForm(){
   document.getElementById('form-wrap').style.display='block';
   document.getElementById('loading').style.display='none';
   document.getElementById('rout').style.display='none';
+  document.getElementById('pageHeader').style.display='';
+  document.body.classList.remove('results-mode');
 }
 
 function openMod(t,h){
@@ -737,6 +737,8 @@ function render(p1,p2,r){
   document.getElementById('rcontent').innerHTML=h;
   document.getElementById('loading').style.display='none';
   document.getElementById('rout').style.display='block';
+  document.getElementById('pageHeader').style.display='none';
+  document.body.classList.add('results-mode');
   window.scrollTo(0,0);
 }
 
