@@ -162,6 +162,7 @@ body.results-mode{background:#f2f2f2;}
 .gate-chip:active{transform:translateY(1px);box-shadow:0 1px 2px rgba(0,0,0,0.18) inset;}
 .gate-chip:nth-child(odd){background:var(--card-stripe-odd);}
 .gate-chip:nth-child(even){background:var(--card-stripe-even);}
+.gate-def-print{display:none;}
 .gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.28rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def[hidden]{display:none;}
@@ -207,6 +208,26 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 .flinks a:hover{color:var(--f);}
 .fprivacy{font-family:'DM Sans',sans-serif;font-size:0.54rem;color:var(--dim);line-height:1.5;max-width:360px;margin:0.3rem auto 0;font-weight:400;}
 
+@media print{
+  #pageHeader,footer,#pricing-wrap,#form-wrap,.card-expand{display:none!important;}
+  .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
+  .ptop,.pbot{display:block!important;gap:0!important;margin:0!important;}
+  .pmid{display:none!important;}
+  .dp{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    height:auto!important;min-height:100vh;overflow:visible!important;
+    box-shadow:none!important;border-radius:0!important;border:none!important;
+    page-break-after:always;break-after:page;
+    padding:0.6in 0.6in;animation:none!important;
+  }
+  .pbot .dp:last-child{page-break-after:auto;break-after:auto;}
+  .dp[style*="cursor:default"]{display:none!important;}
+  .dp-fade{display:none!important;}
+  .dpdef[hidden]{display:block!important;}
+  .gate-def{display:none!important;}
+  .gate-def-print{display:block!important;margin-top:0.3rem;font-size:9pt;line-height:1.5;}
+  .gate-def-print-row{padding:0.15rem 0;border-bottom:1px solid rgba(0,0,0,0.08);}
+}
 </style>
 </head>
 <body>
@@ -695,7 +716,8 @@ function hdr(hd){
   if(hd.incarnation_cross){h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
   if(hd.gates&&hd.gates.length){
     h+=dpsec('Gates');
-    h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
+    h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div>
+    <div class="gate-def-print">${hd.gates.map(g=>`<div class="gate-def-print-row">Gate ${g} — ${GATES[g]||'No description available.'}</div>`).join('')}</div></div>`;
   }
   return h||apend('Unavailable');
 }
