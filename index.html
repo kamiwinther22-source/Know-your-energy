@@ -115,7 +115,10 @@ body.results-mode{background:#f2f2f2;}
   box-shadow:0 1px 0 rgba(255,255,255,0.14) inset,0 -1px 0 rgba(0,0,0,0.12) inset,0 18px 34px -14px rgba(10,10,26,0.45),0 6px 14px rgba(10,10,26,0.2);
   transition:transform 0.16s ease,box-shadow 0.16s ease;
   animation:cardIn 0.55s cubic-bezier(0.2,0.7,0.3,1) both;
+  height:400px;cursor:pointer;position:relative;
 }
+.dp-fade{position:absolute;left:0;right:0;bottom:0;height:36px;background:linear-gradient(transparent,var(--card-bg));pointer-events:none;}
+.dp-fade[hidden]{display:none;}
 @keyframes cardIn{from{opacity:0;transform:translateY(16px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
 .ptop .dp:nth-child(1){animation-delay:0s;}
 .ptop .dp:nth-child(2){animation-delay:0.09s;}
@@ -690,9 +693,11 @@ function hdr(hd){
   return h||apend('Unavailable');
 }
 
+let cardRegistry=[];
 function pan(nm,sys,rows,isP2,kind){
   const c=(isP2?'p2 ':'')+kind;
-  return `<div class="dp ${c}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div></div>`;
+  const idx=cardRegistry.push({title:nm+' · '+sys,rows,kindClass:c})-1;
+  return `<div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div>`;
 }
 
 function docBlank(){
@@ -701,6 +706,7 @@ function docBlank(){
 
 function render(p1,p2,r){
   const n1=p1.first+(p1.last?' '+p1.last:'');
+  cardRegistry=[];
 
   let h='<div class="results-canvas">';
 
@@ -740,6 +746,11 @@ function render(p1,p2,r){
     blank.style.width=rect.width+'px';
     blank.style.height=rect.height+'px';
   }
+
+  document.querySelectorAll('.dp').forEach(card=>{
+    const fade=card.querySelector('.dp-fade');
+    if(fade)fade.hidden=card.scrollHeight<=card.clientHeight+1;
+  });
 }
 
 document.addEventListener('click',function(e){
@@ -760,6 +771,14 @@ document.addEventListener('click',function(e){
     chip.classList.add('active');
     box.textContent='Gate '+chip.dataset.gate+' — '+(GATES[chip.dataset.gate]||'No description available.');
     box.hidden=false;
+    return;
+  }
+  const card=e.target.closest('.dp');
+  if(card&&card.dataset.cardIdx!==undefined){
+    const entry=cardRegistry[card.dataset.cardIdx];
+    if(entry){
+      openMod(entry.title,`<div class="dp ${entry.kindClass}" style="height:auto;overflow:visible;box-shadow:none;border:none;animation:none;cursor:default;padding-bottom:0.3rem;"><div class="dplist" style="overflow:visible;">${entry.rows}</div></div>`);
+    }
   }
 });
 </script>
