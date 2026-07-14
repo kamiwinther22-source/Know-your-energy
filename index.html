@@ -710,33 +710,27 @@ function pan(nm,sys,rows,isP2,kind){
 function docBlank(){
   return `<div class="doc-blank" id="docBlank"></div>`;
 }
+function blankSlot(kind,isP2){
+  const c=(isP2?'p2 ':'')+kind;
+  return `<div class="dp ${c}" style="cursor:default;"></div>`;
+}
 
 function render(p1,p2,r){
   const n1=p1.first+(p1.last?' '+p1.last:'');
   cardRegistry=[];
 
   let h='<div class="results-canvas">';
-
-  if(p2){
-    h+=`<div class="ptop">
-      ${pan(p1.first,'Astrology',ar(p1.astro),false,'astro')}
-      ${pan(p1.first,'Numerology',nr(p1.numerology),false,'num')}
-      ${pan(p1.first,'Human Design',hdr(p1.hd),false,'hd')}
-    </div>
-    <div class="pmid">${docBlank()}</div>
-    <div class="pbot">
-      ${pan(p2.first,'Astrology',ar(p2.astro),true,'astro')}
-      ${pan(p2.first,'Numerology',nr(p2.numerology),true,'num')}
-      ${pan(p2.first,'Human Design',hdr(p2.hd),true,'hd')}
-    </div>`;
-  }else{
-    h+=`<div class="ptop">
-      ${pan(p1.first,'Astrology',ar(p1.astro),false,'astro')}
-      ${pan(p1.first,'Numerology',nr(p1.numerology),false,'num')}
-      ${pan(p1.first,'Human Design',hdr(p1.hd),false,'hd')}
-    </div>
-    <div class="pmid">${docBlank()}</div>`;
-  }
+  h+=`<div class="ptop">
+    ${pan(p1.first,'Astrology',ar(p1.astro),false,'astro')}
+    ${pan(p1.first,'Numerology',nr(p1.numerology),false,'num')}
+    ${pan(p1.first,'Human Design',hdr(p1.hd),false,'hd')}
+  </div>
+  <div class="pmid">${docBlank()}</div>
+  <div class="pbot">
+    ${p2?pan(p2.first,'Astrology',ar(p2.astro),true,'astro'):blankSlot('astro',true)}
+    ${p2?pan(p2.first,'Numerology',nr(p2.numerology),true,'num'):blankSlot('num',true)}
+    ${p2?pan(p2.first,'Human Design',hdr(p2.hd),true,'hd'):blankSlot('hd',true)}
+  </div>`;
   h+='</div>';
 
   document.getElementById('rcontent').innerHTML=h;
