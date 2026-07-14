@@ -104,8 +104,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 .rout{display:none;}
 body.results-mode{background:#f2f2f2;}
-.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;margin-bottom:400px;}
-.pmid{margin-bottom:400px;display:flex;justify-content:center;}
+.ptop{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;margin-bottom:0.6rem;}
+.pmid{margin-bottom:0.6rem;display:flex;justify-content:center;}
 .pbot{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;}
 .dp{
   --card-bg:#d8dade;--card-text:#202024;--card-dim:#40404a;--card-mid:#2a2a30;--card-accent:#4a4a54;
@@ -177,6 +177,12 @@ body.results-mode{background:#f2f2f2;}
 .mtop{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0.85rem;border-bottom:1px solid rgba(255,51,204,0.1);}
 .mttl{font-size:0.92rem;font-style:italic;font-weight:800;color:var(--f);}
 .mx{background:none;border:none;color:var(--dim);font-size:0.92rem;cursor:pointer;padding:0 0.25rem;}
+
+.card-expand{display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;background:var(--card-bg);color:var(--card-text);padding:1.1rem 1.1rem 2.5rem;}
+.card-expand.open{display:block;}
+.card-expand-close{position:sticky;top:0;float:right;background:none;border:none;font-size:1.3rem;color:var(--card-text);cursor:pointer;padding:0.3rem;line-height:1;}
+.card-expand-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);margin-bottom:0.6rem;clear:both;}
+.card-expand-body .dplist{overflow:visible;}
 .mx:hover{color:var(--f);}
 .mbody{padding:0.85rem;font-size:0.78rem;line-height:1.78;color:var(--mid);font-style:italic;font-weight:700;}
 .mbody p{margin-bottom:0.75rem;}.mbody p:last-child{margin-bottom:0;}
@@ -210,6 +216,12 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
     <div class="mtop"><div class="mttl" id="mttl"></div><button class="mx" onclick="closeMod()">✕</button></div>
     <div class="mbody" id="mbody"></div>
   </div>
+</div>
+
+<div class="card-expand" id="cardExpand">
+  <button type="button" class="card-expand-close" id="cardExpandClose">✕</button>
+  <div class="card-expand-title" id="cardExpandTitle"></div>
+  <div class="card-expand-body" id="cardExpandBody"></div>
 </div>
 
 <div class="wrap">
@@ -691,7 +703,7 @@ function hdr(hd){
 let cardRegistry=[];
 function pan(nm,sys,rows,isP2,kind){
   const c=(isP2?'p2 ':'')+kind;
-  const idx=cardRegistry.push({title:nm+' · '+sys,rows,kindClass:c})-1;
+  const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
   return `<div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div>`;
 }
 
@@ -768,11 +780,24 @@ document.addEventListener('click',function(e){
     box.hidden=false;
     return;
   }
+  const closeExpand=e.target.closest('#cardExpandClose');
+  if(closeExpand){
+    document.getElementById('cardExpand').classList.remove('open');
+    document.body.style.overflow='';
+    return;
+  }
   const card=e.target.closest('.dp');
   if(card&&card.dataset.cardIdx!==undefined){
     const entry=cardRegistry[card.dataset.cardIdx];
     if(entry){
-      openMod(entry.title,`<div class="dp ${entry.kindClass}" style="height:auto;overflow:visible;box-shadow:none;border:none;animation:none;cursor:default;padding-bottom:0.3rem;"><div class="dplist" style="overflow:visible;">${entry.rows}</div></div>`);
+      const cs=getComputedStyle(card);
+      const expand=document.getElementById('cardExpand');
+      ['--card-bg','--card-text','--card-dim','--card-mid','--card-accent','--card-a1','--card-a2','--card-a3','--card-a4','--card-stripe-odd','--card-stripe-even']
+        .forEach(v=>expand.style.setProperty(v,cs.getPropertyValue(v)));
+      document.getElementById('cardExpandTitle').textContent=entry.title;
+      document.getElementById('cardExpandBody').innerHTML=entry.rows;
+      expand.classList.add('open');
+      document.body.style.overflow='hidden';
     }
   }
 });
