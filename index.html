@@ -118,6 +118,7 @@ body.results-mode{background:#f2f2f2;}
   animation:cardIn 0.55s cubic-bezier(0.2,0.7,0.3,1) both;
   height:200px;cursor:pointer;position:relative;
 }
+.dp-chrome{height:2.6rem;flex-shrink:0;background:linear-gradient(115deg,#161719 0%,#3a3d43 12%,#e8eaee 24%,#fefefe 30%,#8a8d94 42%,#2a2c30 54%,#c4c8ce 66%,#f5f5f6 72%,#5a5d63 86%,#161719 100%);}
 .dp-fade{position:absolute;left:0;right:0;bottom:0;height:36px;background:linear-gradient(transparent,var(--card-bg));pointer-events:none;}
 .dp-fade[hidden]{display:none;}
 @keyframes cardIn{from{opacity:0;transform:translateY(16px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
@@ -726,7 +727,7 @@ let cardRegistry=[];
 function pan(nm,sys,rows,isP2,kind){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
-  return `<div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div>`;
+  return `<div class="dp ${c}" data-card-idx="${idx}"><div class="dp-chrome"></div><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div>`;
 }
 
 function docBlank(){
