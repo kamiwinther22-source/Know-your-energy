@@ -295,8 +295,6 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       <button class="rp active" onclick="selRel(this,'parent-child')">Parent · Child</button>
       <button class="rp" onclick="selRel(this,'romantic')">Romantic</button>
       <button class="rp" onclick="selRel(this,'friends')">Friends</button>
-      <button class="rp" onclick="selRel(this,'siblings')">Siblings</button>
-      <button class="rp" onclick="selRel(this,'colleagues')">Colleagues</button>
       <button class="rp" onclick="selRel(this,'other')">Other</button>
     </div>
   </div>
@@ -375,7 +373,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 <script>
 const W='https://know-your-energy.kwdoanchor.workers.dev';
 let rtype='individual',rel='parent-child',plan='free';
-const rls={'parent-child':'Parent · Child','romantic':'Romantic Partners','friends':'Friends','siblings':'Siblings','colleagues':'Colleagues','other':'Connection'};
+const rls={'parent-child':'Parent · Child','romantic':'Romantic Partners','friends':'Friends','other':'Connection'};
 
 function selPlan(p){
   document.querySelectorAll('.price-line').forEach(l=>l.classList.remove('selected'));
