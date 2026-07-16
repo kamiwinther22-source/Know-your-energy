@@ -45,7 +45,7 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .price-text{font-size:0.82rem;color:var(--txt);font-weight:400;}
 .price-text strong{color:var(--f);}
 
-#form-wrap{display:none;}
+#form-wrap{display:block;}
 
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.75rem;}
 .tlbl{font-size:0.75rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--dim);transition:color 0.18s;}
@@ -254,7 +254,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <div class="tagline-s">A user manual when communicating with someone who has a different operating system.</div>
 </header>
 
-<div id="pricing-wrap">
+<div id="pricing-wrap" style="display:none;">
   <span class="slbl">Select a plan to begin</span>
   <div class="price-list">
     <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
@@ -277,7 +277,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button>
 </div>
 
-<div id="form-wrap" style="display:none;">
+<div id="form-wrap">
 
   <div class="gr"></div>
 
