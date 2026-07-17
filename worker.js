@@ -125,11 +125,7 @@ async function getAstrology(env, dob, timeStr, ampm, city, state, country) {
   const { hour, minute } = normalizeTime(timeStr, ampm);
   const { cityName, countryCode } = normalizeCity(city, state, country);
 
-  const birthData = { year, month, day, hour, minute, second: 0 };
-  if (city && city.trim().length > 0) {
-    birthData.city = cityName;
-    birthData.country_code = countryCode;
-  }
+  const birthData = { year, month, day, hour, minute, second: 0, city: cityName, country_code: countryCode };
 
   const res = await fetch("https://api.astrology-api.io/api/v3/data/positions", {
     method: "POST",
@@ -270,6 +266,46 @@ async function assemblePersonData(env, person) {
   return { numerology, numerologyError, astrology, astrologyError, humanDesign, humanDesignError };
 }
 
+// ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
+
+const PLAN_CONFIG = {
+  single: { mode: "payment", amount: 500, name: "Single Reading" },
+  monthly: { mode: "subscription", amount: 1000, name: "Monthly Unlimited Readings", interval: "month" },
+  annual: { mode: "subscription", amount: 2500, name: "Annual Unlimited Readings", interval: "year" }
+};
+
+async function createCheckoutSession(env, plan, origin) {
+  const config = PLAN_CONFIG[plan];
+  if (!config) throw new Error(`Unknown plan: "${plan}".`);
+
+  const params = new URLSearchParams();
+  params.set("mode", config.mode);
+  params.set("success_url", `${origin}/?checkout=success&plan=${plan}`);
+  params.set("cancel_url", `${origin}/?checkout=cancel`);
+  params.set("line_items[0][quantity]", "1");
+  params.set("line_items[0][price_data][currency]", "usd");
+  params.set("line_items[0][price_data][unit_amount]", String(config.amount));
+  params.set("line_items[0][price_data][product_data][name]", config.name);
+  if (config.interval) {
+    params.set("line_items[0][price_data][recurring][interval]", config.interval);
+  }
+
+  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: params.toString()
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Stripe API error: ${errText}`);
+  }
+  return await res.json();
+}
+
 export default {
   async fetch(request, env, ctx) {
     if (request.method === "OPTIONS") {
@@ -279,6 +315,25 @@ export default {
       return new Response("Method Not Allowed", { status: 405, headers: { ...CORS_HEADERS, ...PRIVACY_HEADERS } });
     }
     const url = new URL(request.url);
+
+    if (url.pathname === "/create-checkout-session") {
+      let body;
+      try {
+        body = await request.json();
+      } catch (e) {
+        return jsonResponse({ error: "Invalid request body." }, 400);
+      }
+      try {
+        const origin = url.origin === "https://know-your-energy.kwdoanchor.workers.dev"
+          ? "https://know-your-energy.com"
+          : url.origin;
+        const session = await createCheckoutSession(env, body.plan, origin);
+        return jsonResponse({ url: session.url });
+      } catch (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+    }
+
     if (url.pathname !== "/report") {
       return jsonResponse({ error: "Unknown endpoint" }, 404);
     }

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know Your Energy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&family=Barlow+Condensed:wght@600;700;800&family=Alex+Brush&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -24,14 +24,12 @@ body{background:radial-gradient(ellipse at 50% 18%, var(--moon2) 0%, var(--moon)
 .wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(115deg,#161719 0%,#e8eaee 20%,#fefefe 30%,#8a8d94 45%,#c4c8ce 60%,#f5f5f6 70%,#161719 100%);}
 
 header{text-align:center;padding:1.3rem 1rem 0.8rem;}
-.brand{font-size:clamp(1.3rem,4vw,2rem);font-weight:800;line-height:1;letter-spacing:0.01em;
+.brand{font-family:'Alex Brush',cursive;font-size:clamp(2rem,7vw,2.8rem);font-weight:400;line-height:1;letter-spacing:0.01em;
   background:linear-gradient(120deg,#f8e4a8 0%,#f8dc86 30%,#d8d8e0 55%,var(--k) 70%,#f8dc86 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 .rule{width:40px;height:2px;background:linear-gradient(90deg,var(--f),var(--k));margin:0.4rem auto;}
-.desc{font-size:0.7rem;color:var(--mid);line-height:1.5;max-width:320px;margin:0 auto;font-weight:400;}
-.tagline-q{font-size:0.75rem;color:#f8e4a8;font-style:italic;font-weight:600;line-height:1.45;margin:0.45rem auto 0.15rem;max-width:360px;}
-.tagline-s{font-size:0.68rem;color:var(--mid);font-style:italic;font-weight:400;line-height:1.45;max-width:360px;margin:0 auto;}
+.desc{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--txt);line-height:1.5;max-width:320px;margin:0 auto;font-weight:700;}
 
 .slbl{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mid);display:block;margin-bottom:0.5rem;font-weight:600;}
 
@@ -45,7 +43,7 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .price-text{font-size:0.82rem;color:var(--txt);font-weight:400;}
 .price-text strong{color:var(--f);}
 
-#form-wrap{display:block;}
+#form-wrap{display:none;}
 
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.75rem;}
 .tlbl{font-size:0.75rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--dim);transition:color 0.18s;}
@@ -78,7 +76,7 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .f3c{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.32rem;}
 .time-row{display:grid;grid-template-columns:1fr auto;gap:0.32rem;align-items:end;}
 label{display:block;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.16rem;font-weight:600;}
-.opt{color:var(--f);font-size:0.46rem;letter-spacing:0.05em;text-transform:none;margin-left:0.15rem;opacity:0.85;}
+.opt{color:var(--f);font-size:0.46rem;letter-spacing:0.05em;text-transform:none;margin-left:0.15rem;}
 input,select{width:100%;background:var(--moon);border:none;border-radius:5px;color:#f8e4a8;font-size:0.8rem;font-weight:600;padding:0.4rem 0.52rem;outline:none;-webkit-appearance:none;appearance:none;
   box-shadow:inset 0 2px 4px rgba(0,0,0,0.55),inset 0 -1px 0 rgba(255,255,255,0.04);}
 input:focus,select:focus{box-shadow:inset 0 2px 4px rgba(0,0,0,0.55),inset 0 -1px 0 rgba(255,255,255,0.04),0 0 0 1px rgba(240,201,76,0.35);}
@@ -90,10 +88,26 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 .err{display:none;font-size:0.7rem;color:#ff9b9b;margin-bottom:0.45rem;padding:0.38rem 0.55rem;background:rgba(255,80,80,0.08);border-radius:5px;border:1px solid rgba(255,80,80,0.25);font-weight:400;}
 
-.gen-btn{width:auto;min-width:140px;display:block;margin:0 auto;padding:0.5rem 1.4rem;background:var(--moon);border:1px solid var(--k);border-radius:6px;color:var(--f);font-size:0.72rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:all 0.18s;}
-.gen-btn:hover{border-color:var(--f);}
+.gen-btn{position:relative;overflow:hidden;width:auto;min-width:140px;display:block;margin:0 auto;padding:0.55rem 1.6rem;
+  background:linear-gradient(160deg,#fff3d0 0%,#f0c94c 45%,#b8863f 100%);border:none;border-radius:6px;
+  color:#241a05;font-size:0.72rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  transition:transform 0.18s ease,box-shadow 0.18s ease;box-shadow:0 8px 20px -8px rgba(240,201,76,0.5);}
+.gen-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px -8px rgba(240,201,76,0.65);}
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn:disabled{opacity:0.35;cursor:not-allowed;}
+.gen-btn::after{content:'';position:absolute;top:-60%;left:-35%;width:30%;height:220%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,0.85),transparent);transform:rotate(20deg);
+  animation:genbtnsheen 3.2s ease-in-out infinite;}
+@keyframes genbtnsheen{0%{left:-35%;}35%{left:130%;}100%{left:130%;}}
+@media(prefers-reduced-motion:reduce){.gen-btn::after{animation:none;display:none;}}
+
+.continue-glow{position:relative;display:block;width:fit-content;margin:0 auto;border-radius:9px;padding:3px;overflow:hidden;}
+.continue-glow::before{content:'';position:absolute;inset:-100%;
+  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
+  animation:silverspin 3s linear infinite;}
+.continue-glow .gen-btn{position:relative;z-index:1;margin:0;border-radius:7px;}
+@keyframes silverspin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion:reduce){.continue-glow::before{animation:none;display:none;}}
 
 .loading{display:none;text-align:center;padding:3rem 1rem;}
 .lr{width:40px;height:40px;position:relative;margin:0 auto 1rem;}
@@ -103,22 +117,21 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .ll{font-size:0.95rem;font-weight:600;color:var(--mid);}
 
 .rout{display:none;}
-body.results-mode{background:#f2f2f2;}
+body.results-mode{background:radial-gradient(ellipse at 50% 18%, var(--moon2) 0%, var(--moon) 65%);}
 .ptop{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;margin-bottom:0.6rem;}
 .pmid{margin-bottom:0.6rem;display:flex;justify-content:center;}
 .pbot{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;}
 .dp{
-  --card-bg:#d8dade;--card-text:#202024;--card-dim:#40404a;--card-mid:#2a2a30;--card-accent:#4a4a54;
-  --card-a1:rgba(255,255,255,0.4);--card-a2:rgba(0,0,0,0.14);--card-a3:rgba(255,255,255,0.15);--card-a4:rgba(0,0,0,0.08);
-  --card-stripe-odd:rgba(255,255,255,0.1);--card-stripe-even:rgba(0,0,0,0.07);
+  --card-bg:#131f42;--card-text:#f0e4b8;--card-dim:#f0e4b8;--card-mid:#f0e4b8;--card-accent:#f0c94c;
+  --card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);
+  --card-stripe-odd:rgba(255,255,255,0.035);--card-stripe-even:rgba(0,0,0,0.16);
   background:var(--card-bg);
   color:var(--card-text);border:1px solid var(--card-a1);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:0 1px 0 rgba(255,255,255,0.7) inset,0 -1px 0 rgba(0,0,0,0.08) inset,0 18px 34px -14px rgba(10,10,26,0.35),0 6px 14px rgba(10,10,26,0.16);
+  box-shadow:0 1px 0 rgba(255,255,255,0.08) inset,0 -1px 0 rgba(0,0,0,0.2) inset,0 18px 34px -14px rgba(0,0,0,0.5),0 6px 14px rgba(0,0,0,0.3);
   transition:transform 0.16s ease,box-shadow 0.16s ease;
   animation:cardIn 0.55s cubic-bezier(0.2,0.7,0.3,1) both;
   height:200px;cursor:pointer;position:relative;
 }
-.dp-chrome{height:2.6rem;flex-shrink:0;background:linear-gradient(115deg,#161719 0%,#3a3d43 12%,#e8eaee 24%,#fefefe 30%,#8a8d94 42%,#2a2c30 54%,#c4c8ce 66%,#f5f5f6 72%,#5a5d63 86%,#161719 100%);}
 .dp-fade{position:absolute;left:0;right:0;bottom:0;height:36px;background:linear-gradient(transparent,var(--card-bg));pointer-events:none;}
 .dp-fade[hidden]{display:none;}
 @keyframes cardIn{from{opacity:0;transform:translateY(16px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
@@ -128,14 +141,15 @@ body.results-mode{background:#f2f2f2;}
 .pbot .dp:nth-child(1){animation-delay:0.27s;}
 .pbot .dp:nth-child(2){animation-delay:0.36s;}
 .pbot .dp:nth-child(3){animation-delay:0.45s;}
-.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.2) inset;}
-@media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.18) inset,0 -1px 0 rgba(0,0,0,0.12) inset,0 24px 40px -14px rgba(10,10,26,0.5),0 8px 16px rgba(10,10,26,0.24);}}
-.dp.astro{--card-bg:#e8d9a8;--card-text:#3a2c0a;--card-dim:#7a6224;--card-mid:#5c4818;--card-accent:#8a6a1e;--card-a1:rgba(138,106,30,0.25);--card-a2:rgba(138,106,30,0.12);--card-a3:rgba(138,106,30,0.06);--card-a4:rgba(138,106,30,0.1);--card-stripe-odd:rgba(255,255,255,0.7);--card-stripe-even:rgba(90,70,20,0.22);}
-.dp.hd{--card-bg:#e8c4a8;--card-text:#3a2415;--card-dim:#7a5638;--card-mid:#5c3a20;--card-accent:#8a5a34;--card-a1:rgba(138,90,52,0.25);--card-a2:rgba(138,90,52,0.12);--card-a3:rgba(138,90,52,0.06);--card-a4:rgba(138,90,52,0.1);--card-stripe-odd:rgba(255,255,255,0.7);--card-stripe-even:rgba(120,70,40,0.22);}
-.dp.num{--card-bg:#d8dade;--card-text:#202124;--card-dim:#5c5e64;--card-mid:#3a3b40;--card-accent:#4a4a52;--card-a1:rgba(74,74,82,0.25);--card-a2:rgba(74,74,82,0.12);--card-a3:rgba(74,74,82,0.06);--card-a4:rgba(74,74,82,0.1);--card-stripe-odd:rgba(255,255,255,0.75);--card-stripe-even:rgba(60,62,70,0.2);}
-.dp.p2.astro{--card-bg:#f2e8c4;--card-text:#3a2c0a;--card-dim:#8a7238;--card-mid:#5c4818;--card-accent:#8a6a1e;--card-a1:rgba(138,106,30,0.2);--card-a2:rgba(138,106,30,0.1);--card-a3:rgba(138,106,30,0.05);--card-a4:rgba(138,106,30,0.08);--card-stripe-odd:rgba(255,255,255,0.75);--card-stripe-even:rgba(90,70,20,0.18);}
-.dp.p2.hd{--card-bg:#f2d8c0;--card-text:#3a2415;--card-dim:#8a6c50;--card-mid:#5c3a20;--card-accent:#8a5a34;--card-a1:rgba(138,90,52,0.2);--card-a2:rgba(138,90,52,0.1);--card-a3:rgba(138,90,52,0.05);--card-a4:rgba(138,90,52,0.08);--card-stripe-odd:rgba(255,255,255,0.75);--card-stripe-even:rgba(120,70,40,0.18);}
-.dp.p2.num{--card-bg:#e8eaec;--card-text:#202124;--card-dim:#6c6e74;--card-mid:#3a3b40;--card-accent:#4a4a52;--card-a1:rgba(74,74,82,0.2);--card-a2:rgba(74,74,82,0.1);--card-a3:rgba(74,74,82,0.05);--card-a4:rgba(74,74,82,0.08);--card-stripe-odd:rgba(255,255,255,0.8);--card-stripe-even:rgba(60,62,70,0.16);}
+.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.3) inset;}
+@media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset,0 -1px 0 rgba(0,0,0,0.25) inset,0 24px 40px -14px rgba(0,0,0,0.6),0 8px 16px rgba(0,0,0,0.36);}}
+.dp.astro{--card-accent:#f0c94c;--card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);}
+.dp.hd{--card-accent:#e0995e;--card-a1:rgba(224,153,94,0.3);--card-a2:rgba(224,153,94,0.14);--card-a3:rgba(224,153,94,0.08);--card-a4:rgba(224,153,94,0.1);}
+.dp.num{--card-accent:#b8bcc4;--card-a1:rgba(184,188,196,0.3);--card-a2:rgba(184,188,196,0.14);--card-a3:rgba(184,188,196,0.08);--card-a4:rgba(184,188,196,0.1);}
+.dp.p2{--card-bg:#0a1530;}
+.dp.p2.astro{--card-accent:#f0c94c;--card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);}
+.dp.p2.hd{--card-accent:#e0995e;--card-a1:rgba(224,153,94,0.3);--card-a2:rgba(224,153,94,0.14);--card-a3:rgba(224,153,94,0.08);--card-a4:rgba(224,153,94,0.1);}
+.dp.p2.num{--card-accent:#b8bcc4;--card-a1:rgba(184,188,196,0.3);--card-a2:rgba(184,188,196,0.14);--card-a3:rgba(184,188,196,0.08);--card-a4:rgba(184,188,196,0.1);}
 
 .dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
@@ -143,9 +157,9 @@ body.results-mode{background:#f2f2f2;}
 .dprl{font-family:'Barlow Condensed',sans-serif;color:var(--card-dim);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.01em;font-weight:700;flex-shrink:0;}
 .glyph{color:var(--card-accent);font-size:0.62rem;font-weight:400;text-transform:none;}
 .dprv{font-family:'Barlow Condensed',sans-serif;color:var(--card-text);font-style:normal;font-weight:800;text-align:left;}
-.dprv.pend{color:var(--card-accent);opacity:0.85;font-size:0.46rem;}
+.dprv.pend{color:var(--card-accent);font-size:0.46rem;}
 
-.dpsec{padding:0.18rem 0.4rem 0.05rem;font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--card-accent);opacity:0.85;font-weight:700;margin-top:0.05rem;}
+.dpsec{padding:0.18rem 0.4rem 0.05rem;font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--card-accent);font-weight:700;margin-top:0.05rem;}
 .dpsec:first-child{margin-top:0;}
 
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
@@ -168,8 +182,8 @@ body.results-mode{background:#f2f2f2;}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.28rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def[hidden]{display:none;}
 
-.doc-blank{background:#fdfdfb;border:1px solid rgba(10,10,26,0.08);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.5) inset,0 18px 34px -14px rgba(10,10,26,0.28),0 6px 14px rgba(10,10,26,0.12);}
-.results-canvas{background:rgba(10,10,26,0.035);border-radius:24px;padding:1.1rem;}
+.doc-blank{background:#131f42;border:1px solid rgba(240,201,76,0.15);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.08) inset,0 18px 34px -14px rgba(0,0,0,0.5),0 6px 14px rgba(0,0,0,0.3);}
+.results-canvas{background:rgba(0,0,0,0.12);border-radius:24px;padding:1.1rem;}
 
 .modal{position:fixed;inset:0;background:rgba(8,14,32,0.92);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
 .modal.open{display:block;}
@@ -208,11 +222,13 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 .fprivacy{font-size:0.54rem;color:var(--dim);line-height:1.5;max-width:360px;margin:0.3rem auto 0;font-weight:400;}
 
 @media print{
+  body.results-mode{background:#fff!important;}
   #pageHeader,footer,#pricing-wrap,#form-wrap,.card-expand{display:none!important;}
   .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
   .ptop,.pbot{display:block!important;gap:0!important;margin:0!important;}
   .pmid{display:none!important;}
   .dp{
+    --card-bg:#ffffff!important;--card-text:#151515!important;--card-dim:#151515!important;--card-mid:#151515!important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
     height:auto!important;min-height:100vh;overflow:visible!important;
     box-shadow:none!important;border-radius:0!important;border:none!important;
@@ -249,17 +265,14 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 <header id="pageHeader">
   <div class="brand">Know Your Energy</div>
   <div class="rule"></div>
-  <div class="desc">Full Western Astrology, Human Design, and Numerology charts with a reading across all three — for individuals or any two people.</div>
-  <div class="tagline-q">"Why is this relationship so easy and talking to this person feels so hard?"</div>
-  <div class="tagline-s">A user manual when communicating with someone who has a different operating system.</div>
+  <div class="desc">Astrology, Numerology, Human Design</div>
 </header>
 
-<div id="pricing-wrap" style="display:none;">
-  <span class="slbl">Select a plan to begin</span>
+<div id="pricing-wrap">
   <div class="price-list">
     <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
       <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>Free</strong> — one reading, no account required</div>
+      <div class="price-text"><strong>Free</strong> — one reading</div>
     </div>
     <div class="price-line" id="pl-single" onclick="selPlan('single')">
       <div class="price-check"><div class="price-check-dot"></div></div>
@@ -274,7 +287,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
     </div>
   </div>
-  <button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button>
+  <span class="continue-glow"><button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button></span>
 </div>
 
 <div id="form-wrap">
@@ -304,10 +317,10 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       <div class="cttl" id="p1ttl">Your Information</div>
       <div class="f"><div class="f3">
         <div><label>First</label><input type="text" id="p1f" placeholder="First"></div>
-        <div><label>Mid <span class="opt">opt</span></label><input type="text" id="p1m" placeholder="Mid"></div>
+        <div><label>Mid</label><input type="text" id="p1m" placeholder="Mid"></div>
         <div><label>Last</label><input type="text" id="p1l" placeholder="Last"></div>
       </div></div>
-      <div class="tnote-tight">No spaces between multiple middle names, not case sensitive.</div>
+      <div class="tnote-tight">No spaces between multiple middle names.</div>
       <div class="f"><label>Date of birth</label><input type="text" id="p1d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
       <div class="f">
         <label>Birth time <span class="opt">if known</span></label>
@@ -318,7 +331,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       </div>
       <div class="f"><div class="f3c">
         <div><label>City</label><input type="text" id="p1c" placeholder="City"></div>
-        <div><label>State <span class="opt">opt</span></label><input type="text" id="p1s" placeholder="State"></div>
+        <div><label>State</label><input type="text" id="p1s" placeholder="State"></div>
         <div><label>Country</label><input type="text" id="p1co" placeholder="Country"></div>
       </div></div>
       <div class="tnote">Birth time and location improve accuracy. If unknown, those parts of the reading will be omitted.</div>
@@ -328,10 +341,10 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       <div class="cttl">Person Two</div>
       <div class="f"><div class="f3">
         <div><label>First</label><input type="text" id="p2f" placeholder="First"></div>
-        <div><label>Mid <span class="opt">opt</span></label><input type="text" id="p2m" placeholder="Mid"></div>
+        <div><label>Mid</label><input type="text" id="p2m" placeholder="Mid"></div>
         <div><label>Last</label><input type="text" id="p2l" placeholder="Last"></div>
       </div></div>
-      <div class="tnote-tight">No spaces between multiple middle names, not case sensitive.</div>
+      <div class="tnote-tight">No spaces between multiple middle names.</div>
       <div class="f"><label>Date of birth</label><input type="text" id="p2d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
       <div class="f">
         <label>Birth time <span class="opt">if known</span></label>
@@ -342,7 +355,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       </div>
       <div class="f"><div class="f3c">
         <div><label>City</label><input type="text" id="p2c" placeholder="City"></div>
-        <div><label>State <span class="opt">opt</span></label><input type="text" id="p2s" placeholder="State"></div>
+        <div><label>State</label><input type="text" id="p2s" placeholder="State"></div>
         <div><label>Country</label><input type="text" id="p2co" placeholder="Country"></div>
       </div></div>
       <div class="tnote">Birth time and location improve accuracy. If unknown, those parts of the reading will be omitted.</div>
@@ -350,7 +363,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   </div>
 
   <div class="err" id="err"></div>
-  <button class="gen-btn" onclick="generate()">Generate</button>
+  <span class="continue-glow"><button class="gen-btn" onclick="generate()">Generate</button></span>
 
 </div>
 
@@ -381,14 +394,43 @@ function selPlan(p){
   plan=p;
 }
 
-function confirmPlan(){
+async function confirmPlan(){
   if(plan!=='free'){
-    openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Stripe payment coming soon. Plan: <strong style="color:var(--f)">${plan}</strong>.</p>`);
+    const btn=document.querySelector('#pricing-wrap .gen-btn');
+    if(btn){btn.disabled=true;btn.textContent='Redirecting…';}
+    try{
+      const res=await fetch(W+'/create-checkout-session',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({plan})
+      });
+      const result=await res.json();
+      if(!res.ok||!result.url)throw new Error(result.error||'Could not start checkout.');
+      window.location.href=result.url;
+    }catch(e){
+      openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Payment could not be started: ${e.message}</p>`);
+      if(btn){btn.disabled=false;btn.textContent='Continue';}
+    }
     return;
   }
   document.getElementById('pricing-wrap').style.display='none';
   document.getElementById('form-wrap').style.display='block';
 }
+
+function handleCheckoutReturn(){
+  const params=new URLSearchParams(window.location.search);
+  const checkout=params.get('checkout');
+  if(!checkout)return;
+  history.replaceState(null,'',window.location.pathname);
+  if(checkout==='success'){
+    document.getElementById('pricing-wrap').style.display='none';
+    document.getElementById('form-wrap').style.display='block';
+    openMod('Payment Successful',`<p style="font-size:0.78rem;line-height:1.7;">Thank you — your payment went through. You're all set to generate your reading below.</p>`);
+  }else if(checkout==='cancel'){
+    openMod('Payment Cancelled',`<p style="font-size:0.78rem;line-height:1.7;">Checkout was cancelled. No charge was made.</p>`);
+  }
+}
+handleCheckoutReturn();
 
 function togType(){
   const two=document.getElementById('ttype').checked;
@@ -463,11 +505,11 @@ function subContact(){
 
 async function generate(){
   document.getElementById('err').style.display='none';
-  const p1f=g('p1f'),p1l=g('p1l'),d1=g('p1d');
-  if(!p1f||!p1l||!vd(d1)){showErr('Please enter first name, last name, and date of birth (MM/DD/YYYY).');return;}
+  const p1f=g('p1f'),p1m=g('p1m'),p1l=g('p1l'),d1=g('p1d');
+  if(!p1f||!p1m||!p1l||!vd(d1)){showErr('Please enter first, middle, and last name, and date of birth (MM/DD/YYYY).');return;}
   if(rtype==='two-person'){
-    const p2f=g('p2f'),p2l=g('p2l'),d2=g('p2d');
-    if(!p2f||!p2l||!vd(d2)){showErr('Please enter first name, last name, and date of birth for Person Two.');return;}
+    const p2f=g('p2f'),p2m=g('p2m'),p2l=g('p2l'),d2=g('p2d');
+    if(!p2f||!p2m||!p2l||!vd(d2)){showErr('Please enter first, middle, and last name, and date of birth for Person Two.');return;}
   }
 
   document.getElementById('form-wrap').style.display='none';
@@ -723,7 +765,7 @@ let cardRegistry=[];
 function pan(nm,sys,rows,isP2,kind){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
-  return `<div class="dp ${c}" data-card-idx="${idx}"><div class="dp-chrome"></div><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div>`;
+  return `<div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div>`;
 }
 
 function docBlank(){
