@@ -33,6 +33,52 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .tagline-q{font-size:0.75rem;color:#f8e4a8;font-style:italic;font-weight:600;line-height:1.45;margin:0.45rem auto 0.15rem;max-width:360px;}
 .tagline-s{font-size:0.68rem;color:var(--mid);font-style:italic;font-weight:400;line-height:1.45;max-width:360px;margin:0 auto;}
 
+/* ── LANDING ─────────────────────────────────────────────────────── */
+#landing{display:block;}
+
+.hero{text-align:center;padding:0.9rem 1rem 1.6rem;}
+.hero-eyebrow{font-size:0.58rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--f);font-weight:700;opacity:0.9;margin-bottom:0.7rem;}
+.hero-h1{font-family:'Playfair Display',serif;font-style:italic;font-weight:800;
+  font-size:clamp(1.4rem,5.4vw,2.15rem);line-height:1.28;color:var(--txt);max-width:480px;margin:0 auto 0.7rem;}
+.hero-sub{font-size:0.78rem;color:var(--mid);line-height:1.65;max-width:400px;margin:0 auto 1.2rem;font-weight:400;}
+.hero-cta{display:inline-block;padding:0.62rem 1.7rem;background:linear-gradient(120deg,#f8e4a8,#f0c94c);
+  color:#0a1530;font-weight:800;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;
+  border-radius:8px;cursor:pointer;border:none;box-shadow:0 10px 22px -8px rgba(240,201,76,0.45);
+  transition:transform 0.15s ease,box-shadow 0.15s ease;font-family:inherit;}
+.hero-cta:hover{transform:translateY(-1px);box-shadow:0 12px 28px -8px rgba(240,201,76,0.6);}
+.hero-cta:active{transform:translateY(1px);}
+.hero-trust{font-size:0.6rem;color:var(--dim);margin-top:0.65rem;letter-spacing:0.02em;}
+
+.sec-eyebrow{font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim);font-weight:700;text-align:center;margin-bottom:1rem;}
+
+.why{padding:1.3rem 1rem 1.7rem;max-width:460px;margin:0 auto;}
+.why-lead{margin-bottom:1.1rem;}
+.why-item{padding:0.5rem 0 0.5rem 0.8rem;border-left:2px solid rgba(240,201,76,0.35);margin-bottom:0.65rem;}
+.why-q{font-size:0.82rem;color:var(--txt);font-weight:600;line-height:1.5;font-style:italic;font-family:'Playfair Display',serif;}
+.why-close{text-align:center;font-size:0.76rem;color:var(--mid);line-height:1.65;font-weight:400;padding-top:0.35rem;max-width:400px;margin:0 auto;}
+.why-close strong{color:var(--f);}
+
+.how{padding:1.2rem 1rem 1.9rem;max-width:640px;margin:0 auto;}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin:0 0 1.15rem;}
+@media(max-width:520px){.how-grid{grid-template-columns:1fr;}}
+.sys-card{border-radius:10px;padding:0.9rem 0.8rem;text-align:center;background:var(--moon2);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,0.35),0 1px 0 rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);}
+.sys-glyph{font-size:1.35rem;margin-bottom:0.42rem;display:block;line-height:1;}
+.sys-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;font-size:0.74rem;margin-bottom:0.4rem;}
+.sys-card.astro .sys-glyph,.sys-card.astro .sys-name{color:var(--f);}
+.sys-card.hd .sys-glyph,.sys-card.hd .sys-name{color:#e0995e;}
+.sys-card.num .sys-glyph,.sys-card.num .sys-name{color:var(--k);}
+.sys-desc{font-size:0.67rem;color:var(--mid);line-height:1.55;font-weight:400;}
+.how-close{text-align:center;font-size:0.76rem;color:var(--mid);line-height:1.65;font-weight:400;max-width:440px;margin:0 auto;}
+
+.pricing-h{text-align:center;font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:1.08rem;color:var(--txt);margin-bottom:0.35rem;}
+.pricing-sub{text-align:center;font-size:0.72rem;color:var(--mid);margin-bottom:1.1rem;}
+
+@media(prefers-reduced-motion:no-preference){
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity 0.55s ease,transform 0.55s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+}
+
 .slbl{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mid);display:block;margin-bottom:0.5rem;font-weight:600;}
 
 .price-list{margin-bottom:0.8rem;}
@@ -45,7 +91,7 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .price-text{font-size:0.82rem;color:var(--txt);font-weight:400;}
 .price-text strong{color:var(--f);}
 
-#form-wrap{display:block;}
+#form-wrap{display:none;}
 
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.75rem;}
 .tlbl{font-size:0.75rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--dim);transition:color 0.18s;}
@@ -208,7 +254,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 .fprivacy{font-size:0.54rem;color:var(--dim);line-height:1.5;max-width:360px;margin:0.3rem auto 0;font-weight:400;}
 
 @media print{
-  #pageHeader,footer,#pricing-wrap,#form-wrap,.card-expand{display:none!important;}
+  #pageHeader,footer,#landing,#form-wrap,.card-expand{display:none!important;}
   .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
   .ptop,.pbot{display:block!important;gap:0!important;margin:0!important;}
   .pmid{display:none!important;}
@@ -249,32 +295,76 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 <header id="pageHeader">
   <div class="brand">Know Your Energy</div>
   <div class="rule"></div>
-  <div class="desc">Full Western Astrology, Human Design, and Numerology charts with a reading across all three — for individuals or any two people.</div>
-  <div class="tagline-q">"Why is this relationship so easy and talking to this person feels so hard?"</div>
-  <div class="tagline-s">A user manual when communicating with someone who has a different operating system.</div>
 </header>
 
-<div id="pricing-wrap" style="display:none;">
-  <span class="slbl">Select a plan to begin</span>
-  <div class="price-list">
-    <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
-      <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>Free</strong> — one reading, no account required</div>
+<div id="landing">
+
+  <section class="hero">
+    <div class="hero-eyebrow">Astrology + Numerology + Human Design</div>
+    <h1 class="hero-h1">You're not hard to understand. You're just running on a different system.</h1>
+    <p class="hero-sub">One combined reading, pulled from all three systems at once — for yourself, or for you and someone you're trying to understand.</p>
+    <button type="button" class="hero-cta" onclick="scrollToPricing()">Get Your Reading</button>
+    <div class="hero-trust">Free reading available &nbsp;·&nbsp; No account required</div>
+  </section>
+
+  <section class="why">
+    <div class="why-lead">
+      <div class="tagline-q">"Why is this relationship so easy, and talking to this person feels so hard?"</div>
+      <div class="tagline-s">A user manual when communicating with someone who has a different operating system.</div>
     </div>
-    <div class="price-line" id="pl-single" onclick="selPlan('single')">
-      <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>$5</strong> — single reading</div>
+    <div class="reveal why-item"><div class="why-q">Why do I click instantly with some people and grind against others?</div></div>
+    <div class="reveal why-item"><div class="why-q">Why does the advice that works for everyone else not work for me?</div></div>
+    <div class="reveal why-item"><div class="why-q">Why do I feel fluent with one person and lost in translation with another?</div></div>
+    <div class="reveal why-close">Astrology, Numerology, and Human Design each answer part of it. <strong>Together, they answer all of it.</strong></div>
+  </section>
+
+  <section class="how">
+    <div class="sec-eyebrow">Three Systems, One Reading</div>
+    <div class="how-grid">
+      <div class="reveal sys-card astro">
+        <span class="sys-glyph">☉</span>
+        <div class="sys-name">Astrology</div>
+        <div class="sys-desc">The planets at your exact moment of birth — how you express yourself, love, and grow.</div>
+      </div>
+      <div class="reveal sys-card num">
+        <span class="sys-glyph">✦</span>
+        <div class="sys-name">Numerology</div>
+        <div class="sys-desc">The numbers hidden in your name and birth date — your natural gifts and direction.</div>
+      </div>
+      <div class="reveal sys-card hd">
+        <span class="sys-glyph">⬡</span>
+        <div class="sys-name">Human Design</div>
+        <div class="sys-desc">Your energetic blueprint — how you're wired to decide and take action.</div>
+      </div>
     </div>
-    <div class="price-line" id="pl-monthly" onclick="selPlan('monthly')">
-      <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>$10 / month</strong> — unlimited readings</div>
+    <div class="reveal how-close">Read alone, each system tells part of the story. Read together, they explain the whole person — and how two people's systems mesh or clash.</div>
+  </section>
+
+  <div id="pricing-wrap">
+    <div class="pricing-h">Choose how you'd like to begin</div>
+    <div class="pricing-sub">Start free, or unlock unlimited readings.</div>
+    <span class="slbl">Select a plan</span>
+    <div class="price-list">
+      <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
+        <div class="price-check"><div class="price-check-dot"></div></div>
+        <div class="price-text"><strong>Free</strong> — one reading, no account required</div>
+      </div>
+      <div class="price-line" id="pl-single" onclick="selPlan('single')">
+        <div class="price-check"><div class="price-check-dot"></div></div>
+        <div class="price-text"><strong>$5</strong> — single reading</div>
+      </div>
+      <div class="price-line" id="pl-monthly" onclick="selPlan('monthly')">
+        <div class="price-check"><div class="price-check-dot"></div></div>
+        <div class="price-text"><strong>$10 / month</strong> — unlimited readings</div>
+      </div>
+      <div class="price-line" id="pl-annual" onclick="selPlan('annual')">
+        <div class="price-check"><div class="price-check-dot"></div></div>
+        <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
+      </div>
     </div>
-    <div class="price-line" id="pl-annual" onclick="selPlan('annual')">
-      <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
-    </div>
+    <button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button>
   </div>
-  <button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button>
+
 </div>
 
 <div id="form-wrap">
@@ -400,8 +490,16 @@ async function confirmPlan(){
     }
     return;
   }
-  document.getElementById('pricing-wrap').style.display='none';
+  enterForm();
+}
+
+function enterForm(){
+  document.getElementById('landing').style.display='none';
   document.getElementById('form-wrap').style.display='block';
+}
+
+function scrollToPricing(){
+  document.getElementById('pricing-wrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function handleCheckoutReturn(){
@@ -410,14 +508,28 @@ function handleCheckoutReturn(){
   if(!checkout)return;
   history.replaceState(null,'',window.location.pathname);
   if(checkout==='success'){
-    document.getElementById('pricing-wrap').style.display='none';
-    document.getElementById('form-wrap').style.display='block';
+    enterForm();
     openMod('Payment Successful',`<p style="font-size:0.78rem;line-height:1.7;">Thank you — your payment went through. You're all set to generate your reading below.</p>`);
   }else if(checkout==='cancel'){
     openMod('Payment Cancelled',`<p style="font-size:0.78rem;line-height:1.7;">Checkout was cancelled. No charge was made.</p>`);
   }
 }
 handleCheckoutReturn();
+
+function initScrollReveal(){
+  const els=document.querySelectorAll('.reveal');
+  if(!els.length||!('IntersectionObserver' in window))return;
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        obs.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.15});
+  els.forEach(el=>obs.observe(el));
+}
+initScrollReveal();
 
 function togType(){
   const two=document.getElementById('ttype').checked;
@@ -457,7 +569,7 @@ function showErr(msg){
 }
 
 function showForm(){
-  document.getElementById('pricing-wrap').style.display='none';
+  document.getElementById('landing').style.display='none';
   document.getElementById('form-wrap').style.display='block';
   document.getElementById('loading').style.display='none';
   document.getElementById('rout').style.display='none';
