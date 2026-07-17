@@ -125,11 +125,7 @@ async function getAstrology(env, dob, timeStr, ampm, city, state, country) {
   const { hour, minute } = normalizeTime(timeStr, ampm);
   const { cityName, countryCode } = normalizeCity(city, state, country);
 
-  const birthData = { year, month, day, hour, minute, second: 0 };
-  if (city && city.trim().length > 0) {
-    birthData.city = cityName;
-    birthData.country_code = countryCode;
-  }
+  const birthData = { year, month, day, hour, minute, second: 0, city: cityName, country_code: countryCode };
 
   const res = await fetch("https://api.astrology-api.io/api/v3/data/positions", {
     method: "POST",
