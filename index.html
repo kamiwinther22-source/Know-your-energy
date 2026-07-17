@@ -101,6 +101,14 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 @keyframes genbtnsheen{0%{left:-35%;}35%{left:130%;}100%{left:130%;}}
 @media(prefers-reduced-motion:reduce){.gen-btn::after{animation:none;display:none;}}
 
+.continue-glow{position:relative;display:block;width:fit-content;margin:0 auto;border-radius:9px;padding:3px;overflow:hidden;}
+.continue-glow::before{content:'';position:absolute;inset:-100%;
+  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
+  animation:silverspin 3s linear infinite;}
+.continue-glow .gen-btn{position:relative;z-index:1;margin:0;border-radius:7px;}
+@keyframes silverspin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion:reduce){.continue-glow::before{animation:none;display:none;}}
+
 .loading{display:none;text-align:center;padding:3rem 1rem;}
 .lr{width:40px;height:40px;position:relative;margin:0 auto 1rem;}
 .lr::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--f);animation:spin 1.4s linear infinite;}
@@ -109,17 +117,17 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .ll{font-size:0.95rem;font-weight:600;color:var(--mid);}
 
 .rout{display:none;}
-body.results-mode{background:#f2f2f2;}
+body.results-mode{background:radial-gradient(ellipse at 50% 18%, var(--moon2) 0%, var(--moon) 65%);}
 .ptop{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;margin-bottom:0.6rem;}
 .pmid{margin-bottom:0.6rem;display:flex;justify-content:center;}
 .pbot{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;}
 .dp{
-  --card-bg:#d8dade;--card-text:#16161a;--card-dim:#16161a;--card-mid:#16161a;--card-accent:#2c2c32;
-  --card-a1:rgba(255,255,255,0.4);--card-a2:rgba(0,0,0,0.14);--card-a3:rgba(255,255,255,0.15);--card-a4:rgba(0,0,0,0.08);
-  --card-stripe-odd:rgba(255,255,255,0.1);--card-stripe-even:rgba(0,0,0,0.07);
+  --card-bg:#131f42;--card-text:#f0e4b8;--card-dim:#f0e4b8;--card-mid:#f0e4b8;--card-accent:#f0c94c;
+  --card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);
+  --card-stripe-odd:rgba(255,255,255,0.035);--card-stripe-even:rgba(0,0,0,0.16);
   background:var(--card-bg);
   color:var(--card-text);border:1px solid var(--card-a1);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:0 1px 0 rgba(255,255,255,0.7) inset,0 -1px 0 rgba(0,0,0,0.08) inset,0 18px 34px -14px rgba(10,10,26,0.35),0 6px 14px rgba(10,10,26,0.16);
+  box-shadow:0 1px 0 rgba(255,255,255,0.08) inset,0 -1px 0 rgba(0,0,0,0.2) inset,0 18px 34px -14px rgba(0,0,0,0.5),0 6px 14px rgba(0,0,0,0.3);
   transition:transform 0.16s ease,box-shadow 0.16s ease;
   animation:cardIn 0.55s cubic-bezier(0.2,0.7,0.3,1) both;
   height:200px;cursor:pointer;position:relative;
@@ -133,14 +141,15 @@ body.results-mode{background:#f2f2f2;}
 .pbot .dp:nth-child(1){animation-delay:0.27s;}
 .pbot .dp:nth-child(2){animation-delay:0.36s;}
 .pbot .dp:nth-child(3){animation-delay:0.45s;}
-.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.2) inset;}
-@media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.18) inset,0 -1px 0 rgba(0,0,0,0.12) inset,0 24px 40px -14px rgba(10,10,26,0.5),0 8px 16px rgba(10,10,26,0.24);}}
-.dp.astro{--card-bg:#e8d9a8;--card-text:#2a1f08;--card-dim:#2a1f08;--card-mid:#2a1f08;--card-accent:#4a3810;--card-a1:rgba(138,106,30,0.25);--card-a2:rgba(138,106,30,0.12);--card-a3:rgba(138,106,30,0.06);--card-a4:rgba(138,106,30,0.1);--card-stripe-odd:rgba(255,255,255,0.7);--card-stripe-even:rgba(90,70,20,0.22);}
-.dp.hd{--card-bg:#e8c4a8;--card-text:#2a160d;--card-dim:#2a160d;--card-mid:#2a160d;--card-accent:#4a2c18;--card-a1:rgba(138,90,52,0.25);--card-a2:rgba(138,90,52,0.12);--card-a3:rgba(138,90,52,0.06);--card-a4:rgba(138,90,52,0.1);--card-stripe-odd:rgba(255,255,255,0.7);--card-stripe-even:rgba(120,70,40,0.22);}
-.dp.num{--card-bg:#d8dade;--card-text:#16161a;--card-dim:#16161a;--card-mid:#16161a;--card-accent:#2c2c32;--card-a1:rgba(74,74,82,0.25);--card-a2:rgba(74,74,82,0.12);--card-a3:rgba(74,74,82,0.06);--card-a4:rgba(74,74,82,0.1);--card-stripe-odd:rgba(255,255,255,0.75);--card-stripe-even:rgba(60,62,70,0.2);}
-.dp.p2.astro{--card-bg:#f2e8c4;--card-text:#2a1f08;--card-dim:#2a1f08;--card-mid:#2a1f08;--card-accent:#4a3810;--card-a1:rgba(138,106,30,0.2);--card-a2:rgba(138,106,30,0.1);--card-a3:rgba(138,106,30,0.05);--card-a4:rgba(138,106,30,0.08);--card-stripe-odd:rgba(255,255,255,0.75);--card-stripe-even:rgba(90,70,20,0.18);}
-.dp.p2.hd{--card-bg:#f2d8c0;--card-text:#2a160d;--card-dim:#2a160d;--card-mid:#2a160d;--card-accent:#4a2c18;--card-a1:rgba(138,90,52,0.2);--card-a2:rgba(138,90,52,0.1);--card-a3:rgba(138,90,52,0.05);--card-a4:rgba(138,90,52,0.08);--card-stripe-odd:rgba(255,255,255,0.75);--card-stripe-even:rgba(120,70,40,0.18);}
-.dp.p2.num{--card-bg:#e8eaec;--card-text:#16161a;--card-dim:#16161a;--card-mid:#16161a;--card-accent:#2c2c32;--card-a1:rgba(74,74,82,0.2);--card-a2:rgba(74,74,82,0.1);--card-a3:rgba(74,74,82,0.05);--card-a4:rgba(74,74,82,0.08);--card-stripe-odd:rgba(255,255,255,0.8);--card-stripe-even:rgba(60,62,70,0.16);}
+.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.3) inset;}
+@media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset,0 -1px 0 rgba(0,0,0,0.25) inset,0 24px 40px -14px rgba(0,0,0,0.6),0 8px 16px rgba(0,0,0,0.36);}}
+.dp.astro{--card-accent:#f0c94c;--card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);}
+.dp.hd{--card-accent:#e0995e;--card-a1:rgba(224,153,94,0.3);--card-a2:rgba(224,153,94,0.14);--card-a3:rgba(224,153,94,0.08);--card-a4:rgba(224,153,94,0.1);}
+.dp.num{--card-accent:#b8bcc4;--card-a1:rgba(184,188,196,0.3);--card-a2:rgba(184,188,196,0.14);--card-a3:rgba(184,188,196,0.08);--card-a4:rgba(184,188,196,0.1);}
+.dp.p2{--card-bg:#0a1530;}
+.dp.p2.astro{--card-accent:#f0c94c;--card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);}
+.dp.p2.hd{--card-accent:#e0995e;--card-a1:rgba(224,153,94,0.3);--card-a2:rgba(224,153,94,0.14);--card-a3:rgba(224,153,94,0.08);--card-a4:rgba(224,153,94,0.1);}
+.dp.p2.num{--card-accent:#b8bcc4;--card-a1:rgba(184,188,196,0.3);--card-a2:rgba(184,188,196,0.14);--card-a3:rgba(184,188,196,0.08);--card-a4:rgba(184,188,196,0.1);}
 
 .dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
@@ -173,8 +182,8 @@ body.results-mode{background:#f2f2f2;}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.28rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def[hidden]{display:none;}
 
-.doc-blank{background:#fdfdfb;border:1px solid rgba(10,10,26,0.08);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.5) inset,0 18px 34px -14px rgba(10,10,26,0.28),0 6px 14px rgba(10,10,26,0.12);}
-.results-canvas{background:rgba(10,10,26,0.035);border-radius:24px;padding:1.1rem;}
+.doc-blank{background:#131f42;border:1px solid rgba(240,201,76,0.15);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.08) inset,0 18px 34px -14px rgba(0,0,0,0.5),0 6px 14px rgba(0,0,0,0.3);}
+.results-canvas{background:rgba(0,0,0,0.12);border-radius:24px;padding:1.1rem;}
 
 .modal{position:fixed;inset:0;background:rgba(8,14,32,0.92);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
 .modal.open{display:block;}
@@ -213,11 +222,13 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 .fprivacy{font-size:0.54rem;color:var(--dim);line-height:1.5;max-width:360px;margin:0.3rem auto 0;font-weight:400;}
 
 @media print{
+  body.results-mode{background:#fff!important;}
   #pageHeader,footer,#pricing-wrap,#form-wrap,.card-expand{display:none!important;}
   .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
   .ptop,.pbot{display:block!important;gap:0!important;margin:0!important;}
   .pmid{display:none!important;}
   .dp{
+    --card-bg:#ffffff!important;--card-text:#151515!important;--card-dim:#151515!important;--card-mid:#151515!important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
     height:auto!important;min-height:100vh;overflow:visible!important;
     box-shadow:none!important;border-radius:0!important;border:none!important;
@@ -258,11 +269,10 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 </header>
 
 <div id="pricing-wrap">
-  <span class="slbl">Select a plan to begin</span>
   <div class="price-list">
     <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
       <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>Free</strong> — one reading, no account required</div>
+      <div class="price-text"><strong>Free</strong> — one reading</div>
     </div>
     <div class="price-line" id="pl-single" onclick="selPlan('single')">
       <div class="price-check"><div class="price-check-dot"></div></div>
@@ -277,7 +287,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
     </div>
   </div>
-  <button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button>
+  <span class="continue-glow"><button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button></span>
 </div>
 
 <div id="form-wrap">
@@ -321,7 +331,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       </div>
       <div class="f"><div class="f3c">
         <div><label>City</label><input type="text" id="p1c" placeholder="City"></div>
-        <div><label>State <span class="opt">optional</span></label><input type="text" id="p1s" placeholder="State"></div>
+        <div><label>State</label><input type="text" id="p1s" placeholder="State"></div>
         <div><label>Country</label><input type="text" id="p1co" placeholder="Country"></div>
       </div></div>
       <div class="tnote">Birth time and location improve accuracy. If unknown, those parts of the reading will be omitted.</div>
@@ -345,7 +355,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       </div>
       <div class="f"><div class="f3c">
         <div><label>City</label><input type="text" id="p2c" placeholder="City"></div>
-        <div><label>State <span class="opt">optional</span></label><input type="text" id="p2s" placeholder="State"></div>
+        <div><label>State</label><input type="text" id="p2s" placeholder="State"></div>
         <div><label>Country</label><input type="text" id="p2co" placeholder="Country"></div>
       </div></div>
       <div class="tnote">Birth time and location improve accuracy. If unknown, those parts of the reading will be omitted.</div>
@@ -353,7 +363,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   </div>
 
   <div class="err" id="err"></div>
-  <button class="gen-btn" onclick="generate()">Generate</button>
+  <span class="continue-glow"><button class="gen-btn" onclick="generate()">Generate</button></span>
 
 </div>
 
