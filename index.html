@@ -381,14 +381,43 @@ function selPlan(p){
   plan=p;
 }
 
-function confirmPlan(){
+async function confirmPlan(){
   if(plan!=='free'){
-    openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Stripe payment coming soon. Plan: <strong style="color:var(--f)">${plan}</strong>.</p>`);
+    const btn=document.querySelector('#pricing-wrap .gen-btn');
+    if(btn){btn.disabled=true;btn.textContent='Redirecting…';}
+    try{
+      const res=await fetch(W+'/create-checkout-session',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({plan})
+      });
+      const result=await res.json();
+      if(!res.ok||!result.url)throw new Error(result.error||'Could not start checkout.');
+      window.location.href=result.url;
+    }catch(e){
+      openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Payment could not be started: ${e.message}</p>`);
+      if(btn){btn.disabled=false;btn.textContent='Continue';}
+    }
     return;
   }
   document.getElementById('pricing-wrap').style.display='none';
   document.getElementById('form-wrap').style.display='block';
 }
+
+function handleCheckoutReturn(){
+  const params=new URLSearchParams(window.location.search);
+  const checkout=params.get('checkout');
+  if(!checkout)return;
+  history.replaceState(null,'',window.location.pathname);
+  if(checkout==='success'){
+    document.getElementById('pricing-wrap').style.display='none';
+    document.getElementById('form-wrap').style.display='block';
+    openMod('Payment Successful',`<p style="font-size:0.78rem;line-height:1.7;">Thank you — your payment went through. You're all set to generate your reading below.</p>`);
+  }else if(checkout==='cancel'){
+    openMod('Payment Cancelled',`<p style="font-size:0.78rem;line-height:1.7;">Checkout was cancelled. No charge was made.</p>`);
+  }
+}
+handleCheckoutReturn();
 
 function togType(){
   const two=document.getElementById('ttype').checked;
