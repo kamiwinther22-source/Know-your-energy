@@ -362,7 +362,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
   <div class="cards">
     <div class="card">
-      <div class="cttl" id="p1ttl">Your Information</div>
+      <div class="cttl" id="p1ttl">Your Full Name at Birth</div>
       <div class="f"><div class="f3">
         <div><label>First</label><input type="text" id="p1f" placeholder="First"></div>
         <div><label>Mid</label><input type="text" id="p1m" placeholder="Mid"></div>
@@ -506,7 +506,7 @@ function togType(){
   rtype=two?'two-person':'individual';
   document.getElementById('p2card').style.display=two?'block':'none';
   document.getElementById('relwrap').style.display=two?'flex':'none';
-  document.getElementById('p1ttl').textContent=two?'Person One':'Your Information';
+  document.getElementById('p1ttl').textContent=two?'Person One':'Your Full Name at Birth';
   document.getElementById('lind').classList.toggle('active',!two);
   document.getElementById('ltwo').classList.toggle('active',two);
 }
