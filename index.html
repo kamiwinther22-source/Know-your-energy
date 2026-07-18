@@ -155,11 +155,14 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.2) inset;}
 @media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset,0 24px 40px -14px rgba(0,0,0,0.55),0 8px 16px rgba(0,0,0,0.32);}}
 
-.card-frame{position:relative;border-radius:25px;padding:3px;border:3px solid #1e3a72;}
-.card-gap{position:relative;border-radius:22px;padding:3px;}
-.card-shine{position:relative;border-radius:19px;padding:1px;border:2.5px solid #d7dbe2;}
-.card-shine .dp{position:relative;z-index:1;border-radius:17px;}
-@media(prefers-reduced-motion:reduce){.card-shine::before{animation:none;display:none;}}
+.card-frame-clip{border-radius:25px;overflow:hidden;}
+.card-frame-ring{box-sizing:border-box;border:3px solid transparent;
+  border-image:linear-gradient(135deg,#4a70c4 0%,#233f7a 25%,#4a70c4 50%,#152a56 75%,#4a70c4 100%) 1;}
+.card-gap{padding:3px;}
+.card-shine-clip{border-radius:19px;overflow:hidden;}
+.card-shine-ring{box-sizing:border-box;border:3px solid transparent;
+  border-image:linear-gradient(135deg,#ffffff 0%,#d8dade 20%,#ffffff 40%,#c3c7d1 60%,#ffffff 80%,#d8dade 100%) 1;}
+.card-shine-ring .dp{position:relative;z-index:1;border-radius:16px;}
 
 .dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
@@ -247,10 +250,10 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
   .ptop,.pbot{display:block!important;gap:0!important;margin:0!important;}
   .pmid{display:none!important;}
-  .card-frame{border-radius:0!important;padding:0!important;border:none!important;}
-  .card-gap{border-radius:0!important;padding:0!important;}
-  .card-shine{border-radius:0!important;padding:0!important;border:none!important;}
-  .card-frame:has(.dp[style*="cursor:default"]){display:none!important;}
+  .card-frame-clip,.card-shine-clip{border-radius:0!important;overflow:visible!important;}
+  .card-frame-ring,.card-shine-ring{border:none!important;border-image:none!important;}
+  .card-gap{padding:0!important;}
+  .card-frame-clip:has(.dp[style*="cursor:default"]){display:none!important;}
   .dp{
     --card-bg:#ffffff!important;--card-text:#101c38!important;--card-dim:#101c38!important;--card-mid:#101c38!important;
     background:#ffffff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
@@ -832,15 +835,15 @@ let cardRegistry=[];
 function pan(nm,sys,rows,isP2,kind){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
-  return `<div class="card-frame pcell"><div class="card-gap"><div class="card-shine"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div></div></div></div>`;
+  return `<div class="card-frame-clip pcell"><div class="card-frame-ring"><div class="card-gap"><div class="card-shine-clip"><div class="card-shine-ring"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div></div></div></div></div></div>`;
 }
 
 function docBlank(){
-  return `<div class="card-frame" id="docBlank"><div class="card-gap"><div class="card-shine"><div class="dp" style="cursor:default;"></div></div></div></div>`;
+  return `<div class="card-frame-clip" id="docBlank"><div class="card-frame-ring"><div class="card-gap"><div class="card-shine-clip"><div class="card-shine-ring"><div class="dp" style="cursor:default;"></div></div></div></div></div></div>`;
 }
 function blankSlot(kind,isP2){
   const c=(isP2?'p2 ':'')+kind;
-  return `<div class="card-frame pcell"><div class="card-gap"><div class="card-shine"><div class="dp ${c}" style="cursor:default;"></div></div></div></div>`;
+  return `<div class="card-frame-clip pcell"><div class="card-frame-ring"><div class="card-gap"><div class="card-shine-clip"><div class="card-shine-ring"><div class="dp ${c}" style="cursor:default;"></div></div></div></div></div></div>`;
 }
 
 function render(p1,p2,r){
@@ -868,7 +871,7 @@ function render(p1,p2,r){
   document.body.classList.add('results-mode');
   window.scrollTo(0,0);
 
-  const ref=document.querySelector('.ptop .card-frame')||document.querySelector('.ptop .dp');
+  const ref=document.querySelector('.ptop .card-frame-clip')||document.querySelector('.ptop .dp');
   const blank=document.getElementById('docBlank');
   if(ref&&blank){
     const rect=ref.getBoundingClientRect();
