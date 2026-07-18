@@ -261,13 +261,17 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .card-frame-clip:has(.dp[style*="cursor:default"]){display:none!important;}
   .dp{
     --card-bg:#ffffff!important;--card-text:#101c38!important;--card-dim:#101c38!important;--card-mid:#101c38!important;
+    --card-stripe-odd:transparent!important;--card-stripe-even:transparent!important;
     background:#ffffff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
-    height:auto!important;min-height:100vh;overflow:visible!important;
+    height:auto!important;overflow:visible!important;
     box-shadow:none!important;border-radius:0!important;border:none!important;
     page-break-after:always;break-after:page;
     padding:0.6in 0.6in;
   }
+  .dprow{border-bottom:1px solid rgba(16,28,56,0.18)!important;}
+  .dprow:last-child{border-bottom:none!important;}
+  .dph{background:none!important;border-bottom:1.5px solid #101c38!important;padding-bottom:0.3rem!important;margin-bottom:0.2rem;}
   .pbot .dp:last-child{page-break-after:auto;break-after:auto;}
   .pcell{animation:none!important;}
   .dp[style*="cursor:default"]{display:none!important;}
