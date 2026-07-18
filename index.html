@@ -192,7 +192,6 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.28rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def[hidden]{display:none;}
 
-.doc-blank{background:#ece5cc;border:1px solid rgba(10,21,48,0.15);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.8) inset,0 18px 34px -14px rgba(0,0,0,0.45),0 6px 14px rgba(0,0,0,0.28);}
 .results-canvas{background:rgba(255,255,255,0.3);border-radius:24px;padding:1.1rem;}
 
 .modal{position:fixed;inset:0;background:rgba(8,14,32,0.92);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
@@ -837,7 +836,7 @@ function pan(nm,sys,rows,isP2,kind){
 }
 
 function docBlank(){
-  return `<div class="doc-blank" id="docBlank"></div>`;
+  return `<div class="card-frame" id="docBlank"><div class="card-gap"><div class="card-shine"><div class="dp" style="cursor:default;"></div></div></div></div>`;
 }
 function blankSlot(kind,isP2){
   const c=(isP2?'p2 ':'')+kind;
