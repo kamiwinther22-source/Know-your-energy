@@ -124,7 +124,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .ll{font-size:0.95rem;font-weight:600;color:var(--mid);}
 
 .rout{display:none;}
-body.results-mode{background:radial-gradient(ellipse at 50% 15%, #f2efe6 0%, #d9d4c6 75%);}
+body.results-mode{background:#e8d9a8 url('card-gold-bg-desat.jpg') center top/cover no-repeat;}
 body.results-mode footer{border-top-color:rgba(16,28,56,0.15);}
 body.results-mode .flinks,body.results-mode .flinks a,body.results-mode .fprivacy{color:#23345a;}
 body.results-mode .flinks a:hover{color:#101c38;}
@@ -132,14 +132,12 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .pmid{margin-bottom:0.6rem;display:flex;justify-content:center;}
 .pbot{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;}
 .dp{
-  --card-bg:#ece5cc;--card-text:var(--ink);--card-dim:var(--ink);--card-mid:#1c2b4d;--card-accent:#3d2f0b;
-  --card-metal:radial-gradient(ellipse 55% 45% at 20% 14%, rgba(255,255,255,0.65), transparent 55%),
-    linear-gradient(135deg, #ffffff 0%, var(--k) 20%, #fbefce 40%, var(--f) 55%, #fbefce 70%, var(--k) 85%, #ffffff 100%);
-  --card-a1:rgba(10,21,48,0.28);--card-a2:rgba(10,21,48,0.13);--card-a3:rgba(10,21,48,0.07);--card-a4:rgba(10,21,48,0.09);
-  --card-stripe-odd:rgba(255,255,255,0.3);--card-stripe-even:rgba(10,21,48,0.05);
-  background:var(--card-metal);
-  color:var(--card-text);border:2px solid var(--f);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:0 1px 0 rgba(255,255,255,0.8) inset,inset 0 0 0 1px rgba(255,255,255,0.55),0 18px 34px -14px rgba(0,0,0,0.45),0 6px 14px rgba(0,0,0,0.28);
+  --card-bg:#fdf8ec;--card-text:var(--ink);--card-dim:var(--ink);--card-mid:var(--ink);--card-accent:var(--ink);
+  background:var(--card-bg);
+  --card-a1:rgba(10,21,48,0.28);--card-a2:rgba(10,21,48,0.13);--card-a3:rgba(10,21,48,0.08);--card-a4:rgba(10,21,48,0.1);
+  --card-stripe-odd:rgba(255,255,255,0.5);--card-stripe-even:rgba(10,21,48,0.045);
+  color:var(--card-text);border-radius:15px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:1px 1px 0 rgba(255,255,255,0.9) inset;
   transition:transform 0.16s ease,box-shadow 0.16s ease;
   height:200px;cursor:pointer;position:relative;
 }
@@ -153,15 +151,24 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .pbot .pcell:nth-child(1){animation-delay:0.27s;}
 .pbot .pcell:nth-child(2){animation-delay:0.36s;}
 .pbot .pcell:nth-child(3){animation-delay:0.45s;}
-.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.2) inset;}
-@media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset,inset 0 0 0 1px rgba(255,255,255,0.65),0 24px 40px -14px rgba(0,0,0,0.55),0 8px 16px rgba(0,0,0,0.32);}}
+.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.15) inset;}
+@media(hover:hover){.dp:hover{transform:translateY(-2px);box-shadow:1px 1px 0 rgba(255,255,255,0.95) inset;}}
 
-.card-shine{position:relative;border-radius:22px;padding:2px;overflow:hidden;}
-.card-shine::before{content:'';position:absolute;inset:-100%;
-  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
-  animation:silverspin 4s linear infinite;}
-.card-shine .dp{position:relative;z-index:1;border-radius:20px;}
-@media(prefers-reduced-motion:reduce){.card-shine::before{animation:none;display:none;}}
+.card-frame-clip{position:relative;border-radius:25px;padding:4px;
+  background:linear-gradient(150deg,#1c2b52,#0a1530 55%,#16224a);
+  box-shadow:
+    1.5px 1.5px 0 rgba(255,255,255,0.5) inset,
+    10px 26px 34px -10px rgba(30,20,5,0.4),
+    3px 10px 12px -4px rgba(30,20,5,0.22);}
+.card-gap{border-radius:21px;padding:3px;
+  background:linear-gradient(150deg,#fbfbfc,#c7ccd6 50%,#eef0f3);
+  box-shadow:1px 1px 0 rgba(255,255,255,0.7) inset;}
+.card-shine-clip{position:relative;border-radius:18px;padding:3px;
+  background:rgba(60,50,20,0.04);
+  box-shadow:
+    1px 1px 0 rgba(255,255,255,0.5) inset,
+    -1px -1px 1px rgba(50,38,12,0.14) inset;}
+.card-shine-clip .dp{position:relative;z-index:1;border-radius:15px;margin:0;}
 
 .dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
@@ -194,7 +201,6 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.28rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def[hidden]{display:none;}
 
-.doc-blank{background:#ece5cc;border:1px solid rgba(10,21,48,0.15);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.8) inset,0 18px 34px -14px rgba(0,0,0,0.45),0 6px 14px rgba(0,0,0,0.28);}
 .results-canvas{background:rgba(255,255,255,0.3);border-radius:24px;padding:1.1rem;}
 
 .modal{position:fixed;inset:0;background:rgba(8,14,32,0.92);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
@@ -250,11 +256,12 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
   .ptop,.pbot{display:block!important;gap:0!important;margin:0!important;}
   .pmid{display:none!important;}
-  .card-shine{border-radius:0!important;padding:0!important;}
-  .card-shine::before{display:none!important;}
+  .card-frame-clip,.card-gap,.card-shine-clip{border-radius:0!important;border:none!important;box-shadow:none!important;background:none!important;padding:0!important;margin:0!important;}
+  .card-shine-clip .dp{margin:0!important;}
+  .card-frame-clip:has(.dp[style*="cursor:default"]){display:none!important;}
   .dp{
     --card-bg:#ffffff!important;--card-text:#101c38!important;--card-dim:#101c38!important;--card-mid:#101c38!important;
-    background:#ffffff!important;
+    background:#ffffff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
     height:auto!important;min-height:100vh;overflow:visible!important;
     box-shadow:none!important;border-radius:0!important;border:none!important;
@@ -830,18 +837,19 @@ function hdr(hd){
 }
 
 let cardRegistry=[];
+
 function pan(nm,sys,rows,isP2,kind){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
-  return `<div class="card-shine pcell"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div></div>`;
+  return `<div class="card-frame-clip pcell"><div class="card-gap"><div class="card-shine-clip"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div></div></div></div>`;
 }
 
 function docBlank(){
-  return `<div class="doc-blank" id="docBlank"></div>`;
+  return `<div class="card-frame-clip" id="docBlank"><div class="card-gap"><div class="card-shine-clip"><div class="dp" style="cursor:default;"></div></div></div></div>`;
 }
 function blankSlot(kind,isP2){
   const c=(isP2?'p2 ':'')+kind;
-  return `<div class="dp pcell ${c}" style="cursor:default;"></div>`;
+  return `<div class="card-frame-clip pcell"><div class="card-gap"><div class="card-shine-clip"><div class="dp ${c}" style="cursor:default;"></div></div></div></div>`;
 }
 
 function render(p1,p2,r){
@@ -869,7 +877,7 @@ function render(p1,p2,r){
   document.body.classList.add('results-mode');
   window.scrollTo(0,0);
 
-  const ref=document.querySelector('.ptop .card-shine')||document.querySelector('.ptop .dp');
+  const ref=document.querySelector('.ptop .card-frame-clip')||document.querySelector('.ptop .dp');
   const blank=document.getElementById('docBlank');
   if(ref&&blank){
     const rect=ref.getBoundingClientRect();
