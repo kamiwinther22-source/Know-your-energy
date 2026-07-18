@@ -31,7 +31,14 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .rule{width:40px;height:2px;background:linear-gradient(90deg,var(--f),var(--k));margin:0.4rem auto;}
 .desc{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--txt);line-height:1.5;max-width:320px;margin:0 auto;font-weight:700;}
 
-.slbl{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mid);display:block;margin-bottom:0.5rem;font-weight:600;}
+#landing{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem 1rem;}
+.landing-card{position:relative;width:min(94vw,430px);}
+.landing-card img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,0.8);}
+.coin-hit{position:absolute;cursor:pointer;background:transparent;border:none;padding:0;border-radius:50%;
+  left:28%;width:44%;top:85.5%;height:14.5%;transition:box-shadow 0.2s ease;}
+.coin-hit:hover{box-shadow:0 0 0 4px rgba(246,227,171,0.8),0 0 20px 6px rgba(246,227,171,0.5);}
+.coin-hit:active{transform:scale(0.97);}
+#pageHeader{display:none;}
 
 .price-list{margin-bottom:0.8rem;}
 .price-line{display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.15s;border:1px solid transparent;background:var(--moon2);box-shadow:inset 0 2px 4px rgba(0,0,0,0.4);}
@@ -122,34 +129,40 @@ body.results-mode{background:radial-gradient(ellipse at 50% 18%, var(--moon2) 0%
 .pmid{margin-bottom:0.6rem;display:flex;justify-content:center;}
 .pbot{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:start;gap:0.6rem;}
 .dp{
-  --card-bg:#131f42;--card-text:#f0e4b8;--card-dim:#f0e4b8;--card-mid:#f0e4b8;--card-accent:#f0c94c;
-  --card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);
-  --card-stripe-odd:rgba(255,255,255,0.035);--card-stripe-even:rgba(0,0,0,0.16);
+  --card-bg:#e6e3dc;--card-text:#101c38;--card-dim:#101c38;--card-mid:#152244;--card-accent:#4d3a0f;
+  --card-a1:rgba(107,80,21,0.35);--card-a2:rgba(107,80,21,0.16);--card-a3:rgba(107,80,21,0.09);--card-a4:rgba(107,80,21,0.12);
+  --card-stripe-odd:rgba(255,255,255,0.55);--card-stripe-even:rgba(0,0,0,0.05);
   background:var(--card-bg);
   color:var(--card-text);border:1px solid var(--card-a1);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:0 1px 0 rgba(255,255,255,0.08) inset,0 -1px 0 rgba(0,0,0,0.2) inset,0 18px 34px -14px rgba(0,0,0,0.5),0 6px 14px rgba(0,0,0,0.3);
+  box-shadow:0 1px 0 rgba(255,255,255,0.7) inset,0 -1px 0 rgba(0,0,0,0.1) inset,0 18px 34px -14px rgba(0,0,0,0.45),0 6px 14px rgba(0,0,0,0.28);
   transition:transform 0.16s ease,box-shadow 0.16s ease;
-  animation:cardIn 0.55s cubic-bezier(0.2,0.7,0.3,1) both;
   height:200px;cursor:pointer;position:relative;
 }
 .dp-fade{position:absolute;left:0;right:0;bottom:0;height:36px;background:linear-gradient(transparent,var(--card-bg));pointer-events:none;}
 .dp-fade[hidden]{display:none;}
 @keyframes cardIn{from{opacity:0;transform:translateY(16px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
-.ptop .dp:nth-child(1){animation-delay:0s;}
-.ptop .dp:nth-child(2){animation-delay:0.09s;}
-.ptop .dp:nth-child(3){animation-delay:0.18s;}
-.pbot .dp:nth-child(1){animation-delay:0.27s;}
-.pbot .dp:nth-child(2){animation-delay:0.36s;}
-.pbot .dp:nth-child(3){animation-delay:0.45s;}
-.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.3) inset;}
-@media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset,0 -1px 0 rgba(0,0,0,0.25) inset,0 24px 40px -14px rgba(0,0,0,0.6),0 8px 16px rgba(0,0,0,0.36);}}
-.dp.astro{--card-accent:#f0c94c;--card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);}
-.dp.hd{--card-accent:#e0995e;--card-a1:rgba(224,153,94,0.3);--card-a2:rgba(224,153,94,0.14);--card-a3:rgba(224,153,94,0.08);--card-a4:rgba(224,153,94,0.1);}
-.dp.num{--card-accent:#b8bcc4;--card-a1:rgba(184,188,196,0.3);--card-a2:rgba(184,188,196,0.14);--card-a3:rgba(184,188,196,0.08);--card-a4:rgba(184,188,196,0.1);}
-.dp.p2{--card-bg:#0a1530;}
-.dp.p2.astro{--card-accent:#f0c94c;--card-a1:rgba(240,201,76,0.3);--card-a2:rgba(240,201,76,0.14);--card-a3:rgba(240,201,76,0.08);--card-a4:rgba(240,201,76,0.1);}
-.dp.p2.hd{--card-accent:#e0995e;--card-a1:rgba(224,153,94,0.3);--card-a2:rgba(224,153,94,0.14);--card-a3:rgba(224,153,94,0.08);--card-a4:rgba(224,153,94,0.1);}
-.dp.p2.num{--card-accent:#b8bcc4;--card-a1:rgba(184,188,196,0.3);--card-a2:rgba(184,188,196,0.14);--card-a3:rgba(184,188,196,0.08);--card-a4:rgba(184,188,196,0.1);}
+.pcell{animation:cardIn 0.55s cubic-bezier(0.2,0.7,0.3,1) both;}
+.ptop .pcell:nth-child(1){animation-delay:0s;}
+.ptop .pcell:nth-child(2){animation-delay:0.09s;}
+.ptop .pcell:nth-child(3){animation-delay:0.18s;}
+.pbot .pcell:nth-child(1){animation-delay:0.27s;}
+.pbot .pcell:nth-child(2){animation-delay:0.36s;}
+.pbot .pcell:nth-child(3){animation-delay:0.45s;}
+.dp:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(0,0,0,0.2) inset;}
+@media(hover:hover){.dp:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.8) inset,0 -1px 0 rgba(0,0,0,0.12) inset,0 24px 40px -14px rgba(0,0,0,0.55),0 8px 16px rgba(0,0,0,0.32);}}
+.dp.astro{--card-bg:#e9dfc3;--card-accent:#4d3a0f;--card-a1:rgba(107,80,21,0.35);--card-a2:rgba(107,80,21,0.16);--card-a3:rgba(107,80,21,0.09);--card-a4:rgba(107,80,21,0.12);}
+.dp.hd{--card-bg:#e9dac3;--card-accent:#5c3216;--card-a1:rgba(122,68,32,0.35);--card-a2:rgba(122,68,32,0.16);--card-a3:rgba(122,68,32,0.09);--card-a4:rgba(122,68,32,0.12);}
+.dp.num{--card-bg:#dedee3;--card-accent:#3d4658;--card-a1:rgba(61,70,88,0.35);--card-a2:rgba(61,70,88,0.16);--card-a3:rgba(61,70,88,0.09);--card-a4:rgba(61,70,88,0.12);}
+.dp.p2.astro{--card-bg:#f2e9d2;--card-accent:#4d3a0f;--card-a1:rgba(107,80,21,0.3);--card-a2:rgba(107,80,21,0.14);--card-a3:rgba(107,80,21,0.07);--card-a4:rgba(107,80,21,0.1);}
+.dp.p2.hd{--card-bg:#f2e2d2;--card-accent:#5c3216;--card-a1:rgba(122,68,32,0.3);--card-a2:rgba(122,68,32,0.14);--card-a3:rgba(122,68,32,0.07);--card-a4:rgba(122,68,32,0.1);}
+.dp.p2.num{--card-bg:#e7e7ec;--card-accent:#3d4658;--card-a1:rgba(61,70,88,0.3);--card-a2:rgba(61,70,88,0.14);--card-a3:rgba(61,70,88,0.07);--card-a4:rgba(61,70,88,0.1);}
+
+.card-shine{position:relative;border-radius:22px;padding:2px;overflow:hidden;}
+.card-shine::before{content:'';position:absolute;inset:-100%;
+  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
+  animation:silverspin 4s linear infinite;}
+.card-shine .dp{position:relative;z-index:1;border-radius:20px;}
+@media(prefers-reduced-motion:reduce){.card-shine::before{animation:none;display:none;}}
 
 .dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
@@ -182,7 +195,7 @@ body.results-mode{background:radial-gradient(ellipse at 50% 18%, var(--moon2) 0%
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.28rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def[hidden]{display:none;}
 
-.doc-blank{background:#131f42;border:1px solid rgba(240,201,76,0.15);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.08) inset,0 18px 34px -14px rgba(0,0,0,0.5),0 6px 14px rgba(0,0,0,0.3);}
+.doc-blank{background:#e6e3dc;border:1px solid rgba(107,80,21,0.18);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,0.7) inset,0 18px 34px -14px rgba(0,0,0,0.45),0 6px 14px rgba(0,0,0,0.28);}
 .results-canvas{background:rgba(0,0,0,0.12);border-radius:24px;padding:1.1rem;}
 
 .modal{position:fixed;inset:0;background:rgba(8,14,32,0.92);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
@@ -223,19 +236,22 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
 @media print{
   body.results-mode{background:#fff!important;}
-  #pageHeader,footer,#pricing-wrap,#form-wrap,.card-expand{display:none!important;}
+  #landing,#pageHeader,footer,#form-wrap,.card-expand{display:none!important;}
   .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
   .ptop,.pbot{display:block!important;gap:0!important;margin:0!important;}
   .pmid{display:none!important;}
+  .card-shine{border-radius:0!important;padding:0!important;}
+  .card-shine::before{display:none!important;}
   .dp{
-    --card-bg:#ffffff!important;--card-text:#151515!important;--card-dim:#151515!important;--card-mid:#151515!important;
+    --card-bg:#ffffff!important;--card-text:#101c38!important;--card-dim:#101c38!important;--card-mid:#101c38!important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
     height:auto!important;min-height:100vh;overflow:visible!important;
     box-shadow:none!important;border-radius:0!important;border:none!important;
     page-break-after:always;break-after:page;
-    padding:0.6in 0.6in;animation:none!important;
+    padding:0.6in 0.6in;
   }
   .pbot .dp:last-child{page-break-after:auto;break-after:auto;}
+  .pcell{animation:none!important;}
   .dp[style*="cursor:default"]{display:none!important;}
   .dp-fade{display:none!important;}
   .dpdef[hidden]{display:block!important;}
@@ -260,6 +276,13 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <div class="card-expand-body" id="cardExpandBody"></div>
 </div>
 
+<div id="landing">
+  <div class="landing-card">
+    <img src="landing-card.jpg" alt="Know Your Energy — Astrology, Numerology, Human Design">
+    <button type="button" class="coin-hit" id="coinBtn" aria-label="Begin your reading"></button>
+  </div>
+</div>
+
 <div class="wrap">
 
 <header id="pageHeader">
@@ -268,7 +291,8 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <div class="desc">Astrology, Numerology, Human Design</div>
 </header>
 
-<div id="pricing-wrap">
+<div id="form-wrap">
+
   <div class="price-list">
     <div class="price-line selected" id="pl-free" onclick="selPlan('free')">
       <div class="price-check"><div class="price-check-dot"></div></div>
@@ -287,10 +311,6 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
       <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
     </div>
   </div>
-  <span class="continue-glow"><button class="gen-btn" onclick="confirmPlan()" style="margin-bottom:0;">Continue</button></span>
-</div>
-
-<div id="form-wrap">
 
   <div class="gr"></div>
 
@@ -305,10 +325,10 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
   <div id="relwrap" style="display:none;">
     <div class="rel-row">
-      <button class="rp active" onclick="selRel(this,'parent-child')">Parent · Child</button>
-      <button class="rp" onclick="selRel(this,'romantic')">Romantic</button>
-      <button class="rp" onclick="selRel(this,'friends')">Friends</button>
-      <button class="rp" onclick="selRel(this,'other')">Other</button>
+      <button class="rp active" data-rel="parent-child" onclick="selRel(this,'parent-child')">Parent · Child</button>
+      <button class="rp" data-rel="romantic" onclick="selRel(this,'romantic')">Romantic</button>
+      <button class="rp" data-rel="friends" onclick="selRel(this,'friends')">Friends</button>
+      <button class="rp" data-rel="other" onclick="selRel(this,'other')">Other</button>
     </div>
   </div>
 
@@ -394,43 +414,64 @@ function selPlan(p){
   plan=p;
 }
 
-async function confirmPlan(){
-  if(plan!=='free'){
-    const btn=document.querySelector('#pricing-wrap .gen-btn');
-    if(btn){btn.disabled=true;btn.textContent='Redirecting…';}
-    try{
-      const res=await fetch(W+'/create-checkout-session',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({plan})
-      });
-      const result=await res.json();
-      if(!res.ok||!result.url)throw new Error(result.error||'Could not start checkout.');
-      window.location.href=result.url;
-    }catch(e){
-      openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Payment could not be started: ${e.message}</p>`);
-      if(btn){btn.disabled=false;btn.textContent='Continue';}
-    }
-    return;
-  }
-  document.getElementById('pricing-wrap').style.display='none';
+function enterForm(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('pageHeader').style.display='block';
   document.getElementById('form-wrap').style.display='block';
+}
+
+function fillPerson(p,prefix){
+  if(!p)return;
+  document.getElementById(prefix+'f').value=p.first||'';
+  document.getElementById(prefix+'m').value=p.mid||'';
+  document.getElementById(prefix+'l').value=p.last||'';
+  document.getElementById(prefix+'d').value=p.dob||'';
+  const parts=(p.time||'').split(' ');
+  document.getElementById(prefix+'t').value=parts[0]||'';
+  if(parts[1])document.getElementById(prefix+'ap').value=parts[1];
+  document.getElementById(prefix+'c').value=p.city||'';
+  document.getElementById(prefix+'s').value=p.state||'';
+  document.getElementById(prefix+'co').value=p.country||'';
+}
+
+function restorePending(pending){
+  rel=pending.rel;
+  selPlan(pending.plan);
+  if(pending.rtype==='two-person'){
+    document.getElementById('ttype').checked=true;
+    togType();
+    document.querySelectorAll('.rp').forEach(p=>p.classList.toggle('active',p.dataset.rel===rel));
+  }
+  fillPerson(pending.p1,'p1');
+  fillPerson(pending.p2,'p2');
 }
 
 function handleCheckoutReturn(){
   const params=new URLSearchParams(window.location.search);
   const checkout=params.get('checkout');
-  if(!checkout)return;
+  if(!checkout)return false;
   history.replaceState(null,'',window.location.pathname);
+  const raw=sessionStorage.getItem('kye_pending');
+  const pending=raw?JSON.parse(raw):null;
+
+  enterForm();
+  if(pending)restorePending(pending);
+
   if(checkout==='success'){
-    document.getElementById('pricing-wrap').style.display='none';
-    document.getElementById('form-wrap').style.display='block';
-    openMod('Payment Successful',`<p style="font-size:0.78rem;line-height:1.7;">Thank you — your payment went through. You're all set to generate your reading below.</p>`);
+    if(pending){
+      sessionStorage.removeItem('kye_pending');
+      openMod('Payment Successful',`<p style="font-size:0.78rem;line-height:1.7;">Thank you — your payment went through. Generating your reading now…</p>`);
+      setTimeout(()=>{closeMod();runReport(pending.p1,pending.p2);},900);
+    }else{
+      openMod('Payment Successful',`<p style="font-size:0.78rem;line-height:1.7;">Thank you — your payment went through. You're all set to generate your reading below.</p>`);
+    }
   }else if(checkout==='cancel'){
     openMod('Payment Cancelled',`<p style="font-size:0.78rem;line-height:1.7;">Checkout was cancelled. No charge was made.</p>`);
   }
+  return true;
 }
-handleCheckoutReturn();
+
+if(!handleCheckoutReturn())document.getElementById('coinBtn').addEventListener('click',enterForm);
 
 function togType(){
   const two=document.getElementById('ttype').checked;
@@ -469,15 +510,6 @@ function showErr(msg){
   el.style.display='block';
 }
 
-function showForm(){
-  document.getElementById('pricing-wrap').style.display='none';
-  document.getElementById('form-wrap').style.display='block';
-  document.getElementById('loading').style.display='none';
-  document.getElementById('rout').style.display='none';
-  document.getElementById('pageHeader').style.display='';
-  document.body.classList.remove('results-mode');
-}
-
 function openMod(t,h){
   document.getElementById('mttl').textContent=t;
   document.getElementById('mbody').innerHTML=h;
@@ -512,10 +544,6 @@ async function generate(){
     if(!p2f||!p2m||!p2l||!vd(d2)){showErr('Please enter first, middle, and last name, and date of birth for Person Two.');return;}
   }
 
-  document.getElementById('form-wrap').style.display='none';
-  document.getElementById('loading').style.display='block';
-  document.getElementById('rout').style.display='none';
-
   const getTime=(tid,aid)=>{const t=g(tid),ap=document.getElementById(aid)?.value||'AM';return t?t+' '+ap:'';};
   const loc=(c,s,co)=>[c,s,co].filter(Boolean).join(', ');
 
@@ -542,6 +570,35 @@ async function generate(){
     country:g('p2co'),
     location:loc(g('p2c'),g('p2s'),g('p2co'))
   }:null;
+
+  if(plan!=='free'){
+    const btn=document.querySelector('#form-wrap .gen-btn');
+    sessionStorage.setItem('kye_pending',JSON.stringify({rtype,rel,plan,p1,p2}));
+    if(btn){btn.disabled=true;btn.textContent='Redirecting…';}
+    try{
+      const res=await fetch(W+'/create-checkout-session',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({plan})
+      });
+      const result=await res.json();
+      if(!res.ok||!result.url)throw new Error(result.error||'Could not start checkout.');
+      window.location.href=result.url;
+    }catch(e){
+      sessionStorage.removeItem('kye_pending');
+      openMod('Purchase',`<p style="font-size:0.78rem;line-height:1.7;">Payment could not be started: ${e.message}</p>`);
+      if(btn){btn.disabled=false;btn.textContent='Generate';}
+    }
+    return;
+  }
+
+  runReport(p1,p2);
+}
+
+async function runReport(p1,p2){
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('loading').style.display='block';
+  document.getElementById('rout').style.display='none';
 
   try{
     const res=await fetch(W+'/report',{
@@ -765,7 +822,7 @@ let cardRegistry=[];
 function pan(nm,sys,rows,isP2,kind){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
-  return `<div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div>`;
+  return `<div class="card-shine pcell"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div><div class="dp-fade"></div></div></div>`;
 }
 
 function docBlank(){
@@ -773,7 +830,7 @@ function docBlank(){
 }
 function blankSlot(kind,isP2){
   const c=(isP2?'p2 ':'')+kind;
-  return `<div class="dp ${c}" style="cursor:default;"></div>`;
+  return `<div class="dp pcell ${c}" style="cursor:default;"></div>`;
 }
 
 function render(p1,p2,r){
@@ -801,7 +858,7 @@ function render(p1,p2,r){
   document.body.classList.add('results-mode');
   window.scrollTo(0,0);
 
-  const ref=document.querySelector('.ptop .dp');
+  const ref=document.querySelector('.ptop .card-shine')||document.querySelector('.ptop .dp');
   const blank=document.getElementById('docBlank');
   if(ref&&blank){
     const rect=ref.getBoundingClientRect();
