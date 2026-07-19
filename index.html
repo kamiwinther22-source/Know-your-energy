@@ -32,7 +32,7 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .desc{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--txt);line-height:1.5;max-width:320px;margin:0 auto;font-weight:700;}
 
 #landing{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem 1rem;}
-.landing-card{position:relative;width:min(94vw,430px);}
+.landing-card{position:relative;width:min(94vw,430px,42.5vh);}
 .landing-card img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,0.8);}
 .coin-hit{position:absolute;cursor:pointer;background:transparent;border:none;padding:0;border-radius:50%;
   left:28%;width:44%;top:85.5%;height:14.5%;transition:box-shadow 0.2s ease;}
@@ -767,6 +767,7 @@ const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','M
 const VS='︎';
 const PLANET_GLYPH={Sun:'☉'+VS,Moon:'☽'+VS,Mercury:'☿'+VS,Venus:'♀'+VS,Mars:'♂'+VS,Jupiter:'♃'+VS,Saturn:'♄'+VS,Uranus:'♅'+VS,Neptune:'♆'+VS,Pluto:'♇'+VS};
 const SIGN_GLYPH={Ari:'♈'+VS,Tau:'♉'+VS,Gem:'♊'+VS,Can:'♋'+VS,Leo:'♌'+VS,Vir:'♍'+VS,Lib:'♎'+VS,Sco:'♏'+VS,Sag:'♐'+VS,Cap:'♑'+VS,Aqu:'♒'+VS,Pis:'♓'+VS};
+const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
@@ -783,7 +784,7 @@ function ar(astro){
       const sign=p.sign||p.zodiac_sign;
       if(name&&sign){
         const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
-        const signOut=SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${sign}`:sign;
+        const signOut=SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
         h+=arow(glyph+name,signOut,ASTRO_KEY[name]);
       }
     });
