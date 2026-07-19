@@ -1,4 +1,5 @@
 import { calculateFullChart } from './numerology-calculator.js';
+import { computeAstrology } from './astro-engine.js';
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -116,45 +117,18 @@ function normalizeCity(city, state, country) {
   };
 }
 
-// ─── ASTROLOGY API ───────────────────────────────────────────────────────────
-// Passes city + country_code directly — confirmed valid in v3 OpenAPI spec.
-// No geocoding pre-call needed.
+// ─── ASTROLOGY — now 100% local ──────────────────────────────────────────────
+// No fetch, no API key, no rate limit. See astro-engine.js.
 
-async function getAstrology(env, dob, timeStr, ampm, city, state, country) {
+function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
   const { year, month, day } = normalizeDOB(dob);
   const { hour, minute } = normalizeTime(timeStr, ampm);
   const { cityName, countryCode } = normalizeCity(city, state, country);
-
-  const birthData = { year, month, day, hour, minute, second: 0, city: cityName, country_code: countryCode };
-
-  const res = await fetch("https://api.astrology-api.io/api/v3/data/positions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${env.AstroKYE}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      subject: {
-        name: "subject",
-        birth_data: birthData
-      },
-      options: {
-        house_system: "P",
-        language: "en",
-        tradition: "universal",
-        detail_level: "standard",
-        zodiac_type: "Tropic",
-        active_points: ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"],
-        precision: 2
-      }
-    })
+  return computeAstrology({
+    year, month, day, hour, minute,
+    cityName, countryCode,
+    state: state || ""
   });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Astrology API ${res.status}: ${errText}`);
-  }
-  return await res.json();
 }
 
 // ─── HUMAN DESIGN API ────────────────────────────────────────────────────────
@@ -249,7 +223,7 @@ async function assemblePersonData(env, person) {
 
   let astrology = null, astrologyError = null;
   try {
-    astrology = await getAstrology(env, dob, time, ampm, city, state, country);
+    astrology = getAstrologyLocal(dob, time, ampm, city, state, country);
   } catch (e) { astrologyError = e.message; }
 
   let humanDesign = null, humanDesignError = null;
@@ -311,10 +285,22 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: { ...CORS_HEADERS, ...PRIVACY_HEADERS } });
     }
+    const url = new URL(request.url);
+
+    // Self-test page: open /astro-check in any browser (GET works) to see
+    // a sample chart and confirm the local engine is live.
+    if (url.pathname === "/astro-check") {
+      try {
+        const sample = getAstrologyLocal("06/15/1990", "11:30", "AM", "Paris", "", "France");
+        return jsonResponse({ ok: true, engine: "local", sample });
+      } catch (error) {
+        return jsonResponse({ ok: false, error: error.message }, 500);
+      }
+    }
+
     if (request.method !== "POST") {
       return new Response("Method Not Allowed", { status: 405, headers: { ...CORS_HEADERS, ...PRIVACY_HEADERS } });
     }
-    const url = new URL(request.url);
 
     if (url.pathname === "/create-checkout-session") {
       let body;
