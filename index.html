@@ -19,7 +19,7 @@
   --dim:#a8b2d8;
   --note:#eef1fb;
 }
-body{background:radial-gradient(ellipse at 50% 18%, var(--moon2) 0%, var(--moon) 65%);color:var(--txt);font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:400;min-height:100vh;font-size:12px;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body{background:radial-gradient(ellipse at 50% 18%, var(--moon2) 0%, var(--moon) 65%);color:var(--txt);font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:400;min-height:100vh;font-size:12px;-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
 .wrap{max-width:680px;margin:0 auto;padding:0 1rem 2.5rem;position:relative;}
 .wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(115deg,#161719 0%,#e8eaee 20%,#fefefe 30%,#8a8d94 45%,#c4c8ce 60%,#f5f5f6 70%,#161719 100%);}
 
@@ -32,7 +32,7 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .desc{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--txt);line-height:1.5;max-width:320px;margin:0 auto;font-weight:700;}
 
 #landing{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem 1rem;}
-.landing-card{position:relative;width:min(94vw,430px);}
+.landing-card{position:relative;width:min(94vw,430px,42.5vh);}
 .landing-card img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,0.8);}
 .coin-hit{position:absolute;cursor:pointer;background:transparent;border:none;padding:0;border-radius:50%;
   left:28%;width:44%;top:85.5%;height:14.5%;transition:box-shadow 0.2s ease;}
@@ -124,25 +124,25 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .ll{font-size:0.95rem;font-weight:600;color:var(--mid);}
 
 .rout{display:none;}
-body.results-mode{background:#dcd0cc;min-height:auto;}
-body.results-mode footer{border-top-color:rgba(16,28,56,0.15);}
+body.results-mode{background:#000;min-height:auto;}
+body.results-mode footer{display:none;}
 body.results-mode .flinks,body.results-mode .flinks a,body.results-mode .fprivacy{color:#23345a;}
 body.results-mode .flinks a:hover{color:#101c38;}
 .jewel-frame{position:relative;width:100vw;margin:0 0 0 calc(50% - 50vw);}
 .jewel-bg{display:block;width:100%;height:auto;pointer-events:none;}
 .jewel-slot{position:absolute;overflow:hidden;}
-.js-1{left:5.6%;top:5.7%;width:26.1%;height:25.4%;border-radius:8% 8% 4% 4%;}
-.js-2{left:35.6%;top:4.2%;width:27.6%;height:26.9%;border-radius:4%;}
-.js-3{left:66.5%;top:4.2%;width:26.1%;height:26.9%;border-radius:4% 8% 4% 4%;}
-.js-4{left:35.6%;top:34.1%;width:27.6%;height:25.8%;border-radius:4%;}
-.js-5{left:5.6%;top:64.1%;width:26.1%;height:25.9%;border-radius:4%;}
-.js-6{left:35.6%;top:64.1%;width:27.6%;height:25.9%;border-radius:4%;}
-.js-7{left:66.5%;top:64.1%;width:26.1%;height:25.9%;border-radius:4%;}
+.js-1{left:7.10%;top:20.72%;width:24.86%;height:17.43%;border-radius:6% 6% 4% 4%;}
+.js-2{left:36.22%;top:19.28%;width:26.28%;height:18.88%;border-radius:4%;}
+.js-3{left:65.34%;top:19.28%;width:26.28%;height:18.88%;border-radius:4%;}
+.js-4{left:36.22%;top:39.80%;width:26.28%;height:18.09%;border-radius:4%;}
+.js-5{left:7.10%;top:58.88%;width:24.86%;height:18.09%;border-radius:4%;}
+.js-6{left:36.22%;top:58.88%;width:26.28%;height:18.09%;border-radius:4%;}
+.js-7{left:65.34%;top:58.88%;width:26.28%;height:18.09%;border-radius:4%;}
 .dp{
   --card-bg:#fdf8ec;--card-text:var(--ink);--card-dim:var(--ink);--card-mid:var(--ink);--card-accent:var(--ink);
-  background:var(--card-bg);
+  background:transparent;
   --card-a1:rgba(10,21,48,0.28);--card-a2:rgba(10,21,48,0.13);--card-a3:rgba(10,21,48,0.08);--card-a4:rgba(10,21,48,0.1);
-  --card-stripe-odd:rgba(255,255,255,0.5);--card-stripe-even:rgba(10,21,48,0.045);
+  --card-stripe-odd:transparent;--card-stripe-even:transparent;
   color:var(--card-text);overflow:hidden;display:flex;flex-direction:column;
   transition:filter 0.16s ease;
   position:absolute;inset:0;cursor:pointer;
@@ -158,6 +158,8 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .js-7.pcell{animation-delay:0.44s;}
 .dp:active{filter:brightness(0.97);}
 @media(hover:hover){.dp:hover{filter:brightness(1.04);}}
+.jewel-slot .dph{background:none;border-bottom:none;}
+.jewel-slot .dp{padding-top:1.3rem;}
 
 .dph{padding:0.2rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:700;}
 .dplist{flex:1;}
@@ -767,6 +769,7 @@ const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','M
 const VS='︎';
 const PLANET_GLYPH={Sun:'☉'+VS,Moon:'☽'+VS,Mercury:'☿'+VS,Venus:'♀'+VS,Mars:'♂'+VS,Jupiter:'♃'+VS,Saturn:'♄'+VS,Uranus:'♅'+VS,Neptune:'♆'+VS,Pluto:'♇'+VS};
 const SIGN_GLYPH={Ari:'♈'+VS,Tau:'♉'+VS,Gem:'♊'+VS,Can:'♋'+VS,Leo:'♌'+VS,Vir:'♍'+VS,Lib:'♎'+VS,Sco:'♏'+VS,Sag:'♐'+VS,Cap:'♑'+VS,Aqu:'♒'+VS,Pis:'♓'+VS};
+const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
@@ -783,7 +786,7 @@ function ar(astro){
       const sign=p.sign||p.zodiac_sign;
       if(name&&sign){
         const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
-        const signOut=SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${sign}`:sign;
+        const signOut=SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
         h+=arow(glyph+name,signOut,ASTRO_KEY[name]);
       }
     });
