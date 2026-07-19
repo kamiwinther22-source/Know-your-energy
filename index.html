@@ -130,6 +130,10 @@ body.results-mode .flinks,body.results-mode .flinks a,body.results-mode .fprivac
 body.results-mode .flinks a:hover{color:#101c38;}
 .jewel-frame{position:relative;width:100vw;margin:0 0 0 calc(50% - 50vw);}
 .jewel-bg{display:block;width:100%;height:auto;pointer-events:none;}
+@media(min-width:600px){
+  .jewel-frame{width:fit-content;height:100vh;margin:0 auto;}
+  .jewel-bg{width:auto;height:100%;}
+}
 .jewel-slot{position:absolute;overflow:hidden;}
 .js-1{left:7.10%;top:20.72%;width:24.86%;height:17.43%;border-radius:6% 6% 4% 4%;}
 .js-2{left:36.22%;top:19.28%;width:26.28%;height:18.88%;border-radius:4%;}
@@ -250,7 +254,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .print-masthead{display:block!important;text-align:center;margin-bottom:0.22in;}
   .pm-title{font-family:'Alex Brush',cursive;font-weight:400;font-size:30pt;letter-spacing:0.01em;line-height:1;color:#0a1530;}
   .pm-sub{font-family:'DM Sans',sans-serif;font-size:9pt;letter-spacing:0.1em;text-transform:uppercase;color:#0a1530;font-weight:500;margin-top:0.06in;}
-  .jewel-frame{position:static!important;width:auto!important;min-height:0!important;margin:0!important;overflow:visible!important;}
+  .jewel-frame{position:static!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;overflow:visible!important;}
   .jewel-bg{display:none!important;}
   .jewel-slot{position:static!important;overflow:visible!important;width:auto!important;height:auto!important;border-radius:0!important;margin-bottom:0.35in!important;}
   .jewel-slot:last-child{margin-bottom:0!important;}
@@ -320,15 +324,15 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
     </div>
     <div class="price-line" id="pl-single" onclick="selPlan('single')">
       <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>$5</strong> — single reading</div>
+      <div class="price-text"><strong>$5</strong> — one reading</div>
     </div>
     <div class="price-line" id="pl-monthly" onclick="selPlan('monthly')">
       <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>$10 / month</strong> — unlimited readings</div>
+      <div class="price-text"><strong>$10</strong> — one month pass, unlimited readings</div>
     </div>
     <div class="price-line" id="pl-annual" onclick="selPlan('annual')">
       <div class="price-check"><div class="price-check-dot"></div></div>
-      <div class="price-text"><strong>$25 / year</strong> — unlimited readings</div>
+      <div class="price-text"><strong>$25</strong> — one year pass, unlimited readings</div>
     </div>
   </div>
 
