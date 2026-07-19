@@ -242,10 +242,12 @@ async function assemblePersonData(env, person) {
 
 // ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
 
+// All three plans are one-time charges. Nobody is ever auto-billed again —
+// "month"/"year" describe how long the pass lasts, not a recurring charge.
 const PLAN_CONFIG = {
   single: { mode: "payment", amount: 500, name: "Single Reading" },
-  monthly: { mode: "subscription", amount: 1000, name: "Monthly Unlimited Readings", interval: "month" },
-  annual: { mode: "subscription", amount: 2500, name: "Annual Unlimited Readings", interval: "year" }
+  monthly: { mode: "payment", amount: 1000, name: "One Month Pass" },
+  annual: { mode: "payment", amount: 2500, name: "One Year Pass" }
 };
 
 async function createCheckoutSession(env, plan, origin) {
@@ -260,9 +262,6 @@ async function createCheckoutSession(env, plan, origin) {
   params.set("line_items[0][price_data][currency]", "usd");
   params.set("line_items[0][price_data][unit_amount]", String(config.amount));
   params.set("line_items[0][price_data][product_data][name]", config.name);
-  if (config.interval) {
-    params.set("line_items[0][price_data][recurring][interval]", config.interval);
-  }
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",
