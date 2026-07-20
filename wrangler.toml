@@ -1,4 +1,8 @@
 name = "know-your-energy"
 main = "worker.js"
 compatibility_date = "2026-06-28"
-account_id = "a57df0f95c29d2c09b0ae7a528a5776a" 
+account_id = "a57df0f95c29d2c09b0ae7a528a5776a"
+
+[[kv_namespaces]]
+binding = "PASSES"
+id = "a31901132e3f4d66afbbea7d5a4befc7"
