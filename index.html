@@ -95,6 +95,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 .err{display:none;font-size:0.7rem;color:#ff9b9b;margin-bottom:0.45rem;padding:0.38rem 0.55rem;background:rgba(255,80,80,0.08);border-radius:5px;border:1px solid rgba(255,80,80,0.25);font-weight:400;}
 
+.pass-unlock{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.65rem;flex-wrap:wrap;}
+.pass-unlock-lbl{font-size:0.6rem;color:var(--dim);font-weight:600;white-space:nowrap;}
+.pass-unlock input{flex:1;min-width:140px;}
+.pass-unlock .sbtn{flex-shrink:0;}
+
 .gen-btn{position:relative;overflow:hidden;width:auto;min-width:140px;display:block;margin:0 auto;padding:0.55rem 1.6rem;
   background:linear-gradient(160deg,#fff3d0 0%,#f0c94c 45%,#b8863f 100%);border:none;border-radius:6px;
   color:#241a05;font-size:0.72rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
@@ -340,6 +345,17 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
     </div>
   </div>
 
+  <div class="f" id="passEmailWrap" style="display:none;">
+    <label>Email <span class="opt">this is the key to your pass — you'll use it next time</span></label>
+    <input type="email" id="passEmail" placeholder="you@example.com">
+  </div>
+
+  <div class="pass-unlock" id="passUnlock">
+    <span class="pass-unlock-lbl">Already have a pass?</span>
+    <input type="email" id="unlockEmail" placeholder="you@example.com">
+    <button type="button" class="sbtn" onclick="checkPass()">Unlock</button>
+  </div>
+
   <div class="gr"></div>
 
   <div class="toggle-row">
@@ -426,7 +442,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
 <footer>
   <div class="flinks"><a onclick="openContact()">Contact</a> &nbsp;·&nbsp; Privacy</div>
-  <div class="fprivacy">No data is stored, sold, or shared. Birth data is used only to generate your reading. Payments processed by Stripe.</div>
+  <div class="fprivacy">Birth data is used only to generate your reading and is never stored. If you buy a month or year pass, your email is stored only so you can unlock that pass on a future visit — it is never sold or shared. Payments processed by Stripe.</div>
 </footer>
 
 </div>
@@ -440,6 +456,31 @@ function selPlan(p){
   document.querySelectorAll('.price-line').forEach(l=>l.classList.remove('selected'));
   document.getElementById('pl-'+p).classList.add('selected');
   plan=p;
+  document.getElementById('passEmailWrap').style.display=(p==='monthly'||p==='annual')?'block':'none';
+}
+
+async function checkPass(){
+  const email=document.getElementById('unlockEmail').value.trim();
+  if(!email){showErr('Enter the email you used to buy your pass.');return;}
+  try{
+    const res=await fetch(W+'/check-pass',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email})
+    });
+    const result=await res.json();
+    if(result.active){
+      selPlan(result.plan);
+      paidThisSession=true;
+      document.getElementById('passEmailWrap').style.display='none';
+      const until=new Date(result.expiresAt).toLocaleDateString();
+      openMod('Pass Found',`<p style="font-size:0.78rem;line-height:1.7;">Welcome back — your ${result.plan==='annual'?'year':'month'} pass is active through ${until}. Fill in your details below and generate your reading.</p>`);
+    }else{
+      showErr('No active pass found for that email.');
+    }
+  }catch(e){
+    showErr('Connection error: '+e.message);
+  }
 }
 
 function enterForm(){
@@ -486,6 +527,7 @@ function handleCheckoutReturn(){
   const params=new URLSearchParams(window.location.search);
   const checkout=params.get('checkout');
   if(!checkout)return false;
+  const sessionId=params.get('session_id');
   history.replaceState(null,'',window.location.pathname);
   const raw=sessionStorage.getItem('kye_pending');
   const pending=raw?JSON.parse(raw):null;
@@ -495,6 +537,13 @@ function handleCheckoutReturn(){
 
   if(checkout==='success'){
     paidThisSession=true;
+    if(sessionId){
+      fetch(W+'/record-pass',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({session_id:sessionId})
+      }).catch(()=>{});
+    }
     if(pending){
       sessionStorage.removeItem('kye_pending');
       openMod('Payment Successful',`<p style="font-size:0.78rem;line-height:1.7;">Thank you — your payment went through. Generating your reading now…</p>`);
@@ -609,6 +658,11 @@ async function generate(){
   }:null;
 
   if(plan!=='free'&&!(paidThisSession&&plan!=='single')){
+    const passEmail=document.getElementById('passEmail').value.trim();
+    if((plan==='monthly'||plan==='annual')&&!passEmail){
+      showErr('Enter an email for your pass — it\'s what you\'ll use to unlock it next time.');
+      return;
+    }
     const btn=document.querySelector('#form-wrap .gen-btn');
     sessionStorage.setItem('kye_pending',JSON.stringify({rtype,rel,plan,p1,p2}));
     if(btn){btn.disabled=true;btn.textContent='Redirecting…';}
@@ -616,7 +670,7 @@ async function generate(){
       const res=await fetch(W+'/create-checkout-session',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({plan})
+        body:JSON.stringify({plan,email:passEmail||undefined})
       });
       const result=await res.json();
       if(!res.ok||!result.url)throw new Error(result.error||'Could not start checkout.');

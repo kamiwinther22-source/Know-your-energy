@@ -250,18 +250,20 @@ const PLAN_CONFIG = {
   annual: { mode: "payment", amount: 2500, name: "One Year Pass" }
 };
 
-async function createCheckoutSession(env, plan, origin) {
+async function createCheckoutSession(env, plan, origin, email) {
   const config = PLAN_CONFIG[plan];
   if (!config) throw new Error(`Unknown plan: "${plan}".`);
 
   const params = new URLSearchParams();
   params.set("mode", config.mode);
-  params.set("success_url", `${origin}/?checkout=success&plan=${plan}`);
+  params.set("success_url", `${origin}/?checkout=success&plan=${plan}&session_id={CHECKOUT_SESSION_ID}`);
   params.set("cancel_url", `${origin}/?checkout=cancel`);
   params.set("line_items[0][quantity]", "1");
   params.set("line_items[0][price_data][currency]", "usd");
   params.set("line_items[0][price_data][unit_amount]", String(config.amount));
   params.set("line_items[0][price_data][product_data][name]", config.name);
+  params.set("metadata[plan]", plan);
+  if (email) params.set("customer_email", email);
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",
@@ -277,6 +279,58 @@ async function createCheckoutSession(env, plan, origin) {
     throw new Error(`Stripe API error: ${errText}`);
   }
   return await res.json();
+}
+
+// ─── PASSES (monthly/annual, verified against Stripe, stored in KV) ──────────
+
+const PASS_DURATION_MS = {
+  monthly: 31 * 24 * 60 * 60 * 1000,
+  annual: 366 * 24 * 60 * 60 * 1000
+};
+
+function passKey(email) {
+  return `pass:${email.trim().toLowerCase()}`;
+}
+
+async function recordPass(env, sessionId) {
+  const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
+    headers: { "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}` }
+  });
+  if (!res.ok) throw new Error("Could not verify checkout session with Stripe.");
+  const session = await res.json();
+
+  if (session.payment_status !== "paid") {
+    return { ok: false, reason: "Payment not completed." };
+  }
+
+  const plan = session.metadata && session.metadata.plan;
+  const durationMs = PASS_DURATION_MS[plan];
+  if (!durationMs) {
+    // Single-reading purchases don't create a pass — nothing to store.
+    return { ok: true, plan: plan || null };
+  }
+
+  const email = session.customer_details && session.customer_details.email;
+  if (!email) return { ok: false, reason: "No email on checkout session." };
+
+  const purchasedAt = Date.now();
+  const expiresAt = purchasedAt + durationMs;
+  await env.PASSES.put(
+    passKey(email),
+    JSON.stringify({ plan, purchasedAt, expiresAt }),
+    { expirationTtl: Math.ceil(durationMs / 1000) }
+  );
+
+  return { ok: true, plan, expiresAt };
+}
+
+async function checkPassRecord(env, email) {
+  if (!email) return { active: false };
+  const raw = await env.PASSES.get(passKey(email));
+  if (!raw) return { active: false };
+  const record = JSON.parse(raw);
+  if (record.expiresAt < Date.now()) return { active: false };
+  return { active: true, plan: record.plan, expiresAt: record.expiresAt };
 }
 
 export default {
@@ -312,8 +366,38 @@ export default {
         const origin = url.origin === "https://know-your-energy.kwdoanchor.workers.dev"
           ? "https://know-your-energy.com"
           : url.origin;
-        const session = await createCheckoutSession(env, body.plan, origin);
+        const session = await createCheckoutSession(env, body.plan, origin, body.email);
         return jsonResponse({ url: session.url });
+      } catch (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+    }
+
+    if (url.pathname === "/record-pass") {
+      let body;
+      try {
+        body = await request.json();
+      } catch (e) {
+        return jsonResponse({ error: "Invalid request body." }, 400);
+      }
+      try {
+        const result = await recordPass(env, body.session_id);
+        return jsonResponse(result);
+      } catch (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
+    }
+
+    if (url.pathname === "/check-pass") {
+      let body;
+      try {
+        body = await request.json();
+      } catch (e) {
+        return jsonResponse({ error: "Invalid request body." }, 400);
+      }
+      try {
+        const result = await checkPassRecord(env, body.email);
+        return jsonResponse(result);
       } catch (error) {
         return jsonResponse({ error: error.message }, 500);
       }
