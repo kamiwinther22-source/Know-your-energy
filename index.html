@@ -31,14 +31,11 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .rule{width:40px;height:2px;background:linear-gradient(90deg,var(--f),var(--k));margin:0.4rem auto;}
 .desc{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--txt);line-height:1.5;max-width:320px;margin:0 auto;font-weight:700;}
 
-#landing{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem 1rem;}
-.landing-card{position:relative;width:min(94vw,430px,42.5vh);}
-.landing-card img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,0.8);}
-.coin-hit{position:absolute;cursor:pointer;background:transparent;border:none;padding:0;border-radius:50%;
-  left:28%;width:44%;top:85.5%;height:14.5%;transition:box-shadow 0.2s ease;}
-.coin-hit:hover{box-shadow:0 0 0 4px rgba(246,227,171,0.8),0 0 20px 6px rgba(246,227,171,0.5);}
-.coin-hit:active{transform:scale(0.97);}
-#pageHeader{display:none;}
+.hero-intro{text-align:center;padding:0 1rem 1.1rem;max-width:420px;margin:0 auto;}
+.hero-sub{font-size:0.95rem;font-weight:700;color:var(--f);letter-spacing:0.02em;margin-bottom:0.65rem;}
+.hero-points{list-style:none;display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.8rem;}
+.hero-points li{font-size:0.7rem;line-height:1.55;color:var(--txt);opacity:0.9;}
+.hero-tag{font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--dim);font-weight:700;}
 
 .price-list{margin-bottom:0.8rem;}
 .price-line{display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.15s;border:1px solid transparent;background:var(--moon2);box-shadow:inset 0 2px 4px rgba(0,0,0,0.4);}
@@ -49,8 +46,6 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .price-line.selected .price-check-dot{display:block;}
 .price-text{font-size:0.82rem;color:var(--txt);font-weight:400;}
 .price-text strong{color:var(--f);}
-
-#form-wrap{display:none;}
 
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.75rem;}
 .tlbl{font-size:0.75rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--dim);transition:color 0.18s;}
@@ -258,7 +253,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 @media print{
   @page{margin:0.6in;}
   body.results-mode{background:#fff!important;}
-  #landing,#pageHeader,footer,#form-wrap,.card-expand{display:none!important;}
+  #pageHeader,footer,#form-wrap,.hero-intro,.card-expand{display:none!important;}
   .results-canvas{background:none!important;padding:0!important;border-radius:0!important;}
   .print-masthead{display:block!important;text-align:center;margin-bottom:0.22in;}
   .pm-title{font-family:'Alex Brush',cursive;font-weight:400;font-size:30pt;letter-spacing:0.01em;line-height:1;color:#0a1530;}
@@ -309,13 +304,6 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <div class="card-expand-body" id="cardExpandBody"></div>
 </div>
 
-<div id="landing">
-  <div class="landing-card">
-    <img src="landing-card.jpg" alt="Know Your Energy — Astrology, Numerology, Human Design">
-    <button type="button" class="coin-hit" id="coinBtn" aria-label="Begin your reading"></button>
-  </div>
-</div>
-
 <div class="wrap">
 
 <header id="pageHeader">
@@ -323,6 +311,16 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <div class="rule"></div>
   <div class="desc">Astrology, Numerology, Human Design</div>
 </header>
+
+<div class="hero-intro" id="heroIntro">
+  <div class="hero-sub">You are uniquely designed</div>
+  <ul class="hero-points">
+    <li>No one else was born at the exact same time and place with your exact name.</li>
+    <li>You have very specific things you do or do not like.</li>
+    <li>There are people you are naturally drawn to and there are people you cannot understand.</li>
+  </ul>
+  <div class="hero-tag">Individual or Relational Insight — no subscription required</div>
+</div>
 
 <div id="form-wrap">
 
@@ -484,8 +482,8 @@ async function checkPass(){
 }
 
 function enterForm(){
-  document.getElementById('landing').style.display='none';
   document.getElementById('pageHeader').style.display='block';
+  document.getElementById('heroIntro').style.display='block';
   document.getElementById('form-wrap').style.display='block';
 }
 
@@ -493,6 +491,7 @@ function resetToForm(){
   document.body.classList.remove('results-mode');
   document.getElementById('rout').style.display='none';
   document.getElementById('pageHeader').style.display='block';
+  document.getElementById('heroIntro').style.display='none';
   document.getElementById('form-wrap').style.display='block';
   window.scrollTo(0,0);
 }
@@ -557,7 +556,7 @@ function handleCheckoutReturn(){
   return true;
 }
 
-if(!handleCheckoutReturn())document.getElementById('coinBtn').addEventListener('click',enterForm);
+handleCheckoutReturn();
 
 function togType(){
   const two=document.getElementById('ttype').checked;
@@ -1067,6 +1066,7 @@ function render(p1,p2,r){
   document.getElementById('loading').style.display='none';
   document.getElementById('rout').style.display='block';
   document.getElementById('pageHeader').style.display='none';
+  document.getElementById('heroIntro').style.display='none';
   document.body.classList.add('results-mode');
   window.scrollTo(0,0);
 }
