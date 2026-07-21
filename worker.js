@@ -292,7 +292,16 @@ function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
 }
 
-async function recordPass(env, sessionId) {
+// Only the plain birth-data fields needed to refill the form — never the
+// computed numerology/astrology/Human Design output, which is regenerated
+// fresh from these each time.
+function personSnapshot(p) {
+  if (!p) return null;
+  const { first, mid, last, dob, time, city, state, country } = p;
+  return { first, mid, last, dob, time, city, state, country };
+}
+
+async function recordPass(env, sessionId, p1, p2) {
   const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
     headers: { "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}` }
   });
@@ -317,7 +326,7 @@ async function recordPass(env, sessionId) {
   const expiresAt = purchasedAt + durationMs;
   await env.PASSES.put(
     passKey(email),
-    JSON.stringify({ plan, purchasedAt, expiresAt }),
+    JSON.stringify({ plan, purchasedAt, expiresAt, p1: personSnapshot(p1), p2: personSnapshot(p2) }),
     { expirationTtl: Math.ceil(durationMs / 1000) }
   );
 
@@ -330,7 +339,24 @@ async function checkPassRecord(env, email) {
   if (!raw) return { active: false };
   const record = JSON.parse(raw);
   if (record.expiresAt < Date.now()) return { active: false };
-  return { active: true, plan: record.plan, expiresAt: record.expiresAt };
+  return { active: true, plan: record.plan, expiresAt: record.expiresAt, p1: record.p1 || null, p2: record.p2 || null };
+}
+
+// Refreshes the stored person snapshot for an active pass, so the most
+// recently used birth data is what autofills next time — called whenever a
+// pass holder generates a reading, not just at purchase time.
+async function refreshPassSnapshot(env, email, p1, p2) {
+  if (!email) return;
+  const key = passKey(email);
+  const raw = await env.PASSES.get(key);
+  if (!raw) return;
+  const record = JSON.parse(raw);
+  if (record.expiresAt < Date.now()) return;
+  const remainingTtl = Math.ceil((record.expiresAt - Date.now()) / 1000);
+  if (remainingTtl <= 0) return;
+  record.p1 = personSnapshot(p1);
+  record.p2 = personSnapshot(p2);
+  await env.PASSES.put(key, JSON.stringify(record), { expirationTtl: remainingTtl });
 }
 
 // ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
@@ -595,7 +621,7 @@ export default {
         return jsonResponse({ error: "Invalid request body." }, 400);
       }
       try {
-        const result = await recordPass(env, body.session_id);
+        const result = await recordPass(env, body.session_id, body.p1, body.p2);
         return jsonResponse(result);
       } catch (error) {
         return jsonResponse({ error: error.message }, 500);
@@ -635,6 +661,10 @@ export default {
         report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data);
       } catch (error) {
         reportError = error.message;
+      }
+
+      if (body.passEmail) {
+        ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
       }
 
       return jsonResponse({ p1: p1Data, p2: p2Data, report, reportError });

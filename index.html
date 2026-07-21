@@ -474,7 +474,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
 <script>
 const W='https://know-your-energy.kwdoanchor.workers.dev';
-let rtype='individual',rel='parent-child',plan='free',paidThisSession=false;
+let rtype='individual',rel='parent-child',plan='free',paidThisSession=false,passEmail='';
 const rls={'parent-child':'Parent · Child','romantic':'Romantic Partners','friends':'Friends','other':'Connection'};
 
 function selPlan(p){
@@ -497,9 +497,21 @@ async function checkPass(){
     if(result.active){
       selPlan(result.plan);
       paidThisSession=true;
+      passEmail=email;
       document.getElementById('passEmailWrap').style.display='none';
+      let filled=false;
+      if(result.p1){
+        fillPerson(result.p1,'p1');
+        filled=true;
+      }
+      if(result.p2){
+        document.getElementById('ttype').checked=true;
+        togType();
+        fillPerson(result.p2,'p2');
+      }
       const until=new Date(result.expiresAt).toLocaleDateString();
-      openMod('Pass Found',`<p style="font-size:0.78rem;line-height:1.7;">Welcome back — your ${result.plan==='annual'?'year':'month'} pass is active through ${until}. Fill in your details below and generate your reading.</p>`);
+      const fillMsg=filled?' Your details have been filled in below — double-check them and generate your reading.':' Fill in your details below and generate your reading.';
+      openMod('Pass Found',`<p style="font-size:0.78rem;line-height:1.7;">Welcome back — your ${result.plan==='annual'?'year':'month'} pass is active through ${until}.${fillMsg}</p>`);
     }else{
       showErr('No active pass found for that email.');
     }
@@ -548,6 +560,7 @@ function restorePending(pending){
   }
   fillPerson(pending.p1,'p1');
   fillPerson(pending.p2,'p2');
+  if(pending.passEmail)passEmail=pending.passEmail;
 }
 
 function handleCheckoutReturn(){
@@ -568,7 +581,7 @@ function handleCheckoutReturn(){
       fetch(W+'/record-pass',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({session_id:sessionId})
+        body:JSON.stringify({session_id:sessionId,p1:pending?pending.p1:undefined,p2:pending?pending.p2:undefined})
       }).catch(()=>{});
     }
     if(pending){
@@ -698,19 +711,19 @@ async function generate(){
   }:null;
 
   if(plan!=='free'&&!(paidThisSession&&plan!=='single')){
-    const passEmail=document.getElementById('passEmail').value.trim();
-    if((plan==='monthly'||plan==='annual')&&!passEmail){
+    const enteredPassEmail=document.getElementById('passEmail').value.trim();
+    if((plan==='monthly'||plan==='annual')&&!enteredPassEmail){
       showErr('Enter an email for your pass — it\'s what you\'ll use to unlock it next time.');
       return;
     }
     const btn=document.querySelector('#form-wrap .gen-btn');
-    sessionStorage.setItem('kye_pending',JSON.stringify({rtype,rel,plan,p1,p2}));
+    sessionStorage.setItem('kye_pending',JSON.stringify({rtype,rel,plan,p1,p2,passEmail:enteredPassEmail}));
     if(btn){btn.disabled=true;btn.textContent='Redirecting…';}
     try{
       const res=await fetch(W+'/create-checkout-session',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({plan,email:passEmail||undefined})
+        body:JSON.stringify({plan,email:enteredPassEmail||undefined})
       });
       const result=await res.json();
       if(!res.ok||!result.url)throw new Error(result.error||'Could not start checkout.');
@@ -735,7 +748,7 @@ async function runReport(p1,p2){
     const res=await fetch(W+'/report',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({rtype,relLabel:rls[rel],p1,p2})
+      body:JSON.stringify({rtype,relLabel:rls[rel],p1,p2,passEmail:passEmail||undefined})
     });
 
     const result=await res.json();
