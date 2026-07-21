@@ -521,6 +521,7 @@ function resetToForm(){
   document.getElementById('heroIntro').style.display='none';
   document.getElementById('form-wrap').style.display='block';
   window.scrollTo(0,0);
+  sessionStorage.removeItem('kye_last_result');
 }
 
 function fillPerson(p,prefix){
@@ -583,7 +584,20 @@ function handleCheckoutReturn(){
   return true;
 }
 
-handleCheckoutReturn();
+function restoreLastResult(){
+  const raw=sessionStorage.getItem('kye_last_result');
+  if(!raw)return false;
+  try{
+    const saved=JSON.parse(raw);
+    render(saved.p1,saved.p2,saved.r,saved.reportErr);
+    return true;
+  }catch(e){
+    sessionStorage.removeItem('kye_last_result');
+    return false;
+  }
+}
+
+const checkoutHandled=handleCheckoutReturn();
 
 function togType(){
   const two=document.getElementById('ttype').checked;
@@ -1113,8 +1127,10 @@ function render(p1,p2,r,reportErr){
   document.getElementById('rout').style.display='block';
   document.getElementById('pageHeader').style.display='none';
   document.getElementById('heroIntro').style.display='none';
+  document.getElementById('form-wrap').style.display='none';
   document.body.classList.add('results-mode');
   window.scrollTo(0,0);
+  sessionStorage.setItem('kye_last_result',JSON.stringify({p1,p2,r,reportErr}));
 }
 
 document.addEventListener('click',function(e){
@@ -1160,6 +1176,8 @@ document.addEventListener('click',function(e){
     }
   }
 });
+
+if(!checkoutHandled)restoreLastResult();
 </script>
 </body>
 </html>
