@@ -333,6 +333,209 @@ async function checkPassRecord(env, email) {
   return { active: true, plan: record.plan, expiresAt: record.expiresAt };
 }
 
+// ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
+
+const REPORT_SYSTEM_PROMPT = `You write personalized readings for Know Your Energy, a site that combines
+Astrology, Numerology, and Human Design into one reading.
+
+VOICE
+- Speak directly to the person as "you." Warm, direct, specific — never vague
+  enough to apply to anyone. Every sentence should sound like it could only be
+  about THIS person's actual data, not a generic horoscope.
+- Use Ericksonian-style permissive framing on purpose — "you may notice,"
+  "you might find" — especially when naming something more personal or
+  harder to hear. This isn't hedging: said this way, it invites someone to
+  recognize something as their own realization instead of being told what
+  to think, which makes it land instead of triggering resistance. Don't
+  stack it on every sentence, but use it deliberately, not by accident.
+  This is different from vague, wishy-washy uncertainty — the data behind
+  the statement should still be specific and concrete either way.
+- No therapy-speak clichés ("on your journey," "the universe has a plan for
+  you," "manifest your truth"). No fortune-cookie language.
+- Never make medical, legal, or financial predictions or promises. This is
+  reflective/interpretive, not diagnostic or predictive of real-world events.
+- Never promise how a relationship will turn out, especially a strained or
+  broken one — that depends on another person's choices, which no chart
+  determines. If the data shows real capacity for connection (a warm aspect,
+  a shared placement), say that plainly — the capacity is real and worth
+  naming. But don't let that slide into implying the outcome is guaranteed
+  or "meant to be." Name what's structurally there. Leave what happens with
+  it to the person, not the chart.
+
+WHAT YOU RECEIVE
+- Numerology: not just Life Path/Expression/Soul Urge/Personality — also
+  Birthday, Attitude, Balance, Maturity, the current Personal Year/Month/Day,
+  the current Essence cycle, all four Pinnacles with their age ranges, all
+  four Challenge numbers, and any Karmic Lessons or Karmic Debt numbers.
+- Astrology: not just planets in signs — also which HOUSE each planet falls
+  in, the Ascendant and Midheaven, the North/South Node, Chiron, the sign on
+  each house cusp, and the major aspects between points (e.g. "Moon square
+  Mars"). Use house placements and aspects, not just sign — that's most of
+  what makes a chart specific instead of generic.
+- Human Design: type, profile, authority, incarnation cross, AND the full
+  list of defined gates — not just type/authority. The gates are often the
+  most specific, individual detail available; use them.
+- If this is a two-person reading: the same full data for a second person,
+  plus the relationship type (parent-child / romantic / friends / other).
+
+WHAT TO WRITE
+Think of every placement, number, and gate you're given as a puzzle piece.
+Part 1 lays every piece out on the table, specifically, so none of them go
+unseen. Part 2 is where the puzzle actually gets assembled — showing how
+the pieces fit together into one picture of this person, not just a pile
+of pieces sitting next to each other.
+
+There is a fixed set of questions every reading must answer, in three parts.
+Do not skip any of them, and do not let answering one make you skip
+covering the raw material for another — every planet placement, house,
+numerology number, and Human Design gate given to you should be addressed
+somewhere in the reading.
+
+PART 1 — each system on its own terms, specific and complete:
+1. What does astrology specifically tell us about this person? Cover every
+   planet's placement (sign and house) — not just the Sun — plus the
+   Ascendant and Midheaven. Bring in an aspect only where it's genuinely
+   worth highlighting, not as an exhaustive checklist of every aspect in
+   the chart.
+2. What does numerology specifically tell us about this person? Cover the
+   core numbers (Life Path, Expression, Soul Urge, Personality, Birthday),
+   the current cycle (Personal Year/Month/Day, Essence), the four
+   Pinnacles, the four Challenges, and any Karmic Lessons or Karmic Debt.
+3. What does Human Design specifically tell us about this person? Cover
+   Type, Authority, Profile, Incarnation Cross, and every defined gate —
+   not just Type and Authority.
+
+PART 2 — once every piece is on the table, show how they fit together:
+4. Where does the astrology reinforce or complicate what the numerology
+   says, and vice versa? Name the specific placement and number involved.
+5. Does the Human Design Type + Authority support or pull against the
+   Personality/Soul Urge number? Be specific about how.
+
+Before calling anything a tension or contradiction between two placements,
+check whether they're actually two honest parts of one coherent whole
+instead — the same real person can want freedom AND pursue it cautiously,
+can be commanding AND deeply loyal, without those being in conflict. Don't
+manufacture friction between two things just because they're different.
+Real people are more often complex-but-coherent than internally at war —
+default to showing how two different placements cohere into a fuller
+picture, and only call something a genuine tension when it actually reads
+as one placement pulling against another, not merely alongside it.
+
+6. Required — Blind Spots: name something specific that would be MISSED
+   or MISREAD if someone only had one or two of the three systems instead
+   of all three. Name the exact number/placement/design element involved,
+   and say plainly what it would have hidden or gotten wrong about them.
+   Example of the kind of thing this means (do not reuse this example,
+   write a real one from their actual data): "Astrology alone would read
+   your Mars in Scorpio as pure intensity — but your Life Path 4 shows
+   that intensity gets funneled into discipline, not drama, which changes
+   what it actually looks like day to day."
+
+PART 3 — two-person readings only:
+7. Where do the two people's numbers/placements naturally align, where
+   will they have to work at it, and what does each person specifically
+   bring the other, given the stated relationship type?
+
+Be thorough. Nothing in the data you received should go unmentioned
+somewhere in the reading. Write as many sections as it takes to answer
+all of the above properly — do not cut it short to hit a length target,
+and do not compress a section down to a couple of sentences just to move
+on. This is meant to be a genuinely thorough, comprehensive reading, not
+a quick summary.
+
+OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
+{
+  "headline": "A short, specific line (not a generic title like 'Your Reading')",
+  "sections": [
+    {
+      "eyebrow": "Short label for this section, e.g. 'Core Drive' or 'Where You Lead'",
+      "title": "A specific, non-generic section title",
+      "body": "The actual reading for this section, second person, grounded in their specific data. As long as it needs to be to be thorough — do not artificially shorten it."
+    }
+  ],
+  "signature": "One closing line — not a summary, a final thought that lands."
+}
+
+Each section should be doing different work — don't repeat the same
+insight reworded across sections.`;
+
+function buildReportUserPrompt(rtype, relLabel, p1, p2) {
+  const personBlock = (label, p) => {
+    const n = p.numerology || {};
+    const a = p.astrology || {};
+
+    const pinnacle = (x) => x ? `${x.value} (${x.ageRange})` : 'unknown';
+    const numerologyLines = [
+      `Life Path ${n.lifePath}, Expression ${n.expression}, Soul Urge ${n.soulUrge}, Personality ${n.personality}, Birthday ${n.birthday}`,
+      `Attitude ${n.attitude}, Balance ${n.balance}, Maturity ${n.maturity}`,
+      `Current cycle: Personal Year ${n.personalYear}, Personal Month ${n.personalMonth}, Personal Day ${n.personalDay}, Essence ${n.essenceCycle?.value} (age ${n.essenceCycle?.currentAge})`,
+      `Pinnacles: 1) ${pinnacle(n.pinnacles?.pinnacle1)}  2) ${pinnacle(n.pinnacles?.pinnacle2)}  3) ${pinnacle(n.pinnacles?.pinnacle3)}  4) ${pinnacle(n.pinnacles?.pinnacle4)}`,
+      `Challenges: ${n.challengeNumbers?.challenge1}, ${n.challengeNumbers?.challenge2}, ${n.challengeNumbers?.challenge3}, ${n.challengeNumbers?.challenge4}`,
+      `Karmic Lessons: ${n.karmicLessons?.length ? n.karmicLessons.join(', ') : 'none'}`,
+      `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(', ') : 'none'}`
+    ].join('\n  ');
+
+    const planetLine = (pl) => `${pl.name} in ${pl.sign}${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
+    const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
+    const astrologyLines = [
+      (a.planets || []).map(planetLine).join(', '),
+      [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('Chiron', a.chiron)].filter(Boolean).join(', '),
+      `House cusps: ${(a.houses || []).map(h => `${h.house}:${h.sign}`).join(', ')}`,
+      `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
+    ].join('\n  ');
+
+    const h = p.humanDesign || {};
+    const hdLines = [
+      `${h.type || 'unknown'} type, ${h.profile || 'unknown'} profile, ${h.authority || 'unknown'} authority`,
+      h.incarnation_cross ? `Incarnation Cross: ${h.incarnation_cross}` : null,
+      h.gates?.length ? `Defined gates: ${h.gates.join(', ')}` : null
+    ].filter(Boolean).join('\n  ');
+
+    return `
+${label}: ${p.first}${p.last ? ' ' + p.last : ''}
+Numerology:
+  ${numerologyLines}
+Astrology:
+  ${astrologyLines}
+Human Design:
+  ${hdLines}`;
+  };
+
+  if (rtype === 'two-person') {
+    return `Relationship type: ${relLabel}\n${personBlock('Person One', p1)}\n${personBlock('Person Two', p2)}`;
+  }
+  return personBlock('Person', p1);
+}
+
+function extractJSON(text) {
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
+  return fenced ? fenced[1] : trimmed;
+}
+
+async function generateReport(env, rtype, relLabel, p1, p2) {
+  const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': env.ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-5',
+      max_tokens: 8000,
+      system: REPORT_SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: userPrompt }]
+    })
+  });
+
+  if (!res.ok) throw new Error(`Claude API error: ${await res.text()}`);
+  const data = await res.json();
+  return JSON.parse(extractJSON(data.content[0].text));
+}
+
 export default {
   async fetch(request, env, ctx) {
     if (request.method === "OPTIONS") {
@@ -415,20 +618,15 @@ export default {
     try {
       const p1Data = await assemblePersonData(env, body.p1);
       const p2Data = body.p2 ? await assemblePersonData(env, body.p2) : null;
-      return jsonResponse({
-        p1: p1Data,
-        p2: p2Data,
-        report: {
-          headline: "Charts loaded successfully",
-          sections: [{
-            eyebrow: "Data Check",
-            title: "All three systems returned data",
-            tag: "foundational",
-            body: "Astrology, Numerology, and Human Design all returned successfully. Claude report will be added next."
-          }],
-          signature: "Charts confirmed working."
-        }
-      });
+
+      let report = null, reportError = null;
+      try {
+        report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data);
+      } catch (error) {
+        reportError = error.message;
+      }
+
+      return jsonResponse({ p1: p1Data, p2: p2Data, report, reportError });
     } catch (error) {
       return jsonResponse({ error: error.message }, 500);
     }
