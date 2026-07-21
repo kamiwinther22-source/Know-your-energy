@@ -26,8 +26,6 @@
  * ============================================================
  *
  * KNOWN UNVERIFIED EDGE CASES (not yet tested against a real chart):
- * - Y as a vowel (Decoz's documented rule for names like Mary, Lynn —
- *   currently Y is always treated as a consonant)
  * - Hyphenated or apostrophe'd names (Smith-Jones, O'Brien)
  * - Master numbers appearing in Expression, Soul Urge, or Personality
  *   (only verified so far for Life Path)
@@ -62,6 +60,24 @@ const LETTER_VALUES = {
 const VOWELS = new Set(["A", "E", "I", "O", "U"]);
 const MASTER_NUMBERS = [11, 22, 33];
 const KARMIC_DEBT_NUMBERS = [13, 14, 16, 19];
+
+// Y as a vowel (Decoz's documented rule): Y counts as a vowel when it's the
+// only vowel SOUND in its syllable — practically, when it is not word-initial
+// and not immediately preceded by a true vowel letter.
+//   - Word-initial Y is a consonant glide: Yolanda, Yes, Young, Yvonne.
+//   - Y immediately after a true vowel closes a diphthong, so it's a
+//     consonant: Kay, Faye, Joy, Toy, Player.
+//   - Y after a consonant, not word-initial, carries the vowel sound itself:
+//     Lynn, Ryan, Bryan, Kyle, Tyler, Sylvia, Cyndi, Rhythm, Myth.
+// Verified against all of the above names before being trusted here.
+function isVowelChar(ch, index, letters) {
+  if (VOWELS.has(ch)) return true;
+  if (ch !== "Y") return false;
+  if (index === 0) return false;
+  const prev = letters[index - 1];
+  if (VOWELS.has(prev)) return false;
+  return true;
+}
 
 // ---------- CORE REDUCTION HELPERS ----------
 
@@ -99,11 +115,9 @@ function nameLetterValues(name) {
 }
 
 function sumLetters(name, filterFn) {
-  return name
-    .toUpperCase()
-    .replace(/[^A-Z]/g, "")
-    .split("")
-    .filter((ch) => (filterFn ? filterFn(ch) : true))
+  const letters = name.toUpperCase().replace(/[^A-Z]/g, "").split("");
+  return letters
+    .filter((ch, i) => (filterFn ? filterFn(ch, i, letters) : true))
     .reduce((sum, ch) => sum + LETTER_VALUES[ch], 0);
 }
 
@@ -151,11 +165,11 @@ function calculateExpression(first, middle, last) {
 }
 
 function calculateSoulUrge(first, middle, last) {
-  return nameBasedNumber([first, middle, last], (ch) => VOWELS.has(ch));
+  return nameBasedNumber([first, middle, last], (ch, i, letters) => isVowelChar(ch, i, letters));
 }
 
 function calculatePersonality(first, middle, last) {
-  return nameBasedNumber([first, middle, last], (ch) => !VOWELS.has(ch));
+  return nameBasedNumber([first, middle, last], (ch, i, letters) => !isVowelChar(ch, i, letters));
 }
 
 function calculateBirthdayNumber(dob) {
