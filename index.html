@@ -117,10 +117,19 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 @media(prefers-reduced-motion:reduce){.continue-glow::before{animation:none;display:none;}}
 
 .loading{display:none;text-align:center;padding:3rem 1rem;}
-.lr{width:40px;height:40px;position:relative;margin:0 auto 1rem;}
-.lr::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--f);animation:spin 1.4s linear infinite;}
-.lr::after{content:'';position:absolute;inset:7px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--k);animation:spin 2s linear infinite reverse;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.finger-tap{display:flex;justify-content:center;align-items:flex-end;gap:7px;height:40px;margin:0 auto;}
+.finger-tap .finger{width:9px;height:26px;background:linear-gradient(var(--f),var(--k));border-radius:5px 5px 3px 3px;animation:fingertap 1s ease-in-out infinite;}
+.finger-tap .finger:nth-child(1){animation-delay:0s;}
+.finger-tap .finger:nth-child(2){animation-delay:0.13s;}
+.finger-tap .finger:nth-child(3){animation-delay:0.26s;}
+.finger-tap .finger:nth-child(4){animation-delay:0.39s;}
+@keyframes fingertap{
+  0%,20%,100%{transform:translateY(0) scaleY(1);}
+  38%{transform:translateY(10px) scaleY(0.8);}
+  52%{transform:translateY(10px) scaleY(1);}
+}
+.finger-tap-surface{width:64px;height:2px;background:var(--k);opacity:0.5;margin:4px auto 1rem;border-radius:1px;}
+@media(prefers-reduced-motion:reduce){.finger-tap .finger{animation:none;}}
 .ll{font-size:0.95rem;font-weight:600;color:var(--mid);}
 
 .rout{display:none;}
@@ -442,7 +451,13 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 </div>
 
 <div class="loading" id="loading">
-  <div class="lr"></div>
+  <div class="finger-tap" aria-hidden="true">
+    <div class="finger"></div>
+    <div class="finger"></div>
+    <div class="finger"></div>
+    <div class="finger"></div>
+  </div>
+  <div class="finger-tap-surface"></div>
   <div class="ll">Reading the energy…</div>
 </div>
 
