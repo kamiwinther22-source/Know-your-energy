@@ -183,6 +183,13 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.44rem;line-height:1.45;color:var(--card-mid);font-style:italic;font-weight:400;}
 .dpdef[hidden]{display:none;}
 
+.report-print-full{display:none;}
+.report-preview{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.5rem;font-style:italic;color:var(--card-mid);text-align:center;}
+.report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.48rem;line-height:1.6;color:var(--card-text);font-weight:400;}
+.report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.48rem;font-style:italic;line-height:1.6;color:var(--card-accent);font-weight:500;}
+.card-expand-body .report-body{font-size:1.05rem;line-height:1.7;padding:0 0.3rem;}
+.card-expand-body .report-sig{font-size:1.05rem;line-height:1.7;padding:0.6rem 0.3rem 0;}
+
 .gates-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.2rem;padding:0.1rem 0.4rem 0.3rem;}
 @media(max-width:380px){.gates-grid{grid-template-columns:repeat(3,1fr);}}
 .gate-chip{border:1px solid var(--card-a1);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:normal;font-size:0.52rem;padding:0.16rem 0;cursor:pointer;text-align:center;transition:all 0.15s;
@@ -262,7 +269,6 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .jewel-bg{display:none!important;}
   .jewel-slot{position:static!important;overflow:visible!important;width:auto!important;height:auto!important;border-radius:0!important;margin-bottom:0.35in!important;}
   .jewel-slot:last-child{margin-bottom:0!important;}
-  .js-4{display:none!important;}
   .jewel-slot:has(.dp[style*="cursor:default"]){display:none!important;}
   .dp{
     --card-bg:#ffffff!important;--card-text:#101c38!important;--card-dim:#101c38!important;--card-mid:#101c38!important;
@@ -286,6 +292,10 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .gate-def{display:none!important;}
   .gate-def-print{display:block!important;margin-top:0.1in;font-size:10pt;line-height:1.5;}
   .gate-def-print-row{padding:0.06in 0;page-break-inside:avoid;break-inside:avoid;}
+  .report-tray-preview{display:none!important;}
+  .report-print-full{display:block!important;}
+  .report-body{font-size:11pt!important;line-height:1.6!important;color:#0a1530!important;padding:0!important;}
+  .report-sig{font-size:11pt!important;line-height:1.6!important;color:#0a1530!important;padding:0.14in 0 0!important;font-style:italic;}
 }
 </style>
 </head>
@@ -715,7 +725,7 @@ async function runReport(p1,p2){
       p2.hd=result.p2.humanDesign;
     }
 
-    render(p1,p2,result.report);
+    render(p1,p2,result.report,result.reportError);
   }catch(e){
     document.getElementById('loading').style.display='none';
     document.getElementById('form-wrap').style.display='block';
@@ -1025,6 +1035,25 @@ function hdr(hd){
 
 let cardRegistry=[];
 
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function reportSlot(n1,report,reportError,slot){
+  if(!report){
+    if(!reportError)return docBlank(slot);
+    return `<div class="jewel-slot ${slot}"><div class="dp" style="cursor:default;"><div class="dph">Reading</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+  }
+  const sectionsHtml=(report.sections||[]).map(s=>{
+    const head=s.eyebrow?`${escapeHtml(s.eyebrow)} — ${escapeHtml(s.title)}`:escapeHtml(s.title);
+    return `${dpsec(head)}<div class="dprow"><p class="report-body">${escapeHtml(s.body)}</p></div>`;
+  }).join('');
+  const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
+  const fullRows=sectionsHtml+sigHtml;
+  const idx=cardRegistry.push({title:escapeHtml(report.headline||(n1+"'s Reading")),rows:fullRows})-1;
+  return `<div class="jewel-slot ${slot} pcell"><div class="dp report-card" data-card-idx="${idx}"><div class="dph">${escapeHtml(report.headline||'Your Reading')}</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">Tap to read your full reading</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
+}
+
 function pan(nm,sys,rows,isP2,kind,slot){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
@@ -1039,7 +1068,7 @@ function blankSlot(kind,isP2,slot){
   return `<div class="jewel-slot ${slot} pcell"><div class="dp ${c}" style="cursor:default;"></div></div>`;
 }
 
-function render(p1,p2,r){
+function render(p1,p2,r,reportErr){
   const n1=p1.first+(p1.last?' '+p1.last:'');
   cardRegistry=[];
 
@@ -1054,7 +1083,7 @@ function render(p1,p2,r){
     ${pan(p1.first,'Astrology',ar(p1.astro),false,'astro','js-1')}
     ${pan(p1.first,'Numerology',nr(p1.numerology),false,'num','js-2')}
     ${pan(p1.first,'Human Design',hdr(p1.hd),false,'hd','js-3')}
-    ${docBlank('js-4')}
+    ${reportSlot(n1,r,reportErr,'js-4')}
     ${p2?pan(p2.first,'Astrology',ar(p2.astro),true,'astro','js-5'):blankSlot('astro',true,'js-5')}
     ${p2?pan(p2.first,'Numerology',nr(p2.numerology),true,'num','js-6'):blankSlot('num',true,'js-6')}
     ${p2?pan(p2.first,'Human Design',hdr(p2.hd),true,'hd','js-7'):blankSlot('hd',true,'js-7')}
