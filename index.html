@@ -121,9 +121,23 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .lr::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--f);animation:spin 1.4s linear infinite;}
 .lr::after{content:'';position:absolute;inset:7px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--k);animation:spin 2s linear infinite reverse;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.ll{font-size:0.95rem;font-weight:600;color:var(--mid);}
-
-.rout{display:none;}
+.ll{font-size:0.95rem;font-weight:600;color:var(--mid);
+.rout{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  display:none;
+  z-index:10;
+}
+body.results-mode .rout{display:block;}
+#rcontent{
+  position:absolute;
+  inset:0;
+  overflow:auto;
+  cursor:pointer;
+}
 body.results-mode{background:#000;min-height:auto;}
 body.results-mode footer{display:none;}
 body.results-mode .flinks,body.results-mode .flinks a,body.results-mode .fprivacy{color:#23345a;}
