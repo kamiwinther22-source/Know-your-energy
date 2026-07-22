@@ -747,21 +747,7 @@ function render(p1,p2,report){
     return;
   }
 
-  let html=`<div class="results-canvas"><div class="print-masthead"><div class="pm-title">Know Your Energy</div><div class="pm-sub">Astrology, Numerology, Human Design</div></div><h2 style="text-align:center;margin-bottom:1rem;font-size:1.2rem;">${report.headline||'Your Reading'}</h2>`;
-  
-  report.sections.forEach(section=>{
-    html+=`<div style="margin-bottom:1.5rem;"><div style="font-size:0.8rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;">${section.eyebrow||''}</div><h3 style="font-size:1rem;margin-bottom:0.5rem;">${section.title||''}</h3><p style="line-height:1.6;color:var(--txt);font-size:0.9rem;">${section.body||''}</p></div>`;
-  });
-  
-  if(report.signature){
-    html+=`<div style="text-align:center;margin-top:2rem;font-style:italic;color:var(--dim);">${report.signature}</div>`;
-  }
-  
-  html+=`<div class="results-actions"><button class="again-btn" onclick="resetToForm()">Generate Another Reading</button></div></div>`;
-  
-  document.getElementById('rcontent').innerHTML=html;
-  window.scrollTo(0,0);
-}
+  let html=`<div class="results-canvas"><div class="print-masthead"><div class="pm-title">Know Your Energy</div><div class="pm-sub">Astrology, Numerology, Human Design<
 const GLOSSARY={
   sun:"Your core identity — how you express your basic sense of self.",
   moon:"Your emotional world and instinctive reactions; what makes you feel safe.",
