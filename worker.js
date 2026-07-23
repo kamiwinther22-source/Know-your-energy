@@ -122,13 +122,32 @@ function normalizeCity(city, state, country) {
 
 function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
   const { year, month, day } = normalizeDOB(dob);
+  const hasRealTime = !!(timeStr && timeStr.trim());
   const { hour, minute } = normalizeTime(timeStr, ampm);
   const { cityName, countryCode } = normalizeCity(city, state, country);
-  return computeAstrology({
+  const result = computeAstrology({
     year, month, day, hour, minute,
     cityName, countryCode,
     state: state || ""
   });
+
+  if (!hasRealTime) {
+    // Ascendant, Midheaven, and house placements all depend on the exact
+    // clock time of birth — without it they'd just be guesses computed from
+    // a defaulted noon, not the "omitted" behavior promised on the form.
+    // Sign-level planet positions don't depend on time-of-day, so those stay.
+    result.planets = result.planets.map(({ house, ...rest }) => rest);
+    result.ascendant = null;
+    result.midheaven = null;
+    result.houses = [];
+    result.aspects = result.aspects.filter(
+      a => a.point1 !== "Ascendant" && a.point2 !== "Ascendant" &&
+           a.point1 !== "Midheaven" && a.point2 !== "Midheaven"
+    );
+    result.timeUnknown = true;
+  }
+
+  return result;
 }
 
 // ─── HUMAN DESIGN API ────────────────────────────────────────────────────────
@@ -407,8 +426,9 @@ WHAT YOU RECEIVE
 - Astrology: not just planets in signs — also which HOUSE each planet falls
   in, the Ascendant and Midheaven, the North/South Node, Chiron, the sign on
   each house cusp, and the major aspects between points (e.g. "Moon square
-  Mars"). Use house placements and aspects, not just sign — that's most of
-  what makes a chart specific instead of generic.
+  Mars") — whenever birth time was provided, since houses/Ascendant/Midheaven
+  require it. Use house placements and aspects when you have them, not just
+  sign — that's most of what makes a chart specific instead of generic.
 - Human Design: type, profile, authority, incarnation cross, AND the full
   list of defined gates — not just type/authority. The gates are often the
   most specific, individual detail available; use them.
@@ -431,8 +451,12 @@ somewhere in the reading.
 PART 1 — each system on its own terms, specific and complete:
 1. What does astrology specifically tell us about this person? Cover every
    planet's placement (sign and house) — not just the Sun — plus the
-   Ascendant and Midheaven. Bring in an aspect only where it's genuinely
-   worth highlighting, not as an exhaustive checklist of every aspect in
+   Ascendant and Midheaven, whenever that data is provided. If birth time
+   wasn't given, house placements and the Ascendant/Midheaven won't be in
+   the data at all — cover planets by sign only in that case, and never
+   guess or invent a house or rising sign that wasn't supplied. Bring in
+   an aspect only where it's genuinely worth highlighting, not as an
+   exhaustive checklist of every aspect in
    the chart.
 2. What does numerology specifically tell us about this person? Cover the
    core numbers (Life Path, Expression, Soul Urge, Personality, Birthday),
@@ -515,11 +539,12 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     const planetLine = (pl) => `${pl.name} in ${pl.sign}${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
     const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
     const astrologyLines = [
+      a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
       (a.planets || []).map(planetLine).join(', '),
       [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('Chiron', a.chiron)].filter(Boolean).join(', '),
-      `House cusps: ${(a.houses || []).map(h => `${h.house}:${h.sign}`).join(', ')}`,
+      a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign}`).join(', ')}` : null,
       `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
-    ].join('\n  ');
+    ].filter(Boolean).join('\n  ');
 
     const h = p.humanDesign || {};
     const hdLines = [

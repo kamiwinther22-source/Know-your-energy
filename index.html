@@ -670,10 +670,10 @@ function subContact(){
 async function generate(){
   document.getElementById('err').style.display='none';
   const p1f=g('p1f'),p1m=g('p1m'),p1l=g('p1l'),d1=g('p1d');
-  if(!p1f||!p1m||!p1l||!vd(d1)){showErr('Please enter first, middle, and last name, and date of birth (MM/DD/YYYY).');return;}
+  if(!p1f||!p1l||!vd(d1)){showErr('Please enter first and last name, and date of birth (MM/DD/YYYY).');return;}
   if(rtype==='two-person'){
     const p2f=g('p2f'),p2m=g('p2m'),p2l=g('p2l'),d2=g('p2d');
-    if(!p2f||!p2m||!p2l||!vd(d2)){showErr('Please enter first, middle, and last name, and date of birth for Person Two.');return;}
+    if(!p2f||!p2l||!vd(d2)){showErr('Please enter first and last name, and date of birth for Person Two.');return;}
   }
 
   const getTime=(tid,aid)=>{const t=g(tid),ap=document.getElementById(aid)?.value||'AM';return t?t+' '+ap:'';};
@@ -980,16 +980,19 @@ function arow(l,v,defKey,defNum){
     def=GLOSSARY[defKey];
   }
   const lbl=def?`<span class="dprl term" data-def="${defKey}">${l}</span>`:`<span class="dprl">${l}</span>`;
-  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${v}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
+  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
 }
 function karmicRow(l,numbers,defKey){
   if(!numbers.length)return arow(l,'None',null);
   const v=numbers.join(', ');
-  const defs=numbers.map(n=>NUM_DEFS[defKey]&&NUM_DEFS[defKey][n]).filter(Boolean);
-  if(!defs.length)return arow(l,v,null);
-  const combined=defs.length>1?defs.map((d,i)=>`<strong>${numbers[i]}:</strong> ${d}`).join(' '):defs[0];
+  const pairs=numbers.map(n=>{
+    const d=NUM_DEFS[defKey]&&NUM_DEFS[defKey][n];
+    return d?{n,d}:null;
+  }).filter(Boolean);
+  if(!pairs.length)return arow(l,v,null);
+  const combined=pairs.length>1?pairs.map(({n,d})=>`<strong>${n}:</strong> ${d}`).join(' '):pairs[0].d;
   const lbl=`<span class="dprl term" data-def="${defKey}">${l}</span>`;
-  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${v}</span></div><div class="dpdef" hidden>${combined}</div></div>`;
+  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div><div class="dpdef" hidden>${combined}</div></div>`;
 }
 function apend(v){return `<div class="dprow"><div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div></div>`;}
 function dpsec(l){return `<div class="dpsec">${l}</div>`;}
@@ -1094,7 +1097,7 @@ function reportSlot(n1,report,reportError,slot){
 function pan(nm,sys,rows,isP2,kind,slot){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
-  return `<div class="jewel-slot ${slot} pcell"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div></div></div>`;
+  return `<div class="jewel-slot ${slot} pcell"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${escapeHtml(nm)} · ${sys}</div><div class="dplist">${rows}</div></div></div>`;
 }
 
 function docBlank(slot){
@@ -1113,7 +1116,7 @@ function render(p1,p2,r,reportErr){
   let h='<div class="results-canvas">';
   h+=`<div class="print-masthead">
     <div class="pm-title">Know Your Energy</div>
-    <div class="pm-sub">${n1}'s Reading &middot; ${printDate}</div>
+    <div class="pm-sub">${escapeHtml(n1)}'s Reading &middot; ${printDate}</div>
   </div>`;
   h+=`<div class="jewel-frame">
     <img class="jewel-bg" src="jewel-tray.jpg" alt="">
