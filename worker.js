@@ -570,6 +570,12 @@ reading that says something true and specific about the questions that
 matter beats a longer one that touches everything at the expense of
 saying anything well.
 
+LENGTH TARGET
+Aim for roughly 1,500-2,500 words across the whole reading, all sections
+combined. Treat this as a target to comfortably land inside, not a wall
+to write up against — a reading that makes its points well in 1,800
+words is better than one padded out to hit a number.
+
 OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
 {
   "headline": "A short, specific line (not a generic title like 'Your Reading')",
@@ -577,7 +583,7 @@ OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
     {
       "eyebrow": "Short label for this section, e.g. 'Core Drive' or 'Where You Lead'",
       "title": "A specific, non-generic section title",
-      "body": "The actual reading for this section, second person, grounded in their specific data. As long as it needs to be to be thorough — do not artificially shorten it."
+      "body": "The actual reading for this section, second person, grounded in their specific data. Give it the room the point actually needs, within the overall length target above."
     }
   ],
   "signature": "One closing line — not a summary, a final thought that lands."
@@ -654,7 +660,9 @@ async function generateReport(env, rtype, relLabel, p1, p2) {
     body: JSON.stringify({
       model: 'claude-sonnet-5',
       max_tokens: 12000,
-      system: REPORT_SYSTEM_PROMPT,
+      system: [
+        { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
+      ],
       messages: [{ role: 'user', content: userPrompt }]
     })
   });
