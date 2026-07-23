@@ -217,10 +217,15 @@ body.results-mode .flinks a:hover{color:#101c38;}
   cursor:pointer;transition:all 0.18s;display:flex;align-items:center;justify-content:center;text-align:center;
   z-index:6;
 }
-.again-btn{left:14%;width:24%;background:var(--moon);border:1px solid var(--k);color:var(--f);}
-.again-btn:hover{border-color:var(--f);}
-.save-btn{left:61%;width:26%;background:rgba(10,21,48,0.55);border:1px solid var(--k);color:var(--f);}
-.save-btn:hover{border-color:var(--f);background:var(--moon);}
+.again-btn,.save-btn{
+  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:0.05em;
+  background:rgba(253,248,236,0.55);border:1px solid rgba(10,21,48,0.35);color:var(--ink);
+  box-shadow:0 1px 0 rgba(255,255,255,0.45) inset,0 2px 4px rgba(0,0,0,0.14);
+}
+.again-btn{left:14%;width:24%;}
+.save-btn{left:61%;width:26%;}
+.again-btn:hover,.save-btn:hover{background:rgba(253,248,236,0.85);border-color:var(--ink);}
+.again-btn:active,.save-btn:active{transform:translateY(1px);box-shadow:0 1px 2px rgba(0,0,0,0.18) inset;}
 @media print{.again-btn,.save-btn{display:none!important;}}
 
 .modal{position:fixed;inset:0;background:rgba(8,14,32,0.92);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
