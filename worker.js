@@ -378,6 +378,27 @@ async function refreshPassSnapshot(env, email, p1, p2) {
   await env.PASSES.put(key, JSON.stringify(record), { expirationTtl: remainingTtl });
 }
 
+// ─── USAGE TRACKING (running total, for cost monitoring) ─────────────────────
+// No auth on the read side (see the /usage route) — this is a lifetime running
+// total of tokens spent generating readings, not customer data.
+
+const USAGE_KV_KEY = "usage:totals";
+
+async function recordUsage(env, usage) {
+  if (!usage) return;
+  const raw = await env.PASSES.get(USAGE_KV_KEY);
+  const totals = raw ? JSON.parse(raw) : {
+    requests: 0, inputTokens: 0, outputTokens: 0,
+    cacheCreationTokens: 0, cacheReadTokens: 0
+  };
+  totals.requests += 1;
+  totals.inputTokens += usage.input_tokens || 0;
+  totals.outputTokens += usage.output_tokens || 0;
+  totals.cacheCreationTokens += usage.cache_creation_input_tokens || 0;
+  totals.cacheReadTokens += usage.cache_read_input_tokens || 0;
+  await env.PASSES.put(USAGE_KV_KEY, JSON.stringify(totals));
+}
+
 // ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
 
 const REPORT_SYSTEM_PROMPT = `You write personalized readings for Know Your Energy, a site that combines
@@ -436,41 +457,72 @@ WHAT YOU RECEIVE
   plus the relationship type (parent-child / romantic / friends / other).
 
 WHAT TO WRITE
-Think of every placement, number, and gate you're given as a puzzle piece.
-Part 1 lays every piece out on the table, specifically, so none of them go
-unseen. Part 2 is where the puzzle actually gets assembled — showing how
-the pieces fit together into one picture of this person, not just a pile
-of pieces sitting next to each other.
+The full data — every planet, house, number, and gate — already prints in
+full on the page as its own card. That's not your job to repeat. Your job
+is answering the real question each specific piece of data exists to
+answer, then weaving those answers into one coherent narrative. Depth on
+the questions that matter beats touching everything once — skip whatever
+would just be restating data for its own sake.
 
-There is a fixed set of questions every reading must answer, in three parts.
-Do not skip any of them, and do not let answering one make you skip
-covering the raw material for another — every planet placement, house,
-numerology number, and Human Design gate given to you should be addressed
-somewhere in the reading.
+This is a single-person reading unless a relationship type is given. For
+two-person readings, PART 3 below entirely replaces PART 1 and PART 2 —
+do not also write individual coverage for either person.
 
-PART 1 — each system on its own terms, specific and complete:
-1. What does astrology specifically tell us about this person? Cover every
-   planet's placement (sign and house) — not just the Sun — plus the
-   Ascendant and Midheaven, whenever that data is provided. If birth time
-   wasn't given, house placements and the Ascendant/Midheaven won't be in
-   the data at all — cover planets by sign only in that case, and never
-   guess or invent a house or rising sign that wasn't supplied. Bring in
-   an aspect only where it's genuinely worth highlighting, not as an
-   exhaustive checklist of every aspect in
-   the chart.
-2. What does numerology specifically tell us about this person? Cover the
-   core numbers (Life Path, Expression, Soul Urge, Personality, Birthday),
-   the current cycle (Personal Year/Month/Day, Essence), the four
-   Pinnacles, the four Challenges, and any Karmic Lessons or Karmic Debt.
-3. What does Human Design specifically tell us about this person? Cover
-   Type, Authority, Profile, Incarnation Cross, and every defined gate —
-   not just Type and Authority.
+===== SINGLE-PERSON READINGS: PART 1 =====
+Every placement, number, and gate exists to answer a specific real-life
+question about this person — not "what does astrology/numerology/Human
+Design say," but the actual question that specific piece of data answers.
+Draw from whichever of these are genuinely revealing for THIS person —
+you don't need to hit every single one, but don't skip a whole system.
 
-PART 2 — once every piece is on the table, show how they fit together:
-4. Where does the astrology reinforce or complicate what the numerology
-   says, and vice versa? Name the specific placement and number involved.
-5. Does the Human Design Type + Authority support or pull against the
-   Personality/Soul Urge number? Be specific about how.
+Astrology — each placement answers a different question:
+- Sun: who are they at their core, what drives their basic identity?
+- Moon: what do they need emotionally to feel secure, how do they process feelings?
+- Mercury: how do they think and communicate?
+- Venus: what/who do they love, and how; what do they value?
+- Mars: how do they take action, assert themselves, pursue what they want?
+- Jupiter: where do they find growth, luck, and meaning?
+- Saturn: where do they face responsibility, restriction, hard-won mastery?
+- Uranus: where do they need freedom, or break from convention?
+- Neptune: where do they dream, idealize, or risk losing clarity?
+- Pluto: where do they go through deep transformation or power struggles?
+- Ascendant: how do they come across to others; how do they approach life itself?
+- Midheaven: what's their public path — career, reputation, aspiration?
+- Houses: WHICH AREA OF LIFE does each planet's energy actually play out in?
+- Aspects: how do these different drives support or complicate each other?
+- Chiron: where's their deepest wound, and the gift in healing it?
+(Only use house/Ascendant/Midheaven/aspect data if birth time was
+provided — never guess or invent it if it wasn't.)
+
+Numerology — each number answers a different question:
+- Life Path: what's their overall life purpose or journey?
+- Expression: what are their natural talents, how are they meant to use them?
+- Soul Urge: what do they truly want at their core?
+- Personality: how do others perceive them on the surface?
+- Birthday number: what specific natural gift do they carry?
+- Maturity: who do they grow into later in life?
+- Attitude: how do they instinctively react to new situations?
+- Balance: how do they regain steadiness under stress?
+- Personal Year/Month/Day, Essence: what theme is active for them right now?
+- Pinnacles/Challenges: what's the opportunity and the obstacle in each life phase?
+- Karmic Lessons/Debt: what are they here to learn or work through?
+
+Human Design — each element answers a different question:
+- Type: how are they actually designed to take action correctly?
+- Authority: how do they make the right decisions for themselves?
+- Profile: what's their role/lens for engaging with life?
+- Incarnation Cross: what's their larger life theme or purpose?
+- Gates: what specific gifts or fixed traits do they carry?
+
+===== SINGLE-PERSON READINGS: PART 2 =====
+Take what you found in Part 1 and cross-check it by THEME, not by system —
+for each theme, compare what astrology, numerology, and Human Design each
+say about it, and say where they reinforce each other, add nuance, or
+where one reveals something the others miss:
+- Core identity: Sun sign vs. Life Path vs. Type
+- Outward impression: Ascendant vs. Personality number vs. Profile's outer-facing line
+- Core want and how they pursue it: Mars/Venus vs. Soul Urge vs. Authority
+- Life direction/purpose: Midheaven vs. Life Path + Expression vs. Incarnation Cross
 
 Before calling anything a tension or contradiction between two placements,
 check whether they're actually two honest parts of one coherent whole
@@ -482,27 +534,68 @@ default to showing how two different placements cohere into a fuller
 picture, and only call something a genuine tension when it actually reads
 as one placement pulling against another, not merely alongside it.
 
-6. Required — Blind Spots: name something specific that would be MISSED
-   or MISREAD if someone only had one or two of the three systems instead
-   of all three. Name the exact number/placement/design element involved,
-   and say plainly what it would have hidden or gotten wrong about them.
-   Example of the kind of thing this means (do not reuse this example,
-   write a real one from their actual data): "Astrology alone would read
-   your Mars in Scorpio as pure intensity — but your Life Path 4 shows
-   that intensity gets funneled into discipline, not drama, which changes
-   what it actually looks like day to day."
+Required — Blind Spots: name something specific that would be MISSED
+or MISREAD if someone only had one or two of the three systems instead
+of all three. Name the exact number/placement/design element involved,
+and say plainly what it would have hidden or gotten wrong about them.
+Example of the kind of thing this means (do not reuse this example,
+write a real one from their actual data): "Astrology alone would read
+your Mars in Scorpio as pure intensity — but your Life Path 4 shows
+that intensity gets funneled into discipline, not drama, which changes
+what it actually looks like day to day."
 
-PART 3 — two-person readings only:
-7. Where do the two people's numbers/placements naturally align, where
-   will they have to work at it, and what does each person specifically
-   bring the other, given the stated relationship type?
+===== TWO-PERSON READINGS: PART 3 (replaces Part 1 and Part 2) =====
+Do not describe either person's chart, numbers, or design on its own
+terms — assume both people already know their own results (their own
+cards are right there on the page, and they may already have their own
+individual reading). Every question you answer here must be about the
+INTERACTION between the two of them — never one person alone.
 
-Be thorough. Nothing in the data you received should go unmentioned
-somewhere in the reading. Write as many sections as it takes to answer
-all of the above properly — do not cut it short to hit a length target,
-and do not compress a section down to a couple of sentences just to move
-on. This is meant to be a genuinely thorough, comprehensive reading, not
-a quick summary.
+Interpret everything below through the relationship type you were given
+(parent-child / romantic / friends / other) — never default to a romantic
+reading when the relationship isn't romantic. The same placement means
+something different depending on who these two people are to each other;
+get that right before writing anything.
+
+Astrology — interaction between charts:
+- Sun-Sun: do their core identities blend, compete, or complement?
+- Sun-Moon: does one person's core self meet the other's emotional needs?
+- Moon-Moon: do they feel emotionally safe with each other, or misread each other's needs?
+- Venus-Mars: is there real chemistry, and which direction does it run? (romantic attraction for a couple; mutual encouragement or friction around drive/affection for any other relationship type)
+- Mercury-Mercury: do they think and communicate compatibly, or talk past each other?
+- Mars-Mars: do they clash or team up around drive, conflict, and pursuing goals?
+- Saturn/Jupiter to the other's personal planets: where does one person add structure/weight, or growth/encouragement, to the other?
+- Ascendant to Sun: how do their outward first impressions of each other compare to who they actually are underneath?
+- House overlays (only when both provided birth times): which of the other's houses does each person's planet fall into? This shows WHERE in life — home, career, communication, romance — their dynamic actually plays out, not just that a dynamic exists.
+
+Numerology — interaction between numbers:
+- Life Path-Life Path: are their overall life directions aligned, complementary, or fundamentally different?
+- Expression-Expression: do their natural talents work together or compete?
+- Soul Urge-Soul Urge: do they want the same kinds of things at their core?
+- Personality-Personality: how do their outward "first impression" styles mesh?
+
+Human Design — interaction between designs:
+- Type-Type: does one person's energy mechanics support or drain the other's?
+- Authority-Authority: whose decision-making style leads, and does that create ease or friction?
+- Profile-Profile: do their roles/lenses on life reinforce each other or pull in different directions?
+- Defined vs. undefined gates/centers: where does one person's defined trait "run" the other's undefined one, for better or worse?
+
+Close a two-person reading with a brief, genuine note: if either person
+hasn't gotten their own individual reading yet, that's where to start —
+this reading assumes that groundwork, it doesn't replace it.
+
+Write as many sections as it takes to answer the questions above with
+real depth — do not compress a section down to a couple of sentences
+just to move on. But depth means insight, not coverage: a shorter
+reading that says something true and specific about the questions that
+matter beats a longer one that touches everything at the expense of
+saying anything well.
+
+LENGTH TARGET
+Aim for roughly 1,500-2,500 words across the whole reading, all sections
+combined. Treat this as a target to comfortably land inside, not a wall
+to write up against — a reading that makes its points well in 1,800
+words is better than one padded out to hit a number.
 
 OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
 {
@@ -511,7 +604,7 @@ OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
     {
       "eyebrow": "Short label for this section, e.g. 'Core Drive' or 'Where You Lead'",
       "title": "A specific, non-generic section title",
-      "body": "The actual reading for this section, second person, grounded in their specific data. As long as it needs to be to be thorough — do not artificially shorten it."
+      "body": "The actual reading for this section, second person, grounded in their specific data. Give it the room the point actually needs, within the overall length target above."
     }
   ],
   "signature": "One closing line — not a summary, a final thought that lands."
@@ -536,13 +629,13 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
       `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(', ') : 'none'}`
     ].join('\n  ');
 
-    const planetLine = (pl) => `${pl.name} in ${pl.sign}${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
+    const planetLine = (pl) => `${pl.name} in ${pl.sign} ${pl.degreesInSign}°${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
     const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
     const astrologyLines = [
       a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
       (a.planets || []).map(planetLine).join(', '),
       [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('Chiron', a.chiron)].filter(Boolean).join(', '),
-      a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign}`).join(', ')}` : null,
+      a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(', ')}` : null,
       `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
     ].filter(Boolean).join('\n  ');
 
@@ -575,7 +668,7 @@ function extractJSON(text) {
   return fenced ? fenced[1] : trimmed;
 }
 
-async function generateReport(env, rtype, relLabel, p1, p2) {
+async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -587,14 +680,20 @@ async function generateReport(env, rtype, relLabel, p1, p2) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      max_tokens: 8000,
-      system: REPORT_SYSTEM_PROMPT,
+      max_tokens: 12000,
+      system: [
+        { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
+      ],
       messages: [{ role: 'user', content: userPrompt }]
     })
   });
 
   if (!res.ok) throw new Error(`Claude API error: ${await res.text()}`);
   const data = await res.json();
+  if (ctx) ctx.waitUntil(recordUsage(env, data.usage));
+  if (data.stop_reason === 'max_tokens') {
+    throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
+  }
   return JSON.parse(extractJSON(data.content[0].text));
 }
 
@@ -605,6 +704,13 @@ export default {
     }
     const url = new URL(request.url);
 
+    // This domain (the *.workers.dev API host) is backend-only — the actual
+    // site lives at know-your-energy.com. Nothing here is meant to be
+    // crawled or show up in search results.
+    if (url.pathname === "/robots.txt") {
+      return new Response("User-agent: *\nDisallow: /\n", { headers: { "Content-Type": "text/plain; charset=UTF-8" } });
+    }
+
     // Self-test page: open /astro-check in any browser (GET works) to see
     // a sample chart and confirm the local engine is live.
     if (url.pathname === "/astro-check") {
@@ -614,6 +720,41 @@ export default {
       } catch (error) {
         return jsonResponse({ ok: false, error: error.message }, 500);
       }
+    }
+
+    // Running cost dashboard: open /usage in any browser. No auth by design —
+    // not customer data, just a lifetime total of Claude tokens/cost.
+    if (url.pathname === "/usage") {
+      const raw = await env.PASSES.get(USAGE_KV_KEY);
+      const t = raw ? JSON.parse(raw) : { requests: 0, inputTokens: 0, outputTokens: 0, cacheCreationTokens: 0, cacheReadTokens: 0 };
+      // Claude Sonnet 5 introductory pricing (through 2026-08-31): $2/$10 per
+      // million input/output tokens. Update these if pricing changes.
+      const INPUT_RATE = 2 / 1_000_000;
+      const OUTPUT_RATE = 10 / 1_000_000;
+      const CACHE_WRITE_RATE = INPUT_RATE * 1.25;
+      const CACHE_READ_RATE = INPUT_RATE * 0.1;
+      const cost = t.inputTokens * INPUT_RATE + t.outputTokens * OUTPUT_RATE
+        + t.cacheCreationTokens * CACHE_WRITE_RATE + t.cacheReadTokens * CACHE_READ_RATE;
+      const perReading = t.requests ? cost / t.requests : 0;
+      const row = (label, value) => `<tr><td>${label}</td><td>${value}</td></tr>`;
+      const html = `<!doctype html><html><head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow"><title>Usage</title>
+<style>body{font-family:-apple-system,sans-serif;background:#0a1530;color:#f0c94c;padding:2rem;max-width:600px;margin:0 auto;}
+h1{font-size:1.2rem;} table{width:100%;border-collapse:collapse;margin-top:1rem;}
+td{padding:0.4rem 0;border-bottom:1px solid rgba(240,201,76,0.2);} td:last-child{text-align:right;font-weight:700;}
+.note{font-size:0.75rem;opacity:0.7;margin-top:1.5rem;}</style></head><body>
+<h1>Claude API usage — running total</h1>
+<table>
+${row('Readings generated', t.requests)}
+${row('Input tokens', t.inputTokens.toLocaleString())}
+${row('Output tokens', t.outputTokens.toLocaleString())}
+${row('Cache write tokens', t.cacheCreationTokens.toLocaleString())}
+${row('Cache read tokens', t.cacheReadTokens.toLocaleString())}
+${row('Estimated total cost', '$' + cost.toFixed(2))}
+${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
+</table>
+<p class="note">Estimate uses Claude Sonnet 5 introductory pricing ($2/$10 per million input/output tokens, through 2026-08-31) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees.</p>
+</body></html>`;
+      return new Response(html, { headers: { "Content-Type": "text/html; charset=UTF-8", ...CORS_HEADERS } });
     }
 
     if (request.method !== "POST") {
@@ -683,7 +824,7 @@ export default {
 
       let report = null, reportError = null;
       try {
-        report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data);
+        report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
       } catch (error) {
         reportError = error.message;
       }
