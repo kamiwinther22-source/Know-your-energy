@@ -436,37 +436,32 @@ WHAT YOU RECEIVE
   plus the relationship type (parent-child / romantic / friends / other).
 
 WHAT TO WRITE
-Think of every placement, number, and gate you're given as a puzzle piece.
-Part 1 lays every piece out on the table, specifically, so none of them go
-unseen. Part 2 is where the puzzle actually gets assembled — showing how
-the pieces fit together into one picture of this person, not just a pile
-of pieces sitting next to each other.
+The full data — every planet, house, number, and gate — already prints in
+full on the page as its own card. That's not your job to repeat. Your job
+is the part the cards can't do: choosing whichever specific pieces actually
+reveal something and weaving them into one coherent narrative about this
+person. Depth on the pieces that matter beats touching everything once —
+skip whatever would just be restating data for its own sake.
 
 There is a fixed set of questions every reading must answer, in three parts.
-Do not skip any of them, and do not let answering one make you skip
-covering the raw material for another — every planet placement, house,
-numerology number, and Human Design gate given to you should be addressed
-somewhere in the reading.
 
-PART 1 — each system on its own terms, specific and complete:
-1. What does astrology specifically tell us about this person? Cover every
-   planet's placement (sign and house) — not just the Sun — plus the
-   Ascendant and Midheaven, whenever that data is provided. If birth time
-   wasn't given, house placements and the Ascendant/Midheaven won't be in
-   the data at all — cover planets by sign only in that case, and never
-   guess or invent a house or rising sign that wasn't supplied. Bring in
-   an aspect only where it's genuinely worth highlighting, not as an
-   exhaustive checklist of every aspect in
-   the chart.
-2. What does numerology specifically tell us about this person? Cover the
-   core numbers (Life Path, Expression, Soul Urge, Personality, Birthday),
-   the current cycle (Personal Year/Month/Day, Essence), the four
-   Pinnacles, the four Challenges, and any Karmic Lessons or Karmic Debt.
+PART 1 — draw out what's actually specific about this person, one system
+at a time:
+1. What does astrology specifically tell us about this person? Pull in the
+   planet placements (sign and house, whenever birth time was given), the
+   Ascendant/Midheaven, and any aspect genuinely worth highlighting —
+   enough to be specific, not a planet-by-planet checklist. If birth time
+   wasn't given, cover planets by sign only, and never guess or invent a
+   house or rising sign that wasn't supplied.
+2. What does numerology specifically tell us about this person? Pull in
+   whichever of the core numbers, current cycle, Pinnacles, Challenges, or
+   Karmic Lessons/Debt actually shape the picture you're building — not a
+   full recitation of every number you were given.
 3. What does Human Design specifically tell us about this person? Cover
-   Type, Authority, Profile, Incarnation Cross, and every defined gate —
-   not just Type and Authority.
+   Type and Authority, and bring in whichever defined gates are most
+   revealing for this person — not the full gate list.
 
-PART 2 — once every piece is on the table, show how they fit together:
+PART 2 — take the pieces you pulled out above and show how they fit together:
 4. Where does the astrology reinforce or complicate what the numerology
    says, and vice versa? Name the specific placement and number involved.
 5. Does the Human Design Type + Authority support or pull against the
@@ -497,12 +492,12 @@ PART 3 — two-person readings only:
    will they have to work at it, and what does each person specifically
    bring the other, given the stated relationship type?
 
-Be thorough. Nothing in the data you received should go unmentioned
-somewhere in the reading. Write as many sections as it takes to answer
-all of the above properly — do not cut it short to hit a length target,
-and do not compress a section down to a couple of sentences just to move
-on. This is meant to be a genuinely thorough, comprehensive reading, not
-a quick summary.
+Write as many sections as it takes to answer all of the above with real
+depth — do not compress a section down to a couple of sentences just to
+move on. But depth means insight, not coverage: a shorter reading that
+says something true and specific about the pieces that matter beats a
+longer one that mentions everything at the expense of saying anything
+well.
 
 OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
 {
@@ -587,7 +582,7 @@ async function generateReport(env, rtype, relLabel, p1, p2) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      max_tokens: 8000,
+      max_tokens: 12000,
       system: REPORT_SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userPrompt }]
     })
@@ -595,6 +590,9 @@ async function generateReport(env, rtype, relLabel, p1, p2) {
 
   if (!res.ok) throw new Error(`Claude API error: ${await res.text()}`);
   const data = await res.json();
+  if (data.stop_reason === 'max_tokens') {
+    throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
+  }
   return JSON.parse(extractJSON(data.content[0].text));
 }
 
