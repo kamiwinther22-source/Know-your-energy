@@ -1105,7 +1105,7 @@ function escapeHtml(s){
 function reportSlot(n1,report,reportError,slot){
   if(!report){
     if(!reportError)return docBlank(slot);
-    return `<div class="jewel-slot ${slot}"><div class="dp" style="cursor:default;"><div class="dph">Reading</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    return `<div class="jewel-slot ${slot}"><div class="dp" style="cursor:default;"><div class="dph">Reading</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p><p class="report-body" style="font-size:0.4rem;opacity:0.6;">Debug: ${escapeHtml(reportError)}</p></div></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} — ${escapeHtml(s.title)}`:escapeHtml(s.title);
