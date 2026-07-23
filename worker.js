@@ -704,6 +704,13 @@ export default {
     }
     const url = new URL(request.url);
 
+    // This domain (the *.workers.dev API host) is backend-only — the actual
+    // site lives at know-your-energy.com. Nothing here is meant to be
+    // crawled or show up in search results.
+    if (url.pathname === "/robots.txt") {
+      return new Response("User-agent: *\nDisallow: /\n", { headers: { "Content-Type": "text/plain; charset=UTF-8" } });
+    }
+
     // Self-test page: open /astro-check in any browser (GET works) to see
     // a sample chart and confirm the local engine is live.
     if (url.pathname === "/astro-check") {
@@ -730,7 +737,7 @@ export default {
         + t.cacheCreationTokens * CACHE_WRITE_RATE + t.cacheReadTokens * CACHE_READ_RATE;
       const perReading = t.requests ? cost / t.requests : 0;
       const row = (label, value) => `<tr><td>${label}</td><td>${value}</td></tr>`;
-      const html = `<!doctype html><html><head><meta charset="UTF-8"><title>Usage</title>
+      const html = `<!doctype html><html><head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow"><title>Usage</title>
 <style>body{font-family:-apple-system,sans-serif;background:#0a1530;color:#f0c94c;padding:2rem;max-width:600px;margin:0 auto;}
 h1{font-size:1.2rem;} table{width:100%;border-collapse:collapse;margin-top:1rem;}
 td{padding:0.4rem 0;border-bottom:1px solid rgba(240,201,76,0.2);} td:last-child{text-align:right;font-weight:700;}
