@@ -781,6 +781,8 @@ const GLOSSARY={
   uranus:"Where you seek freedom, disruption, and individuality.",
   neptune:"Where you dream, idealize, and sometimes lose clarity.",
   pluto:"Where you experience deep transformation and power dynamics.",
+  ascendant:"Your outward first impression — the mask you present before people know you.",
+  midheaven:"Your public reputation, career direction, and life's aim.",
 
   lifepath:"Your overall life direction and central lesson.",
   expression:"Your natural talents and how you express them in the world.",
@@ -1002,8 +1004,12 @@ const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mar
 const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','Mars']],['Social',['Jupiter','Saturn']],['Outer',['Uranus','Neptune','Pluto']]];
 const VS='︎';
 const PLANET_GLYPH={Sun:'☉'+VS,Moon:'☽'+VS,Mercury:'☿'+VS,Venus:'♀'+VS,Mars:'♂'+VS,Jupiter:'♃'+VS,Saturn:'♄'+VS,Uranus:'♅'+VS,Neptune:'♆'+VS,Pluto:'♇'+VS};
-const SIGN_GLYPH={Ari:'♈'+VS,Tau:'♉'+VS,Gem:'♊'+VS,Can:'♋'+VS,Leo:'♌'+VS,Vir:'♍'+VS,Lib:'♎'+VS,Sco:'♏'+VS,Sag:'♐'+VS,Cap:'♑'+VS,Aqu:'♒'+VS,Pis:'♓'+VS};
+const SIGN_GLYPH={Aries:'♈'+VS,Taurus:'♉'+VS,Gemini:'♊'+VS,Cancer:'♋'+VS,Leo:'♌'+VS,Virgo:'♍'+VS,Libra:'♎'+VS,Scorpio:'♏'+VS,Sagittarius:'♐'+VS,Capricorn:'♑'+VS,Aquarius:'♒'+VS,Pisces:'♓'+VS};
 const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
+
+function signDisplay(sign){
+  return SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
+}
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
@@ -1012,6 +1018,12 @@ function ar(astro){
   const byName={};
   planets.forEach(p=>{const name=p.name||p.planet;if(name)byName[name]=p;});
   let h='';
+  if(astro.ascendant?.sign){
+    h+=arow('Ascendant',signDisplay(astro.ascendant.sign),'ascendant');
+  }
+  if(astro.midheaven?.sign){
+    h+=arow('Midheaven',signDisplay(astro.midheaven.sign),'midheaven');
+  }
   ASTRO_GROUPS.forEach(([label,names])=>{
     const rows=names.map(n=>byName[n]).filter(Boolean);
     if(!rows.length)return;
@@ -1020,7 +1032,8 @@ function ar(astro){
       const sign=p.sign||p.zodiac_sign;
       if(name&&sign){
         const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
-        const signOut=SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
+        let signOut=signDisplay(sign);
+        if(p.house)signOut+=` · House ${p.house}`;
         h+=arow(glyph+name,signOut,ASTRO_KEY[name]);
       }
     });
