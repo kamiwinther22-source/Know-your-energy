@@ -378,6 +378,27 @@ async function refreshPassSnapshot(env, email, p1, p2) {
   await env.PASSES.put(key, JSON.stringify(record), { expirationTtl: remainingTtl });
 }
 
+// ─── USAGE TRACKING (running total, for cost monitoring) ─────────────────────
+// No auth on the read side (see the /usage route) — this is a lifetime running
+// total of tokens spent generating readings, not customer data.
+
+const USAGE_KV_KEY = "usage:totals";
+
+async function recordUsage(env, usage) {
+  if (!usage) return;
+  const raw = await env.PASSES.get(USAGE_KV_KEY);
+  const totals = raw ? JSON.parse(raw) : {
+    requests: 0, inputTokens: 0, outputTokens: 0,
+    cacheCreationTokens: 0, cacheReadTokens: 0
+  };
+  totals.requests += 1;
+  totals.inputTokens += usage.input_tokens || 0;
+  totals.outputTokens += usage.output_tokens || 0;
+  totals.cacheCreationTokens += usage.cache_creation_input_tokens || 0;
+  totals.cacheReadTokens += usage.cache_read_input_tokens || 0;
+  await env.PASSES.put(USAGE_KV_KEY, JSON.stringify(totals));
+}
+
 // ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
 
 const REPORT_SYSTEM_PROMPT = `You write personalized readings for Know Your Energy, a site that combines
@@ -647,7 +668,7 @@ function extractJSON(text) {
   return fenced ? fenced[1] : trimmed;
 }
 
-async function generateReport(env, rtype, relLabel, p1, p2) {
+async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -669,6 +690,7 @@ async function generateReport(env, rtype, relLabel, p1, p2) {
 
   if (!res.ok) throw new Error(`Claude API error: ${await res.text()}`);
   const data = await res.json();
+  if (ctx) ctx.waitUntil(recordUsage(env, data.usage));
   if (data.stop_reason === 'max_tokens') {
     throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
   }
@@ -691,6 +713,41 @@ export default {
       } catch (error) {
         return jsonResponse({ ok: false, error: error.message }, 500);
       }
+    }
+
+    // Running cost dashboard: open /usage in any browser. No auth by design —
+    // not customer data, just a lifetime total of Claude tokens/cost.
+    if (url.pathname === "/usage") {
+      const raw = await env.PASSES.get(USAGE_KV_KEY);
+      const t = raw ? JSON.parse(raw) : { requests: 0, inputTokens: 0, outputTokens: 0, cacheCreationTokens: 0, cacheReadTokens: 0 };
+      // Claude Sonnet 5 introductory pricing (through 2026-08-31): $2/$10 per
+      // million input/output tokens. Update these if pricing changes.
+      const INPUT_RATE = 2 / 1_000_000;
+      const OUTPUT_RATE = 10 / 1_000_000;
+      const CACHE_WRITE_RATE = INPUT_RATE * 1.25;
+      const CACHE_READ_RATE = INPUT_RATE * 0.1;
+      const cost = t.inputTokens * INPUT_RATE + t.outputTokens * OUTPUT_RATE
+        + t.cacheCreationTokens * CACHE_WRITE_RATE + t.cacheReadTokens * CACHE_READ_RATE;
+      const perReading = t.requests ? cost / t.requests : 0;
+      const row = (label, value) => `<tr><td>${label}</td><td>${value}</td></tr>`;
+      const html = `<!doctype html><html><head><meta charset="UTF-8"><title>Usage</title>
+<style>body{font-family:-apple-system,sans-serif;background:#0a1530;color:#f0c94c;padding:2rem;max-width:600px;margin:0 auto;}
+h1{font-size:1.2rem;} table{width:100%;border-collapse:collapse;margin-top:1rem;}
+td{padding:0.4rem 0;border-bottom:1px solid rgba(240,201,76,0.2);} td:last-child{text-align:right;font-weight:700;}
+.note{font-size:0.75rem;opacity:0.7;margin-top:1.5rem;}</style></head><body>
+<h1>Claude API usage — running total</h1>
+<table>
+${row('Readings generated', t.requests)}
+${row('Input tokens', t.inputTokens.toLocaleString())}
+${row('Output tokens', t.outputTokens.toLocaleString())}
+${row('Cache write tokens', t.cacheCreationTokens.toLocaleString())}
+${row('Cache read tokens', t.cacheReadTokens.toLocaleString())}
+${row('Estimated total cost', '$' + cost.toFixed(2))}
+${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
+</table>
+<p class="note">Estimate uses Claude Sonnet 5 introductory pricing ($2/$10 per million input/output tokens, through 2026-08-31) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees.</p>
+</body></html>`;
+      return new Response(html, { headers: { "Content-Type": "text/html; charset=UTF-8", ...CORS_HEADERS } });
     }
 
     if (request.method !== "POST") {
@@ -760,7 +817,7 @@ export default {
 
       let report = null, reportError = null;
       try {
-        report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data);
+        report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
       } catch (error) {
         reportError = error.message;
       }
