@@ -307,6 +307,14 @@ const PASS_DURATION_MS = {
   annual: 366 * 24 * 60 * 60 * 1000
 };
 
+// Family emails with unlimited free access — never go through Stripe,
+// never expire. Checked before any real KV pass lookup.
+const UNLIMITED_EMAILS = [
+  "kamiwinther22@gmail.com",
+  "maddiewinther@gmail.com",
+  "halliewinther@gmail.com"
+];
+
 function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
 }
@@ -354,6 +362,11 @@ async function recordPass(env, sessionId, p1, p2) {
 
 async function checkPassRecord(env, email) {
   if (!email) return { active: false };
+  if (UNLIMITED_EMAILS.includes(email.trim().toLowerCase())) {
+    const raw = await env.PASSES.get(passKey(email));
+    const record = raw ? JSON.parse(raw) : {};
+    return { active: true, plan: "annual", expiresAt: Date.now() + PASS_DURATION_MS.annual, p1: record.p1 || null, p2: record.p2 || null };
+  }
   const raw = await env.PASSES.get(passKey(email));
   if (!raw) return { active: false };
   const record = JSON.parse(raw);
@@ -368,11 +381,14 @@ async function refreshPassSnapshot(env, email, p1, p2) {
   if (!email) return;
   const key = passKey(email);
   const raw = await env.PASSES.get(key);
-  if (!raw) return;
-  const record = JSON.parse(raw);
-  if (record.expiresAt < Date.now()) return;
-  const remainingTtl = Math.ceil((record.expiresAt - Date.now()) / 1000);
+  const isUnlimited = UNLIMITED_EMAILS.includes(email.trim().toLowerCase());
+  if (!raw && !isUnlimited) return;
+  const record = raw ? JSON.parse(raw) : { plan: "annual", purchasedAt: Date.now() };
+  if (!isUnlimited && record.expiresAt < Date.now()) return;
+  const expiresAt = isUnlimited ? Date.now() + PASS_DURATION_MS.annual : record.expiresAt;
+  const remainingTtl = Math.ceil((expiresAt - Date.now()) / 1000);
   if (remainingTtl <= 0) return;
+  record.expiresAt = expiresAt;
   record.p1 = personSnapshot(p1);
   record.p2 = personSnapshot(p2);
   await env.PASSES.put(key, JSON.stringify(record), { expirationTtl: remainingTtl });
