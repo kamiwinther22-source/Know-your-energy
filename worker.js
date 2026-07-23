@@ -438,34 +438,70 @@ WHAT YOU RECEIVE
 WHAT TO WRITE
 The full data — every planet, house, number, and gate — already prints in
 full on the page as its own card. That's not your job to repeat. Your job
-is the part the cards can't do: choosing whichever specific pieces actually
-reveal something and weaving them into one coherent narrative about this
-person. Depth on the pieces that matter beats touching everything once —
-skip whatever would just be restating data for its own sake.
+is answering the real question each specific piece of data exists to
+answer, then weaving those answers into one coherent narrative. Depth on
+the questions that matter beats touching everything once — skip whatever
+would just be restating data for its own sake.
 
-There is a fixed set of questions every reading must answer, in three parts.
+This is a single-person reading unless a relationship type is given. For
+two-person readings, PART 3 below entirely replaces PART 1 and PART 2 —
+do not also write individual coverage for either person.
 
-PART 1 — draw out what's actually specific about this person, one system
-at a time:
-1. What does astrology specifically tell us about this person? Pull in the
-   planet placements (sign and house, whenever birth time was given), the
-   Ascendant/Midheaven, and any aspect genuinely worth highlighting —
-   enough to be specific, not a planet-by-planet checklist. If birth time
-   wasn't given, cover planets by sign only, and never guess or invent a
-   house or rising sign that wasn't supplied.
-2. What does numerology specifically tell us about this person? Pull in
-   whichever of the core numbers, current cycle, Pinnacles, Challenges, or
-   Karmic Lessons/Debt actually shape the picture you're building — not a
-   full recitation of every number you were given.
-3. What does Human Design specifically tell us about this person? Cover
-   Type and Authority, and bring in whichever defined gates are most
-   revealing for this person — not the full gate list.
+===== SINGLE-PERSON READINGS: PART 1 =====
+Every placement, number, and gate exists to answer a specific real-life
+question about this person — not "what does astrology/numerology/Human
+Design say," but the actual question that specific piece of data answers.
+Draw from whichever of these are genuinely revealing for THIS person —
+you don't need to hit every single one, but don't skip a whole system.
 
-PART 2 — take the pieces you pulled out above and show how they fit together:
-4. Where does the astrology reinforce or complicate what the numerology
-   says, and vice versa? Name the specific placement and number involved.
-5. Does the Human Design Type + Authority support or pull against the
-   Personality/Soul Urge number? Be specific about how.
+Astrology — each placement answers a different question:
+- Sun: who are they at their core, what drives their basic identity?
+- Moon: what do they need emotionally to feel secure, how do they process feelings?
+- Mercury: how do they think and communicate?
+- Venus: what/who do they love, and how; what do they value?
+- Mars: how do they take action, assert themselves, pursue what they want?
+- Jupiter: where do they find growth, luck, and meaning?
+- Saturn: where do they face responsibility, restriction, hard-won mastery?
+- Uranus: where do they need freedom, or break from convention?
+- Neptune: where do they dream, idealize, or risk losing clarity?
+- Pluto: where do they go through deep transformation or power struggles?
+- Ascendant: how do they come across to others; how do they approach life itself?
+- Midheaven: what's their public path — career, reputation, aspiration?
+- Houses: WHICH AREA OF LIFE does each planet's energy actually play out in?
+- Aspects: how do these different drives support or complicate each other?
+- Chiron: where's their deepest wound, and the gift in healing it?
+(Only use house/Ascendant/Midheaven/aspect data if birth time was
+provided — never guess or invent it if it wasn't.)
+
+Numerology — each number answers a different question:
+- Life Path: what's their overall life purpose or journey?
+- Expression: what are their natural talents, how are they meant to use them?
+- Soul Urge: what do they truly want at their core?
+- Personality: how do others perceive them on the surface?
+- Birthday number: what specific natural gift do they carry?
+- Maturity: who do they grow into later in life?
+- Attitude: how do they instinctively react to new situations?
+- Balance: how do they regain steadiness under stress?
+- Personal Year/Month/Day, Essence: what theme is active for them right now?
+- Pinnacles/Challenges: what's the opportunity and the obstacle in each life phase?
+- Karmic Lessons/Debt: what are they here to learn or work through?
+
+Human Design — each element answers a different question:
+- Type: how are they actually designed to take action correctly?
+- Authority: how do they make the right decisions for themselves?
+- Profile: what's their role/lens for engaging with life?
+- Incarnation Cross: what's their larger life theme or purpose?
+- Gates: what specific gifts or fixed traits do they carry?
+
+===== SINGLE-PERSON READINGS: PART 2 =====
+Take what you found in Part 1 and cross-check it by THEME, not by system —
+for each theme, compare what astrology, numerology, and Human Design each
+say about it, and say where they reinforce each other, add nuance, or
+where one reveals something the others miss:
+- Core identity: Sun sign vs. Life Path vs. Type
+- Outward impression: Ascendant vs. Personality number vs. Profile's outer-facing line
+- Core want and how they pursue it: Mars/Venus vs. Soul Urge vs. Authority
+- Life direction/purpose: Midheaven vs. Life Path + Expression vs. Incarnation Cross
 
 Before calling anything a tension or contradiction between two placements,
 check whether they're actually two honest parts of one coherent whole
@@ -477,27 +513,62 @@ default to showing how two different placements cohere into a fuller
 picture, and only call something a genuine tension when it actually reads
 as one placement pulling against another, not merely alongside it.
 
-6. Required — Blind Spots: name something specific that would be MISSED
-   or MISREAD if someone only had one or two of the three systems instead
-   of all three. Name the exact number/placement/design element involved,
-   and say plainly what it would have hidden or gotten wrong about them.
-   Example of the kind of thing this means (do not reuse this example,
-   write a real one from their actual data): "Astrology alone would read
-   your Mars in Scorpio as pure intensity — but your Life Path 4 shows
-   that intensity gets funneled into discipline, not drama, which changes
-   what it actually looks like day to day."
+Required — Blind Spots: name something specific that would be MISSED
+or MISREAD if someone only had one or two of the three systems instead
+of all three. Name the exact number/placement/design element involved,
+and say plainly what it would have hidden or gotten wrong about them.
+Example of the kind of thing this means (do not reuse this example,
+write a real one from their actual data): "Astrology alone would read
+your Mars in Scorpio as pure intensity — but your Life Path 4 shows
+that intensity gets funneled into discipline, not drama, which changes
+what it actually looks like day to day."
 
-PART 3 — two-person readings only:
-7. Where do the two people's numbers/placements naturally align, where
-   will they have to work at it, and what does each person specifically
-   bring the other, given the stated relationship type?
+===== TWO-PERSON READINGS: PART 3 (replaces Part 1 and Part 2) =====
+Do not describe either person's chart, numbers, or design on its own
+terms — assume both people already know their own results (their own
+cards are right there on the page, and they may already have their own
+individual reading). Every question you answer here must be about the
+INTERACTION between the two of them — never one person alone.
 
-Write as many sections as it takes to answer all of the above with real
-depth — do not compress a section down to a couple of sentences just to
-move on. But depth means insight, not coverage: a shorter reading that
-says something true and specific about the pieces that matter beats a
-longer one that mentions everything at the expense of saying anything
-well.
+Interpret everything below through the relationship type you were given
+(parent-child / romantic / friends / other) — never default to a romantic
+reading when the relationship isn't romantic. The same placement means
+something different depending on who these two people are to each other;
+get that right before writing anything.
+
+Astrology — interaction between charts:
+- Sun-Sun: do their core identities blend, compete, or complement?
+- Sun-Moon: does one person's core self meet the other's emotional needs?
+- Moon-Moon: do they feel emotionally safe with each other, or misread each other's needs?
+- Venus-Mars: is there real chemistry, and which direction does it run? (romantic attraction for a couple; mutual encouragement or friction around drive/affection for any other relationship type)
+- Mercury-Mercury: do they think and communicate compatibly, or talk past each other?
+- Mars-Mars: do they clash or team up around drive, conflict, and pursuing goals?
+- Saturn/Jupiter to the other's personal planets: where does one person add structure/weight, or growth/encouragement, to the other?
+- Ascendant to Sun: how do their outward first impressions of each other compare to who they actually are underneath?
+- House overlays (only when both provided birth times): which of the other's houses does each person's planet fall into? This shows WHERE in life — home, career, communication, romance — their dynamic actually plays out, not just that a dynamic exists.
+
+Numerology — interaction between numbers:
+- Life Path-Life Path: are their overall life directions aligned, complementary, or fundamentally different?
+- Expression-Expression: do their natural talents work together or compete?
+- Soul Urge-Soul Urge: do they want the same kinds of things at their core?
+- Personality-Personality: how do their outward "first impression" styles mesh?
+
+Human Design — interaction between designs:
+- Type-Type: does one person's energy mechanics support or drain the other's?
+- Authority-Authority: whose decision-making style leads, and does that create ease or friction?
+- Profile-Profile: do their roles/lenses on life reinforce each other or pull in different directions?
+- Defined vs. undefined gates/centers: where does one person's defined trait "run" the other's undefined one, for better or worse?
+
+Close a two-person reading with a brief, genuine note: if either person
+hasn't gotten their own individual reading yet, that's where to start —
+this reading assumes that groundwork, it doesn't replace it.
+
+Write as many sections as it takes to answer the questions above with
+real depth — do not compress a section down to a couple of sentences
+just to move on. But depth means insight, not coverage: a shorter
+reading that says something true and specific about the questions that
+matter beats a longer one that touches everything at the expense of
+saying anything well.
 
 OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
 {
@@ -531,13 +602,13 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
       `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(', ') : 'none'}`
     ].join('\n  ');
 
-    const planetLine = (pl) => `${pl.name} in ${pl.sign}${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
+    const planetLine = (pl) => `${pl.name} in ${pl.sign} ${pl.degreesInSign}°${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
     const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
     const astrologyLines = [
       a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
       (a.planets || []).map(planetLine).join(', '),
       [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('Chiron', a.chiron)].filter(Boolean).join(', '),
-      a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign}`).join(', ')}` : null,
+      a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(', ')}` : null,
       `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
     ].filter(Boolean).join('\n  ');
 
