@@ -33,8 +33,6 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 
 .hero-intro{text-align:center;padding:0 1rem 1.1rem;max-width:420px;margin:0 auto;}
 .hero-sub{font-size:0.95rem;font-weight:700;color:var(--f);letter-spacing:0.02em;margin-bottom:0.65rem;}
-.hero-points{list-style:none;display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.8rem;}
-.hero-points li{font-size:0.7rem;line-height:1.55;color:var(--txt);opacity:0.9;}
 .hero-tag{font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--dim);font-weight:700;}
 
 .price-list{margin-bottom:0.8rem;}
@@ -117,27 +115,22 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 @media(prefers-reduced-motion:reduce){.continue-glow::before{animation:none;display:none;}}
 
 .loading{display:none;text-align:center;padding:3rem 1rem;}
-.lr{width:40px;height:40px;position:relative;margin:0 auto 1rem;}
-.lr::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--f);animation:spin 1.4s linear infinite;}
-.lr::after{content:'';position:absolute;inset:7px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--k);animation:spin 2s linear infinite reverse;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.ll{font-size:0.95rem;font-weight:600;color:var(--mid);
-.rout{
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  display:none;
-  z-index:10;
+.finger-tap{display:flex;justify-content:center;align-items:flex-end;gap:7px;height:40px;margin:0 auto;}
+.finger-tap .finger{width:9px;height:26px;background:linear-gradient(var(--f),var(--k));border-radius:5px 5px 3px 3px;animation:fingertap 1s ease-in-out infinite;}
+.finger-tap .finger:nth-child(1){animation-delay:0s;}
+.finger-tap .finger:nth-child(2){animation-delay:0.13s;}
+.finger-tap .finger:nth-child(3){animation-delay:0.26s;}
+.finger-tap .finger:nth-child(4){animation-delay:0.39s;}
+@keyframes fingertap{
+  0%,20%,100%{transform:translateY(0) scaleY(1);}
+  38%{transform:translateY(10px) scaleY(0.8);}
+  52%{transform:translateY(10px) scaleY(1);}
 }
-body.results-mode .rout{display:block;}
-#rcontent{
-  position:absolute;
-  inset:0;
-  overflow:auto;
-  cursor:pointer;
-}
+.finger-tap-surface{width:64px;height:2px;background:var(--k);opacity:0.5;margin:4px auto 1rem;border-radius:1px;}
+@media(prefers-reduced-motion:reduce){.finger-tap .finger{animation:none;}}
+.ll{font-size:0.95rem;font-weight:600;color:var(--mid);}
+
+.rout{display:none;}
 body.results-mode{background:#000;min-height:auto;}
 body.results-mode footer{display:none;}
 body.results-mode .flinks,body.results-mode .flinks a,body.results-mode .fprivacy{color:#23345a;}
@@ -197,6 +190,13 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.44rem;line-height:1.45;color:var(--card-mid);font-style:italic;font-weight:400;}
 .dpdef[hidden]{display:none;}
 
+.report-print-full{display:none;}
+.report-preview{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.5rem;font-style:italic;color:var(--card-mid);text-align:center;}
+.report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.48rem;line-height:1.6;color:var(--card-text);font-weight:400;}
+.report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.48rem;font-style:italic;line-height:1.6;color:var(--card-accent);font-weight:500;}
+.card-expand-body .report-body{font-size:1.05rem;line-height:1.7;padding:0 0.3rem;}
+.card-expand-body .report-sig{font-size:1.05rem;line-height:1.7;padding:0.6rem 0.3rem 0;}
+
 .gates-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.2rem;padding:0.1rem 0.4rem 0.3rem;}
 @media(max-width:380px){.gates-grid{grid-template-columns:repeat(3,1fr);}}
 .gate-chip{border:1px solid var(--card-a1);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:normal;font-size:0.52rem;padding:0.16rem 0;cursor:pointer;text-align:center;transition:all 0.15s;
@@ -214,6 +214,8 @@ body.results-mode .flinks a:hover{color:#101c38;}
 .results-actions{text-align:center;padding:1.1rem 1rem 1.6rem;}
 .again-btn{background:var(--moon);border:1px solid var(--k);border-radius:6px;color:var(--f);font-size:0.72rem;font-weight:700;letter-spacing:0.05em;padding:0.55rem 1.4rem;cursor:pointer;transition:all 0.18s;}
 .again-btn:hover{border-color:var(--f);}
+.save-btn{background:transparent;border:1px solid var(--k);border-radius:6px;color:var(--f);font-size:0.72rem;font-weight:700;letter-spacing:0.05em;padding:0.55rem 1.4rem;cursor:pointer;transition:all 0.18s;margin-left:0.6rem;}
+.save-btn:hover{border-color:var(--f);background:var(--moon);}
 @media print{.results-actions{display:none!important;}}
 
 .modal{position:fixed;inset:0;background:rgba(8,14,32,0.92);backdrop-filter:blur(3px);z-index:200;display:none;overflow-y:auto;padding:1rem;}
@@ -276,7 +278,6 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .jewel-bg{display:none!important;}
   .jewel-slot{position:static!important;overflow:visible!important;width:auto!important;height:auto!important;border-radius:0!important;margin-bottom:0.35in!important;}
   .jewel-slot:last-child{margin-bottom:0!important;}
-  .js-4{display:none!important;}
   .jewel-slot:has(.dp[style*="cursor:default"]){display:none!important;}
   .dp{
     --card-bg:#ffffff!important;--card-text:#101c38!important;--card-dim:#101c38!important;--card-mid:#101c38!important;
@@ -300,6 +301,10 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   .gate-def{display:none!important;}
   .gate-def-print{display:block!important;margin-top:0.1in;font-size:10pt;line-height:1.5;}
   .gate-def-print-row{padding:0.06in 0;page-break-inside:avoid;break-inside:avoid;}
+  .report-tray-preview{display:none!important;}
+  .report-print-full{display:block!important;}
+  .report-body{font-size:11pt!important;line-height:1.6!important;color:#0a1530!important;padding:0!important;}
+  .report-sig{font-size:11pt!important;line-height:1.6!important;color:#0a1530!important;padding:0.14in 0 0!important;font-style:italic;}
 }
 </style>
 </head>
@@ -328,11 +333,6 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
 <div class="hero-intro" id="heroIntro">
   <div class="hero-sub">You are uniquely designed</div>
-  <ul class="hero-points">
-    <li>No one else was born at the exact same time and place with your exact name.</li>
-    <li>You have very specific things you do or do not like.</li>
-    <li>There are people you are naturally drawn to and there are people you cannot understand.</li>
-  </ul>
   <div class="hero-tag">Individual or Relational Insight — no subscription required</div>
 </div>
 
@@ -444,7 +444,13 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 </div>
 
 <div class="loading" id="loading">
-  <div class="lr"></div>
+  <div class="finger-tap" aria-hidden="true">
+    <div class="finger"></div>
+    <div class="finger"></div>
+    <div class="finger"></div>
+    <div class="finger"></div>
+  </div>
+  <div class="finger-tap-surface"></div>
   <div class="ll">Reading the energy…</div>
 </div>
 
@@ -461,7 +467,7 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
 
 <script>
 const W='https://know-your-energy.kwdoanchor.workers.dev';
-let rtype='individual',rel='parent-child',plan='free',paidThisSession=false;
+let rtype='individual',rel='parent-child',plan='free',paidThisSession=false,passEmail='';
 const rls={'parent-child':'Parent · Child','romantic':'Romantic Partners','friends':'Friends','other':'Connection'};
 
 function selPlan(p){
@@ -484,9 +490,21 @@ async function checkPass(){
     if(result.active){
       selPlan(result.plan);
       paidThisSession=true;
+      passEmail=email;
       document.getElementById('passEmailWrap').style.display='none';
+      let filled=false;
+      if(result.p1){
+        fillPerson(result.p1,'p1');
+        filled=true;
+      }
+      if(result.p2){
+        document.getElementById('ttype').checked=true;
+        togType();
+        fillPerson(result.p2,'p2');
+      }
       const until=new Date(result.expiresAt).toLocaleDateString();
-      openMod('Pass Found',`<p style="font-size:0.78rem;line-height:1.7;">Welcome back — your ${result.plan==='annual'?'year':'month'} pass is active through ${until}. Fill in your details below and generate your reading.</p>`);
+      const fillMsg=filled?' Your details have been filled in below — double-check them and generate your reading.':' Fill in your details below and generate your reading.';
+      openMod('Pass Found',`<p style="font-size:0.78rem;line-height:1.7;">Welcome back — your ${result.plan==='annual'?'year':'month'} pass is active through ${until}.${fillMsg}</p>`);
     }else{
       showErr('No active pass found for that email.');
     }
@@ -508,6 +526,7 @@ function resetToForm(){
   document.getElementById('heroIntro').style.display='none';
   document.getElementById('form-wrap').style.display='block';
   window.scrollTo(0,0);
+  sessionStorage.removeItem('kye_last_result');
 }
 
 function fillPerson(p,prefix){
@@ -534,6 +553,7 @@ function restorePending(pending){
   }
   fillPerson(pending.p1,'p1');
   fillPerson(pending.p2,'p2');
+  if(pending.passEmail)passEmail=pending.passEmail;
 }
 
 function handleCheckoutReturn(){
@@ -554,7 +574,7 @@ function handleCheckoutReturn(){
       fetch(W+'/record-pass',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({session_id:sessionId})
+        body:JSON.stringify({session_id:sessionId,p1:pending?pending.p1:undefined,p2:pending?pending.p2:undefined})
       }).catch(()=>{});
     }
     if(pending){
@@ -570,7 +590,20 @@ function handleCheckoutReturn(){
   return true;
 }
 
-handleCheckoutReturn();
+function restoreLastResult(){
+  const raw=sessionStorage.getItem('kye_last_result');
+  if(!raw)return false;
+  try{
+    const saved=JSON.parse(raw);
+    render(saved.p1,saved.p2,saved.r,saved.reportErr);
+    return true;
+  }catch(e){
+    sessionStorage.removeItem('kye_last_result');
+    return false;
+  }
+}
+
+const checkoutHandled=handleCheckoutReturn();
 
 function togType(){
   const two=document.getElementById('ttype').checked;
@@ -637,10 +670,10 @@ function subContact(){
 async function generate(){
   document.getElementById('err').style.display='none';
   const p1f=g('p1f'),p1m=g('p1m'),p1l=g('p1l'),d1=g('p1d');
-  if(!p1f||!p1m||!p1l||!vd(d1)){showErr('Please enter first, middle, and last name, and date of birth (MM/DD/YYYY).');return;}
+  if(!p1f||!p1l||!vd(d1)){showErr('Please enter first and last name, and date of birth (MM/DD/YYYY).');return;}
   if(rtype==='two-person'){
     const p2f=g('p2f'),p2m=g('p2m'),p2l=g('p2l'),d2=g('p2d');
-    if(!p2f||!p2m||!p2l||!vd(d2)){showErr('Please enter first, middle, and last name, and date of birth for Person Two.');return;}
+    if(!p2f||!p2l||!vd(d2)){showErr('Please enter first and last name, and date of birth for Person Two.');return;}
   }
 
   const getTime=(tid,aid)=>{const t=g(tid),ap=document.getElementById(aid)?.value||'AM';return t?t+' '+ap:'';};
@@ -671,19 +704,19 @@ async function generate(){
   }:null;
 
   if(plan!=='free'&&!(paidThisSession&&plan!=='single')){
-    const passEmail=document.getElementById('passEmail').value.trim();
-    if((plan==='monthly'||plan==='annual')&&!passEmail){
+    const enteredPassEmail=document.getElementById('passEmail').value.trim();
+    if((plan==='monthly'||plan==='annual')&&!enteredPassEmail){
       showErr('Enter an email for your pass — it\'s what you\'ll use to unlock it next time.');
       return;
     }
     const btn=document.querySelector('#form-wrap .gen-btn');
-    sessionStorage.setItem('kye_pending',JSON.stringify({rtype,rel,plan,p1,p2}));
+    sessionStorage.setItem('kye_pending',JSON.stringify({rtype,rel,plan,p1,p2,passEmail:enteredPassEmail}));
     if(btn){btn.disabled=true;btn.textContent='Redirecting…';}
     try{
       const res=await fetch(W+'/create-checkout-session',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({plan,email:passEmail||undefined})
+        body:JSON.stringify({plan,email:enteredPassEmail||undefined})
       });
       const result=await res.json();
       if(!res.ok||!result.url)throw new Error(result.error||'Could not start checkout.');
@@ -708,7 +741,7 @@ async function runReport(p1,p2){
     const res=await fetch(W+'/report',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({rtype,relLabel:rls[rel],p1,p2})
+      body:JSON.stringify({rtype,relLabel:rls[rel],p1,p2,passEmail:passEmail||undefined})
     });
 
     const result=await res.json();
@@ -729,25 +762,14 @@ async function runReport(p1,p2){
       p2.hd=result.p2.humanDesign;
     }
 
-    render(p1,p2,result.report);
+    render(p1,p2,result.report,result.reportError);
   }catch(e){
     document.getElementById('loading').style.display='none';
     document.getElementById('form-wrap').style.display='block';
     showErr('Connection error: '+e.message);
   }
 }
-function render(p1,p2,report){
-  document.getElementById('loading').style.display='none';
-  document.body.classList.add('results-mode');
-  document.getElementById('rout').style.display='block';
-  
-  if(!report||!report.sections){
-    showErr('Could not render report.');
-    resetToForm();
-    return;
-  }
 
-  let html=`<div class="results-canvas"><div class="print-masthead"><div class="pm-title">Know Your Energy</div><div class="pm-sub">Astrology, Numerology, Human Design<
 const GLOSSARY={
   sun:"Your core identity — how you express your basic sense of self.",
   moon:"Your emotional world and instinctive reactions; what makes you feel safe.",
@@ -759,6 +781,8 @@ const GLOSSARY={
   uranus:"Where you seek freedom, disruption, and individuality.",
   neptune:"Where you dream, idealize, and sometimes lose clarity.",
   pluto:"Where you experience deep transformation and power dynamics.",
+  ascendant:"Your outward first impression — the mask you present before people know you.",
+  midheaven:"Your public reputation, career direction, and life's aim.",
 
   lifepath:"Your overall life direction and central lesson.",
   expression:"Your natural talents and how you express them in the world.",
@@ -863,21 +887,21 @@ const NUM_DEFS={
     9:`As a Life Path 9, you carry a broad, humanitarian view of the world — compassionate, idealistic, and more concerned with the greater good than personal gain, judging people by what they contribute rather than by bias or background. You're a natural utopian, willing to give your time, money, and energy toward making things better on a larger scale. The core lesson of the 9 is release: learning to let go of possessions, outcomes, and even relationships without gripping too tightly, since your deepest fulfillment comes from giving without expecting anything back.`,
     11:`As a Life Path 11, you carry the sensitivity and partnership instincts of the 2, but amplified into something more intense — a heightened intuition that makes you a kind of lightning rod for ideas, insight, and inspiration you can't always explain rationally. That same amplified wiring makes you unusually vulnerable to nervous energy and stress, and you may have felt misunderstood or withdrawn earlier in life simply because so much was happening beneath the surface. Your path is learning to channel that intensity deliberately, so the inspiration that moves through you also reaches and uplifts the people around you.`,
     22:`As a Life Path 22, you're the Master Builder — capable of taking a big, almost visionary idea and actually constructing it in the real world, turning inspiration into something concrete and lasting on a scale most people can't. That kind of impact only happens by rallying other people, resources, and ideas around your vision, since your power works through collaboration rather than solo effort. The 22 carries an unusually wide gap between its promise and its pitfalls: flexibility tends to be your weak point, and the same drive that lets you build big things can slide into controlling or manipulating the people you need on your side.`,
-    33:`As a Life Path 33, you carry the rarest of the Master Numbers — a blend of the 3's expressive gifts and the 6's instinct to nurture, producing what Decoz calls the Master Teacher: someone whose compassion and desire to help the vulnerable become a vehicle for genuinely lifting others up. Your spirituality tends to be experiential rather than doctrinal, showing up as sincere devotion and service rather than formal belief. Like the 6, your real work is learning the difference between truly helping someone and simply absorbing their struggles for them — knowing when to guide and when to step back so people can grow through their own experience.`
+    33:`As a Life Path 33, you carry the rarest of the Master Numbers — a blend of the 3's expressive gifts and the 6's instinct to nurture, producing what's often described as the Master Teacher: someone whose compassion and desire to help the vulnerable become a vehicle for genuinely lifting others up. Your spirituality tends to be experiential rather than doctrinal, showing up as sincere devotion and service rather than formal belief. Like the 6, your real work is learning the difference between truly helping someone and simply absorbing their struggles for them — knowing when to guide and when to step back so people can grow through their own experience.`
   },
   expression:{
     1:`With an Expression number of 1, you're wired to lead rather than follow — you bring original ideas, self-reliance, and drive to whatever you do, and you're happiest running the show rather than taking orders. This independence makes you an excellent pioneer, entrepreneur, or executive, but left unchecked it can tip into bossiness or an intolerance for anyone who doesn't move at your pace. Learning to channel your ambition without steamrolling the people around you is where this number's real growth lies.`,
     2:`With an Expression number of 2, your gift is sensitivity — an intuitive read on what others are feeling that makes you a natural mediator, partner, and team player rather than a solo act. You do your best work in cooperation, smoothing over conflict and creating harmony where others create friction. The flip side is that this same sensitivity leaves you easily wounded — a sharp word or tense atmosphere can knock you off balance far more than it would someone less attuned to emotional undercurrents.`,
     3:`With an Expression number of 3, you were built to communicate — your natural charm, wit, and creative spark make you a gifted writer, speaker, performer, or artist who can lift a room's mood almost without trying. People are drawn to your optimism and expressiveness, and self-expression through words, art, or performance is where you truly shine. The catch is discipline: that same free-flowing creative energy can scatter into moodiness, superficiality, or a scattered, undisciplined approach to follow-through if you don't anchor it.`,
     4:`With an Expression number of 4, you express yourself through steady, practical effort — you're the builder who turns big ideas into real, working structures through discipline, organization, and reliability. Others count on you because you take responsibility seriously and manage details that people around you overlook, which suits careers in management, finance, or any field that rewards precision. The risk is rigidity: your love of order can calcify into stubbornness or an overly serious, all-work outlook that needs conscious loosening up.`,
-    5:`With an Expression number of 5, your natural talent is adaptability — you communicate easily, pick up new skills fast, and thrive on variety, change, and freedom in a way that suits sales, travel, media, or any fast-moving field. Routine feels like a trap to you, and you have a gift for reinventing yourself whenever life calls for it. Decoz's caution for this number is follow-through: the same restlessness that makes you versatile can also make you abandon projects the moment the excitement fades, so real growth comes from pairing your love of change with consistency.`,
-    6:`With an Expression number of 6, your defining gift is care — you're a natural nurturer, healer, or teacher whose sense of responsibility and love of harmony makes you the person others turn to for comfort and stability. This number carries real artistic and musical sensitivity too, though it's often set aside because you're so busy tending to everyone else's needs. Decoz flags the overuse pattern here as self-sacrifice: without limits, your devotion to others can tip into a martyr complex, leaving your own needs and talents chronically neglected.`,
-    7:`With an Expression number of 7, you express yourself through depth of thought rather than surface charm — you have an analytical, probing mind drawn to research, science, philosophy, or spiritual inquiry, and you need solitude to process what you've learned. Your strength is genuine expertise built through quiet study rather than quick answers. The pitfall Decoz points to is isolation: without deliberately staying connected to others, your need for privacy and your impatience with shallow thinking can curdle into aloofness or cynicism.`,
-    8:`With an Expression number of 8, your talent is turning vision into material results — you have a natural command of business, money, and organization, and you're built to manage resources and people on a large scale. Authority and financial success come more naturally to you than to most, provided you pair ambition with discipline and follow-through. Decoz frames this number as fundamentally about balance: chasing power or wealth without fairness and emotional grounding is where this Expression's potential curdles into its biggest liability.`,
-    9:`With an Expression number of 9, you express yourself through big-picture compassion — you're the humanitarian who feels called to make the world more just and humane, often gifted with a rare ability to synthesize wide-ranging knowledge into art, ideas, or causes larger than yourself. Many people with this number are drawn to creative or charitable work that reaches beyond personal gain. Decoz notes the shadow side is emotional self-neglect: in your drive to serve some larger purpose, you can postpone your own needs and hold back the deeper feelings you rarely let yourself share.`,
-    11:`With an Expression number of 11, you carry an amplified, more electric version of the number 2's sensitivity — Decoz describes this as the most highly charged Expression of all, a kind of lightning rod for intuition, inspired ideas, and even psychic insight. This makes you unusually perceptive about people and unseen possibilities, well suited to work that depends on "reading" others, from counseling to the arts. The challenge is that this heightened energy is a lot to carry: without learning to manage and ground that constant intuitive charge, it can leave you anxious or emotionally overwhelmed rather than inspired.`,
-    22:`With an Expression number of 22, you're what Decoz calls the master builder — you combine the practical discipline of the 4 with a visionary scope that lets you dream in terms of legacy, aiming to build something that outlasts you rather than something merely personal. Of all the Expression numbers, 22 carries the greatest potential for large-scale, lasting accomplishment. That scale is also its liability: living up to a 22 can demand your whole life's focus, and the same ambition that builds monuments can strain your personal relationships if you don't consciously protect them.`,
-    33:`With an Expression number of 33, you carry what Decoz calls the master teacher energy — it blends the expressive warmth of the 3 with the nurturing devotion of the 6, amplified into a rare calling to spiritually and emotionally uplift others. Genuinely fully-expressed 33s set aside personal ambition almost entirely in favor of guiding, teaching, and caring for others on a wide scale. Because this number is so rare and demanding — requiring an unusual convergence in your name to activate — Decoz notes it asks for real selflessness, and living up to it means resisting the urge to view your own needs as secondary to everyone else's indefinitely.`
+    5:`With an Expression number of 5, your natural talent is adaptability — you communicate easily, pick up new skills fast, and thrive on variety, change, and freedom in a way that suits sales, travel, media, or any fast-moving field. Routine feels like a trap to you, and you have a gift for reinventing yourself whenever life calls for it. The caution worth naming for this number is follow-through: the same restlessness that makes you versatile can also make you abandon projects the moment the excitement fades, so real growth comes from pairing your love of change with consistency.`,
+    6:`With an Expression number of 6, your defining gift is care — you're a natural nurturer, healer, or teacher whose sense of responsibility and love of harmony makes you the person others turn to for comfort and stability. This number carries real artistic and musical sensitivity too, though it's often set aside because you're so busy tending to everyone else's needs. The overuse pattern to watch for here is self-sacrifice: without limits, your devotion to others can tip into a martyr complex, leaving your own needs and talents chronically neglected.`,
+    7:`With an Expression number of 7, you express yourself through depth of thought rather than surface charm — you have an analytical, probing mind drawn to research, science, philosophy, or spiritual inquiry, and you need solitude to process what you've learned. Your strength is genuine expertise built through quiet study rather than quick answers. The pitfall worth naming here is isolation: without deliberately staying connected to others, your need for privacy and your impatience with shallow thinking can curdle into aloofness or cynicism.`,
+    8:`With an Expression number of 8, your talent is turning vision into material results — you have a natural command of business, money, and organization, and you're built to manage resources and people on a large scale. Authority and financial success come more naturally to you than to most, provided you pair ambition with discipline and follow-through. This number is fundamentally about balance: chasing power or wealth without fairness and emotional grounding is where this Expression's potential curdles into its biggest liability.`,
+    9:`With an Expression number of 9, you express yourself through big-picture compassion — you're the humanitarian who feels called to make the world more just and humane, often gifted with a rare ability to synthesize wide-ranging knowledge into art, ideas, or causes larger than yourself. Many people with this number are drawn to creative or charitable work that reaches beyond personal gain. The shadow side worth naming is emotional self-neglect: in your drive to serve some larger purpose, you can postpone your own needs and hold back the deeper feelings you rarely let yourself share.`,
+    11:`With an Expression number of 11, you carry an amplified, more electric version of the number 2's sensitivity — often considered the most highly charged Expression of all, a kind of lightning rod for intuition, inspired ideas, and even psychic insight. This makes you unusually perceptive about people and unseen possibilities, well suited to work that depends on "reading" others, from counseling to the arts. The challenge is that this heightened energy is a lot to carry: without learning to manage and ground that constant intuitive charge, it can leave you anxious or emotionally overwhelmed rather than inspired.`,
+    22:`With an Expression number of 22, you're what's often called the master builder — you combine the practical discipline of the 4 with a visionary scope that lets you dream in terms of legacy, aiming to build something that outlasts you rather than something merely personal. Of all the Expression numbers, 22 carries the greatest potential for large-scale, lasting accomplishment. That scale is also its liability: living up to a 22 can demand your whole life's focus, and the same ambition that builds monuments can strain your personal relationships if you don't consciously protect them.`,
+    33:`With an Expression number of 33, you carry what's often called the master teacher energy — it blends the expressive warmth of the 3 with the nurturing devotion of the 6, amplified into a rare calling to spiritually and emotionally uplift others. Genuinely fully-expressed 33s set aside personal ambition almost entirely in favor of guiding, teaching, and caring for others on a wide scale. Because this number is so rare and demanding — requiring an unusual convergence in your name to activate — living up to it asks for real selflessness, resisting the urge to view your own needs as secondary to everyone else's indefinitely.`
   },
   soulurge:{
     1:`With a Soul Urge of 1, you are driven by an inner need to stand on your own and take charge of your own life rather than follow someone else's rules. You want to rise to the top of whatever field you choose, trusting your own instincts over the crowd, and you chafe against routine or anything that limits your independence. Watch the shadow side of this drive: left unchecked, the same need to lead can tip into dominating the people closest to you.`,
@@ -958,16 +982,19 @@ function arow(l,v,defKey,defNum){
     def=GLOSSARY[defKey];
   }
   const lbl=def?`<span class="dprl term" data-def="${defKey}">${l}</span>`:`<span class="dprl">${l}</span>`;
-  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${v}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
+  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
 }
 function karmicRow(l,numbers,defKey){
   if(!numbers.length)return arow(l,'None',null);
   const v=numbers.join(', ');
-  const defs=numbers.map(n=>NUM_DEFS[defKey]&&NUM_DEFS[defKey][n]).filter(Boolean);
-  if(!defs.length)return arow(l,v,null);
-  const combined=defs.length>1?defs.map((d,i)=>`<strong>${numbers[i]}:</strong> ${d}`).join(' '):defs[0];
+  const pairs=numbers.map(n=>{
+    const d=NUM_DEFS[defKey]&&NUM_DEFS[defKey][n];
+    return d?{n,d}:null;
+  }).filter(Boolean);
+  if(!pairs.length)return arow(l,v,null);
+  const combined=pairs.length>1?pairs.map(({n,d})=>`<strong>${n}:</strong> ${d}`).join(' '):pairs[0].d;
   const lbl=`<span class="dprl term" data-def="${defKey}">${l}</span>`;
-  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${v}</span></div><div class="dpdef" hidden>${combined}</div></div>`;
+  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div><div class="dpdef" hidden>${combined}</div></div>`;
 }
 function apend(v){return `<div class="dprow"><div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div></div>`;}
 function dpsec(l){return `<div class="dpsec">${l}</div>`;}
@@ -977,8 +1004,12 @@ const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mar
 const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','Mars']],['Social',['Jupiter','Saturn']],['Outer',['Uranus','Neptune','Pluto']]];
 const VS='︎';
 const PLANET_GLYPH={Sun:'☉'+VS,Moon:'☽'+VS,Mercury:'☿'+VS,Venus:'♀'+VS,Mars:'♂'+VS,Jupiter:'♃'+VS,Saturn:'♄'+VS,Uranus:'♅'+VS,Neptune:'♆'+VS,Pluto:'♇'+VS};
-const SIGN_GLYPH={Ari:'♈'+VS,Tau:'♉'+VS,Gem:'♊'+VS,Can:'♋'+VS,Leo:'♌'+VS,Vir:'♍'+VS,Lib:'♎'+VS,Sco:'♏'+VS,Sag:'♐'+VS,Cap:'♑'+VS,Aqu:'♒'+VS,Pis:'♓'+VS};
+const SIGN_GLYPH={Aries:'♈'+VS,Taurus:'♉'+VS,Gemini:'♊'+VS,Cancer:'♋'+VS,Leo:'♌'+VS,Virgo:'♍'+VS,Libra:'♎'+VS,Scorpio:'♏'+VS,Sagittarius:'♐'+VS,Capricorn:'♑'+VS,Aquarius:'♒'+VS,Pisces:'♓'+VS};
 const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
+
+function signDisplay(sign){
+  return SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
+}
 
 function ar(astro){
   if(!astro||astro.error)return apend('Unavailable');
@@ -987,6 +1018,12 @@ function ar(astro){
   const byName={};
   planets.forEach(p=>{const name=p.name||p.planet;if(name)byName[name]=p;});
   let h='';
+  if(astro.ascendant?.sign){
+    h+=arow('Ascendant',signDisplay(astro.ascendant.sign),'ascendant');
+  }
+  if(astro.midheaven?.sign){
+    h+=arow('Midheaven',signDisplay(astro.midheaven.sign),'midheaven');
+  }
   ASTRO_GROUPS.forEach(([label,names])=>{
     const rows=names.map(n=>byName[n]).filter(Boolean);
     if(!rows.length)return;
@@ -995,7 +1032,8 @@ function ar(astro){
       const sign=p.sign||p.zodiac_sign;
       if(name&&sign){
         const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
-        const signOut=SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
+        let signOut=signDisplay(sign);
+        if(p.house)signOut+=` · House ${p.house}`;
         h+=arow(glyph+name,signOut,ASTRO_KEY[name]);
       }
     });
@@ -1050,10 +1088,29 @@ function hdr(hd){
 
 let cardRegistry=[];
 
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function reportSlot(n1,report,reportError,slot){
+  if(!report){
+    if(!reportError)return docBlank(slot);
+    return `<div class="jewel-slot ${slot}"><div class="dp" style="cursor:default;"><div class="dph">Reading</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+  }
+  const sectionsHtml=(report.sections||[]).map(s=>{
+    const head=s.eyebrow?`${escapeHtml(s.eyebrow)} — ${escapeHtml(s.title)}`:escapeHtml(s.title);
+    return `${dpsec(head)}<div class="dprow"><p class="report-body">${escapeHtml(s.body)}</p></div>`;
+  }).join('');
+  const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
+  const fullRows=sectionsHtml+sigHtml;
+  const idx=cardRegistry.push({title:escapeHtml(report.headline||(n1+"'s Reading")),rows:fullRows})-1;
+  return `<div class="jewel-slot ${slot} pcell"><div class="dp report-card" data-card-idx="${idx}"><div class="dph">${escapeHtml(report.headline||'Your Reading')}</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">Tap to read your full reading</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
+}
+
 function pan(nm,sys,rows,isP2,kind,slot){
   const c=(isP2?'p2 ':'')+kind;
   const idx=cardRegistry.push({title:nm+' · '+sys,rows})-1;
-  return `<div class="jewel-slot ${slot} pcell"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${nm} · ${sys}</div><div class="dplist">${rows}</div></div></div>`;
+  return `<div class="jewel-slot ${slot} pcell"><div class="dp ${c}" data-card-idx="${idx}"><div class="dph">${escapeHtml(nm)} · ${sys}</div><div class="dplist">${rows}</div></div></div>`;
 }
 
 function docBlank(slot){
@@ -1064,7 +1121,7 @@ function blankSlot(kind,isP2,slot){
   return `<div class="jewel-slot ${slot} pcell"><div class="dp ${c}" style="cursor:default;"></div></div>`;
 }
 
-function render(p1,p2,r){
+function render(p1,p2,r,reportErr){
   const n1=p1.first+(p1.last?' '+p1.last:'');
   cardRegistry=[];
 
@@ -1072,19 +1129,19 @@ function render(p1,p2,r){
   let h='<div class="results-canvas">';
   h+=`<div class="print-masthead">
     <div class="pm-title">Know Your Energy</div>
-    <div class="pm-sub">${n1}'s Reading &middot; ${printDate}</div>
+    <div class="pm-sub">${escapeHtml(n1)}'s Reading &middot; ${printDate}</div>
   </div>`;
   h+=`<div class="jewel-frame">
     <img class="jewel-bg" src="jewel-tray.jpg" alt="">
     ${pan(p1.first,'Astrology',ar(p1.astro),false,'astro','js-1')}
     ${pan(p1.first,'Numerology',nr(p1.numerology),false,'num','js-2')}
     ${pan(p1.first,'Human Design',hdr(p1.hd),false,'hd','js-3')}
-    ${docBlank('js-4')}
+    ${reportSlot(n1,r,reportErr,'js-4')}
     ${p2?pan(p2.first,'Astrology',ar(p2.astro),true,'astro','js-5'):blankSlot('astro',true,'js-5')}
     ${p2?pan(p2.first,'Numerology',nr(p2.numerology),true,'num','js-6'):blankSlot('num',true,'js-6')}
     ${p2?pan(p2.first,'Human Design',hdr(p2.hd),true,'hd','js-7'):blankSlot('hd',true,'js-7')}
   </div>`;
-  h+=`<div class="results-actions"><button type="button" class="again-btn" onclick="resetToForm()">Run Another Reading</button></div>`;
+  h+=`<div class="results-actions"><button type="button" class="again-btn" onclick="resetToForm()">Run Another Reading</button><button type="button" class="save-btn" onclick="window.print()">Save / Print Reading</button></div>`;
   h+='</div>';
 
   document.getElementById('rcontent').innerHTML=h;
@@ -1092,8 +1149,10 @@ function render(p1,p2,r){
   document.getElementById('rout').style.display='block';
   document.getElementById('pageHeader').style.display='none';
   document.getElementById('heroIntro').style.display='none';
+  document.getElementById('form-wrap').style.display='none';
   document.body.classList.add('results-mode');
   window.scrollTo(0,0);
+  sessionStorage.setItem('kye_last_result',JSON.stringify({p1,p2,r,reportErr}));
 }
 
 document.addEventListener('click',function(e){
@@ -1139,6 +1198,8 @@ document.addEventListener('click',function(e){
     }
   }
 });
+
+if(!checkoutHandled)restoreLastResult();
 </script>
 </body>
 </html>

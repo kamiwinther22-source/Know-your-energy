@@ -1,9 +1,9 @@
 /**
  * PYTHAGOREAN NUMEROLOGY CALCULATOR
  * ----------------------------------
- * Full-chart calculator built from documented, public-domain numerology
- * formulas (Pythagorean system / Hans Decoz methodology). No external
- * API calls, no vendor, no cost. Runs entirely inside your own code.
+ * Full-chart calculator built from the standard, documented Pythagorean
+ * numerology system. No external API calls, no vendor, no cost. Runs
+ * entirely inside your own code.
  *
  * Returns RAW NUMBERS ONLY — no interpretive text. Interpretation is
  * intentionally left to Claude downstream, per your architecture.
@@ -61,9 +61,9 @@ const VOWELS = new Set(["A", "E", "I", "O", "U"]);
 const MASTER_NUMBERS = [11, 22, 33];
 const KARMIC_DEBT_NUMBERS = [13, 14, 16, 19];
 
-// Y as a vowel (Decoz's documented rule): Y counts as a vowel when it's the
-// only vowel SOUND in its syllable — practically, when it is not word-initial
-// and not immediately preceded by a true vowel letter.
+// Y as a vowel: Y counts as a vowel when it's the only vowel SOUND in its
+// syllable — practically, when it is not word-initial and not immediately
+// preceded by a true vowel letter.
 //   - Word-initial Y is a consonant glide: Yolanda, Yes, Young, Yvonne.
 //   - Y immediately after a true vowel closes a diphthong, so it's a
 //     consonant: Kay, Faye, Joy, Toy, Player.
@@ -97,7 +97,7 @@ function reducePreserveMasters(num) {
 
 // Fully reduces to a single digit regardless of Master Numbers.
 // Used for Challenge Number inputs, where master birth components
-// are fully reduced before subtraction (per Decoz methodology).
+// are fully reduced before subtraction (standard rule for this calculation).
 function reduceFully(num) {
   let n = num;
   while (n > 9) {
@@ -123,7 +123,7 @@ function sumLetters(name, filterFn) {
 
 // Reduces each name segment separately (preserving masters within each),
 // then sums the segment results and reduces the total (preserving masters).
-// This is the standard Decoz approach for name-based numbers.
+// This is the standard approach for name-based numbers.
 function nameBasedNumber(nameParts, filterFn) {
   let karmicDebt = null;
   const segmentTotal = nameParts
@@ -217,13 +217,12 @@ function calculateChallengeNumbers(dob) {
 }
 
 // ---------- PINNACLE NUMBERS ----------
-// Per Hans Decoz (worldnumerology.com/numerology-pinnacles/): the PINNACLE
-// VALUES themselves preserve master numbers (11/22/33), but the AGE FORMULA
-// ("36 minus Life Path") uses the Life Path number FULLY REDUCED to a single
-// digit, even when the actual Life Path is a master number. These are two
-// separate rules applied to two different things — the previous version of
-// this file conflated them and used the raw master number in the age formula,
-// which is the bug that gave wrong Pinnacle age ranges.
+// The PINNACLE VALUES themselves preserve master numbers (11/22/33), but the
+// AGE FORMULA ("36 minus Life Path") uses the Life Path number FULLY REDUCED
+// to a single digit, even when the actual Life Path is a master number. These
+// are two separate rules applied to two different things — the previous
+// version of this file conflated them and used the raw master number in the
+// age formula, which is the bug that gave wrong Pinnacle age ranges.
 function calculatePinnacles(dob, lifePathRawValue) {
   const { month, day, year } = parseDate(dob);
   const m = reducePreserveMasters(month).value;

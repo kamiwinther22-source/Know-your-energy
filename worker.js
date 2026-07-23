@@ -122,13 +122,32 @@ function normalizeCity(city, state, country) {
 
 function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
   const { year, month, day } = normalizeDOB(dob);
+  const hasRealTime = !!(timeStr && timeStr.trim());
   const { hour, minute } = normalizeTime(timeStr, ampm);
   const { cityName, countryCode } = normalizeCity(city, state, country);
-  return computeAstrology({
+  const result = computeAstrology({
     year, month, day, hour, minute,
     cityName, countryCode,
     state: state || ""
   });
+
+  if (!hasRealTime) {
+    // Ascendant, Midheaven, and house placements all depend on the exact
+    // clock time of birth — without it they'd just be guesses computed from
+    // a defaulted noon, not the "omitted" behavior promised on the form.
+    // Sign-level planet positions don't depend on time-of-day, so those stay.
+    result.planets = result.planets.map(({ house, ...rest }) => rest);
+    result.ascendant = null;
+    result.midheaven = null;
+    result.houses = [];
+    result.aspects = result.aspects.filter(
+      a => a.point1 !== "Ascendant" && a.point2 !== "Ascendant" &&
+           a.point1 !== "Midheaven" && a.point2 !== "Midheaven"
+    );
+    result.timeUnknown = true;
+  }
+
+  return result;
 }
 
 // ─── HUMAN DESIGN API ────────────────────────────────────────────────────────
@@ -292,7 +311,16 @@ function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
 }
 
-async function recordPass(env, sessionId) {
+// Only the plain birth-data fields needed to refill the form — never the
+// computed numerology/astrology/Human Design output, which is regenerated
+// fresh from these each time.
+function personSnapshot(p) {
+  if (!p) return null;
+  const { first, mid, last, dob, time, city, state, country } = p;
+  return { first, mid, last, dob, time, city, state, country };
+}
+
+async function recordPass(env, sessionId, p1, p2) {
   const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
     headers: { "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}` }
   });
@@ -317,7 +345,7 @@ async function recordPass(env, sessionId) {
   const expiresAt = purchasedAt + durationMs;
   await env.PASSES.put(
     passKey(email),
-    JSON.stringify({ plan, purchasedAt, expiresAt }),
+    JSON.stringify({ plan, purchasedAt, expiresAt, p1: personSnapshot(p1), p2: personSnapshot(p2) }),
     { expirationTtl: Math.ceil(durationMs / 1000) }
   );
 
@@ -330,7 +358,24 @@ async function checkPassRecord(env, email) {
   if (!raw) return { active: false };
   const record = JSON.parse(raw);
   if (record.expiresAt < Date.now()) return { active: false };
-  return { active: true, plan: record.plan, expiresAt: record.expiresAt };
+  return { active: true, plan: record.plan, expiresAt: record.expiresAt, p1: record.p1 || null, p2: record.p2 || null };
+}
+
+// Refreshes the stored person snapshot for an active pass, so the most
+// recently used birth data is what autofills next time — called whenever a
+// pass holder generates a reading, not just at purchase time.
+async function refreshPassSnapshot(env, email, p1, p2) {
+  if (!email) return;
+  const key = passKey(email);
+  const raw = await env.PASSES.get(key);
+  if (!raw) return;
+  const record = JSON.parse(raw);
+  if (record.expiresAt < Date.now()) return;
+  const remainingTtl = Math.ceil((record.expiresAt - Date.now()) / 1000);
+  if (remainingTtl <= 0) return;
+  record.p1 = personSnapshot(p1);
+  record.p2 = personSnapshot(p2);
+  await env.PASSES.put(key, JSON.stringify(record), { expirationTtl: remainingTtl });
 }
 
 // ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
@@ -361,6 +406,17 @@ VOICE
   naming. But don't let that slide into implying the outcome is guaranteed
   or "meant to be." Name what's structurally there. Leave what happens with
   it to the person, not the chart.
+- When you name a Karmic Debt, a Challenge number, or a hard aspect, frame
+  the difficulty attached to it as the calibration that unusual raw capacity
+  requires, not as a unique misfortune singling this person out. A glass
+  blower doesn't shape a vase through force alone, or the glass shatters;
+  they hold a precise balance of pressure and release. Someone carrying a
+  lot of raw intensity in their chart isn't exempt from that same
+  calibration — if anything, more capacity means more refining, not less.
+  The goal is for a hard placement to land as "this is what it looks like
+  to refine something substantial," not "why is this happening only to
+  me." That reframe — from isolating tragedy to expected refinement — is
+  worth landing deliberately, not glossed over.
 
 WHAT YOU RECEIVE
 - Numerology: not just Life Path/Expression/Soul Urge/Personality — also
@@ -370,8 +426,9 @@ WHAT YOU RECEIVE
 - Astrology: not just planets in signs — also which HOUSE each planet falls
   in, the Ascendant and Midheaven, the North/South Node, Chiron, the sign on
   each house cusp, and the major aspects between points (e.g. "Moon square
-  Mars"). Use house placements and aspects, not just sign — that's most of
-  what makes a chart specific instead of generic.
+  Mars") — whenever birth time was provided, since houses/Ascendant/Midheaven
+  require it. Use house placements and aspects when you have them, not just
+  sign — that's most of what makes a chart specific instead of generic.
 - Human Design: type, profile, authority, incarnation cross, AND the full
   list of defined gates — not just type/authority. The gates are often the
   most specific, individual detail available; use them.
@@ -394,8 +451,12 @@ somewhere in the reading.
 PART 1 — each system on its own terms, specific and complete:
 1. What does astrology specifically tell us about this person? Cover every
    planet's placement (sign and house) — not just the Sun — plus the
-   Ascendant and Midheaven. Bring in an aspect only where it's genuinely
-   worth highlighting, not as an exhaustive checklist of every aspect in
+   Ascendant and Midheaven, whenever that data is provided. If birth time
+   wasn't given, house placements and the Ascendant/Midheaven won't be in
+   the data at all — cover planets by sign only in that case, and never
+   guess or invent a house or rising sign that wasn't supplied. Bring in
+   an aspect only where it's genuinely worth highlighting, not as an
+   exhaustive checklist of every aspect in
    the chart.
 2. What does numerology specifically tell us about this person? Cover the
    core numbers (Life Path, Expression, Soul Urge, Personality, Birthday),
@@ -478,11 +539,12 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     const planetLine = (pl) => `${pl.name} in ${pl.sign}${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
     const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
     const astrologyLines = [
+      a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
       (a.planets || []).map(planetLine).join(', '),
       [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('Chiron', a.chiron)].filter(Boolean).join(', '),
-      `House cusps: ${(a.houses || []).map(h => `${h.house}:${h.sign}`).join(', ')}`,
+      a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign}`).join(', ')}` : null,
       `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
-    ].join('\n  ');
+    ].filter(Boolean).join('\n  ');
 
     const h = p.humanDesign || {};
     const hdLines = [
@@ -584,7 +646,7 @@ export default {
         return jsonResponse({ error: "Invalid request body." }, 400);
       }
       try {
-        const result = await recordPass(env, body.session_id);
+        const result = await recordPass(env, body.session_id, body.p1, body.p2);
         return jsonResponse(result);
       } catch (error) {
         return jsonResponse({ error: error.message }, 500);
@@ -624,6 +686,10 @@ export default {
         report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data);
       } catch (error) {
         reportError = error.message;
+      }
+
+      if (body.passEmail) {
+        ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
       }
 
       return jsonResponse({ p1: p1Data, p2: p2Data, report, reportError });
