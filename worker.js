@@ -697,6 +697,7 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
     body: JSON.stringify({
       model: 'claude-sonnet-5',
       max_tokens: 12000,
+      thinking: { type: 'disabled' },
       system: [
         { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
       ],
