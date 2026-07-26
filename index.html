@@ -34,14 +34,23 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .hero-intro{text-align:center;padding:0 1rem 1.1rem;max-width:420px;margin:0 auto;}
 .hero-sub{font-size:0.95rem;font-weight:700;color:var(--f);letter-spacing:0.02em;margin-bottom:0.65rem;}
 .hero-tag{font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--dim);font-weight:700;}
-.sky-ticker{overflow:hidden;white-space:nowrap;border-top:1px solid rgba(163,178,216,0.25);border-bottom:1px solid rgba(163,178,216,0.25);background:rgba(10,21,48,0.22);}
-.sky-ticker-track{display:inline-flex;width:max-content;animation:sky-scroll 70s linear infinite;}
-.sky-ticker-set{display:inline-flex;padding:0.32rem 0;}
-.sky-ticker-set span{margin:0 1rem;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--dim);font-weight:700;}
-.sky-ticker-set .sky-retro{color:#e08a8a;}
-.sky-ticker:hover .sky-ticker-track{animation-play-state:paused;}
-@keyframes sky-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-@media (prefers-reduced-motion: reduce){.sky-ticker-track{animation:none;}}
+.orrery-wrap{max-width:340px;margin:0.5rem auto 0;position:relative;}
+.orrery-wrap svg{width:100%;height:auto;display:block;overflow:visible;}
+.zodiac-ring{fill:none;stroke:rgba(163,178,216,0.25);stroke-width:1;}
+.orrery-orbit{fill:none;stroke:rgba(163,178,216,0.15);stroke-width:1;}
+.orrery-tick{stroke:rgba(163,178,216,0.3);stroke-width:1;}
+.orrery-sign-glyph{fill:var(--dim);font-size:11px;text-anchor:middle;dominant-baseline:middle;}
+.orrery-center{fill:var(--f);}
+.orrery-planet-dot{filter:drop-shadow(0 0 4px currentColor);}
+.orrery-planet-label{font-size:9px;font-weight:700;fill:currentColor;text-anchor:middle;}
+.orrery-orbit-group{animation:orrery-spin linear infinite;transform-origin:200px 200px;}
+@keyframes orrery-spin{to{transform:rotate(360deg);}}
+.orrery-caption{text-align:center;font-size:0.56rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);margin-top:0.3rem;}
+.orrery-legend{display:flex;flex-wrap:wrap;gap:0.25rem 0.6rem;justify-content:center;max-width:340px;margin:0.4rem auto 0;padding-bottom:0.3rem;}
+.orrery-legend-item{display:flex;align-items:center;gap:0.25rem;font-size:0.52rem;letter-spacing:0.02em;text-transform:uppercase;color:var(--dim);font-weight:700;}
+.orrery-legend-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.orrery-legend-item.orrery-retro{color:#e08a8a;}
+@media (prefers-reduced-motion: reduce){.orrery-orbit-group{animation:none!important;}}
 
 .price-list{margin-bottom:0.8rem;}
 .price-line{display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.15s;border:1px solid transparent;background:var(--moon2);box-shadow:inset 0 2px 4px rgba(0,0,0,0.4);}
@@ -353,7 +362,17 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <div class="desc">Astrology, Numerology, Human Design</div>
 </header>
 
-<div class="sky-ticker" id="skyTicker"><div class="sky-ticker-track" id="skyTickerTrack"></div></div>
+<div class="orrery-wrap" id="orreryWrap">
+  <svg viewBox="0 0 400 400">
+    <circle class="zodiac-ring" cx="200" cy="200" r="185"/>
+    <g id="orreryTicks"></g>
+    <g id="orreryOrbits"></g>
+    <g id="orreryGroups"></g>
+    <circle class="orrery-center" cx="200" cy="200" r="4"/>
+  </svg>
+</div>
+<div class="orrery-caption" id="orreryCaption"></div>
+<div class="orrery-legend" id="orreryLegend"></div>
 
 <div class="hero-intro" id="heroIntro">
   <div class="hero-sub">You are uniquely designed</div>
@@ -1506,24 +1525,99 @@ document.addEventListener('click',function(e){
 
 if(!checkoutHandled)restoreLastResult();
 
-async function loadSkyTicker(){
+const ORRERY_SIGN_ORDER=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+const ORRERY_PERIOD_DAYS={Sun:365.25,Moon:27.3,Mercury:88,Venus:225,Mars:687,Jupiter:4333,Saturn:10759,Uranus:30687,Neptune:60190,Pluto:90560};
+const ORRERY_RADIUS={Sun:55,Moon:75,Mercury:95,Venus:112,Mars:129,Jupiter:145,Saturn:159,Uranus:169,Neptune:177,Pluto:183};
+const ORRERY_COLOR={Sun:'#f0c94c',Moon:'#e8e8ff',Mercury:'#8fd6ff',Venus:'#ff9ecf',Mars:'#ff5f5f',Jupiter:'#ffb547',Saturn:'#c9a9ff',Uranus:'#31f2ff',Neptune:'#5e8bff',Pluto:'#c6ff3a'};
+
+function orreryAngleToXY(deg,r,cx=200,cy=200){
+  const theta=(deg-90)*Math.PI/180;
+  return {x:cx+r*Math.cos(theta),y:cy+r*Math.sin(theta)};
+}
+
+async function buildOrrery(){
   try{
     const res=await fetch(W+'/sky-now');
     if(!res.ok)return;
     const data=await res.json();
     if(!data||!data.planets||!data.planets.length)return;
-    const planetSpans=data.planets.map(p=>{
-      const sym=PLANET_GLYPH[p.name]||'';
-      const retro=p.retrograde?' <span class="sky-retro">℞</span>':'';
-      return `<span>${sym} ${p.name} in ${p.sign}${retro}</span>`;
-    }).join('');
-    const aspectSpans=(data.aspects||[]).slice(0,8).map(a=>`<span>${a.point1} ${a.aspect} ${a.point2}</span>`).join('');
-    const setHTML=planetSpans+aspectSpans;
-    const track=document.getElementById('skyTickerTrack');
-    if(track)track.innerHTML=`<span class="sky-ticker-set">${setHTML}</span><span class="sky-ticker-set">${setHTML}</span>`;
+
+    const svgNS='http://www.w3.org/2000/svg';
+    const ticksG=document.getElementById('orreryTicks');
+    const orbitsG=document.getElementById('orreryOrbits');
+    const groupsG=document.getElementById('orreryGroups');
+    const legend=document.getElementById('orreryLegend');
+    if(!ticksG||!orbitsG||!groupsG)return;
+
+    for(let i=0;i<12;i++){
+      const a1=orreryAngleToXY(i*30,178),a2=orreryAngleToXY(i*30,190);
+      const line=document.createElementNS(svgNS,'line');
+      line.setAttribute('x1',a1.x);line.setAttribute('y1',a1.y);
+      line.setAttribute('x2',a2.x);line.setAttribute('y2',a2.y);
+      line.setAttribute('class','orrery-tick');
+      ticksG.appendChild(line);
+      const mid=orreryAngleToXY(i*30+15,198);
+      const t=document.createElementNS(svgNS,'text');
+      t.setAttribute('x',mid.x);t.setAttribute('y',mid.y);
+      t.setAttribute('class','orrery-sign-glyph');
+      t.textContent=SIGN_GLYPH[ORRERY_SIGN_ORDER[i]]||'';
+      ticksG.appendChild(t);
+    }
+
+    Object.values(ORRERY_RADIUS).forEach(r=>{
+      const c=document.createElementNS(svgNS,'circle');
+      c.setAttribute('cx',200);c.setAttribute('cy',200);c.setAttribute('r',r);
+      c.setAttribute('class','orrery-orbit');
+      orbitsG.appendChild(c);
+    });
+
+    data.planets.forEach(p=>{
+      if(typeof p.absoluteDegrees!=='number')return;
+      const deg=p.absoluteDegrees;
+      const r=ORRERY_RADIUS[p.name];
+      const period=ORRERY_PERIOD_DAYS[p.name];
+      const color=ORRERY_COLOR[p.name];
+      if(!r||!period)return;
+
+      const g=document.createElementNS(svgNS,'g');
+      g.setAttribute('class','orrery-orbit-group');
+      g.style.animationDuration=period+'s';
+      g.style.animationDelay=(-(deg/360)*period)+'s';
+      g.style.animationDirection=p.retrograde?'reverse':'normal';
+
+      const pos=orreryAngleToXY(deg,r);
+      const dot=document.createElementNS(svgNS,'circle');
+      dot.setAttribute('cx',pos.x);dot.setAttribute('cy',pos.y);dot.setAttribute('r',4);
+      dot.setAttribute('class','orrery-planet-dot');
+      dot.setAttribute('fill',color);
+      dot.style.color=color;
+      g.appendChild(dot);
+
+      const label=document.createElementNS(svgNS,'text');
+      label.setAttribute('x',pos.x);label.setAttribute('y',pos.y-8);
+      label.setAttribute('class','orrery-planet-label');
+      label.style.color=color;
+      label.textContent=(PLANET_GLYPH[p.name]||'').replace(VS,'');
+      g.appendChild(label);
+
+      groupsG.appendChild(g);
+
+      if(legend){
+        const li=document.createElement('div');
+        li.className='orrery-legend-item'+(p.retrograde?' orrery-retro':'');
+        li.innerHTML=`<span class="orrery-legend-dot" style="background:${color}"></span>${(PLANET_GLYPH[p.name]||'').replace(VS,'')} ${p.name} &middot; ${p.sign}${p.retrograde?' &#8478;':''}`;
+        legend.appendChild(li);
+      }
+    });
+
+    const caption=document.getElementById('orreryCaption');
+    if(caption&&data.generatedAt){
+      const d=new Date(data.generatedAt);
+      caption.textContent='the sky right now · '+d.toUTCString().replace(':00 GMT',' UTC');
+    }
   }catch(e){/* decorative only, never block the page */}
 }
-loadSkyTicker();
+buildOrrery();
 </script>
 </body>
 </html>

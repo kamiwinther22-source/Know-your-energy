@@ -286,7 +286,7 @@ function getCurrentSky() {
   });
   const data = {
     generatedAt: now.toISOString(),
-    planets: chart.planets.map(({ name, sign, degreesInSign, retrograde }) => ({ name, sign, degreesInSign, retrograde })),
+    planets: chart.planets.map(({ name, sign, degreesInSign, absoluteDegrees, retrograde }) => ({ name, sign, degreesInSign, absoluteDegrees, retrograde })),
     aspects: chart.aspects.filter(a => a.point1 !== "Ascendant" && a.point2 !== "Ascendant" && a.point1 !== "Midheaven" && a.point2 !== "Midheaven")
   };
   skyCache = { computedAt: now.getTime(), data };
