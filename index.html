@@ -193,6 +193,9 @@ body.results-mode .flinks a:hover{color:#101c38;}
 
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
 .dprow:nth-child(even){background:var(--card-stripe-even);}
+@keyframes rowIn{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:none;}}
+.dplist>.dprow,.dplist>.dpsec{opacity:0;animation:rowIn 0.35s ease forwards;}
+@media(prefers-reduced-motion:reduce){.pcell,.dplist>.dprow,.dplist>.dpsec{animation:none!important;opacity:1!important;}}
 .dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
 .dprl.term:hover{color:var(--card-accent);}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.44rem;line-height:1.45;color:var(--card-mid);font-style:italic;font-weight:400;}
@@ -307,7 +310,8 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
     padding:0!important;
   }
   .dph{background:none!important;border-bottom:none!important;color:#0a1530!important;padding:0 0 0.1in!important;margin-bottom:0.14in;font-size:14pt!important;letter-spacing:0.03em;page-break-after:avoid;break-after:avoid;}
-  .dprow{padding:0.09in 0!important;widows:2;orphans:2;page-break-inside:avoid;break-inside:avoid;}
+  .dprow{padding:0.09in 0!important;widows:2;orphans:2;page-break-inside:avoid;break-inside:avoid;animation:none!important;opacity:1!important;}
+  .dpsec{animation:none!important;opacity:1!important;}
   .dpr{font-size:12.5pt!important;padding:0.02in 0!important;}
   .dprl{font-size:10pt!important;}
   .dpdef{font-size:9.5pt!important;color:#0a1530!important;padding:0.03in 0 0!important;line-height:1.5!important;}
@@ -1410,6 +1414,16 @@ function blankSlot(kind,isP2,slot){
   return `<div class="jewel-slot ${slot} pcell"><div class="dp ${c}" style="cursor:default;"></div></div>`;
 }
 
+function staggerRows(){
+  document.querySelectorAll('#rcontent .jewel-slot.pcell').forEach(slot=>{
+    const cardDelay=parseFloat(getComputedStyle(slot).animationDelay)||0;
+    const rows=slot.querySelectorAll('.dplist>.dprow,.dplist>.dpsec');
+    rows.forEach((row,i)=>{
+      row.style.animationDelay=(cardDelay+0.3+Math.min(i,20)*0.035)+'s';
+    });
+  });
+}
+
 function render(p1,p2,r,reportErr){
   const n1=p1.first+(p1.last?' '+p1.last:'');
   cardRegistry=[];
@@ -1435,6 +1449,7 @@ function render(p1,p2,r,reportErr){
   h+='</div>';
 
   document.getElementById('rcontent').innerHTML=h;
+  staggerRows();
   document.getElementById('loading').style.display='none';
   document.getElementById('rout').style.display='block';
   document.getElementById('pageHeader').style.display='none';
