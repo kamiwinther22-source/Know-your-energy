@@ -1,0 +1,200 @@
+<!--
+  Astrology wheel chart -- design reference, not wired into the site yet.
+
+  Status as of this commit:
+  - Visual design approved direction: flat honest colors (no fake metal/glass
+    textures), signs identified by name + position (no fill color on the sign
+    ring), each of the 10 planets has its own distinct color that matches
+    between the wheel and the key below it.
+  - Sized for the results page's existing tap-to-expand modal (.card-expand),
+    not the small card thumbnail -- the thumbnail state still needs a simple
+    teaser design (see the existing report-card preview pattern in index.html
+    for precedent).
+  - Uses MOCK data (hardcoded planet degrees/signs). Not yet wired to the
+    real astro-engine.js output or dropped into index.html/worker.js.
+  - Rising Sign / Midheaven are a plain caption line below the wheel, not
+    text on the ring itself -- fitting that text on the ring caused real
+    clipping/overlap bugs with no clean fix.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wheel Chart Concept 5 — Color on Planets</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#fdf8ec;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;align-items:center;}
+.page{width:min(96vw,720px);padding:1.2rem 1rem 1.6rem;}
+.label{color:#8a7a52;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-align:center;margin-bottom:0.6rem;}
+svg{display:block;width:100%;height:auto;}
+.sign-glyph{font-size:16px;font-weight:800;text-anchor:middle;dominant-baseline:middle;fill:#4a4330;font-family:'Barlow Condensed',sans-serif;letter-spacing:0;text-transform:uppercase;}
+.house-num{font-size:18px;fill:#8a7a52;text-anchor:middle;dominant-baseline:middle;font-family:'Barlow Condensed',sans-serif;font-weight:800;}
+.house-line{stroke:#c9bd94;stroke-width:2.2;}
+.sign-line{stroke:#b8a860;stroke-width:2.6;}
+.angles{text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:0.04em;text-transform:uppercase;color:#3a3424;margin-top:0.9rem;}
+.angles span{margin:0 0.6rem;}
+.plist{display:grid;grid-template-columns:repeat(5,1fr);gap:1.4rem 0.8rem;margin-top:1.1rem;padding-top:1.4rem;border-top:2px solid rgba(90,82,56,0.2);}
+.pcell{text-align:center;}
+.pglyph{font-size:2.4rem;display:block;}
+.pname{font-weight:800;font-size:1.15rem;display:block;margin-top:0.25rem;}
+.pplace{color:#4a4330;font-weight:600;font-size:0.98rem;display:block;margin-top:0.1rem;}
+@media(max-width:480px){.plist{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="label">Concept 5 — Color Lives on the Planets</div>
+  <svg id="wheel" viewBox="0 0 540 540"></svg>
+  <div class="angles" id="angles"></div>
+  <div class="plist" id="plist"></div>
+</div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('wheel');
+const CX = 270, CY = 270;
+const R_OUT = 250, R_SIGN_IN = 195, R_HOUSE_IN = 65;
+const R_PLANET_BASE = 182;
+
+// the wheel itself carries no color -- signs are identified by glyph and
+// position only. Every color in this piece belongs to a planet.
+const SIGNS = [
+  {name:'Aries',glyph:'♈'},{name:'Taurus',glyph:'♉'},{name:'Gemini',glyph:'♊'},
+  {name:'Cancer',glyph:'♋'},{name:'Leo',glyph:'♌'},{name:'Virgo',glyph:'♍'},
+  {name:'Libra',glyph:'♎'},{name:'Scorpio',glyph:'♏'},{name:'Sagittarius',glyph:'♐'},
+  {name:'Capricorn',glyph:'♑'},{name:'Aquarius',glyph:'♒'},{name:'Pisces',glyph:'♓'},
+];
+
+const HOUSE_CUSPS = [352,20,48,80,112,145,172,200,228,260,292,325];
+
+// ten colors, computationally chosen and checked (colorblind-safe adjacency,
+// ten basic, unmistakable color names -- each used exactly once, so no two
+// planets ever share a color family (that was the actual bug before: two
+// purples, two oranges, two greens, no matter how the shades were tuned).
+const PLANETS = [
+  {name:'Sun',     glyph:'☉', deg:214, color:'#d9b400'}, // yellow
+  {name:'Moon',    glyph:'☽', deg:218, color:'#009e96'}, // teal
+  {name:'Mercury', glyph:'☿', deg:225, color:'#f57c00'}, // orange
+  {name:'Venus',   glyph:'♀', deg:160, color:'#e0188f'}, // pink
+  {name:'Mars',    glyph:'♂', deg:55,  color:'#e6231e'}, // red
+  {name:'Jupiter', glyph:'♃', deg:300, color:'#7a3fd9'}, // purple
+  {name:'Saturn',  glyph:'♄', deg:305, color:'#8b5a2b'}, // brown
+  {name:'Uranus',  glyph:'♅', deg:12,  color:'#1a63d6'}, // blue
+  {name:'Neptune', glyph:'♆', deg:355, color:'#2e9e3f'}, // green
+  {name:'Pluto',   glyph:'♇', deg:268, color:'#2b2420'}, // black/charcoal
+];
+
+// the two chart angles -- shown distinctly from planets, not color-coded
+// the same way, since they aren't planets
+const ANGLES = [
+  {name:'Rising Sign', abbr:'ASC', deg:352},
+  {name:'Midheaven',   abbr:'MC',  deg:260},
+];
+
+function el(tag, attrs){
+  const e = document.createElementNS(NS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+function degToXY(deg, r){
+  const rad = (180 - deg) * Math.PI / 180;
+  return [CX + r * Math.cos(rad), CY - r * Math.sin(rad)];
+}
+
+const defs = el('defs',{});
+svg.appendChild(defs);
+
+// sign ring: outline only, no fill distinction between signs
+svg.appendChild(el('circle',{cx:CX,cy:CY,r:R_OUT,fill:'#fdf8ec',stroke:'#c9a646','stroke-width':3}));
+svg.appendChild(el('circle',{cx:CX,cy:CY,r:R_SIGN_IN,fill:'none',stroke:'#c9bd94','stroke-width':2.2}));
+SIGNS.forEach((s,i)=>{
+  const d0 = i*30;
+  const [x1,y1]=degToXY(d0,R_SIGN_IN), [x2,y2]=degToXY(d0,R_OUT);
+  svg.appendChild(el('line',{x1,y1,x2,y2,class:'sign-line'}));
+  // sits close to the outer rim, not at the ring's midpoint, since a label
+  // further out has more arc length to work with for long names
+  const [gx,gy]=degToXY(d0+15,R_OUT-16);
+  const t=el('text',{x:gx,y:gy,class:'sign-glyph'}); t.textContent=s.name; svg.appendChild(t);
+});
+
+// house ring
+HOUSE_CUSPS.forEach((deg,i)=>{
+  const [x1,y1]=degToXY(deg,R_HOUSE_IN), [x2,y2]=degToXY(deg,R_SIGN_IN);
+  svg.appendChild(el('line',{x1,y1,x2,y2,class:'house-line'}));
+  const mid = (deg + (HOUSE_CUSPS[(i+1)%12]-deg+360)%360/2)%360;
+  const [nx,ny]=degToXY(mid,R_HOUSE_IN+20);
+  const n=el('text',{x:nx,y:ny,class:'house-num'}); n.textContent=i+1; svg.appendChild(n);
+});
+svg.appendChild(el('circle',{cx:CX,cy:CY,r:R_HOUSE_IN,fill:'none',stroke:'#c9bd94','stroke-width':2.2}));
+
+// the two chart angles: just a bold line at the exact degree on the wheel --
+// no text label crammed onto the ring itself. A word like "RISING SIGN"
+// extending outward at a near-horizontal angle simply has nowhere to go
+// without either clipping off the canvas or overlapping planet glyphs no
+// matter how the anchor is tuned, so the readable label lives in the plain
+// caption line under the wheel instead, where it has the full page width.
+ANGLES.forEach(a=>{
+  const [x1,y1]=degToXY(a.deg,R_HOUSE_IN), [x2,y2]=degToXY(a.deg,R_OUT);
+  svg.appendChild(el('line',{x1,y1,x2,y2,stroke:'#3a3424','stroke-width':3.4}));
+});
+
+// cluster detection: stelliums fan outward across radii instead of overlapping
+const sorted=[...PLANETS].sort((a,b)=>a.deg-b.deg);
+const groups=[];
+sorted.forEach(p=>{
+  const last=groups[groups.length-1];
+  if(last && (p.deg-last[last.length-1].deg)<=22) last.push(p); else groups.push([p]);
+});
+if(groups.length>1){
+  const first=groups[0], last=groups[groups.length-1];
+  if((first[0].deg+360-last[last.length-1].deg)<=22){ groups[0]=last.concat(first); groups.pop(); }
+}
+
+// planet glyphs: each in its own color, with a thin dark outline (stroke
+// under fill) so every color stays legible regardless of its own contrast.
+// Stelliums fan out using only two radial tiers plus a small angular nudge
+// for a 3rd/4th member -- NOT ever-deeper radial stacking, which was eating
+// into the center and crushing the house numbers into an unreadable clump.
+groups.forEach(g=>{
+  g.forEach((p,idx)=>{
+    const tier = idx % 2;
+    const pairIndex = Math.floor(idx/2);
+    const angleNudge = pairIndex * 9 * (tier===0 ? 1 : -1);
+    const r = R_PLANET_BASE - tier*54;
+    const [x,y] = degToXY(p.deg + angleNudge, r);
+    const t = el('text',{
+      x, y:y+1, 'text-anchor':'middle', 'dominant-baseline':'middle',
+      'font-size':36, 'font-weight':700, fill:p.color,
+      stroke:'#241a05','stroke-width':0.8,'paint-order':'stroke fill'
+    });
+    t.textContent = p.glyph;
+    svg.appendChild(t);
+  });
+});
+
+// the two angle labels, as plain text with the full page width to work with
+const anglesEl = document.getElementById('angles');
+anglesEl.innerHTML = ANGLES.map(a=>{
+  const signIdx = Math.floor(a.deg/30);
+  return `<span>${a.name}: ${SIGNS[signIdx].name}</span>`;
+}).join('');
+
+// legend grid: same color, same glyph, plus a mock placement (sign + degree) --
+// 5 columns x 2 rows instead of one long narrow column
+const plist = document.getElementById('plist');
+PLANETS.forEach(p=>{
+  const signIdx = Math.floor(p.deg/30);
+  const degInSign = Math.floor(p.deg%30);
+  const cell = document.createElement('div');
+  cell.className = 'pcell';
+  cell.innerHTML = `<span class="pglyph" style="color:${p.color}">${p.glyph}</span>`
+    + `<span class="pname" style="color:${p.color}">${p.name}</span>`
+    + `<span class="pplace">${SIGNS[signIdx].name} ${degInSign}°</span>`;
+  plist.appendChild(cell);
+});
+</script>
+</body>
+</html>
