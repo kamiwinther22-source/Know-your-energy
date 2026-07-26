@@ -259,6 +259,40 @@ async function assemblePersonData(env, person) {
   return { numerology, numerologyError, astrology, astrologyError, humanDesign, humanDesignError };
 }
 
+// ─── CURRENT SKY (live ticker) ───────────────────────────────────────────────
+// Sign positions and aspects between bodies don't depend on the observer's
+// location - only houses/Ascendant/Midheaven do. So this reuses the same
+// local ephemeris engine with a placeholder city and just discards the
+// location-dependent parts, giving a real "what's happening in the sky
+// right now" feed with zero external API cost.
+
+let skyCache = null; // { computedAt: <ms>, data: {...} }
+const SKY_CACHE_MS = 10 * 60 * 1000;
+
+function getCurrentSky() {
+  const now = new Date();
+  if (skyCache && now.getTime() - skyCache.computedAt < SKY_CACHE_MS) {
+    return skyCache.data;
+  }
+  const chart = computeAstrology({
+    year: now.getUTCFullYear(),
+    month: now.getUTCMonth() + 1,
+    day: now.getUTCDate(),
+    hour: now.getUTCHours(),
+    minute: now.getUTCMinutes(),
+    cityName: "New York",
+    countryCode: "US",
+    state: ""
+  });
+  const data = {
+    generatedAt: now.toISOString(),
+    planets: chart.planets.map(({ name, sign, degreesInSign, retrograde }) => ({ name, sign, degreesInSign, retrograde })),
+    aspects: chart.aspects.filter(a => a.point1 !== "Ascendant" && a.point2 !== "Ascendant" && a.point1 !== "Midheaven" && a.point2 !== "Midheaven")
+  };
+  skyCache = { computedAt: now.getTime(), data };
+  return data;
+}
+
 // ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
 
 // All three plans are one-time charges. Nobody is ever auto-billed again —
@@ -772,6 +806,16 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
 <p class="note">Estimate uses Claude Sonnet 5 introductory pricing ($2/$10 per million input/output tokens, through 2026-08-31) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees.</p>
 </body></html>`;
       return new Response(html, { headers: { "Content-Type": "text/html; charset=UTF-8", ...CORS_HEADERS } });
+    }
+
+    // Live "cosmic weather" ticker feed: current planetary sign positions and
+    // aspects, no birth data involved. GET, cached in-isolate for 10 minutes.
+    if (url.pathname === "/sky-now") {
+      try {
+        return jsonResponse(getCurrentSky());
+      } catch (error) {
+        return jsonResponse({ error: error.message }, 500);
+      }
     }
 
     if (request.method !== "POST") {

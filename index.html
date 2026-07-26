@@ -34,6 +34,14 @@ header{text-align:center;padding:1.3rem 1rem 0.8rem;}
 .hero-intro{text-align:center;padding:0 1rem 1.1rem;max-width:420px;margin:0 auto;}
 .hero-sub{font-size:0.95rem;font-weight:700;color:var(--f);letter-spacing:0.02em;margin-bottom:0.65rem;}
 .hero-tag{font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--dim);font-weight:700;}
+.sky-ticker{overflow:hidden;white-space:nowrap;border-top:1px solid rgba(163,178,216,0.25);border-bottom:1px solid rgba(163,178,216,0.25);background:rgba(10,21,48,0.22);}
+.sky-ticker-track{display:inline-flex;width:max-content;animation:sky-scroll 70s linear infinite;}
+.sky-ticker-set{display:inline-flex;padding:0.32rem 0;}
+.sky-ticker-set span{margin:0 1rem;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--dim);font-weight:700;}
+.sky-ticker-set .sky-retro{color:#e08a8a;}
+.sky-ticker:hover .sky-ticker-track{animation-play-state:paused;}
+@keyframes sky-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media (prefers-reduced-motion: reduce){.sky-ticker-track{animation:none;}}
 
 .price-list{margin-bottom:0.8rem;}
 .price-line{display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.15s;border:1px solid transparent;background:var(--moon2);box-shadow:inset 0 2px 4px rgba(0,0,0,0.4);}
@@ -340,6 +348,8 @@ footer{text-align:center;padding:1rem 1rem 0.7rem;border-top:1px solid rgba(255,
   <div class="rule"></div>
   <div class="desc">Astrology, Numerology, Human Design</div>
 </header>
+
+<div class="sky-ticker" id="skyTicker"><div class="sky-ticker-track" id="skyTickerTrack"></div></div>
 
 <div class="hero-intro" id="heroIntro">
   <div class="hero-sub">You are uniquely designed</div>
@@ -1480,6 +1490,25 @@ document.addEventListener('click',function(e){
 });
 
 if(!checkoutHandled)restoreLastResult();
+
+async function loadSkyTicker(){
+  try{
+    const res=await fetch(W+'/sky-now');
+    if(!res.ok)return;
+    const data=await res.json();
+    if(!data||!data.planets||!data.planets.length)return;
+    const planetSpans=data.planets.map(p=>{
+      const sym=PLANET_GLYPH[p.name]||'';
+      const retro=p.retrograde?' <span class="sky-retro">℞</span>':'';
+      return `<span>${sym} ${p.name} in ${p.sign}${retro}</span>`;
+    }).join('');
+    const aspectSpans=(data.aspects||[]).slice(0,8).map(a=>`<span>${a.point1} ${a.aspect} ${a.point2}</span>`).join('');
+    const setHTML=planetSpans+aspectSpans;
+    const track=document.getElementById('skyTickerTrack');
+    if(track)track.innerHTML=`<span class="sky-ticker-set">${setHTML}</span><span class="sky-ticker-set">${setHTML}</span>`;
+  }catch(e){/* decorative only, never block the page */}
+}
+loadSkyTicker();
 </script>
 </body>
 </html>
