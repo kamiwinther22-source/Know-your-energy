@@ -134,6 +134,7 @@ body{
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
 .key-txt{font-size:0.85rem;line-height:1.38;color:#000000;font-weight:500;}
 .key-txt em{font-style:normal;color:#8a8a8a;}
+.key-hl{background:none;color:#193866;font-weight:800;}
 
 .form-col{position:relative;}
 .form-panel{
@@ -453,10 +454,11 @@ const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:dro
   <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
 </svg>`;
 const KEYS = [
-  '1 full free astrology, numerology, human design reading for you or a relationship of any two people.',
-  'Your info is neither shared nor saved',
-  'No subscriptions or auto-renewals',
-  'Email is simply your key to your results and time-limited pass if you choose to purchase one.',
+  '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
+  'Your info is <mark class="key-hl">neither</mark> shared <mark class="key-hl">nor</mark> saved',
+  '<mark class="key-hl">No subscriptions</mark> or auto-renewals',
+  '<mark class="key-hl">Email</mark> is simply your key to your results and time-limited <mark class="key-hl">pass</mark> if you choose to purchase one.',
+  'You will not receive emails from us',
 ];
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
