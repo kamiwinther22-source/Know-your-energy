@@ -86,7 +86,30 @@ body{
 .title-glint svg{display:block;width:100%;height:100%;}
 
 /* ---------- tagline / toggle ---------- */
-.tagline{text-align:center;font-size:0.92rem;font-style:italic;line-height:1.5;color:#000000;max-width:340px;margin:0 auto 1.1rem;}
+.tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
+.tagline-slide{
+  position:absolute;top:0;left:0;width:100%;
+  text-align:center;font-size:0.92rem;font-style:italic;line-height:1.5;font-weight:600;
+  opacity:0;transition:opacity 0.7s ease;pointer-events:none;
+}
+.tagline-slide.active{opacity:1;pointer-events:auto;}
+/* Each slide is the same shiny-gradient-text technique as the title (deep
+   anchor + bright same-hue accent + deep anchor), so the color changes but
+   the legibility standard doesn't -- every one verified >=4.6:1 contrast at
+   its brightest point, >=10:1 at its anchor tone, same floor as the title. */
+.tagline-slide.c-blue{
+  background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+}
+.tagline-slide.c-emerald{
+  background:linear-gradient(100deg,#143e22 0%,#1f7a3d 35%,#163f24 50%,#1f7a3d 65%,#143e22 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+}
+.tagline-slide.c-pink{
+  background:linear-gradient(100deg,#580e33 0%,#ca2175 35%,#62103a 50%,#ca2175 65%,#580e33 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+}
+@media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#5a6350;}
 .tog-lbl{cursor:pointer;opacity:0.55;transition:opacity 0.2s,color 0.2s;user-select:none;}
 .tog-lbl.active{opacity:1;color:#000000;}
@@ -204,7 +227,11 @@ body{
     <div class="solar-wrap" id="solarWrap"></div>
   </div>
 
-  <div class="tagline">"what if 3 ancient systems could increase your understanding of yourself as well as your relationships with others?"</div>
+  <div class="tagline-wrap" id="taglineWrap">
+    <div class="tagline-slide c-blue active">"what if 3 ancient systems could increase your understanding of yourself as well as your relationships with others?"</div>
+    <div class="tagline-slide c-emerald">[PLACEHOLDER — your second tagline goes here]</div>
+    <div class="tagline-slide c-pink">[PLACEHOLDER — your third tagline goes here]</div>
+  </div>
 
   <div class="bottom-grid">
     <div class="keys-col" id="keysCol"></div>
@@ -470,6 +497,36 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
 document.querySelector('.gen-btn').addEventListener('click', ()=>{
   window.location.href = 'index.html';
 });
+
+// ---------- tagline rotation: 3 slides, one visible at a time, same spot ----------
+(function(){
+  const wrap = document.getElementById('taglineWrap');
+  const slides = Array.from(wrap.querySelectorAll('.tagline-slide'));
+
+  // measure the tallest slide for real (not guessed) so the wrapper height
+  // never jumps as different-length taglines rotate through
+  let maxH = 0;
+  slides.forEach(s=>{
+    s.style.position = 'static';
+    s.style.opacity = '1';
+    maxH = Math.max(maxH, s.getBoundingClientRect().height);
+  });
+  slides.forEach(s=>{
+    s.style.position = 'absolute';
+    s.style.opacity = '';
+  });
+  wrap.style.height = maxH + 'px';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  let idx = 0;
+  setInterval(()=>{
+    slides[idx].classList.remove('active');
+    idx = (idx + 1) % slides.length;
+    slides[idx].classList.add('active');
+  }, 4200);
+})();
 </script>
 </body>
 </html>
