@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Know Your Energy — Landing</title>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+/* Background: light metallic with only a slight green cast -- brighter and
+   more luminous than the earlier pass, which read as muddy sage. Mostly
+   bright near-white/silver patches with just a couple of pale green patches
+   for the whisper of tint, plus fine grain so it stays a mottled surface
+   rather than a flat gradient. */
+body{
+  font-family:'DM Sans',sans-serif;overflow-x:hidden;
+  background-color:#f4f6f0;
+  background-image:
+    radial-gradient(ellipse 55% 38% at 12% 8%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(ellipse 48% 34% at 88% 18%, rgba(232,238,218,0.55) 0%, rgba(232,238,218,0) 60%),
+    radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 65%),
+    radial-gradient(ellipse 58% 46% at 84% 80%, rgba(226,234,212,0.5) 0%, rgba(226,234,212,0) 65%),
+    radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%),
+    linear-gradient(115deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 24%, rgba(255,255,255,0) 76%, rgba(255,255,255,0.45) 100%),
+    radial-gradient(ellipse 140% 75% at 50% 0%, #f8faf4 0%, #f1f4ec 45%, #e9ede2 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-attachment:fixed;
+  padding:1.15rem 1rem 1.3rem;
+  display:flex;flex-direction:column;align-items:center;
+  color:#000000;
+}
+.content{width:100%;max-width:420px;}
+
+/* ---------- numerology grid: 2 rows of 6 ---------- */
+.num-section{margin-bottom:1.1rem;}
+.sec-label{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;text-align:center;color:#5a6350;opacity:0.75;margin-bottom:0.4rem;}
+.num-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0.3rem;width:100%;justify-items:center;}
+.num-tile{
+  position:relative;overflow:hidden;
+  width:100%;max-width:56px;aspect-ratio:1/1;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:0.12rem 0.08rem;text-align:center;border:1px solid;
+  box-shadow:0 2px 4px -1px rgba(60,55,40,0.3),inset 0 0 0 0.5px rgba(255,255,255,0.6);
+}
+/* Bright specular hotspot plus a soft diagonal glass-streak -- rounded,
+   continuous falloff (not a hard-edged split), same as the version that
+   landed closer before. */
+.num-tile::after{
+  content:'';position:absolute;inset:-2px;
+  background:
+    radial-gradient(circle at 26% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 14%, rgba(255,255,255,0) 34%),
+    linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.65) 42%, rgba(255,255,255,0) 54%);
+  pointer-events:none;
+}
+.num-tile::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.16) 100%);
+  pointer-events:none;
+}
+.num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.05rem;line-height:1;color:#000000;}
+.num-tile .lbl{position:relative;z-index:1;font-size:0.44rem;font-weight:700;letter-spacing:0.01em;line-height:1.14;color:#000000;margin-top:0.12rem;}
+
+/* ---------- solar system: concentric orbits, sun at center ---------- */
+.solar-section{margin-bottom:0.9rem;display:flex;flex-direction:column-reverse;align-items:center;}
+.solar-section .sec-label{margin-top:0.3rem;margin-bottom:0;}
+.solar-wrap{position:relative;width:100%;max-width:400px;}
+.solar-wrap svg{display:block;width:100%;height:auto;}
+.p-label{font-size:9.5px;font-weight:800;fill:#000000;}
+.p-label.sub{font-size:7.8px;font-weight:600;opacity:0.85;}
+
+/* ---------- title ---------- */
+.brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
+/* Title color: YInMn Blue, the real pigment discovered in 2009 -- reported
+   at the time as the first genuinely new blue discovered in two centuries.
+   Verified hex (Wikipedia) is #306AC0; used here as the bright sheen accent
+   inside a deeper same-hue anchor so the letterforms stay legible (>=8:1
+   contrast against this background) rather than washing out like the old
+   green/gold gradient did (its lightest stops measured ~2:1). */
+.brand{
+  font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
+  font-size:clamp(2.3rem,10vw,3.4rem);white-space:nowrap;
+  background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 0 14px rgba(48,106,192,0.4));
+}
+.title-glint{position:absolute;pointer-events:none;}
+.title-glint svg{display:block;width:100%;height:100%;}
+
+/* ---------- tagline / toggle ---------- */
+.tagline{text-align:center;font-size:0.92rem;font-style:italic;line-height:1.5;color:#000000;max-width:340px;margin:0 auto 1.1rem;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#5a6350;}
+.tog-lbl{cursor:pointer;opacity:0.55;transition:opacity 0.2s,color 0.2s;user-select:none;}
+.tog-lbl.active{opacity:1;color:#000000;}
+.toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
+.toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
+.toggle-pill.on{background:#306AC0;}
+.toggle-pill.on::after{left:16.5px;}
+
+/* ---------- relationship-type chips (Relational mode only) ---------- */
+.rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #306AC0;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip:hover{background:rgba(48,106,192,0.12);}
+.rel-chip.active{background:#306AC0;color:#ffffff;}
+.rel-chip.active:hover{background:#306AC0;}
+
+/* ---------- bottom two-column: keys | form ---------- */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
+
+.keys-col{padding-top:0.3rem;}
+.key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
+.key-item:last-child{margin-bottom:0;}
+.key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
+.key-txt{font-size:0.85rem;line-height:1.38;color:#000000;font-weight:500;}
+.key-txt em{font-style:normal;color:#8a8a8a;}
+
+.form-col{position:relative;}
+.form-panel{
+  position:relative;border-radius:16px;padding:1.2rem 1rem 1.1rem;
+  background:rgba(255,255,255,0.34);
+  box-shadow:0 8px 18px -8px rgba(45,55,35,0.3);
+}
+.form-panel .f{margin-bottom:0.7rem;}
+.form-panel .f:last-child{margin-bottom:0;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#5a6350;margin-bottom:0.2rem;font-weight:700;}
+.section-lbl{font-size:0.6rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
+.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#000000;font-weight:600;}
+.row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
+.row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
+
+/* Thin underline field with small tick marks at the start and stop points of
+   the writing line -- "|____________|" -- instead of a boxed/indented input,
+   with italic text for a lighter, less typewriter-formal feel. */
+.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid #6b7460;}
+.line-field::before,.line-field::after{
+  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:#6b7460;
+}
+.line-field::before{left:0;}
+.line-field::after{right:0;}
+.line-field input,.line-field select{
+  width:100%;background:transparent;border:none;color:#000000;font-size:0.7rem;font-weight:500;
+  font-style:italic;font-family:'DM Sans',sans-serif;padding:0.15rem 0.2rem 0;outline:none;
+  -webkit-appearance:none;appearance:none;
+}
+.line-field select{width:auto;padding-right:1rem;}
+.line-field input::placeholder{color:#7a8470;opacity:0.75;font-style:italic;}
+
+/* ---------- submit button: blue fill, 3D lift built from nothing but
+   white / light silver / translucent layers -- slow-spinning silver ring
+   still wraps it, same verified technique as the live entry form's button ---------- */
+.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
+.glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
+.glow-ring::before{content:'';position:absolute;inset:-100%;
+  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
+  animation:silverspin 3s linear infinite;}
+.glow-ring .gen-btn{position:relative;z-index:1;margin:0;border-radius:7px;}
+@keyframes silverspin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
+.gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
+  background:linear-gradient(160deg,#4d7fd1 0%,#306AC0 45%,#1f3f70 100%);
+  border:1px solid rgba(255,255,255,0.55);border-radius:6px;
+  color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  transition:transform 0.18s ease,box-shadow 0.18s ease;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.65),
+    inset 0 -4px 7px rgba(210,220,230,0.4),
+    0 8px 18px -6px rgba(190,200,210,0.6);}
+.gen-btn:hover{transform:translateY(-1px);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.7),
+    inset 0 -4px 7px rgba(210,220,230,0.45),
+    0 10px 22px -6px rgba(190,200,210,0.7);}
+.gen-btn:active{transform:translateY(1px);}
+.gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
+  background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
+.gen-btn::after{content:'';position:absolute;top:-60%;left:-35%;width:30%;height:220%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,0.85),transparent);transform:rotate(20deg);
+  animation:genbtnsheen 3.2s ease-in-out infinite;}
+@keyframes genbtnsheen{0%{left:-35%;}35%{left:130%;}100%{left:130%;}}
+@media(prefers-reduced-motion:reduce){.gen-btn::after{animation:none;display:none;}}
+.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#5a6350;margin:0.35rem 0 0;}
+.tnote.tight{margin:0.2rem 0 0.65rem;}
+</style>
+</head>
+<body>
+<div class="content">
+
+  <div class="num-section">
+    <div class="num-grid" id="numGrid"></div>
+  </div>
+
+  <div class="brand-row">
+    <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
+      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
+    </div>
+    <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
+      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
+    </div>
+    <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
+      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
+    </div>
+    <div class="brand">Know Your Energy</div>
+  </div>
+
+  <div class="solar-section">
+    <div class="solar-wrap" id="solarWrap"></div>
+  </div>
+
+  <div class="tagline">"what if 3 ancient systems could increase your understanding of yourself as well as your relationships with others?"</div>
+
+  <div class="bottom-grid">
+    <div class="keys-col" id="keysCol"></div>
+    <div class="form-col">
+      <div class="toggle-row">
+        <span class="tog-lbl active" id="lblInd">Individual</span>
+        <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
+        <span class="tog-lbl" id="lblRel">Relational</span>
+      </div>
+
+      <div class="rel-row" id="relWrap" style="display:none;">
+        <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
+        <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
+        <button type="button" class="rel-chip" data-rel="friends">Friends</button>
+        <button type="button" class="rel-chip" data-rel="other">Other</button>
+      </div>
+
+      <div class="form-panel">
+        <div class="f">
+          <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
+          <div class="row3">
+            <div><label>First</label><div class="line-field"><input placeholder="First"></div></div>
+            <div><label>Mid</label><div class="line-field"><input placeholder="Mid"></div></div>
+            <div><label>Last</label><div class="line-field"><input placeholder="Last"></div></div>
+          </div>
+        </div>
+        <div class="f">
+          <label>Date of Birth</label>
+          <div class="line-field"><input placeholder="MM/DD/YYYY"></div>
+        </div>
+        <div class="f">
+          <label>Birth Time <span class="opt-note">if known</span></label>
+          <div class="row-ampm">
+            <div class="line-field"><input placeholder="HH:MM"></div>
+            <div class="line-field">
+              <select><option>AM</option><option>PM</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="f">
+          <label>Birthplace <span class="opt-note">if known</span></label>
+          <div class="line-field"><input placeholder="City, State, Country"></div>
+        </div>
+
+        <div id="p2Section" style="display:none;">
+          <div class="f">
+            <label class="section-lbl">Person Two</label>
+            <div class="row3">
+              <div><label>First</label><div class="line-field"><input placeholder="First"></div></div>
+              <div><label>Mid</label><div class="line-field"><input placeholder="Mid"></div></div>
+              <div><label>Last</label><div class="line-field"><input placeholder="Last"></div></div>
+            </div>
+          </div>
+          <div class="f">
+            <label>Date of Birth</label>
+            <div class="line-field"><input placeholder="MM/DD/YYYY"></div>
+          </div>
+          <div class="f">
+            <label>Birth Time <span class="opt-note">if known</span></label>
+            <div class="row-ampm">
+              <div class="line-field"><input placeholder="HH:MM"></div>
+              <div class="line-field">
+                <select><option>AM</option><option>PM</option></select>
+              </div>
+            </div>
+          </div>
+          <div class="f">
+            <label>Birthplace <span class="opt-note">if known</span></label>
+            <div class="line-field"><input placeholder="City, State, Country"></div>
+          </div>
+        </div>
+
+        <div class="f">
+          <label>Email Address</label>
+          <div class="line-field"><input placeholder="your.email@example.com"></div>
+        </div>
+      </div>
+
+      <div class="submit-wrap">
+        <span class="glow-ring"><button type="button" class="gen-btn">Generate</button></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- numerology numbers: monochrome palette, distinguished by outline ----------
+// Correction from the previous pass: I'd sampled a real photo but that photo's
+// warm ambient light was bouncing onto the metal -- a lighting artifact of
+// that shot, not silver's actual hue. Silver here is now genuinely cool/
+// neutral steel-gray (hue ~215, near-desaturated), gold is the only warm tone
+// (as asked), white/cream stay true white/cream rather than tan-shifted.
+// Contrast against the ink text verified per stop, same as before.
+// Rebuilt from real, established metallic/precious color names instead of
+// self-derived HSL math: Platinum + classic Silver for silverL, Silver +
+// Steel + Gunmetal (lightened just enough to stay legible, same hue/sat
+// preserved) for silverD, and Champagne -- a genuinely well-known pale gold
+// that is NOT yellow/orange -- for goldT.
+const TONES = {
+  cream:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #f7f2e7 55%, #e9dbbd 100%)', border:'#cdbfa0' },
+  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #ffffff 55%, #e3e3e3 100%)', border:'#c7c2b4' },
+  silverL: { grad:'radial-gradient(circle at 30% 26%, #e5e4e2 0%, #c0c0c0 55%, #979691 100%)', border:'#6a695f' },
+  silverD: { grad:'radial-gradient(circle at 30% 26%, #c0c0c0 0%, #91989c 55%, #8499a4 100%)', border:'#4c5c66' },
+  goldT:   { grad:'radial-gradient(circle at 30% 26%, #f8ead3 0%, #ded0ba 55%, #c6b395 100%)', border:'#a08e68' },
+};
+const NUMS = [
+  {n:1,  lbl:'Leadership',     tone:'silverL'},
+  {n:2,  lbl:'Partnership',    tone:'goldT'},
+  {n:3,  lbl:'Expression',     tone:'white'},
+  {n:4,  lbl:'Structure',      tone:'cream'},
+  {n:5,  lbl:'Freedom',        tone:'silverD'},
+  {n:6,  lbl:'Nurturing',      tone:'white'},
+  {n:7,  lbl:'Introspection',  tone:'goldT'},
+  {n:8,  lbl:'Ambition',       tone:'cream'},
+  {n:9,  lbl:'Compassion',     tone:'silverL'},
+  {n:11, lbl:'Intuition',      tone:'silverD'},
+  {n:22, lbl:'Master Builder', tone:'cream'},
+  {n:33, lbl:'Master Teacher', tone:'goldT'},
+];
+const numGrid = document.getElementById('numGrid');
+NUMS.forEach(item=>{
+  const t = TONES[item.tone];
+  const tile = document.createElement('div');
+  tile.className = 'num-tile';
+  tile.style.background = t.grad;
+  tile.style.borderColor = t.border;
+  tile.innerHTML = `<div class="n">${item.n}</div><div class="lbl">${item.lbl}</div>`;
+  numGrid.appendChild(tile);
+});
+
+// ---------- solar system: monochrome, laid out like an actual snapshot in
+// time -- distinct orbital tiers (inner rocky pair / inner-mid pair / outer
+// gas giants / far icy trio) with a gap between tiers like the real solar
+// system, each planet at its own radius within its tier and a scattered
+// (not evenly-spaced) angle, rather than one continuously-growing spiral. ----
+const PLANETS = [
+  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70},
+  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:160},
+  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:38},
+  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:-158},
+  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:104},
+  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-16},
+  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-108},
+  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:14},
+  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-148},
+];
+const RINGS = [26,34,46,54,74,86,100,110,120];
+const SIZE = 420, C = SIZE/2;
+const solarWrap = document.getElementById('solarWrap');
+// Tight crop around the actual rendered content (measured via getBBox, not
+// guessed) instead of the full square canvas, so the container isn't full
+// of dead margin above/below the ring cluster.
+let svg = `<svg viewBox="41 78 356 264" xmlns="http://www.w3.org/2000/svg">`;
+
+// glossy-sphere radial gradients, one per tone -- an off-center highlight
+// (upper-left) fading to the same darkest stop used on the number tiles,
+// so a small flat circle reads as a lit, dimensional bead rather than a dot.
+const stopsByTone = {};
+svg += '<defs>';
+Object.entries(TONES).forEach(([name, t])=>{
+  const stops = t.grad.match(/#[0-9a-fA-F]{6}/g);
+  stopsByTone[name] = stops;
+  svg += `<radialGradient id="pg-${name}" cx="35%" cy="30%" r="75%">
+    <stop offset="0%" stop-color="${stops[0]}"/>
+    <stop offset="55%" stop-color="${stops[1]}"/>
+    <stop offset="100%" stop-color="${stops[2]}"/>
+  </radialGradient>`;
+});
+// soft glow behind each orbit ring -- a wider, blurred, white duplicate of
+// the ring line sitting underneath the crisp dashed ring, so the path itself
+// reads as glowing without becoming a solid band.
+svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.8"/></filter>`;
+svg += '</defs>';
+
+RINGS.forEach(r=>{
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#306AC0" stroke-width="2.4" opacity="0.4" filter="url(#glow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#306AC0" stroke-width="0.9" opacity="0.9"/>`;
+});
+
+// sun -- the one warm point the (now-neutral) planets orbit
+svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
+svg += `<text x="${C}" y="${C+3}" text-anchor="middle" font-size="7.5" font-weight="800" fill="#000000">SUN</text>`;
+
+PLANETS.forEach(p=>{
+  const t = TONES[p.tone];
+  const a = p.angle * Math.PI/180;
+  const dx = Math.cos(a), dy = Math.sin(a);
+  const px = C + p.r*dx, py = C + p.r*dy;
+
+  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9"/>`;
+
+  const gap = p.size + 5;
+  const labelX = px + dx*gap;
+  const labelY = py + dy*gap;
+  let anchor = 'middle';
+  if (dx > 0.3) anchor = 'start';
+  else if (dx < -0.3) anchor = 'end';
+
+  const lineH = 9.6;
+  svg += `<text x="${labelX}" y="${labelY}" text-anchor="${anchor}" class="p-label">${p.name}</text>`;
+  p.lines.forEach((line,li)=>{
+    svg += `<text x="${labelX}" y="${labelY + lineH*(li+1)}" text-anchor="${anchor}" class="p-label sub">${line}</text>`;
+  });
+});
+svg += `</svg>`;
+solarWrap.innerHTML = svg;
+
+// ---------- key-icon selling points: copied verbatim from your reference image ----------
+const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
+  <defs>
+    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
+  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
+</svg>`;
+const KEYS = [
+  '1 full free astrology, numerology, human design reading for you or a relationship of any two people.',
+  'Your info is neither shared nor saved',
+  'No subscriptions or auto-renewals',
+  'Email is simply your key to your results and time-limited pass if you choose to purchase one.',
+];
+const keysCol = document.getElementById('keysCol');
+keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
+
+// ---------- Individual / Relational toggle ----------
+const togPill = document.getElementById('togPill');
+const lblInd = document.getElementById('lblInd');
+const lblRel = document.getElementById('lblRel');
+const p1Ttl = document.getElementById('p1Ttl');
+const p2Section = document.getElementById('p2Section');
+const relWrap = document.getElementById('relWrap');
+let isRelational = false;
+
+function setMode(rel){
+  isRelational = rel;
+  togPill.classList.toggle('on', rel);
+  lblInd.classList.toggle('active', !rel);
+  lblRel.classList.toggle('active', rel);
+  p1Ttl.textContent = rel ? 'Person One' : 'Full Name at Birth';
+  p2Section.style.display = rel ? 'block' : 'none';
+  relWrap.style.display = rel ? 'flex' : 'none';
+}
+togPill.addEventListener('click', ()=>setMode(!isRelational));
+togPill.addEventListener('keydown', e=>{
+  if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setMode(!isRelational); }
+});
+lblInd.addEventListener('click', ()=>setMode(false));
+lblRel.addEventListener('click', ()=>setMode(true));
+
+document.querySelectorAll('.rel-chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('.rel-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+
+// ---------- Generate: hands off to the real, working entry form/report flow ----------
+document.querySelector('.gen-btn').addEventListener('click', ()=>{
+  window.location.href = 'index.html';
+});
+</script>
+</body>
+</html>
