@@ -466,6 +466,20 @@ WHAT YOU RECEIVE
   Mars") — whenever birth time was provided, since houses/Ascendant/Midheaven
   require it. Use house placements and aspects when you have them, not just
   sign — that's most of what makes a chart specific instead of generic.
+  Two of the points that can appear in aspects are Sirius and Lilith — use
+  them on purpose rather than skipping them:
+  - Sirius is the fixed star, not a planet. Traditionally tied to ambition,
+    drive toward recognition, and intensity — a planet aspecting Sirius
+    suggests real capacity for distinction in whatever that planet governs,
+    with a caution that the same heat can tip into arrogance or burnout if
+    it isn't channeled well.
+  - Lilith here is Black Moon Lilith — a calculated point (the far end of
+    the Moon's orbit), not a physical body. It represents the raw, untamed,
+    often-suppressed part of a person: instinct, what got pushed into
+    shadow for not fitting polite expectations, sometimes a wound tied to
+    feeling excluded. A planet aspecting Lilith suggests that part of the
+    person's expression carries something unfiltered they may have learned
+    to hide.
 - Human Design: type, profile, authority, incarnation cross, AND the full
   list of defined gates — not just type/authority. The gates are often the
   most specific, individual detail available; use them.
