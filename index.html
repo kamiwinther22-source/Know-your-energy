@@ -266,23 +266,31 @@ body{
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
 
+/* Pill-shaped, bright-white buttons -- deliberately NOT the same shape,
+   size or material as the tall grey report panels, so they read as
+   controls, not more cards. Wrapped in the same spinning silver
+   glow-ring halo already proven on the entry form's Generate button,
+   plus real pulsing sparkle glints (not a diagonal sheen). */
+.side-btn-ring{position:absolute;border-radius:999px;padding:3px;overflow:hidden;}
+.side-btn-ring::before{content:'';position:absolute;inset:-100%;
+  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
+  animation:silverspin 3s linear infinite;}
+@media(prefers-reduced-motion:reduce){.side-btn-ring::before{animation:none;display:none;}}
 .side-btn{
-  position:absolute;overflow:hidden;cursor:pointer;border-radius:9px;
+  position:relative;z-index:1;overflow:hidden;cursor:pointer;border-radius:999px;
+  width:100%;height:100%;
   display:flex;align-items:center;justify-content:center;text-align:center;
   font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.03em;text-transform:uppercase;
-  padding:0.4rem;color:#232a20;
-  background:
-    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 55%),
-    linear-gradient(150deg, #dadedc 0%, #dcdcdc 42%, #bcc0c2 72%, #999da1 100%);
-  border:1px solid #7c848a;
-  box-shadow:0 3px 8px -3px rgba(20,30,25,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+  padding:0.3rem 0.4rem;color:#193866;
+  background:linear-gradient(160deg,#ffffff 0%,#fdfdfd 55%,#f2f4f7 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .side-btn:active{transform:translateY(1px);}
-.side-btn .glint{position:absolute;pointer-events:none;animation:sideGlint 2.6s ease-in-out infinite;}
-.side-btn .glint.g2{animation-delay:0.9s;}
-.side-btn .glint.g3{animation-delay:1.7s;}
-@keyframes sideGlint{0%,100%{opacity:0.15;}50%{opacity:1;}}
-@media(prefers-reduced-motion:reduce){.side-btn .glint{animation:none;opacity:0.7;}}
+.side-btn .glint{position:absolute;pointer-events:none;animation:sideGlint 2.2s ease-in-out infinite;}
+.side-btn .glint.g2{animation-delay:0.7s;}
+.side-btn .glint.g3{animation-delay:1.4s;}
+@keyframes sideGlint{0%,40%,100%{opacity:0.2;transform:scale(0.8);}20%{opacity:1;transform:scale(1.15);}}
+@media(prefers-reduced-motion:reduce){.side-btn .glint{animation:none;opacity:0.85;}}
 
 /* ---------- tap-to-expand modal ---------- */
 .card-expand{display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;background:#fdf8ec;color:#000000;padding:1.3rem 1.3rem 3rem;font-size:16px;}
@@ -304,7 +312,7 @@ body{
 .card-expand-body .report-body{font-size:1rem;line-height:1.65;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:1rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
 @media print{
-  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.side-btn{display:none!important;}
+  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.side-btn-ring{display:none!important;}
   body{background:#fff!important;}
   .panel{box-shadow:none!important;border:1px solid #999!important;background:#fff!important;}
   .dp{--card-text:#000!important;--card-accent:#193866!important;--card-stripe-odd:transparent!important;}
@@ -1248,16 +1256,21 @@ function blankPanel(colIndex,rowIndex){
   const p=panelPos(colIndex,rowIndex);
   return `<div class="panel blank" style="left:${p.x}px;top:${p.y}px;"></div>`;
 }
-const GLINT_SVG='<svg viewBox="0 0 24 24" style="display:block;width:100%;height:100%;"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#ffffff"/></svg>';
+const GLINT_SVG='<svg viewBox="0 0 24 24" style="display:block;width:100%;height:100%;filter:drop-shadow(0 0 1.5px rgba(255,255,255,0.9));"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#306AC0"/></svg>';
 function sideButton(colIndex,label,onclick){
+  // deliberately a short pill, not a tall card, so it never reads as a
+  // fourth report panel -- wrapped in the same spinning glow-ring used on
+  // the entry form's Generate button, plus real pulsing sparkle glints
   const p=panelPos(colIndex,1);
-  const btnH=110;
+  const btnH=54;
   const y=p.y+(PH-btnH)/2;
-  return `<div class="side-btn" style="left:${p.x}px;top:${y}px;width:${PW}px;height:${btnH}px;" onclick="${onclick}">
-    <div class="glint" style="width:9px;height:9px;top:8px;left:8px;">${GLINT_SVG}</div>
-    <div class="glint g2" style="width:6px;height:6px;bottom:10px;right:10px;">${GLINT_SVG}</div>
-    <div class="glint g3" style="width:5px;height:5px;top:50%;right:6px;">${GLINT_SVG}</div>
-    <span>${label}</span>
+  return `<div class="side-btn-ring" style="left:${p.x}px;top:${y}px;width:${PW}px;height:${btnH}px;">
+    <div class="side-btn" onclick="${onclick}">
+      <div class="glint" style="width:15px;height:15px;top:-6px;left:-6px;">${GLINT_SVG}</div>
+      <div class="glint g2" style="width:12px;height:12px;bottom:-5px;right:-4px;">${GLINT_SVG}</div>
+      <div class="glint g3" style="width:10px;height:10px;top:50%;right:30%;">${GLINT_SVG}</div>
+      <span>${label}</span>
+    </div>
   </div>`;
 }
 function reportSlot(n1,report,reportError){
