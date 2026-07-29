@@ -264,7 +264,7 @@ body{
 .dpdef p:last-child{margin-bottom:0;}
 .dpdef p:first-child{font-weight:700;font-style:normal;}
 .wheel-wrap{display:none;}
-.card-expand-body .wheel-wrap{display:block;width:92%;max-width:400px;margin:0 auto 0.8rem;}
+.card-expand-body .wheel-wrap{display:block;width:100%;max-width:500px;margin:0 auto 0.8rem;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
 .report-preview{padding:0 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;font-style:normal;color:var(--card-text);text-align:center;}
@@ -1199,12 +1199,12 @@ function astroWheelSVG(astro){
   const rot=d=>(d+ROT)%360;
   const toXY=(deg,r)=>{const rad=(180-deg)*Math.PI/180;return [CX+r*Math.cos(rad),CY-r*Math.sin(rad)];};
   let svg=`<svg viewBox="0 0 460 460" style="display:block;width:100%;height:100%;">`;
-  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#999" stroke-width="2"/>`;
-  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#ccc" stroke-width="1.4"/>`;
+  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#306AC0" stroke-width="2"/>`;
+  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#306AC0" stroke-width="1.4" opacity="0.85"/>`;
   SIGN_ORDER.forEach((s,i)=>{
     const d0=rot(i*30);
     const [x1,y1]=toXY(d0,R_SIGN_IN), [x2,y2]=toXY(d0,R_OUT);
-    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#999" stroke-width="1.6"/>`;
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#306AC0" stroke-width="1.6" opacity="0.85"/>`;
     const [gx,gy]=toXY(d0+15,R_LABEL);
     // rotate each label so it reads normally as if you're standing at the
     // center looking outward at it -- tangent to the ring, NOT running
@@ -1222,9 +1222,9 @@ function astroWheelSVG(astro){
     houses.forEach(h=>{
       const d=rot(h.absoluteDegrees);
       const [x1,y1]=toXY(d,R_HOUSE_IN), [x2,y2]=toXY(d,R_SIGN_IN);
-      svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ccc" stroke-width="1"/>`;
+      svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#306AC0" stroke-width="1" opacity="0.6"/>`;
     });
-    svg+=`<circle cx="${CX}" cy="${CY}" r="${R_HOUSE_IN}" fill="none" stroke="#ccc" stroke-width="1.4"/>`;
+    svg+=`<circle cx="${CX}" cy="${CY}" r="${R_HOUSE_IN}" fill="none" stroke="#306AC0" stroke-width="1.4" opacity="0.6"/>`;
   }
   if(astro.ascendant&&typeof astro.ascendant.absoluteDegrees==='number'){
     const d=rot(astro.ascendant.absoluteDegrees);
