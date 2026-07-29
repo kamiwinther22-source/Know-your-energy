@@ -211,7 +211,7 @@ body{
 /* ---------- results page: V-shape panels, same brushed-metal technique
    verified against the real jewel-tray reference photo (dimensions,
    texture, edge glint all measured from it, not guessed) ---------- */
-.results-wrap{display:none;padding:1.6rem 1rem 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
+.results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:transparent;
   background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
@@ -219,7 +219,7 @@ body{
 .results-wrap .sub{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;
   font-weight:700;color:#3a4232;text-align:center;margin-bottom:1.6rem;}
 .stage-outer{width:100%;overflow:visible;}
-.stage{position:relative;width:460px;height:600px;transform-origin:top left;}
+.stage{position:relative;transform-origin:top left;}
 .panel{
   position:absolute;width:80px;height:168px;border-radius:10px;overflow:hidden;cursor:pointer;
   background-image:
@@ -244,7 +244,7 @@ body{
 .dph{padding:0.3rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:800;}
 .dplist{flex:1;overflow:hidden;}
 .dpr{display:flex;flex-direction:column;gap:0.02rem;padding:0.1rem 0.4rem;font-size:0.5rem;}
-.dprl{font-family:'Barlow Condensed',sans-serif;color:var(--card-dim);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.01em;font-weight:700;flex-shrink:0;}
+.dprl{font-family:'Barlow Condensed',sans-serif;color:var(--card-dim);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.01em;font-weight:700;flex-shrink:0;align-self:flex-start;}
 .glyph{color:var(--card-accent);font-size:0.6rem;font-weight:400;text-transform:none;}
 .dprv{font-family:'Barlow Condensed',sans-serif;color:var(--card-text);font-style:normal;font-weight:800;text-align:left;}
 .dprv.pend{color:var(--card-accent);font-size:0.44rem;}
@@ -1441,10 +1441,11 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
 // across the top row, the reading centered alone in the middle row, P2's
 // three cards across the bottom row (blank if individual) ----
 let cardRegistry=[];
-const PW=80, PH=168;
-const STAGE_W=460;
-const COL_GAP=20, ROW_GAP=20;
-const COL_X=[90, 90+PW+COL_GAP, 90+2*(PW+COL_GAP)]; // 3 evenly spaced columns
+const PW=92, PH=168;
+const MARGIN=14;
+const COL_GAP=12, ROW_GAP=20;
+const STAGE_W=MARGIN*2+3*PW+2*COL_GAP;
+const COL_X=[MARGIN, MARGIN+PW+COL_GAP, MARGIN+2*(PW+COL_GAP)]; // 3 evenly spaced columns
 const ROW_Y=[20, 20+PH+ROW_GAP, 20+2*(PH+ROW_GAP)]; // top / middle / bottom
 
 function panelPos(colIndex, rowIndex){
@@ -1455,10 +1456,6 @@ function pan(nm,sys,rows,colIndex,rowIndex,preHtml){
   const idx=cardRegistry.push({title:nm+' \u00b7 '+sys,rows,preHtml})-1;
   const p=panelPos(colIndex,rowIndex);
   return `<div class="panel" style="left:${p.x}px;top:${p.y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${escapeHtml(nm)} \u00b7 ${sys}</div><div class="dplist">${rows}</div></div></div>`;
-}
-function blankPanel(colIndex,rowIndex){
-  const p=panelPos(colIndex,rowIndex);
-  return `<div class="panel blank" style="left:${p.x}px;top:${p.y}px;"></div>`;
 }
 const GLINT_SVG='<svg viewBox="0 0 24 24" style="display:block;width:100%;height:100%;filter:drop-shadow(0 0 1.5px rgba(255,255,255,0.9));"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#306AC0"/></svg>';
 function sideButton(colIndex,label,onclick){
@@ -1506,13 +1503,13 @@ function render(p1,p2,r,reportErr){
   h+=pan(p1.first,'Human Design',hdr(p1.hd),2,0);
   // middle row: the reading, alone, centered
   h+=reportSlot(namesForTitle,r,reportErr);
-  // bottom row: P2's three systems, or blank if individual
+  // bottom row: P2's three systems -- solo readings skip this row entirely
+  // rather than reserving a blank one, so there's no dead space at the
+  // bottom of the page.
   if(p2){
     h+=pan(p2.first,'Astrology',ar(p2.astro),0,2,wheelWrap(p2.astro));
     h+=pan(p2.first,'Numerology',nr(p2.numerology),1,2);
     h+=pan(p2.first,'Human Design',hdr(p2.hd),2,2);
-  }else{
-    h+=blankPanel(0,2)+blankPanel(1,2)+blankPanel(2,2);
   }
   h+=sideButton(0,'Run Another Reading','resetToForm()');
   h+=sideButton(2,'Save / Print Reading','window.print()');
@@ -1522,14 +1519,18 @@ function render(p1,p2,r,reportErr){
   document.getElementById('resultsWrap').style.display='block';
   document.querySelector('.content').style.display='none';
 
-  // Real phones are often narrower than the 460px canvas the panel math is
-  // built on -- measure actual available width and scale the whole stage
-  // down to fit, rather than letting it clip off the right edge.
+  // Real phones are rarely exactly STAGE_W wide -- always scale the stage
+  // to fill whatever width is actually available (shrinking on narrow
+  // phones, enlarging on wider ones) instead of just capping at native size.
   const outer = document.getElementById('stageOuter');
   const availWidth = outer.clientWidth;
-  const scale = Math.min(1, availWidth / STAGE_W);
+  const scale = availWidth / STAGE_W;
+  const rows = p2 ? 3 : 2;
+  const stageHeight = ROW_Y[rows-1] + PH + 20;
+  stage.style.width = STAGE_W + 'px';
+  stage.style.height = stageHeight + 'px';
   stage.style.transform = `scale(${scale})`;
-  outer.style.height = (600 * scale) + 'px';
+  outer.style.height = (stageHeight * scale) + 'px';
 }
 
 function resetToForm(){
