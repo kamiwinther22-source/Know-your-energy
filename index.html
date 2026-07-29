@@ -250,6 +250,11 @@ body{
 .dprv.pend{color:var(--card-accent);font-size:0.44rem;}
 .dpsec{padding:0.2rem 0.4rem 0.05rem;font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--card-accent);font-weight:800;margin-top:0.05rem;}
 .dpsec:first-child{margin-top:0;}
+.stage-range{padding:0.1rem 0.4rem 0;font-family:'Barlow Condensed',sans-serif;font-size:0.34rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-mid);font-weight:700;}
+.stage-pair{display:flex;gap:0.5rem;}
+.stage-pair .pc-col{flex:1;min-width:0;}
+.stage-pair .dpr{padding:0.02rem 0.4rem;}
+.stage-pair .dpdef{padding:0 0.4rem 0.3rem;}
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
 .dprow:nth-child(even){background:var(--card-stripe-even);}
 .dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
@@ -258,6 +263,8 @@ body{
 .dpdef p{margin:0 0 0.5em;}
 .dpdef p:last-child{margin-bottom:0;}
 .dpdef p:first-child{font-weight:700;font-style:normal;}
+.wheel-wrap{display:none;}
+.card-expand-body .wheel-wrap{display:block;width:60%;max-width:260px;margin:0 auto 0.8rem;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
 .report-preview{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.48rem;font-style:italic;color:var(--card-mid);text-align:center;}
@@ -1168,6 +1175,77 @@ const PLANET_GLYPH={Sun:'\u2609'+VS,Moon:'\u263d'+VS,Mercury:'\u263f'+VS,Venus:'
 const SIGN_GLYPH={Aries:'\u2648'+VS,Taurus:'\u2649'+VS,Gemini:'\u264a'+VS,Cancer:'\u264b'+VS,Leo:'\u264c'+VS,Virgo:'\u264d'+VS,Libra:'\u264e'+VS,Scorpio:'\u264f'+VS,Sagittarius:'\u2650'+VS,Capricorn:'\u2651'+VS,Aquarius:'\u2652'+VS,Pisces:'\u2653'+VS};
 const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
 
+const PLANET_COLOR={Sun:'#b8960a',Moon:'#009e96',Mercury:'#e06a00',Venus:'#c11a7e',Mars:'#c41f1a',Jupiter:'#6a35b8',Saturn:'#7a4d24',Uranus:'#1a63d6',Neptune:'#238a34',Pluto:'#2b2420'};
+const SIGN_ORDER=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+
+// Real astrology wheel: signs at their real fixed 30deg boundaries, planets
+// at their real computed degree (astro.planets[].absoluteDegrees), rotated
+// so the Sun sits at the top instead of using a fixed Ascendant-at-left
+// convention. Falls back gracefully when birth time wasn't given (no houses).
+function astroWheelSVG(astro){
+  if(!astro||astro.error)return '';
+  const planets=(astro.planets||[]).filter(p=>p.name&&typeof p.absoluteDegrees==='number');
+  if(!planets.length)return '';
+  const NS='http://www.w3.org/2000/svg';
+  const CX=150,CY=150,R_OUT=140,R_SIGN_IN=108,R_HOUSE_IN=36,R_PLANET_BASE=100;
+  const sunDeg=(planets.find(p=>p.name==='Sun')||planets[0]).absoluteDegrees;
+  const ROT=(90-sunDeg+360)%360;
+  const rot=d=>(d+ROT)%360;
+  const toXY=(deg,r)=>{const rad=(180-deg)*Math.PI/180;return [CX+r*Math.cos(rad),CY-r*Math.sin(rad)];};
+  let svg=`<svg viewBox="0 0 300 300" style="display:block;width:100%;height:100%;">`;
+  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#999" stroke-width="2"/>`;
+  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#ccc" stroke-width="1.4"/>`;
+  SIGN_ORDER.forEach((s,i)=>{
+    const d0=rot(i*30);
+    const [x1,y1]=toXY(d0,R_SIGN_IN), [x2,y2]=toXY(d0,R_OUT);
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#999" stroke-width="1.6"/>`;
+    const [gx,gy]=toXY(d0+15,R_OUT-9);
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="800" fill="#333" font-family="'Barlow Condensed',sans-serif">${s.slice(0,3).toUpperCase()}</text>`;
+  });
+  const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number');
+  if(houses.length){
+    houses.forEach(h=>{
+      const d=rot(h.absoluteDegrees);
+      const [x1,y1]=toXY(d,R_HOUSE_IN), [x2,y2]=toXY(d,R_SIGN_IN);
+      svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ccc" stroke-width="1"/>`;
+    });
+    svg+=`<circle cx="${CX}" cy="${CY}" r="${R_HOUSE_IN}" fill="none" stroke="#ccc" stroke-width="1.4"/>`;
+  }
+  if(astro.ascendant&&typeof astro.ascendant.absoluteDegrees==='number'){
+    const d=rot(astro.ascendant.absoluteDegrees);
+    const [x1,y1]=toXY(d,R_HOUSE_IN||0), [x2,y2]=toXY(d,R_OUT);
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#333" stroke-width="2.2"/>`;
+  }
+  const sorted=[...planets].sort((a,b)=>a.absoluteDegrees-b.absoluteDegrees);
+  const groups=[];
+  sorted.forEach(p=>{
+    const last=groups[groups.length-1];
+    if(last&&(p.absoluteDegrees-last[last.length-1].absoluteDegrees)<=8)last.push(p);else groups.push([p]);
+  });
+  if(groups.length>1){
+    const first=groups[0], last=groups[groups.length-1];
+    if((first[0].absoluteDegrees+360-last[last.length-1].absoluteDegrees)<=8){groups[0]=last.concat(first);groups.pop();}
+  }
+  groups.forEach(g=>{
+    g.forEach((p,idx)=>{
+      const tier=idx%2, pairIndex=Math.floor(idx/2);
+      const nudge=pairIndex*5*(tier===0?1:-1);
+      const r=R_PLANET_BASE-tier*30;
+      const [x,y]=toXY(rot(p.absoluteDegrees)+nudge,r);
+      const color=PLANET_COLOR[p.name]||'#333';
+      const glyph=PLANET_GLYPH[p.name]||p.name[0];
+      svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="20" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.5" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
+    });
+  });
+  svg+='</svg>';
+  return svg;
+}
+function wheelWrap(astro){
+  const svg=astroWheelSVG(astro);
+  if(!svg)return '';
+  return `<div class="wheel-wrap">${svg}</div>`;
+}
+
 function signDisplay(sign){
   return SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
 }
@@ -1182,51 +1260,66 @@ function ar(astro){
   const emitPlanet=p=>{
     const name=p.name, sign=p.sign;
     if(!name||!sign)return;
-    const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
+    const glyph=PLANET_GLYPH[name]?`<span class="glyph" style="color:${PLANET_COLOR[name]||'inherit'}">${PLANET_GLYPH[name]}</span> `:'';
     let signOut=sign;
     if(p.house)signOut+=` \u00b7 House ${p.house}`;
     h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
   };
-  // lead with the Sun sign -- the placement people actually expect to see first
+  // lead with the Sun sign -- the placement people actually expect to see first.
+  // Ascendant/Midheaven move to their own small section at the bottom instead
+  // of leading the card -- they're chart points, not planets in signs.
   if(byName.Sun)emitPlanet(byName.Sun);
   if(byName.Moon)emitPlanet(byName.Moon);
-  if(astro.ascendant?.sign){
-    h+=arow('Ascendant',astro.ascendant.sign,'ascendant');
-  }
-  if(astro.midheaven?.sign){
-    h+=arow('Midheaven',astro.midheaven.sign,'midheaven');
-  }
   ASTRO_GROUPS.forEach(([label,names])=>{
     if(label==='Luminaries')return; // Sun/Moon already emitted above
     const rows=names.map(n=>byName[n]).filter(Boolean);
     rows.forEach(emitPlanet);
   });
+  if(astro.ascendant?.sign||astro.midheaven?.sign){
+    h+=dpsec('Chart Points');
+    if(astro.ascendant?.sign)h+=arow('Ascendant',astro.ascendant.sign,'ascendant');
+    if(astro.midheaven?.sign)h+=arow('Midheaven',astro.midheaven.sign,'midheaven');
+  }
   return h||apend('Unavailable');
+}
+
+function pcCol(label,value,defKey,defNum){
+  let specific=defKey&&defNum!=null&&NUM_DEFS[defKey]&&NUM_DEFS[defKey][defNum];
+  const general=defKey&&GLOSSARY[defKey]?GLOSSARY[defKey]:null;
+  let def=null;
+  if(general&&specific)def=`<p>${general}</p><p>${specific}</p>`;
+  else if(specific)def=`<p>${specific}</p>`;
+  else if(general)def=`<p>${general}</p>`;
+  const lbl=def?`<span class="dprl term" data-def="${defKey}">${label}</span>`:`<span class="dprl">${label}</span>`;
+  return `<div class="pc-col"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(value)}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
+}
+function pinnacleChallengeRow(n,pinnacle,challengeVal){
+  return `<div class="dprow"><div class="stage-range">${escapeHtml(pinnacle.ageRange)}</div><div class="stage-pair">${pcCol('Pinnacle '+n,pinnacle.value,'pinnacle',pinnacle.value)}${pcCol('Challenge '+n,challengeVal,'challenge',challengeVal)}</div></div>`;
 }
 
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
+  h+=dpsec('From Your Birth Date');
   h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
+  h+=arow('Birthday',num.birthday,'birthday',num.birthday);
+  h+=arow('Attitude',num.attitude,'attitude',num.attitude);
+  h+=dpsec('From Your Name');
   h+=arow('Expression',num.expression,'expression',num.expression);
   h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
   h+=arow('Personality',num.personality,'personality',num.personality);
-  h+=arow('Birthday',num.birthday,'birthday',num.birthday);
-  h+=arow('Attitude',num.attitude,'attitude',num.attitude);
   h+=arow('Balance',num.balance,'balance',num.balance);
-  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=dpsec('Pinnacles & Challenges — By Life Stage');
+  h+=pinnacleChallengeRow(1,num.pinnacles.pinnacle1,num.challengeNumbers.challenge1);
+  h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
+  h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
+  h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
+  h+=dpsec('Right Now');
   h+=arow('Personal Year',num.personalYear,'personalyear',num.personalYear);
   h+=arow('Personal Month',num.personalMonth,'personalmonth',num.personalMonth);
   h+=arow('Personal Day',num.personalDay,'personalday',num.personalDay);
   h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
-  h+=arow('Pinnacle 1',num.pinnacles.pinnacle1.value+' ('+num.pinnacles.pinnacle1.ageRange+')','pinnacle',num.pinnacles.pinnacle1.value);
-  h+=arow('Pinnacle 2',num.pinnacles.pinnacle2.value+' ('+num.pinnacles.pinnacle2.ageRange+')','pinnacle',num.pinnacles.pinnacle2.value);
-  h+=arow('Pinnacle 3',num.pinnacles.pinnacle3.value+' ('+num.pinnacles.pinnacle3.ageRange+')','pinnacle',num.pinnacles.pinnacle3.value);
-  h+=arow('Pinnacle 4',num.pinnacles.pinnacle4.value+' ('+num.pinnacles.pinnacle4.ageRange+')','pinnacle',num.pinnacles.pinnacle4.value);
-  h+=arow('Challenge 1',num.challengeNumbers.challenge1,'challenge',num.challengeNumbers.challenge1);
-  h+=arow('Challenge 2',num.challengeNumbers.challenge2,'challenge',num.challengeNumbers.challenge2);
-  h+=arow('Challenge 3',num.challengeNumbers.challenge3,'challenge',num.challengeNumbers.challenge3);
-  h+=arow('Challenge 4',num.challengeNumbers.challenge4,'challenge',num.challengeNumbers.challenge4);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
   h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
   h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   return h;
@@ -1239,8 +1332,8 @@ function hdr(hd){
   if(hd.type)core.push(arow('Type',hd.type,'hdtype',normalizeHDType(hd.type)));
   if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile'));
   if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority',normalizeHDAuthority(hd.authority)));
-  if(core.length){h+=core.join('');}
-  if(hd.incarnation_cross){h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
+  if(core.length){h+=dpsec('Core');h+=core.join('');}
+  if(hd.incarnation_cross){h+=dpsec('Cross');h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
   if(hd.gates&&hd.gates.length){
     h+=dpsec('Gates');
     h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
@@ -1301,8 +1394,8 @@ function panelPos(colIndex, rowIndex){
   return { x: COL_X[colIndex], y: ROW_Y[rowIndex] };
 }
 
-function pan(nm,sys,rows,colIndex,rowIndex){
-  const idx=cardRegistry.push({title:nm+' \u00b7 '+sys,rows})-1;
+function pan(nm,sys,rows,colIndex,rowIndex,preHtml){
+  const idx=cardRegistry.push({title:nm+' \u00b7 '+sys,rows,preHtml})-1;
   const p=panelPos(colIndex,rowIndex);
   return `<div class="panel" style="left:${p.x}px;top:${p.y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${escapeHtml(nm)} \u00b7 ${sys}</div><div class="dplist">${rows}</div></div></div>`;
 }
@@ -1351,14 +1444,14 @@ function render(p1,p2,r,reportErr){
   const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
   let h='';
   // top row: P1's three systems
-  h+=pan(p1.first,'Astrology',ar(p1.astro),0,0);
+  h+=pan(p1.first,'Astrology',ar(p1.astro),0,0,wheelWrap(p1.astro));
   h+=pan(p1.first,'Numerology',nr(p1.numerology),1,0);
   h+=pan(p1.first,'Human Design',hdr(p1.hd),2,0);
   // middle row: the reading, alone, centered
   h+=reportSlot(namesForTitle,r,reportErr);
   // bottom row: P2's three systems, or blank if individual
   if(p2){
-    h+=pan(p2.first,'Astrology',ar(p2.astro),0,2);
+    h+=pan(p2.first,'Astrology',ar(p2.astro),0,2,wheelWrap(p2.astro));
     h+=pan(p2.first,'Numerology',nr(p2.numerology),1,2);
     h+=pan(p2.first,'Human Design',hdr(p2.hd),2,2);
   }else{
@@ -1513,7 +1606,7 @@ document.addEventListener('click', e=>{
     const entry=cardRegistry[card.dataset.cardIdx];
     if(entry){
       document.getElementById('cardExpandTitle').textContent=entry.title;
-      document.getElementById('cardExpandBody').innerHTML=entry.rows;
+      document.getElementById('cardExpandBody').innerHTML=(entry.preHtml||'')+entry.rows;
       document.getElementById('cardExpand').classList.add('open');
     }
   }
