@@ -304,7 +304,21 @@ body{
 @media(prefers-reduced-motion:reduce){.side-btn .glint{animation:none;opacity:0.85;}}
 
 /* ---------- tap-to-expand modal ---------- */
-.card-expand{display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;background:#fdf8ec;color:#000000;padding:1.3rem 1.3rem 3rem;font-size:16px;}
+.card-expand{
+  display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;
+  color:#000000;padding:1.3rem 1.3rem 3rem;font-size:16px;
+  background-color:#f4f6f0;
+  background-image:
+    radial-gradient(ellipse 55% 38% at 12% 8%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(ellipse 48% 34% at 88% 18%, rgba(232,238,218,0.55) 0%, rgba(232,238,218,0) 60%),
+    radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 65%),
+    radial-gradient(ellipse 58% 46% at 84% 80%, rgba(226,234,212,0.5) 0%, rgba(226,234,212,0) 65%),
+    radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%),
+    linear-gradient(115deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 24%, rgba(255,255,255,0) 76%, rgba(255,255,255,0.45) 100%),
+    radial-gradient(ellipse 140% 75% at 50% 0%, #f8faf4 0%, #f1f4ec 45%, #e9ede2 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-attachment:fixed;
+}
 .card-expand.open{display:block;}
 .card-expand-close{position:sticky;top:0;float:right;background:none;border:none;font-size:1.6rem;color:#000000;cursor:pointer;padding:0.3rem;line-height:1;}
 .card-expand-title{max-width:760px;margin:0 auto 1rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:2rem;letter-spacing:0.02em;text-transform:uppercase;color:#193866;clear:both;}
@@ -324,7 +338,7 @@ body{
 .card-expand-body .report-sig{font-size:1rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
 @media print{
   .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.side-btn-ring{display:none!important;}
-  body{background:#fff!important;}
+  body,.card-expand{background:#fff!important;}
   .panel{box-shadow:none!important;border:1px solid #999!important;background:#fff!important;}
   .dp{--card-text:#000!important;--card-accent:#193866!important;--card-stripe-odd:transparent!important;}
 }
