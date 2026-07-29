@@ -1127,6 +1127,17 @@ function ar(astro){
   const byName={};
   planets.forEach(p=>{const name=p.name;if(name)byName[name]=p;});
   let h='';
+  const emitPlanet=p=>{
+    const name=p.name, sign=p.sign;
+    if(!name||!sign)return;
+    const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
+    let signOut=sign;
+    if(p.house)signOut+=` \u00b7 House ${p.house}`;
+    h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
+  };
+  // lead with the Sun sign -- the placement people actually expect to see first
+  if(byName.Sun)emitPlanet(byName.Sun);
+  if(byName.Moon)emitPlanet(byName.Moon);
   if(astro.ascendant?.sign){
     h+=arow('Ascendant',astro.ascendant.sign,'ascendant');
   }
@@ -1134,18 +1145,9 @@ function ar(astro){
     h+=arow('Midheaven',astro.midheaven.sign,'midheaven');
   }
   ASTRO_GROUPS.forEach(([label,names])=>{
+    if(label==='Luminaries')return; // Sun/Moon already emitted above
     const rows=names.map(n=>byName[n]).filter(Boolean);
-    if(!rows.length)return;
-    rows.forEach(p=>{
-      const name=p.name;
-      const sign=p.sign;
-      if(name&&sign){
-        const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
-        let signOut=sign;
-        if(p.house)signOut+=` \u00b7 House ${p.house}`;
-        h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
-      }
-    });
+    rows.forEach(emitPlanet);
   });
   return h||apend('Unavailable');
 }
@@ -1273,12 +1275,13 @@ function sideButton(colIndex,label,onclick){
     </div>
   </div>`;
 }
-function reportSlot(n1,report,reportError){
+function reportSlot(names,report,reportError){
   const p=panelPos(1,1); // centered in the middle row
   const x=p.x, y=p.y;
+  const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
     if(!reportError)return `<div class="panel blank" style="left:${x}px;top:${y}px;"></div>`;
-    return `<div class="panel report" style="left:${x}px;top:${y}px;"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    return `<div class="panel report" style="left:${x}px;top:${y}px;"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
@@ -1286,20 +1289,21 @@ function reportSlot(n1,report,reportError){
   }).join('');
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml;
-  const idx=cardRegistry.push({title:escapeHtml(report.headline||(n1+"'s Reading")),rows:fullRows})-1;
-  return `<div class="panel report" style="left:${x}px;top:${y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${escapeHtml(report.headline||'Your Reading')}</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">Tap to read your full reading</p></div></div></div></div>`;
+  const idx=cardRegistry.push({title,rows:fullRows})-1;
+  return `<div class="panel report" style="left:${x}px;top:${y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">Tap to read your full reading</p></div></div></div></div>`;
 }
 
 function render(p1,p2,r,reportErr){
   cardRegistry=[];
   const n1=p1.first+(p1.last?' '+p1.last:'');
+  const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
   let h='';
   // top row: P1's three systems
   h+=pan(p1.first,'Astrology',ar(p1.astro),0,0);
   h+=pan(p1.first,'Numerology',nr(p1.numerology),1,0);
   h+=pan(p1.first,'Human Design',hdr(p1.hd),2,0);
   // middle row: the reading, alone, centered
-  h+=reportSlot(n1,r,reportErr);
+  h+=reportSlot(namesForTitle,r,reportErr);
   // bottom row: P2's three systems, or blank if individual
   if(p2){
     h+=pan(p2.first,'Astrology',ar(p2.astro),0,2);
