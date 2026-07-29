@@ -1253,6 +1253,11 @@ function astroWheelSVG(astro){
     const [x1,y1]=toXY(d,R_HOUSE_IN||0), [x2,y2]=toXY(d,R_OUT);
     svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#333" stroke-width="2.2"/>`;
   }
+  if(astro.midheaven&&typeof astro.midheaven.absoluteDegrees==='number'){
+    const d=rot(astro.midheaven.absoluteDegrees);
+    const [x1,y1]=toXY(d,R_HOUSE_IN||0), [x2,y2]=toXY(d,R_OUT);
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#333" stroke-width="2.2" stroke-dasharray="6,3"/>`;
+  }
   const sorted=[...planets].sort((a,b)=>a.absoluteDegrees-b.absoluteDegrees);
   const groups=[];
   sorted.forEach(p=>{
@@ -1267,15 +1272,21 @@ function astroWheelSVG(astro){
     // stack same-cluster glyphs at their own true degree (never nudged
     // sideways into a neighboring wedge) -- spread by DISTANCE FROM CENTER
     // only, so every glyph stays inside its real sign/house wedge with no
-    // pointer line needed to show where it "really" belongs
+    // pointer line needed to show where it "really" belongs.
+    // Shrink glyph size as the cluster gets bigger, so a real chart with a
+    // large stellium (5+ planets within a few degrees) still fits cleanly
+    // in the same fixed radial band instead of overlapping -- tuned for
+    // "however many planets a real chart throws at it," not just one test.
     const n=g.length;
+    const band=R_STACK_MAX-R_STACK_MIN;
+    const fontSize=n===1?30:Math.max(9,Math.min(30,band/((n-1)*1.45)));
     g.forEach((p,idx)=>{
-      const r=n===1?(R_STACK_MAX+R_STACK_MIN)/2:R_STACK_MAX-(idx*(R_STACK_MAX-R_STACK_MIN)/(n-1));
+      const r=n===1?(R_STACK_MAX+R_STACK_MIN)/2:R_STACK_MAX-(idx*(band/(n-1)));
       const trueDeg=rot(p.absoluteDegrees);
       const [x,y]=toXY(trueDeg,r);
       const color=PLANET_COLOR[p.name]||'#333';
       const glyph=PLANET_GLYPH[p.name]||p.name[0];
-      svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="30" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.6" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
+      svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${fontSize.toFixed(1)}" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.6" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
     });
   });
   svg+='</svg>';
