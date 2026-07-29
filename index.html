@@ -1210,7 +1210,11 @@ function astroWheelSVG(astro){
     // center looking outward at it -- tangent to the ring, NOT running
     // along the radius like a spoke. At the top this is upright/unrotated;
     // going around the ring it turns to stay "facing" that viewpoint.
-    const faceAngle=Math.atan2(gx-CX,CY-gy)*180/Math.PI;
+    let faceAngle=Math.atan2(gx-CX,CY-gy)*180/Math.PI;
+    // flip any label that would otherwise render upside-down (bottom half
+    // of the ring) so every sign stays upright and readable -- strictly
+    // "always facing center" would put half of them the wrong way up
+    if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
     svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#232a20" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
   });
   const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number');
