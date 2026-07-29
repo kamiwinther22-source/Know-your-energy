@@ -1229,7 +1229,7 @@ function astroWheelSVG(astro){
     // of the ring) so every sign stays upright and readable -- strictly
     // "always facing center" would put half of them the wrong way up
     if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
-    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#232a20" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#000000" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
   });
   const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number');
   if(houses.length){
