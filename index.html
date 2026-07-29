@@ -1258,36 +1258,41 @@ function astroWheelSVG(astro){
     const [x1,y1]=toXY(d,R_HOUSE_IN||0), [x2,y2]=toXY(d,R_OUT);
     svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#333" stroke-width="2.2" stroke-dasharray="6,3"/>`;
   }
+  // Glyphs stay at their own true degree always (never nudged sideways into
+  // a neighboring wedge, no pointer line). Font size stays fixed and legible
+  // -- crowding is resolved by radial LANES instead of shrinking text: every
+  // glyph starts at the same comfortable resting radius, and only glyphs
+  // that would actually collide (with each other OR with an unrelated
+  // nearby planet -- e.g. Mercury and the Sun are never far apart on any
+  // real chart) get pushed out one lane further, spilling outward into the
+  // sign-ring band rather than becoming too small to read.
+  const GLYPH_FONT=26;
+  const LANE_GAP=GLYPH_FONT*1.45; // measured glyph diagonal + margin -- two glyphs whose radii differ by this much can never overlap, at any angle
+  const BASE_R=(R_STACK_MAX+R_STACK_MIN)/2;
+  function angDist(a,b){ const d=Math.abs(a-b)%360; return d>180?360-d:d; }
   const sorted=[...planets].sort((a,b)=>a.absoluteDegrees-b.absoluteDegrees);
-  const groups=[];
-  sorted.forEach(p=>{
-    const last=groups[groups.length-1];
-    if(last&&(p.absoluteDegrees-last[last.length-1].absoluteDegrees)<=8)last.push(p);else groups.push([p]);
+  const lanes=[];
+  const placements=sorted.map(p=>{
+    let k=0;
+    while(k<24){
+      if(!lanes[k])lanes[k]=[];
+      const r=BASE_R+k*LANE_GAP;
+      const needDeg=(LANE_GAP/r)*(180/Math.PI);
+      if(!lanes[k].some(deg=>angDist(deg,p.absoluteDegrees)<needDeg)){
+        lanes[k].push(p.absoluteDegrees);
+        return {p,r};
+      }
+      k++;
+    }
+    lanes[0].push(p.absoluteDegrees);
+    return {p,r:BASE_R};
   });
-  if(groups.length>1){
-    const first=groups[0], last=groups[groups.length-1];
-    if((first[0].absoluteDegrees+360-last[last.length-1].absoluteDegrees)<=8){groups[0]=last.concat(first);groups.pop();}
-  }
-  groups.forEach(g=>{
-    // stack same-cluster glyphs at their own true degree (never nudged
-    // sideways into a neighboring wedge) -- spread by DISTANCE FROM CENTER
-    // only, so every glyph stays inside its real sign/house wedge with no
-    // pointer line needed to show where it "really" belongs.
-    // Shrink glyph size as the cluster gets bigger, so a real chart with a
-    // large stellium (5+ planets within a few degrees) still fits cleanly
-    // in the same fixed radial band instead of overlapping -- tuned for
-    // "however many planets a real chart throws at it," not just one test.
-    const n=g.length;
-    const band=R_STACK_MAX-R_STACK_MIN;
-    const fontSize=n===1?30:Math.max(9,Math.min(30,band/((n-1)*1.45)));
-    g.forEach((p,idx)=>{
-      const r=n===1?(R_STACK_MAX+R_STACK_MIN)/2:R_STACK_MAX-(idx*(band/(n-1)));
-      const trueDeg=rot(p.absoluteDegrees);
-      const [x,y]=toXY(trueDeg,r);
-      const color=PLANET_COLOR[p.name]||'#333';
-      const glyph=PLANET_GLYPH[p.name]||p.name[0];
-      svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${fontSize.toFixed(1)}" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.6" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
-    });
+  placements.forEach(({p,r})=>{
+    const trueDeg=rot(p.absoluteDegrees);
+    const [x,y]=toXY(trueDeg,r);
+    const color=PLANET_COLOR[p.name]||'#333';
+    const glyph=PLANET_GLYPH[p.name]||p.name[0];
+    svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${GLYPH_FONT}" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.6" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
   });
   svg+='</svg>';
   return svg;
