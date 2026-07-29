@@ -1206,7 +1206,10 @@ function astroWheelSVG(astro){
     const [x1,y1]=toXY(d0,R_SIGN_IN), [x2,y2]=toXY(d0,R_OUT);
     svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#999" stroke-width="1.6"/>`;
     const [gx,gy]=toXY(d0+15,R_LABEL);
-    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#232a20" font-family="'Barlow Condensed',sans-serif">${s.toUpperCase()}</text>`;
+    // rotate each label to run along its own radius, facing the center --
+    // like spokes, instead of sitting flat/horizontal regardless of position
+    const faceAngle=Math.atan2(gy-CY,gx-CX)*180/Math.PI+180;
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#232a20" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
   });
   const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number');
   if(houses.length){
