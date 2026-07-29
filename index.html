@@ -1190,12 +1190,15 @@ function astroWheelSVG(astro){
   const NS='http://www.w3.org/2000/svg';
   // sized so full sign names have real room at the outer edge, not squeezed
   // 3-letter abbreviations -- legible without straining was the actual ask
-  const CX=220,CY=220,R_OUT=160,R_SIGN_IN=122,R_HOUSE_IN=35,R_PLANET_BASE=106,R_LABEL=182;
+  // wheel sized so the sign ring itself is wide enough for full spelled-out
+  // names at a legible size, at the widest word ("SAGITTARIUS") -- labels
+  // sit inside the ring near its outer edge, not pushed outside the circle
+  const CX=230,CY=230,R_OUT=195,R_SIGN_IN=145,R_HOUSE_IN=40,R_PLANET_BASE=125,R_LABEL=183;
   const sunDeg=(planets.find(p=>p.name==='Sun')||planets[0]).absoluteDegrees;
   const ROT=(90-sunDeg+360)%360;
   const rot=d=>(d+ROT)%360;
   const toXY=(deg,r)=>{const rad=(180-deg)*Math.PI/180;return [CX+r*Math.cos(rad),CY-r*Math.sin(rad)];};
-  let svg=`<svg viewBox="0 0 440 440" style="display:block;width:100%;height:100%;">`;
+  let svg=`<svg viewBox="0 0 460 460" style="display:block;width:100%;height:100%;">`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#999" stroke-width="2"/>`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#ccc" stroke-width="1.4"/>`;
   SIGN_ORDER.forEach((s,i)=>{
@@ -1203,7 +1206,7 @@ function astroWheelSVG(astro){
     const [x1,y1]=toXY(d0,R_SIGN_IN), [x2,y2]=toXY(d0,R_OUT);
     svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#999" stroke-width="1.6"/>`;
     const [gx,gy]=toXY(d0+15,R_LABEL);
-    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="800" fill="#232a20" font-family="'Barlow Condensed',sans-serif">${s.toUpperCase()}</text>`;
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#232a20" font-family="'Barlow Condensed',sans-serif">${s.toUpperCase()}</text>`;
   });
   const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number');
   if(houses.length){
