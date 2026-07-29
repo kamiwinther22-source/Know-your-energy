@@ -243,7 +243,7 @@ body{
   color:var(--card-text);height:100%;display:flex;flex-direction:column;}
 .dph{padding:0.3rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:800;}
 .dplist{flex:1;overflow:hidden;}
-.dpr{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:baseline;gap:0.1rem 0.4rem;padding:0.1rem 0.4rem;font-size:0.5rem;}
+.dpr{display:flex;flex-direction:column;gap:0.02rem;padding:0.1rem 0.4rem;font-size:0.5rem;}
 .dprl{font-family:'Barlow Condensed',sans-serif;color:var(--card-dim);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.01em;font-weight:700;flex-shrink:0;}
 .glyph{color:var(--card-accent);font-size:0.6rem;font-weight:400;text-transform:none;}
 .dprv{font-family:'Barlow Condensed',sans-serif;color:var(--card-text);font-style:normal;font-weight:800;text-align:left;}
@@ -264,10 +264,11 @@ body{
 .dpdef p:last-child{margin-bottom:0;}
 .dpdef p:first-child{font-weight:700;font-style:normal;}
 .wheel-wrap{display:none;}
-.card-expand-body .wheel-wrap{display:block;width:60%;max-width:260px;margin:0 auto 0.8rem;}
+.card-expand-body .wheel-wrap{display:block;width:92%;max-width:400px;margin:0 auto 0.8rem;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
-.report-preview{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.48rem;font-style:italic;color:var(--card-mid);text-align:center;}
+.report-preview{padding:0 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;font-style:normal;color:var(--card-text);text-align:center;}
+.report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
@@ -1187,20 +1188,22 @@ function astroWheelSVG(astro){
   const planets=(astro.planets||[]).filter(p=>p.name&&typeof p.absoluteDegrees==='number');
   if(!planets.length)return '';
   const NS='http://www.w3.org/2000/svg';
-  const CX=150,CY=150,R_OUT=140,R_SIGN_IN=108,R_HOUSE_IN=36,R_PLANET_BASE=100;
+  // sized so full sign names have real room at the outer edge, not squeezed
+  // 3-letter abbreviations -- legible without straining was the actual ask
+  const CX=220,CY=220,R_OUT=160,R_SIGN_IN=122,R_HOUSE_IN=35,R_PLANET_BASE=106,R_LABEL=182;
   const sunDeg=(planets.find(p=>p.name==='Sun')||planets[0]).absoluteDegrees;
   const ROT=(90-sunDeg+360)%360;
   const rot=d=>(d+ROT)%360;
   const toXY=(deg,r)=>{const rad=(180-deg)*Math.PI/180;return [CX+r*Math.cos(rad),CY-r*Math.sin(rad)];};
-  let svg=`<svg viewBox="0 0 300 300" style="display:block;width:100%;height:100%;">`;
+  let svg=`<svg viewBox="0 0 440 440" style="display:block;width:100%;height:100%;">`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#999" stroke-width="2"/>`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#ccc" stroke-width="1.4"/>`;
   SIGN_ORDER.forEach((s,i)=>{
     const d0=rot(i*30);
     const [x1,y1]=toXY(d0,R_SIGN_IN), [x2,y2]=toXY(d0,R_OUT);
     svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#999" stroke-width="1.6"/>`;
-    const [gx,gy]=toXY(d0+15,R_OUT-9);
-    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="800" fill="#333" font-family="'Barlow Condensed',sans-serif">${s.slice(0,3).toUpperCase()}</text>`;
+    const [gx,gy]=toXY(d0+15,R_LABEL);
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="800" fill="#232a20" font-family="'Barlow Condensed',sans-serif">${s.toUpperCase()}</text>`;
   });
   const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number');
   if(houses.length){
@@ -1230,10 +1233,16 @@ function astroWheelSVG(astro){
     g.forEach((p,idx)=>{
       const tier=idx%2, pairIndex=Math.floor(idx/2);
       const nudge=pairIndex*5*(tier===0?1:-1);
-      const r=R_PLANET_BASE-tier*30;
-      const [x,y]=toXY(rot(p.absoluteDegrees)+nudge,r);
+      const r=R_PLANET_BASE-tier*28;
+      const glyphDeg=rot(p.absoluteDegrees)+nudge;
+      const [x,y]=toXY(glyphDeg,r);
       const color=PLANET_COLOR[p.name]||'#333';
       const glyph=PLANET_GLYPH[p.name]||p.name[0];
+      // thin guide line from the glyph out to its exact degree on the sign
+      // ring, so it's unambiguous which position on the wheel it belongs to
+      const [gx1,gy1]=toXY(glyphDeg,r+11);
+      const [gx2,gy2]=toXY(rot(p.absoluteDegrees),R_SIGN_IN);
+      svg+=`<line x1="${gx1.toFixed(1)}" y1="${gy1.toFixed(1)}" x2="${gx2.toFixed(1)}" y2="${gy2.toFixed(1)}" stroke="${color}" stroke-width="1" stroke-dasharray="2,2" opacity="0.6"/>`;
       svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="20" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.5" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
     });
   });
@@ -1435,7 +1444,7 @@ function reportSlot(names,report,reportError){
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml;
   const idx=cardRegistry.push({title,rows:fullRows})-1;
-  return `<div class="panel report" style="left:${x}px;top:${y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">Tap to read your full reading</p></div></div></div></div>`;
+  return `<div class="panel report" style="left:${x}px;top:${y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
 }
 
 function render(p1,p2,r,reportErr){
