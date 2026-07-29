@@ -263,9 +263,8 @@ body{
 .dpsec:first-child{margin-top:0;}
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
 .dprow:nth-child(even){background:var(--card-stripe-even);}
-.dprl.term{cursor:pointer;color:var(--card-dim);font-weight:700;border-bottom:none;position:relative;padding-right:0.62rem;}
-.dprl.term::after{content:'\24d8';position:absolute;right:0;top:-0.05rem;font-size:0.58rem;font-weight:400;opacity:0.6;color:var(--card-accent);}
-.dprl.term:active{opacity:0.6;}
+.dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
+.dprl.term:hover{color:var(--card-accent);}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
@@ -278,25 +277,15 @@ body{
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
 
-/* Small silver sparkling buttons that sit in the empty side-slots next to
-   the middle-row report card, instead of a big bar below the whole grid. */
-.side-btn{
-  position:absolute;overflow:hidden;cursor:pointer;border-radius:9px;
-  display:flex;align-items:center;justify-content:center;text-align:center;
-  font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.03em;text-transform:uppercase;
-  padding:0.4rem;color:#232a20;
-  background:
-    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 55%),
-    linear-gradient(150deg, #c4cac7 0%, #c9c9c9 42%, #9aa0a3 72%, #727579 100%);
-  border:1px solid #5c6469;
-  box-shadow:0 3px 8px -3px rgba(20,30,25,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
+.btn-row{position:relative;width:100%;display:flex;justify-content:center;gap:0.7rem;margin-top:1.2rem;}
+.rbtn{
+  font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;
+  padding:0.6rem 1rem;border-radius:7px;text-align:center;cursor:pointer;
+  background:linear-gradient(160deg,#eef3f9 0%,#c7d3e0 100%);border:1.2px solid #7a8fa6;color:#193866;
+  box-shadow:0 3px 8px -3px rgba(30,45,60,0.35);
 }
-.side-btn:active{transform:translateY(1px);}
-.side-btn .glint{position:absolute;pointer-events:none;animation:sideGlint 2.6s ease-in-out infinite;}
-.side-btn .glint.g2{animation-delay:0.9s;}
-.side-btn .glint.g3{animation-delay:1.7s;}
-@keyframes sideGlint{0%,100%{opacity:0.15;}50%{opacity:1;}}
-@media(prefers-reduced-motion:reduce){.side-btn .glint{animation:none;opacity:0.7;}}
+.rbtn.primary{background:linear-gradient(160deg,#4d7fd1 0%,#306AC0 45%,#1f3f70 100%);border-color:#1f3f70;color:#ffffff;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.6),0 4px 10px -3px rgba(30,45,60,0.5);}
 
 /* ---------- tap-to-expand modal ---------- */
 .card-expand{display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;background:#fdf8ec;color:#000000;padding:1.3rem 1.3rem 3rem;font-size:16px;}
@@ -318,7 +307,7 @@ body{
 .card-expand-body .report-body{font-size:1rem;line-height:1.65;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:1rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
 @media print{
-  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.side-btn{display:none!important;}
+  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.btn-row{display:none!important;}
   body{background:#fff!important;}
   .panel{box-shadow:none!important;border:1px solid #999!important;background:#fff!important;}
   .dp{--card-text:#000!important;--card-accent:#193866!important;--card-stripe-odd:transparent!important;}
@@ -450,6 +439,10 @@ body{
   <div class="ttl">Know Your Energy</div>
   <div class="sub">Your Reading</div>
   <div class="stage-outer" id="stageOuter"><div class="stage" id="stage"></div></div>
+  <div class="btn-row">
+    <div class="rbtn" onclick="resetToForm()">Run Another Reading</div>
+    <div class="rbtn primary" onclick="window.print()">Save / Print Reading</div>
+  </div>
 </div>
 
 <div class="card-expand" id="cardExpand">
@@ -1262,19 +1255,6 @@ function blankPanel(colIndex,rowIndex){
   const p=panelPos(colIndex,rowIndex);
   return `<div class="panel blank" style="left:${p.x}px;top:${p.y}px;"></div>`;
 }
-const GLINT_SVG='<svg viewBox="0 0 24 24" style="display:block;width:100%;height:100%;"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#ffffff"/></svg>';
-function sideButton(colIndex,label,onclick){
-  // smaller than a full panel, vertically centered in the middle-row slot
-  const p=panelPos(colIndex,1);
-  const btnH=110;
-  const y=p.y+(PH-btnH)/2;
-  return `<div class="side-btn" style="left:${p.x}px;top:${y}px;width:${PW}px;height:${btnH}px;" onclick="${onclick}">
-    <div class="glint" style="width:9px;height:9px;top:8px;left:8px;">${GLINT_SVG}</div>
-    <div class="glint g2" style="width:6px;height:6px;bottom:10px;right:10px;">${GLINT_SVG}</div>
-    <div class="glint g3" style="width:5px;height:5px;top:50%;right:6px;">${GLINT_SVG}</div>
-    <span>${label}</span>
-  </div>`;
-}
 function reportSlot(n1,report,reportError){
   const p=panelPos(1,1); // centered in the middle row
   const x=p.x, y=p.y;
@@ -1310,8 +1290,6 @@ function render(p1,p2,r,reportErr){
   }else{
     h+=blankPanel(0,2)+blankPanel(1,2)+blankPanel(2,2);
   }
-  h+=sideButton(0,'Run Another Reading','resetToForm()');
-  h+=sideButton(2,'Save / Print Reading','window.print()');
   const stage=document.getElementById('stage');
   stage.innerHTML=h;
   document.getElementById('loading').style.display='none';
