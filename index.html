@@ -263,8 +263,9 @@ body{
 .dpsec:first-child{margin-top:0;}
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
 .dprow:nth-child(even){background:var(--card-stripe-even);}
-.dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
-.dprl.term:hover{color:var(--card-accent);}
+.dprl.term{cursor:pointer;color:var(--card-accent)!important;font-weight:800;border-bottom:none;position:relative;padding-right:0.62rem;}
+.dprl.term::after{content:'\24d8';position:absolute;right:0;top:-0.05rem;font-size:0.62rem;font-weight:400;opacity:0.85;}
+.dprl.term:active{opacity:0.6;}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
