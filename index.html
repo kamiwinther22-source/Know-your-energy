@@ -1207,7 +1207,7 @@ function astroWheelSVG(astro){
   // wheel sized so the sign ring itself is wide enough for full spelled-out
   // names at a legible size, at the widest word ("SAGITTARIUS") -- labels
   // sit inside the ring near its outer edge, not pushed outside the circle
-  const CX=230,CY=230,R_OUT=195,R_SIGN_IN=145,R_HOUSE_IN=40,R_PLANET_BASE=125,R_LABEL=183;
+  const CX=230,CY=230,R_OUT=195,R_SIGN_IN=145,R_HOUSE_IN=18,R_HOUSE_LABEL=30,R_STACK_MAX=140,R_STACK_MIN=35,R_LABEL=183;
   const sunDeg=(planets.find(p=>p.name==='Sun')||planets[0]).absoluteDegrees;
   const ROT=(90-sunDeg+360)%360;
   const rot=d=>(d+ROT)%360;
@@ -1231,12 +1231,20 @@ function astroWheelSVG(astro){
     if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
     svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#000000" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
   });
-  const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number');
+  const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number').sort((a,b)=>a.absoluteDegrees-b.absoluteDegrees);
   if(houses.length){
-    houses.forEach(h=>{
+    houses.forEach((h,i)=>{
       const d=rot(h.absoluteDegrees);
       const [x1,y1]=toXY(d,R_HOUSE_IN), [x2,y2]=toXY(d,R_SIGN_IN);
       svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#306AC0" stroke-width="1" opacity="0.6"/>`;
+      // house number, centered in the small band just outside the inner
+      // circle -- real house cusps aren't evenly spaced, so this midpoint
+      // is computed per-house rather than assumed
+      const next=houses[(i+1)%houses.length];
+      const span=((next.absoluteDegrees-h.absoluteDegrees)+360)%360;
+      const midDeg=rot(h.absoluteDegrees+span/2);
+      const [hx,hy]=toXY(midDeg,R_HOUSE_LABEL);
+      svg+=`<text x="${hx.toFixed(1)}" y="${(hy+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="700" fill="#306AC0" font-family="'Barlow Condensed',sans-serif">${h.house}</text>`;
     });
     svg+=`<circle cx="${CX}" cy="${CY}" r="${R_HOUSE_IN}" fill="none" stroke="#306AC0" stroke-width="1.4" opacity="0.6"/>`;
   }
@@ -1256,19 +1264,17 @@ function astroWheelSVG(astro){
     if((first[0].absoluteDegrees+360-last[last.length-1].absoluteDegrees)<=8){groups[0]=last.concat(first);groups.pop();}
   }
   groups.forEach(g=>{
+    // stack same-cluster glyphs at their own true degree (never nudged
+    // sideways into a neighboring wedge) -- spread by DISTANCE FROM CENTER
+    // only, so every glyph stays inside its real sign/house wedge with no
+    // pointer line needed to show where it "really" belongs
+    const n=g.length;
     g.forEach((p,idx)=>{
-      const tier=idx%2, pairIndex=Math.floor(idx/2);
-      const nudge=pairIndex*38*(tier===0?1:-1);
-      const r=R_PLANET_BASE-tier*44;
-      const glyphDeg=rot(p.absoluteDegrees)+nudge;
-      const [x,y]=toXY(glyphDeg,r);
+      const r=n===1?(R_STACK_MAX+R_STACK_MIN)/2:R_STACK_MAX-(idx*(R_STACK_MAX-R_STACK_MIN)/(n-1));
+      const trueDeg=rot(p.absoluteDegrees);
+      const [x,y]=toXY(trueDeg,r);
       const color=PLANET_COLOR[p.name]||'#333';
       const glyph=PLANET_GLYPH[p.name]||p.name[0];
-      // thin guide line from the glyph out to its exact degree on the sign
-      // ring, so it's unambiguous which position on the wheel it belongs to
-      const [gx1,gy1]=toXY(glyphDeg,r+11);
-      const [gx2,gy2]=toXY(rot(p.absoluteDegrees),R_SIGN_IN);
-      svg+=`<line x1="${gx1.toFixed(1)}" y1="${gy1.toFixed(1)}" x2="${gx2.toFixed(1)}" y2="${gy2.toFixed(1)}" stroke="${color}" stroke-width="1" stroke-dasharray="2,2" opacity="0.6"/>`;
       svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="30" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.6" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
     });
   });
