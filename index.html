@@ -264,7 +264,7 @@ body{
 .dpdef p:last-child{margin-bottom:0;}
 .dpdef p:first-child{font-weight:700;font-style:normal;}
 .wheel-wrap{display:none;}
-.card-expand-body .wheel-wrap{display:block;width:100%;max-width:500px;margin:0 auto 0.8rem;}
+.card-expand-body .wheel-wrap{display:flex;justify-content:center;width:calc(100% + 2.6rem);max-width:600px;margin:0 -1.3rem 0.8rem;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
 .report-preview{padding:0 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;font-style:normal;color:var(--card-text);text-align:center;}
@@ -1258,8 +1258,8 @@ function astroWheelSVG(astro){
   groups.forEach(g=>{
     g.forEach((p,idx)=>{
       const tier=idx%2, pairIndex=Math.floor(idx/2);
-      const nudge=pairIndex*5*(tier===0?1:-1);
-      const r=R_PLANET_BASE-tier*28;
+      const nudge=pairIndex*38*(tier===0?1:-1);
+      const r=R_PLANET_BASE-tier*44;
       const glyphDeg=rot(p.absoluteDegrees)+nudge;
       const [x,y]=toXY(glyphDeg,r);
       const color=PLANET_COLOR[p.name]||'#333';
@@ -1269,7 +1269,7 @@ function astroWheelSVG(astro){
       const [gx1,gy1]=toXY(glyphDeg,r+11);
       const [gx2,gy2]=toXY(rot(p.absoluteDegrees),R_SIGN_IN);
       svg+=`<line x1="${gx1.toFixed(1)}" y1="${gy1.toFixed(1)}" x2="${gx2.toFixed(1)}" y2="${gy2.toFixed(1)}" stroke="${color}" stroke-width="1" stroke-dasharray="2,2" opacity="0.6"/>`;
-      svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="20" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.5" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
+      svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="30" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.6" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
     });
   });
   svg+='</svg>';
