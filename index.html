@@ -202,6 +202,116 @@ body{
 @media(prefers-reduced-motion:reduce){.gen-btn::after{animation:none;display:none;}}
 .tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#5a6350;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
+.err{display:none;font-size:0.7rem;color:#a01818;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(160,24,24,0.08);border-radius:5px;border:1px solid rgba(160,24,24,0.25);font-weight:600;}
+
+/* ---------- loading state ---------- */
+.loading{display:none;text-align:center;padding:4rem 1rem;}
+.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#193866;}
+
+/* ---------- results page: V-shape panels, same brushed-metal technique
+   verified against the real jewel-tray reference photo (dimensions,
+   texture, edge glint all measured from it, not guessed) ---------- */
+.results-wrap{display:none;padding:1.6rem 1rem 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
+.results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:transparent;
+  background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  text-align:center;margin-bottom:0.3rem;}
+.results-wrap .sub{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;
+  font-weight:700;color:#3a4232;text-align:center;margin-bottom:1.6rem;}
+.stage-outer{width:100%;overflow:visible;}
+.stage{position:relative;width:460px;height:790px;transform-origin:top left;}
+.panel{
+  position:absolute;width:80px;height:168px;border-radius:10px;overflow:hidden;cursor:pointer;
+  background-image:
+    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(150deg, #c4cac7 0%, #c9c9c9 42%, #9aa0a3 72%, #727579 100%);
+  border:1px solid #5c6469;
+  box-shadow:
+    0 4px 10px -4px rgba(20,30,25,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    inset 3px 0 5px -2px rgba(255,255,255,0.95),
+    inset -2px 0 4px -2px rgba(40,45,45,0.35);
+  display:flex;flex-direction:column;
+}
+.panel.report{
+  border-color:#1f3f70;border-width:1.4px;
+  background-image:
+    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(150deg, #dbe6f3 0%, #a9c2e0 42%, #6f93c2 72%, #3f5c86 100%);
+  box-shadow:
+    0 4px 10px -4px rgba(20,30,25,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    inset 3px 0 5px -2px rgba(255,255,255,0.95),
+    inset -2px 0 4px -2px rgba(20,30,50,0.35);
+}
+.panel.blank{cursor:default;}
+
+/* ---------- panel content: dark text on the light brushed-metal panel,
+   brand blue for accents instead of the old gold ---------- */
+.dp{--card-text:#000000;--card-dim:#000000;--card-mid:#232a20;--card-accent:#193866;
+  --card-a1:rgba(10,21,48,0.28);--card-a2:rgba(10,21,48,0.15);--card-a3:rgba(255,255,255,0.4);--card-a4:rgba(48,106,192,0.12);
+  --card-stripe-odd:rgba(255,255,255,0.22);--card-stripe-even:transparent;
+  color:var(--card-text);height:100%;display:flex;flex-direction:column;}
+.dph{padding:0.3rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:800;}
+.dplist{flex:1;overflow:hidden;}
+.dpr{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:baseline;gap:0.1rem 0.4rem;padding:0.1rem 0.4rem;font-size:0.5rem;}
+.dprl{font-family:'Barlow Condensed',sans-serif;color:var(--card-dim);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.01em;font-weight:700;flex-shrink:0;}
+.glyph{color:var(--card-accent);font-size:0.6rem;font-weight:400;text-transform:none;}
+.dprv{font-family:'Barlow Condensed',sans-serif;color:var(--card-text);font-style:normal;font-weight:800;text-align:left;}
+.dprv.pend{color:var(--card-accent);font-size:0.44rem;}
+.dpsec{padding:0.2rem 0.4rem 0.05rem;font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--card-accent);font-weight:800;margin-top:0.05rem;}
+.dpsec:first-child{margin-top:0;}
+.dprow:nth-child(odd){background:var(--card-stripe-odd);}
+.dprow:nth-child(even){background:var(--card-stripe-even);}
+.dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
+.dprl.term:hover{color:var(--card-accent);}
+.dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
+.dpdef[hidden]{display:none;}
+.report-print-full{display:none;}
+.report-preview{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.48rem;font-style:italic;color:var(--card-mid);text-align:center;}
+.report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
+.report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
+.gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
+.gate-chip{border:1px solid var(--card-a1);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.48rem;padding:0.14rem 0;cursor:pointer;text-align:center;background:var(--card-stripe-odd);}
+.gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);}
+.gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
+.gate-def-print{display:none;}
+
+.btn-row{position:relative;width:100%;display:flex;justify-content:center;gap:0.7rem;margin-top:1.2rem;}
+.rbtn{
+  font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;
+  padding:0.6rem 1rem;border-radius:7px;text-align:center;cursor:pointer;
+  background:linear-gradient(160deg,#eef3f9 0%,#c7d3e0 100%);border:1.2px solid #7a8fa6;color:#193866;
+  box-shadow:0 3px 8px -3px rgba(30,45,60,0.35);
+}
+.rbtn.primary{background:linear-gradient(160deg,#4d7fd1 0%,#306AC0 45%,#1f3f70 100%);border-color:#1f3f70;color:#ffffff;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.6),0 4px 10px -3px rgba(30,45,60,0.5);}
+
+/* ---------- tap-to-expand modal ---------- */
+.card-expand{display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;background:#fdf8ec;color:#000000;padding:1.3rem 1.3rem 3rem;font-size:16px;}
+.card-expand.open{display:block;}
+.card-expand-close{position:sticky;top:0;float:right;background:none;border:none;font-size:1.6rem;color:#000000;cursor:pointer;padding:0.3rem;line-height:1;}
+.card-expand-title{max-width:760px;margin:0 auto 1rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:2rem;letter-spacing:0.02em;text-transform:uppercase;color:#193866;clear:both;}
+.card-expand-body{max-width:760px;margin:0 auto;}
+.card-expand-body .dplist{overflow:visible;}
+.card-expand-body .dph{font-size:1.2rem;padding:0.55rem 0.3rem;}
+.card-expand-body .dpr{font-size:1.7rem;padding:0.5rem 0.3rem;gap:0.2rem 1.4rem;}
+.card-expand-body .dprl{font-size:1.1rem;}
+.card-expand-body .glyph{font-size:2rem;}
+.card-expand-body .dprv.pend{font-size:1.4rem;}
+.card-expand-body .dpsec{font-size:1.05rem;padding:0.45rem 0.3rem 0.15rem;}
+.card-expand-body .dpdef{font-size:1.1rem;line-height:1.45;padding:0 0.3rem 0.5rem;}
+.card-expand-body .gates-grid{gap:0.6rem;padding:0.3rem 0.3rem 0.5rem;}
+.card-expand-body .gate-chip{font-size:1.4rem;padding:0.5rem 0;}
+.card-expand-body .gate-def{font-size:1.1rem;line-height:1.45;padding:0.5rem 0.8rem;margin:0 0.3rem 0.5rem;}
+.card-expand-body .report-body{font-size:1rem;line-height:1.65;padding:0 0.3rem;}
+.card-expand-body .report-sig{font-size:1rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
+@media print{
+  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.btn-row{display:none!important;}
+  body{background:#fff!important;}
+  .panel{box-shadow:none!important;border:1px solid #999!important;background:#fff!important;}
+  .dp{--card-text:#000!important;--card-accent:#193866!important;--card-stripe-odd:transparent!important;}
+}
 </style>
 </head>
 <body>
@@ -254,69 +364,91 @@ body{
         <div class="f">
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
           <div class="row3">
-            <div><label>First</label><div class="line-field"><input placeholder="First"></div></div>
-            <div><label>Mid</label><div class="line-field"><input placeholder="Mid"></div></div>
-            <div><label>Last</label><div class="line-field"><input placeholder="Last"></div></div>
+            <div><label>First</label><div class="line-field"><input id="p1f" placeholder="First"></div></div>
+            <div><label>Mid</label><div class="line-field"><input id="p1m" placeholder="Mid"></div></div>
+            <div><label>Last</label><div class="line-field"><input id="p1l" placeholder="Last"></div></div>
           </div>
         </div>
         <div class="f">
           <label>Date of Birth</label>
-          <div class="line-field"><input placeholder="MM/DD/YYYY"></div>
+          <div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
         </div>
         <div class="f">
           <label>Birth Time <span class="opt-note">if known</span></label>
           <div class="row-ampm">
-            <div class="line-field"><input placeholder="HH:MM"></div>
+            <div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)"></div>
             <div class="line-field">
-              <select><option>AM</option><option>PM</option></select>
+              <select id="p1ap"><option value="AM">AM</option><option value="PM">PM</option></select>
             </div>
           </div>
         </div>
         <div class="f">
           <label>Birthplace <span class="opt-note">if known</span></label>
-          <div class="line-field"><input placeholder="City, State, Country"></div>
+          <div class="line-field"><input id="p1loc" placeholder="City, State, Country"></div>
         </div>
 
         <div id="p2Section" style="display:none;">
           <div class="f">
             <label class="section-lbl">Person Two</label>
             <div class="row3">
-              <div><label>First</label><div class="line-field"><input placeholder="First"></div></div>
-              <div><label>Mid</label><div class="line-field"><input placeholder="Mid"></div></div>
-              <div><label>Last</label><div class="line-field"><input placeholder="Last"></div></div>
+              <div><label>First</label><div class="line-field"><input id="p2f" placeholder="First"></div></div>
+              <div><label>Mid</label><div class="line-field"><input id="p2m" placeholder="Mid"></div></div>
+              <div><label>Last</label><div class="line-field"><input id="p2l" placeholder="Last"></div></div>
             </div>
           </div>
           <div class="f">
             <label>Date of Birth</label>
-            <div class="line-field"><input placeholder="MM/DD/YYYY"></div>
+            <div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
           </div>
           <div class="f">
             <label>Birth Time <span class="opt-note">if known</span></label>
             <div class="row-ampm">
-              <div class="line-field"><input placeholder="HH:MM"></div>
+              <div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)"></div>
               <div class="line-field">
-                <select><option>AM</option><option>PM</option></select>
+                <select id="p2ap"><option value="AM">AM</option><option value="PM">PM</option></select>
               </div>
             </div>
           </div>
           <div class="f">
             <label>Birthplace <span class="opt-note">if known</span></label>
-            <div class="line-field"><input placeholder="City, State, Country"></div>
+            <div class="line-field"><input id="p2loc" placeholder="City, State, Country"></div>
           </div>
         </div>
 
         <div class="f">
           <label>Email Address</label>
-          <div class="line-field"><input placeholder="your.email@example.com"></div>
+          <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com"></div>
         </div>
       </div>
 
+      <div class="err" id="err"></div>
+
       <div class="submit-wrap">
-        <span class="glow-ring"><button type="button" class="gen-btn">Generate</button></span>
+        <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
       </div>
     </div>
   </div>
 
+</div>
+
+<div class="loading" id="loading">
+  <div class="loading-txt">Reading your chart&hellip;</div>
+</div>
+
+<div class="results-wrap" id="resultsWrap">
+  <div class="ttl">Know Your Energy</div>
+  <div class="sub">Your Reading</div>
+  <div class="stage-outer" id="stageOuter"><div class="stage" id="stage"></div></div>
+  <div class="btn-row">
+    <div class="rbtn" onclick="resetToForm()">Run Another Reading</div>
+    <div class="rbtn primary" onclick="window.print()">Save / Print Reading</div>
+  </div>
+</div>
+
+<div class="card-expand" id="cardExpand">
+  <button type="button" class="card-expand-close" id="cardExpandClose">&#10005;</button>
+  <div class="card-expand-title" id="cardExpandTitle"></div>
+  <div class="card-expand-body" id="cardExpandBody"></div>
 </div>
 
 <script>
@@ -488,10 +620,585 @@ togPill.addEventListener('keydown', e=>{
 lblInd.addEventListener('click', ()=>setMode(false));
 lblRel.addEventListener('click', ()=>setMode(true));
 
+const GLOSSARY={
+  sun:"Your core identity — how you express your basic sense of self.",
+  moon:"Your emotional world and instinctive reactions; what makes you feel safe.",
+  mercury:"How you think, process information, and communicate.",
+  venus:"What you value, how you love, and what you find beautiful.",
+  mars:"How you take action, assert yourself, and pursue what you want.",
+  jupiter:"Where you seek growth, meaning, and expansion.",
+  saturn:"Where you meet structure, discipline, and long-term lessons.",
+  uranus:"Where you seek freedom, disruption, and individuality.",
+  neptune:"Where you dream, idealize, and sometimes lose clarity.",
+  pluto:"Where you experience deep transformation and power dynamics.",
+  ascendant:"Your outward first impression — the mask you present before people know you.",
+  midheaven:"Your public reputation, career direction, and life's aim.",
+
+  lifepath:"Your overall life direction and central lesson.",
+  expression:"Your natural talents and how you express them in the world.",
+  soulurge:"Your inner motivation — what your heart truly wants.",
+  personality:"How others perceive you before they know you well.",
+  birthday:"A special natural talent tied to the day you were born.",
+  attitude:"Your instinctive first reaction to new situations.",
+  balance:"How you regain composure and cope during hard times.",
+  maturity:"Who you're growing into from mid-life onward.",
+  personalyear:"The overarching theme of your current year-long cycle.",
+  personalmonth:"The theme of the current month within this year's cycle.",
+  personalday:"The theme of today within this month's cycle.",
+  essence:"The vibration you're living through at your current age.",
+  pinnacle:"A multi-year chapter of life and the opportunity it offers.",
+  challenge:"A recurring obstacle to work through during that chapter.",
+  karmiclessons:"Traits missing from your name that you're here to develop.",
+  karmicdebt:"A number marking a lesson carried over for you to resolve.",
+
+  hdtype:"Your energetic strategy for engaging with the world.",
+  hdprofile:"The role your personality plays out — your life's ‘costume’.",
+  hdauthority:"How you're energetically built to make sound decisions.",
+  hdcross:"Your life's overarching theme and sense of purpose."
+};
+
+const ASTRO_DEFS={
+  sun:{
+    Aries:`With your Sun in Aries, your core identity is built around initiative — you're wired to go first, decide fast, and meet life head-on rather than wait to be invited. That directness makes you a natural starter and a genuine leader in a crisis, though patience with slower processes (and slower people) doesn't come easily. The growth edge is learning that not everything needs to be won or finished today.`,
+    Taurus:`With your Sun in Taurus, your sense of self is rooted in steadiness — you know who you are by what you can rely on: your body, your senses, your word once it's given. That groundedness makes you genuinely dependable and hard to rattle, but it can also make change feel like a threat rather than an option worth considering. Real growth here is staying open to a shift you didn't choose, without losing your footing.`,
+    Gemini:`With your Sun in Gemini, your identity lives in your mind's motion — you know yourself through curiosity, conversation, and the constant gathering of new information and connections. That mental agility makes you quick, witty, and easy to talk to, but it can also leave your sense of self feeling scattered across too many interests to settle into one. The lesson is depth: staying with one thread long enough to actually finish it.`,
+    Cancer:`With your Sun in Cancer, who you are is tied to what you protect — home, family, the people you've let close enough to matter. You lead with feeling before logic, and your instinct to nurture is real, not performative, which is why people trust you with their vulnerable moments. The edge to watch is taking things personally that were never about you, and mistaking withdrawal for self-protection when it's really just avoidance.`,
+    Leo:`With your Sun in Leo, your identity is built to be seen — you carry a warmth and confidence that naturally draws attention, and you do your best work when you're genuinely proud of what you're making. That radiance is real generosity, not vanity, when it's healthy: you want others to shine too. The growth edge is handling the moments no one's watching with the same integrity you bring when they are.`,
+    Virgo:`With your Sun in Virgo, your sense of self is built through usefulness — you know who you are by what you improve, refine, and get genuinely right, and sloppy or careless work bothers you more than it bothers most people. That precision makes you exceptionally good at the details others miss, but the same instinct can turn inward into self-criticism that's far harsher than anything you'd say to someone else. The lesson is letting "good enough" actually be enough sometimes.`,
+    Libra:`With your Sun in Libra, your identity forms in relationship — you know yourself most clearly through how you connect, negotiate, and create fairness between people, and being genuinely alone with no one to weigh your choices against can feel disorienting. That gift for balance makes you a natural diplomat, but it can also mean losing track of your own preference under the weight of everyone else's. The growth edge is deciding what you want before you ask what's fair.`,
+    Scorpio:`With your Sun in Scorpio, your core identity runs deep rather than wide — you experience life at an intensity most people either avoid or can't sustain, and you're drawn instinctively toward whatever's hidden, taboo, or unresolved. That intensity gives you real staying power through crisis and transformation, but it can also make you guarded to a fault, assuming betrayal before it's actually happened. The lesson is choosing when to let your guard down, not just whether to.`,
+    Sagittarius:`With your Sun in Sagittarius, who you are is defined by the horizon — you need room to explore, question, and believe in something bigger than your immediate circumstances, whether that's travel, philosophy, or plain optimism. That expansiveness makes you genuinely inspiring to be around, but it can also make you blunt to the point of carelessness, or restless with anything that asks you to stay put. The growth edge is honoring a commitment even after the initial excitement fades.`,
+    Capricorn:`With your Sun in Capricorn, your identity is built on what you can actually achieve and sustain — you measure yourself by competence and results, often holding yourself to standards well above what anyone else expects of you. That discipline makes you someone people trust with real responsibility early, but it can also mean you delay joy until you've "earned" it, or mistake your accomplishments for your worth. The lesson is letting yourself rest without treating it as failure.`,
+    Aquarius:`With your Sun in Aquarius, your core identity is tied to being distinct — you know yourself through your ideas, your independence, and your instinct to question whatever "everyone just does." That originality makes you a genuine innovator and a loyal friend to causes bigger than yourself, but it can also create real emotional distance, since detachment feels safer to you than dependency. The growth edge is letting people matter to you individually, not just as part of a group you champion.`,
+    Pisces:`With your Sun in Pisces, your sense of self is fluid rather than fixed — you know yourself through empathy, imagination, and a porousness to other people's feelings that can make the line between "you" and "them" genuinely blurry. That sensitivity makes you unusually compassionate and creative, but it can also leave you without a firm center, absorbing moods that aren't yours to carry or escaping into fantasy when reality gets hard. The lesson is building a self solid enough to stay open without dissolving.`
+  },
+  moon:{
+    Aries:`With your Moon in Aries, your emotional instinct is to act first and feel later — anger, excitement, and hurt all move through you fast and visibly, and sitting quietly with a feeling isn't your natural mode. You feel safest when you're free to respond immediately rather than wait, which makes you emotionally honest but sometimes reactive before you've actually processed what happened. The lesson is pausing just long enough to know what you're really feeling before you act on it.`,
+    Taurus:`With your Moon in Taurus, you feel safe through consistency — familiar routines, physical comfort, and people who don't change the terms on you without warning. Your emotional world moves slowly and steadily, which makes you a calming, dependable presence, but it also means you can dig in and refuse to budge long after budging would actually help. The growth edge is letting comfort include some change, instead of treating change itself as the threat.`,
+    Gemini:`With your Moon in Gemini, you process feelings by talking, naming, and turning them over mentally rather than sitting in them — an emotion doesn't feel real to you until you've put words to it. That makes you unusually good at articulating what's going on inside you, but it can also let you intellectualize a feeling right past actually experiencing it. The lesson is letting yourself feel something before you explain it.`,
+    Cancer:`With your Moon in Cancer, this placement is fully at home — your emotional life runs deep, protective, and instinctively tuned to the people you love, and home in some form (a place, a person, a routine) is where you genuinely recharge. That depth of feeling makes you an exceptional caretaker, but it can also mean you take things personally that were never meant as a slight, and retreat into your shell rather than say what's actually bothering you. The growth edge is speaking the hurt instead of just absorbing it.`,
+    Leo:`With your Moon in Leo, you feel safest when you feel genuinely seen and appreciated — your emotional world is warm, generous, and a little dramatic, and being ignored stings you more than most people would admit it stings them. That warmth makes you a loyal, big-hearted presence for people you love, but it can also tip into needing constant reassurance or taking a lack of attention as a personal rejection. The lesson is finding your own sense of okay-ness that doesn't depend on an audience.`,
+    Virgo:`With your Moon in Virgo, you process emotion by trying to fix, organize, or make sense of it — feelings that can't be turned into a useful action tend to make you uneasy, so you'll often clean, plan, or problem-solve your way through distress instead of just sitting with it. That instinct makes you genuinely helpful in a crisis, but it can also mean you criticize yourself for feeling "too much" or not handling things perfectly. The growth edge is letting a feeling just be messy sometimes, with nothing to fix.`,
+    Libra:`With your Moon in Libra, you feel most at ease when there's harmony around you, and real conflict — even necessary conflict — can leave you emotionally unsettled long after it's resolved. You instinctively read the emotional temperature of a room and adjust to keep the peace, which makes you an easy, gracious presence, but it can also mean you swallow your own feelings to avoid rocking the boat. The lesson is naming what's actually bothering you before the resentment builds.`,
+    Scorpio:`With your Moon in Scorpio, your emotional world runs intense and mostly private — you feel things at full volume internally while often showing very little on the surface, and trust has to be earned slowly before you'll let anyone see the depth of what's underneath. That intensity gives you real emotional courage and loyalty once trust is established, but it can also mean you assume the worst about people's motives before they've given you a real reason to. The growth edge is risking vulnerability before you have absolute proof it's safe.`,
+    Sagittarius:`With your Moon in Sagittarius, you feel safest when you have room to move, explore, and believe things are ultimately going to work out — pessimism and confinement both weigh on you emotionally in a way that's hard for more cautious people to understand. That optimism makes you a genuinely uplifting presence, but it can also mean you dodge heavier feelings by staying busy, joking, or physically leaving rather than sitting with discomfort. The lesson is staying present for the hard feeling instead of moving past it too fast.`,
+    Capricorn:`With your Moon in Capricorn, you were likely taught early — by circumstance or example — to manage your own feelings quietly rather than lean on others, and that self-sufficiency runs deep. You feel most secure when you're competent and in control of the situation, which makes you steady under pressure, but it can also mean you struggle to ask for comfort even when you genuinely need it. The growth edge is letting someone help carry something before you're at your absolute limit.`,
+    Aquarius:`With your Moon in Aquarius, you process emotion at a bit of a remove — you'd rather understand a feeling than be swept up in it, which can make you seem cool or detached even when you care deeply. That objectivity makes you a clear-headed friend in other people's crises, but it can also mean you undervalue your own feelings, treating them as inconvenient data rather than something worth attending to. The lesson is letting a feeling be irrational and yours anyway.`,
+    Pisces:`With your Moon in Pisces, you feel everything — your own and, often, everyone else's too, since the emotional boundary between you and the people around you tends to run thin. That empathy makes you an unusually gentle, intuitive presence, but it can also leave you overwhelmed, unsure which feelings actually originate with you, or tempted to escape into distraction rather than face something painful directly. The growth edge is building enough emotional structure to stay open without drowning in it.`
+  },
+  mercury:{
+    Aries:`With your Mercury in Aries, your mind moves fast and says what it thinks the moment it thinks it — you're a quick, decisive communicator who'd rather speak plainly and move on than deliberate endlessly. That directness makes you easy to understand and hard to stall, but it can also come across as blunt or impatient with people who need more time to process. The lesson is pausing half a beat before you speak, especially when you're frustrated.`,
+    Taurus:`With your Mercury in Taurus, you think slowly and deliberately, preferring to fully form an opinion before you voice it — once you've said something, you tend to mean it and stand by it. That steadiness makes your word genuinely trustworthy, but it can also make you slow to update your thinking even when new information calls for it. The growth edge is treating a changed mind as flexibility, not failure.`,
+    Gemini:`With your Mercury in Gemini, this placement is fully at home — your mind is quick, curious, and genuinely happiest juggling several ideas or conversations at once, picking up new information almost effortlessly. That mental agility makes you a natural communicator and connector, but it can also mean you skim the surface of a lot of things rather than go deep into any one of them. The lesson is choosing, sometimes, to finish the thought instead of chasing the next one.`,
+    Cancer:`With your Mercury in Cancer, you think and communicate through feeling as much as logic — your memory for emotional detail is sharp, and you tend to filter information through "how does this affect the people I care about" rather than pure objectivity. That makes you an intuitive, sensitive communicator, but it can also mean a fact lands differently on a given day depending on your mood, or that you take a neutral comment more personally than it was meant. The growth edge is separating what was actually said from how it made you feel.`,
+    Leo:`With your Mercury in Leo, you communicate with real conviction and warmth — you like being genuinely listened to, and your ideas tend to come with confidence and a bit of flair rather than hedging. That certainty makes you persuasive and fun to listen to, but it can also make it hard to hear you were wrong, since it can feel like a blow to your pride rather than just new information. The lesson is separating being right from being respected — you can lose the first without losing the second.`,
+    Virgo:`With your Mercury in Virgo, this placement is fully at home — your mind is precise, detail-oriented, and genuinely skilled at spotting what's off or what could be improved, which makes you an excellent editor, analyst, or problem-solver. That precision is a real gift, but it can also tip into over-criticism, both of your own thinking and of other people's less-polished ideas. The growth edge is knowing when "good enough" is actually the more useful answer than "perfect."`,
+    Libra:`With your Mercury in Libra, you think in terms of balance, weighing every side of an argument before committing to one, which makes you a genuinely fair-minded and diplomatic communicator. That instinct to see all perspectives is valuable, but it can also leave you stuck in indecision, or so focused on keeping the peace that you soften a truth someone actually needed to hear plainly. The lesson is being willing to land on an opinion, even an unpopular one.`,
+    Scorpio:`With your Mercury in Scorpio, your mind digs — you're drawn to what's beneath the surface, uninterested in small talk, and genuinely perceptive about what people aren't saying out loud. That depth makes you an excellent investigator of any kind of truth, but it can also mean you assume hidden motives even when there aren't any, or keep your own thinking guarded until you're certain it's safe to share. The growth edge is voicing a half-formed thought instead of waiting until you're fully certain.`,
+    Sagittarius:`With your Mercury in Sagittarius, you think in big, sweeping ideas rather than fine print, and you communicate with an honesty that can be refreshing or blunt depending on who's on the receiving end. That expansive thinking makes you a natural teacher or storyteller, but it can also mean you overlook the detail that actually mattered, or make a promise your follow-through can't quite match. The lesson is pairing your big-picture instinct with enough patience for the specifics.`,
+    Capricorn:`With your Mercury in Capricorn, your thinking is structured, practical, and outcome-focused — you'd rather communicate a plan than a feeling, and you tend to take ideas seriously only once they've proven useful. That discipline makes your judgment reliable under pressure, but it can also make you dismissive of ideas (or people) that seem impractical on first pass, when they might just need more time. The growth edge is staying curious about possibilities you can't immediately monetize or execute.`,
+    Aquarius:`With your Mercury in Aquarius, your mind runs original and a little ahead of the room — you're drawn to unconventional ideas and genuinely enjoy questioning assumptions everyone else has stopped examining. That originality makes you a real innovator, but it can also make you stubborn about your own theories, or detached enough in conversation that people struggle to feel you're actually engaging with them, not just their ideas. The lesson is letting a conversation be personal, not just intellectual.`,
+    Pisces:`With your Mercury in Pisces, you think in images, impressions, and intuition more than hard logic, which gives you real creative and empathetic insight but can make your thinking hard to pin down or explain in a straight line. That intuitive style makes you unusually good at sensing what's true beneath the words, but it can also mean you avoid a difficult conversation rather than have it directly, or lose a fact in translation between what you meant and what you said. The growth edge is grounding an intuition in something concrete enough for others to follow.`
+  },
+  venus:{
+    Aries:`With your Venus in Aries, you love with the same directness you do everything else — pursuit excites you more than being pursued, and you're drawn to people and experiences with real energy and a bit of a challenge to them. That boldness makes romance and attraction feel alive and immediate, but it can also mean your interest cools once the chase is over, or that you push for what you want in a relationship before checking whether the other person is ready. The lesson is staying engaged after the initial spark fades.`,
+    Taurus:`With your Venus in Taurus, this placement is fully at home — you love through the senses: touch, food, comfort, physical presence, and you build affection slowly but keep it once it's built. That steadiness makes you a deeply loyal partner and a genuine appreciator of beauty and pleasure, but it can also tip into possessiveness or a reluctance to release a relationship, habit, or comfort long past its useful life. The growth edge is loosening your grip without losing your loyalty.`,
+    Gemini:`With your Venus in Gemini, what attracts you most is a good conversation — wit, curiosity, and mental chemistry matter to you as much as physical attraction, and you fall for minds as readily as looks. That intellectual playfulness keeps a relationship interesting, but it can also mean you get restless with a partner who doesn't keep you stimulated, or that you flirt with new ideas and people more than commitment strictly allows. The lesson is finding depth with the person you're already with instead of always the next interesting conversation.`,
+    Cancer:`With your Venus in Cancer, you love by nurturing — caring for someone, feeding them, remembering the small things that matter to them, is how you show affection more than words or grand gestures. That devotion makes you an exceptionally warm, protective partner, but it can also mean you get hurt easily by perceived rejection, or hold onto an old attachment long after it's stopped serving you. The growth edge is trusting that love can survive a little distance without becoming abandonment.`,
+    Leo:`With your Venus in Leo, you love generously and openly — grand romantic gestures, genuine pride in your partner, and being proud to be seen together all come naturally to you. That warmth makes you a loyal, affectionate partner who makes people feel adored, but it can also mean you need visible appreciation to feel secure, or that your pride gets bruised more easily than you'd admit when love isn't reciprocated with equal drama. The lesson is loving quietly sometimes, with no audience required.`,
+    Virgo:`With your Venus in Virgo, you show love through usefulness — fixing something, helping someone improve, taking care of the practical details of a relationship rather than the poetic ones. That devotion is real and often underappreciated, but it can also mean you're overly critical of a partner (or yourself) instead of simply accepting them, and slow to believe you deserve love you haven't somehow earned. The growth edge is receiving affection without needing to justify it first.`,
+    Libra:`With your Venus in Libra, this placement is fully at home — partnership itself is central to how you experience love, and you have a natural gift for charm, diplomacy, and creating beauty and harmony in a relationship. That grace makes you an easy, appealing partner, but it can also mean you avoid necessary conflict to keep the peace, or stay in a relationship past its expiration date because being alone feels worse than being unhappy together. The lesson is choosing honesty over harmony when the two conflict.`,
+    Scorpio:`With your Venus in Scorpio, you love intensely and completely, with little interest in anything casual — once you're in, you're all in, and you expect the same depth of commitment back. That intensity makes for genuinely transformative, loyal relationships, but it can also tip into jealousy, control, or testing a partner's loyalty in ways that create the very insecurity you're trying to avoid. The growth edge is trusting without needing proof first.`,
+    Sagittarius:`With your Venus in Sagittarius, you're drawn to partners who expand your world — different backgrounds, big ideas, a shared sense of adventure — and you need real freedom within a relationship to feel like yourself. That openness keeps love exciting and growth-oriented, but it can also mean you avoid commitment that feels confining, or overpromise more freedom or excitement than you can actually sustain day to day. The lesson is finding a partner who gives you room without mistaking every constraint for a cage.`,
+    Capricorn:`With your Venus in Capricorn, you love seriously and for the long term — you're not drawn to fleeting romance so much as a partnership built on mutual respect, shared ambition, and real staying power. That commitment makes you an exceptionally reliable partner, but it can also mean you're slow to show vulnerability, or that you unconsciously treat love as something to be earned through achievement rather than simply given. The growth edge is letting affection be effortless sometimes, not just deserved.`,
+    Aquarius:`With your Venus in Aquarius, you're drawn to partners who respect your independence and engage you intellectually — conventional romance interests you less than a real friendship with romantic and creative chemistry layered on top. That originality makes your relationships feel genuinely equal, but it can also create emotional distance, since you may retreat from intensity that feels like it's asking you to lose yourself. The lesson is letting closeness in without treating it as a threat to your freedom.`,
+    Pisces:`With your Venus in Pisces, you love with real tenderness and imagination — you're drawn to a kind of soulful, almost boundless connection, and you're capable of genuine, selfless devotion to someone you love. That romantic sensitivity makes you a compassionate partner, but it can also mean you idealize someone before you actually know them, or stay in a relationship that's quietly costing you because leaving feels like abandoning them. The growth edge is loving someone clearly, as they actually are, not just as you imagine them.`
+  },
+  mars:{
+    Aries:`With your Mars in Aries, this placement is fully at home — you act on instinct, immediately and without much hesitation, which makes you a natural first-mover in almost any situation. That drive gives you real courage and initiative, but it can also mean you act before you've thought a decision all the way through, or that your temper flares fast and burns out just as quickly. The lesson is pairing your instinct to move with just enough pause to aim it well.`,
+    Taurus:`With your Mars in Taurus, you act slowly and deliberately, building momentum steadily rather than exploding into action — once you're moving, though, you're genuinely hard to stop or redirect. That persistence makes you exceptionally good at finishing what you start, but it can also mean you're slow to act when speed actually matters, or stubborn about a course of action long after it's stopped working. The growth edge is knowing the difference between persistence and refusing to adapt.`,
+    Gemini:`With your Mars in Gemini, your drive shows up mentally and verbally more than physically — you assert yourself through argument, wit, and ideas, and you're at your most energized when you have several projects or conversations going at once. That mental restlessness makes you quick and adaptable, but it can also mean your energy scatters across too many things to finish any one of them, or that you win an argument instead of actually resolving it. The lesson is following through on the idea you already started.`,
+    Cancer:`With your Mars in Cancer, you act to protect — your drive shows up most clearly when someone or something you love is threatened, and you're capable of real fierceness in defense of family or home. That protective instinct is genuine strength, but it can also mean your assertiveness gets tangled up with emotion, showing up as moodiness or indirect action (guilt, withdrawal) rather than a clear, direct ask. The growth edge is asking for what you want directly instead of hoping it gets noticed.`,
+    Leo:`With your Mars in Leo, you act with confidence and flair — you're motivated by pride in what you're doing and energized by recognition for it, which makes you a natural leader who takes initiative visibly rather than quietly. That boldness inspires others to follow you, but it can also mean your ego gets tangled up in being right or being first, making it hard to back down gracefully when you should. The lesson is letting someone else take the credit sometimes without it costing you anything real.`,
+    Virgo:`With your Mars in Virgo, you act through precision and preparation rather than raw force — you'd rather do something correctly and efficiently than do it fast, and you take real satisfaction in getting the details exactly right. That care makes your work genuinely reliable, but it can also mean you hold back from acting until conditions are perfect, or turn your critical eye on your own effort so harshly it undercuts your confidence. The growth edge is acting before everything is fully ready.`,
+    Libra:`With your Mars in Libra, you act through negotiation and partnership rather than solo force — you're most energized when you're working toward something fair, and direct confrontation genuinely drains you in a way it doesn't drain more combative signs. That diplomacy makes you effective at getting others on board, but it can also mean you avoid necessary conflict, or take too long weighing options while a decisive moment passes you by. The lesson is acting decisively even when it means someone won't be pleased with you.`,
+    Scorpio:`With your Mars in Scorpio, this placement is fully at home — your drive runs deep and controlled rather than loud, and you're capable of sustaining intense focus and willpower toward a goal far longer than most people can manage. That intensity makes you formidable once committed, but it can also mean you hold onto anger or a grudge well past the point it's useful, or that you manipulate a situation quietly rather than confront it openly. The growth edge is channeling that intensity into the open instead of underground.`,
+    Sagittarius:`With your Mars in Sagittarius, you act on enthusiasm and belief — you move fastest toward something you're genuinely excited about or convinced is right, and hesitation isn't really your style. That boldness makes you a natural motivator and adventurer, but it can also mean you commit to something before thinking through the follow-through it requires, or speak more bluntly in the moment than the situation called for. The lesson is pacing your enthusiasm to match the actual size of the commitment.`,
+    Capricorn:`With your Mars in Capricorn, you act with discipline and a long-term goal in mind — your drive shows up as patient, sustained effort toward a concrete outcome rather than a burst of impulse. That focus makes you exceptionally effective at achieving what you set out to do, but it can also mean you're overly hard on yourself for a setback, or so focused on the destination that you burn through your own energy getting there. The growth edge is letting effort be enough, even before the result arrives.`,
+    Aquarius:`With your Mars in Aquarius, you act on principle — you're motivated by what you believe is right or fair, often for a group or cause bigger than your own immediate interest, and you're willing to break convention to get there. That independence makes you an effective agent of change, but it can also mean you act unpredictably just to avoid feeling boxed in, or get so attached to your own stance that you resist input that could actually improve it. The lesson is staying flexible on the method even while you're firm on the principle.`,
+    Pisces:`With your Mars in Pisces, your drive is indirect and intuitive rather than forceful — you act on a feeling or a hunch more readily than a clear plan, and direct confrontation isn't a natural mode for you. That sensitivity can make you an unusually compassionate and creative force when you do act, but it can also mean you avoid asserting yourself directly, letting frustration build until it leaks out sideways instead. The growth edge is turning an intuitive pull into a concrete, stated action.`
+  },
+  jupiter:{
+    Aries:`With your Jupiter in Aries, you grow through boldness — taking the leap, starting the venture, trusting your instinct before you've gathered every piece of information. That confidence tends to open real doors for you, since opportunity often does favor the person willing to move first. The caution worth naming is overconfidence: growth here comes from pairing your instinct to act with just enough planning to see it through.`,
+    Taurus:`With your Jupiter in Taurus, you grow through patience and accumulation — steady effort, tangible resources, and a genuine appreciation for life's pleasures tend to expand your world more than any single dramatic leap. That grounded approach to growth means what you build tends to last, but it can also tip into excess, whether that's material overindulgence or simply resisting change that would actually serve your expansion. The lesson is trusting that some growth requires letting go of something comfortable first.`,
+    Gemini:`With your Jupiter in Gemini, you grow through learning, conversation, and the sheer accumulation of information and connections — the more you know and the more people you talk to, the more your world expands. That intellectual appetite makes you a lifelong learner, but it can also mean you gather knowledge broadly without ever going deep enough to master any one thing. The growth edge is letting curiosity lead you somewhere specific, not just everywhere at once.`,
+    Cancer:`With your Jupiter in Cancer, you grow through emotional security and home — the more rooted and cared-for you feel, the more capacity you have to expand outward into the rest of your life. That connection between home and growth means your family or chosen family is often central to your biggest opportunities, but it can also mean you overextend yourself caring for others as your own way of feeling significant. The lesson is letting your own growth matter as much as everyone else's comfort.`,
+    Leo:`With your Jupiter in Leo, you grow through genuine self-expression and confidence — the more fully you let yourself be seen doing what you love, the more opportunity tends to find you. That generosity of spirit makes you naturally inspiring to others, but it can also tip into overconfidence or a need for the spotlight that outpaces your actual readiness. The growth edge is being generous with the credit even as your own light gets brighter.`,
+    Virgo:`With your Jupiter in Virgo, you grow through skill, service, and getting the details right — mastery of a craft or genuine usefulness to others tends to be what actually expands your opportunities, more than any grand gesture. That practical approach to growth means your success is well-earned and durable, but it can also mean you undersell your own accomplishments, treating "good enough" as never quite enough. The lesson is recognizing your own expertise instead of always finding one more thing to fix first.`,
+    Libra:`With your Jupiter in Libra, you grow through partnership and fairness — collaboration, diplomacy, and relationships built on genuine mutual benefit tend to be where your biggest opportunities show up. That relational instinct makes you skilled at building the alliances that actually move things forward, but it can also mean you avoid growth that requires a decision someone else might not like. The growth edge is trusting that fairness sometimes means disappointing someone anyway.`,
+    Scorpio:`With your Jupiter in Scorpio, you grow through depth and transformation — the willingness to face what's hidden, uncomfortable, or intense tends to be exactly what expands your world, even when it doesn't feel like growth in the moment. That capacity for real change makes your development genuinely profound rather than superficial, but it can also mean you resist opportunities that don't come wrapped in intensity or high stakes. The lesson is trusting that not every expansion has to come from a crisis.`,
+    Sagittarius:`With your Jupiter in Sagittarius, this placement is fully at home — your growth comes through exploration, belief, and a genuine appetite for the bigger picture, whether that's travel, philosophy, education, or simple optimism about what's possible. That expansiveness tends to bring real, visible good fortune, but it can also tip into overconfidence, overcommitment, or promising more than you can actually deliver. The growth edge is grounding your big vision in follow-through.`,
+    Capricorn:`With your Jupiter in Capricorn, you grow slowly and structurally — steady, disciplined effort toward a concrete, long-term goal tends to be what actually expands your world, more than any lucky break. That patient approach means your success tends to be earned and durable, but it can also mean you undervalue growth that doesn't come with visible achievement attached, or delay enjoying your progress until some future finish line. The lesson is letting the climb itself count as success, not just the summit.`,
+    Aquarius:`With your Jupiter in Aquarius, you grow through originality and community — unconventional ideas, causes bigger than yourself, and genuine connection to a group of like-minded people tend to be where your biggest opportunities show up. That independence of thought makes your growth genuinely innovative, but it can also mean you resist good opportunities simply because they look too conventional, or stay detached from a support system that could actually help you further. The growth edge is letting a group's success matter as much as your own originality.`,
+    Pisces:`With your Jupiter in Pisces, you grow through compassion, imagination, and a willingness to trust something you can't fully explain — intuition, spirituality, or creative inspiration tend to expand your world more than a strictly logical plan would. That openness makes your growth feel genuinely meaningful and connected to something larger, but it can also mean you avoid the practical follow-through an opportunity needs, or overextend yourself helping others at your own expense. The lesson is pairing your faith in the bigger picture with a concrete next step.`
+  },
+  saturn:{
+    Aries:`With your Saturn in Aries, your hardest lessons involve patience and self-assertion — you likely had to learn, the hard way, that acting purely on impulse doesn't get you as far as impulse plus discipline does. Life tends to test your confidence and independence early, asking you to earn the boldness that comes naturally to others. The mastery available here is real, hard-won courage — the kind that's been tested, not just assumed.`,
+    Taurus:`With your Saturn in Taurus, your hardest lessons involve security and self-worth — you may have faced real material or financial hardship, or simply grew up believing your worth was tied to what you could produce or accumulate. That difficulty tends to build genuine resilience and a real, unshakeable relationship to stability once you've worked through it, rather than the more casual security others take for granted. The mastery here is trusting your own worth independent of what you own.`,
+    Gemini:`With your Saturn in Gemini, your hardest lessons involve communication and confidence in your own mind — you may have felt dismissed, misunderstood, or unsure that your ideas were worth voicing, especially early on. That struggle tends to build unusually disciplined, precise thinking once you push through it, since you learn not to speak until you're genuinely sure of what you mean. The mastery available here is trusting your own voice without needing outside validation first.`,
+    Cancer:`With your Saturn in Cancer, your hardest lessons involve home and emotional security — you may have grown up in a household that felt unstable, emotionally withheld, or where you had to be the responsible one before you were ready. That early weight tends to build real emotional resilience and an eventual gift for creating the stable home you didn't necessarily have. The mastery here is letting yourself be nurtured too, not just the one who provides it.`,
+    Leo:`With your Saturn in Leo, your hardest lessons involve self-expression and being seen — you may have felt overlooked, criticized for taking up space, or unsure that your creativity or leadership was actually welcome. That struggle tends to build a hard-won, deeply earned confidence once you push through it, rather than the more effortless charisma other placements carry. The mastery here is claiming the spotlight you've genuinely earned, without waiting for permission.`,
+    Virgo:`With your Saturn in Virgo, your hardest lessons involve perfectionism and self-worth tied to productivity — you likely learned early that mistakes carried real consequences, which can build a harsh inner critic that's difficult to quiet even after you've clearly proven your competence. That discipline tends to make you exceptionally skilled and reliable, but the growth work is separating your value from your output. The mastery here is genuine self-acceptance, not just self-improvement.`,
+    Libra:`With your Saturn in Libra, your hardest lessons involve relationships and fairness — you may have learned early that partnership requires real work, compromise, and sometimes disappointment, rather than the effortless harmony it can look like from the outside. That struggle tends to build unusually mature, resilient relationships once you push through the lesson, built on real commitment rather than just chemistry. The mastery here is trusting a relationship can survive honesty, not just pleasantness.`,
+    Scorpio:`With your Saturn in Scorpio, your hardest lessons involve trust, power, and facing what's hidden — you may have experienced betrayal, loss, or situations that forced you to confront intensity most people get to avoid, well before you felt ready. That difficulty tends to build genuine emotional depth and resilience, a hard-won capacity to face what others flinch from. The mastery here is using that depth to heal, rather than to guard yourself so tightly nothing gets through.`,
+    Sagittarius:`With your Saturn in Sagittarius, your hardest lessons involve belief and meaning — you may have had your faith, worldview, or optimism tested hard, forced to build a philosophy that could actually withstand real disappointment rather than one that just sounded good. That struggle tends to build a grounded, tested wisdom once you work through it, more durable than untested optimism. The mastery here is holding real conviction without needing certainty first.`,
+    Capricorn:`With your Saturn in Capricorn, this placement is fully at home — you were likely given real responsibility early, whether by circumstance or your own instinct, and discipline, structure, and achievement come to you almost by necessity rather than choice. That maturity tends to bring genuine, lasting authority and competence over time, but the growth work is not letting your entire sense of worth ride on constant achievement. The mastery here is success that includes rest, not just relentless climbing.`,
+    Aquarius:`With your Saturn in Aquarius, your hardest lessons involve belonging and individuality — you may have felt like an outsider, different from your peers in a way that was hard to resolve, forced to build your own framework rather than simply adopting one. That struggle tends to build genuine, principled independence once you work through it, the kind that doesn't need the group's approval to hold steady. The mastery here is finding real community without sacrificing what makes you distinct.`,
+    Pisces:`With your Saturn in Pisces, your hardest lessons involve boundaries and faith — you may have struggled to tell where you end and someone else begins, or felt disillusioned when reality didn't match the ideal you'd imagined. That struggle tends to build a hard-won, realistic compassion once you work through it — care for others that includes care for yourself. The mastery here is staying open-hearted without dissolving your own limits in the process.`
+  },
+  uranus:{
+    Aries:`With your Uranus in Aries, you're part of a generation wired for bold, sudden self-assertion and independence — a collective instinct toward breaking old models rather than reforming them slowly. Personally, this often shows up as a strong need to define yourself on your own terms, sometimes through abrupt changes of direction that surprise the people around you.`,
+    Taurus:`With your Uranus in Taurus, you're part of a generation reshaping ideas about material security, value, and the earth itself — questioning inherited assumptions about money, ownership, and stability. Personally, this can show up as sudden shifts in what actually feels secure to you, or an unconventional relationship to comfort and possessions.`,
+    Gemini:`With your Uranus in Gemini, you're part of a generation that reinvented how information and ideas move — communication, media, and the speed of thought itself shifting under this influence. Personally, this can show up as a restless, quick mind that gets bored fast and is drawn to unconventional ways of thinking and connecting.`,
+    Cancer:`With your Uranus in Cancer, you're part of a generation rethinking home, family, and emotional security — challenging traditional models of what a household or a family actually has to look like. Personally, this can show up as an unpredictable relationship to home, or a need for emotional independence that doesn't fit neatly into conventional family expectations.`,
+    Leo:`With your Uranus in Leo, you're part of a generation that reshaped ideas about self-expression, individuality, and creativity — a collective push toward more radical, authentic self-representation. Personally, this can show up as an unconventional creative streak, or a need to express yourself in ways that don't follow anyone else's script.`,
+    Virgo:`With your Uranus in Virgo, you're part of a generation that reshaped work, health, and daily life — technology and new methods disrupting how people actually labor and care for their bodies. Personally, this can show up as an unconventional relationship to routine, health, or work, drawn to unusual methods that don't fit standard advice.`,
+    Libra:`With your Uranus in Libra, you're part of a generation reshaping ideas about partnership, fairness, and relationships — questioning traditional models of marriage, commitment, and justice. Personally, this can show up as an unconventional approach to relationships, needing real independence within partnership rather than a traditional structure.`,
+    Scorpio:`With your Uranus in Scorpio, you're part of a generation that reshaped ideas about power, sexuality, and what's hidden — disrupting institutions built on secrecy or control. Personally, this can show up as sudden, transformative upheavals that force you to release something you were holding onto too tightly.`,
+    Sagittarius:`With your Uranus in Sagittarius, you're part of a generation reshaping belief, education, and worldview — a collective questioning of inherited philosophies, religions, and institutions of higher learning. Personally, this can show up as an unconventional or evolving belief system, drawn to ideas that break from whatever framework you were raised in.`,
+    Capricorn:`With your Uranus in Capricorn, you're part of a generation that reshaped structures of authority and institutions themselves — a collective disruption of traditional power, government, and established systems. Personally, this can show up as an unconventional relationship to authority, either resisting it or rebuilding it in your own unconventional way.`,
+    Aquarius:`With your Uranus in Aquarius, this placement is fully at home — you're part of a generation strongly wired for innovation, technology, and collective progress, with an unusually strong instinct toward the future and toward group-oriented change. Personally, this can show up as a especially strong pull toward originality, humanitarian causes, and discomfort with anything that feels arbitrarily traditional.`,
+    Pisces:`With your Uranus in Pisces, you're part of a generation reshaping spirituality, imagination, and collective compassion — disrupting old religious and creative institutions in favor of something more fluid and inclusive. Personally, this can show up as an unconventional spiritual or creative path, drawn to ideas and practices that blend and dissolve traditional boundaries.`
+  },
+  neptune:{
+    Aries:`With your Neptune in Aries, you're part of a generation that dreamed in terms of bold new beginnings and idealized self-assertion — a collective imagination shaped around pioneering something new. Personally, this can show up as an idealized, sometimes unrealistic picture of your own independence or courage, worth checking against what's actually true.`,
+    Taurus:`With your Neptune in Taurus, you're part of a generation that idealized material stability, nature, and simplicity — a collective dream shaped around what security and groundedness were supposed to feel like. Personally, this can show up as an idealized picture of comfort or stability that reality has trouble living up to.`,
+    Gemini:`With your Neptune in Gemini, you're part of a generation that idealized information, connection, and communication itself — a collective imagination shaped around the promise of knowing and reaching everyone, everywhere, instantly. Personally, this can show up as difficulty separating fact from story, since ideas and information can blur together for you more easily than for others.`,
+    Cancer:`With your Neptune in Cancer, you're part of a generation that idealized home and family — a collective dream shaped around what nurturing, belonging, and emotional safety were supposed to look like. Personally, this can show up as an idealized picture of family or home that real relationships have a hard time matching.`,
+    Leo:`With your Neptune in Leo, you're part of a generation that idealized fame, creativity, and individual glory — a collective dream shaped around the myth of the extraordinary, larger-than-life self. Personally, this can show up as an idealized picture of your own specialness or destiny, worth grounding in what you've actually built.`,
+    Virgo:`With your Neptune in Virgo, you're part of a generation that idealized service, health, and purity — a collective dream shaped around perfect systems, clean living, and selfless usefulness. Personally, this can show up as an idealized, sometimes unattainable standard for your own daily habits, health, or usefulness to others.`,
+    Libra:`With your Neptune in Libra, you're part of a generation that idealized romance, partnership, and harmony — a collective dream shaped around soulmates and perfect fairness. Personally, this can show up as an idealized picture of love that real, imperfect relationships struggle to live up to, worth checking against who a partner actually is rather than who you imagine them to be.`,
+    Scorpio:`With your Neptune in Scorpio, you're part of a generation that idealized transformation, power, and what's hidden — a collective fascination with intensity, secrecy, and radical change. Personally, this can show up as an idealized, sometimes dramatized picture of your own crises or transformations, worth grounding in what's actually happening rather than the story about it.`,
+    Sagittarius:`With your Neptune in Sagittarius, you're part of a generation that idealized belief, adventure, and higher meaning — a collective dream shaped around utopian philosophies and grand quests for truth. Personally, this can show up as an idealized picture of a belief system or a journey, worth checking against practical, lived experience.`,
+    Capricorn:`With your Neptune in Capricorn, you're part of a generation that idealized (or grew disillusioned with) authority, structure, and institutions — a collective reckoning with whether traditional power structures actually deliver what they promise. Personally, this can show up as an idealized or disillusioned relationship to achievement and authority, worth examining honestly rather than either worshipping or dismissing it wholesale.`,
+    Aquarius:`With your Neptune in Aquarius, you're part of a generation that idealized technology, humanity's collective future, and utopian community — a dream shaped around what innovation and connection could make possible for everyone at once. Personally, this can show up as an idealized picture of group belonging or a cause, worth grounding in what a community can actually deliver.`,
+    Pisces:`With your Neptune in Pisces, this placement is fully at home — you're part of a generation with an unusually strong collective imagination, spirituality, and compassion, dreaming in terms of dissolving boundaries and interconnectedness. Personally, this can show up as an especially strong intuitive or spiritual sensitivity, powerful when grounded, disorienting when it isn't.`
+  },
+  pluto:{
+    Aries:`With your Pluto in Aries, you're part of a generation that transforms through bold, sometimes forceful self-assertion — a collective reckoning with independence, war, and the will to act rather than wait. Personally, this can show up as intense personal experiences that force you to claim your own power directly, rather than have it handed to you.`,
+    Taurus:`With your Pluto in Taurus, you're part of a generation transforming ideas about money, resources, and the material world itself — a collective reckoning with what real, sustainable value actually looks like. Personally, this can show up as intense experiences around security or possessions that force a deeper, more honest relationship to what actually matters to you materially.`,
+    Gemini:`With your Pluto in Gemini, you're part of a generation transforming how information itself moves and who controls it — a collective reckoning with truth, media, and the power of language. Personally, this can show up as intense experiences around communication or ideas that fundamentally reshape how you think.`,
+    Cancer:`With your Pluto in Cancer, you're part of a generation transforming ideas about home, family, and belonging — a collective reckoning with what security and nurturing actually require. Personally, this can show up as intense, sometimes difficult family experiences that force a deep transformation in how you understand home.`,
+    Leo:`With your Pluto in Leo, you're part of a generation transforming ideas about individuality, power, and self-expression — a collective reckoning with who gets to be seen and who holds authority. Personally, this can show up as intense experiences around pride, creativity, or leadership that force a deeper, more honest relationship to your own power.`,
+    Virgo:`With your Pluto in Virgo, you're part of a generation transforming work, health, and daily systems — a collective reckoning with how labor and care actually function at scale. Personally, this can show up as intense experiences around health, routine, or work that force a fundamental rebuild of how you approach the practical details of your life.`,
+    Libra:`With your Pluto in Libra, you're part of a generation transforming ideas about partnership, justice, and fairness — a collective reckoning with power imbalances inside relationships and legal systems alike. Personally, this can show up as intense, transformative experiences within close relationships that force a deeper honesty about what fairness actually requires.`,
+    Scorpio:`With your Pluto in Scorpio, this placement is fully at home — you're part of a generation with an especially strong collective instinct toward transformation, facing what's hidden, and radical rebirth, unafraid of intensity that other eras avoided. Personally, this can show up as an unusually strong personal capacity for deep change, once you stop resisting it.`,
+    Sagittarius:`With your Pluto in Sagittarius, you're part of a generation transforming belief systems, religion, and worldview at scale — a collective reckoning with whose truth gets to be the truth. Personally, this can show up as intense experiences that fundamentally reshape your beliefs or philosophy, forcing a more honest, tested worldview than the one you started with.`,
+    Capricorn:`With your Pluto in Capricorn, you're part of a generation transforming structures of power and authority themselves — institutions, governments, and traditional hierarchies undergoing deep, forced change. Personally, this can show up as intense experiences around authority, ambition, or achievement that fundamentally reshape your relationship to structure and control.`,
+    Aquarius:`With your Pluto in Aquarius, you're part of a generation transforming technology, collective systems, and humanity's shared future — a deep reckoning with how power operates at a species-wide scale. Personally, this can show up as intense experiences around community, individuality, or innovation that reshape how you relate to the collective.`,
+    Pisces:`With your Pluto in Pisces, you're part of a generation transforming spirituality, collective imagination, and inherited illusions — a deep reckoning with what's actually real versus what's simply been believed. Personally, this can show up as intense experiences that dissolve an old belief or boundary, forcing a more honest, less illusioned relationship to faith and compassion.`
+  }
+};
+
+const GATES={
+  1:"Self-Expression — the drive to creatively express who you are.",
+  2:"The Direction of the Self — innate sense of direction for yourself and others.",
+  3:"Ordering — finding workable order out of new beginnings' chaos.",
+  4:"Formulization — the need to answer and make sense of things.",
+  5:"Fixed Rhythms — comfort in patience and consistent routine.",
+  6:"Friction — the gateway to (or from) intimacy and conflict.",
+  7:"The Role of the Self — quiet leadership through direction-setting.",
+  8:"Contribution — holding a group together by individual example.",
+  9:"Focus — determination to see small details through to completion.",
+  10:"Behavior of the Self — self-love and authentic conduct.",
+  11:"Ideas — generating concepts and seeking peace through sharing them.",
+  12:"Caution — careful articulation; knowing when to speak or stay silent.",
+  13:"The Listener — a fellowship built on hearing others' secrets.",
+  14:"Power Skills — competence that generates resources and possessions.",
+  15:"Extremes — modesty and acceptance of every kind of person.",
+  16:"Skills — enthusiasm and talent honed through repeated practice.",
+  17:"Opinions — logical, forward-looking views meant to be followed.",
+  18:"Correction — spotting flaws and the drive to fix what's broken.",
+  19:"Wanting — sensitivity to what's needed for support and belonging.",
+  20:"The Now — presence and acting from contemplation in the moment.",
+  21:"Control — the will to take charge and manage resources.",
+  22:"Openness — emotional grace and social receptivity.",
+  23:"Assimilation — simplifying complex ideas so others can grasp them.",
+  24:"Rationalization — returning to and reworking a thought until it's clear.",
+  25:"Innocence — universal love, unattached to any single outcome.",
+  26:"The Egoist — persuasion and confident salesmanship.",
+  27:"Caring — nourishment and responsibility for others' wellbeing.",
+  28:"The Game Player — the search for meaning through risk.",
+  29:"Perseverance — the commitment to say yes and see it through.",
+  30:"Feelings — desire and the recognition of emotional experience.",
+  31:"Influence — leadership earned through others' recognition.",
+  32:"Continuity — sensing what will or won't endure.",
+  33:"Privacy — retreat, reflection, and remembering the past.",
+  34:"Power — raw energy and the strength to act.",
+  35:"Change — restlessness that pushes progress through experience.",
+  36:"Crisis — emotional experience through turbulence and new terrain.",
+  37:"Friendship — bonds built through family, agreements, and warmth.",
+  38:"Opposition — the fighter's spirit; standing for what matters.",
+  39:"Provocation — stirring others to reveal what's really going on.",
+  40:"Aloneness — earning rest and deliverance through providership.",
+  41:"Contraction — the first stirrings of fantasy and new desire.",
+  42:"Growth — bringing cycles to completion and increase.",
+  43:"Insight — sudden breakthroughs of individual knowing.",
+  44:"Alertness — instinctive read on people and patterns from the past.",
+  45:"Gatherer — leadership through the sharing of resources.",
+  46:"Determination — love of the body and being in the right place.",
+  47:"Realization — making sense of past confusion and oppression.",
+  48:"Depth — the well of knowledge and fear of inadequacy.",
+  49:"Principles — the values that define acceptance or rejection.",
+  50:"Values — the responsibility of upholding law and tradition.",
+  51:"Shock — the jolt that initiates and awakens.",
+  52:"Stillness — focused inaction that precedes concentrated action.",
+  53:"Beginnings — the drive to start, though not always finish.",
+  54:"Ambition — drive to rise and transform one's circumstances.",
+  55:"Spirit — emotional abundance and shifting moods.",
+  56:"Stimulation — the wanderer's gift for storytelling and experience.",
+  57:"Intuition — instant clarity and gentle, penetrating awareness.",
+  58:"Vitality — the joy and stamina to correct and improve.",
+  59:"Sexuality — breaking down barriers to create intimacy.",
+  60:"Acceptance — working within limitation to create something new.",
+  61:"Mystery — inner truth and the need to know why.",
+  62:"Details — precision and facts expressed in small, clear terms.",
+  63:"Doubt — questioning what's already been completed.",
+  64:"Confusion — a flood of impressions awaiting order and meaning."
+};
+
+const NUM_DEFS={
+  lifepath:{
+    1:`As a Life Path 1, you're wired to lead rather than follow — you trust your own judgment, move decisively once you've committed to a goal, and bring an original, unconventional approach to whatever you take on. You tend to do your best work independently or in charge of your own venture, since you chafe under too much direction from others. The growth edge for a 1 is keeping that drive humble: unchecked, your self-reliance can tip into pride or an unwillingness to acknowledge that your gifts aren't entirely of your own making.`,
+    2:`As a Life Path 2, your gift is emotional attunement — you sense what the people around you need almost before they say it, and you become the calm, steady presence others lean on. The catch is that this same sensitivity makes you quick to hurt, so you're prone to swallowing your own opinions and avoiding confrontation rather than risk friction, which quietly builds resentment. Your path is learning to trust the inner strength you already have so you can speak up and use your gift for connection without losing yourself in it.`,
+    3:`As a Life Path 3, you're a natural communicator with real charisma — expressive, optimistic, and able to light up a room, which makes you a magnet for social attention. Your challenge is turning that raw talent into something lasting: 3s often struggle with follow-through, discipline, and practical matters like money, and the same emotional openness that fuels your charm can flip into moodiness or a sharp tongue when you're low. When you commit to the work behind the gift, your self-expression becomes genuinely uplifting to everyone around you.`,
+    4:`As a Life Path 4, you're the builder — practical, disciplined, and methodical, with a strong internal compass for right and wrong that makes you someone others can count on. You succeed through sustained, step-by-step effort rather than shortcuts, and that same grounded realism can make you rigid or overly quick to judge others who don't share your standards. Your work is to stay firm in your integrity while loosening your grip enough to work for a better world without demanding it happen exactly your way.`,
+    5:`As a Life Path 5, you're built for motion — curious, adaptable, and drawn to variety, travel, and new people, learning best through direct experience rather than rules handed down to you. That appetite for freedom is your greatest asset, but it can easily curdle into restlessness, impulsiveness, or scattering your energy across too many pursuits to finish any of them. Your real lesson is discovering that true freedom isn't the absence of commitment — it's the discipline to choose your changes rather than being driven by them.`,
+    6:`As a Life Path 6, you're the caretaker — instinctively drawn to the vulnerable, quick to offer comfort, and willing to shoulder responsibility that others let slide, often through real personal sacrifice. The lesson tucked inside that generosity is learning where help ends and interference begins: true service means equipping people to handle their own struggles, not just being a permanent shoulder to cry on. Getting that balance right is what turns your caregiving from self-sacrifice into genuine healing.`,
+    7:`As a Life Path 7, you're the seeker — analytical and introspective, pulled toward life's deeper mysteries with a mind built for research, theory, and solving problems others can't crack. You tend to be something of a lone wolf, needing solitude to recharge and finding close relationships genuinely difficult to sustain, even though you can be warm and generous in company. The risk is letting that need for privacy tip into isolation; taken too far, it can leave you cynical and suspicious instead of at peace.`,
+    8:`As a Life Path 8, you have a natural command of the material world — a sharp instinct for business, finance, and leadership that gives you more potential than any other Life Path to build real wealth and influence, provided you put in sustained effort. You're able to inspire others to join your vision, though you often have to keep pushing them along, and you're drawn to positions of authority in business, law, or large institutions. Your central challenge is detachment: learning that the power and resources you accumulate are meant to serve others, not just secure your own comfort and status.`,
+    9:`As a Life Path 9, you carry a broad, humanitarian view of the world — compassionate, idealistic, and more concerned with the greater good than personal gain, judging people by what they contribute rather than by bias or background. You're a natural utopian, willing to give your time, money, and energy toward making things better on a larger scale. The core lesson of the 9 is release: learning to let go of possessions, outcomes, and even relationships without gripping too tightly, since your deepest fulfillment comes from giving without expecting anything back.`,
+    11:`As a Life Path 11, you carry the sensitivity and partnership instincts of the 2, but amplified into something more intense — a heightened intuition that makes you a kind of lightning rod for ideas, insight, and inspiration you can't always explain rationally. That same amplified wiring makes you unusually vulnerable to nervous energy and stress, and you may have felt misunderstood or withdrawn earlier in life simply because so much was happening beneath the surface. Your path is learning to channel that intensity deliberately, so the inspiration that moves through you also reaches and uplifts the people around you.`,
+    22:`As a Life Path 22, you're the Master Builder — capable of taking a big, almost visionary idea and actually constructing it in the real world, turning inspiration into something concrete and lasting on a scale most people can't. That kind of impact only happens by rallying other people, resources, and ideas around your vision, since your power works through collaboration rather than solo effort. The 22 carries an unusually wide gap between its promise and its pitfalls: flexibility tends to be your weak point, and the same drive that lets you build big things can slide into controlling or manipulating the people you need on your side.`,
+    33:`As a Life Path 33, you carry the rarest of the Master Numbers — a blend of the 3's expressive gifts and the 6's instinct to nurture, producing what's often described as the Master Teacher: someone whose compassion and desire to help the vulnerable become a vehicle for genuinely lifting others up. Your spirituality tends to be experiential rather than doctrinal, showing up as sincere devotion and service rather than formal belief. Like the 6, your real work is learning the difference between truly helping someone and simply absorbing their struggles for them — knowing when to guide and when to step back so people can grow through their own experience.`
+  },
+  expression:{
+    1:`With an Expression number of 1, you're wired to lead rather than follow — you bring original ideas, self-reliance, and drive to whatever you do, and you're happiest running the show rather than taking orders. This independence makes you an excellent pioneer, entrepreneur, or executive, but left unchecked it can tip into bossiness or an intolerance for anyone who doesn't move at your pace. Learning to channel your ambition without steamrolling the people around you is where this number's real growth lies.`,
+    2:`With an Expression number of 2, your gift is sensitivity — an intuitive read on what others are feeling that makes you a natural mediator, partner, and team player rather than a solo act. You do your best work in cooperation, smoothing over conflict and creating harmony where others create friction. The flip side is that this same sensitivity leaves you easily wounded — a sharp word or tense atmosphere can knock you off balance far more than it would someone less attuned to emotional undercurrents.`,
+    3:`With an Expression number of 3, you were built to communicate — your natural charm, wit, and creative spark make you a gifted writer, speaker, performer, or artist who can lift a room's mood almost without trying. People are drawn to your optimism and expressiveness, and self-expression through words, art, or performance is where you truly shine. The catch is discipline: that same free-flowing creative energy can scatter into moodiness, superficiality, or a scattered, undisciplined approach to follow-through if you don't anchor it.`,
+    4:`With an Expression number of 4, you express yourself through steady, practical effort — you're the builder who turns big ideas into real, working structures through discipline, organization, and reliability. Others count on you because you take responsibility seriously and manage details that people around you overlook, which suits careers in management, finance, or any field that rewards precision. The risk is rigidity: your love of order can calcify into stubbornness or an overly serious, all-work outlook that needs conscious loosening up.`,
+    5:`With an Expression number of 5, your natural talent is adaptability — you communicate easily, pick up new skills fast, and thrive on variety, change, and freedom in a way that suits sales, travel, media, or any fast-moving field. Routine feels like a trap to you, and you have a gift for reinventing yourself whenever life calls for it. The caution worth naming for this number is follow-through: the same restlessness that makes you versatile can also make you abandon projects the moment the excitement fades, so real growth comes from pairing your love of change with consistency.`,
+    6:`With an Expression number of 6, your defining gift is care — you're a natural nurturer, healer, or teacher whose sense of responsibility and love of harmony makes you the person others turn to for comfort and stability. This number carries real artistic and musical sensitivity too, though it's often set aside because you're so busy tending to everyone else's needs. The overuse pattern to watch for here is self-sacrifice: without limits, your devotion to others can tip into a martyr complex, leaving your own needs and talents chronically neglected.`,
+    7:`With an Expression number of 7, you express yourself through depth of thought rather than surface charm — you have an analytical, probing mind drawn to research, science, philosophy, or spiritual inquiry, and you need solitude to process what you've learned. Your strength is genuine expertise built through quiet study rather than quick answers. The pitfall worth naming here is isolation: without deliberately staying connected to others, your need for privacy and your impatience with shallow thinking can curdle into aloofness or cynicism.`,
+    8:`With an Expression number of 8, your talent is turning vision into material results — you have a natural command of business, money, and organization, and you're built to manage resources and people on a large scale. Authority and financial success come more naturally to you than to most, provided you pair ambition with discipline and follow-through. This number is fundamentally about balance: chasing power or wealth without fairness and emotional grounding is where this Expression's potential curdles into its biggest liability.`,
+    9:`With an Expression number of 9, you express yourself through big-picture compassion — you're the humanitarian who feels called to make the world more just and humane, often gifted with a rare ability to synthesize wide-ranging knowledge into art, ideas, or causes larger than yourself. Many people with this number are drawn to creative or charitable work that reaches beyond personal gain. The shadow side worth naming is emotional self-neglect: in your drive to serve some larger purpose, you can postpone your own needs and hold back the deeper feelings you rarely let yourself share.`,
+    11:`With an Expression number of 11, you carry an amplified, more electric version of the number 2's sensitivity — often considered the most highly charged Expression of all, a kind of lightning rod for intuition, inspired ideas, and even psychic insight. This makes you unusually perceptive about people and unseen possibilities, well suited to work that depends on "reading" others, from counseling to the arts. The challenge is that this heightened energy is a lot to carry: without learning to manage and ground that constant intuitive charge, it can leave you anxious or emotionally overwhelmed rather than inspired.`,
+    22:`With an Expression number of 22, you're what's often called the master builder — you combine the practical discipline of the 4 with a visionary scope that lets you dream in terms of legacy, aiming to build something that outlasts you rather than something merely personal. Of all the Expression numbers, 22 carries the greatest potential for large-scale, lasting accomplishment. That scale is also its liability: living up to a 22 can demand your whole life's focus, and the same ambition that builds monuments can strain your personal relationships if you don't consciously protect them.`,
+    33:`With an Expression number of 33, you carry what's often called the master teacher energy — it blends the expressive warmth of the 3 with the nurturing devotion of the 6, amplified into a rare calling to spiritually and emotionally uplift others. Genuinely fully-expressed 33s set aside personal ambition almost entirely in favor of guiding, teaching, and caring for others on a wide scale. Because this number is so rare and demanding — requiring an unusual convergence in your name to activate — living up to it asks for real selflessness, resisting the urge to view your own needs as secondary to everyone else's indefinitely.`
+  },
+  soulurge:{
+    1:`With a Soul Urge of 1, you are driven by an inner need to stand on your own and take charge of your own life rather than follow someone else's rules. You want to rise to the top of whatever field you choose, trusting your own instincts over the crowd, and you chafe against routine or anything that limits your independence. Watch the shadow side of this drive: left unchecked, the same need to lead can tip into dominating the people closest to you.`,
+    2:`With a Soul Urge of 2, what you crave most is emotional closeness — real intimacy, harmony, and a sense of being safe and appreciated by the people you love. You have a refined, sensitive nature and a gift for smoothing things over through tact and quiet persuasion rather than force, and you're genuinely moved by beauty, especially music. Because confrontation unsettles you, you can slip into indecision or let others take the lead in moments that call for you to assert yourself.`,
+    3:`With a Soul Urge of 3, your heart wants to create and to be heard — you're happiest when you can put your feelings into words, performance, or some other outlet for self-expression that lights up a room. You're naturally warm, witty, and entertaining, drawn to writing, acting, singing, or any medium where your imagination can run free. The catch is that you'd rather charm people on the surface than reveal what's really going on underneath, so when that creativity gets blocked, it tends to curdle into restless daydreaming instead.`,
+    4:`With a Soul Urge of 4, what you want deep down is to build something solid — a stable home, a dependable routine, a life you can trust won't crumble under you. You find genuine satisfaction in methodical, step-by-step effort, and you'd rather earn security through discipline and hard work than take shortcuts. This grounded, orderly instinct makes you someone others count on, though it can also make you resistant to anything that threatens your sense of order.`,
+    5:`With a Soul Urge of 5, your heart is pulled toward freedom — new places, new people, new experiences, anything that keeps life from feeling stale. You're quick-thinking and resourceful, the type who tends to land on your feet even when circumstances shift suddenly, and you're naturally drawn to people who share your restless curiosity. The flip side is a tendency to lose interest fast and drift away from obligations once the novelty wears off.`,
+    6:`With a Soul Urge of 6, what you want most is to love and be responsible for others — a comfortable home, a secure family, people who can lean on you. You're generous almost to a fault, quick to forgive, and naturally suited to counseling or healing roles because you listen so well and care so deeply. The risk is that this devotion tips into over-involvement, leaving you carrying — or smothering — the very people you're trying to help.`,
+    7:`With a Soul Urge of 7, your deepest hunger is to understand — to look past appearances and grasp the truths underneath, whether through study, analysis, or quiet introspection. You're most at home turning things over in your own mind, and you'd rather work something out alone than rely on other people to help you through it. Because you trust logic more than feeling, the emotional side of life can strike you as unpredictable and unsettling, and real growth comes from letting someone genuinely into your inner world.`,
+    8:`With a Soul Urge of 8, you're motivated by a genuine hunger for accomplishment — to build something significant, hold real authority, and achieve the kind of material success and influence that lets you shape outcomes rather than just react to them. You think in big-picture, visionary terms, spotting opportunity and the route toward it more easily than you handle the fine print underneath it. Whether this drive gets fulfilled depends as much on opportunity and effort as it does on the desire itself.`,
+    9:`With a Soul Urge of 9, your heart is set on something bigger than yourself — you want your life to leave the world a little better, and your deepest fulfillment comes from serving humanity rather than chasing personal gain. You hold high ideals, feel other people's pain readily, and are quick to forgive and to give of yourself, sometimes more than you should. At its core, this number's desire is for wisdom, compassion, and the sense of completion that comes from having genuinely made a difference.`,
+    11:`With a Soul Urge of 11, what you long for is deep emotional and intuitive connection — you sense things about people and situations that others miss, and you're drawn to being a peacemaker who resolves conflict rather than causes it. This heightened sensitivity shows up less through career ambition and more through your closest relationships — friends, family, lovers — where it makes you unusually perceptive but also easily hurt. At its best, this Soul Urge channels insight, and even a psychic quality, that the people around you come to rely on.`,
+    22:`With a Soul Urge of 22, you're driven to build something that outlasts you — not just a personal achievement but a structure, institution, or idea with real, lasting impact on the wider world. You pair big, idealistic vision with a practical, disciplined streak that lets you actually manifest what you imagine, rather than leaving it as a dream. Because the ambition here is so outsized, it can create genuine internal pressure, and you need a worthy enough goal to channel it toward — otherwise that power turns inward on you.`,
+    33:`With a Soul Urge of 33, your innermost desire is to uplift others — to teach, heal, and nurture with a compassion that asks for little in return. Home and family matter deeply to you, and you'll often set your own needs aside to make sure the people you love are cared for and comfortable. This is considered the most selfless of the Soul Urge numbers — at its fullest expression, personal ambition falls away almost entirely in favor of serving and comforting others.`
+  },
+  personality:{
+    1:`With a Personality number of 1, you come across right away as independent, confident, and self-directed — people read you as someone who leads rather than follows. Your bearing is original and a little daring, which draws attention and respect, but if that confidence isn't balanced with warmth it can register as blunt or hard to approach. Softening your intensity with patience and genuine listening only strengthens the commanding presence people already sense in you.`,
+    2:`With a Personality number of 2, you give off a gentle, unassuming warmth that makes people feel instantly safe around you. Others sense a natural diplomat — tactful, non-confrontational, and remarkably able to really listen — so people are drawn to unload their worries on you and feel valued for it. A trace of old sensitivity or shyness often lingers beneath that soft exterior, and perceptive people can pick up on it even when you've otherwise grown past it.`,
+    3:`With a Personality number of 3, you walk into a room with a charm and vibrancy that people immediately notice — expressive, upbeat, and fun to be near. You tend to care about how you present yourself, favoring style and a bit of glamour, which adds to the magnetic first impression you make. The risk is that this charm reads as surface-level if you don't also show follow-through, since a 3 personality can seem more interested in being entertaining than in going deep.`,
+    4:`With a Personality number of 4, people size you up as solid, practical, and dependable before you've said a word — your manner is unpretentious and geared toward function over flash. Others instinctively trust your judgment and lean on you when something needs to get done right, sensing the discipline and precision behind your quiet, no-nonsense presence. What you project isn't flair, it's steadiness — the sense that you are someone who follows through.`,
+    5:`With a Personality number of 5, you strike people as energetic, adaptable, and up for anything — your presence carries a restless, magnetic charm that makes you easy to talk to and fun to be around. People are drawn to how current and unafraid of change you seem, but that same free-spiritedness can make you look hard to pin down, as though you're always keeping one foot out the door. It's a first impression built on movement and possibility more than permanence.`,
+    6:`With a Personality number of 6, you come across as warm, responsible, and instantly trustworthy — the kind of person others feel comfortable confiding in. People sense your fairness and your instinct to keep the peace, often bringing you their problems because you seem so willing to help carry the load. Just be mindful that this nurturing first impression can tip into self-sacrifice if you let others lean on you more than is fair to you.`,
+    7:`With a Personality number of 7, you give off a quiet, studious, faintly mysterious air — people sense there's more going on beneath the surface than you let on. Your composure and obvious intelligence earn quick respect, and others are drawn less to warmth than to the sense that you notice things they miss. That same reserve can come across as distant or aloof, so watch that your self-possession doesn't read as detachment.`,
+    8:`With a Personality number of 8, you project strength and authority the moment you walk in — capable, ambitious, and clearly in control, without needing to raise your voice to be noticed. People tend to expect competence and results from you on sight, and many will either be drawn to that command or intimidated by it. Guard against letting the polished, businesslike image overshadow your warmth, or you risk seeming unapproachable.`,
+    9:`With a Personality number of 9, you carry yourself with an elegant, almost noble bearing that people notice immediately, whatever your actual stature. Others are pulled toward your grace and charisma — or occasionally put off by what can read as aloofness or superiority — but underneath that composed exterior most sense a genuine, deep-seated compassion for people. It's a first impression of dignity that, once people get closer, gives way to real warmth.`,
+    11:`With a Personality number of 11, people pick up on a gentle, intuitive presence that puts them instantly at ease — you carry the warmth and peacemaking instinct of a 2, but turned up to a more vivid, magnetic pitch. Others experience you as an unusually attentive listener who makes them feel truly seen, and many 11 Personalities have a natural stage presence or charisma that draws people in. At your best, you come across as a calming, unifying force others gravitate toward in times of tension.`,
+    22:`With a Personality number of 22, you radiate a steady, grounded reliability that makes people trust your judgment almost immediately — you're the one others assume can handle it when things get uncertain. Underneath that practical, dependable exterior (the same competence people associate with a 4) runs a much bigger ambition: a quiet sense that you're meant to build something with lasting, large-scale impact. This blend of down-to-earth composure and unspoken vision often isn't fully apparent to others until later in life, when the "master builder" quality becomes impossible to miss.`,
+    33:`With a Personality number of 33, you come across as a safe harbor — warm, fair-minded, and instinctively protective, the kind of presence that makes people want to relax and unburden themselves around you. Like a 6, you inspire trust and seem endlessly willing to keep the peace or put others first, often reading as hospitable, family-oriented, and nurturing. Because a true 33 is rare, when it does shape someone's outward presence it tends to be an unusually impressive one — though it carries the same risk as the 6 of tipping into self-sacrifice or being taken advantage of.`
+  },
+  pinnacle:{
+    1:`During a 1 Pinnacle you're handed a chapter built around starting fresh — a new job, venture, or direction where you're expected to lead rather than follow. It rewards initiative and self-reliance, but also asks you to grow out of impatience or self-doubt so your independence doesn't tip into going it alone unnecessarily.`,
+    2:`A 2 Pinnacle slows the pace and shifts your progress toward partnership — this chapter tends to reward patience, tact, and working closely with others rather than pushing solo. You're being asked to read the room, hold your emotional center, and let cooperation (instead of force) carry you toward what you want.`,
+    3:`A 3 Pinnacle opens a period where self-expression becomes the vehicle for your progress — through writing, speaking, art, or simply becoming more visible and sociable. The opportunity is real recognition and joy, but the chapter also asks you to bring follow-through and depth to your talent instead of scattering it across too many surface-level pursuits.`,
+    4:`A 4 Pinnacle is a building chapter — years defined by steady effort, added responsibility, and the practical work of putting your career, finances, or home life on solid footing. It's demanding and can feel like a grind, but it rewards discipline with something lasting, as long as you stay flexible enough not to let duty crowd out everything else.`,
+    5:`A 5 Pinnacle throws open the doors to change — travel, new relationships, a career pivot, or simply a much wider range of experience than you're used to. The opportunity is freedom and growth through variety, but the chapter tests your judgment, since the same restlessness that expands your world can also pull you toward instability if you don't stay grounded.`,
+    6:`A 6 Pinnacle centers your years on home, family, and the people who depend on you — this is a chapter where love, caretaking, and duty to others move to the front of your life, sometimes bringing marriage, children, or becoming the one others lean on. The opportunity is deep stability and connection, provided you keep boundaries so responsibility for others doesn't turn into self-sacrifice.`,
+    7:`A 7 Pinnacle is a quieter, more inward chapter — years suited to study, specialization, or spiritual development rather than outward achievement. It can feel isolating at times, but the opportunity here is real: sharpened expertise and inner clarity, so long as you keep enough connection with others that solitude doesn't harden into distance or distrust.`,
+    8:`An 8 Pinnacle is a chapter of ambition realized — career growth, financial gain, and increased authority tend to concentrate in these years, often putting you in a leadership or business-building role. The real opportunity is mastering power and money with integrity, since this chapter also tests whether success will harden you or whether you can hold onto fairness while you climb.`,
+    9:`A 9 Pinnacle is a chapter of closure and service — you're pushed to live from your broader values, whether through helping others, creative or humanitarian work, or simply releasing what no longer belongs in your life. The opportunity is meaning and impact beyond yourself, but it asks you to let go gracefully rather than clinging to what this chapter is naturally moving you away from.`,
+    11:`An 11 Pinnacle (a master number, kept unreduced) intensifies whatever chapter it touches with heightened intuition and idealism — you may find yourself unusually perceptive, sensitive to others, and pulled toward something larger than ordinary ambition, especially in your closest relationships. It's a demanding energy to carry well, but when you can act on your insight instead of being overwhelmed by it, this Pinnacle becomes a real boost to your personal and spiritual growth.`,
+    22:`A 22 Pinnacle is the most demanding and potentially rewarding of all the Pinnacles — this chapter hands you both a big vision and the practical means to build it into something real and lasting, often pushing you toward entrepreneurship or large-scale projects. The opportunity is legacy-level achievement, but the pressure is proportionally heavy, so the chapter also asks you to stay grounded enough to execute rather than be overwhelmed by the scope of what you're capable of.`
+  },
+  challenge:{
+    0:`A Challenge of 0 asks you to work through a lack of one single, defined obstacle — instead, you're being asked to expand your outlook itself: to question your assumptions, stretch past the limits of what you already believe, and approach life with a beginner's openness. Because the 0 borrows the qualities of the 9, the real work is developing compassion and a wider view of the world rather than overcoming any one specific flaw.`,
+    1:`A Challenge of 1 asks you to work through a fear of standing out — you may shrink from attention, second-guess yourself, or let sensitivity to what others think keep you blending into the background instead of asserting your own individuality. Overcoming it means building genuine self-confidence and independence, so your natural intuition becomes a strength instead of a source of timidity.`,
+    2:`A Challenge of 2 asks you to work through emotional over-sensitivity — you may absorb other people's moods so completely that you lose your own footing, letting small setbacks feel disproportionately upsetting. The lesson is to keep your center intact while still using your natural empathy to genuinely help the people around you, rather than dissolving into their emotions.`,
+    3:`A Challenge of 3 asks you to work through a pull toward scattered, surface-level living — spreading your energy across too many pursuits, or hiding behind charm and humor instead of doing the deeper work of focus and honest self-expression. The lesson is to commit to fewer things fully, and to let your creativity come from something real rather than performance.`,
+    4:`A Challenge of 4 asks you to work through real limitations — you'll likely need to put in visible effort before success arrives, and you're prone to feeling boxed in by rules, routine, or fear of change. The lesson is to treat those restrictions as guidance rather than punishment, building the discipline and structure to reach your goals without becoming rigid.`,
+    5:`A Challenge of 5 asks you to work through an oversized appetite for freedom — a restlessness that can tip into overindulgence, impulsiveness, or an inability to stay with people or commitments once they get difficult. The lesson is to keep enough discipline and follow-through to build lasting relationships and finish what you start, without losing your taste for new experience altogether.`,
+    6:`A Challenge of 6 asks you to work through an imbalance around responsibility — you may take on far more caretaking than is healthy, feeling burdened by other people's needs or overcontrolling out of a need to keep everyone comfortable. The lesson is to keep offering love and support, but with boundaries, so responsibility doesn't quietly become self-sacrifice.`,
+    7:`A Challenge of 7 asks you to work through guardedness — a tendency toward suspicion, emotional distance, or isolation that keeps you from letting others close even when your instincts are sound. The lesson is to pair your natural insight with trust and openness, since your wisdom only becomes fully useful once you're willing to share it and let people in.`,
+    8:`A Challenge of 8 asks you to work through an unhealthy relationship with money and power — a pull toward materialism strong enough to tempt you into ruthless or unscrupulous choices if left unchecked. The lesson is to recognize that achievement alone isn't enough, and to use whatever resources or influence you build in a way that benefits more than just yourself.`
+  },
+  karmiclessons:{
+    1:`You may find it hard to trust your own judgment or push your ideas forward without someone else's approval first. This lifetime keeps putting strong-willed, forceful people in your path specifically so you're forced to practice standing your ground. The lesson is to build self-reliance and the confidence to lead your own decisions rather than defer to others.`,
+    2:`Working closely with others doesn't come naturally to you, and you may swing between being oblivious to others' feelings and being overwhelmed by them. Circumstances will keep steering you toward situations that can only be resolved through patience, tact, and quiet cooperation rather than force. The growth here is learning to stay present with another person without either losing yourself in them or shutting them out.`,
+    3:`You tend to be your own harshest critic, quietly convinced that anything you create or say in public falls short of some impossible standard. Sharing your ideas, humor, or creative work openly feels riskier for you than it does for most people, so you may hold back rather than risk looking foolish. This lifetime asks you to practice self-expression anyway — to loosen up, enjoy the process, and trust that your voice is worth putting into the world.`,
+    4:`Structure and follow-through are not things you come by easily — you may feel scattered, impractical, or unsure how to turn ambition into a workable plan. Without a deliberate framework, projects can drift and effort can go to waste. Your task in this life is to build discipline and method on purpose: set a routine, stick with it, and let steady effort (rather than inspiration alone) get you where you're going.`,
+    5:`Change tends to rattle you more than it should, and you may cling to routine or the familiar as a way of feeling safe. Life will keep handing you unplanned disruptions anyway, precisely so you learn to move through them without losing your footing. The lesson is to develop real adaptability — to let go when something has run its course and treat freedom as something you can handle, not something to fear.`,
+    6:`Responsibility toward home, family, or the people who depend on you can feel heavier to you than it does to others, so you may keep relationships at arm's length even while forming them. This can leave you feeling isolated without fully understanding why. What you're being asked to learn is how to let people in, follow through on commitments, and find that obligation to others can be a source of connection rather than just a burden.`,
+    7:`Your instinct is to trust only what can be proven or reasoned out, which leaves little room for faith, intuition, or the parts of life that resist logical explanation. Life keeps nudging you toward exactly what you're missing, drawing you into experiences that ask you to sit with uncertainty instead of controlling it. The lesson is to develop an inner life — to trust a hunch, sit with doubt, and let some things simply be felt rather than solved.`,
+    8:`You can attract money and opportunity, but you tend to lose your grip on it just as easily, often because ego or an unwillingness to admit limits gets in the way. Ambition without an instinct for managing what it brings can mean substantial gains slip through your fingers before you've learned to hold onto them. This lifetime is about developing a real understanding of the material world — how to balance risk with restraint, and success with the relationships it can crowd out.`,
+    9:`Compassion for people or causes outside your own immediate circle doesn't come automatically to you — you may care deeply about those close to you but feel unsure how, or why, to extend that concern more broadly. This life will keep asking you to set personal gain aside for something bigger than yourself, even when the cause doesn't obviously touch your own life. The lesson is to widen your circle of concern — to practice tolerance, generosity, and letting go on a larger scale.`
+  },
+  karmicdebt:{
+    13:`When 13 shows up in your chart, the temptation is to look for the shortcut rather than put in sustained effort, which tends to breed frustration and a shaky sense of your own capability. You may also find your energy scattered across too many projects at once instead of committed to one. The path through it is discipline: keep a schedule, follow things through to the end, and let consistent, unglamorous effort do what shortcuts never could.`,
+    14:`This debt is tied to a past misuse of freedom, so your life keeps throwing sudden change and unpredictable circumstances at you, forcing constant adaptation. It also carries a real vulnerability to overindulgence — food, substances, or sensory excess can become a way of coping with instability. Your work is to build moderation and grounded commitment, using your considerable versatility in service of a steady direction instead of using change as an escape hatch.`,
+    16:`The 16 works by tearing down whatever the ego has built up to separate you from a deeper sense of life — often after a period of real ego inflation — so that something truer can take its place. This can be disorienting and even painful, showing up as sudden reversals or a loss of interest in things you thought mattered, and you may also find it hard to share your feelings even though you feel them intensely. The lesson is humility: letting the old structure fall away so an inner rebirth, and a more honest connection to yourself and others, can happen.`,
+    19:`With a 19, you're repeatedly placed in situations where you have to stand on your own and fend for yourself, which builds real independence but can also tip into stubbornly refusing help you actually need. Much of that self-sufficiency is self-imposed — you want to do things your own way — even though you remain, like everyone, dependent on connection and support from others. The core lesson is learning to use your independence and personal power wisely, without losing sight of the people who are there for you.`
+  },
+  birthday:{
+    1:`A Birthday number of 1 gives you a natural streak of independence and leadership — you're someone who takes initiative without needing to be asked, and you bring original thinking to whatever you're involved in. Use it as a talent for starting things, not just an excuse to insist on doing everything your own way.`,
+    2:`A Birthday number of 2 gives you a natural gift for tact and cooperation — you read a room well and have an instinct for smoothing tension between people. It's a quiet talent, easy to undersell, but genuinely valuable in any setting that depends on people getting along.`,
+    3:`A Birthday number of 3 gives you a natural spark for self-expression — words, humor, and creativity come easily to you, and you tend to lift the mood of whatever room you're in. The talent is real; the discipline to finish what you start is the part worth building alongside it.`,
+    4:`A Birthday number of 4 gives you a natural talent for order and reliable, systematic work — you're the one who can be trusted to build the structure everyone else works within. It's not flashy, but it's the kind of skill projects genuinely fall apart without.`,
+    5:`A Birthday number of 5 gives you a natural adaptability — you pick up new skills and situations fast, and you're comfortable with change that would rattle most people. The gift is versatility; the growth edge is following through once the novelty of something new has worn off.`,
+    6:`A Birthday number of 6 gives you a natural talent for care — people, animals, and causes that need looking after tend to gravitate toward you, and you have a genuine gift for making others feel supported. Just watch the edge where caring for others quietly becomes carrying them.`,
+    7:`A Birthday number of 7 gives you a natural analytical mind — you're drawn to understanding how and why things work, and you're comfortable doing that thinking on your own rather than needing a group to sort it out with. It's a real gift for depth, best balanced with staying reachable to the people around you.`,
+    8:`A Birthday number of 8 gives you a natural head for organization, money, and getting things actually accomplished — you think in terms of results and tend to have a good instinct for opportunity. The talent is real efficiency; the discipline is making sure ambition doesn't outrun fairness.`,
+    9:`A Birthday number of 9 gives you a natural generosity and breadth of perspective — you tend to think in terms of what's good for the whole group, not just yourself, and people often find you easy to confide in. The gift is compassion; the balance is remembering your own needs count too.`,
+    11:`A Birthday number of 11 gives you a heightened intuition — you tend to sense things about people and situations before you can fully explain why, which can make you unusually perceptive in relationships and creative work. It's a sensitive gift, worth grounding rather than dismissing when it doesn't come with hard evidence attached.`,
+    22:`A Birthday number of 22 gives you a natural capacity to think practically at a large scale — turning an ambitious idea into something real and lasting comes more naturally to you than it does to most. Use it deliberately; it's a genuine talent for building, not just dreaming.`
+  },
+  attitude:{
+    1:`With an Attitude number of 1, the first impression you give off is confidence — you come across as someone who knows their own mind and isn't waiting for permission to act. People read you as capable before you've said a word, which can work for you or feel like pressure to always have it together.`,
+    2:`With an Attitude number of 2, the first impression you give off is gentleness — people sense right away that you're approachable, easy to talk to, and unlikely to judge them harshly. It's a quiet strength, though it can also mean people underestimate how much you actually notice.`,
+    3:`With an Attitude number of 3, the first impression you give off is warmth and energy — people expect you to be fun, expressive, and easy to be around, often before you've done anything to earn that read. It's a likable first impression, but it can also make people slow to take your serious moments seriously.`,
+    4:`With an Attitude number of 4, the first impression you give off is steadiness — people sense they can count on you and that you take things seriously, even in a first meeting. It's a trustworthy read, though it can also make you seem more reserved or rigid than you actually are underneath.`,
+    5:`With an Attitude number of 5, the first impression you give off is energy and unpredictability — people sense you're up for anything and unlikely to be pinned down to routine. It's an exciting first impression, though it can also read as restless or hard to rely on before people actually get to know you.`,
+    6:`With an Attitude number of 6, the first impression you give off is warmth and responsibility — people sense right away that you're someone who'll show up for them, and they often come to you for advice quickly. It's a nurturing read, though it can also mean people lean on you before you've had a chance to say how much you can carry.`,
+    7:`With an Attitude number of 7, the first impression you give off is composure and depth — people sense you're thinking more than you're saying, which can read as wise or as distant depending on the moment. It's a natural air of privacy, worth softening a little when you actually want to be approached.`,
+    8:`With an Attitude number of 8, the first impression you give off is authority — people sense competence and ambition in you quickly, often assuming you're more senior or more in-charge than you technically are. It's a commanding first read, though it can also intimidate people before they've seen your warmer side.`,
+    9:`With an Attitude number of 9, the first impression you give off is openness — people sense a kind of broad-minded warmth in you, like you'll accept them without much judgment. It's a welcoming read, though it can also mean people expect more selflessness from you than is fair to expect from anyone.`,
+    11:`With an Attitude number of 11, the first impression you give off is a kind of quiet intensity — people sense there's more going on beneath the surface than you're letting show, and they're often right. It's a magnetic, slightly mysterious first read, worth channeling deliberately rather than leaving people guessing.`,
+    22:`With an Attitude number of 22, the first impression you give off is quiet capability at scale — people sense you're the kind of person who could actually build something significant, even before you've told them what you do. It's a grounded kind of presence, more substance than flash.`,
+    33:`With an Attitude number of 33, the first impression you give off is genuine warmth paired with real depth — people often sense, almost immediately, that you're someone who'd actually show up for them in a hard moment. It's a rare first read, worth trusting rather than downplaying.`
+  },
+  balance:{
+    1:`With a Balance number of 1, your instinct under stress is to take control — deciding on a course of action and acting on it, alone if you have to, is what actually steadies you. Leaning on this instinct is fine; just don't let "handling it myself" turn into refusing help that's genuinely offered.`,
+    2:`With a Balance number of 2, your instinct under stress is to seek connection — talking it through with someone you trust is what actually settles you, more than working it out alone. There's real wisdom in that, as long as you're also willing to voice what you need instead of just absorbing the tension quietly.`,
+    3:`With a Balance number of 3, your instinct under stress is to express it — putting the feeling into words, art, or conversation is what actually releases the pressure for you. That's a healthy outlet as long as you don't use humor or distraction as a way to avoid the feeling instead of processing it.`,
+    4:`With a Balance number of 4, your instinct under stress is to create order — organizing, planning, or simply doing something productive is what actually calms you down. It's a genuinely useful coping tool, as long as the busywork doesn't become a way to avoid sitting with the feeling itself.`,
+    5:`With a Balance number of 5, your instinct under stress is to change something — a new environment, a new activity, some form of movement is what actually resets you. That's a real coping skill, though it's worth checking whether you're resolving the stress or just outrunning it.`,
+    6:`With a Balance number of 6, your instinct under stress is to take care of someone else — shifting your focus onto another person's needs is what actually settles you. It's a generous coping mechanism, but make sure it doesn't become a way to avoid dealing with your own stress directly.`,
+    7:`With a Balance number of 7, your instinct under stress is to withdraw and think it through alone — solitude and quiet reflection are what actually restore you, more than talking it out with others. That's a legitimate coping style, as long as the withdrawal doesn't tip into full isolation.`,
+    8:`With a Balance number of 8, your instinct under stress is to take charge of the practical situation — tackling the concrete problem head-on is what actually calms you. It's an effective coping tool, as long as you're solving the real issue and not just the parts that are easiest to control.`,
+    9:`With a Balance number of 9, your instinct under stress is to zoom out — putting the problem in a bigger perspective, or turning your attention to helping someone else, is what actually settles you. It's a genuinely wise coping style, as long as "bigger perspective" doesn't become a way to avoid feeling the immediate thing.`,
+    11:`With a Balance number of 11, your instinct under stress is to turn inward toward intuition — quiet reflection, and trusting a felt sense of what's true, is what actually steadies you more than logic does. It's a real strength, best paired with grounding it in something concrete before acting on it.`,
+    22:`With a Balance number of 22, your instinct under stress is to build a practical plan — mapping out concrete steps toward a solution is what actually settles you, more than talking or venting. It's a genuinely effective coping style, well-suited to handling real, large-scale pressure.`
+  },
+  maturity:{
+    1:`As you move into your Maturity number 1, the second half of your life asks you to step more fully into independence and leadership than you may have in your earlier years — trusting your own judgment and initiative rather than deferring to others. This chapter rewards decisiveness and original thinking more than it rewards waiting to be told what to do.`,
+    2:`As you move into your Maturity number 2, the second half of your life asks you to lean more into partnership, patience, and emotional sensitivity — cooperation and genuine closeness with others become more central than solo achievement. This chapter rewards diplomacy and tact more than it rewards going it alone.`,
+    3:`As you move into your Maturity number 3, the second half of your life asks you to lean more into self-expression, creativity, and joy — sharing what you know or feel through some form of communication becomes more central. This chapter rewards genuine self-expression more than it rewards staying quiet to avoid drawing attention.`,
+    4:`As you move into your Maturity number 4, the second half of your life asks you to lean more into structure, discipline, and the practical work of building something durable. This chapter rewards steady, methodical effort more than it rewards chasing quick wins.`,
+    5:`As you move into your Maturity number 5, the second half of your life asks you to lean more into freedom, variety, and new experience — resisting the pull to settle into a rigid routine just because it's expected. This chapter rewards adaptability more than it rewards clinging to the familiar.`,
+    6:`As you move into your Maturity number 6, the second half of your life asks you to lean more into responsibility, community, and care for others — family, home, and service tend to take on more weight. This chapter rewards genuine nurturing more than it rewards personal ambition alone.`,
+    7:`As you move into your Maturity number 7, the second half of your life asks you to lean more into introspection, study, and a search for deeper meaning — quiet, private growth matters more now than external achievement. This chapter rewards depth more than it rewards staying constantly busy.`,
+    8:`As you move into your Maturity number 8, the second half of your life asks you to lean more into ambition, authority, and material accomplishment — building real influence and stability becomes more central. This chapter rewards decisive, results-oriented effort more than it rewards staying in the background.`,
+    9:`As you move into your Maturity number 9, the second half of your life asks you to lean more into generosity and a wider, more humanitarian view — giving back and releasing what no longer serves you both matter more now. This chapter rewards genuine selflessness more than it rewards holding tightly to what you've accumulated.`,
+    11:`As you move into your Maturity number 11, the second half of your life asks you to lean more into your intuition and your capacity to inspire others — the quieter insight you may have downplayed earlier becomes something worth trusting and sharing openly. This chapter rewards authenticity over playing it safe.`,
+    22:`As you move into your Maturity number 22, the second half of your life asks you to lean more into large-scale building — turning a long-held vision into something concrete and lasting becomes genuinely possible now, more than it may have felt earlier. This chapter rewards ambitious, practical follow-through.`,
+    33:`As you move into your Maturity number 33, the second half of your life asks you to lean more fully into teaching, healing, and guiding others — a rare calling to uplift people on a wider scale becomes more central. This chapter rewards selfless service more than it rewards personal ambition.`
+  },
+  personalyear:{
+    1:`In a Personal Year 1, you're at the start of a new nine-year cycle — this is a year for new beginnings, fresh starts, and planting seeds for what's ahead, even if the payoff isn't visible yet. Initiative taken now tends to set the tone for the years that follow.`,
+    2:`In a Personal Year 2, the theme is patience and partnership — this is a year for cooperation, relationship-building, and letting things develop gradually rather than forcing quick results. Progress may feel slower than last year's, but it's laying real groundwork.`,
+    3:`In a Personal Year 3, the theme is self-expression and social connection — this is a year that favors creativity, communication, and simply enjoying life more, after the more effortful years around it. Use it to create and connect, not just to grind.`,
+    4:`In a Personal Year 4, the theme is work and foundation-building — this is a year that rewards discipline, organization, and putting in the practical effort that doesn't show immediate results but sets up everything after it. It can feel demanding, but it's genuinely constructive.`,
+    5:`In a Personal Year 5, the theme is change — this is a year that tends to bring unexpected shifts, new opportunities, and a need for real flexibility, whether or not you were looking for change. Resisting it tends to be harder than adapting to it.`,
+    6:`In a Personal Year 6, the theme is responsibility and home — this is a year that often centers on family, relationships, and taking care of people or commitments close to you. It asks for real care, and often gives back a genuine sense of connection in return.`,
+    7:`In a Personal Year 7, the theme is reflection — this is a year that favors introspection, study, and rest over external pursuit, sometimes bringing a quieter, more internal period than the years around it. Treat it as useful, not wasted.`,
+    8:`In a Personal Year 8, the theme is achievement — this is a year that tends to bring real opportunities around career, money, and recognition, rewarding ambition and follow-through more than it has in recent cycles. Use the momentum deliberately.`,
+    9:`In a Personal Year 9, the theme is completion — this is the final year of a nine-year cycle, favoring release, closure, and letting go of what no longer fits before a new cycle begins next year. Trying to force something new to start now tends to fight the year's actual current.`,
+    11:`In a Personal Year 11, the theme is heightened intuition and inspiration — this is a year that can bring unusually sharp insight, spiritual growth, or creative breakthroughs, alongside real nervous tension if that heightened sensitivity isn't managed. Trust what you're sensing, but ground it before acting.`,
+    22:`In a Personal Year 22, the theme is large-scale building — this is a year with real potential to turn an ambitious plan into something concrete and lasting, provided you pair the vision with steady, practical effort. It's a big-opportunity year, not an easy one.`,
+    33:`In a Personal Year 33, the theme is service on a wider scale — this is a rare year that favors teaching, healing, or guiding others in a way that reaches beyond your usual circle. It asks a lot of you, and tends to give back a genuine sense of purpose.`
+  },
+  personalmonth:{
+    1:`A Personal Month 1 favors new starts — this is a good window to begin something rather than wait for the perfect moment.`,
+    2:`A Personal Month 2 favors patience and connection — this month rewards cooperation and steady, quiet progress over big, solo pushes.`,
+    3:`A Personal Month 3 favors self-expression and enjoyment — this is a good month for creativity, socializing, and lightening up a little.`,
+    4:`A Personal Month 4 favors focused, practical work — this month rewards discipline and getting the unglamorous tasks actually done.`,
+    5:`A Personal Month 5 favors flexibility — this month tends to bring change or unexpected opportunity, and adapting quickly serves you better than resisting it.`,
+    6:`A Personal Month 6 favors responsibility and care — this month tends to center on home, family, or people who need your attention.`,
+    7:`A Personal Month 7 favors reflection — this is a good month to slow down, think things through, and resist the urge to force forward motion.`,
+    8:`A Personal Month 8 favors action toward tangible goals — this month tends to reward ambition, follow-through, and attention to money or career.`,
+    9:`A Personal Month 9 favors release — this is a good month to finish, let go of, or clear out whatever's run its course before the next cycle begins.`,
+    11:`A Personal Month 11 brings heightened intuition — pay attention to insight or inspiration that shows up this month, even if it doesn't fully make logical sense yet.`,
+    22:`A Personal Month 22 favors practical, large-scale progress — this is a strong month for turning a bigger plan into a concrete next step.`,
+    33:`A Personal Month 33 favors selfless service — this month tends to center on genuinely showing up for someone else in a meaningful way.`
+  },
+  personalday:{
+    1:`A Personal Day 1 favors starting something — today rewards initiative more than waiting.`,
+    2:`A Personal Day 2 favors patience and cooperation — today favors listening and working with others over pushing your own agenda.`,
+    3:`A Personal Day 3 favors self-expression — today is a good day to communicate, create, or simply enjoy yourself a little more.`,
+    4:`A Personal Day 4 favors focused, practical work — today rewards getting through the unglamorous tasks on your list.`,
+    5:`A Personal Day 5 favors flexibility — today may bring the unexpected, and going with it tends to work out better than resisting it.`,
+    6:`A Personal Day 6 favors care and responsibility — today tends to center on family, home, or someone who needs your attention.`,
+    7:`A Personal Day 7 favors quiet reflection — today is a good day to slow down and think, rather than push for more output.`,
+    8:`A Personal Day 8 favors decisive action — today tends to reward ambition and attention to money, work, or tangible goals.`,
+    9:`A Personal Day 9 favors letting go — today is a good day to finish or release something rather than start something new.`,
+    11:`A Personal Day 11 brings a spike in intuition — trust an insight that shows up today, even before you can fully explain it.`,
+    22:`A Personal Day 22 favors practical progress on something bigger — today is a strong day to take a concrete step toward a larger goal.`,
+    33:`A Personal Day 33 favors showing up for someone else — today tends to center on genuine care or service toward another person.`
+  },
+  essence:{
+    1:`Living through a 1 Essence cycle, the current chapter of your life is oriented around independence and new initiative — you're likely feeling a stronger-than-usual pull to lead, start something, or make a decision entirely on your own terms.`,
+    2:`Living through a 2 Essence cycle, the current chapter of your life is oriented around partnership and patience — cooperation, close relationships, and gradual, cooperative progress are more central right now than solo achievement.`,
+    3:`Living through a 3 Essence cycle, the current chapter of your life is oriented around self-expression — creativity, communication, and simply being more visible or expressive tend to come more naturally during this period.`,
+    4:`Living through a 4 Essence cycle, the current chapter of your life is oriented around building — discipline, structure, and practical, unglamorous effort are what this period is actually about, even if the payoff isn't immediate.`,
+    5:`Living through a 5 Essence cycle, the current chapter of your life is oriented around change — this period tends to bring more variety, movement, or unexpected shifts than usual, and resisting them tends to be harder than adapting.`,
+    6:`Living through a 6 Essence cycle, the current chapter of your life is oriented around responsibility — home, family, and care for others tend to take on more weight during this period.`,
+    7:`Living through a 7 Essence cycle, the current chapter of your life is oriented around reflection — this tends to be a quieter, more internal period, better suited to study and introspection than external pursuit.`,
+    8:`Living through an 8 Essence cycle, the current chapter of your life is oriented around achievement — ambition, career, and material progress tend to move more prominently into focus during this period.`,
+    9:`Living through a 9 Essence cycle, the current chapter of your life is oriented around release — this period tends to ask you to close out or let go of something that's run its course, clearing space for what comes next.`,
+    11:`Living through an 11 Essence cycle, the current chapter of your life is oriented around heightened intuition and inspiration — insight, sensitivity, and even some nervous tension tend to run stronger than usual during this period.`,
+    22:`Living through a 22 Essence cycle, the current chapter of your life is oriented around large-scale building — this period carries real potential to turn a significant, long-held goal into something concrete.`
+  }
+};
+
+
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function arow(l,v,defKey,defNum){
+  let def;
+  if(defKey&&defNum!=null&&NUM_DEFS[defKey]&&NUM_DEFS[defKey][defNum]){
+    def=NUM_DEFS[defKey][defNum];
+  }else if(defKey&&defNum!=null&&ASTRO_DEFS[defKey]&&ASTRO_DEFS[defKey][defNum]){
+    def=ASTRO_DEFS[defKey][defNum];
+  }else if(defKey&&GLOSSARY[defKey]){
+    def=GLOSSARY[defKey];
+  }
+  const lbl=def?`<span class="dprl term" data-def="${defKey}">${l}</span>`:`<span class="dprl">${l}</span>`;
+  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
+}
+function karmicRow(l,numbers,defKey){
+  if(!numbers.length)return arow(l,'None',null);
+  const v=numbers.join(', ');
+  const pairs=numbers.map(n=>{
+    const d=NUM_DEFS[defKey]&&NUM_DEFS[defKey][n];
+    return d?{n,d}:null;
+  }).filter(Boolean);
+  if(!pairs.length)return arow(l,v,null);
+  const combined=pairs.length>1?pairs.map(({n,d})=>`<strong>${n}:</strong> ${d}`).join(' '):pairs[0].d;
+  const lbl=`<span class="dprl term" data-def="${defKey}">${l}</span>`;
+  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div><div class="dpdef" hidden>${combined}</div></div>`;
+}
+function apend(v){return `<div class="dprow"><div class="dpr"><span class="dprl">Status</span><span class="dprv pend">${v}</span></div></div>`;}
+function dpsec(l){return `<div class="dpsec">${l}</div>`;}
+
+const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mars',Jupiter:'jupiter',Saturn:'saturn',
+  Uranus:'uranus',Neptune:'neptune',Pluto:'pluto'};
+const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','Mars']],['Social',['Jupiter','Saturn']],['Outer',['Uranus','Neptune','Pluto']]];
+const VS='\ufe0e';
+const PLANET_GLYPH={Sun:'\u2609'+VS,Moon:'\u263d'+VS,Mercury:'\u263f'+VS,Venus:'\u2640'+VS,Mars:'\u2642'+VS,Jupiter:'\u2643'+VS,Saturn:'\u2644'+VS,Uranus:'\u2645'+VS,Neptune:'\u2646'+VS,Pluto:'\u2647'+VS};
+const SIGN_GLYPH={Aries:'\u2648'+VS,Taurus:'\u2649'+VS,Gemini:'\u264a'+VS,Cancer:'\u264b'+VS,Leo:'\u264c'+VS,Virgo:'\u264d'+VS,Libra:'\u264e'+VS,Scorpio:'\u264f'+VS,Sagittarius:'\u2650'+VS,Capricorn:'\u2651'+VS,Aquarius:'\u2652'+VS,Pisces:'\u2653'+VS};
+const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
+
+function signDisplay(sign){
+  return SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
+}
+
+function ar(astro){
+  if(!astro||astro.error)return apend('Unavailable');
+  const planets=astro.planets||[];
+  if(!planets.length)return apend('Unavailable');
+  const byName={};
+  planets.forEach(p=>{const name=p.name;if(name)byName[name]=p;});
+  let h='';
+  if(astro.ascendant?.sign){
+    h+=arow('Ascendant',astro.ascendant.sign,'ascendant');
+  }
+  if(astro.midheaven?.sign){
+    h+=arow('Midheaven',astro.midheaven.sign,'midheaven');
+  }
+  ASTRO_GROUPS.forEach(([label,names])=>{
+    const rows=names.map(n=>byName[n]).filter(Boolean);
+    if(!rows.length)return;
+    rows.forEach(p=>{
+      const name=p.name;
+      const sign=p.sign;
+      if(name&&sign){
+        const glyph=PLANET_GLYPH[name]?`<span class="glyph">${PLANET_GLYPH[name]}</span> `:'';
+        let signOut=sign;
+        if(p.house)signOut+=` \u00b7 House ${p.house}`;
+        h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
+      }
+    });
+  });
+  return h||apend('Unavailable');
+}
+
+function nr(num){
+  if(!num)return apend('Unavailable');
+  let h='';
+  h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
+  h+=arow('Expression',num.expression,'expression',num.expression);
+  h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
+  h+=arow('Personality',num.personality,'personality',num.personality);
+  h+=arow('Birthday',num.birthday,'birthday',num.birthday);
+  h+=arow('Attitude',num.attitude,'attitude',num.attitude);
+  h+=arow('Balance',num.balance,'balance',num.balance);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=arow('Personal Year',num.personalYear,'personalyear',num.personalYear);
+  h+=arow('Personal Month',num.personalMonth,'personalmonth',num.personalMonth);
+  h+=arow('Personal Day',num.personalDay,'personalday',num.personalDay);
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
+  h+=arow('Pinnacle 1',num.pinnacles.pinnacle1.value+' ('+num.pinnacles.pinnacle1.ageRange+')','pinnacle',num.pinnacles.pinnacle1.value);
+  h+=arow('Pinnacle 2',num.pinnacles.pinnacle2.value+' ('+num.pinnacles.pinnacle2.ageRange+')','pinnacle',num.pinnacles.pinnacle2.value);
+  h+=arow('Pinnacle 3',num.pinnacles.pinnacle3.value+' ('+num.pinnacles.pinnacle3.ageRange+')','pinnacle',num.pinnacles.pinnacle3.value);
+  h+=arow('Pinnacle 4',num.pinnacles.pinnacle4.value+' ('+num.pinnacles.pinnacle4.ageRange+')','pinnacle',num.pinnacles.pinnacle4.value);
+  h+=arow('Challenge 1',num.challengeNumbers.challenge1,'challenge',num.challengeNumbers.challenge1);
+  h+=arow('Challenge 2',num.challengeNumbers.challenge2,'challenge',num.challengeNumbers.challenge2);
+  h+=arow('Challenge 3',num.challengeNumbers.challenge3,'challenge',num.challengeNumbers.challenge3);
+  h+=arow('Challenge 4',num.challengeNumbers.challenge4,'challenge',num.challengeNumbers.challenge4);
+  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
+  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
+  return h;
+}
+
+function hdr(hd){
+  if(!hd||hd.error)return apend('Unavailable');
+  let h='';
+  const core=[];
+  if(hd.type)core.push(arow('Type',hd.type,'hdtype'));
+  if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile'));
+  if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority'));
+  if(core.length){h+=core.join('');}
+  if(hd.incarnation_cross){h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
+  if(hd.gates&&hd.gates.length){
+    h+=dpsec('Gates');
+    h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
+  }
+  return h||apend('Unavailable');
+}
+
+let relType = 'parent-child';
 document.querySelectorAll('.rel-chip').forEach(chip=>{
   chip.addEventListener('click', ()=>{
     document.querySelectorAll('.rel-chip').forEach(c=>c.classList.remove('active'));
     chip.classList.add('active');
+    relType = chip.dataset.rel;
   });
 });
 
@@ -524,6 +1231,213 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
     slides[idx].classList.add('active');
   }, 4200);
 })();
+
+// ---------- V-shape panel layout: equal spacing, no overlap, verified by
+// measurement earlier in this project -- reused here instead of reinvented ----
+let cardRegistry=[];
+const PW=80, PH=168, DX_STEP=38, DY_STEP=188, X0=26, Y0=210;
+const STAGE_W=460;
+function panelPos(index, isP2){
+  // index: 0=astro,1=numerology,2=hd (0-indexed tier)
+  const apexX = STAGE_W/2;
+  const side = isP2 ? 1 : -1;
+  const x = apexX + side*(X0+DX_STEP*index) + (isP2?0:-PW);
+  const y = Y0 + DY_STEP*index;
+  return {x,y};
+}
+
+function pan(nm,sys,rows,isP2,kind,tierIndex){
+  const idx=cardRegistry.push({title:nm+' \u00b7 '+sys,rows})-1;
+  const p=panelPos(tierIndex,isP2);
+  return `<div class="panel" style="left:${p.x}px;top:${p.y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${escapeHtml(nm)} \u00b7 ${sys}</div><div class="dplist">${rows}</div></div></div>`;
+}
+function blankPanel(tierIndex,isP2){
+  const p=panelPos(tierIndex,isP2);
+  return `<div class="panel blank" style="left:${p.x}px;top:${p.y}px;"></div>`;
+}
+function reportSlot(n1,report,reportError){
+  const apexX=STAGE_W/2;
+  const x=apexX-PW/2, y=22;
+  if(!report){
+    if(!reportError)return `<div class="panel blank" style="left:${x}px;top:${y}px;"></div>`;
+    return `<div class="panel report" style="left:${x}px;top:${y}px;"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+  }
+  const sectionsHtml=(report.sections||[]).map(s=>{
+    const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
+    return `${dpsec(head)}<div class="dprow"><p class="report-body">${escapeHtml(s.body)}</p></div>`;
+  }).join('');
+  const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
+  const fullRows=sectionsHtml+sigHtml;
+  const idx=cardRegistry.push({title:escapeHtml(report.headline||(n1+"'s Reading")),rows:fullRows})-1;
+  return `<div class="panel report" style="left:${x}px;top:${y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${escapeHtml(report.headline||'Your Reading')}</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">Tap to read your full reading</p></div></div></div></div>`;
+}
+
+function render(p1,p2,r,reportErr){
+  cardRegistry=[];
+  const n1=p1.first+(p1.last?' '+p1.last:'');
+  let h='';
+  h+=reportSlot(n1,r,reportErr);
+  h+=pan(p1.first,'Astrology',ar(p1.astro),false,'astro',0);
+  h+=pan(p1.first,'Numerology',nr(p1.numerology),false,'num',1);
+  h+=pan(p1.first,'Human Design',hdr(p1.hd),false,'hd',2);
+  if(p2){
+    h+=pan(p2.first,'Astrology',ar(p2.astro),true,'astro',0);
+    h+=pan(p2.first,'Numerology',nr(p2.numerology),true,'num',1);
+    h+=pan(p2.first,'Human Design',hdr(p2.hd),true,'hd',2);
+  }
+  const stage=document.getElementById('stage');
+  stage.innerHTML=h;
+  document.getElementById('loading').style.display='none';
+  document.getElementById('resultsWrap').style.display='block';
+  document.querySelector('.content').style.display='none';
+
+  // Real phones are often narrower than the 460px canvas the panel math is
+  // built on -- measure actual available width and scale the whole stage
+  // down to fit, rather than letting it clip off the right edge.
+  const outer = document.getElementById('stageOuter');
+  const availWidth = outer.clientWidth;
+  const scale = Math.min(1, availWidth / STAGE_W);
+  stage.style.transform = `scale(${scale})`;
+  outer.style.height = (790 * scale) + 'px';
+}
+
+function resetToForm(){
+  document.getElementById('resultsWrap').style.display='none';
+  document.querySelector('.content').style.display='block';
+  document.getElementById('loading').style.display='none';
+}
+
+// ---------- form helpers ----------
+function vd(d){return /^\d{2}\/\d{2}\/\d{4}$/.test(d);}
+const g=id=>document.getElementById(id)?.value?.trim()||'';
+function showErr(msg){
+  const el=document.getElementById('err');
+  el.textContent=msg;
+  el.style.display='block';
+}
+function fmtDate(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length>2&&v.length<=4)v=v.slice(0,2)+'/'+v.slice(2);
+  else if(v.length>4)v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4,8);
+  el.value=v;
+}
+function fmtTime(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length>2)v=v.slice(0,2)+':'+v.slice(2,4);
+  el.value=v;
+}
+function parseLocation(raw){
+  const parts=raw.split(',').map(s=>s.trim()).filter(Boolean);
+  return {
+    city: parts[0]||'',
+    state: parts.length===3?parts[1]:'',
+    country: parts.length===3?parts[2]:(parts[1]||'')
+  };
+}
+
+const W_API='https://know-your-energy.kwdoanchor.workers.dev';
+
+async function generate(){
+  document.getElementById('err').style.display='none';
+  const p1f=g('p1f'),p1l=g('p1l'),d1=g('p1d');
+  if(!p1f||!p1l||!vd(d1)){showErr('Please enter first and last name, and date of birth (MM/DD/YYYY).');return;}
+  if(isRelational){
+    const p2f=g('p2f'),p2l=g('p2l'),d2=g('p2d');
+    if(!p2f||!p2l||!vd(d2)){showErr('Please enter first and last name, and date of birth for Person Two.');return;}
+  }
+  const loc1=parseLocation(g('p1loc'));
+  const p1={
+    first:p1f, mid:g('p1m'), last:p1l, dob:d1,
+    time: g('p1t') ? g('p1t')+' '+(document.getElementById('p1ap').value) : '',
+    city:loc1.city, state:loc1.state, country:loc1.country,
+    location: g('p1loc')
+  };
+  let p2=null;
+  if(isRelational){
+    const loc2=parseLocation(g('p2loc'));
+    p2={
+      first:g('p2f'), mid:g('p2m'), last:g('p2l'), dob:g('p2d'),
+      time: g('p2t') ? g('p2t')+' '+(document.getElementById('p2ap').value) : '',
+      city:loc2.city, state:loc2.state, country:loc2.country,
+      location: g('p2loc')
+    };
+  }
+  document.querySelector('.content').style.display='none';
+  document.getElementById('loading').style.display='block';
+  try{
+    const res=await fetch(W_API+'/report',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
+    });
+    const result=await res.json();
+    if(!res.ok){
+      document.getElementById('loading').style.display='none';
+      document.querySelector('.content').style.display='block';
+      showErr(result.error||'Something went wrong. Please try again.');
+      return;
+    }
+    p1.numerology=result.p1.numerology;
+    p1.astro=result.p1.astrology;
+    p1.hd=result.p1.humanDesign;
+    if(p2&&result.p2){
+      p2.numerology=result.p2.numerology;
+      p2.astro=result.p2.astrology;
+      p2.hd=result.p2.humanDesign;
+    }
+    render(p1,p2,result.report,result.reportError);
+  }catch(e){
+    document.getElementById('loading').style.display='none';
+    document.querySelector('.content').style.display='block';
+    showErr('Connection error: '+e.message);
+  }
+}
+
+// ---------- tap-to-expand: cards, term definitions, gate chips ----------
+document.addEventListener('click', e=>{
+  const insideExpand=e.target.closest('#cardExpandBody');
+
+  const term=e.target.closest('.term');
+  if(term){
+    const def=term.parentElement.nextElementSibling;
+    if(def&&def.classList.contains('dpdef')){ def.hidden=!def.hidden; }
+    return;
+  }
+  const gate=e.target.closest('.gate-chip');
+  if(gate){
+    const defBox=gate.closest('.dprow').querySelector('.gate-def');
+    const num=gate.dataset.gate;
+    document.querySelectorAll('.gate-chip').forEach(c=>c.classList.remove('active'));
+    if(defBox.hidden || defBox.dataset.gate!==num){
+      gate.classList.add('active');
+      defBox.textContent='Gate '+num+' \u2014 '+(GATES[num]||'No description available.');
+      defBox.dataset.gate=num;
+      defBox.hidden=false;
+    }else{
+      defBox.hidden=true;
+      defBox.dataset.gate='';
+    }
+    return;
+  }
+  if(insideExpand)return;
+
+  const closeExpand=e.target.closest('#cardExpandClose');
+  if(closeExpand){
+    document.getElementById('cardExpand').classList.remove('open');
+    return;
+  }
+
+  const card=e.target.closest('.panel[data-card-idx]');
+  if(card){
+    const entry=cardRegistry[card.dataset.cardIdx];
+    if(entry){
+      document.getElementById('cardExpandTitle').textContent=entry.title;
+      document.getElementById('cardExpandBody').innerHTML=entry.rows;
+      document.getElementById('cardExpand').classList.add('open');
+    }
+  }
+});
+
 </script>
 </body>
 </html>
