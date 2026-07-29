@@ -255,6 +255,9 @@ body{
 .dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
 .dprl.term:hover{color:var(--card-accent);}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
+.dpdef p{margin:0 0 0.5em;}
+.dpdef p:last-child{margin-bottom:0;}
+.dpdef p:first-child{font-weight:700;font-style:normal;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
 .report-preview{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.48rem;font-style:italic;color:var(--card-mid);text-align:center;}
@@ -1082,17 +1085,66 @@ function escapeHtml(s){
   return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 function arow(l,v,defKey,defNum){
-  let def;
+  let specific;
   if(defKey&&defNum!=null&&NUM_DEFS[defKey]&&NUM_DEFS[defKey][defNum]){
-    def=NUM_DEFS[defKey][defNum];
+    specific=NUM_DEFS[defKey][defNum];
   }else if(defKey&&defNum!=null&&ASTRO_DEFS[defKey]&&ASTRO_DEFS[defKey][defNum]){
-    def=ASTRO_DEFS[defKey][defNum];
-  }else if(defKey&&GLOSSARY[defKey]){
-    def=GLOSSARY[defKey];
+    specific=ASTRO_DEFS[defKey][defNum];
+  }else if(defKey&&defNum!=null&&HD_DEFS[defKey]&&HD_DEFS[defKey][defNum]){
+    specific=HD_DEFS[defKey][defNum];
   }
+  const general=defKey&&GLOSSARY[defKey]?GLOSSARY[defKey]:null;
+  // show the plain "what this is" line first, then the personalized
+  // interpretation below it -- someone new to this shouldn't have to
+  // already know what a Life Path number is to read their own result
+  let def=null;
+  if(general&&specific)def=`<p>${general}</p><p>${specific}</p>`;
+  else if(specific)def=`<p>${specific}</p>`;
+  else if(general)def=`<p>${general}</p>`;
   const lbl=def?`<span class="dprl term" data-def="${defKey}">${l}</span>`:`<span class="dprl">${l}</span>`;
   return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
 }
+// Human Design's real API returns free-text (e.g. "Manifesting Generator",
+// "Emotional - Solar Plexus"), so match by keyword rather than requiring an
+// exact string -- keeps the definitions working regardless of exact phrasing.
+function normalizeHDType(s){
+  const t=(s||'').toLowerCase();
+  if(t.includes('manifesting generator'))return 'manifesting generator';
+  if(t.includes('generator'))return 'generator';
+  if(t.includes('projector'))return 'projector';
+  if(t.includes('manifestor'))return 'manifestor';
+  if(t.includes('reflector'))return 'reflector';
+  return null;
+}
+function normalizeHDAuthority(s){
+  const t=(s||'').toLowerCase();
+  if(t.includes('sacral'))return 'sacral';
+  if(t.includes('emotional')||t.includes('solar plexus'))return 'emotional';
+  if(t.includes('splenic')||t.includes('spleen'))return 'splenic';
+  if(t.includes('ego')||t.includes('heart'))return 'ego';
+  if(t.includes('self-projected')||t.includes('self projected'))return 'self-projected';
+  if(t.includes('mental')||t.includes('environment'))return 'mental';
+  if(t.includes('lunar')||t.includes('moon'))return 'lunar';
+  return null;
+}
+const HD_DEFS={
+  hdtype:{
+    'generator':`You have a steady, renewable well of life-force energy, but it only switches on in response to something outside you — a question, an opportunity, a person — not from sitting down and forcing an idea out of nowhere. When something's a genuine yes, you'll feel a pull toward it in your gut; when it's not, you'll feel resistance or boredom even if it looks good on paper. The frustration Generators feel is almost always a sign they've been initiating instead of waiting for something worth responding to.`,
+    'manifesting generator':`You have the same steady, renewable energy as a Generator, but with an extra shortcut straight to your voice — once something's a yes, you tend to move on it fast, sometimes skipping steps other people assume are necessary. That speed is a real strength, not a flaw to fix, but it means you're more likely to leave people behind or miss a detail if you don't say out loud what you're about to do before you do it. Like a Generator, you're still waiting for something to respond to — you're just quicker once you respond.`,
+    'projector':`You don't have steady, renewable energy the way a Generator does, so pacing yourself matters more for you than for almost anyone — pushing through exhaustion to keep up with other people's stamina is the fastest way to burn out. What you do have is a genuine talent for seeing how other people and systems work, often more clearly than they see it themselves. That gift only really lands when someone actually asks for your read on things — unrequested advice tends to be met with resistance, even when you're right.`,
+    'manifestor':`You're built to start things on your own, without waiting for an invitation or a sign — you feel an impulse and you move, in bursts, then need real rest before the next one. Because your energy doesn't broadcast the way a Generator's does, people are often caught off guard by what you're about to do, and that's where most of your friction comes from. Telling people what you're about to do before you do it — not asking permission, just informing them — is what keeps that friction from turning into pushback.`,
+    'reflector':`You don't run on any of the same fixed circuitry as the other four types — instead, you take in and reflect back whatever's around you, which makes you an unusually accurate read on the health of a group, room, or relationship. Because you're so sensitive to your surroundings, your own sense of who you are can shift noticeably depending on where you are and who you're with — that's not a flaw, it's how you're built to work. Big decisions genuinely need time for you: waiting through roughly a full month lets you feel a choice from enough different angles to trust it.`
+  },
+  hdauthority:{
+    'sacral':`Your gut answers before your head does — decisions that are right for you usually show up as an immediate, physical yes or no in the moment you're asked, not something you arrive at by thinking it through in advance. It only works in response to a real question asked right now; sitting alone trying to plan out an answer ahead of time tends to produce the wrong one.`,
+    'emotional':`You don't get a reliable answer in the moment — whatever you feel right when a decision comes up is only half the picture, and it will look different in a few hours or the next day. Clarity for you comes from riding out that wave rather than deciding at the peak of excitement or the bottom of doubt; if a decision doesn't need to be made right now, it shouldn't be.`,
+    'splenic':`Your read on things comes as a quiet, single, in-the-moment instinct — not a loud gut punch, more like a whisper that's easy to talk yourself out of if you're not listening for it. It only speaks once, right now, about right now; it isn't built to weigh in on some hypothetical decision for later.`,
+    'ego':`Your decisions are trustworthy when they come from genuine willpower and desire — an honest "do I actually want to put my energy into this," not what you think you should want. Because that willpower isn't unlimited, promises made to prove yourself rather than from real desire are usually the ones you end up regretting.`,
+    'self-projected':`You find your own clarity by talking — hearing your own voice describe a direction out loud, to someone else or even to yourself, is how you discover whether it's actually right for you, more than thinking it over silently ever will. The words that come out of you in that moment tend to be more trustworthy than whatever you rehearsed beforehand.`,
+    'mental':`You think out loud by nature, and you need the right people and the right space around you to do it — talking something through with a few trusted people you respect, not to get their opinion but to hear your own thoughts reflected back, is how clarity actually arrives for you.`,
+    'lunar':`You don't have one of the faster-acting authorities the other types rely on — real clarity on a big decision takes you through roughly a full lunar cycle, about a month, of asking the same question in different moods and different company before an answer holds steady. Rushing a major decision before that cycle plays out is the most common way this authority gets overridden.`
+  }
+};
 function karmicRow(l,numbers,defKey){
   if(!numbers.length)return arow(l,'None',null);
   const v=numbers.join(', ');
@@ -1184,9 +1236,9 @@ function hdr(hd){
   if(!hd||hd.error)return apend('Unavailable');
   let h='';
   const core=[];
-  if(hd.type)core.push(arow('Type',hd.type,'hdtype'));
+  if(hd.type)core.push(arow('Type',hd.type,'hdtype',normalizeHDType(hd.type)));
   if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile'));
-  if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority'));
+  if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority',normalizeHDAuthority(hd.authority)));
   if(core.length){h+=core.join('');}
   if(hd.incarnation_cross){h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
   if(hd.gates&&hd.gates.length){
