@@ -262,8 +262,7 @@ body{
    wheel, for Astrology) stays full size, the text list fills whatever
    space is left and gets clipped with a fade -- a real preview, full
    content only in the tap-to-expand modal. ---------- */
-.top-btns{display:flex;gap:0.5rem;justify-content:center;width:100%;max-width:380px;margin:0 auto 1.3rem;}
-.top-btns .side-btn{flex:1;height:38px;font-size:0.46rem;padding:0.2rem 0.3rem;}
+.top-btns{display:flex;gap:0.7rem;justify-content:center;width:100%;margin:0 auto 1.3rem;}
 
 .main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;align-items:start;width:100%;max-width:460px;margin:0 auto;}
 .quad-item{position:relative;min-width:0;cursor:pointer;border-radius:10px;overflow:hidden;
@@ -294,21 +293,26 @@ body{
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
 
-/* Pill-shaped buttons -- a single static diagonal sheen, not a spinning
-   halo or sparkle glints. Classy shine, not a game-show ring. */
+/* Solid navy pills, sized to their own content (not stretched across the
+   row) -- so they pop off the cream page instead of blending into it as
+   white-on-white did. One static diagonal sheen for shine, a real lift
+   shadow so they read as pressable, and a small icon each for quick
+   recognition at a glance. */
 .side-btn{
   position:relative;overflow:hidden;cursor:pointer;border-radius:999px;
-  display:flex;align-items:center;justify-content:center;text-align:center;
-  font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.03em;text-transform:uppercase;
-  padding:0.3rem 0.4rem;color:#193866;
-  background:linear-gradient(160deg,#ffffff 0%,#fdfdfd 50%,#eef1f5 100%);
-  border:1px solid rgba(25,56,102,0.3);
-  box-shadow:0 2px 6px -2px rgba(20,30,50,0.25), inset 0 1px 0 rgba(255,255,255,0.95);
+  display:inline-flex;align-items:center;justify-content:center;gap:0.35rem;text-align:center;
+  font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;
+  padding:0.6rem 1.1rem;color:#fdfdfd;
+  background:linear-gradient(155deg,#2f5590 0%,#193866 55%,#122a4d 100%);
+  border:1px solid rgba(10,20,45,0.5);
+  box-shadow:0 4px 12px -3px rgba(15,25,45,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+  transition:transform 0.15s ease, box-shadow 0.15s ease;
 }
 .side-btn::before{content:'';position:absolute;top:-10%;left:-35%;width:32%;height:120%;
-  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
   transform:skewX(-16deg);pointer-events:none;}
-.side-btn:active{transform:translateY(1px);}
+.side-btn .btn-icon{flex-shrink:0;width:11px;height:11px;display:block;}
+.side-btn:active{transform:translateY(2px) scale(0.97);box-shadow:0 1px 4px -1px rgba(15,25,45,0.4), inset 0 1px 0 rgba(255,255,255,0.2);}
 
 /* ---------- tap-to-expand modal ---------- */
 .card-expand{
@@ -1451,8 +1455,10 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
 // real CSS flex handles sizing and wrapping. ----------
 let cardRegistry=[];
 
-function topBtn(label,onclick){
-  return `<div class="side-btn" onclick="${onclick}"><span>${label}</span></div>`;
+const BTN_ICON_REFRESH='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 106.3 16.3M20 11V5M20 11h-6"/></svg>';
+const BTN_ICON_PRINT='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4.5A1.5 1.5 0 013 16.5v-5A1.5 1.5 0 014.5 10h15a1.5 1.5 0 011.5 1.5v5a1.5 1.5 0 01-1.5 1.5H18M6 14h12v7H6z"/></svg>';
+function topBtn(label,onclick,icon){
+  return `<div class="side-btn" onclick="${onclick}">${icon||''}<span>${label}</span></div>`;
 }
 
 // Astrology (col 1) and Human Design (col 3) are clear/transparent, no
@@ -1500,7 +1506,7 @@ function render(p1,p2,r,reportErr){
   const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
 
   document.getElementById('topBtns').innerHTML=
-    topBtn('Run Another Reading','resetToForm()')+topBtn('Save / Print Reading','window.print()');
+    topBtn('Run Another Reading','resetToForm()',BTN_ICON_REFRESH)+topBtn('Save / Print Reading','window.print()',BTN_ICON_PRINT);
 
   // Row 1 = P1, row 2 = Reading (middle column only), row 3 = P2 mirrored
   // below -- solo readings just end after Reading, no reserved empty space.
