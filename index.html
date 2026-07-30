@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know Your Energy — Landing</title>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 /* Background: light metallic with only a slight green cast -- brighter and
@@ -292,10 +292,21 @@ body{
    so no text ever sits on the ornate border itself. */
 .frame-card{position:relative;width:100%;height:25dvh;grid-row:2;}
 .frame-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;}
-.frame-card .frame-inner{position:absolute;top:12%;bottom:12%;left:21%;right:21%;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:0.06rem;}
+.frame-card .frame-inner{position:absolute;top:12%;bottom:12%;left:21%;right:21%;overflow:hidden;}
+/* Clear glass pane the values sit on -- mostly transparent (not frosted/
+   opaque), just a soft edge highlight and faint shadow so it reads as a
+   real glass insert rather than empty space. */
+.frame-card .glass-pane{position:absolute;inset:2%;border-radius:6px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.14) 100%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(110,120,145,0.18), 0 3px 10px rgba(70,80,105,0.14);}
+.frame-card .frame-values{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0.32rem;}
 .frame-card .frow{display:flex;flex-direction:column;text-align:center;}
-.frame-card .flbl{font-family:'Barlow Condensed',sans-serif;font-size:0.34rem;letter-spacing:0.02em;text-transform:uppercase;font-weight:700;color:#4a5060;}
-.frame-card .fval{font-family:'Barlow Condensed',sans-serif;font-size:0.4rem;font-weight:800;color:#193866;}
+/* Etched-into-glass look: full-strength, fully legible navy fill (never
+   faded/translucent) with a bevelled highlight-below / shadow-above
+   text-shadow pair to read as carved into the glass rather than printed
+   flat on top of it. */
+.frame-card .fval{font-family:'Cormorant Garamond',serif;font-size:0.72rem;font-weight:600;letter-spacing:0.03em;color:#193866;
+  text-shadow:0 1px 0 rgba(255,255,255,0.9), 0 -0.5px 0.5px rgba(20,30,55,0.45);}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
@@ -1511,16 +1522,10 @@ function frameCard(person,side){
   const planets=a.planets||[];
   const findSign=name=>planets.find(p=>p.name===name)?.sign||'--';
   const fields=[
-    ['Sun',findSign('Sun')],['Moon',findSign('Moon')],
-    ['Rising',a.ascendant?.sign||'--'],['Venus',findSign('Venus')],
-    ['Life Path',n.lifePath??'--'],['Expression',n.expression??'--'],
-    ['Soul Urge',n.soulUrge??'--'],
-    ['Year',n.personalYear??'--'],['Month',n.personalMonth??'--'],['Day',n.personalDay??'--'],
-    ['Essence',n.essenceCycle?.value??'--'],
-    ['Type',h.type||'--'],['Profile',h.profile||'--'],['Authority',h.authority||'--']
+    findSign('Sun'), n.lifePath??'--', h.type||'--', h.profile||'--', h.authority||'--'
   ];
-  const rows=fields.map(([l,v])=>`<div class="frow"><span class="fval">${escapeHtml(String(v))}</span></div>`).join('');
-  return `<div class="frame-card" style="grid-column:${side};"><img src="${FRAME_GOLD_VINE}" alt=""><div class="frame-inner">${rows}</div></div>`;
+  const rows=fields.map(v=>`<div class="frow"><span class="fval">${escapeHtml(String(v))}</span></div>`).join('');
+  return `<div class="frame-card" style="grid-column:${side};"><img src="${FRAME_GOLD_VINE}" alt=""><div class="frame-inner"><div class="glass-pane"></div><div class="frame-values">${rows}</div></div></div>`;
 }
 
 function personRow(person,rowNum){
