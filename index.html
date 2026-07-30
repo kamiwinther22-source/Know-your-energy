@@ -234,6 +234,9 @@ body{
   display:flex;flex-direction:column;
 }
 .panel.blank{cursor:default;}
+.astro-chart-preview{padding:0;}
+.chart-preview-inner{flex:1;display:flex;align-items:center;justify-content:center;padding:0.3rem;}
+.chart-preview-inner svg{width:100%;height:100%;}
 
 /* ---------- panel content: dark text on the light brushed-metal panel,
    brand blue for accents instead of the old gold ---------- */
@@ -253,6 +256,9 @@ body{
 .stage-range{padding:0.1rem 0.4rem 0;font-family:'Barlow Condensed',sans-serif;font-size:0.34rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-mid);font-weight:700;}
 .stage-pair{display:flex;gap:0.5rem;}
 .stage-pair .pc-col{flex:1;min-width:0;}
+.birthdate-row .dprl,.birthdate-row .dprv{font-size:0.19rem;}
+.card-expand-body .birthdate-row .dprl{font-size:1.1rem;}
+.card-expand-body .birthdate-row .dprv{font-size:1.7rem;}
 .stage-pair .dpr{padding:0.02rem 0.4rem;}
 .stage-pair .dpdef{padding:0 0.4rem 0.3rem;}
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
@@ -267,7 +273,9 @@ body{
 .card-expand-body .wheel-wrap{display:flex;justify-content:center;width:calc(100% + 2.6rem);max-width:600px;margin:0 -1.3rem 0.8rem;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
-.report-preview{padding:0 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;font-style:normal;color:var(--card-text);text-align:center;}
+.report-preview{padding:0 0.4rem;font-family:'Alex Brush',cursive;font-size:1.5rem;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
+  color:transparent;background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
@@ -1456,14 +1464,12 @@ function pan(nm,sys,rows,colIndex,rowIndex,preHtml){
   return `<div class="panel" style="left:${p.x}px;top:${p.y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">${escapeHtml(nm)} \u00b7 ${sys}</div><div class="dplist">${rows}</div></div></div>`;
 }
 const GLINT_SVG='<svg viewBox="0 0 24 24" style="display:block;width:100%;height:100%;filter:drop-shadow(0 0 1.5px rgba(255,255,255,0.9));"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#306AC0"/></svg>';
-function sideButton(colIndex,label,onclick){
+function sideButtonAt(x,y,width,label,onclick){
   // deliberately a short pill, not a tall card, so it never reads as a
   // fourth report panel -- wrapped in the same spinning glow-ring used on
   // the entry form's Generate button, plus real pulsing sparkle glints
-  const p=panelPos(colIndex,1);
   const btnH=54;
-  const y=p.y+(PH-btnH)/2;
-  return `<div class="side-btn-ring" style="left:${p.x}px;top:${y}px;width:${PW}px;height:${btnH}px;">
+  return `<div class="side-btn-ring" style="left:${x}px;top:${y}px;width:${width}px;height:${btnH}px;">
     <div class="side-btn" onclick="${onclick}">
       <div class="glint" style="width:15px;height:15px;top:-6px;left:-6px;">${GLINT_SVG}</div>
       <div class="glint g2" style="width:12px;height:12px;bottom:-5px;right:-4px;">${GLINT_SVG}</div>
@@ -1472,13 +1478,27 @@ function sideButton(colIndex,label,onclick){
     </div>
   </div>`;
 }
-function reportSlot(names,report,reportError){
-  const p=panelPos(1,1); // centered in the middle row
-  const x=p.x, y=p.y;
+// The astrology chart needs to be visible the moment the results page loads,
+// not hidden behind a tap -- a full legible wheel doesn't fit inside a
+// normal 92px card column, so instead of squeezing it into the top-row
+// Astrology card, it gets its own wider preview slot beside the Reading
+// card. Tapping it opens the exact same modal as the Astrology card above
+// (same cardIdx), so the full-size, fully labeled wheel is still one tap
+// away.
+const CHART_PREVIEW_W=130, CHART_GAP=12;
+const READING_X=MARGIN+CHART_PREVIEW_W+CHART_GAP;
+const READING_W=(STAGE_W-MARGIN)-READING_X;
+function astroChartPreview(astro,cardIdx,y){
+  const svg=astroWheelSVG(astro);
+  if(!svg||cardIdx==null)return '';
+  return `<div class="panel astro-chart-preview" style="left:${MARGIN}px;top:${y}px;width:${CHART_PREVIEW_W}px;" data-card-idx="${cardIdx}"><div class="chart-preview-inner">${svg}</div></div>`;
+}
+function reportSlot(names,report,reportError,y){
+  const x=READING_X, w=READING_W;
   const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
-    if(!reportError)return `<div class="panel blank" style="left:${x}px;top:${y}px;"></div>`;
-    return `<div class="panel report" style="left:${x}px;top:${y}px;"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    if(!reportError)return `<div class="panel blank" style="left:${x}px;top:${y}px;width:${w}px;"></div>`;
+    return `<div class="panel report" style="left:${x}px;top:${y}px;width:${w}px;"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
@@ -1487,7 +1507,7 @@ function reportSlot(names,report,reportError){
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml;
   const idx=cardRegistry.push({title,rows:fullRows})-1;
-  return `<div class="panel report" style="left:${x}px;top:${y}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
+  return `<div class="panel report" style="left:${x}px;top:${y}px;width:${w}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
 }
 
 function render(p1,p2,r,reportErr){
@@ -1496,21 +1516,31 @@ function render(p1,p2,r,reportErr){
   const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
   let h='';
   // top row: P1's three systems
+  const astroCardIdx=cardRegistry.length;
   h+=pan(p1.first,'Astrology',ar(p1.astro),0,0,wheelWrap(p1.astro));
   h+=pan(p1.first,'Numerology',nr(p1.numerology),1,0);
   h+=pan(p1.first,'Human Design',hdr(p1.hd),2,0);
-  // middle row: the reading, alone, centered
-  h+=reportSlot(namesForTitle,r,reportErr);
+  // middle row: astrology chart preview beside the reading, so the chart
+  // itself is visible immediately without tapping in
+  h+=astroChartPreview(p1.astro,astroCardIdx,ROW_Y[1]);
+  h+=reportSlot(namesForTitle,r,reportErr,ROW_Y[1]);
   // bottom row: P2's three systems -- solo readings skip this row entirely
   // rather than reserving a blank one, so there's no dead space at the
   // bottom of the page.
+  let lastRow=1;
   if(p2){
     h+=pan(p2.first,'Astrology',ar(p2.astro),0,2,wheelWrap(p2.astro));
     h+=pan(p2.first,'Numerology',nr(p2.numerology),1,2);
     h+=pan(p2.first,'Human Design',hdr(p2.hd),2,2);
+    lastRow=2;
   }
-  h+=sideButton(0,'Run Another Reading','resetToForm()');
-  h+=sideButton(2,'Save / Print Reading','window.print()');
+  // nav buttons live in their own row below everything else, since the
+  // chart preview now needs the full middle row for astrology + reading
+  const btnY=ROW_Y[lastRow]+PH+ROW_GAP;
+  const btnTotalW=PW*2+COL_GAP;
+  const btnStartX=(STAGE_W-btnTotalW)/2;
+  h+=sideButtonAt(btnStartX,btnY,PW,'Run Another Reading','resetToForm()');
+  h+=sideButtonAt(btnStartX+PW+COL_GAP,btnY,PW,'Save / Print Reading','window.print()');
   const stage=document.getElementById('stage');
   stage.innerHTML=h;
   document.getElementById('loading').style.display='none';
@@ -1523,8 +1553,7 @@ function render(p1,p2,r,reportErr){
   const outer = document.getElementById('stageOuter');
   const availWidth = outer.clientWidth;
   const scale = availWidth / STAGE_W;
-  const rows = p2 ? 3 : 2;
-  const stageHeight = ROW_Y[rows-1] + PH + 20;
+  const stageHeight = btnY + 54 + 20;
   stage.style.width = STAGE_W + 'px';
   stage.style.height = stageHeight + 'px';
   stage.style.transform = `scale(${scale})`;
