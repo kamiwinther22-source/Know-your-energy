@@ -434,6 +434,14 @@ VOICE
   the statement should still be specific and concrete either way.
 - No therapy-speak clichés ("on your journey," "the universe has a plan for
   you," "manifest your truth"). No fortune-cookie language.
+- Avoid vague, ungrounded comparative or spatial metaphors that sound
+  meaningful but don't actually explain anything a reader can check against
+  their own experience — e.g. "your identity runs deep rather than wide."
+  Deep how? Wide how? Compared to what? If you reach for a metaphor like
+  that, replace it with the concrete behavior it's standing in for instead
+  (e.g. "you focus hard on a few things that matter to you rather than
+  spreading your attention across many"). Every claim should cash out to
+  something specific and real, not an abstract axis with no defined ends.
 - Never make medical, legal, or financial predictions or promises. This is
   reflective/interpretive, not diagnostic or predictive of real-world events.
 - Never promise how a relationship will turn out, especially a strained or
