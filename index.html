@@ -1519,7 +1519,7 @@ function frameCard(person,side){
     ['Essence',n.essenceCycle?.value??'--'],
     ['Type',h.type||'--'],['Profile',h.profile||'--'],['Authority',h.authority||'--']
   ];
-  const rows=fields.map(([l,v])=>`<div class="frow"><span class="flbl">${escapeHtml(l)}</span><span class="fval">${escapeHtml(String(v))}</span></div>`).join('');
+  const rows=fields.map(([l,v])=>`<div class="frow"><span class="fval">${escapeHtml(String(v))}</span></div>`).join('');
   return `<div class="frame-card" style="grid-column:${side};"><img src="${FRAME_GOLD_VINE}" alt=""><div class="frame-inner">${rows}</div></div>`;
 }
 
