@@ -1395,6 +1395,8 @@ function hdr(hd){
     h+=dpsec('Gates');
     h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
   }
+  h+=dpsec('Temporary Debug — Raw API Response');
+  h+=`<div class="dprow"><pre style="white-space:pre-wrap;word-break:break-word;font-size:0.6rem;line-height:1.4;padding:0.3rem;background:rgba(0,0,0,0.05);border-radius:4px;">${escapeHtml(JSON.stringify(hd,null,2))}</pre></div>`;
   return h||apend('Unavailable');
 }
 
