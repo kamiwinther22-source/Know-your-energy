@@ -293,26 +293,28 @@ body{
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
 
-/* Solid navy pills, sized to their own content (not stretched across the
+/* Silver/chrome pills, sized to their own content (not stretched across the
    row) -- so they pop off the cream page instead of blending into it as
-   white-on-white did. One static diagonal sheen for shine, a real lift
-   shadow so they read as pressable, and a small icon each for quick
-   recognition at a glance. */
+   white-on-white did. Banded metallic gradient + a soft outer silver glow
+   give the shine; everything here is static (no spin, no moving streak) --
+   a spinning ring was tried before and rejected as a "game show" effect. A
+   real lift shadow keeps them reading as pressable, small icon each for
+   quick recognition at a glance. */
 .side-btn{
   position:relative;overflow:hidden;cursor:pointer;border-radius:999px;
   display:inline-flex;align-items:center;justify-content:center;gap:0.35rem;text-align:center;
   font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;
-  padding:0.6rem 1.1rem;color:#fdfdfd;
-  background:linear-gradient(155deg,#2f5590 0%,#193866 55%,#122a4d 100%);
-  border:1px solid rgba(10,20,45,0.5);
-  box-shadow:0 4px 12px -3px rgba(15,25,45,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+  padding:0.6rem 1.1rem;color:#193866;
+  background:linear-gradient(155deg,#f5f6f8 0%,#d7dadf 18%,#f9fafb 34%,#b9bec5 52%,#eef0f2 68%,#c3c7cd 85%,#eceef0 100%);
+  border:1px solid rgba(120,128,138,0.55);
+  box-shadow:0 0 14px rgba(255,255,255,0.65), 0 5px 14px -4px rgba(35,40,50,0.4), inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1.5px 2px rgba(100,105,115,0.35);
   transition:transform 0.15s ease, box-shadow 0.15s ease;
 }
 .side-btn::before{content:'';position:absolute;top:-10%;left:-35%;width:32%;height:120%;
   background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
   transform:skewX(-16deg);pointer-events:none;}
 .side-btn .btn-icon{flex-shrink:0;width:11px;height:11px;display:block;}
-.side-btn:active{transform:translateY(2px) scale(0.97);box-shadow:0 1px 4px -1px rgba(15,25,45,0.4), inset 0 1px 0 rgba(255,255,255,0.2);}
+.side-btn:active{transform:translateY(2px) scale(0.97);box-shadow:0 0 8px rgba(255,255,255,0.45), 0 2px 6px -2px rgba(35,40,50,0.35), inset 0 1px 0 rgba(255,255,255,0.7);}
 
 /* ---------- tap-to-expand modal ---------- */
 .card-expand{
