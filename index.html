@@ -1459,16 +1459,16 @@ function topBtn(label,onclick){
 // Each card's text list is capped and fades out partway down -- a real
 // preview, not the entire chart dumped in place -- so the narrow middle
 // column never grows tall enough to throw off the 3-column layout.
-function quadItem(nm,sys,rows,preHtml,wheelSvg){
+function quadItem(nm,sys,rows,preHtml,wheelSvg,rowNum){
   const idx=cardRegistry.push({title:nm+' \u00b7 '+sys,rows,preHtml})-1;
   const wheelHtml=wheelSvg?`<div class="quad-wheel">${wheelSvg}</div>`:'';
-  return `<div class="quad-item" data-card-idx="${idx}"><div class="quad-title">${escapeHtml(nm)} \u00b7 ${sys}</div>${wheelHtml}<div class="dplist">${rows}</div></div>`;
+  return `<div class="quad-item" style="grid-row:${rowNum};" data-card-idx="${idx}"><div class="quad-title">${escapeHtml(nm)} \u00b7 ${sys}</div>${wheelHtml}<div class="dplist">${rows}</div></div>`;
 }
-function reportSlot(names,report,reportError){
+function reportSlot(names,report,reportError,rowNum){
   const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
     if(!reportError)return '';
-    return `<div class="panel-auto" style="grid-column:2;"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
@@ -1477,16 +1477,20 @@ function reportSlot(names,report,reportError){
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml;
   const idx=cardRegistry.push({title,rows:fullRows})-1;
-  return `<div class="panel-auto" style="grid-column:2;" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
+  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
 }
 
 // One row = Astrology (col 1) / Numerology (col 2, narrow) / Human
-// Design (col 3) -- CSS grid auto-flow places these three children into
-// the three columns in document order, matching the original sketch.
-function personRow(person){
-  return quadItem(person.first,'Astrology',ar(person.astro),wheelWrap(person.astro),astroWheelSVG(person.astro))
-    +quadItem(person.first,'Numerology',nr(person.numerology))
-    +quadItem(person.first,'Human Design',hdr(person.hd));
+// Design (col 3). Each card gets an EXPLICIT grid-row -- Astrology's wheel
+// makes its card taller than Numerology/HD, which stretches that whole
+// grid row; without an explicit row, CSS auto-placement backfills the
+// empty col-1/col-3 slots beside Reading with whatever card comes next in
+// the markup, scattering the second person's row instead of keeping it
+// together underneath.
+function personRow(person,rowNum){
+  return quadItem(person.first,'Astrology',ar(person.astro),wheelWrap(person.astro),astroWheelSVG(person.astro),rowNum)
+    +quadItem(person.first,'Numerology',nr(person.numerology),null,null,rowNum)
+    +quadItem(person.first,'Human Design',hdr(person.hd),null,null,rowNum);
 }
 
 function render(p1,p2,r,reportErr){
@@ -1497,11 +1501,10 @@ function render(p1,p2,r,reportErr){
   document.getElementById('topBtns').innerHTML=
     topBtn('Run Another Reading','resetToForm()')+topBtn('Save / Print Reading','window.print()');
 
-  // P1's row, Reading centered in the middle column right below it, then
-  // P2's row mirrored below -- solo readings just end after Reading, no
-  // reserved empty space.
-  let h=personRow(p1)+reportSlot(namesForTitle,r,reportErr);
-  if(p2)h+=personRow(p2);
+  // Row 1 = P1, row 2 = Reading (middle column only), row 3 = P2 mirrored
+  // below -- solo readings just end after Reading, no reserved empty space.
+  let h=personRow(p1,1)+reportSlot(namesForTitle,r,reportErr,2);
+  if(p2)h+=personRow(p2,3);
   document.getElementById('mainGrid').innerHTML=h;
 
   document.getElementById('loading').style.display='none';
