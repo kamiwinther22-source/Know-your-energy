@@ -208,30 +208,11 @@ body{
 .loading{display:none;text-align:center;padding:4rem 1rem;}
 .loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#193866;}
 
-/* ---------- results page: V-shape panels, same brushed-metal technique
-   verified against the real jewel-tray reference photo (dimensions,
-   texture, edge glint all measured from it, not guessed) ---------- */
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:transparent;
   background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   text-align:center;margin-bottom:1.4rem;}
-.stage-outer{width:100%;overflow:visible;}
-.stage{position:relative;transform-origin:top left;}
-.panel{
-  position:absolute;width:80px;height:168px;border-radius:10px;overflow:hidden;cursor:pointer;
-  background-image:
-    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 55%),
-    linear-gradient(150deg, #ffffff 0%, #fbfbf9 55%, #f4f2ea 100%);
-  border:1px solid rgba(25,56,102,0.35);
-  box-shadow:
-    0 4px 10px -4px rgba(20,30,50,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.95),
-    inset 3px 0 5px -2px rgba(255,255,255,0.95),
-    inset -2px 0 4px -2px rgba(20,30,50,0.15);
-  display:flex;flex-direction:column;
-}
-.panel.blank{cursor:default;}
 
 /* ---------- panel content: dark text on the light brushed-metal panel,
    brand blue for accents instead of the old gold ---------- */
@@ -274,32 +255,19 @@ body{
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
 
-/* ---------- normal document-flow results layout: "energy convergence".
-   Each person's Astrology / Numerology / Human Design sit in one even
-   3-column row, all three the same real bordered card. A drawn SVG glow
-   path visually carries each card down (or, for a second person, up)
-   into the shared Reading card in between -- one relational reading that
-   both people's charts visibly feed into, not unrelated boxes next to a
-   report. Card positions are measured after layout (getBoundingClientRect),
-   never hand-computed pixels. ---------- */
+/* ---------- normal document-flow results layout: back to the original
+   3-column sketch. Astrology (col 1), Numerology (col 2, narrow), Human
+   Design (col 3); Reading sits in the middle column right below
+   Numerology; a second person's row mirrors below. Cards are clear
+   (transparent, no white fill) -- just a hairline border, page texture
+   shows through. Each card's text list is capped height + fades out --
+   a real preview, full content only in the tap-to-expand modal. ---------- */
 .top-btns{display:flex;gap:0.5rem;justify-content:center;width:100%;max-width:380px;margin:0 auto 1.3rem;}
-.top-btns .side-btn-ring{position:relative;left:auto!important;top:auto!important;flex:1;width:auto!important;height:38px;}
-.top-btns .side-btn{font-size:0.46rem;padding:0.2rem 0.3rem;}
+.top-btns .side-btn{flex:1;height:38px;font-size:0.46rem;padding:0.2rem 0.3rem;}
 
-.energy-stage{position:relative;width:100%;max-width:460px;margin:0 auto;}
-.energy-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
-.energy-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;position:relative;z-index:1;}
-.energy-reading{position:relative;z-index:1;margin:1.7rem 0;}
-.quad-item{position:relative;min-width:0;cursor:pointer;border-radius:10px;overflow:visible;
-  background-image:
-    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 55%),
-    linear-gradient(150deg, #ffffff 0%, #fbfbf9 55%, #f4f2ea 100%);
-  border:1px solid rgba(25,56,102,0.35);
-  box-shadow:
-    0 4px 10px -4px rgba(20,30,50,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.95),
-    inset 3px 0 5px -2px rgba(255,255,255,0.95),
-    inset -2px 0 4px -2px rgba(20,30,50,0.15);
+.main-grid{display:grid;grid-template-columns:1fr 132px 1fr;gap:0.6rem;align-items:start;width:100%;max-width:460px;margin:0 auto;}
+.quad-item{position:relative;min-width:0;cursor:pointer;border-radius:10px;overflow:hidden;
+  background:transparent;border:1px solid rgba(25,56,102,0.3);
   padding:0.55rem 0.45rem 0.6rem;}
 .quad-item .quad-title{font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:800;color:#193866;margin-bottom:0.35rem;text-align:center;}
 .quad-item .quad-wheel{width:100%;margin-bottom:0.45rem;}
@@ -309,18 +277,13 @@ body{
 .quad-item .dpsec{font-size:0.39rem;padding:0.18rem 0 0.05rem;}
 .quad-item .dpdef{font-size:0.43rem;padding:0 0 0.26rem;}
 .quad-item .glyph{font-size:0.62rem;}
-.panel-auto{position:relative;width:100%;border-radius:10px;cursor:pointer;overflow:visible;
-  background-image:
-    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 55%),
-    linear-gradient(150deg, #ffffff 0%, #fbfbf9 55%, #f4f2ea 100%);
-  border:1px solid rgba(25,56,102,0.35);
-  box-shadow:
-    0 4px 10px -4px rgba(20,30,50,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.95),
-    inset 3px 0 5px -2px rgba(255,255,255,0.95),
-    inset -2px 0 4px -2px rgba(20,30,50,0.15);
+.panel-auto{position:relative;width:100%;border-radius:10px;cursor:pointer;overflow:hidden;
+  background:transparent;border:1px solid rgba(25,56,102,0.3);
   display:flex;flex-direction:column;}
-.panel-auto .dplist{overflow:visible;height:auto;}
+.quad-item .dplist,.panel-auto .dplist{max-height:148px;overflow:hidden;position:relative;}
+.quad-item .dplist::after,.panel-auto .dplist::after{content:'';position:absolute;left:0;right:0;bottom:0;height:34px;
+  background:linear-gradient(to bottom, rgba(241,244,236,0) 0%, rgba(241,244,236,0.92) 80%);
+  pointer-events:none;}
 .panel-auto .report-tray-preview{padding:1rem 0.4rem;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
@@ -330,30 +293,21 @@ body{
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
 
-/* Pill-shaped, bright-white buttons -- deliberately NOT the same shape,
-   size or material as the ivory/gold report panels, so they read as
-   controls, not more cards. Spinning gold glow-ring halo (no grey),
-   plus real pulsing sparkle glints (not a diagonal sheen). */
-.side-btn-ring{position:absolute;border-radius:999px;padding:3px;overflow:hidden;}
-.side-btn-ring::before{content:'';position:absolute;inset:-100%;
-  background:conic-gradient(from 0deg,#193866 0%,#eef1fb 12%,#ffffff 20%,#eef1fb 28%,#193866 40%,#0d1f3a 50%,#193866 60%,#eef1fb 72%,#ffffff 80%,#eef1fb 88%,#193866 100%);
-  animation:silverspin 3s linear infinite;}
-@media(prefers-reduced-motion:reduce){.side-btn-ring::before{animation:none;display:none;}}
+/* Pill-shaped buttons -- a single static diagonal sheen, not a spinning
+   halo or sparkle glints. Classy shine, not a game-show ring. */
 .side-btn{
-  position:relative;z-index:1;overflow:hidden;cursor:pointer;border-radius:999px;
-  width:100%;height:100%;
+  position:relative;overflow:hidden;cursor:pointer;border-radius:999px;
   display:flex;align-items:center;justify-content:center;text-align:center;
   font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.03em;text-transform:uppercase;
   padding:0.3rem 0.4rem;color:#193866;
-  background:linear-gradient(160deg,#ffffff 0%,#fdfdfd 55%,#f2f4f7 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.9);
+  background:linear-gradient(160deg,#ffffff 0%,#fdfdfd 50%,#eef1f5 100%);
+  border:1px solid rgba(25,56,102,0.3);
+  box-shadow:0 2px 6px -2px rgba(20,30,50,0.25), inset 0 1px 0 rgba(255,255,255,0.95);
 }
+.side-btn::before{content:'';position:absolute;top:-10%;left:-35%;width:32%;height:120%;
+  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+  transform:skewX(-16deg);pointer-events:none;}
 .side-btn:active{transform:translateY(1px);}
-.side-btn .glint{position:absolute;pointer-events:none;animation:sideGlint 2.2s ease-in-out infinite;}
-.side-btn .glint.g2{animation-delay:0.7s;}
-.side-btn .glint.g3{animation-delay:1.4s;}
-@keyframes sideGlint{0%,40%,100%{opacity:0.2;transform:scale(0.8);}20%{opacity:1;transform:scale(1.15);}}
-@media(prefers-reduced-motion:reduce){.side-btn .glint{animation:none;opacity:0.85;}}
 
 /* ---------- tap-to-expand modal ---------- */
 .card-expand{
@@ -389,9 +343,11 @@ body{
 .card-expand-body .report-body{font-size:1rem;line-height:1.65;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:1rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
 @media print{
-  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.side-btn-ring{display:none!important;}
+  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.top-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
-  .panel{box-shadow:none!important;border:1px solid #193866!important;background:#fff!important;}
+  .quad-item,.panel-auto{box-shadow:none!important;border:1px solid #193866!important;background:#fff!important;}
+  .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
+  .quad-item .dplist::after,.panel-auto .dplist::after{display:none!important;}
   .dp{--card-text:#000!important;--card-accent:#193866!important;--card-stripe-odd:transparent!important;}
 }
 </style>
@@ -520,7 +476,7 @@ body{
 <div class="results-wrap" id="resultsWrap">
   <div class="ttl">Know Your Energy</div>
   <div class="top-btns" id="topBtns"></div>
-  <div class="energy-stage" id="energyStage"></div>
+  <div class="main-grid" id="mainGrid"></div>
 </div>
 
 <div class="card-expand" id="cardExpand">
@@ -1495,20 +1451,14 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
 let cardRegistry=[];
 
 function topBtn(label,onclick){
-  return `<div class="side-btn-ring">
-    <div class="side-btn" onclick="${onclick}">
-      <div class="glint" style="width:11px;height:11px;top:-5px;left:-5px;">${GLINT_SVG}</div>
-      <div class="glint g2" style="width:9px;height:9px;bottom:-4px;right:-3px;">${GLINT_SVG}</div>
-      <div class="glint g3" style="width:8px;height:8px;top:50%;right:28%;">${GLINT_SVG}</div>
-      <span>${label}</span>
-    </div>
-  </div>`;
+  return `<div class="side-btn" onclick="${onclick}"><span>${label}</span></div>`;
 }
-const GLINT_SVG='<svg viewBox="0 0 24 24" style="display:block;width:100%;height:100%;filter:drop-shadow(0 0 1.5px rgba(255,255,255,0.9));"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#306AC0"/></svg>';
 
-// Astrology, Numerology and Human Design all share the same bordered
-// card now (evenly split 3-column row). Tapping any of them opens the
-// same modal as a full detailed view.
+// Astrology (col 1) and Human Design (col 3) are clear/transparent, no
+// fill. Tapping any card opens the same modal as a full detailed view.
+// Each card's text list is capped and fades out partway down -- a real
+// preview, not the entire chart dumped in place -- so the narrow middle
+// column never grows tall enough to throw off the 3-column layout.
 function quadItem(nm,sys,rows,preHtml,wheelSvg){
   const idx=cardRegistry.push({title:nm+' \u00b7 '+sys,rows,preHtml})-1;
   const wheelHtml=wheelSvg?`<div class="quad-wheel">${wheelSvg}</div>`:'';
@@ -1518,7 +1468,7 @@ function reportSlot(names,report,reportError){
   const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
     if(!reportError)return '';
-    return `<div class="panel-auto"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    return `<div class="panel-auto" style="grid-column:2;"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
@@ -1527,68 +1477,16 @@ function reportSlot(names,report,reportError){
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml;
   const idx=cardRegistry.push({title,rows:fullRows})-1;
-  return `<div class="panel-auto" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
+  return `<div class="panel-auto" style="grid-column:2;" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
 }
 
-// One row = Astrology / Numerology / Human Design, three even columns.
-function personRow(person,rowId){
-  return `<div class="energy-row" id="${rowId}">`
-    +quadItem(person.first,'Astrology',ar(person.astro),wheelWrap(person.astro),astroWheelSVG(person.astro))
+// One row = Astrology (col 1) / Numerology (col 2, narrow) / Human
+// Design (col 3) -- CSS grid auto-flow places these three children into
+// the three columns in document order, matching the original sketch.
+function personRow(person){
+  return quadItem(person.first,'Astrology',ar(person.astro),wheelWrap(person.astro),astroWheelSVG(person.astro))
     +quadItem(person.first,'Numerology',nr(person.numerology))
-    +quadItem(person.first,'Human Design',hdr(person.hd))
-    +`</div>`;
-}
-
-// Measures the real, laid-out positions of each row's cards and the
-// Reading card (never hand-computed pixels) and draws a soft glow path
-// from each card into Reading -- down from a first row, up from a
-// second, so a relational reading visibly has both people's energy
-// converging into it.
-function drawEnergyPaths(){
-  const stage=document.getElementById('energyStage');
-  const svg=document.getElementById('energySvg');
-  const reading=document.getElementById('energyReading');
-  if(!stage||!svg||!reading)return;
-  const stageRect=stage.getBoundingClientRect();
-  svg.setAttribute('viewBox',`0 0 ${stageRect.width} ${stageRect.height}`);
-  svg.setAttribute('width',stageRect.width);
-  svg.setAttribute('height',stageRect.height);
-  const readingRect=reading.getBoundingClientRect();
-  let body=`<defs>
-    <linearGradient id="flowDown" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#306AC0" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="#193866" stop-opacity="0.55"/>
-    </linearGradient>
-    <linearGradient id="flowUp" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0%" stop-color="#306AC0" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="#193866" stop-opacity="0.55"/>
-    </linearGradient>
-    <filter id="energyGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
-    <radialGradient id="energyCore" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-      <stop offset="45%" stop-color="#306AC0" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#306AC0" stop-opacity="0"/>
-    </radialGradient>
-  </defs>`;
-  function connect(rowEl,fromBelow){
-    if(!rowEl)return;
-    const dx=readingRect.left+readingRect.width/2-stageRect.left;
-    const dy=(fromBelow?readingRect.bottom:readingRect.top)-stageRect.top+(fromBelow?-4:4);
-    [...rowEl.children].forEach(card=>{
-      const r=card.getBoundingClientRect();
-      const x=r.left+r.width/2-stageRect.left;
-      const y=(fromBelow?r.top:r.bottom)-stageRect.top;
-      const midY=y+(dy-y)*0.55;
-      const d=`M${x},${y} Q${x},${midY} ${dx},${dy}`;
-      const grad=fromBelow?'flowUp':'flowDown';
-      body+=`<path d="${d}" fill="none" stroke="url(#${grad})" stroke-width="9" filter="url(#energyGlow)" opacity="0.65"/>`;
-      body+=`<path d="${d}" fill="none" stroke="#193866" stroke-width="1.4" opacity="0.5"/>`;
-    });
-    body+=`<circle cx="${dx}" cy="${dy}" r="28" fill="url(#energyCore)"/>`;
-  }
-  connect(document.getElementById('energyRow1'),false);
-  connect(document.getElementById('energyRow2'),true);
-  svg.innerHTML=body;
+    +quadItem(person.first,'Human Design',hdr(person.hd));
 }
 
 function render(p1,p2,r,reportErr){
@@ -1599,18 +1497,12 @@ function render(p1,p2,r,reportErr){
   document.getElementById('topBtns').innerHTML=
     topBtn('Run Another Reading','resetToForm()')+topBtn('Save / Print Reading','window.print()');
 
-  // P1's row converges down into the shared Reading; P2's row (if any)
-  // converges up into the same Reading from below.
-  let h=`<svg class="energy-svg" id="energySvg"></svg>`;
-  h+=personRow(p1,'energyRow1');
-  h+=`<div class="energy-reading" id="energyReading">${reportSlot(namesForTitle,r,reportErr)}</div>`;
-  if(p2)h+=personRow(p2,'energyRow2');
-  document.getElementById('energyStage').innerHTML=h;
-  requestAnimationFrame(()=>requestAnimationFrame(drawEnergyPaths));
-  if(!window.__energyResizeBound){
-    window.__energyResizeBound=true;
-    window.addEventListener('resize',drawEnergyPaths);
-  }
+  // P1's row, Reading centered in the middle column right below it, then
+  // P2's row mirrored below -- solo readings just end after Reading, no
+  // reserved empty space.
+  let h=personRow(p1)+reportSlot(namesForTitle,r,reportErr);
+  if(p2)h+=personRow(p2);
+  document.getElementById('mainGrid').innerHTML=h;
 
   document.getElementById('loading').style.display='none';
   document.getElementById('resultsWrap').style.display='block';
@@ -1750,7 +1642,7 @@ document.addEventListener('click', e=>{
     return;
   }
 
-  const card=e.target.closest('.panel[data-card-idx], .quad-item[data-card-idx], .panel-auto[data-card-idx]');
+  const card=e.target.closest('.quad-item[data-card-idx], .panel-auto[data-card-idx]');
   if(card){
     const entry=cardRegistry[card.dataset.cardIdx];
     if(entry){
