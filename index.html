@@ -273,18 +273,16 @@ body{
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
-/* Middle row: astrology wheel, Reading, and Human Design -- all bare (no
-   card background/border/shadow), laid out with real CSS flex-wrap instead
-   of hand-computed pixel positions. The wheel's flex-basis is deliberately
-   large so on any real phone width it claims a full line by itself and
-   grows to fill it; Reading/HD then wrap to the line below and split it
-   evenly. This is normal responsive flow -- no separate math needed per
-   device size, no scale-transform involved for this row at all. */
-.mid-flex-row{display:flex;flex-wrap:wrap;gap:0.9rem;justify-content:center;align-items:flex-start;width:100%;max-width:460px;margin:0 auto 1.4rem;}
-.mid-item{cursor:pointer;}
-.mid-item-wheel{flex:1 1 280px;max-width:100%;}
+/* Middle row: astrology wheel, Reading, and Human Design together in one
+   row, no card background/border/shadow. flex-basis:0 with these grow
+   ratios means the three always divide the row's actual width between them
+   (wheel getting the larger share) and never wrap to separate lines --
+   sizing adapts to any device width automatically, no per-device math. */
+.mid-flex-row{display:flex;flex-wrap:nowrap;gap:0.6rem;align-items:flex-start;width:100%;max-width:460px;margin:0 auto 1.4rem;}
+.mid-item{cursor:pointer;min-width:0;}
+.mid-item-wheel{flex:2.2 1 0;min-width:0;}
 .mid-item-wheel svg{display:block;width:100%;height:auto;}
-.mid-item-text{flex:1 1 140px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0.6rem 0.4rem;}
+.mid-item-text{flex:1 1 0;min-width:0;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0.6rem 0.3rem;}
 .mid-item-text .mid-label{font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#3a4232;margin-bottom:0.5rem;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
