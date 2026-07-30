@@ -221,14 +221,14 @@ body{
 .panel{
   position:absolute;width:80px;height:168px;border-radius:10px;overflow:hidden;cursor:pointer;
   background-image:
-    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 55%),
-    linear-gradient(150deg, #dadedc 0%, #dcdcdc 42%, #bcc0c2 72%, #999da1 100%);
-  border:1px solid #7c848a;
+    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(150deg, #ffffff 0%, #fdf9ec 40%, #f7edcf 75%, #ecdca8 100%);
+  border:1px solid #b3922f;
   box-shadow:
-    0 4px 10px -4px rgba(20,30,25,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.6),
+    0 4px 10px -4px rgba(60,45,10,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.9),
     inset 3px 0 5px -2px rgba(255,255,255,0.95),
-    inset -2px 0 4px -2px rgba(40,45,45,0.25);
+    inset -2px 0 4px -2px rgba(120,95,30,0.22);
   display:flex;flex-direction:column;
 }
 .panel.blank{cursor:default;}
@@ -299,14 +299,14 @@ body{
 .mid-col .dprl{font-size:0.36rem;}
 .panel-auto{position:relative;width:100%;border-radius:10px;cursor:pointer;overflow:visible;
   background-image:
-    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 55%),
-    linear-gradient(150deg, #dadedc 0%, #dcdcdc 42%, #bcc0c2 72%, #999da1 100%);
-  border:1px solid #7c848a;
+    radial-gradient(ellipse 70% 55% at 28% 16%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(150deg, #ffffff 0%, #fdf9ec 40%, #f7edcf 75%, #ecdca8 100%);
+  border:1px solid #b3922f;
   box-shadow:
-    0 4px 10px -4px rgba(20,30,25,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.6),
+    0 4px 10px -4px rgba(60,45,10,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.9),
     inset 3px 0 5px -2px rgba(255,255,255,0.95),
-    inset -2px 0 4px -2px rgba(40,45,45,0.25);
+    inset -2px 0 4px -2px rgba(120,95,30,0.22);
   display:flex;flex-direction:column;}
 .panel-auto .dplist{overflow:visible;height:auto;}
 .panel-auto .report-tray-preview{padding:1rem 0.4rem;}
@@ -319,13 +319,12 @@ body{
 .gate-def-print{display:none;}
 
 /* Pill-shaped, bright-white buttons -- deliberately NOT the same shape,
-   size or material as the tall grey report panels, so they read as
-   controls, not more cards. Wrapped in the same spinning silver
-   glow-ring halo already proven on the entry form's Generate button,
+   size or material as the ivory/gold report panels, so they read as
+   controls, not more cards. Spinning gold glow-ring halo (no grey),
    plus real pulsing sparkle glints (not a diagonal sheen). */
 .side-btn-ring{position:absolute;border-radius:999px;padding:3px;overflow:hidden;}
 .side-btn-ring::before{content:'';position:absolute;inset:-100%;
-  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
+  background:conic-gradient(from 0deg,#a8842a 0%,#fdf3d0 12%,#fffdf0 20%,#fdf3d0 28%,#a8842a 40%,#7a5f1a 50%,#a8842a 60%,#fdf3d0 72%,#fffdf0 80%,#fdf3d0 88%,#a8842a 100%);
   animation:silverspin 3s linear infinite;}
 @media(prefers-reduced-motion:reduce){.side-btn-ring::before{animation:none;display:none;}}
 .side-btn{
@@ -380,7 +379,7 @@ body{
 @media print{
   .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.side-btn-ring{display:none!important;}
   body,.card-expand{background:#fff!important;}
-  .panel{box-shadow:none!important;border:1px solid #999!important;background:#fff!important;}
+  .panel{box-shadow:none!important;border:1px solid #b3922f!important;background:#fff!important;}
   .dp{--card-text:#000!important;--card-accent:#193866!important;--card-stripe-odd:transparent!important;}
 }
 </style>
