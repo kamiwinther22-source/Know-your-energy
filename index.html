@@ -294,11 +294,17 @@ body{
 .frame-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;}
 .frame-card .frame-inner{position:absolute;top:12%;bottom:12%;left:21%;right:21%;overflow:hidden;}
 /* Clear glass pane the values sit on -- mostly transparent (not frosted/
-   opaque), just a soft edge highlight and faint shadow so it reads as a
-   real glass insert rather than empty space. */
-.frame-card .glass-pane{position:absolute;inset:2%;border-radius:6px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.14) 100%);
-  box-shadow:inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(110,120,145,0.18), 0 3px 10px rgba(70,80,105,0.14);}
+   opaque). backdrop-filter is what actually makes it read as glass instead
+   of a flat gradient card: it optically blurs whatever's behind it (the
+   frame's own gold and blue), the way real glass does, rather than faking
+   translucency with a static overlay. A crisp top specular line and a
+   faint cool tint at the edges (real glass disperses slightly toward
+   blue/green) round it out. */
+.frame-card .glass-pane{position:absolute;inset:2%;border-radius:8px;
+  background:linear-gradient(165deg, rgba(255,255,255,0.22) 0%, rgba(235,242,250,0.08) 35%, rgba(255,255,255,0.04) 55%, rgba(220,232,245,0.12) 100%);
+  backdrop-filter:blur(5px) saturate(1.15);-webkit-backdrop-filter:blur(5px) saturate(1.15);
+  border:1px solid rgba(255,255,255,0.55);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.85), inset 0 -1px 3px rgba(100,115,145,0.2), inset 1px 0 0 rgba(255,255,255,0.3), 0 4px 14px rgba(60,75,105,0.16);}
 .frame-card .frame-values{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0.32rem;}
 .frame-card .frow{display:flex;flex-direction:column;text-align:center;}
 /* Etched-into-glass look: full-strength, fully legible navy fill (never
@@ -306,7 +312,11 @@ body{
    text-shadow pair to read as carved into the glass rather than printed
    flat on top of it. */
 .frame-card .fval{font-family:'Cormorant Garamond',serif;font-size:0.72rem;font-weight:600;letter-spacing:0.03em;color:#193866;
-  text-shadow:0 1px 0 rgba(255,255,255,0.9), 0 -0.5px 0.5px rgba(20,30,55,0.45);}
+  text-shadow:
+    0 1.5px 0 rgba(255,255,255,0.95),
+    0 -1px 0.5px rgba(15,25,50,0.55),
+    0 2px 3px rgba(20,30,55,0.2),
+    0 0 5px rgba(255,255,255,0.4);}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
