@@ -273,9 +273,19 @@ body{
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
-.astro-chart-bare{position:absolute;cursor:pointer;display:flex;flex-direction:column;}
-.chart-preview-inner{flex:1;display:flex;align-items:center;justify-content:center;padding:0.1rem;}
-.chart-preview-inner svg{width:100%;height:100%;}
+/* Middle row: astrology wheel, Reading, and Human Design -- all bare (no
+   card background/border/shadow), laid out with real CSS flex-wrap instead
+   of hand-computed pixel positions. The wheel's flex-basis is deliberately
+   large so on any real phone width it claims a full line by itself and
+   grows to fill it; Reading/HD then wrap to the line below and split it
+   evenly. This is normal responsive flow -- no separate math needed per
+   device size, no scale-transform involved for this row at all. */
+.mid-flex-row{display:flex;flex-wrap:wrap;gap:0.9rem;justify-content:center;align-items:flex-start;width:100%;max-width:460px;margin:0 auto 1.4rem;}
+.mid-item{cursor:pointer;}
+.mid-item-wheel{flex:1 1 280px;max-width:100%;}
+.mid-item-wheel svg{display:block;width:100%;height:auto;}
+.mid-item-text{flex:1 1 140px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0.6rem 0.4rem;}
+.mid-item-text .mid-label{font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#3a4232;margin-bottom:0.5rem;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
@@ -475,6 +485,8 @@ body{
 <div class="results-wrap" id="resultsWrap">
   <div class="ttl">Know Your Energy</div>
   <div class="stage-outer" id="stageOuter"><div class="stage" id="stage"></div></div>
+  <div class="mid-flex-row" id="midFlexRow"></div>
+  <div class="stage-outer" id="stageOuter2"><div class="stage" id="stage2"></div></div>
 </div>
 
 <div class="card-expand" id="cardExpand">
@@ -1451,26 +1463,12 @@ const COL_GAP=12, ROW_GAP=20;
 const STAGE_W=MARGIN*2+3*PW+2*COL_GAP;
 const COL_X=[MARGIN, MARGIN+PW+COL_GAP, MARGIN+2*(PW+COL_GAP)]; // 3 evenly spaced columns
 const BTN_H=54;
-// A legible wheel (matching what actually reads clearly in the full modal)
-// needs close to the entire phone width -- there's no rectangle-shrinking
-// that fits it in the same row as two other legible elements, so it gets
-// a full-width row of its own. Reading and the Human Design mirror (both
-// short text, genuinely legible at half-width) share the row below it.
-const WHEEL_ROW_H=STAGE_W-2*MARGIN;
-// row 0: nav buttons (top of the page) / row 1: P1's three system cards /
-// row 2: astrology wheel, full width, bare / row 3: Reading (left) + Human
-// Design mirror (right) / row 4: P2's three system cards, if present
-const ROW_Y=[
-  20,
-  20+BTN_H+ROW_GAP,
-  20+BTN_H+ROW_GAP+PH+ROW_GAP,
-  20+BTN_H+ROW_GAP+PH+ROW_GAP+WHEEL_ROW_H+ROW_GAP,
-  20+BTN_H+ROW_GAP+PH+ROW_GAP+WHEEL_ROW_H+ROW_GAP+PH+ROW_GAP
-];
-const MID_GAP=12;
-const MID_HALF_W=((STAGE_W-2*MARGIN)-MID_GAP)/2;
-const MID_READING_X=MARGIN;
-const MID_HD_X=MARGIN+MID_HALF_W+MID_GAP;
+// row 0: nav buttons (top of the page) / row 1: P1's three system cards.
+// The astrology wheel + Reading + Human Design mirror live in a separate
+// #midFlexRow element entirely outside this scaled canvas -- real CSS
+// flex-wrap in normal document flow, not hand-computed pixel positions, so
+// the wheel can claim however much width it actually needs.
+const ROW_Y=[20, 20+BTN_H+ROW_GAP];
 
 function panelPos(colIndex, rowIndex){
   return { x: COL_X[colIndex], y: ROW_Y[rowIndex] };
@@ -1501,20 +1499,20 @@ function sideButtonAt(x,y,width,label,onclick){
 // directly beside the Reading card, with Human Design mirroring it on the
 // other side. Tapping either preview opens the exact same modal as its
 // full card above (same cardIdx), so full detail is still one tap away.
-function astroChartPreview(astro,cardIdx,x,y,width,height){
+function astroChartPreview(astro,cardIdx){
   const svg=astroWheelSVG(astro);
   if(!svg||cardIdx==null)return '';
-  return `<div class="astro-chart-bare" style="left:${x}px;top:${y}px;width:${width}px;height:${height}px;" data-card-idx="${cardIdx}"><div class="chart-preview-inner">${svg}</div></div>`;
+  return `<div class="mid-item mid-item-wheel" data-card-idx="${cardIdx}">${svg}</div>`;
 }
-function hdMirror(hd,cardIdx,x,y,width){
+function hdMirror(hd,cardIdx){
   if(!hd||hd.error||cardIdx==null)return '';
-  return `<div class="panel" style="left:${x}px;top:${y}px;width:${width}px;" data-card-idx="${cardIdx}"><div class="dp"><div class="dph">Human Design</div><div class="dplist"><div class="dprow report-tray-preview"><p class="hd-mirror-type">${escapeHtml(hd.type||'')}</p></div></div></div></div>`;
+  return `<div class="mid-item mid-item-text" data-card-idx="${cardIdx}"><div class="mid-label">Human Design</div><p class="hd-mirror-type">${escapeHtml(hd.type||'')}</p></div>`;
 }
-function reportSlot(names,report,reportError,x,y,w){
+function reportSlot(names,report,reportError){
   const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
-    if(!reportError)return `<div class="panel blank" style="left:${x}px;top:${y}px;width:${w}px;"></div>`;
-    return `<div class="panel report" style="left:${x}px;top:${y}px;width:${w}px;"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    if(!reportError)return '';
+    return `<div class="mid-item mid-item-text"><div class="mid-label">Reading</div><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
@@ -1523,7 +1521,20 @@ function reportSlot(names,report,reportError,x,y,w){
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml;
   const idx=cardRegistry.push({title,rows:fullRows})-1;
-  return `<div class="panel report" style="left:${x}px;top:${y}px;width:${w}px;" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
+  return `<div class="mid-item mid-item-text" data-card-idx="${idx}"><div class="mid-label">Reading</div><p class="report-preview">${escapeHtml(names)}</p></div>`;
+}
+
+function scaleStage(stageId,outerId,html,rowCount){
+  const stage=document.getElementById(stageId);
+  const outer=document.getElementById(outerId);
+  stage.innerHTML=html;
+  const availWidth=outer.clientWidth;
+  const scale=availWidth/STAGE_W;
+  const stageHeight=ROW_Y[rowCount-1]+PH+20;
+  stage.style.width=STAGE_W+'px';
+  stage.style.height=stageHeight+'px';
+  stage.style.transform=`scale(${scale})`;
+  outer.style.height=(stageHeight*scale)+'px';
 }
 
 function render(p1,p2,r,reportErr){
@@ -1542,40 +1553,36 @@ function render(p1,p2,r,reportErr){
   h+=pan(p1.first,'Numerology',nr(p1.numerology),1,1);
   const hdCardIdx=cardRegistry.length;
   h+=pan(p1.first,'Human Design',hdr(p1.hd),2,1);
-  // astrology wheel gets a full-width row of its own, bare (no box) -- the
-  // only way it's actually legible on a phone. Tapping it opens the same
-  // modal as the Astrology card above.
-  h+=astroChartPreview(p1.astro,astroCardIdx,MARGIN,ROW_Y[2],STAGE_W-2*MARGIN,WHEEL_ROW_H);
-  // Reading and the Human Design mirror share the row below the wheel --
-  // both are short text, genuinely legible at half-width
-  h+=reportSlot(namesForTitle,r,reportErr,MID_READING_X,ROW_Y[3],MID_HALF_W);
-  h+=hdMirror(p1.hd,hdCardIdx,MID_HD_X,ROW_Y[3],MID_HALF_W);
-  // P2's three system cards -- solo readings skip this row entirely rather
-  // than reserving a blank one, so there's no dead space at the bottom.
-  let lastRow=3;
-  if(p2){
-    h+=pan(p2.first,'Astrology',ar(p2.astro),0,4,wheelWrap(p2.astro));
-    h+=pan(p2.first,'Numerology',nr(p2.numerology),1,4);
-    h+=pan(p2.first,'Human Design',hdr(p2.hd),2,4);
-    lastRow=4;
-  }
-  const stage=document.getElementById('stage');
-  stage.innerHTML=h;
   document.getElementById('loading').style.display='none';
   document.getElementById('resultsWrap').style.display='block';
   document.querySelector('.content').style.display='none';
+  scaleStage('stage','stageOuter',h,2);
 
-  // Real phones are rarely exactly STAGE_W wide -- always scale the stage
-  // to fill whatever width is actually available (shrinking on narrow
-  // phones, enlarging on wider ones) instead of just capping at native size.
-  const outer = document.getElementById('stageOuter');
-  const availWidth = outer.clientWidth;
-  const scale = availWidth / STAGE_W;
-  const stageHeight = ROW_Y[lastRow] + PH + 20;
-  stage.style.width = STAGE_W + 'px';
-  stage.style.height = stageHeight + 'px';
-  stage.style.transform = `scale(${scale})`;
-  outer.style.height = (stageHeight * scale) + 'px';
+  // Astrology wheel, Reading, and the Human Design mirror live in their own
+  // responsive flex row, entirely outside the scaled canvas -- real CSS
+  // flex-wrap in normal document flow, so the wheel can claim however much
+  // width it actually needs instead of being squeezed to fit a hand-picked
+  // pixel box. Each still opens the exact same modal as its full card above.
+  let mid='';
+  mid+=astroChartPreview(p1.astro,astroCardIdx);
+  mid+=reportSlot(namesForTitle,r,reportErr);
+  mid+=hdMirror(p1.hd,hdCardIdx);
+  document.getElementById('midFlexRow').innerHTML=mid;
+
+  // P2's three system cards, if present, get their own small scaled canvas
+  // below the mid row -- solo readings hide this entirely rather than
+  // reserving dead space.
+  const stageOuter2=document.getElementById('stageOuter2');
+  if(p2){
+    let h2='';
+    h2+=pan(p2.first,'Astrology',ar(p2.astro),0,0,wheelWrap(p2.astro));
+    h2+=pan(p2.first,'Numerology',nr(p2.numerology),1,0);
+    h2+=pan(p2.first,'Human Design',hdr(p2.hd),2,0);
+    stageOuter2.style.display='block';
+    scaleStage('stage2','stageOuter2',h2,1);
+  }else{
+    stageOuter2.style.display='none';
+  }
 }
 
 function resetToForm(){
@@ -1711,7 +1718,7 @@ document.addEventListener('click', e=>{
     return;
   }
 
-  const card=e.target.closest('.panel[data-card-idx], .astro-chart-bare[data-card-idx]');
+  const card=e.target.closest('.panel[data-card-idx], .mid-item[data-card-idx]');
   if(card){
     const entry=cardRegistry[card.dataset.cardIdx];
     if(entry){
