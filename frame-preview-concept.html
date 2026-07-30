@@ -1,0 +1,82 @@
+<!--
+  Preview only, not wired into index.html -- a frame on each side of the
+  Reading report, one per person, containing exactly: Sun, Moon, Rising,
+  Venus, Life Path, Expression, Soul Urge, Personal Year, Personal Month,
+  Personal Day, Essence, and the main Human Design points (Type, Profile,
+  Authority). Nothing else added. Same page background, navy hairline
+  border, cream page -- no dark background, no gold.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frame Preview Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background-color:#f4f6f0;
+  background-image:
+    radial-gradient(ellipse 55% 38% at 12% 8%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(ellipse 48% 34% at 88% 18%, rgba(232,238,218,0.55) 0%, rgba(232,238,218,0) 60%),
+    radial-gradient(ellipse 140% 75% at 50% 0%, #f8faf4 0%, #f1f4ec 45%, #e9ede2 100%);
+  padding:1.6rem 1rem 3rem;
+}
+.wrap{max-width:460px;margin:0 auto;}
+.grid{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:0.6rem;align-items:start;}
+.frame{border:1px solid rgba(25,56,102,0.3);border-radius:10px;padding:0.6rem 0.5rem;background:transparent;}
+.frame-title{font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:800;color:#193866;text-align:center;margin-bottom:0.5rem;padding-bottom:0.4rem;border-bottom:1px solid rgba(25,56,102,0.2);}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:0.3rem;padding:0.16rem 0;border-bottom:1px dotted rgba(25,56,102,0.15);}
+.row:last-child{border-bottom:none;}
+.lbl{font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.02em;text-transform:uppercase;font-weight:700;color:#4a5060;white-space:nowrap;}
+.val{font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;font-weight:800;color:#193866;text-align:right;}
+.reading-slot{border:1px solid rgba(25,56,102,0.3);border-radius:10px;height:100%;min-height:520px;display:flex;align-items:center;justify-content:center;}
+.reading-slot span{font-family:'Alex Brush',cursive;font-size:1.4rem;color:#193866;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="grid">
+    <div class="frame">
+      <div class="frame-title">Person One</div>
+      <div class="row"><span class="lbl">Sun</span><span class="val">Scorpio</span></div>
+      <div class="row"><span class="lbl">Moon</span><span class="val">Capricorn</span></div>
+      <div class="row"><span class="lbl">Rising</span><span class="val">Gemini</span></div>
+      <div class="row"><span class="lbl">Venus</span><span class="val">Scorpio</span></div>
+      <div class="row"><span class="lbl">Life Path</span><span class="val">6</span></div>
+      <div class="row"><span class="lbl">Expression</span><span class="val">4</span></div>
+      <div class="row"><span class="lbl">Soul Urge</span><span class="val">22</span></div>
+      <div class="row"><span class="lbl">Year</span><span class="val">6</span></div>
+      <div class="row"><span class="lbl">Month</span><span class="val">4</span></div>
+      <div class="row"><span class="lbl">Day</span><span class="val">7</span></div>
+      <div class="row"><span class="lbl">Essence</span><span class="val">4</span></div>
+      <div class="row"><span class="lbl">Type</span><span class="val">Manifesting Gen.</span></div>
+      <div class="row"><span class="lbl">Profile</span><span class="val">4/1</span></div>
+      <div class="row"><span class="lbl">Authority</span><span class="val">Sacral</span></div>
+    </div>
+
+    <div class="reading-slot"><span>Reading</span></div>
+
+    <div class="frame">
+      <div class="frame-title">Person Two</div>
+      <div class="row"><span class="lbl">Sun</span><span class="val">Leo</span></div>
+      <div class="row"><span class="lbl">Moon</span><span class="val">Taurus</span></div>
+      <div class="row"><span class="lbl">Rising</span><span class="val">Libra</span></div>
+      <div class="row"><span class="lbl">Venus</span><span class="val">Virgo</span></div>
+      <div class="row"><span class="lbl">Life Path</span><span class="val">9</span></div>
+      <div class="row"><span class="lbl">Expression</span><span class="val">2</span></div>
+      <div class="row"><span class="lbl">Soul Urge</span><span class="val">11</span></div>
+      <div class="row"><span class="lbl">Year</span><span class="val">3</span></div>
+      <div class="row"><span class="lbl">Month</span><span class="val">8</span></div>
+      <div class="row"><span class="lbl">Day</span><span class="val">2</span></div>
+      <div class="row"><span class="lbl">Essence</span><span class="val">7</span></div>
+      <div class="row"><span class="lbl">Type</span><span class="val">Projector</span></div>
+      <div class="row"><span class="lbl">Profile</span><span class="val">2/4</span></div>
+      <div class="row"><span class="lbl">Authority</span><span class="val">Splenic</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
