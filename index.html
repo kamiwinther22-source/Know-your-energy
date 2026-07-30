@@ -1541,6 +1541,26 @@ function renderConvergenceLayer(){
   const colW=rBox.width;
   const topY=0, bottomY=gridBox.height;
 
+  // Never draw over words: hard-mask out every card that has real text
+  // content (both Numerology cards, directly above/below Reading in the
+  // same column) entirely, and mask the Reading card's own preview text
+  // down to its tight bounding box so the glow can surround it without
+  // ever crossing the letters.
+  const textSafeRects=[];
+  grid.querySelectorAll('.quad-item').forEach(card=>{
+    const title=card.querySelector('.quad-title');
+    if(title && /Numerology/i.test(title.textContent)){
+      const b=card.getBoundingClientRect();
+      textSafeRects.push({x:b.left-gridBox.left,y:b.top-gridBox.top,w:b.width,h:b.height});
+    }
+  });
+  const readingText=reading.querySelector('.report-preview, .report-tray-preview, .report-body, .report-sig');
+  if(readingText){
+    const b=readingText.getBoundingClientRect();
+    const pad=6;
+    textSafeRects.push({x:b.left-gridBox.left-pad,y:b.top-gridBox.top-pad,w:b.width+pad*2,h:b.height+pad*2});
+  }
+
   const NS='http://www.w3.org/2000/svg';
   const svg=document.createElementNS(NS,'svg');
   svg.setAttribute('class','convergence-layer');
@@ -1569,11 +1589,16 @@ function renderConvergenceLayer(){
     return 'M'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
   }
 
+  const maskRects=textSafeRects.map(r=>`<rect x="${r.x.toFixed(1)}" y="${r.y.toFixed(1)}" width="${r.w.toFixed(1)}" height="${r.h.toFixed(1)}" fill="#000"/>`).join('');
   let defsHtml=`<defs>
     <radialGradient id="${uid}core"><stop offset="0%" stop-color="#fffdf6" stop-opacity="0.98"/><stop offset="30%" stop-color="#f3e9cf" stop-opacity="0.85"/><stop offset="65%" stop-color="${WARM[1]}" stop-opacity="0.4"/><stop offset="100%" stop-color="${WARM[1]}" stop-opacity="0"/></radialGradient>
     <radialGradient id="${uid}coolhalo"><stop offset="0%" stop-color="#eaf1ff" stop-opacity="0.9"/><stop offset="55%" stop-color="${COOL[2]}" stop-opacity="0.28"/><stop offset="100%" stop-color="${COOL[2]}" stop-opacity="0"/></radialGradient>
     <filter id="${uid}soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter>
     <filter id="${uid}softer" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9"/></filter>
+    <mask id="${uid}textsafe">
+      <rect x="0" y="0" width="${gridBox.width}" height="${gridBox.height}" fill="#fff"/>
+      ${maskRects}
+    </mask>
   </defs>`;
 
   let bodyHtml='';
@@ -1623,7 +1648,7 @@ function renderConvergenceLayer(){
 
   bodyHtml+=`<circle cx="${cx}" cy="${cy}" r="7" fill="#fffdf6"/>`;
 
-  svg.innerHTML=defsHtml+bodyHtml;
+  svg.innerHTML=defsHtml+`<g mask="url(#${uid}textsafe)">${bodyHtml}</g>`;
   grid.insertBefore(svg,grid.firstChild);
 }
 
