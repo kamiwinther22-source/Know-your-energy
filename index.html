@@ -692,7 +692,7 @@ const ASTRO_DEFS={
     Leo:`With your Sun in Leo, your identity is built to be seen — you carry a warmth and confidence that naturally draws attention, and you do your best work when you're genuinely proud of what you're making. That radiance is real generosity, not vanity, when it's healthy: you want others to shine too. The growth edge is handling the moments no one's watching with the same integrity you bring when they are.`,
     Virgo:`With your Sun in Virgo, your sense of self is built through usefulness — you know who you are by what you improve, refine, and get genuinely right, and sloppy or careless work bothers you more than it bothers most people. That precision makes you exceptionally good at the details others miss, but the same instinct can turn inward into self-criticism that's far harsher than anything you'd say to someone else. The lesson is letting "good enough" actually be enough sometimes.`,
     Libra:`With your Sun in Libra, your identity forms in relationship — you know yourself most clearly through how you connect, negotiate, and create fairness between people, and being genuinely alone with no one to weigh your choices against can feel disorienting. That gift for balance makes you a natural diplomat, but it can also mean losing track of your own preference under the weight of everyone else's. The growth edge is deciding what you want before you ask what's fair.`,
-    Scorpio:`With your Sun in Scorpio, your core identity runs deep rather than wide — you experience life at an intensity most people either avoid or can't sustain, and you're drawn instinctively toward whatever's hidden, taboo, or unresolved. That intensity gives you real staying power through crisis and transformation, but it can also make you guarded to a fault, assuming betrayal before it's actually happened. The lesson is choosing when to let your guard down, not just whether to.`,
+    Scorpio:`With your Sun in Scorpio, you focus hard on a few things that actually matter to you rather than spreading your attention across many — and whatever has your attention, you experience it at an intensity most people either avoid or can't sustain, drawn instinctively toward whatever's hidden, taboo, or unresolved. That intensity gives you real staying power through crisis and transformation, but it can also make you guarded to a fault, assuming betrayal before it's actually happened. The lesson is choosing when to let your guard down, not just whether to.`,
     Sagittarius:`With your Sun in Sagittarius, who you are is defined by the horizon — you need room to explore, question, and believe in something bigger than your immediate circumstances, whether that's travel, philosophy, or plain optimism. That expansiveness makes you genuinely inspiring to be around, but it can also make you blunt to the point of carelessness, or restless with anything that asks you to stay put. The growth edge is honoring a commitment even after the initial excitement fades.`,
     Capricorn:`With your Sun in Capricorn, your identity is built on what you can actually achieve and sustain — you measure yourself by competence and results, often holding yourself to standards well above what anyone else expects of you. That discipline makes you someone people trust with real responsibility early, but it can also mean you delay joy until you've "earned" it, or mistake your accomplishments for your worth. The lesson is letting yourself rest without treating it as failure.`,
     Aquarius:`With your Sun in Aquarius, your core identity is tied to being distinct — you know yourself through your ideas, your independence, and your instinct to question whatever "everyone just does." That originality makes you a genuine innovator and a loyal friend to causes bigger than yourself, but it can also create real emotional distance, since detachment feels safer to you than dependency. The growth edge is letting people matter to you individually, not just as part of a group you champion.`,
@@ -1229,7 +1229,7 @@ function astroWheelSVG(astro){
     // of the ring) so every sign stays upright and readable -- strictly
     // "always facing center" would put half of them the wrong way up
     if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
-    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#000000" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="800" fill="#000000" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
   });
   const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number').sort((a,b)=>a.absoluteDegrees-b.absoluteDegrees);
   if(houses.length){
@@ -1358,9 +1358,7 @@ function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
   h+=dpsec('From Your Birth Date');
-  h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
-  h+=arow('Birthday',num.birthday,'birthday',num.birthday);
-  h+=arow('Attitude',num.attitude,'attitude',num.attitude);
+  h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Life Path',num.lifePath,'lifepath',num.lifePath)}${pcCol('Birthday',num.birthday,'birthday',num.birthday)}${pcCol('Attitude',num.attitude,'attitude',num.attitude)}</div></div>`;
   h+=dpsec('From Your Name');
   h+=arow('Expression',num.expression,'expression',num.expression);
   h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
@@ -1395,8 +1393,6 @@ function hdr(hd){
     h+=dpsec('Gates');
     h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
   }
-  h+=dpsec('Temporary Debug — Raw API Response');
-  h+=`<div class="dprow"><pre style="white-space:pre-wrap;word-break:break-word;font-size:0.6rem;line-height:1.4;padding:0.3rem;background:rgba(0,0,0,0.05);border-radius:4px;">${escapeHtml(JSON.stringify(hd,null,2))}</pre></div>`;
   return h||apend('Unavailable');
 }
 
@@ -1631,29 +1627,36 @@ async function generate(){
 document.addEventListener('click', e=>{
   const insideExpand=e.target.closest('#cardExpandBody');
 
-  const term=e.target.closest('.term');
-  if(term){
-    const def=term.parentElement.nextElementSibling;
-    if(def&&def.classList.contains('dpdef')){ def.hidden=!def.hidden; }
-    return;
-  }
-  const gate=e.target.closest('.gate-chip');
-  if(gate){
-    const defBox=gate.closest('.dprow').querySelector('.gate-def');
-    const num=gate.dataset.gate;
-    document.querySelectorAll('.gate-chip').forEach(c=>c.classList.remove('active'));
-    if(defBox.hidden || defBox.dataset.gate!==num){
-      gate.classList.add('active');
-      defBox.textContent='Gate '+num+' \u2014 '+(GATES[num]||'No description available.');
-      defBox.dataset.gate=num;
-      defBox.hidden=false;
-    }else{
-      defBox.hidden=true;
-      defBox.dataset.gate='';
+  // term/gate tap-to-reveal only makes sense once a card is already open --
+  // on the small collapsed card, several rows are already visible term
+  // labels (e.g. "SUN"), so without this guard a tap meant to open the
+  // card could land on one and get silently swallowed instead, making the
+  // card feel unresponsive.
+  if(insideExpand){
+    const term=e.target.closest('.term');
+    if(term){
+      const def=term.parentElement.nextElementSibling;
+      if(def&&def.classList.contains('dpdef')){ def.hidden=!def.hidden; }
+      return;
+    }
+    const gate=e.target.closest('.gate-chip');
+    if(gate){
+      const defBox=gate.closest('.dprow').querySelector('.gate-def');
+      const num=gate.dataset.gate;
+      document.querySelectorAll('.gate-chip').forEach(c=>c.classList.remove('active'));
+      if(defBox.hidden || defBox.dataset.gate!==num){
+        gate.classList.add('active');
+        defBox.textContent='Gate '+num+' \u2014 '+(GATES[num]||'No description available.');
+        defBox.dataset.gate=num;
+        defBox.hidden=false;
+      }else{
+        defBox.hidden=true;
+        defBox.dataset.gate='';
+      }
+      return;
     }
     return;
   }
-  if(insideExpand)return;
 
   const closeExpand=e.target.closest('#cardExpandClose');
   if(closeExpand){
