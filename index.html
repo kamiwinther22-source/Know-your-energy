@@ -1451,16 +1451,26 @@ const COL_GAP=12, ROW_GAP=20;
 const STAGE_W=MARGIN*2+3*PW+2*COL_GAP;
 const COL_X=[MARGIN, MARGIN+PW+COL_GAP, MARGIN+2*(PW+COL_GAP)]; // 3 evenly spaced columns
 const BTN_H=54;
+// A legible wheel (matching what actually reads clearly in the full modal)
+// needs close to the entire phone width -- there's no rectangle-shrinking
+// that fits it in the same row as two other legible elements, so it gets
+// a full-width row of its own. Reading and the Human Design mirror (both
+// short text, genuinely legible at half-width) share the row below it.
+const WHEEL_ROW_H=STAGE_W-2*MARGIN;
 // row 0: nav buttons (top of the page) / row 1: P1's three system cards /
-// row 2: astrology chart (left) + Reading (middle) + Human Design (right) /
-// row 3: P2's three system cards, if present
-const ROW_Y=[20, 20+BTN_H+ROW_GAP, 20+BTN_H+ROW_GAP+PH+ROW_GAP, 20+BTN_H+ROW_GAP+2*(PH+ROW_GAP)];
-// the middle row splits unevenly: wheel and HD preview narrower, Reading gets the rest
-const MID_GAP=10, MID_WHEEL_W=90, MID_HD_W=90;
-const MID_READING_W=(STAGE_W-2*MARGIN)-MID_WHEEL_W-MID_HD_W-2*MID_GAP;
-const MID_WHEEL_X=MARGIN;
-const MID_READING_X=MID_WHEEL_X+MID_WHEEL_W+MID_GAP;
-const MID_HD_X=MID_READING_X+MID_READING_W+MID_GAP;
+// row 2: astrology wheel, full width, bare / row 3: Reading (left) + Human
+// Design mirror (right) / row 4: P2's three system cards, if present
+const ROW_Y=[
+  20,
+  20+BTN_H+ROW_GAP,
+  20+BTN_H+ROW_GAP+PH+ROW_GAP,
+  20+BTN_H+ROW_GAP+PH+ROW_GAP+WHEEL_ROW_H+ROW_GAP,
+  20+BTN_H+ROW_GAP+PH+ROW_GAP+WHEEL_ROW_H+ROW_GAP+PH+ROW_GAP
+];
+const MID_GAP=12;
+const MID_HALF_W=((STAGE_W-2*MARGIN)-MID_GAP)/2;
+const MID_READING_X=MARGIN;
+const MID_HD_X=MARGIN+MID_HALF_W+MID_GAP;
 
 function panelPos(colIndex, rowIndex){
   return { x: COL_X[colIndex], y: ROW_Y[rowIndex] };
@@ -1491,10 +1501,10 @@ function sideButtonAt(x,y,width,label,onclick){
 // directly beside the Reading card, with Human Design mirroring it on the
 // other side. Tapping either preview opens the exact same modal as its
 // full card above (same cardIdx), so full detail is still one tap away.
-function astroChartPreview(astro,cardIdx,x,y,width){
+function astroChartPreview(astro,cardIdx,x,y,width,height){
   const svg=astroWheelSVG(astro);
   if(!svg||cardIdx==null)return '';
-  return `<div class="astro-chart-bare" style="left:${x}px;top:${y}px;width:${width}px;height:${PH}px;" data-card-idx="${cardIdx}"><div class="chart-preview-inner">${svg}</div></div>`;
+  return `<div class="astro-chart-bare" style="left:${x}px;top:${y}px;width:${width}px;height:${height}px;" data-card-idx="${cardIdx}"><div class="chart-preview-inner">${svg}</div></div>`;
 }
 function hdMirror(hd,cardIdx,x,y,width){
   if(!hd||hd.error||cardIdx==null)return '';
@@ -1532,20 +1542,22 @@ function render(p1,p2,r,reportErr){
   h+=pan(p1.first,'Numerology',nr(p1.numerology),1,1);
   const hdCardIdx=cardRegistry.length;
   h+=pan(p1.first,'Human Design',hdr(p1.hd),2,1);
-  // middle row: astrology chart (bare, no box) on the left, Reading in the
-  // middle, Human Design mirrored on the right -- both chart previews open
-  // the exact same modal as their full card above
-  h+=astroChartPreview(p1.astro,astroCardIdx,MID_WHEEL_X,ROW_Y[2],MID_WHEEL_W);
-  h+=reportSlot(namesForTitle,r,reportErr,MID_READING_X,ROW_Y[2],MID_READING_W);
-  h+=hdMirror(p1.hd,hdCardIdx,MID_HD_X,ROW_Y[2],MID_HD_W);
+  // astrology wheel gets a full-width row of its own, bare (no box) -- the
+  // only way it's actually legible on a phone. Tapping it opens the same
+  // modal as the Astrology card above.
+  h+=astroChartPreview(p1.astro,astroCardIdx,MARGIN,ROW_Y[2],STAGE_W-2*MARGIN,WHEEL_ROW_H);
+  // Reading and the Human Design mirror share the row below the wheel --
+  // both are short text, genuinely legible at half-width
+  h+=reportSlot(namesForTitle,r,reportErr,MID_READING_X,ROW_Y[3],MID_HALF_W);
+  h+=hdMirror(p1.hd,hdCardIdx,MID_HD_X,ROW_Y[3],MID_HALF_W);
   // P2's three system cards -- solo readings skip this row entirely rather
   // than reserving a blank one, so there's no dead space at the bottom.
-  let lastRow=2;
+  let lastRow=3;
   if(p2){
-    h+=pan(p2.first,'Astrology',ar(p2.astro),0,3,wheelWrap(p2.astro));
-    h+=pan(p2.first,'Numerology',nr(p2.numerology),1,3);
-    h+=pan(p2.first,'Human Design',hdr(p2.hd),2,3);
-    lastRow=3;
+    h+=pan(p2.first,'Astrology',ar(p2.astro),0,4,wheelWrap(p2.astro));
+    h+=pan(p2.first,'Numerology',nr(p2.numerology),1,4);
+    h+=pan(p2.first,'Human Design',hdr(p2.hd),2,4);
+    lastRow=4;
   }
   const stage=document.getElementById('stage');
   stage.innerHTML=h;
