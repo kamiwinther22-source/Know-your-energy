@@ -255,23 +255,23 @@ body{
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
 
-/* ---------- normal document-flow results layout: 3 equal columns --
-   Astrology, Numerology, Human Design each get the same width, so
-   Numerology isn't squeezed into a narrow strip; Reading spans full
-   width below each person's row instead of being boxed into one column.
-   Cards are clear (transparent, no white fill) -- just a hairline
-   border, page texture shows through. Each card's text list is capped
-   height + fades out -- a real preview, full content only in the
-   tap-to-expand modal. ---------- */
+/* ---------- normal document-flow results layout: 3 equal columns,
+   all 7 boxes (6 charts + Reading) the SAME fixed size. Cards are clear
+   (transparent, no white fill) -- just a hairline border, page texture
+   shows through. Each card is a fixed-height flex column: title (+
+   wheel, for Astrology) stays full size, the text list fills whatever
+   space is left and gets clipped with a fade -- a real preview, full
+   content only in the tap-to-expand modal. ---------- */
 .top-btns{display:flex;gap:0.5rem;justify-content:center;width:100%;max-width:380px;margin:0 auto 1.3rem;}
 .top-btns .side-btn{flex:1;height:38px;font-size:0.46rem;padding:0.2rem 0.3rem;}
 
 .main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;align-items:start;width:100%;max-width:460px;margin:0 auto;}
 .quad-item{position:relative;min-width:0;cursor:pointer;border-radius:10px;overflow:hidden;
   background:transparent;border:1px solid rgba(25,56,102,0.3);
+  height:300px;display:flex;flex-direction:column;
   padding:0.55rem 0.45rem 0.6rem;}
-.quad-item .quad-title{font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:800;color:#193866;margin-bottom:0.35rem;text-align:center;}
-.quad-item .quad-wheel{width:100%;margin-bottom:0.45rem;}
+.quad-item .quad-title{flex-shrink:0;font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:800;color:#193866;margin-bottom:0.35rem;text-align:center;}
+.quad-item .quad-wheel{flex-shrink:0;width:100%;margin-bottom:0.45rem;}
 .quad-item .quad-wheel svg{display:block;width:100%;height:auto;}
 .quad-item .dpr{font-size:0.54rem;padding:0.06rem 0;gap:0.01rem;}
 .quad-item .dprl{font-size:0.43rem;}
@@ -280,12 +280,12 @@ body{
 .quad-item .glyph{font-size:0.62rem;}
 .panel-auto{position:relative;width:100%;border-radius:10px;cursor:pointer;overflow:hidden;
   background:transparent;border:1px solid rgba(25,56,102,0.3);
-  display:flex;flex-direction:column;}
-.quad-item .dplist,.panel-auto .dplist{max-height:148px;overflow:hidden;position:relative;}
+  height:300px;display:flex;flex-direction:column;}
+.quad-item .dplist,.panel-auto .dplist{flex:1;min-height:0;overflow:hidden;position:relative;}
 .quad-item .dplist::after,.panel-auto .dplist::after{content:'';position:absolute;left:0;right:0;bottom:0;height:34px;
   background:linear-gradient(to bottom, rgba(241,244,236,0) 0%, rgba(241,244,236,0.92) 80%);
   pointer-events:none;}
-.panel-auto .report-tray-preview{padding:1rem 0.4rem;}
+.panel-auto .report-tray-preview{height:100%;padding:1rem 0.4rem;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
@@ -1469,7 +1469,7 @@ function reportSlot(names,report,reportError,rowNum){
   const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
     if(!reportError)return '';
-    return `<div class="panel-auto" style="grid-column:1/4;grid-row:${rowNum};"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
@@ -1478,7 +1478,7 @@ function reportSlot(names,report,reportError,rowNum){
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml;
   const idx=cardRegistry.push({title,rows:fullRows})-1;
-  return `<div class="panel-auto" style="grid-column:1/4;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
+  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
 }
 
 // One row = Astrology (col 1) / Numerology (col 2) / Human Design
