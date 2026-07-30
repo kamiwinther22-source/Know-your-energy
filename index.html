@@ -1369,6 +1369,12 @@ function pinnacleChallengeRow(n,pinnacle,challengeVal){
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
+  h+=dpsec('Right Now');
+  h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',num.personalYear,'personalyear',num.personalYear)}${pcCol('Personal Month',num.personalMonth,'personalmonth',num.personalMonth)}${pcCol('Personal Day',num.personalDay,'personalday',num.personalDay)}</div></div>`;
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
+  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   h+=dpsec('From Your Birth Date');
   h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Life Path',num.lifePath,'lifepath',num.lifePath)}${pcCol('Birthday',num.birthday,'birthday',num.birthday)}${pcCol('Attitude',num.attitude,'attitude',num.attitude)}</div></div>`;
   h+=dpsec('From Your Name');
@@ -1381,14 +1387,6 @@ function nr(num){
   h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
   h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
   h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
-  h+=dpsec('Right Now');
-  h+=arow('Personal Year',num.personalYear,'personalyear',num.personalYear);
-  h+=arow('Personal Month',num.personalMonth,'personalmonth',num.personalMonth);
-  h+=arow('Personal Day',num.personalDay,'personalday',num.personalDay);
-  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
-  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
-  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
-  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   return h;
 }
 
