@@ -215,9 +215,7 @@ body{
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:transparent;
   background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  text-align:center;margin-bottom:0.3rem;}
-.results-wrap .sub{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;
-  font-weight:700;color:#3a4232;text-align:center;margin-bottom:1.6rem;}
+  text-align:center;margin-bottom:1.4rem;}
 .stage-outer{width:100%;overflow:visible;}
 .stage{position:relative;transform-origin:top left;}
 .panel{
@@ -234,9 +232,6 @@ body{
   display:flex;flex-direction:column;
 }
 .panel.blank{cursor:default;}
-.astro-chart-preview{padding:0;}
-.chart-preview-inner{flex:1;display:flex;align-items:center;justify-content:center;padding:0.3rem;}
-.chart-preview-inner svg{width:100%;height:100%;}
 
 /* ---------- panel content: dark text on the light brushed-metal panel,
    brand blue for accents instead of the old gold ---------- */
@@ -277,6 +272,10 @@ body{
   color:transparent;background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
+.hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
+.astro-chart-bare{position:absolute;cursor:pointer;display:flex;flex-direction:column;}
+.chart-preview-inner{flex:1;display:flex;align-items:center;justify-content:center;padding:0.1rem;}
+.chart-preview-inner svg{width:100%;height:100%;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
@@ -475,7 +474,6 @@ body{
 
 <div class="results-wrap" id="resultsWrap">
   <div class="ttl">Know Your Energy</div>
-  <div class="sub">Your Reading</div>
   <div class="stage-outer" id="stageOuter"><div class="stage" id="stage"></div></div>
 </div>
 
@@ -1452,7 +1450,17 @@ const MARGIN=14;
 const COL_GAP=12, ROW_GAP=20;
 const STAGE_W=MARGIN*2+3*PW+2*COL_GAP;
 const COL_X=[MARGIN, MARGIN+PW+COL_GAP, MARGIN+2*(PW+COL_GAP)]; // 3 evenly spaced columns
-const ROW_Y=[20, 20+PH+ROW_GAP, 20+2*(PH+ROW_GAP)]; // top / middle / bottom
+const BTN_H=54;
+// row 0: nav buttons (top of the page) / row 1: P1's three system cards /
+// row 2: astrology chart (left) + Reading (middle) + Human Design (right) /
+// row 3: P2's three system cards, if present
+const ROW_Y=[20, 20+BTN_H+ROW_GAP, 20+BTN_H+ROW_GAP+PH+ROW_GAP, 20+BTN_H+ROW_GAP+2*(PH+ROW_GAP)];
+// the middle row splits unevenly: wheel and HD preview narrower, Reading gets the rest
+const MID_GAP=10, MID_WHEEL_W=90, MID_HD_W=90;
+const MID_READING_W=(STAGE_W-2*MARGIN)-MID_WHEEL_W-MID_HD_W-2*MID_GAP;
+const MID_WHEEL_X=MARGIN;
+const MID_READING_X=MID_WHEEL_X+MID_WHEEL_W+MID_GAP;
+const MID_HD_X=MID_READING_X+MID_READING_W+MID_GAP;
 
 function panelPos(colIndex, rowIndex){
   return { x: COL_X[colIndex], y: ROW_Y[rowIndex] };
@@ -1479,22 +1487,20 @@ function sideButtonAt(x,y,width,label,onclick){
   </div>`;
 }
 // The astrology chart needs to be visible the moment the results page loads,
-// not hidden behind a tap -- a full legible wheel doesn't fit inside a
-// normal 92px card column, so instead of squeezing it into the top-row
-// Astrology card, it gets its own wider preview slot beside the Reading
-// card. Tapping it opens the exact same modal as the Astrology card above
-// (same cardIdx), so the full-size, fully labeled wheel is still one tap
-// away.
-const CHART_PREVIEW_W=130, CHART_GAP=12;
-const READING_X=MARGIN+CHART_PREVIEW_W+CHART_GAP;
-const READING_W=(STAGE_W-MARGIN)-READING_X;
-function astroChartPreview(astro,cardIdx,y){
+// not hidden behind a tap -- shown bare (no card background/border/shadow),
+// directly beside the Reading card, with Human Design mirroring it on the
+// other side. Tapping either preview opens the exact same modal as its
+// full card above (same cardIdx), so full detail is still one tap away.
+function astroChartPreview(astro,cardIdx,x,y,width){
   const svg=astroWheelSVG(astro);
   if(!svg||cardIdx==null)return '';
-  return `<div class="panel astro-chart-preview" style="left:${MARGIN}px;top:${y}px;width:${CHART_PREVIEW_W}px;" data-card-idx="${cardIdx}"><div class="chart-preview-inner">${svg}</div></div>`;
+  return `<div class="astro-chart-bare" style="left:${x}px;top:${y}px;width:${width}px;height:${PH}px;" data-card-idx="${cardIdx}"><div class="chart-preview-inner">${svg}</div></div>`;
 }
-function reportSlot(names,report,reportError,y){
-  const x=READING_X, w=READING_W;
+function hdMirror(hd,cardIdx,x,y,width){
+  if(!hd||hd.error||cardIdx==null)return '';
+  return `<div class="panel" style="left:${x}px;top:${y}px;width:${width}px;" data-card-idx="${cardIdx}"><div class="dp"><div class="dph">Human Design</div><div class="dplist"><div class="dprow report-tray-preview"><p class="hd-mirror-type">${escapeHtml(hd.type||'')}</p></div></div></div></div>`;
+}
+function reportSlot(names,report,reportError,x,y,w){
   const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
     if(!reportError)return `<div class="panel blank" style="left:${x}px;top:${y}px;width:${w}px;"></div>`;
@@ -1515,32 +1521,32 @@ function render(p1,p2,r,reportErr){
   const n1=p1.first+(p1.last?' '+p1.last:'');
   const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
   let h='';
-  // top row: P1's three systems
-  const astroCardIdx=cardRegistry.length;
-  h+=pan(p1.first,'Astrology',ar(p1.astro),0,0,wheelWrap(p1.astro));
-  h+=pan(p1.first,'Numerology',nr(p1.numerology),1,0);
-  h+=pan(p1.first,'Human Design',hdr(p1.hd),2,0);
-  // middle row: astrology chart preview beside the reading, so the chart
-  // itself is visible immediately without tapping in
-  h+=astroChartPreview(p1.astro,astroCardIdx,ROW_Y[1]);
-  h+=reportSlot(namesForTitle,r,reportErr,ROW_Y[1]);
-  // bottom row: P2's three systems -- solo readings skip this row entirely
-  // rather than reserving a blank one, so there's no dead space at the
-  // bottom of the page.
-  let lastRow=1;
-  if(p2){
-    h+=pan(p2.first,'Astrology',ar(p2.astro),0,2,wheelWrap(p2.astro));
-    h+=pan(p2.first,'Numerology',nr(p2.numerology),1,2);
-    h+=pan(p2.first,'Human Design',hdr(p2.hd),2,2);
-    lastRow=2;
-  }
-  // nav buttons live in their own row below everything else, since the
-  // chart preview now needs the full middle row for astrology + reading
-  const btnY=ROW_Y[lastRow]+PH+ROW_GAP;
+  // nav buttons sit at the very top of the page
   const btnTotalW=PW*2+COL_GAP;
   const btnStartX=(STAGE_W-btnTotalW)/2;
-  h+=sideButtonAt(btnStartX,btnY,PW,'Run Another Reading','resetToForm()');
-  h+=sideButtonAt(btnStartX+PW+COL_GAP,btnY,PW,'Save / Print Reading','window.print()');
+  h+=sideButtonAt(btnStartX,ROW_Y[0],PW,'Run Another Reading','resetToForm()');
+  h+=sideButtonAt(btnStartX+PW+COL_GAP,ROW_Y[0],PW,'Save / Print Reading','window.print()');
+  // P1's three system cards
+  const astroCardIdx=cardRegistry.length;
+  h+=pan(p1.first,'Astrology',ar(p1.astro),0,1,wheelWrap(p1.astro));
+  h+=pan(p1.first,'Numerology',nr(p1.numerology),1,1);
+  const hdCardIdx=cardRegistry.length;
+  h+=pan(p1.first,'Human Design',hdr(p1.hd),2,1);
+  // middle row: astrology chart (bare, no box) on the left, Reading in the
+  // middle, Human Design mirrored on the right -- both chart previews open
+  // the exact same modal as their full card above
+  h+=astroChartPreview(p1.astro,astroCardIdx,MID_WHEEL_X,ROW_Y[2],MID_WHEEL_W);
+  h+=reportSlot(namesForTitle,r,reportErr,MID_READING_X,ROW_Y[2],MID_READING_W);
+  h+=hdMirror(p1.hd,hdCardIdx,MID_HD_X,ROW_Y[2],MID_HD_W);
+  // P2's three system cards -- solo readings skip this row entirely rather
+  // than reserving a blank one, so there's no dead space at the bottom.
+  let lastRow=2;
+  if(p2){
+    h+=pan(p2.first,'Astrology',ar(p2.astro),0,3,wheelWrap(p2.astro));
+    h+=pan(p2.first,'Numerology',nr(p2.numerology),1,3);
+    h+=pan(p2.first,'Human Design',hdr(p2.hd),2,3);
+    lastRow=3;
+  }
   const stage=document.getElementById('stage');
   stage.innerHTML=h;
   document.getElementById('loading').style.display='none';
@@ -1553,7 +1559,7 @@ function render(p1,p2,r,reportErr){
   const outer = document.getElementById('stageOuter');
   const availWidth = outer.clientWidth;
   const scale = availWidth / STAGE_W;
-  const stageHeight = btnY + 54 + 20;
+  const stageHeight = ROW_Y[lastRow] + PH + 20;
   stage.style.width = STAGE_W + 'px';
   stage.style.height = stageHeight + 'px';
   stage.style.transform = `scale(${scale})`;
@@ -1693,7 +1699,7 @@ document.addEventListener('click', e=>{
     return;
   }
 
-  const card=e.target.closest('.panel[data-card-idx]');
+  const card=e.target.closest('.panel[data-card-idx], .astro-chart-bare[data-card-idx]');
   if(card){
     const entry=cardRegistry[card.dataset.cardIdx];
     if(entry){
