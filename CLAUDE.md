@@ -40,6 +40,45 @@ instance of Claude reading this: these are not suggestions, they are settled.
   or two passes rather than iterating live many times.
 - **Never use a multiple-choice/button-click question widget with her.** If
   something genuinely needs clarifying, just ask in plain text.
+- **Never invent a test/demo name.** When synthetic people are needed for
+  testing or mockups, use "Person One" / "Person Two" — or ask her. Do not
+  make up a realistic-sounding name for her, anyone in her family, or a
+  fictional test subject.
+
+## Results page — settled, don't relitigate
+
+The results page (astrology/numerology/HD cards + Reading, per person) has
+gone through many rejected redesigns. These are settled, not open questions:
+
+- **No grey and no gold anywhere on the results page** — both were tried
+  (a brushed-metal grey card look, then a gold-accent replacement) and both
+  were explicitly rejected ("gold is not the answer... in the never again
+  pile"). Cards are transparent (no fill, page texture shows through) with a
+  thin navy hairline border; buttons are solid navy.
+- **No decorative connecting lines/glow paths between cards.** An "energy
+  convergence" treatment (soft SVG light-paths flowing from each chart into
+  the Reading) was built and explicitly rejected as unattractive/gimmicky/
+  "obvious." Don't reintroduce connector-line motifs.
+- **If a circular/mandala layout is ever attempted again, the circles must
+  be precisely symmetric** (true circles, equal radius) — an organic
+  blob/border-radius version was rejected as "bloblike."
+- **All 7 result boxes are literally identical, fixed size** — each
+  person's Astrology/Numerology/Human Design (6 total) plus the one shared
+  Reading panel. Not just similar widths — same fixed height too. This was
+  a direct, repeated instruction after equal-column and equal-width passes
+  were each judged insufficient.
+- **Each card shows a capped, fading preview** of its content in the small
+  grid view (`max-height`/`flex:1` + a bottom fade-out gradient); full
+  content only appears in the existing tap-to-expand modal. Don't dump full
+  chart content into the small card.
+- **Nav buttons should look pressable and inviting, not blend into the
+  page.** A white-on-white stretched pill was rejected as boring/blending
+  in; a spinning conic-gradient ring with sparkle glints was rejected as
+  "game show"/circus. Current settled look: solid navy pill, sized to its
+  own content (not stretched full-width), small icon, real lift shadow. She
+  does want genuine sparkle/glitter eventually, but **only** if it can be
+  built to match specific glitter reference images she shared earlier in
+  conversation — never invent a sparkle effect from scratch.
 
 ## Two distinct front-end pages — do not conflate them
 
@@ -101,3 +140,41 @@ instance of Claude reading this: these are not suggestions, they are settled.
 - SVG arc commands need the correct sweep-flag or the arc bows the wrong way
   (concave instead of convex) even though both endpoints are mathematically
   correct — verify with `getPointAtLength`, not by eye.
+- **CSS Grid auto-placement will silently scatter items across "holes."**
+  If one item has an explicit `grid-column` but no explicit `grid-row`
+  (e.g. a shared Reading panel below a taller row), the empty cells beside
+  it get backfilled by whatever comes next in DOM order, not left blank.
+  Give every grid item an explicit `grid-row` if the layout has any row of
+  uneven-height content next to a partially-placed item — don't rely on
+  auto-flow.
+- **The "Deploy Worker" GitHub Action only redeploys `worker.js`** (the API
+  backend: `/report`, `/create-checkout-session`, etc). It does **not**
+  deploy `index.html`. The static page is served through some other
+  mechanism not visible in this repo's CI (most likely Cloudflare Pages
+  watching the repo directly) — a green "Deploy Worker" run is *not* proof
+  that an HTML/CSS/JS change is live. The only reliable confirmation is her
+  checking her own phone/browser.
+- **This sandbox's network policy blocks fetching the live domain
+  directly** — arbitrary outbound requests to know-your-energy.com get a
+  403 from the proxy. There is no way to independently verify the live
+  site from inside a session; don't claim to have checked it — ask her to
+  look and describe/screenshot instead.
+- **The local sandbox's git working directory has repeatedly, silently
+  reverted to a stale old commit mid-session**, even when `origin` has
+  later commits. Always run `git fetch origin <branch>` and compare
+  `git log -1` against `origin/<branch>` before trusting a file read or
+  making an edit — don't assume the working tree is current.
+
+## Open threads not yet resolved
+
+- A full audit of `ASTRO_DEFS`/`NUM_DEFS` (in `index.html`) for vague,
+  ungrounded metaphor language (e.g. "your personality runs deep rather
+  than wide") was explicitly requested and is queued but not started.
+- The Sun/Scorpio definition currently frames Scorpio's trust-instinct as
+  accurate and doesn't mention guardedness/slowness-to-trust, which is
+  independently well-documented in real sources as a separate, real trait.
+  She was asked whether to add it back as its own honest point — no answer
+  yet.
+- The Human Design BodyGraph circular/mandala chart is still blocked on
+  needing the real 64-gate wheel ordering (channel/defined-center data is
+  already available via the API and not the blocker).
