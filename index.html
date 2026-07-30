@@ -308,15 +308,11 @@ body{
 .frame-card .frame-values{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0.32rem;}
 .frame-card .frow{display:flex;flex-direction:column;text-align:center;}
 /* Etched-into-glass look: full-strength, fully legible navy fill (never
-   faded/translucent) with a bevelled highlight-below / shadow-above
-   text-shadow pair to read as carved into the glass rather than printed
-   flat on top of it. */
+   faded/translucent), lit by the #glassEmboss SVG filter (real simulated
+   directional lighting on a bump map of the letterforms) rather than a
+   flat shadow-offset trick. */
 .frame-card .fval{font-family:'Cormorant Garamond',serif;font-size:0.72rem;font-weight:600;letter-spacing:0.03em;color:#193866;
-  text-shadow:
-    0 1.5px 0 rgba(255,255,255,0.95),
-    0 -1px 0.5px rgba(15,25,50,0.55),
-    0 2px 3px rgba(20,30,55,0.2),
-    0 0 5px rgba(255,255,255,0.4);}
+  filter:url(#glassEmboss);}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
@@ -504,6 +500,25 @@ body{
   </div>
 
 </div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Real lighting-based emboss, not a shadow trick: feGaussianBlur on
+         the text's own alpha builds a bump map, feSpecularLighting shines
+         a directional light across that bump map to compute genuine
+         highlight/shadow the way an actual carved surface would catch
+         light, then it's composited back onto the solid (never faded)
+         navy fill. -->
+    <filter id="glassEmboss" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.9" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="2.2" specularConstant="0.85" specularExponent="16" lighting-color="#ffffff" result="spec">
+        <feDistantLight azimuth="235" elevation="58"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specClipped"/>
+      <feComposite in="SourceGraphic" in2="specClipped" operator="arithmetic" k1="0" k2="1" k3="0.9" k4="0"/>
+    </filter>
+  </defs>
+</svg>
 
 <div class="loading" id="loading">
   <div class="loading-txt">Reading your chart&hellip;</div>
