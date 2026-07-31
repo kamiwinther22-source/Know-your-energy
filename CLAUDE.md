@@ -149,11 +149,17 @@ gone through many rejected redesigns. These are settled, not open questions:
   auto-flow.
 - **The "Deploy Worker" GitHub Action only redeploys `worker.js`** (the API
   backend: `/report`, `/create-checkout-session`, etc). It does **not**
-  deploy `index.html`. The static page is served through some other
-  mechanism not visible in this repo's CI (most likely Cloudflare Pages
-  watching the repo directly) — a green "Deploy Worker" run is *not* proof
-  that an HTML/CSS/JS change is live. The only reliable confirmation is her
-  checking her own phone/browser.
+  deploy `index.html`. **`index.html` is deployed by GitHub Pages**, not
+  Cloudflare Pages — confirmed via the repo's `CNAME` file
+  (`know-your-energy.com`) and a separate "pages build and deployment"
+  check that runs automatically on every push to `main` (visible via
+  `mcp__github__actions_list` with `method: list_workflow_runs`, filtered
+  to `main` — look for runs named "pages build and deployment", not
+  "Deploy Worker"). A green run there, on the current commit, **is** real
+  evidence the static site redeployed — check that instead of assuming
+  nothing can be confirmed. Browser/CDN caching can still delay what she
+  actually sees, so a hard refresh or private tab is worth trying before
+  concluding a successful deploy didn't take.
 - **This sandbox's network policy blocks fetching the live domain
   directly** — arbitrary outbound requests to know-your-energy.com get a
   403 from the proxy. There is no way to independently verify the live
