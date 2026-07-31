@@ -85,6 +85,14 @@ body{
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
 
+.glossary-link-wrap{text-align:center;margin:0 0 0.9rem;}
+.glossary-link{
+  font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.01em;
+  color:#193866;background:transparent;border:1px solid rgba(25,56,102,0.4);border-radius:999px;
+  padding:0.4rem 0.95rem;cursor:pointer;
+}
+.glossary-link:hover{background:rgba(25,56,102,0.08);}
+
 /* ---------- tagline / toggle ---------- */
 .tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
 .tagline-slide{
@@ -377,6 +385,10 @@ body{
     <div class="brand">Know Your Energy</div>
   </div>
 
+  <div class="glossary-link-wrap">
+    <button type="button" class="glossary-link" id="glossaryBtn">New to this? Browse the glossary</button>
+  </div>
+
   <div class="solar-section">
     <div class="solar-wrap" id="solarWrap"></div>
   </div>
@@ -634,6 +646,8 @@ const KEYS = [
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
 
+document.getElementById('glossaryBtn').addEventListener('click', openGlossary);
+
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
 const lblInd = document.getElementById('lblInd');
@@ -695,6 +709,35 @@ const GLOSSARY={
   hdauthority:"How you're energetically built to make sound decisions.",
   hdcross:"Your life's overarching theme and sense of purpose."
 };
+
+// Pre-reading glossary (entry page, before any data is entered) -- shows
+// the plain "what this is" GLOSSARY line only, since no birth data exists
+// yet to look up a sign- or number-specific interpretation.
+const GLOSSARY_LABEL={
+  sun:'Sun',moon:'Moon',mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',
+  uranus:'Uranus',neptune:'Neptune',pluto:'Pluto',ascendant:'Rising Sign',midheaven:'Midheaven',
+  lifepath:'Life Path',expression:'Expression',soulurge:'Soul Urge',personality:'Personality',
+  birthday:'Birthday',attitude:'Attitude',balance:'Balance',maturity:'Maturity',
+  personalyear:'Personal Year',personalmonth:'Personal Month',personalday:'Personal Day',essence:'Essence',
+  pinnacle:'Pinnacle',challenge:'Challenge',karmiclessons:'Karmic Lessons',karmicdebt:'Karmic Debt',
+  hdtype:'Type',hdprofile:'Profile',hdauthority:'Authority',hdcross:'Incarnation Cross'
+};
+const GLOSSARY_LAYOUT=[
+  ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven']],
+  ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','karmiclessons','karmicdebt']],
+  ['Human Design',['hdtype','hdprofile','hdauthority','hdcross']]
+];
+function buildGlossaryHTML(){
+  return GLOSSARY_LAYOUT.map(([section,keys])=>{
+    const rows=keys.map(k=>`<div class="dprow"><div class="dpr"><span class="dprl">${GLOSSARY_LABEL[k]||k}</span></div><div class="dpdef"><p>${GLOSSARY[k]}</p></div></div>`).join('');
+    return `<div class="dpsec">${section}</div>${rows}`;
+  }).join('');
+}
+function openGlossary(){
+  document.getElementById('cardExpandTitle').textContent='Glossary';
+  document.getElementById('cardExpandBody').innerHTML=buildGlossaryHTML();
+  document.getElementById('cardExpand').classList.add('open');
+}
 
 const ASTRO_DEFS={
   sun:{
