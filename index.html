@@ -85,6 +85,14 @@ body{
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
 
+.glossary-link-wrap{text-align:center;margin:0 0 0.9rem;}
+.glossary-link{
+  font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.01em;
+  color:#193866;background:transparent;border:1px solid rgba(25,56,102,0.4);border-radius:999px;
+  padding:0.4rem 0.95rem;cursor:pointer;
+}
+.glossary-link:hover{background:rgba(25,56,102,0.08);}
+
 /* ---------- tagline / toggle ---------- */
 .tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
 .tagline-slide{
@@ -377,6 +385,10 @@ body{
     <div class="brand">Know Your Energy</div>
   </div>
 
+  <div class="glossary-link-wrap">
+    <button type="button" class="glossary-link" id="glossaryBtn">New to this? Browse the glossary</button>
+  </div>
+
   <div class="solar-section">
     <div class="solar-wrap" id="solarWrap"></div>
   </div>
@@ -634,6 +646,8 @@ const KEYS = [
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
 
+document.getElementById('glossaryBtn').addEventListener('click', openGlossary);
+
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
 const lblInd = document.getElementById('lblInd');
@@ -695,6 +709,35 @@ const GLOSSARY={
   hdauthority:"How you're energetically built to make sound decisions.",
   hdcross:"Your life's overarching theme and sense of purpose."
 };
+
+// Pre-reading glossary (entry page, before any data is entered) -- shows
+// the plain "what this is" GLOSSARY line only, since no birth data exists
+// yet to look up a sign- or number-specific interpretation.
+const GLOSSARY_LABEL={
+  sun:'Sun',moon:'Moon',mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',
+  uranus:'Uranus',neptune:'Neptune',pluto:'Pluto',ascendant:'Rising Sign',midheaven:'Midheaven',
+  lifepath:'Life Path',expression:'Expression',soulurge:'Soul Urge',personality:'Personality',
+  birthday:'Birthday',attitude:'Attitude',balance:'Balance',maturity:'Maturity',
+  personalyear:'Personal Year',personalmonth:'Personal Month',personalday:'Personal Day',essence:'Essence',
+  pinnacle:'Pinnacle',challenge:'Challenge',karmiclessons:'Karmic Lessons',karmicdebt:'Karmic Debt',
+  hdtype:'Type',hdprofile:'Profile',hdauthority:'Authority',hdcross:'Incarnation Cross'
+};
+const GLOSSARY_LAYOUT=[
+  ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven']],
+  ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','karmiclessons','karmicdebt']],
+  ['Human Design',['hdtype','hdprofile','hdauthority','hdcross']]
+];
+function buildGlossaryHTML(){
+  return GLOSSARY_LAYOUT.map(([section,keys])=>{
+    const rows=keys.map(k=>`<div class="dprow"><div class="dpr"><span class="dprl">${GLOSSARY_LABEL[k]||k}</span></div><div class="dpdef"><p>${GLOSSARY[k]}</p></div></div>`).join('');
+    return `<div class="dpsec">${section}</div>${rows}`;
+  }).join('');
+}
+function openGlossary(){
+  document.getElementById('cardExpandTitle').textContent='Glossary';
+  document.getElementById('cardExpandBody').innerHTML=buildGlossaryHTML();
+  document.getElementById('cardExpand').classList.add('open');
+}
 
 const ASTRO_DEFS={
   sun:{
@@ -836,6 +879,34 @@ const ASTRO_DEFS={
     Capricorn:`With your Pluto in Capricorn, you're part of a generation transforming structures of power and authority themselves — institutions, governments, and traditional hierarchies undergoing deep, forced change. Personally, this can show up as intense experiences around authority, ambition, or achievement that fundamentally reshape your relationship to structure and control.`,
     Aquarius:`With your Pluto in Aquarius, you're part of a generation transforming technology, collective systems, and humanity's shared future — a deep reckoning with how power operates at a species-wide scale. Personally, this can show up as intense experiences around community, individuality, or innovation that reshape how you relate to the collective.`,
     Pisces:`With your Pluto in Pisces, you're part of a generation transforming spirituality, collective imagination, and inherited illusions — a deep reckoning with what's actually real versus what's simply been believed. Personally, this can show up as intense experiences that dissolve an old belief or boundary, forcing a more honest, less illusioned relationship to faith and compassion.`
+  },
+  ascendant:{
+    Aries:`With your Ascendant in Aries, you walk into a room already in motion — people read you as direct, energetic, and quick to act before you've said a word, since your Rising sign is the automatic front door other people meet first. That immediacy makes you easy to trust in a crisis and hard to mistake for passive, but it can also read as impatient or combative if you don't check your pace against the room's. The growth edge is letting a first reaction cool for a beat before it becomes your whole approach.`,
+    Taurus:`With your Ascendant in Taurus, you come across as calm, physically present, and unhurried — your automatic manner is steady rather than quick, so people sense someone who isn't easily rattled before they know anything else about you. That groundedness makes you a reassuring presence in tense situations, but it can also read as stubborn or slow to engage when the moment actually calls for speed. The growth edge is letting your pace shift without treating the shift itself as a threat.`,
+    Gemini:`With your Ascendant in Gemini, your automatic mode is curious and conversational — you meet new situations by asking questions, picking up cues fast, and adapting your approach almost as quickly as the room changes. That quickness makes you easy to talk to and hard to bore, but it can also read as inconsistent or scattered if people can't tell which version of you they're getting. The growth edge is letting one thread hold your attention long enough for people to actually know where you land.`,
+    Cancer:`With your Ascendant in Cancer, your first move with anything unfamiliar is protective — you take a beat to read whether a person or situation is safe before you let your guard down, which can look like shyness or reserve to people meeting you for the first time. That instinct keeps you from being caught off guard, but it can also mean you come across as harder to reach than you actually are once someone's earned your trust. The growth edge is showing warmth earlier, on your own terms, instead of waiting to be proven safe.`,
+    Leo:`With your Ascendant in Leo, you arrive with warmth and presence — your automatic manner carries confidence and a bit of natural performance, so people notice you before you've done anything to earn the attention. That radiance makes you a magnetic first impression and genuinely generous once people are in your orbit, but it can also read as attention-seeking if the warmth isn't backed by real interest in the people around you. The growth edge is letting the spotlight rest on someone else without it costing you anything.`,
+    Virgo:`With your Ascendant in Virgo, your automatic mode is observant and a little reserved — you take stock of a new situation before you commit to a reaction, and your first move is usually to notice what's useful or what needs fixing rather than to perform. That precision makes you come across as capable and detail-oriented from the first meeting, but it can also read as overly critical or hard to relax around if your observing tips into visible judgment. The growth edge is letting a first impression be warm before it's useful.`,
+    Libra:`With your Ascendant in Libra, you meet new people and situations by looking for the balance point — your automatic manner is polite, considerate, and quick to smooth over friction before it's even named. That grace makes you an easy, likable first impression that puts other people at ease, but it can also read as people-pleasing or indecisive if you're adjusting yourself to match the room rather than stating your actual position. The growth edge is letting your first move be honest, not just agreeable.`,
+    Scorpio:`With your Ascendant in Scorpio, your automatic manner is guarded and intense — you size up a new situation before you reveal much of yourself, which gives you a magnetic, slightly unreadable presence that people notice even when they can't say why. That reserve protects you from being caught off guard, but it can also read as intimidating or secretive to people who haven't yet earned the version of you that opens up. The growth edge is letting a first impression include a little vulnerability, not just control.`,
+    Sagittarius:`With your Ascendant in Sagittarius, you show up open, enthusiastic, and a little larger than life — your automatic manner is friendly and direct, and you tend to say what you actually think before you've calculated how it'll land. That candor makes you an energizing, refreshing first impression, but it can also read as tactless or restless if your honesty arrives without much cushioning. The growth edge is pairing your first instinct to speak freely with a beat of awareness for who's listening.`,
+    Capricorn:`With your Ascendant in Capricorn, you come across as composed, competent, and older than your years — your automatic manner carries a natural reserve and seriousness, so people tend to trust you with responsibility before you've had to prove yourself. That gravity makes you look reliable from the first handshake, but it can also read as cold or unapproachable if the reserve never lifts. The growth edge is letting people see you before you've accomplished something worth showing them.`,
+    Aquarius:`With your Ascendant in Aquarius, your automatic manner is friendly but a step removed — people sense someone original and easy to talk to, but also someone who's genuinely hard to get a full read on right away. That mix makes you memorable and refreshingly unconventional as a first impression, but it can also read as detached if your friendliness never quite deepens into closeness. The growth edge is letting a first meeting be personal, not just pleasant.`,
+    Pisces:`With your Ascendant in Pisces, you come across as soft, imaginative, and quietly perceptive — your automatic manner absorbs the mood of a room before you've said anything, and people often sense you're gentler or more sensitive than you'd claim to be. That receptivity makes you an easy, non-threatening first impression that people open up to quickly, but it can also read as elusive or hard to pin down if you blend into whatever's around you rather than showing a clear edge. The growth edge is letting your first impression include something definite about who you actually are.`
+  },
+  midheaven:{
+    Aries:`With your Midheaven in Aries, the reputation you build in the world tends to center on initiative — you're the one people expect to start things, take the first swing, or lead when nobody else will. That association with boldness can fast-track you into leadership roles early, but it can also mean your public reputation reads as impatient or overly competitive if you don't pace your ambition to the institution you're operating in. The growth edge is building a track record that shows follow-through, not just first moves.`,
+    Taurus:`With your Midheaven in Taurus, your public reputation tends to form around reliability and tangible results — people come to know you as someone who builds real, lasting value, whether that's financial, material, or simply dependable output over time. That association with steadiness can make you the person institutions trust with long-term responsibility, but it can also typecast you as resistant to change or slow to embrace anything that unsettles what's already working. The growth edge is letting your public direction evolve without it costing you your reputation for stability.`,
+    Gemini:`With your Midheaven in Gemini, your public direction tends to run through communication — writing, teaching, media, or simply being the person who connects other people and ideas. That association with versatility can open a wide range of career paths and keep you from ever feeling boxed in, but it can also mean your public reputation reads as scattered if you're known for having your hand in everything and mastering none of it visibly. The growth edge is letting one area of your communication become the thing you're actually known for.`,
+    Cancer:`With your Midheaven in Cancer, your public reputation tends to form around care — people, institutions, or causes that need protecting or nurturing often become the thing your career life is built around, sometimes literally through family business or home-related work. That association with warmth can make your public role feel personal and trusted rather than corporate, but it can also mean your professional reputation rises and falls with your emotional state more visibly than it would for other placements. The growth edge is separating your public standing from how vulnerable you feel on a given day.`,
+    Leo:`With your Midheaven in Leo, your public direction tends to run toward visibility — leadership, performance, or simply being the recognizable face of whatever you're part of. That association with presence can put you in front of people faster than most placements, but it can also mean your public reputation gets read as ego-driven if the recognition isn't clearly earned by what you're actually contributing. The growth edge is building a reputation for what you make possible for others, not just for being seen.`,
+    Virgo:`With your Midheaven in Virgo, your public reputation tends to form around competence — being the person whose work is genuinely correct, reliable, and useful, often in fields built on precision, health, or service. That association with skill can make you the person institutions quietly depend on to catch what others miss, but it can also mean your public direction reads as overly critical or perfectionistic if your standards for others' work show more than your standards for your own. The growth edge is letting your public reputation include what you've already gotten right, not just what still needs fixing.`,
+    Libra:`With your Midheaven in Libra, your public direction tends to run through partnership and fairness — law, mediation, design, or any field where balancing competing interests is the actual job. That association with diplomacy can make you the person people trust to broker a deal or settle a dispute, but it can also mean your public reputation reads as indecisive or overly accommodating if you're known for weighing every side rather than landing on one. The growth edge is letting your public stance include an actual opinion.`,
+    Scorpio:`With your Midheaven in Scorpio, your public reputation tends to form around depth and transformation — research, psychology, finance, or any field where what's hidden actually matters more than what's on the surface. That association with intensity can make you the person people trust with what they wouldn't tell just anyone, but it can also mean your public direction reads as secretive or intimidating if the intensity never softens into something more approachable. The growth edge is letting your public reputation include some transparency about your own process, not just your results.`,
+    Sagittarius:`With your Midheaven in Sagittarius, your public direction tends to run toward the big picture — teaching, publishing, travel, or any field built on expanding what people believe is possible. That association with vision can make you the person institutions look to for direction and morale, but it can also mean your public reputation reads as overpromising if your enthusiasm outruns your actual follow-through on the specifics. The growth edge is letting your public reputation be built on delivered specifics, not just inspired direction.`,
+    Capricorn:`With your Midheaven in Capricorn, this placement is fully at home — your public direction is built for structured achievement, and the traditional markers of career success (title, authority, long-term status) tend to matter to your sense of purpose more than they would for other placements. That alignment can make you exceptionally effective at climbing a real institutional ladder, but it can also mean your entire sense of self rides on your public position more than is actually healthy. The growth edge is building an identity that would survive losing the title.`,
+    Aquarius:`With your Midheaven in Aquarius, your public direction tends to run toward innovation — unconventional fields, causes bigger than any one person, or work that doesn't fit neatly inside an existing hierarchy. That association with independence can make you a genuine originator in whatever you do publicly, but it can also mean your public reputation reads as detached or hard to place within a traditional career ladder. The growth edge is letting your public direction include enough structure that people can actually find you in it.`,
+    Pisces:`With your Midheaven in Pisces, your public direction tends to run through compassion and imagination — art, healing, spirituality, or any field where sensing what isn't said out loud is the actual skill. That association with intuition can make your public work feel genuinely meaningful rather than merely transactional, but it can also mean your public reputation reads as unclear or ungrounded if your direction doesn't translate into something concrete other people can point to. The growth edge is giving your public direction a shape solid enough for other people to actually follow.`
   }
 };
 
@@ -1073,45 +1144,45 @@ const NUM_DEFS={
     33:`In a Personal Year 33, the theme is service on a wider scale — this is a rare year that favors teaching, healing, or guiding others in a way that reaches beyond your usual circle. It asks a lot of you, and tends to give back a genuine sense of purpose.`
   },
   personalmonth:{
-    1:`A Personal Month 1 favors new starts — this is a good window to begin something rather than wait for the perfect moment.`,
-    2:`A Personal Month 2 favors patience and connection — this month rewards cooperation and steady, quiet progress over big, solo pushes.`,
-    3:`A Personal Month 3 favors self-expression and enjoyment — this is a good month for creativity, socializing, and lightening up a little.`,
-    4:`A Personal Month 4 favors focused, practical work — this month rewards discipline and getting the unglamorous tasks actually done.`,
-    5:`A Personal Month 5 favors flexibility — this month tends to bring change or unexpected opportunity, and adapting quickly serves you better than resisting it.`,
-    6:`A Personal Month 6 favors responsibility and care — this month tends to center on home, family, or people who need your attention.`,
-    7:`A Personal Month 7 favors reflection — this is a good month to slow down, think things through, and resist the urge to force forward motion.`,
-    8:`A Personal Month 8 favors action toward tangible goals — this month tends to reward ambition, follow-through, and attention to money or career.`,
-    9:`A Personal Month 9 favors release — this is a good month to finish, let go of, or clear out whatever's run its course before the next cycle begins.`,
-    11:`A Personal Month 11 brings heightened intuition — pay attention to insight or inspiration that shows up this month, even if it doesn't fully make logical sense yet.`,
-    22:`A Personal Month 22 favors practical, large-scale progress — this is a strong month for turning a bigger plan into a concrete next step.`,
-    33:`A Personal Month 33 favors selfless service — this month tends to center on genuinely showing up for someone else in a meaningful way.`
+    1:`A Personal Month 1 favors new starts — this is a good window to begin something rather than wait for the perfect moment. Watch for impatience with anyone still finishing up last month's business.`,
+    2:`A Personal Month 2 favors patience and connection — this month rewards cooperation and steady, quiet progress over big, solo pushes. If something feels stalled, it's probably not; slow months like this one lay groundwork that doesn't show up yet.`,
+    3:`A Personal Month 3 favors self-expression and enjoyment — this is a good month for creativity, socializing, and lightening up a little. Just don't let the good mood talk you out of a commitment you made during a more serious month.`,
+    4:`A Personal Month 4 favors focused, practical work — this month rewards discipline and getting the unglamorous tasks actually done. It can feel like a grind precisely because it's building something the following months will lean on.`,
+    5:`A Personal Month 5 favors flexibility — this month tends to bring change or unexpected opportunity, and adapting quickly serves you better than resisting it. Don't mistake the restlessness for a sign something's wrong; it's often just this month's energy.`,
+    6:`A Personal Month 6 favors responsibility and care — this month tends to center on home, family, or people who need your attention. Keep an eye on whether you're also asking for help when you need it, not just giving it.`,
+    7:`A Personal Month 7 favors reflection — this is a good month to slow down, think things through, and resist the urge to force forward motion. Output may look lower than usual; that's the point, not a problem to fix.`,
+    8:`A Personal Month 8 favors action toward tangible goals — this month tends to reward ambition, follow-through, and attention to money or career. Push hard, but don't let the momentum run over people who aren't moving at your speed.`,
+    9:`A Personal Month 9 favors release — this is a good month to finish, let go of, or clear out whatever's run its course before the next cycle begins. Starting something brand-new now tends to feel harder than it should, since the month's energy is working against it.`,
+    11:`A Personal Month 11 brings heightened intuition — pay attention to insight or inspiration that shows up this month, even if it doesn't fully make logical sense yet. The same sensitivity can also show up as nervous energy, so ground what you're sensing before acting on it.`,
+    22:`A Personal Month 22 favors practical, large-scale progress — this is a strong month for turning a bigger plan into a concrete next step. The scale can feel like pressure; break it down small enough to actually move on today.`,
+    33:`A Personal Month 33 favors selfless service — this month tends to center on genuinely showing up for someone else in a meaningful way. Just make sure it's actually wanted, not just assumed to be needed.`
   },
   personalday:{
-    1:`A Personal Day 1 favors starting something — today rewards initiative more than waiting.`,
-    2:`A Personal Day 2 favors patience and cooperation — today favors listening and working with others over pushing your own agenda.`,
-    3:`A Personal Day 3 favors self-expression — today is a good day to communicate, create, or simply enjoy yourself a little more.`,
-    4:`A Personal Day 4 favors focused, practical work — today rewards getting through the unglamorous tasks on your list.`,
-    5:`A Personal Day 5 favors flexibility — today may bring the unexpected, and going with it tends to work out better than resisting it.`,
-    6:`A Personal Day 6 favors care and responsibility — today tends to center on family, home, or someone who needs your attention.`,
-    7:`A Personal Day 7 favors quiet reflection — today is a good day to slow down and think, rather than push for more output.`,
-    8:`A Personal Day 8 favors decisive action — today tends to reward ambition and attention to money, work, or tangible goals.`,
-    9:`A Personal Day 9 favors letting go — today is a good day to finish or release something rather than start something new.`,
-    11:`A Personal Day 11 brings a spike in intuition — trust an insight that shows up today, even before you can fully explain it.`,
-    22:`A Personal Day 22 favors practical progress on something bigger — today is a strong day to take a concrete step toward a larger goal.`,
-    33:`A Personal Day 33 favors showing up for someone else — today tends to center on genuine care or service toward another person.`
+    1:`A Personal Day 1 favors starting something — today rewards initiative more than waiting. If you're stuck on a decision, today's the day the delay costs you more than acting would.`,
+    2:`A Personal Day 2 favors patience and cooperation — today favors listening and working with others over pushing your own agenda. If it feels like nothing's moving, today just isn't built for solo speed.`,
+    3:`A Personal Day 3 favors self-expression — today is a good day to communicate, create, or simply enjoy yourself a little more. Say the thing you've been sitting on; today it tends to land better than usual.`,
+    4:`A Personal Day 4 favors focused, practical work — today rewards getting through the unglamorous tasks on your list. It won't feel exciting, but it'll feel done.`,
+    5:`A Personal Day 5 favors flexibility — today may bring the unexpected, and going with it tends to work out better than resisting it. Hold today's plans loosely rather than defending them.`,
+    6:`A Personal Day 6 favors care and responsibility — today tends to center on family, home, or someone who needs your attention. If no one's asking, check in anyway.`,
+    7:`A Personal Day 7 favors quiet reflection — today is a good day to slow down and think, rather than push for more output. Cancel what you can; today rewards less on the calendar, not more.`,
+    8:`A Personal Day 8 favors decisive action — today tends to reward ambition and attention to money, work, or tangible goals. Make the ask, send the invoice, close the loop you've been putting off.`,
+    9:`A Personal Day 9 favors letting go — today is a good day to finish or release something rather than start something new. Starting fresh today tends to fizzle, since the day's energy runs the other direction.`,
+    11:`A Personal Day 11 brings a spike in intuition — trust an insight that shows up today, even before you can fully explain it. If it comes with a wave of nervous energy too, that's part of the same signal, not a separate problem.`,
+    22:`A Personal Day 22 favors practical progress on something bigger — today is a strong day to take a concrete step toward a larger goal. Pick the smallest real step and take it; today is for doing, not planning.`,
+    33:`A Personal Day 33 favors showing up for someone else — today tends to center on genuine care or service toward another person. Make sure it's reciprocal enough that it doesn't quietly become one-sided.`
   },
   essence:{
-    1:`Living through a 1 Essence cycle, the current chapter of your life is oriented around independence and new initiative — you're likely feeling a stronger-than-usual pull to lead, start something, or make a decision entirely on your own terms.`,
-    2:`Living through a 2 Essence cycle, the current chapter of your life is oriented around partnership and patience — cooperation, close relationships, and gradual, cooperative progress are more central right now than solo achievement.`,
-    3:`Living through a 3 Essence cycle, the current chapter of your life is oriented around self-expression — creativity, communication, and simply being more visible or expressive tend to come more naturally during this period.`,
-    4:`Living through a 4 Essence cycle, the current chapter of your life is oriented around building — discipline, structure, and practical, unglamorous effort are what this period is actually about, even if the payoff isn't immediate.`,
-    5:`Living through a 5 Essence cycle, the current chapter of your life is oriented around change — this period tends to bring more variety, movement, or unexpected shifts than usual, and resisting them tends to be harder than adapting.`,
-    6:`Living through a 6 Essence cycle, the current chapter of your life is oriented around responsibility — home, family, and care for others tend to take on more weight during this period.`,
-    7:`Living through a 7 Essence cycle, the current chapter of your life is oriented around reflection — this tends to be a quieter, more internal period, better suited to study and introspection than external pursuit.`,
-    8:`Living through an 8 Essence cycle, the current chapter of your life is oriented around achievement — ambition, career, and material progress tend to move more prominently into focus during this period.`,
-    9:`Living through a 9 Essence cycle, the current chapter of your life is oriented around release — this period tends to ask you to close out or let go of something that's run its course, clearing space for what comes next.`,
-    11:`Living through an 11 Essence cycle, the current chapter of your life is oriented around heightened intuition and inspiration — insight, sensitivity, and even some nervous tension tend to run stronger than usual during this period.`,
-    22:`Living through a 22 Essence cycle, the current chapter of your life is oriented around large-scale building — this period carries real potential to turn a significant, long-held goal into something concrete.`
+    1:`Living through a 1 Essence cycle, the current chapter of your life is oriented around independence and new initiative — you're likely feeling a stronger-than-usual pull to lead, start something, or make a decision entirely on your own terms. The people around you may notice you asking for less input than usual; that's the cycle, not a sign you've stopped valuing them.`,
+    2:`Living through a 2 Essence cycle, the current chapter of your life is oriented around partnership and patience — cooperation, close relationships, and gradual, cooperative progress are more central right now than solo achievement. If progress feels slower than your last chapter, it likely is — this one measures differently.`,
+    3:`Living through a 3 Essence cycle, the current chapter of your life is oriented around self-expression — creativity, communication, and simply being more visible or expressive tend to come more naturally during this period. Use the visibility; a 3 chapter spent staying quiet tends to feel more frustrating than a quieter chapter would.`,
+    4:`Living through a 4 Essence cycle, the current chapter of your life is oriented around building — discipline, structure, and practical, unglamorous effort are what this period is actually about, even if the payoff isn't immediate. Expect this chapter to feel heavier than the ones around it; that weight is the work itself, not a sign something's off.`,
+    5:`Living through a 5 Essence cycle, the current chapter of your life is oriented around change — this period tends to bring more variety, movement, or unexpected shifts than usual, and resisting them tends to be harder than adapting. If you feel less settled than usual, that's the chapter working as intended, not a symptom to fix.`,
+    6:`Living through a 6 Essence cycle, the current chapter of your life is oriented around responsibility — home, family, and care for others tend to take on more weight during this period. Keep track of whether you're also being cared for, not just providing it.`,
+    7:`Living through a 7 Essence cycle, the current chapter of your life is oriented around reflection — this tends to be a quieter, more internal period, better suited to study and introspection than external pursuit. If your output looks thin from the outside, that's consistent with the chapter, not a sign you've lost momentum.`,
+    8:`Living through an 8 Essence cycle, the current chapter of your life is oriented around achievement — ambition, career, and material progress tend to move more prominently into focus during this period. The opportunity is real, but so is the temptation to let this chapter's momentum crowd out everything else.`,
+    9:`Living through a 9 Essence cycle, the current chapter of your life is oriented around release — this period tends to ask you to close out or let go of something that's run its course, clearing space for what comes next. Forcing a new beginning during this chapter tends to work against its actual grain.`,
+    11:`Living through an 11 Essence cycle, the current chapter of your life is oriented around heightened intuition and inspiration — insight, sensitivity, and even some nervous tension tend to run stronger than usual during this period. Ground what you're sensing in something concrete before you act on it fully.`,
+    22:`Living through a 22 Essence cycle, the current chapter of your life is oriented around large-scale building — this period carries real potential to turn a significant, long-held goal into something concrete. The scope can feel like more pressure than earlier chapters; that's proportional to what's actually possible right now, not a sign you're overreaching.`
   }
 };
 
@@ -1119,7 +1190,7 @@ const NUM_DEFS={
 function escapeHtml(s){
   return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-function arow(l,v,defKey,defNum){
+function arow(l,v,defKey,defNum,note){
   let specific;
   if(defKey&&defNum!=null&&NUM_DEFS[defKey]&&NUM_DEFS[defKey][defNum]){
     specific=NUM_DEFS[defKey][defNum];
@@ -1132,10 +1203,11 @@ function arow(l,v,defKey,defNum){
   // show the plain "what this is" line first, then the personalized
   // interpretation below it -- someone new to this shouldn't have to
   // already know what a Life Path number is to read their own result
-  let def=null;
-  if(general&&specific)def=`<p>${general}</p><p>${specific}</p>`;
-  else if(specific)def=`<p>${specific}</p>`;
-  else if(general)def=`<p>${general}</p>`;
+  const parts=[];
+  if(note)parts.push(`<p class="dpdef-note">${note}</p>`);
+  if(general)parts.push(`<p>${general}</p>`);
+  if(specific)parts.push(`<p>${specific}</p>`);
+  const def=parts.length?parts.join(''):null;
   const lbl=def?`<span class="dprl term" data-def="${defKey}">${l}</span>`:`<span class="dprl">${l}</span>`;
   return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
 }
@@ -1162,6 +1234,13 @@ function normalizeHDAuthority(s){
   if(t.includes('lunar')||t.includes('moon'))return 'lunar';
   return null;
 }
+// Same defensive matching as type/authority -- pull the "N/M" pair out of
+// whatever the API actually sends (e.g. "3/5" or "3/5 Martyr / Heretic")
+// rather than requiring an exact string.
+function normalizeHDProfile(s){
+  const m=(s||'').match(/(\d)\s*\/\s*(\d)/);
+  return m?`${m[1]}/${m[2]}`:null;
+}
 const HD_DEFS={
   hdtype:{
     'generator':`Every chart has 9 "centers" — think of them as energy zones in the body. One of them, the Sacral, is about physical stamina and capacity for work. In a Generator's chart, that specific zone is switched on (Human Design calls this "defined"), giving them steady, dependable stamina for work in a way Projectors and Reflectors don't have. Manifestors don't have that zone switched on either, though they get similar-looking output through a different zone entirely. In practice, that's the difference between a battery that recharges on its own and one that doesn't. A Generator can generally keep working day after day and the tank refills; someone without that zone switched on doesn't get that automatic refill, so trying to keep up at a Generator's pace tends to wear them out faster, not because they're weaker or care less, just because their energy for sustained work isn't wired the same way. What a Generator spends that steady energy on still matters — work they have genuine interest in tends to feel sustainable, while work that doesn't interest them can drain even a Generator, stamina or not.`,
@@ -1178,6 +1257,20 @@ const HD_DEFS={
     'self-projected':`Self-Projected Authority comes from a defined G Center — the body's zone for identity and direction — without the gut, spleen, emotional, or heart centers defined alongside it. In practice, that means clarity doesn't show up as a physical signal in the body the way it does for the other Authorities — it shows up in your own voice. Talking a direction out loud, to someone else or even to yourself, is how you discover whether it's right for you; sitting with it silently doesn't work nearly as well. This Authority belongs only to Projectors.`,
     'mental':`Mental Authority (sometimes called a "Sounding Board") means none of the body-based decision centers are defined — instead, clarity depends on your surroundings and the right people around you. Talking something through out loud with a few trusted people isn't about getting their opinion — it's about hearing your own thoughts reflected back, which is how clarity forms for you. In practice, this is the one Authority that can't really be worked out alone in your head or in silence — every other Authority can, in theory, be checked internally; this one needs real conversation.`,
     'lunar':`Lunar Authority belongs only to Reflectors, since they don't have any center switched on to provide a decision-making signal at all. Instead, clarity comes from time itself — riding out a full lunar cycle, about 28 days, asking the same question across different moods and different company before an answer holds steady. In practice, that makes it the slowest Authority by far, and the only one tied to an outside cycle rather than an internal body signal. Rushing a big decision before that month plays out is the most common way this Authority gets overridden.`
+  },
+  hdprofile:{
+    '1/3':`A 1/3 Profile combines a conscious need for a solid, deeply researched foundation with an unconscious style of learning through trial and error — you want to know something thoroughly before you trust it, but your actual experience of learning comes from bumping into what doesn't work first. In practice, that can feel like two different processes running at once: the studying side of you wants certainty before acting, while the experimenting side only finds real answers by testing something out loud. Mistakes made along the way aren't a sign your research was wrong — they're simply how the Line 3 half of you was always going to get its information. The strength here is depth: once you've actually lived through a mistake, the understanding that follows tends to be more solid than research alone could ever give you.`,
+    '1/4':`A 1/4 Profile combines a conscious need for a solid, deeply researched foundation with an unconscious style of influence that runs through a fixed circle of close friends and contacts rather than a wide audience. You build real expertise on your own first, then that knowledge moves outward almost entirely through personal relationships — people you already know, not strangers you're trying to convince. In practice, that makes your network something to actually invest in and maintain, since it's the real channel your influence travels through, not a side effect of it. The combination works best when your foundation is genuinely solid before you lean on your circle to carry it further.`,
+    '2/4':`A 2/4 Profile combines a conscious need for real solitude to develop your natural talent with an unconscious style of influence built through a fixed circle of close friends. You have a gift that tends to look effortless from the outside, but it only develops properly with real time alone — and it's your existing network, not strangers, who end up calling you out to actually use it. In practice, that call-out matters: a 2/4 pushed into the spotlight by people they don't already trust tends to resist or underperform, while being invited out by someone close usually works. The lesson is trusting that your circle knows when you're ready, even when you don't feel ready yourself.`,
+    '2/5':`A 2/5 Profile combines a conscious need for real solitude to develop your natural talent with an unconscious pull to be seen by others as someone who can fix their problems. You'd rather be left alone to develop your gift quietly, but people around you tend to project real expectations onto you anyway, calling you out to solve something practical whether you feel ready or not. In practice, that projection field means your reputation can outrun what you've actually offered to take on — it's worth only stepping in when a request genuinely matches what you can deliver. The tension to manage is real: withdrawing too much reads as unavailable, while accepting every call-out risks disappointing people who expected more than you signed up for.`,
+    '3/5':`A 3/5 Profile combines a conscious style of learning through trial and error with an unconscious pull to be seen by others as someone who can fix their problems with practical, unconventional solutions. You learn what actually works by testing things directly and bumping into what doesn't — failure isn't a flaw here, it's the actual mechanism, the raw material your real-world wisdom is built from. Once you've lived through that testing, people tend to project real expectations onto you, seeing you as someone who can step in and solve what they couldn't. In practice, that projection field cuts both ways: you can become the person credited with fixing things, or blamed when a solution falls short, so it's worth only taking on problems you genuinely feel aligned with rather than every one people hand you.`,
+    '3/6':`A 3/6 Profile combines a conscious style of learning through trial and error with an unconscious three-phase life arc that eventually settles into living as a trusted example for others. The first several decades of your life tend to be heavily experimental — testing things, making real mistakes, and figuring out what doesn't work through direct experience rather than theory. Sometime around your late twenties or early thirties, that active trial-and-error period tends to give way to a more observational phase, stepping back to actually process everything you've lived through. In practice, the wisdom you eventually offer as an example to others carries real weight specifically because it was earned through visible, lived mistakes rather than untested theory.`,
+    '4/6':`A 4/6 Profile combines a conscious style of influence built through a fixed circle of close friends with an unconscious three-phase life arc that eventually settles into living as a trusted example for others. Your impact tends to travel through people you actually know rather than a wide audience, and that personal network only deepens as you move through life's phases. In practice, the trial-and-error and more visible engagement of your earlier years tends to shift, around your late twenties or early thirties, into a steadier, more observational role — one where your closest relationships increasingly look to you for grounded example rather than active involvement. The strength here is that both halves of the Profile run through real relationship, not abstraction.`,
+    '4/1':`A 4/1 Profile combines a conscious style of influence built through a fixed circle of close friends with an unconscious need for a genuinely solid, deeply researched foundation underneath what you share. You spread ideas and influence others primarily through people you already know, but that influence only holds up if what you're offering them is actually well-understood, not just socially convenient. In practice, that makes your closest relationships something to be careful with — this Profile's version of losing trust often comes from being visibly wrong to people who trusted you personally, which cuts deeper than being wrong to a stranger would. The combination works best when you let your real expertise catch up before you lean on your network to carry it.`,
+    '5/1':`A 5/1 Profile combines an unconscious pull to be seen by others as someone who can fix their problems with a conscious need for a genuinely solid, deeply researched foundation underneath whatever you offer. People project real expectations onto you, expecting practical solutions, but unlike a more improvisational 5, your actual answers tend to come from real depth of study rather than pure trial and error. In practice, that combination can make you unusually reliable under pressure — you're not guessing when you step in — but it also means the gap between what people assume you already know and what you've actually verified is worth watching closely. The lesson is trusting your own research enough to act on it, rather than over-preparing past the point it's useful.`,
+    '5/2':`A 5/2 Profile combines an unconscious pull to be seen by others as someone who can fix their problems with a conscious need for real solitude to develop your natural talent. People tend to project expectations onto you and call you out of your own preferred privacy to solve something practical, whether or not you feel ready to be seen that way. In practice, this can create real friction: your natural gift develops best with time alone, but the same gift is exactly what draws the projections pulling you back into view. The lesson is accepting call-outs selectively — from people who actually know what you're capable of — rather than either hiding completely or overcommitting to every expectation placed on you.`,
+    '6/2':`A 6/2 Profile combines an unconscious three-phase life arc that eventually settles into living as a trusted example with a conscious need for real solitude to develop your natural talent. Like other Line 6 Profiles, your first several decades tend to include real trial and error before you move into a more observational phase — but underneath that arc, you also need genuine alone time for your natural gifts to actually develop, and resent being pushed into the spotlight before you're ready. In practice, that combination means the "role model" quality this Profile is known for tends to arrive later and more quietly than for other 6-lines, built as much through your own recharging as through visible experience. The lesson is trusting that withdrawing to recharge isn't avoidance — it's actually part of how this Profile does its real work.`,
+    '6/3':`A 6/3 Profile combines an unconscious three-phase life arc that eventually settles into living as a trusted example with a conscious style of learning through trial and error. Both halves of this Profile involve real, hands-on experience, which tends to make the early trial-and-error period of a 6's life especially pronounced — more mistakes, more direct testing, more bumping into what doesn't work, before the more observational "rooftop" phase begins. In practice, that means your credibility as an eventual example comes from an unusually visible track record of real trial and error, not from having avoided mistakes. The lesson is the same one every 3-line carries: a stumble here isn't failure, it's the actual mechanism your wisdom is built from.`
   }
 };
 function karmicRow(l,numbers,defKey){
@@ -1327,13 +1420,16 @@ function ar(astro){
   const byName={};
   planets.forEach(p=>{const name=p.name;if(name)byName[name]=p;});
   let h='';
+  const GENERATIONAL_PLANETS=new Set(['Uranus','Neptune','Pluto']);
+  const GENERATIONAL_NOTE="Uranus, Neptune, and Pluto move slowly enough that everyone born within several years of you shares this same sign placement. This one describes your generation more than it singles you out individually.";
   const emitPlanet=p=>{
     const name=p.name, sign=p.sign;
     if(!name||!sign)return;
     const glyph=PLANET_GLYPH[name]?`<span class="glyph" style="color:${PLANET_COLOR[name]||'inherit'}">${PLANET_GLYPH[name]}</span> `:'';
     let signOut=sign;
     if(p.house)signOut+=` \u00b7 House ${p.house}`;
-    h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
+    const note=GENERATIONAL_PLANETS.has(name)?GENERATIONAL_NOTE:null;
+    h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign,note);
   };
   // lead with the Sun sign -- the placement people actually expect to see first.
   // Ascendant/Midheaven move to their own small section at the bottom instead
@@ -1347,8 +1443,8 @@ function ar(astro){
   });
   if(astro.ascendant?.sign||astro.midheaven?.sign){
     h+=dpsec('Chart Points');
-    if(astro.ascendant?.sign)h+=arow('Ascendant',astro.ascendant.sign,'ascendant');
-    if(astro.midheaven?.sign)h+=arow('Midheaven',astro.midheaven.sign,'midheaven');
+    if(astro.ascendant?.sign)h+=arow('Rising Sign',astro.ascendant.sign,'ascendant',astro.ascendant.sign);
+    if(astro.midheaven?.sign)h+=arow('Midheaven',astro.midheaven.sign,'midheaven',astro.midheaven.sign);
   }
   return h||apend('Unavailable');
 }
@@ -1370,8 +1466,16 @@ function pinnacleChallengeRow(n,pinnacle,challengeVal){
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
+  h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',num.personalYear,'personalyear',num.personalYear)}${pcCol('Personal Month',num.personalMonth,'personalmonth',num.personalMonth)}${pcCol('Personal Day',num.personalDay,'personalday',num.personalDay)}</div></div>`;
+  h+=dpsec('Right Now');
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
+  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   h+=dpsec('From Your Birth Date');
-  h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Life Path',num.lifePath,'lifepath',num.lifePath)}${pcCol('Birthday',num.birthday,'birthday',num.birthday)}${pcCol('Attitude',num.attitude,'attitude',num.attitude)}</div></div>`;
+  h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
+  h+=arow('Birthday',num.birthday,'birthday',num.birthday);
+  h+=arow('Attitude',num.attitude,'attitude',num.attitude);
   h+=dpsec('From Your Name');
   h+=arow('Expression',num.expression,'expression',num.expression);
   h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
@@ -1382,14 +1486,6 @@ function nr(num){
   h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
   h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
   h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
-  h+=dpsec('Right Now');
-  h+=arow('Personal Year',num.personalYear,'personalyear',num.personalYear);
-  h+=arow('Personal Month',num.personalMonth,'personalmonth',num.personalMonth);
-  h+=arow('Personal Day',num.personalDay,'personalday',num.personalDay);
-  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
-  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
-  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
-  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   return h;
 }
 
@@ -1398,7 +1494,7 @@ function hdr(hd){
   let h='';
   const core=[];
   if(hd.type)core.push(arow('Type',hd.type,'hdtype',normalizeHDType(hd.type)));
-  if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile'));
+  if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile',normalizeHDProfile(hd.profile)));
   if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority',normalizeHDAuthority(hd.authority)));
   if(core.length){h+=dpsec('Core');h+=core.join('');}
   if(hd.incarnation_cross){h+=dpsec('Cross');h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
