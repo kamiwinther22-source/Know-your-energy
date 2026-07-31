@@ -177,19 +177,28 @@ gone through many rejected redesigns. These are settled, not open questions:
   ungrounded language is in progress, not complete. NUM_DEFS and the 7
   personal-planet ASTRO_DEFS signs have had at least one real pass; the
   64 Gates and the outer-planet (Uranus/Neptune/Pluto) entries have not.
-- **Settled, not open — do not relitigate:** the Sun/Scorpio trust-read
-  is deliberately framed as instinctual and accurate, NOT as guardedness
-  or a lesson Scorpio still needs to learn. This was explicitly tried
-  (guardedness/growth-edge framing) and explicitly rejected by her twice
-  now — once in commit `61720c4` ("Scorpio isn't guarded... that read is
-  instinctual for them... not a growth edge they're missing"), and again
-  when a later session reintroduced the same framing without checking
-  that history first. **Before editing any existing ASTRO_DEFS/NUM_DEFS/
-  HD_DEFS entry, check `git log -p -- index.html` (or `git blame`) for
-  that specific line first** — a past correction to content you're about
-  to "fix" may already have happened and just not be reflected in this
-  file's own notes. This file describing something as "open" is not
-  proof it still is; verify against the actual commit history, which is
-  the real record.
+- **Settled, not open — do not relitigate:** the precise, final rule on
+  Sun/Scorpio's trust theme, stated directly by her after real research
+  surfaced a genuine tension: the guardedness/slow-to-trust mechanism
+  IS real and accurate (it matches actual multi-source astrological
+  consensus — Scorpio keeps people at a distance until they've proven
+  they belong closer). What's wrong, and was wrong in every earlier
+  attempt at this entry, is framing that guardedness as a flaw or a
+  lesson to grow out of — implying Scorpio "should" trust more or let
+  their guard down. That's false: the judgment behind the guardedness
+  is reliable, not a mistake. Her words: "any statement that includes
+  judgement such as needing to let guard down more is probably going to
+  rub wrong bc I have never regretted choosing not to trust someone and
+  I am rarely wrong about who i do trust." The current entry (as of
+  commit `9eb35c2`) states the mechanism and its reliability directly,
+  and deliberately has no prescriptive "growth edge" — it's the one Sun
+  sign entry that doesn't end on a named lesson, and that's intentional,
+  not an inconsistency to "fix." **Before editing any existing
+  ASTRO_DEFS/NUM_DEFS/HD_DEFS entry, check `git log -p -- index.html`
+  (or `git blame`) for that specific line first** — a past correction to
+  content you're about to "fix" may already have happened and just not
+  be reflected in this file's own notes. This file describing something
+  as "open" is not proof it still is; verify against the actual commit
+  history, which is the real record.
 - The Human Design BodyGraph is now built (real SVG, 9 centers, real
   channel data, defined/undefined per person) — no longer blocked.
