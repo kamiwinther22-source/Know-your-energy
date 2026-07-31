@@ -34,26 +34,26 @@ body{
 /* ---------- numerology grid: 2 rows of 6 ---------- */
 .num-section{margin-bottom:1.1rem;}
 .sec-label{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;text-align:center;color:#5a6350;opacity:0.75;margin-bottom:0.4rem;}
-.num-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0.3rem;width:100%;justify-items:center;}
+.num-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0.62rem;width:100%;justify-items:center;}
 .num-tile{
-  position:relative;overflow:hidden;
+  position:relative;overflow:hidden;cursor:pointer;
   width:100%;max-width:56px;aspect-ratio:1/1;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:0.12rem 0.08rem;text-align:center;border:1px solid;
-  box-shadow:0 2px 4px -1px rgba(60,55,40,0.3),inset 0 0 0 0.5px rgba(255,255,255,0.6);
+  padding:0.12rem 0.08rem;text-align:center;border:1.5px solid;
+  box-shadow:0 3px 5px -1px rgba(40,36,24,0.45),inset 0 0 0 0.5px rgba(255,255,255,0.75);
 }
-/* Bright specular hotspot plus a soft diagonal glass-streak -- rounded,
-   continuous falloff (not a hard-edged split), same as the version that
-   landed closer before. */
+/* Sharper specular hotspot with a tighter falloff (not a soft diffuse
+   haze) plus a crisp diagonal glass-streak -- narrower gradient stops
+   than before so the highlight reads as a defined glint, not a blur. */
 .num-tile::after{
   content:'';position:absolute;inset:-2px;
   background:
-    radial-gradient(circle at 26% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 14%, rgba(255,255,255,0) 34%),
-    linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.65) 42%, rgba(255,255,255,0) 54%);
+    radial-gradient(circle at 26% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 8%, rgba(255,255,255,0) 22%),
+    linear-gradient(115deg, rgba(255,255,255,0) 34%, rgba(255,255,255,0.75) 42%, rgba(255,255,255,0) 50%);
   pointer-events:none;
 }
 .num-tile::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.16) 100%);
+  background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.2) 100%);
   pointer-events:none;
 }
 .num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.05rem;line-height:1;color:#000000;}
@@ -544,8 +544,18 @@ NUMS.forEach(item=>{
   tile.style.background = t.grad;
   tile.style.borderColor = t.border;
   tile.innerHTML = `<div class="n">${item.n}</div><div class="lbl">${item.lbl}</div>`;
+  tile.addEventListener('click', ()=>openNumberDef(item));
   numGrid.appendChild(tile);
 });
+// Reuses the same NUM_DEFS.lifepath content the results page already
+// shows -- each tile's keyword label (Leadership, Master Teacher, etc.)
+// already mirrors that number's real Life Path theme almost exactly, so
+// this is the number's genuine general meaning, not a mismatched reuse.
+function openNumberDef(item){
+  document.getElementById('cardExpandTitle').textContent=`Number ${item.n} — ${item.lbl}`;
+  document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${NUM_DEFS.lifepath[item.n]||''}</p></div>`;
+  document.getElementById('cardExpand').classList.add('open');
+}
 
 // ---------- solar system: monochrome, laid out like an actual snapshot in
 // time -- distinct orbital tiers (inner rocky pair / inner-mid pair / outer
