@@ -67,10 +67,14 @@ gone through many rejected redesigns. These are settled, not open questions:
   Reading panel. Not just similar widths — same fixed height too. This was
   a direct, repeated instruction after equal-column and equal-width passes
   were each judged insufficient.
-- **Each card shows a capped, fading preview** of its content in the small
-  grid view (`max-height`/`flex:1` + a bottom fade-out gradient); full
-  content only appears in the existing tap-to-expand modal. Don't dump full
-  chart content into the small card.
+- **Each card shows a capped preview** of its content in the small grid
+  view (`max-height`/`flex:1`, hard-clipped — no bottom fade-out
+  gradient); full content only appears in the existing tap-to-expand
+  modal. Don't dump full chart content into the small card. An earlier
+  version of this used a gradient fade on the clipped edge; she rejected
+  that directly as exactly the kind of opacity-based fading the
+  never-fade-text rule forbids — the clip must be a clean hard edge, full
+  strength text right up to the cut.
 - **Nav buttons should look pressable and inviting, not blend into the
   page.** A white-on-white stretched pill was rejected as boring/blending
   in; a spinning conic-gradient ring with sparkle glints was rejected as

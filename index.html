@@ -162,7 +162,7 @@ body{
   -webkit-appearance:none;appearance:none;
 }
 .line-field select{width:auto;padding-right:1rem;}
-.line-field input::placeholder{color:#5c664f;font-style:italic;}
+.line-field input::placeholder{color:#5c664f;font-style:italic;opacity:1;}
 
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
@@ -224,6 +224,7 @@ body{
 .stage-range{padding:0.1rem 0.4rem 0;font-family:'Barlow Condensed',sans-serif;font-size:0.34rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-mid);font-weight:700;}
 .stage-pair{display:flex;gap:0.5rem;}
 .stage-pair .pc-col{flex:1;min-width:0;}
+.stage-pair .dprl{align-self:stretch;white-space:normal;overflow-wrap:anywhere;}
 .birthdate-row .dprl,.birthdate-row .dprv{font-size:0.19rem;}
 .card-expand-body .birthdate-row .dprl{font-size:1.1rem;}
 .card-expand-body .birthdate-row .dprv{font-size:1.7rem;}
@@ -272,10 +273,14 @@ body{
 .panel-auto{position:relative;width:100%;border-radius:10px;cursor:pointer;overflow:hidden;
   background:transparent;border:1px solid rgba(25,56,102,0.3);
   height:300px;display:flex;flex-direction:column;}
+/* Unlike panel-auto (fixed 300px, matching the 6 chart cards), this is a
+   one-line service message with no real content to fill a card-sized box --
+   forcing it to 300px left a large empty rectangle. Sized to its content. */
+.panel-error{position:relative;width:100%;border-radius:10px;
+  background:transparent;border:1px solid rgba(25,56,102,0.3);}
+.panel-error .dp{height:auto;}
+.panel-error .report-body{padding:0.5rem 0.4rem 0.6rem;}
 .quad-item .dplist,.panel-auto .dplist{flex:1;min-height:0;overflow:hidden;position:relative;}
-.quad-item .dplist::after,.panel-auto .dplist::after{content:'';position:absolute;left:0;right:0;bottom:0;height:34px;
-  background:linear-gradient(to bottom, rgba(241,244,236,0) 0%, rgba(241,244,236,0.92) 80%);
-  pointer-events:none;}
 .panel-auto .report-tray-preview{height:100%;padding:1rem 0.4rem;}
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
@@ -340,7 +345,6 @@ body{
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1px solid #193866!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
-  .quad-item .dplist::after,.panel-auto .dplist::after{display:none!important;}
   .dp{--card-text:#000!important;--card-accent:#193866!important;--card-stripe-odd:transparent!important;}
 }
 </style>
@@ -1480,6 +1484,14 @@ function hdBodygraphSVG(hd){
   const definedCenters=new Set();
   definedChannels.forEach(([a,b])=>{definedCenters.add(GATE_CENTER[a]);definedCenters.add(GATE_CENTER[b]);});
   const NAVY='#193866', BLUE='#306AC0', CREAM='#f8f9f4', LINE_ON='#193866', LINE_OFF='#c9d2e2', GATE_OFF_LIGHT='#aab8d4', GATE_OFF_DARK='#b9c6de', WHEEL_OFF='#c2ccdd';
+  // Real Human Design center colors (Jovian Archive / standard bodygraph
+  // convention, cross-checked against multiple independent HD sources):
+  // Head + G are yellow, Ajna is green, Heart + Sacral are red, and
+  // Throat + Solar Plexus + Spleen + Root are brown -- the repeats across
+  // centers are correct, not a mistake. Undefined centers stay white/cream
+  // per the same convention, unchanged below.
+  const CENTER_COLOR={Head:'#E8B923',Ajna:'#3E8E4F',Throat:'#6B4423',G:'#E8B923',Heart:'#B23A3A',Sacral:'#B23A3A',Spleen:'#6B4423',SolarPlexus:'#6B4423',Root:'#6B4423'};
+  const CENTER_TEXT={Head:NAVY,Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
   const CX=230, CY=230, R_IN=182, R_OUT=214, R_LABEL=198;
   const toXY=(deg,r)=>{const rad=deg*Math.PI/180;return [CX+r*Math.sin(rad),CY-r*Math.cos(rad)];};
   let svg=`<svg viewBox="0 0 460 460" style="display:block;width:100%;height:100%;">`;
@@ -1518,7 +1530,7 @@ function hdBodygraphSVG(hd){
   Object.entries(CENTER_SHAPES).forEach(([name,shape])=>{
     const on=definedCenters.has(name);
     const pts=shape.pts.map(p=>p.join(',')).join(' ');
-    svg+=`<polygon points="${pts}" fill="${on?NAVY:CREAM}" stroke="${NAVY}" stroke-width="2"/>`;
+    svg+=`<polygon points="${pts}" fill="${on?CENTER_COLOR[name]:CREAM}" stroke="${NAVY}" stroke-width="2"/>`;
     const gates=CENTER_GATES[name];
     const cols=gates.length>6?4:3;
     const fs=7.5, rowH=8.5;
@@ -1530,7 +1542,7 @@ function hdBodygraphSVG(hd){
       const startX=shape.cx-((rowCount-1)*13)/2;
       const gx=startX+col*13, gy=startY+row*rowH;
       const gOn=active.has(g);
-      const fill=on?(gOn?'#ffffff':GATE_OFF_LIGHT):(gOn?NAVY:GATE_OFF_DARK);
+      const fill=on?(gOn?CENTER_TEXT[name]:GATE_OFF_LIGHT):(gOn?NAVY:GATE_OFF_DARK);
       svg+=`<text x="${gx.toFixed(1)}" y="${(gy+2.5).toFixed(1)}" text-anchor="middle" font-size="${fs}" font-weight="${gOn?800:600}" fill="${fill}" font-family="'Barlow Condensed',sans-serif">${g}</text>`;
     });
   });
@@ -1703,7 +1715,7 @@ function reportSlot(names,report,reportError,rowNum){
   const title=`${escapeHtml(names)} \u00b7 Reading`;
   if(!report){
     if(!reportError)return '';
-    return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${title}</div><div class="dplist"><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div></div>`;
+    return `<div class="panel-error" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${title}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
