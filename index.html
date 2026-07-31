@@ -910,6 +910,33 @@ const ASTRO_DEFS={
   }
 };
 
+// Real Human Design structural data (center/gate membership, the 36
+// channels, and the 64-gate zodiac wheel order), cross-checked against an
+// independent real source: github.com/dturkuler/humandesign_api
+// (src/humandesign/hd_constants.py) -- the wheel order there matched this
+// app's own independently-known sequence exactly (same 64-item cycle, just
+// rotated to a different starting point), and every center's gate count
+// summed to the correct total of 64 with no gaps or duplicates.
+const CENTER_GATES={
+  Head:[64,61,63],
+  Ajna:[47,24,4,11,43,17],
+  Throat:[62,23,56,16,20,31,8,33,35,12,45],
+  G:[1,13,7,2,15,10,25,46],
+  Heart:[21,40,26,51],
+  Sacral:[34,5,14,29,59,9,3,42,27],
+  Spleen:[48,57,44,50,32,28,18],
+  SolarPlexus:[37,6,49,22,55,36,30],
+  Root:[58,38,54,53,60,52,19,39,41]
+};
+const GATE_CENTER={};
+Object.entries(CENTER_GATES).forEach(([c,gates])=>gates.forEach(g=>GATE_CENTER[g]=c));
+const CHANNELS=[
+  [64,47],[61,24],[63,4],[17,62],[43,23],[11,56],[16,48],[20,57],[20,34],[32,54],
+  [28,38],[18,58],[20,10],[31,7],[8,1],[33,13],[10,34],[15,5],[2,14],[46,29],
+  [10,57],[57,34],[50,27],[45,21],[59,6],[42,53],[3,60],[9,52],[26,44],[25,51],
+  [40,37],[35,36],[12,22],[49,19],[55,39],[30,41]
+];
+
 const GATES={
   1:"Self-Expression — the drive to creatively express who you are.",
   2:"The Direction of the Self — innate sense of direction for yourself and others.",
@@ -1409,6 +1436,75 @@ function wheelWrap(astro){
   return `<div class="wheel-wrap">${svg}</div>`;
 }
 
+// Real bodygraph topology: 9 centers in their standard real positions
+// (Head/Ajna stacked at top, Throat below them, G-Center in the middle,
+// Heart/Spleen/Solar Plexus flanking the Sacral band, Root at the
+// bottom) -- matches the layout in every real Human Design chart,
+// including the reference images used to build this. Gate numbers are
+// grouped by center rather than placed at each gate's exact real
+// perimeter position (that level of precision needs per-gate coordinate
+// data this app doesn't have verified) -- center membership, defined
+// state, and channel connections are all real and accurate; only the
+// exact micro-position of an individual gate label within its center is
+// a simplification.
+const CENTER_SHAPES={
+  Head:      {pts:[[120,18],[101,52],[139,52]], cx:120, cy:41},
+  Ajna:      {pts:[[101,60],[139,60],[120,94]], cx:120, cy:71},
+  Throat:    {pts:[[97,102],[143,102],[143,146],[97,146]], cx:120, cy:124},
+  G:         {pts:[[120,158],[154,192],[120,226],[86,192]], cx:120, cy:192},
+  Heart:     {pts:[[201,175],[201,199],[173,187]], cx:191, cy:187},
+  Sacral:    {pts:[[97,238],[143,238],[143,282],[97,282]], cx:120, cy:260},
+  Spleen:    {pts:[[28,222],[28,262],[66,242]], cx:41, cy:242},
+  SolarPlexus:{pts:[[212,222],[212,262],[174,242]], cx:199, cy:242},
+  Root:      {pts:[[97,290],[143,290],[143,334],[97,334]], cx:120, cy:312}
+};
+function hdBodygraphSVG(hd){
+  if(!hd||hd.error||!hd.gates||!hd.gates.length)return '';
+  const active=new Set(hd.gates.map(g=>parseInt(g,10)));
+  const definedChannels=CHANNELS.filter(([a,b])=>active.has(a)&&active.has(b));
+  const definedCenters=new Set();
+  definedChannels.forEach(([a,b])=>{definedCenters.add(GATE_CENTER[a]);definedCenters.add(GATE_CENTER[b]);});
+  const NAVY='#193866', CREAM='#f8f9f4', LINE_ON='#193866', LINE_OFF='#c9d2e2', GATE_OFF_LIGHT='#aab8d4', GATE_OFF_DARK='#b9c6de';
+  let svg=`<svg viewBox="0 0 240 352" style="display:block;width:100%;height:100%;">`;
+  // channel lines first, so center shapes + gate labels sit on top
+  const pairSeen={};
+  CHANNELS.forEach(([a,b])=>{
+    const c1=CENTER_SHAPES[GATE_CENTER[a]], c2=CENTER_SHAPES[GATE_CENTER[b]];
+    if(!c1||!c2)return;
+    const key=[GATE_CENTER[a],GATE_CENTER[b]].sort().join('-');
+    const n=pairSeen[key]=(pairSeen[key]||0)+1;
+    const off=(n-1)*3; // small parallel offset if 2+ channels share the same center pair
+    const on=active.has(a)&&active.has(b);
+    svg+=`<line x1="${(c1.cx+off).toFixed(1)}" y1="${c1.cy.toFixed(1)}" x2="${(c2.cx+off).toFixed(1)}" y2="${c2.cy.toFixed(1)}" stroke="${on?LINE_ON:LINE_OFF}" stroke-width="${on?3:1.2}"/>`;
+  });
+  Object.entries(CENTER_SHAPES).forEach(([name,shape])=>{
+    const on=definedCenters.has(name);
+    const pts=shape.pts.map(p=>p.join(',')).join(' ');
+    svg+=`<polygon points="${pts}" fill="${on?NAVY:CREAM}" stroke="${NAVY}" stroke-width="2"/>`;
+    const gates=CENTER_GATES[name];
+    const cols=gates.length>6?4:3;
+    const fs=7.5, rowH=8.5;
+    const rows=Math.ceil(gates.length/cols);
+    const startY=shape.cy-((rows-1)*rowH)/2;
+    gates.forEach((g,i)=>{
+      const row=Math.floor(i/cols), col=i%cols;
+      const rowCount=Math.min(cols,gates.length-row*cols);
+      const startX=shape.cx-((rowCount-1)*13)/2;
+      const gx=startX+col*13, gy=startY+row*rowH;
+      const gOn=active.has(g);
+      const fill=on?(gOn?'#ffffff':GATE_OFF_LIGHT):(gOn?NAVY:GATE_OFF_DARK);
+      svg+=`<text x="${gx.toFixed(1)}" y="${(gy+2.5).toFixed(1)}" text-anchor="middle" font-size="${fs}" font-weight="${gOn?800:600}" fill="${fill}" font-family="'Barlow Condensed',sans-serif">${g}</text>`;
+    });
+  });
+  svg+='</svg>';
+  return svg;
+}
+function hdWheelWrap(hd){
+  const svg=hdBodygraphSVG(hd);
+  if(!svg)return '';
+  return `<div class="wheel-wrap">${svg}</div>`;
+}
+
 function signDisplay(sign){
   return SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
 }
@@ -1593,7 +1689,7 @@ function reportSlot(names,report,reportError,rowNum){
 function personRow(person,rowNum){
   return quadItem(person.first,'Astrology',ar(person.astro),wheelWrap(person.astro),astroWheelSVG(person.astro),rowNum)
     +quadItem(person.first,'Numerology',nr(person.numerology),null,null,rowNum)
-    +quadItem(person.first,'Human Design',hdr(person.hd),null,null,rowNum);
+    +quadItem(person.first,'Human Design',hdr(person.hd),hdWheelWrap(person.hd),hdBodygraphSVG(person.hd),rowNum);
 }
 
 function render(p1,p2,r,reportErr){
