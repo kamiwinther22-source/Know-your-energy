@@ -686,6 +686,7 @@ const GLOSSARY={
   pluto:"Where you experience deep transformation and power dynamics.",
   ascendant:"Your outward first impression — the mask you present before people know you.",
   midheaven:"Your public reputation, career direction, and life's aim.",
+  house:"The life area where a planet's energy actually plays out — the stage it acts on.",
 
   lifepath:"Your overall life direction and central lesson.",
   expression:"Your natural talents and how you express them in the world.",
@@ -715,7 +716,7 @@ const GLOSSARY={
 // yet to look up a sign- or number-specific interpretation.
 const GLOSSARY_LABEL={
   sun:'Sun',moon:'Moon',mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',
-  uranus:'Uranus',neptune:'Neptune',pluto:'Pluto',ascendant:'Rising Sign',midheaven:'Midheaven',
+  uranus:'Uranus',neptune:'Neptune',pluto:'Pluto',ascendant:'Rising Sign',midheaven:'Midheaven',house:'Houses',
   lifepath:'Life Path',expression:'Expression',soulurge:'Soul Urge',personality:'Personality',
   birthday:'Birthday',attitude:'Attitude',balance:'Balance',maturity:'Maturity',
   personalyear:'Personal Year',personalmonth:'Personal Month',personalday:'Personal Day',essence:'Essence',
@@ -723,7 +724,7 @@ const GLOSSARY_LABEL={
   hdtype:'Type',hdprofile:'Profile',hdauthority:'Authority',hdcross:'Incarnation Cross'
 };
 const GLOSSARY_LAYOUT=[
-  ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven']],
+  ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven','house']],
   ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','karmiclessons','karmicdebt']],
   ['Human Design',['hdtype','hdprofile','hdauthority','hdcross']]
 ];
@@ -907,8 +908,23 @@ const ASTRO_DEFS={
     Capricorn:`With your Midheaven in Capricorn, this placement is fully at home — your public direction is built for structured achievement, and the traditional markers of career success (title, authority, long-term status) tend to matter to your sense of purpose more than they would for other placements. That alignment can make you exceptionally effective at climbing a real institutional ladder, but it can also mean your entire sense of self rides on your public position more than is actually healthy. The growth edge is building an identity that would survive losing the title.`,
     Aquarius:`With your Midheaven in Aquarius, your public direction tends to run toward innovation — unconventional fields, causes bigger than any one person, or work that doesn't fit neatly inside an existing hierarchy. That association with independence can make you a genuine originator in whatever you do publicly, but it can also mean your public reputation reads as detached or hard to place within a traditional career ladder. The growth edge is letting your public direction include enough structure that people can actually find you in it.`,
     Pisces:`With your Midheaven in Pisces, your public direction tends to run through compassion and imagination — art, healing, spirituality, or any field where sensing what isn't said out loud is the actual skill. That association with intuition can make your public work feel genuinely meaningful rather than merely transactional, but it can also mean your public reputation reads as unclear or ungrounded if your direction doesn't translate into something concrete other people can point to. The growth edge is giving your public direction a shape solid enough for other people to actually follow.`
+  },
+  house:{
+    1:`The 1st House governs the self as it first meets the world — your body, your instinctive approach to new situations, and the identity you lead with before anyone gets to know the rest of you. A planet here puts real, visible weight on that planet's themes; whatever's placed in your 1st House tends to color your presence in a way people notice immediately, whether or not you're doing it on purpose.`,
+    2:`The 2nd House governs resources — money, possessions, and the values that decide what you consider worth having in the first place, including your own sense of self-worth. A planet here ties that planet's themes to security and what you build your stability on, for better or worse depending on how that planet tends to handle things.`,
+    3:`The 3rd House governs everyday communication — how you think out loud, talk to the people immediately around you (siblings, neighbors, casual connections), and take in new information. A planet here shapes how that planet's energy shows up in ordinary conversation and learning, more than in any grand life direction.`,
+    4:`The 4th House governs home and roots — family, your sense of where you come from, and the private emotional foundation you operate from underneath the public version of yourself. A planet here ties that planet's themes to your literal home and the family patterns you were raised inside of.`,
+    5:`The 5th House governs self-expression taken out into the open — creativity, romance, play, and (traditionally) children, anything you do for its own sake rather than because it's required. A planet here tends to show up in how you create, flirt, perform, or simply enjoy yourself.`,
+    6:`The 6th House governs daily upkeep — work, routine, health, and the unglamorous maintenance that keeps the rest of life functioning. A planet here shapes how that planet's themes play out in the ordinary grind: the job itself, not the career title; the habit, not the headline.`,
+    7:`The 7th House governs one-on-one partnership — marriage, close business partners, and committed relationships generally, along with what you tend to project onto (or seek out in) whoever you're closely paired with. A planet here colors how that planet's themes show up specifically through your closest partnerships.`,
+    8:`The 8th House governs what's shared and what's transformed — joint finances, deep intimacy, and the kind of change that comes from crisis or loss rather than gradual growth. A planet here ties that planet's themes to intensity: what you're forced to confront rather than what you chose.`,
+    9:`The 9th House governs the search for meaning beyond your immediate world — higher education, travel, philosophy, and belief systems bigger than your day-to-day routine. A planet here shapes how that planet's themes show up in your worldview and your appetite for expanding past what you already know.`,
+    10:`The 10th House governs public direction — career, reputation, and the role you're recognized for in the wider world (the same domain the Midheaven anchors). A planet here ties that planet's themes directly to your visible achievements and how authority figures tend to perceive you.`,
+    11:`The 11th House governs community — friendships, groups, and the hopes you hold for the future that go beyond your individual life. A planet here shapes how that planet's themes show up in your friend circles and the causes or communities you attach yourself to.`,
+    12:`The 12th House governs what's hidden — the subconscious, solitude, and things not fully visible even to you, traditionally linked to endings, rest, and spiritual or reflective withdrawal. A planet here tends to work quietly, showing up as an undercurrent you sense more than something you can point to directly.`
   }
 };
+const HOUSE_THEME={1:'Self & Identity',2:'Resources & Values',3:'Communication',4:'Home & Roots',5:'Creativity & Romance',6:'Work & Health',7:'Partnership',8:'Shared Resources',9:'Philosophy & Travel',10:'Career & Reputation',11:'Community & Hopes',12:'Subconscious & Rest'};
 
 // Real Human Design structural data (center/gate membership, the 36
 // channels, and the 64-gate zodiac wheel order), cross-checked against an
@@ -1526,6 +1542,7 @@ function ar(astro){
     if(p.house)signOut+=` \u00b7 House ${p.house}`;
     const note=GENERATIONAL_PLANETS.has(name)?GENERATIONAL_NOTE:null;
     h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign,note);
+    if(p.house)h+=arow('House '+p.house,HOUSE_THEME[p.house]||('House '+p.house),'house',p.house);
   };
   // lead with the Sun sign -- the placement people actually expect to see first.
   // Ascendant/Midheaven move to their own small section at the bottom instead
