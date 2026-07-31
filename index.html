@@ -1119,7 +1119,7 @@ const NUM_DEFS={
 function escapeHtml(s){
   return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-function arow(l,v,defKey,defNum){
+function arow(l,v,defKey,defNum,note){
   let specific;
   if(defKey&&defNum!=null&&NUM_DEFS[defKey]&&NUM_DEFS[defKey][defNum]){
     specific=NUM_DEFS[defKey][defNum];
@@ -1132,10 +1132,11 @@ function arow(l,v,defKey,defNum){
   // show the plain "what this is" line first, then the personalized
   // interpretation below it -- someone new to this shouldn't have to
   // already know what a Life Path number is to read their own result
-  let def=null;
-  if(general&&specific)def=`<p>${general}</p><p>${specific}</p>`;
-  else if(specific)def=`<p>${specific}</p>`;
-  else if(general)def=`<p>${general}</p>`;
+  const parts=[];
+  if(note)parts.push(`<p class="dpdef-note">${note}</p>`);
+  if(general)parts.push(`<p>${general}</p>`);
+  if(specific)parts.push(`<p>${specific}</p>`);
+  const def=parts.length?parts.join(''):null;
   const lbl=def?`<span class="dprl term" data-def="${defKey}">${l}</span>`:`<span class="dprl">${l}</span>`;
   return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def?`<div class="dpdef" hidden>${def}</div>`:''}</div>`;
 }
@@ -1327,13 +1328,16 @@ function ar(astro){
   const byName={};
   planets.forEach(p=>{const name=p.name;if(name)byName[name]=p;});
   let h='';
+  const GENERATIONAL_PLANETS=new Set(['Uranus','Neptune','Pluto']);
+  const GENERATIONAL_NOTE="Uranus, Neptune, and Pluto move slowly enough that everyone born within several years of you shares this same sign placement. This one describes your generation more than it singles you out individually.";
   const emitPlanet=p=>{
     const name=p.name, sign=p.sign;
     if(!name||!sign)return;
     const glyph=PLANET_GLYPH[name]?`<span class="glyph" style="color:${PLANET_COLOR[name]||'inherit'}">${PLANET_GLYPH[name]}</span> `:'';
     let signOut=sign;
     if(p.house)signOut+=` \u00b7 House ${p.house}`;
-    h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
+    const note=GENERATIONAL_PLANETS.has(name)?GENERATIONAL_NOTE:null;
+    h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign,note);
   };
   // lead with the Sun sign -- the placement people actually expect to see first.
   // Ascendant/Midheaven move to their own small section at the bottom instead
