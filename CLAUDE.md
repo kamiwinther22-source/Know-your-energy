@@ -173,14 +173,23 @@ gone through many rejected redesigns. These are settled, not open questions:
 
 ## Open threads not yet resolved
 
-- A full audit of `ASTRO_DEFS`/`NUM_DEFS` (in `index.html`) for vague,
-  ungrounded metaphor language (e.g. "your personality runs deep rather
-  than wide") was explicitly requested and is queued but not started.
-- The Sun/Scorpio definition currently frames Scorpio's trust-instinct as
-  accurate and doesn't mention guardedness/slowness-to-trust, which is
-  independently well-documented in real sources as a separate, real trait.
-  She was asked whether to add it back as its own honest point — no answer
-  yet.
-- The Human Design BodyGraph circular/mandala chart is still blocked on
-  needing the real 64-gate wheel ordering (channel/defined-center data is
-  already available via the API and not the blocker).
+- A full audit of `ASTRO_DEFS`/`NUM_DEFS`/`HD_DEFS`/`GATES` for vague,
+  ungrounded language is in progress, not complete. NUM_DEFS and the 7
+  personal-planet ASTRO_DEFS signs have had at least one real pass; the
+  64 Gates and the outer-planet (Uranus/Neptune/Pluto) entries have not.
+- **Settled, not open — do not relitigate:** the Sun/Scorpio trust-read
+  is deliberately framed as instinctual and accurate, NOT as guardedness
+  or a lesson Scorpio still needs to learn. This was explicitly tried
+  (guardedness/growth-edge framing) and explicitly rejected by her twice
+  now — once in commit `61720c4` ("Scorpio isn't guarded... that read is
+  instinctual for them... not a growth edge they're missing"), and again
+  when a later session reintroduced the same framing without checking
+  that history first. **Before editing any existing ASTRO_DEFS/NUM_DEFS/
+  HD_DEFS entry, check `git log -p -- index.html` (or `git blame`) for
+  that specific line first** — a past correction to content you're about
+  to "fix" may already have happened and just not be reflected in this
+  file's own notes. This file describing something as "open" is not
+  proof it still is; verify against the actual commit history, which is
+  the real record.
+- The Human Design BodyGraph is now built (real SVG, 9 centers, real
+  channel data, defined/undefined per person) — no longer blocked.
