@@ -1347,8 +1347,8 @@ function ar(astro){
   });
   if(astro.ascendant?.sign||astro.midheaven?.sign){
     h+=dpsec('Chart Points');
-    if(astro.ascendant?.sign)h+=arow('Ascendant',astro.ascendant.sign,'ascendant');
-    if(astro.midheaven?.sign)h+=arow('Midheaven',astro.midheaven.sign,'midheaven');
+    if(astro.ascendant?.sign)h+=arow('Rising Sign',astro.ascendant.sign,'ascendant',astro.ascendant.sign);
+    if(astro.midheaven?.sign)h+=arow('Midheaven',astro.midheaven.sign,'midheaven',astro.midheaven.sign);
   }
   return h||apend('Unavailable');
 }
@@ -1370,8 +1370,16 @@ function pinnacleChallengeRow(n,pinnacle,challengeVal){
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
+  h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',num.personalYear,'personalyear',num.personalYear)}${pcCol('Personal Month',num.personalMonth,'personalmonth',num.personalMonth)}${pcCol('Personal Day',num.personalDay,'personalday',num.personalDay)}</div></div>`;
+  h+=dpsec('Right Now');
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
+  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   h+=dpsec('From Your Birth Date');
-  h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Life Path',num.lifePath,'lifepath',num.lifePath)}${pcCol('Birthday',num.birthday,'birthday',num.birthday)}${pcCol('Attitude',num.attitude,'attitude',num.attitude)}</div></div>`;
+  h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
+  h+=arow('Birthday',num.birthday,'birthday',num.birthday);
+  h+=arow('Attitude',num.attitude,'attitude',num.attitude);
   h+=dpsec('From Your Name');
   h+=arow('Expression',num.expression,'expression',num.expression);
   h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
@@ -1382,14 +1390,6 @@ function nr(num){
   h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
   h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
   h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
-  h+=dpsec('Right Now');
-  h+=arow('Personal Year',num.personalYear,'personalyear',num.personalYear);
-  h+=arow('Personal Month',num.personalMonth,'personalmonth',num.personalMonth);
-  h+=arow('Personal Day',num.personalDay,'personalday',num.personalDay);
-  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
-  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
-  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
-  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   return h;
 }
 
@@ -1398,7 +1398,7 @@ function hdr(hd){
   let h='';
   const core=[];
   if(hd.type)core.push(arow('Type',hd.type,'hdtype',normalizeHDType(hd.type)));
-  if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile'));
+  if(hd.profile)core.push(arow('Profile',hd.profile,'hdprofile',hd.profile));
   if(hd.authority)core.push(arow('Authority',hd.authority,'hdauthority',normalizeHDAuthority(hd.authority)));
   if(core.length){h+=dpsec('Core');h+=core.join('');}
   if(hd.incarnation_cross){h+=dpsec('Cross');h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
