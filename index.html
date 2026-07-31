@@ -21,7 +21,6 @@ body{
     radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 65%),
     radial-gradient(ellipse 58% 46% at 84% 80%, rgba(226,234,212,0.5) 0%, rgba(226,234,212,0) 65%),
     radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%),
-    linear-gradient(115deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 24%, rgba(255,255,255,0) 76%, rgba(255,255,255,0.45) 100%),
     radial-gradient(ellipse 140% 75% at 50% 0%, #f8faf4 0%, #f1f4ec 45%, #e9ede2 100%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-attachment:fixed;
@@ -40,16 +39,6 @@ body{
   width:100%;max-width:56px;aspect-ratio:1/1;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:0.12rem 0.08rem;text-align:center;border:1.5px solid;
   box-shadow:0 3px 5px -1px rgba(40,36,24,0.45),inset 0 0 0 0.5px rgba(255,255,255,0.75);
-}
-/* Sharper specular hotspot with a tighter falloff (not a soft diffuse
-   haze) plus a crisp diagonal glass-streak -- narrower gradient stops
-   than before so the highlight reads as a defined glint, not a blur. */
-.num-tile::after{
-  content:'';position:absolute;inset:-2px;
-  background:
-    radial-gradient(circle at 26% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 8%, rgba(255,255,255,0) 22%),
-    linear-gradient(115deg, rgba(255,255,255,0) 34%, rgba(255,255,255,0.75) 42%, rgba(255,255,255,0) 50%);
-  pointer-events:none;
 }
 .num-tile::before{
   content:'';position:absolute;inset:0;
@@ -203,11 +192,6 @@ body{
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
-.gen-btn::after{content:'';position:absolute;top:-60%;left:-35%;width:30%;height:220%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,0.85),transparent);transform:rotate(20deg);
-  animation:genbtnsheen 3.2s ease-in-out infinite;}
-@keyframes genbtnsheen{0%{left:-35%;}35%{left:130%;}100%{left:130%;}}
-@media(prefers-reduced-motion:reduce){.gen-btn::after{animation:none;display:none;}}
 .tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#5a6350;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
 .err{display:none;font-size:0.7rem;color:#a01818;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(160,24,24,0.08);border-radius:5px;border:1px solid rgba(160,24,24,0.25);font-weight:600;}
@@ -303,9 +287,9 @@ body{
 
 /* Solid navy pills, sized to their own content (not stretched across the
    row) -- so they pop off the cream page instead of blending into it as
-   white-on-white did. One static diagonal sheen for shine, a real lift
-   shadow so they read as pressable, and a small icon each for quick
-   recognition at a glance. */
+   white-on-white did. A real lift shadow so they read as pressable, and
+   a small icon each for quick recognition at a glance. No shine/sheen
+   overlay -- explicitly rejected, do not reintroduce. */
 .side-btn{
   position:relative;overflow:hidden;cursor:pointer;border-radius:999px;
   display:inline-flex;align-items:center;justify-content:center;gap:0.35rem;text-align:center;
@@ -316,9 +300,6 @@ body{
   box-shadow:0 4px 12px -3px rgba(15,25,45,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
   transition:transform 0.15s ease, box-shadow 0.15s ease;
 }
-.side-btn::before{content:'';position:absolute;top:-10%;left:-35%;width:32%;height:120%;
-  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
-  transform:skewX(-16deg);pointer-events:none;}
 .side-btn .btn-icon{flex-shrink:0;width:11px;height:11px;display:block;}
 .side-btn:active{transform:translateY(2px) scale(0.97);box-shadow:0 1px 4px -1px rgba(15,25,45,0.4), inset 0 1px 0 rgba(255,255,255,0.2);}
 
@@ -333,7 +314,6 @@ body{
     radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 65%),
     radial-gradient(ellipse 58% 46% at 84% 80%, rgba(226,234,212,0.5) 0%, rgba(226,234,212,0) 65%),
     radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%),
-    linear-gradient(115deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 24%, rgba(255,255,255,0) 76%, rgba(255,255,255,0.45) 100%),
     radial-gradient(ellipse 140% 75% at 50% 0%, #f8faf4 0%, #f1f4ec 45%, #e9ede2 100%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-attachment:fixed;
@@ -516,11 +496,11 @@ body{
 // preserved) for silverD, and Champagne -- a genuinely well-known pale gold
 // that is NOT yellow/orange -- for goldT.
 const TONES = {
-  cream:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #f7f2e7 55%, #e9dbbd 100%)', border:'#cdbfa0' },
-  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #ffffff 55%, #e3e3e3 100%)', border:'#c7c2b4' },
-  silverL: { grad:'radial-gradient(circle at 30% 26%, #e5e4e2 0%, #c0c0c0 55%, #979691 100%)', border:'#6a695f' },
-  silverD: { grad:'radial-gradient(circle at 30% 26%, #c0c0c0 0%, #91989c 55%, #8499a4 100%)', border:'#4c5c66' },
-  goldT:   { grad:'radial-gradient(circle at 30% 26%, #f8ead3 0%, #ded0ba 55%, #c6b395 100%)', border:'#a08e68' },
+  cream:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #fdfaf3 55%, #f3ead9 100%)', border:'#d9cdb2' },
+  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #ffffff 55%, #f1f1f1 100%)', border:'#d8d4c9' },
+  silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
+  silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
+  goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
 };
 const NUMS = [
   {n:1,  lbl:'Leadership',     tone:'silverL'},
