@@ -135,7 +135,10 @@ body{
    color), which is the actual reason it read as a highlighter mark
    instead of considered typography. Down to 2 signals -- color + the
    existing bold weight -- still findable at a skim, without the block. */
-.key-hl{color:#306AC0;font-weight:800;}
+/* <mark> has a browser-default yellow background in every browser --
+   omitting a background rule here does NOT mean "no background," it means
+   "fall back to that yellow default." Has to be set explicitly to none. */
+.key-hl{background:none;color:#306AC0;font-weight:800;}
 
 .form-col{position:relative;}
 .form-panel{
@@ -290,8 +293,12 @@ body{
 .report-body{padding:0 0.4rem;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;color:var(--card-text);font-weight:400;}
 .report-sig{padding:0.3rem 0.4rem 0;font-family:'DM Sans',sans-serif;font-size:0.46rem;font-style:italic;line-height:1.55;color:var(--card-accent);font-weight:500;}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
-.gate-chip{border:1px solid var(--card-a1);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.48rem;padding:0.14rem 0;cursor:pointer;text-align:center;background:var(--card-stripe-odd);}
-.gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);}
+/* Real depth (shadow) instead of flat, plus the same dotted-underline
+   language .term already uses everywhere else in this app for "tap this" --
+   so gates read as tappable using a convention the rest of the app already
+   teaches, not a new, unlabeled one. */
+.gate-chip{border:1px solid var(--card-a1);border-bottom:1.5px dotted var(--card-accent);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.48rem;padding:0.14rem 0;cursor:pointer;text-align:center;background:var(--card-stripe-odd);box-shadow:0 1px 3px -1px rgba(25,56,102,0.35);}
+.gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);background:var(--card-a4);}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
 
@@ -1745,18 +1752,11 @@ function hdBodygraphSVG(hd){
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_IN}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   const step=360/64;
-  // Spokes -- a thin line from every gate's position on the ring inward to
-  // whichever center that gate actually belongs to, same structural "wheel"
-  // look as the reference chart. All 64 draw as a light structural layer;
-  // the gates that are actually defined for this person redraw on top in
-  // blue so the real pattern still reads clearly through the full spoke set.
-  GATE_WHEEL_ORDER.forEach((g,i)=>{
-    const d0=i*step;
-    const shape=CENTER_SHAPES[GATE_CENTER[g]];
-    if(!shape)return;
-    const [sx,sy]=toXY(d0+step/2,R_IN);
-    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${shape.cx}" y2="${shape.cy}" stroke="${WHEEL_OFF}" stroke-width="0.6" opacity="0.5"/>`;
-  });
+  // Spokes -- a thin line from each DEFINED gate's position on the ring
+  // inward to whichever center it actually belongs to. Drawing all 64
+  // (including undefined gates) held up in sparse test data but turned
+  // into real visual clutter against an actual, fully-populated chart --
+  // only the gates that are actually active for this person get a spoke.
   GATE_WHEEL_ORDER.forEach((g,i)=>{
     if(!active.has(g))return;
     const d0=i*step;
@@ -1935,6 +1935,7 @@ function hdr(hd){
   if(hd.incarnation_cross){h+=dpsec('Cross');h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
   if(hd.gates&&hd.gates.length){
     h+=dpsec('Gates');
+    h+=`<div class="dprow"><p class="report-body">Tap any gate below to see what it means.</p></div>`;
     h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
   }
   return h||apend('Unavailable');
@@ -2190,6 +2191,10 @@ document.addEventListener('click', e=>{
         defBox.textContent='Gate '+num+' \u2014 '+(GATES[num]||'No description available.');
         defBox.dataset.gate=num;
         defBox.hidden=false;
+        // The definition renders below a 3x-per-row grid -- on a phone
+        // screen that's frequently off the bottom of the viewport, so a
+        // tap can look like it did nothing at all. Bring it into view.
+        defBox.scrollIntoView({behavior:'smooth',block:'nearest'});
       }else{
         defBox.hidden=true;
         defBox.dataset.gate='';
