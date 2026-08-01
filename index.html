@@ -256,7 +256,11 @@ body{
    wheel, for Astrology) stays full size, the text list fills whatever
    space is left and gets clipped with a fade -- a real preview, full
    content only in the tap-to-expand modal. ---------- */
-.top-btns{display:flex;gap:0.7rem;justify-content:center;width:100%;margin:0 auto 1.3rem;}
+/* Nav buttons now sit inside the grid itself, flanking the Reading panel
+   (row 2, columns 1 and 3 -- both empty there since Reading only occupies
+   column 2) instead of a separate row above everything. */
+.grid-nav-btn{align-self:center;justify-self:center;}
+.bottom-btns{display:flex;gap:0.7rem;justify-content:center;width:100%;margin:1.4rem auto 0;}
 
 .main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;align-items:start;width:100%;max-width:460px;margin:0 auto;}
 .quad-item{position:relative;min-width:0;cursor:pointer;border-radius:10px;overflow:hidden;
@@ -342,7 +346,7 @@ body{
 .card-expand-body .report-body{font-size:1rem;line-height:1.65;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:1rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
 @media print{
-  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.top-btns{display:none!important;}
+  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #306AC0!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -477,8 +481,8 @@ body{
 
 <div class="results-wrap" id="resultsWrap">
   <div class="ttl">Know Your Energy</div>
-  <div class="top-btns" id="topBtns"></div>
   <div class="main-grid" id="mainGrid"></div>
+  <div class="bottom-btns" id="bottomBtns"></div>
 </div>
 
 <div class="card-expand" id="cardExpand">
@@ -736,11 +740,52 @@ const GLOSSARY_LAYOUT=[
   ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','karmiclessons','karmicdebt']],
   ['Human Design',['hdtype','hdprofile','hdauthority','hdcross']]
 ];
+function titleCaseWords(s){return s.replace(/\b\w/g,c=>c.toUpperCase());}
+
+// The glossary used to show one flat sentence per term -- real depth
+// already exists for every sign/number/type variant (it's exactly what
+// prints on a real reading's cards), it just wasn't surfaced here. Same
+// tap-to-reveal pattern as everywhere else: one collapsed row per variant,
+// full text underneath, so the list stays scannable instead of a wall of
+// text, but the actual content is the same depth a real reading gets.
+function deepGlossaryRows(key){
+  const general=GLOSSARY[key]?`<div class="dprow"><div class="dpr"><span class="dprl">${GLOSSARY_LABEL[key]||key}</span></div><div class="dpdef"><p>${GLOSSARY[key]}</p></div></div>`:'';
+
+  let variants=null, labelFor=v=>v;
+  if(key==='house'){
+    variants=ASTRO_DEFS.house;
+    labelFor=n=>`House ${n} — ${HOUSE_THEME[n]||''}`;
+  }else if(ASTRO_DEFS[key]){
+    variants=ASTRO_DEFS[key];
+    labelFor=sign=>`${SIGN_GLYPH[sign]||''} ${sign}`;
+  }else if(NUM_DEFS[key]){
+    variants=NUM_DEFS[key];
+    labelFor=n=>`Number ${n}`;
+  }else if(key==='hdtype'&&HD_DEFS.hdtype){
+    variants=HD_DEFS.hdtype;
+    labelFor=titleCaseWords;
+  }else if(key==='hdauthority'&&HD_DEFS.hdauthority){
+    variants=HD_DEFS.hdauthority;
+    labelFor=titleCaseWords;
+  }else if(key==='hdprofile'&&HD_DEFS.hdprofile){
+    variants=HD_DEFS.hdprofile;
+    labelFor=v=>`${v} Profile`;
+  }
+
+  if(!variants)return general||`<div class="dprow"><div class="dpr"><span class="dprl">${GLOSSARY_LABEL[key]||key}</span></div></div>`;
+
+  const rows=Object.keys(variants).map(v=>
+    `<div class="dprow"><div class="dpr"><span class="dprl term" data-def="${key}-${v}">${escapeHtml(labelFor(v))}</span></div><div class="dpdef" hidden><p>${variants[v]}</p></div></div>`
+  ).join('');
+  return general+rows;
+}
+
 function buildGlossaryHTML(){
+  const gateSection=`<div class="dpsec">Gates</div><div class="dprow"><p class="report-body">Every Human Design chart activates a specific set of these 64 gates -- tap any one to see what it means. Your own reading only shows the gates that are actually defined in your chart.</p></div><div class="dprow"><div class="gates-grid">${Array.from({length:64},(_,i)=>i+1).map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
   return GLOSSARY_LAYOUT.map(([section,keys])=>{
-    const rows=keys.map(k=>`<div class="dprow"><div class="dpr"><span class="dprl">${GLOSSARY_LABEL[k]||k}</span></div><div class="dpdef"><p>${GLOSSARY[k]}</p></div></div>`).join('');
+    const rows=keys.map(deepGlossaryRows).join('');
     return `<div class="dpsec">${section}</div>${rows}`;
-  }).join('');
+  }).join('')+gateSection;
 }
 function openGlossary(){
   document.getElementById('cardExpandTitle').textContent='Glossary';
@@ -1136,8 +1181,28 @@ const NUM_DEFS={
     7:`A Birthday number of 7 gives you a natural analytical mind — you're drawn to understanding how and why things work, and you're comfortable doing that thinking on your own rather than needing a group to sort it out with. It's a real gift for depth, best balanced with staying reachable to the people around you.`,
     8:`A Birthday number of 8 gives you a natural head for organization, money, and getting things actually accomplished — you think in terms of results and tend to have a good instinct for opportunity. The talent is real efficiency; the discipline is making sure ambition doesn't outrun fairness.`,
     9:`A Birthday number of 9 gives you a natural generosity and breadth of perspective — you tend to think in terms of what's good for the whole group, not just yourself, and people often find you easy to confide in. The gift is compassion; the balance is remembering your own needs count too.`,
+    10:`A Birthday number of 10 is a 1 with extra voltage behind it — the same natural independence and leadership as a 1, but more concentrated, since the 0 amplifies whatever digit it sits next to instead of adding a separate influence of its own. You tend to take charge even more readily than a plain 1 would. The same caution applies, just louder: original thinking is the gift, insisting on doing everything solo is the overreach.`,
     11:`A Birthday number of 11 gives you a heightened intuition — you tend to sense things about people and situations before you can fully explain why, which can make you unusually perceptive in relationships and creative work. It's a sensitive gift, worth grounding rather than dismissing when it doesn't come with hard evidence attached.`,
-    22:`A Birthday number of 22 gives you a natural capacity to think practically at a large scale — turning an ambitious idea into something real and lasting comes more naturally to you than it does to most. Use it deliberately; it's a genuine talent for building, not just dreaming.`
+    12:`A Birthday number of 12 blends a 1's independence with a 2's instinct for cooperation — you lead most naturally from inside a partnership or small group, not solo out in front. That combination makes you good at getting a group moving in one direction, but it can leave you frustrated when you're forced to decide entirely alone with no one to bounce it off first.`,
+    13:`A Birthday number of 13 blends a 1's drive with a 3's creative spark, but it's traditionally flagged as a Karmic Debt number tied to avoiding real, sustained work — the raw talent for starting something original is genuinely there, but it only pays off with follow-through a 13 has to build on purpose, since it doesn't come as automatically as the initial spark does.`,
+    14:`A Birthday number of 14 blends a 1's independence with a 4's need for structure, but it's traditionally flagged as a Karmic Debt number tied to overdoing freedom — a real love of change and new experience that needs real structure underneath it, or it tips into instability instead of the adaptability it's actually capable of.`,
+    15:`A Birthday number of 15 blends a 1's independence with a 5's adaptability — magnetic and resourceful, good at leading precisely because you're comfortable improvising when a plan changes midstream. The gift is thriving on change while still steering it; the risk is restlessness that never lets a plan run long enough to actually work.`,
+    16:`A Birthday number of 16 blends a 1's independence with a 6's sense of responsibility, but it's traditionally flagged as a Karmic Debt number tied to ego — real insight and care for others that tends to get tested by a fall of some kind, one that rebuilds a truer, less self-important version of the same strength rather than destroying it.`,
+    17:`A Birthday number of 17 blends a 1's independence with a 7's analytical depth — you lead through expertise and insight rather than force, and people tend to trust your judgment once you've actually studied a subject. The gift is earned authority; the risk is over-relying on your own analysis instead of testing it against anyone else's.`,
+    18:`A Birthday number of 18 blends a 1's independence with an 8's drive for material achievement — a natural at running something at real scale, comfortable with responsibility and ambition most people find heavy. The gift is genuine capability under pressure; the balance is making sure the scale you're building serves more than just your own ambition.`,
+    19:`A Birthday number of 19 blends a 1's independence with a 9's compassion, but it's traditionally flagged as a Karmic Debt number tied to self-reliance taken too far — real capability paired with a hard time asking for help, even when the people around you would genuinely give it. The lesson is letting support in before you're forced to by running out of road alone.`,
+    20:`A Birthday number of 20 is a 2 with extra voltage behind it — heightened sensitivity and partnership instinct, since the 0 intensifies rather than adds a separate influence. You read people and rooms even more acutely than a plain 2 would, and you tend to do your best work paired with someone rather than solo. The edge to watch is absorbing other people's moods as if they were your own.`,
+    21:`A Birthday number of 21 blends a 2's partnership instinct with a 1's independent spark — a natural connector who still has a clear point of view of your own, rather than dissolving into whoever you're paired with. The gift is genuine collaboration without losing yourself in it; the risk is a quiet tug-of-war between wanting company and wanting the final say.`,
+    22:`A Birthday number of 22 gives you a natural capacity to think practically at a large scale — turning an ambitious idea into something real and lasting comes more naturally to you than it does to most. Use it deliberately; it's a genuine talent for building, not just dreaming.`,
+    23:`A Birthday number of 23 blends a 2's diplomacy with a 3's expressiveness — a natural communicator who can charm a room and still read what it actually needs, rather than just performing at it. The gift is genuine social ease; the risk is coasting on charm instead of saying the harder, truer thing a moment calls for.`,
+    24:`A Birthday number of 24 blends a 2's partnership instinct with a 4's need for structure — a steady, dependable presence in close relationships and teams, the one people build long-term plans around. The gift is real reliability; the risk is over-committing to stability even after a relationship or plan has stopped actually working.`,
+    25:`A Birthday number of 25 blends a 2's sensitivity with a 5's adaptability — intuitively good at reading when a situation is about to shift, and comfortable moving with it rather than resisting. The gift is emotional attunement to change most people miss; the risk is picking up so much ambient feeling that it's hard to tell which reaction is actually yours.`,
+    26:`A Birthday number of 26 blends a 2's partnership instinct with a 6's sense of responsibility — care expressed through practical follow-through, often centered on home or family, not just warm intention. The gift is dependable nurturing; the risk is measuring your own worth by how much of that caretaking you're doing for everyone else.`,
+    27:`A Birthday number of 27 blends a 2's sensitivity with a 7's introspection — real emotional intelligence paired with a pull toward meaning over surface small talk. The gift is depth other people sense and trust; the risk is withdrawing into your own analysis when what a moment actually needs is just showing up simply.`,
+    28:`A Birthday number of 28 blends a 2's diplomacy with an 8's ambition — you build real influence through relationships rather than through force alone, which tends to make your authority durable rather than resented. The gift is power that people actually want to follow; the risk is leaning on charm to avoid a direct conversation ambition sometimes requires.`,
+    29:`A Birthday number of 29 blends a 2's sensitivity with a 9's compassion, and the two together (2+9=11) carry an undertone of the same heightened intuition an 11 has — a lot of genuine feeling for other people, sometimes more than you have a clear boundary around. The gift is real empathy; the risk is absorbing other people's pain as if it were yours to carry.`,
+    30:`A Birthday number of 30 is a 3 with extra voltage behind it — creative self-expression turned up, since the 0 intensifies rather than adds a separate influence. You're often magnetic in a room, a natural performer or communicator even more so than a plain 3. The same caution applies, just louder: the spark is real, follow-through is the part that has to be built on purpose.`,
+    31:`A Birthday number of 31 blends a 3's creative expression with a 1's independence — an original voice who leads by putting a genuinely personal stamp on whatever you make, rather than following an existing template. The gift is real originality; the risk is discounting a good, more conventional idea just because it wasn't your own.`
   },
   attitude:{
     1:`With an Attitude number of 1, the first impression you give off is confidence — you come across as someone who knows their own mind and isn't waiting for permission to act. People read you as capable before you've said a word, which can work for you or feel like pressure to always have it together.`,
@@ -1661,11 +1726,6 @@ function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
   h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',num.personalYear,'personalyear',num.personalYear)}${pcCol('Personal Month',num.personalMonth,'personalmonth',num.personalMonth)}${pcCol('Personal Day',num.personalDay,'personalday',num.personalDay)}</div></div>`;
-  h+=dpsec('Right Now');
-  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
-  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
-  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
-  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   h+=dpsec('From Your Birth Date');
   h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
   h+=arow('Birthday',num.birthday,'birthday',num.birthday);
@@ -1675,6 +1735,11 @@ function nr(num){
   h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
   h+=arow('Personality',num.personality,'personality',num.personality);
   h+=arow('Balance',num.balance,'balance',num.balance);
+  h+=dpsec('Right Now');
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
+  h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
   h+=dpsec('Pinnacles & Challenges — By Life Stage');
   h+=pinnacleChallengeRow(1,num.pinnacles.pinnacle1,num.challengeNumbers.challenge1);
   h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
@@ -1747,8 +1812,27 @@ let cardRegistry=[];
 
 const BTN_ICON_REFRESH='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 106.3 16.3M20 11V5M20 11h-6"/></svg>';
 const BTN_ICON_PRINT='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4.5A1.5 1.5 0 013 16.5v-5A1.5 1.5 0 014.5 10h15a1.5 1.5 0 011.5 1.5v5a1.5 1.5 0 01-1.5 1.5H18M6 14h12v7H6z"/></svg>';
-function topBtn(label,onclick,icon){
-  return `<div class="side-btn" onclick="${onclick}">${icon||''}<span>${label}</span></div>`;
+const BTN_ICON_SHARE='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>';
+function topBtn(label,onclick,icon,gridPos){
+  const style=gridPos?` style="${gridPos}"`:'';
+  const cls=gridPos?'side-btn grid-nav-btn':'side-btn';
+  return `<div class="${cls}"${style} onclick="${onclick}">${icon||''}<span>${label}</span></div>`;
+}
+// Shares a link to the site, never the person's own chart data -- that
+// would contradict "your info is neither shared nor saved" a few lines
+// up this same page.
+async function shareReading(){
+  const shareData={title:'Know Your Energy',text:'I just got my astrology, numerology, and Human Design reading combined — check it out.',url:'https://know-your-energy.com'};
+  if(navigator.share){
+    try{ await navigator.share(shareData); }catch(e){}
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(shareData.url);
+    alert('Link copied — paste it anywhere to share.');
+  }catch(e){
+    alert(shareData.url);
+  }
 }
 
 // Astrology (col 1) and Human Design (col 3) are clear/transparent, no
@@ -1795,14 +1879,17 @@ function render(p1,p2,r,reportErr){
   const n1=p1.first+(p1.last?' '+p1.last:'');
   const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
 
-  document.getElementById('topBtns').innerHTML=
-    topBtn('Run Another Reading','resetToForm()',BTN_ICON_REFRESH)+topBtn('Save / Print Reading','window.print()',BTN_ICON_PRINT);
-
-  // Row 1 = P1, row 2 = Reading (middle column only), row 3 = P2 mirrored
-  // below -- solo readings just end after Reading, no reserved empty space.
-  let h=personRow(p1,1)+reportSlot(namesForTitle,r,reportErr,2);
+  // Row 1 = P1, row 2 = Reading (middle column only) flanked by the nav
+  // buttons in the empty columns 1 and 3 of that same row, row 3 = P2
+  // mirrored below -- solo readings just end after Reading, no reserved
+  // empty space.
+  let h=personRow(p1,1)
+    +topBtn('Run Another Reading','resetToForm()',BTN_ICON_REFRESH,'grid-column:1;grid-row:2;')
+    +reportSlot(namesForTitle,r,reportErr,2)
+    +topBtn('Save / Print Reading','window.print()',BTN_ICON_PRINT,'grid-column:3;grid-row:2;');
   if(p2)h+=personRow(p2,3);
   document.getElementById('mainGrid').innerHTML=h;
+  document.getElementById('bottomBtns').innerHTML=topBtn('Share','shareReading()',BTN_ICON_SHARE);
 
   document.getElementById('loading').style.display='none';
   document.getElementById('resultsWrap').style.display='block';

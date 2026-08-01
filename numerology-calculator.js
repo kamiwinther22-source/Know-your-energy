@@ -172,9 +172,16 @@ function calculatePersonality(first, middle, last) {
   return nameBasedNumber([first, middle, last], (ch, i, letters) => !isVowelChar(ch, i, letters));
 }
 
+// The Birthday Number is the actual calendar day of birth (1-31), NOT
+// reduced -- this is the one number in the whole chart that stays raw.
+// Every documented Pythagorean source (Decoz included) treats days 10-31
+// as their own distinct numbers with their own meaning, not as a shorthand
+// for their reduced single digit. Reducing this was a real bug: it made
+// day 14 display as "5", which looks like an error to anyone who already
+// knows their own birth day.
 function calculateBirthdayNumber(dob) {
   const { day } = parseDate(dob);
-  return reducePreserveMasters(day);
+  return { value: day, karmicDebt: null };
 }
 
 // ---------- ATTITUDE / SUN NUMBER ----------
@@ -405,7 +412,7 @@ function calculateFullChart(person) {
     essenceCycle: { value: essence.value, currentAge: age },
     karmicLessons: karmicLessons,
     subconsciousSelf: subconsciousSelf,
-    karmicDebtNumbers: [...new Set(karmicDebtNumbers)],
+    karmicDebtNumbers: [...new Set(karmicDebtNumbers)].sort((a, b) => a - b),
     masterNumbersPresent: [lifePath.value, expression.value, soulUrge.value, personality.value]
       .filter((v) => MASTER_NUMBERS.includes(v))
   };
