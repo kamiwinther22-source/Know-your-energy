@@ -27,6 +27,11 @@ instance of Claude reading this: these are not suggestions, they are settled.
   the arc that began at [X] completes") as succinctly as possible; let the
   accuracy be what's striking, not the prose style. If a phrase sounds like
   it's trying to sound deep, it's doing the opposite of its job.
+- **Don't deny a claim nobody made.** "Not because anything was overdue"
+  only existed to correct an earlier draft's mistake — a fresh reader
+  never assumed "overdue" in the first place, so denying it just imports
+  the idea it's trying to avoid. State the fact; don't argue with a
+  strawman left over from the editing process.
 
 ## Codebase structure & tech stack
 
