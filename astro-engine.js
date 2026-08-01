@@ -106,10 +106,19 @@ export function computeAstrology(input) {
   const ascendant = readBody(horoscope.Ascendant);
   const midheaven = readBody(horoscope.Midheaven);
 
-  // --- North Node / South Node / Chiron (bonus points the old API didn't send) ---
+  // --- North Node / South Node / Chiron / Sirius / Lilith (bonus points the old API didn't send) ---
   const northNode = readBody(horoscope.CelestialPoints?.northnode);
   const southNode = readBody(horoscope.CelestialPoints?.southnode);
   const chiron = readBody(horoscope.CelestialBodies?.chiron);
+  // Sirius: the fixed star circular-natal-horoscope-js ships under
+  // CelestialBodies. Lilith here is Black Moon Lilith (a calculated point,
+  // not a physical body), which the library ships under CelestialPoints
+  // alongside the nodes. Both already factor into horoscope.Aspects (the
+  // report prompt has referenced Sirius/Lilith aspects since it was
+  // written) but their own sign placements were never read out here, so
+  // they never had a placement to show on the visible chart.
+  const sirius = readBody(horoscope.CelestialBodies?.sirius);
+  const lilith = readBody(horoscope.CelestialPoints?.lilith);
 
   // --- House cusps ---
   const houses = (horoscope.Houses || []).map((h, i) => {
@@ -149,6 +158,8 @@ export function computeAstrology(input) {
     northNode,
     southNode,
     chiron,
+    sirius,
+    lilith,
     houses,
     aspects,
   };

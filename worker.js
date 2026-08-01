@@ -135,8 +135,15 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     // Ascendant, Midheaven, and house placements all depend on the exact
     // clock time of birth — without it they'd just be guesses computed from
     // a defaulted noon, not the "omitted" behavior promised on the form.
-    // Sign-level planet positions don't depend on time-of-day, so those stay.
-    result.planets = result.planets.map(({ house, ...rest }) => rest);
+    // Sign-level positions don't depend on time-of-day, so those stay for
+    // every body/point, including the ones stored outside result.planets.
+    const stripHouse = (b) => b ? (({ house, ...rest }) => rest)(b) : b;
+    result.planets = result.planets.map(stripHouse);
+    result.northNode = stripHouse(result.northNode);
+    result.southNode = stripHouse(result.southNode);
+    result.chiron = stripHouse(result.chiron);
+    result.sirius = stripHouse(result.sirius);
+    result.lilith = stripHouse(result.lilith);
     result.ascendant = null;
     result.midheaven = null;
     result.houses = [];
@@ -672,7 +679,7 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     const astrologyLines = [
       a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
       (a.planets || []).map(planetLine).join(', '),
-      [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('Chiron', a.chiron)].filter(Boolean).join(', '),
+      [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('South Node', a.southNode), angle('Chiron', a.chiron), angle('Sirius', a.sirius), angle('Lilith', a.lilith)].filter(Boolean).join(', '),
       a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(', ')}` : null,
       `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
     ].filter(Boolean).join('\n  ');
