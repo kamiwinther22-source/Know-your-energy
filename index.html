@@ -1769,15 +1769,19 @@ function hdBodygraphSVG(hd){
     const [x1,y1]=toXY(d0,R_IN), [x2,y2]=toXY(d0,R_OUT);
     svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${BLUE}" stroke-width="1" opacity="0.55"/>`;
     const on=active.has(g);
-    if(on){
-      const [ax1,ay1]=toXY(d0,R_IN), [ax2,ay2]=toXY(d0+step,R_IN), [ax3,ay3]=toXY(d0+step,R_OUT), [ax4,ay4]=toXY(d0,R_OUT);
-      svg+=`<path d="M${ax1.toFixed(1)},${ay1.toFixed(1)} A${R_IN},${R_IN} 0 0 1 ${ax2.toFixed(1)},${ay2.toFixed(1)} L${ax3.toFixed(1)},${ay3.toFixed(1)} A${R_OUT},${R_OUT} 0 0 0 ${ax4.toFixed(1)},${ay4.toFixed(1)} Z" fill="${NAVY}" opacity="0.14"/>`;
-    }
+    // Wedge fill uses the SAME color as whichever center this gate belongs
+    // to -- real HD convention, matching the reference chart, not just an
+    // on/off blue -- every gate carries its center's color even when
+    // undefined (fainter), so the ring itself shows the 9-center grouping.
+    const centerName=GATE_CENTER[g];
+    const wedgeColor=CENTER_COLOR[centerName]||NAVY;
+    const [ax1,ay1]=toXY(d0,R_IN), [ax2,ay2]=toXY(d0+step,R_IN), [ax3,ay3]=toXY(d0+step,R_OUT), [ax4,ay4]=toXY(d0,R_OUT);
+    svg+=`<path d="M${ax1.toFixed(1)},${ay1.toFixed(1)} A${R_IN},${R_IN} 0 0 1 ${ax2.toFixed(1)},${ay2.toFixed(1)} L${ax3.toFixed(1)},${ay3.toFixed(1)} A${R_OUT},${R_OUT} 0 0 0 ${ax4.toFixed(1)},${ay4.toFixed(1)} Z" fill="${wedgeColor}" opacity="${on?0.9:0.13}"/>`;
     const [gx,gy]=toXY(d0+step/2,R_LABEL);
     let faceAngle=d0+step/2;
     if(faceAngle>180)faceAngle-=360;
     if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
-    const fill=on?NAVY:WHEEL_OFF;
+    const fill=on?(CENTER_TEXT[centerName]||NAVY):WHEEL_OFF;
     svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="${on?800:600}" fill="${fill}" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${g}</text>`;
   });
   // channel lines, so center shapes + gate labels sit on top
