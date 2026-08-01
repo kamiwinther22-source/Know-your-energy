@@ -19,6 +19,14 @@ instance of Claude reading this: these are not suggestions, they are settled.
   instead of "black text on white background," "terracotta" instead of
   "orange" — renaming a plain material doesn't change what's actually on
   the screen, and she reads it as spin. Say what it plainly is.
+- **In astrology/numerology/HD content specifically: no dramatic-sounding
+  writing performing depth it doesn't have.** Phrases like "releasing what
+  you've carried too long" are this genre's version of the same problem —
+  language dressed up to sound profound instead of stating the real
+  mechanism plainly. State the actual structural fact (e.g. "this is where
+  the arc that began at [X] completes") as succinctly as possible; let the
+  accuracy be what's striking, not the prose style. If a phrase sounds like
+  it's trying to sound deep, it's doing the opposite of its job.
 
 ## Codebase structure & tech stack
 
