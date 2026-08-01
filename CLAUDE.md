@@ -33,6 +33,49 @@ instance of Claude reading this: these are not suggestions, they are settled.
   the idea it's trying to avoid. State the fact; don't argue with a
   strawman left over from the editing process.
 
+## Content audit checklist — ASTRO_DEFS / NUM_DEFS / HD_DEFS / GATES
+
+**She has not approved any of this content.** Every single entry actually
+reviewed so far (Sun/Scorpio, 7 "runs deep" instances, the 9 Pinnacle,
+rewritten three times before it held) needed a real correction — treat
+that as the expected outcome for the rest of it, not the exception. This
+is heading toward a full rewrite of ~200+ entries (12 signs × 10 planets,
+~120 planet-in-house combos, numerology's core/Pinnacle/Challenge numbers,
+all 64 Gates, HD types/authorities/profiles), not spot fixes.
+
+**Process:** work one category at a time (Sun signs first, since that's
+the most-read single category). Do the research and redraft yourself,
+batch it, bring her a compact before/after for the whole category in one
+pass — not a conversation per entry. She skims and approves, or flags
+specific ones for real discussion. Track category-by-category status
+somewhere durable so it isn't dependent on memory across sessions.
+
+**Checklist every entry must pass:**
+1. Names the real, verified mechanism for this specific placement —
+   checked against actual source material, not just internally
+   plausible. (The Scorpio error: attributing a learning-style preference
+   to Scorpio's core identity, when the real tradition is intensity and
+   facing hard truths.)
+2. No overused clichés or phrases that have stopped meaning anything
+   through repetition (e.g. "runs deep").
+3. Shows the full, real picture — doesn't lead with and end on the hard
+   part alone, doesn't oversell positivity either.
+4. No prescriptive "growth edge" or lesson tacked on where the placement
+   doesn't actually call for one.
+5. Direct, economical wording — not padded, not hedging, not sideways.
+6. Observational, not advice-giving: describes what a period *is* or
+   *supports*, never what happens *if you act a certain way inside it*.
+   If it's genuinely observational it needs no "this isn't advice"
+   disclaimer — the wording itself should make that obvious.
+7. Doesn't universalize a specific narrative onto everyone. State only
+   what's structurally/mechanically true for the whole cycle, not an
+   assumed emotional experience (excess, struggle, overdue-ness).
+8. No dramatic-sounding writing performing depth it doesn't have — state
+   the structural fact plainly; the accuracy should be what's striking,
+   not the prose style.
+9. Doesn't argue with a strawman left over from a previous draft.
+10. No dressing up plain things with fancier names.
+
 ## Codebase structure & tech stack
 
 Small, no-framework, no-build-step app: a single static HTML file plus a
