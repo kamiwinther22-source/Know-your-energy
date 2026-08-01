@@ -686,6 +686,7 @@ const GLOSSARY={
   ascendant:"Your outward first impression — the mask you present before people know you.",
   midheaven:"Your public reputation, career direction, and life's aim.",
   house:"The life area where a planet's energy actually plays out — the stage it acts on.",
+  housecombo:"The life area where a planet's energy actually plays out — the stage it acts on.",
   chiron:"Your deepest wound, and the specific gift that shows up once you've worked with it instead of hiding it.",
   northnode:"The unfamiliar direction you're meant to grow toward in this life, even though it doesn't come naturally yet.",
   southnode:"The familiar habits and instincts you were already born comfortable with — useful, but easy to over-rely on instead of growing past.",
@@ -975,6 +976,133 @@ const ASTRO_DEFS={
     10:`The 10th House governs public direction — career, reputation, and the role you're recognized for in the wider world (the same domain the Midheaven anchors). A planet here ties that planet's themes directly to your visible achievements and how authority figures tend to perceive you.`,
     11:`The 11th House governs community — friendships, groups, and the hopes you hold for the future that go beyond your individual life. A planet here shapes how that planet's themes show up in your friend circles and the causes or communities you attach yourself to.`,
     12:`The 12th House governs what's hidden — the subconscious, solitude, and things not fully visible even to you, traditionally linked to endings, rest, and spiritual or reflective withdrawal. A planet here tends to work quietly, showing up as an undercurrent you sense more than something you can point to directly.`
+  },
+  // Which specific life arena each planet's energy actually plays out in --
+  // not a restatement of the sign entry (that's the planet's core theme
+  // regardless of house) and not the generic house blurb above (that's
+  // the same for anyone with any planet there). Every entry below has to
+  // name the actual combination, not just reshuffle either half alone.
+  housecombo:{
+    sun_1:`With your Sun in the 1st House, your core identity is worn on the outside — who you are isn't something people have to get to know over time, it shows up immediately in your presence, manner, and the way you enter a room. That directness makes you memorable fast, but it also means you have less private distance between "who I am" and "what people see" than most placements do.`,
+    sun_2:`With your Sun in the 2nd House, your sense of self is built through what you accumulate and can rely on — money, possessions, skills you can count on. Your self-worth tracks your material stability more than it does for most people, which can be a genuine motivator to build real security, or a trap if your worth starts rising and falling with your bank balance.`,
+    sun_3:`With your Sun in the 3rd House, your identity is expressed through everyday communication — talking, writing, learning, connecting with the people immediately around you. You know yourself by how well you can explain a thought or pick up a new one, more than through some grander life mission.`,
+    sun_4:`With your Sun in the 4th House, your core identity is rooted in home and family — where you come from, and the private world underneath your public self, matter more to your basic sense of who you are than your career or reputation do. Your foundation isn't a backdrop to your identity here; it largely is your identity.`,
+    sun_5:`With your Sun in the 5th House, your identity is built through creative self-expression — making something, performing, romancing, playing, in a way that's genuinely yours and genuinely visible. You know who you are by what you make and how proudly you can put your name on it.`,
+    sun_6:`With your Sun in the 6th House, your sense of self is tied to being useful — competent, reliable work and daily upkeep matter to your identity more than status does. You feel most like yourself when you're actually doing something productive, not simply being admired for it.`,
+    sun_7:`With your Sun in the 7th House, you come to know yourself largely through your closest partnerships — who you are becomes clearest in relation to someone else, reflected back at you rather than worked out alone in a room. That makes partnership genuinely central to your identity, not an accessory to it, for better and worse.`,
+    sun_8:`With your Sun in the 8th House, your identity is forged through intensity — crisis, transformation, and what's shared rather than what's simply yours alone shape who you understand yourself to be. You tend to know yourself best after you've been through something, not before.`,
+    sun_9:`With your Sun in the 9th House, your core identity is built on belief and exploration — what you think is true, where you've traveled, and how far your worldview reaches matter more to your sense of self than your immediate surroundings do. You know who you are by what you're still trying to figure out about the bigger picture.`,
+    sun_10:`With your Sun in the 10th House, your identity is deeply tied to your public role — career, reputation, and how the wider world recognizes your work aren't separate from who you are, they're close to the center of it. That makes real achievement feel personally necessary, not just externally rewarding.`,
+    sun_11:`With your Sun in the 11th House, you know yourself largely through the groups and causes you belong to — your identity is built more around shared vision and community than around individual, solo accomplishment. Belonging to something bigger than yourself isn't optional here; it's part of how you actually recognize yourself.`,
+    sun_12:`With your Sun in the 12th House, your core identity stays mostly private — worked out in reflection, solitude, or even confusion about yourself, rather than displayed for others to react to. You may take longer than most to feel like you know who you are, since the process happens largely out of view, including your own.`,
+    moon_1:`With your Moon in the 1st House, your emotional state is visible the moment someone meets you — you don't have much of a poker face, and people read your mood before you've said a word. That makes you easy to read and genuinely hard to fake around, for better and worse.`,
+    moon_2:`With your Moon in the 2nd House, you feel emotionally secure through tangible resources — money, possessions, and physical comfort aren't just practical to you, they're part of what makes you feel safe. Instability in what you own or earn tends to rattle you emotionally more than it would most people.`,
+    moon_3:`With your Moon in the 3rd House, your emotional world is processed out loud — through talking, texting, writing something down. You don't fully know what you feel until you've said it to someone, which makes you an instinctive over-communicator when something's actually bothering you.`,
+    moon_4:`With your Moon in the 4th House, this placement is fully at home — your emotional security is directly tied to home and family, and you likely need a physical place that feels like yours to actually recharge. Instability at home affects your mood more directly than almost anything else in your life.`,
+    moon_5:`With your Moon in the 5th House, you feel emotionally alive through creativity, romance, and being genuinely seen doing something you love. Your mood visibly brightens when you're making something or being appreciated for it, and just as visibly dims when there's no outlet for that expression.`,
+    moon_6:`With your Moon in the 6th House, your emotional stability is tied to routine and useful daily work — a disrupted schedule or feeling unproductive unsettles you more than it would most people, while a solid routine genuinely calms you down.`,
+    moon_7:`With your Moon in the 7th House, your emotional security depends heavily on close partnership — you feel safest, and most yourself, when you're paired with someone you trust. Being between real relationships tends to leave you more emotionally unsettled than it would for other placements.`,
+    moon_8:`With your Moon in the 8th House, your emotional life runs deep and mostly private, drawn toward intensity rather than surface calm. You process feelings most honestly during crisis or real vulnerability, and can find ordinary, uneventful emotional stability oddly hard to access or trust.`,
+    moon_9:`With your Moon in the 9th House, you feel emotionally secure through meaning and exploration — travel, belief, and a sense that life is actually going somewhere matter to your mood more than material comfort does. Feeling stuck or boxed in unsettles you emotionally, not just practically.`,
+    moon_10:`With your Moon in the 10th House, your emotional state is unusually tied to your public standing — being recognized or accomplishing something visible genuinely lifts your mood, and professional setbacks land emotionally, not just practically. Your private feelings and public reputation are less separate here than for most people.`,
+    moon_11:`With your Moon in the 11th House, you feel emotionally secure through community and belonging to a group with shared hopes — friendships and causes function almost like an extended family for your sense of safety. Feeling excluded from a group affects you more deeply than most people would expect.`,
+    moon_12:`With your Moon in the 12th House, this placement is fully at home — your emotional life runs largely beneath the surface, processed in solitude, dreams, or reflection rather than shared openly in the moment. You may feel things fully only in hindsight, once you've had real time alone with them.`,
+    mercury_1:`With your Mercury in the 1st House, your mind is on display immediately — how you think and talk is a core part of the first impression you give, often before your personality has a chance to show up any other way. People form an opinion of your intelligence within the first few sentences.`,
+    mercury_2:`With your Mercury in the 2nd House, your thinking is practical and resource-focused — you're naturally good at reasoning through money, value, and what something is actually worth, and you tend to talk about tangible things more readily than abstract ones.`,
+    mercury_3:`With your Mercury in the 3rd House, this placement is fully at home — communication, learning, and everyday information-gathering come naturally and constantly, and you're likely someone who's always mid-conversation, mid-text, or mid-thought about something new you just picked up.`,
+    mercury_4:`With your Mercury in the 4th House, your thinking is shaped by home and family — you process ideas most naturally in a private, familiar setting, and conversations about your roots or upbringing tend to occupy real mental real estate, more than they would for most placements.`,
+    mercury_5:`With your Mercury in the 5th House, your mind is playful and expressive — you think in terms of stories, wit, and creative angles, and you're likely a naturally entertaining communicator who enjoys the performance of a good idea as much as the idea itself.`,
+    mercury_6:`With your Mercury in the 6th House, your thinking is detail-oriented and practical, well-suited to solving the actual problems in front of you at work or in daily routine. You're likely the person who catches the error everyone else's big-picture thinking missed.`,
+    mercury_7:`With your Mercury in the 7th House, your best thinking happens in dialogue with someone else — you process ideas by talking them through with a partner or close collaborator, and you're naturally good at seeing an issue from both sides of a negotiation.`,
+    mercury_8:`With your Mercury in the 8th House, your mind is drawn to what's hidden — research, psychology, and uncovering what other people aren't saying out loud come naturally to you. Surface-level conversation tends to bore you faster than it would most people.`,
+    mercury_9:`With your Mercury in the 9th House, your thinking runs toward the big picture — philosophy, belief systems, and ideas from far outside your own background genuinely interest you, sometimes more than the small, immediate details in front of you.`,
+    mercury_10:`With your Mercury in the 10th House, your communication skill is directly tied to your public reputation — how well you speak, write, or present is part of what you're professionally known for, not just a private skill you happen to have.`,
+    mercury_11:`With your Mercury in the 11th House, your thinking is oriented toward groups and the future — you're naturally drawn into conversations about shared causes, group plans, and where things are collectively headed, more than one-on-one small talk.`,
+    mercury_12:`With your Mercury in the 12th House, a lot of your real thinking happens privately, almost below your own awareness — you may solve a problem in your sleep or during quiet reflection more reliably than by actively talking it through with someone else.`,
+    venus_1:`With your Venus in the 1st House, warmth and likability are part of your first impression itself — people tend to find you charming or attractive almost immediately, since your sense of beauty and ease with people shows up in your actual presence, not just your relationships.`,
+    venus_2:`With your Venus in the 2nd House, this placement is fully at home — love and money follow similar instincts for you, and you likely have a genuine, well-developed appreciation for quality, comfort, and the pleasures that come from having built real material stability.`,
+    venus_3:`With your Venus in the 3rd House, you express affection through communication — a well-chosen word, a thoughtful message, a genuinely good conversation is one of your real love languages, and you likely charm people in casual, everyday interactions more than through grand gestures.`,
+    venus_4:`With your Venus in the 4th House, love and beauty are centered on home and family — you likely put real care into making your home feel warm and beautiful, and your closest, most affectionate relationships tend to be with family or people who feel like family.`,
+    venus_5:`With your Venus in the 5th House, this placement is fully at home — romance, creativity, and pleasure come naturally and abundantly, and you're likely a genuinely delightful, playful presence in love and in whatever you make.`,
+    venus_6:`With your Venus in the 6th House, you show affection through practical, daily acts of care — helping with something, showing up reliably, tending to the details of someone's life — more than through romantic display. Love, for you, often looks like usefulness.`,
+    venus_7:`With your Venus in the 7th House, this placement is fully at home — partnership itself is where your gift for love and diplomacy shows up most clearly, and you likely have real, natural skill at making a close relationship feel balanced and fair.`,
+    venus_8:`With your Venus in the 8th House, your capacity for love runs deep and intense rather than light — you're drawn to real intimacy and transformation in relationships more than casual romance, and shared resources (financial or emotional) tend to matter a great deal in how you bond.`,
+    venus_9:`With your Venus in the 9th House, you're drawn to love and beauty from beyond your own background — different cultures, philosophies, or simply someone who expands your world tend to attract you more than someone who's simply familiar.`,
+    venus_10:`With your Venus in the 10th House, your charm and sense of style are part of your public reputation — you're likely well-liked professionally, and your public image tends to carry real grace or aesthetic sensibility that others notice.`,
+    venus_11:`With your Venus in the 11th House, you experience love most naturally through friendship first — your closest romantic relationships often grow out of a shared community or group of friends, rather than starting as romance from a standing start.`,
+    venus_12:`With your Venus in the 12th House, your deepest capacity for love is often private or even secret — you may be genuinely devoted in ways you don't advertise, and you're capable of a quiet, selfless kind of affection that doesn't require being seen to be real.`,
+    mars_1:`With your Mars in the 1st House, your drive to act is part of your visible identity — you come across as assertive and quick to move before you've had to work at it. People read you as someone who initiates, for better or worse, the moment they meet you.`,
+    mars_2:`With your Mars in the 2nd House, your drive is directed at building and defending your own resources — you assert yourself most clearly around money and possessions, and you're willing to fight to protect what you've earned.`,
+    mars_3:`With your Mars in the 3rd House, your drive comes out verbally — you argue quickly, think fast, and assert yourself in everyday conversation more readily than through physical action. Restlessness shows up as mental energy that needs somewhere to go.`,
+    mars_4:`With your Mars in the 4th House, your drive centers on home and family — you're the one who defends the household, sometimes bringing real friction into it, since this is also where your temper is most likely to show up unfiltered.`,
+    mars_5:`With your Mars in the 5th House, your drive shows up through creativity and romance — you pursue what and who you want boldly, and you're genuinely competitive in anything you consider play.`,
+    mars_6:`With your Mars in the 6th House, your drive channels into work and daily routine — you're capable of real, sustained effort on the job, though the same intensity can push your body harder than it can actually sustain.`,
+    mars_7:`With your Mars in the 7th House, your drive shows up through partnership — you assert yourself most clearly in close one-on-one relationships, which can mean real passion or real conflict, often both at different times with the same person.`,
+    mars_8:`With your Mars in the 8th House, your drive is directed at intensity and control — you assert yourself most in matters of shared resources or deep intimacy, uncomfortable with anything that feels like it's controlling you instead.`,
+    mars_9:`With your Mars in the 9th House, your drive shows up through belief and exploration — you pursue your convictions boldly and act fast on the chance to travel, learn, or expand your world.`,
+    mars_10:`With your Mars in the 10th House, your drive is visible in your career — you're competitive about public achievement and willing to assert yourself to get the recognition you're after.`,
+    mars_11:`With your Mars in the 11th House, your drive shows up within groups — you're often the one who actually gets a shared cause or community project moving, sometimes pushing harder than the group is ready for.`,
+    mars_12:`With your Mars in the 12th House, your drive works mostly behind the scenes — assertiveness that doesn't display outwardly can turn into private frustration if it never finds a direct outlet, so it's worth finding one on purpose.`,
+    jupiter_1:`With your Jupiter in the 1st House, growth and opportunity follow your own confidence and visible presence — you tend to catch good luck simply by putting yourself forward rather than waiting to be noticed.`,
+    jupiter_2:`With your Jupiter in the 2nd House, your resources tend to expand naturally — a generally optimistic relationship to money, generous with what you have, with a real risk of overspending on that same optimism.`,
+    jupiter_3:`With your Jupiter in the 3rd House, growth comes through communication and learning — an optimistic, expansive mind that grows through everyday conversation and local connections more than formal study.`,
+    jupiter_4:`With your Jupiter in the 4th House, growth is tied to home and family — a generous, expansive household, and often real luck or support that traces back to family.`,
+    jupiter_5:`With your Jupiter in the 5th House, growth shows up through creativity and romance — generous, expansive, genuinely lucky in matters of love and creative risk-taking.`,
+    jupiter_6:`With your Jupiter in the 6th House, growth comes through daily work and service — real meaning and even opportunity found in competent, everyday effort rather than any single big break.`,
+    jupiter_7:`With your Jupiter in the 7th House, growth shows up through partnership — expansive, generous in close relationships, though it's worth watching for idealizing a partner past who they actually are.`,
+    jupiter_8:`With your Jupiter in the 8th House, growth comes through shared resources and real transformation — expansion that often arrives through someone else's resources, or through facing something intense and coming out ahead of it.`,
+    jupiter_9:`With your Jupiter in the 9th House, this placement is fully at home — genuine growth through belief, higher learning, and travel, with a real, natural talent for teaching or exploring far outside your own background.`,
+    jupiter_10:`With your Jupiter in the 10th House, growth shows up in career and public reputation — expansive professional success and a natural authority that tends to be recognized without excessive struggle.`,
+    jupiter_11:`With your Jupiter in the 11th House, growth comes through community — an expansive social network and real opportunity that tends to arrive through groups and shared causes rather than solo effort.`,
+    jupiter_12:`With your Jupiter in the 12th House, growth happens privately — an expansive inner or spiritual life, and generosity that often shows up anonymously or behind the scenes rather than where it will be noticed.`,
+    saturn_1:`With your Saturn in the 1st House, responsibility and restriction shape your visible identity early — you may have felt burdened or older than your years from a young age, and real self-assurance here is earned slowly, not given.`,
+    saturn_2:`With your Saturn in the 2nd House, your relationship to resources is cautious and hard-working — real financial security tends to arrive late and only through genuine, sustained effort, not luck.`,
+    saturn_3:`With your Saturn in the 3rd House, communication carries real weight and restraint — you may have felt held back in speaking up early on, and the discipline you build there turns into real, considered thinking later.`,
+    saturn_4:`With your Saturn in the 4th House, home and family carried real responsibility early, possibly more than felt fair — the structure you build later in life is often a direct response to what your foundation didn't give you.`,
+    saturn_5:`With your Saturn in the 5th House, creative and romantic self-expression may have felt inhibited early — real mastery in either arena comes only through sustained, unglamorous practice, not natural ease.`,
+    saturn_6:`With your Saturn in the 6th House, work and routine demand real discipline — a strong work ethic that holds up over time, though health here needs consistent maintenance rather than being left to chance.`,
+    saturn_7:`With your Saturn in the 7th House, partnership is approached seriously and carries real weight — commitment may come later or for practical reasons, but what's built tends to be genuinely durable once it's there.`,
+    saturn_8:`With your Saturn in the 8th House, intensity and shared resources are approached cautiously — real transformation here comes slowly, through sustained effort, not sudden crisis.`,
+    saturn_9:`With your Saturn in the 9th House, belief and worldview are built through disciplined, structured study — a hard-won philosophy that holds up because it was actually tested, not adopted on faith.`,
+    saturn_10:`With your Saturn in the 10th House, this placement is fully at home — genuine, earned authority built the hard way, with career success that tends to arrive through real, sustained accomplishment rather than any shortcut.`,
+    saturn_11:`With your Saturn in the 11th House, responsibility shows up through community — fewer friendships than some placements, but the ones you keep tend to be genuinely deep and long-lasting.`,
+    saturn_12:`With your Saturn in the 12th House, restriction operates privately — an internal discipline and solitary work ethic that isn't visible to others, and rest here has to be earned on purpose rather than taken freely.`,
+    uranus_1:`With your Uranus in the 1st House, disruption and individuality shape your visible identity — an unpredictable, unconventional presence that people notice as different right away.`,
+    uranus_2:`With your Uranus in the 2nd House, your relationship to resources is erratic — income and possessions may fluctuate more than most people's, alongside a genuinely unconventional attitude toward what's actually worth having.`,
+    uranus_3:`With your Uranus in the 3rd House, your thinking is original, sometimes erratic — sudden ideas and unconventional local connections, with a mind that jumps rather than proceeds in a straight line.`,
+    uranus_4:`With your Uranus in the 4th House, home and family life may be unstable or simply unconventional — sudden moves or changes at home aren't the disruption to you that they'd be to someone else; a degree of instability at the root is closer to normal.`,
+    uranus_5:`With your Uranus in the 5th House, creativity and romance run unconventional — experimental self-expression, and relationships that don't follow a standard script.`,
+    uranus_6:`With your Uranus in the 6th House, work and routine resist convention — a job path that doesn't look like a straight line, and health that seems to need real variety rather than a fixed regimen.`,
+    uranus_7:`With your Uranus in the 7th House, partnership is unpredictable — relationships that need real independence built in, or that arrive and change course suddenly rather than settling into a fixed pattern.`,
+    uranus_8:`With your Uranus in the 8th House, transformation arrives suddenly — an unconventional relationship to intimacy and joint resources, with real change more likely to come as a jolt than a gradual shift.`,
+    uranus_9:`With your Uranus in the 9th House, belief and worldview shift suddenly and often — an unconventional philosophy, and a pull toward travel or exploration that doesn't follow the usual route.`,
+    uranus_10:`With your Uranus in the 10th House, your career path runs unconventional — public recognition that can arrive or change suddenly, in a field or role that doesn't fit a standard trajectory.`,
+    uranus_11:`With your Uranus in the 11th House, this placement is fully at home — a genuine innovator within groups and causes, with real, natural investment in humanitarian or collective change.`,
+    uranus_12:`With your Uranus in the 12th House, disruption operates privately — an internal restlessness that may never show outwardly, working itself out in solitude rather than in view of other people.`,
+    neptune_1:`With your Neptune in the 1st House, your visible identity is dreamy and hard to pin down — a charismatic, somewhat elusive presence that other people find difficult to fully define, sometimes even to yourself.`,
+    neptune_2:`With your Neptune in the 2nd House, your relationship to resources is unclear — money and possessions may be romanticized, idealized, or simply hard to keep track of in practical terms.`,
+    neptune_3:`With your Neptune in the 3rd House, your thinking runs imaginative — genuine creative insight that can blur the line between what actually happened and the more compelling story about it.`,
+    neptune_4:`With your Neptune in the 4th House, home and family may carry an idealized or confusing quality — a picture of your roots that doesn't quite match the practical reality, sometimes alongside real instability there.`,
+    neptune_5:`With your Neptune in the 5th House, creativity and romance run deeply imaginative — real artistic sensitivity, paired with a real risk of idealizing a partner past who they actually are.`,
+    neptune_6:`With your Neptune in the 6th House, daily structure and routine can feel genuinely hard to hold onto — a pull toward service or healing work, more comfortable with compassion than with rigid schedules.`,
+    neptune_7:`With your Neptune in the 7th House, partnership is easily idealized — real risk of seeing a partner as who you wish they were rather than who they actually are, worth checking against plain reality.`,
+    neptune_8:`With your Neptune in the 8th House, intimacy and shared resources carry a spiritual, boundary-blurred quality — transformation here is felt more than planned, and financial boundaries with others may stay genuinely unclear.`,
+    neptune_9:`With your Neptune in the 9th House, belief runs toward the mystical — a real pull toward spiritual or idealistic philosophy, and travel that's sought more for the feeling of it than the destination.`,
+    neptune_10:`With your Neptune in the 10th House, your public reputation carries an idealized or image-conscious quality — a career pull toward art, healing, or spiritual work, where the public image may not always match the practical reality underneath it.`,
+    neptune_11:`With your Neptune in the 11th House, your hopes for groups and community run utopian — a genuinely dreamy vision for what a community or cause could become, worth pairing with practical follow-through.`,
+    neptune_12:`With your Neptune in the 12th House, this placement is fully at home — a genuinely deep spiritual or intuitive inner life, comfortable with solitude and reflection in a way that feels natural rather than isolating.`,
+    pluto_1:`With your Pluto in the 1st House, your visible identity carries real intensity — a magnetic presence, and you may go through more than one dramatic personal reinvention over your life.`,
+    pluto_2:`With your Pluto in the 2nd House, your relationship to resources runs intense — real power struggles are possible around money or possessions, along with a deep, sometimes obsessive need for material security.`,
+    pluto_3:`With your Pluto in the 3rd House, your thinking is probing and intense — conversations with you tend to go beneath the surface, and your words are genuinely capable of reshaping how someone else sees things.`,
+    pluto_4:`With your Pluto in the 4th House, your home and family history holds real, sometimes difficult transformation — deep change at the root of your foundation, not always comfortable, but genuinely formative.`,
+    pluto_5:`With your Pluto in the 5th House, creativity and romance run all-or-nothing — intense, transformative relationships and a real, deep creative power when you actually commit to expressing it.`,
+    pluto_6:`With your Pluto in the 6th House, your relationship to work and health carries real intensity — you may face and work through genuine crises in either arena, coming out the other side changed rather than unaffected.`,
+    pluto_7:`With your Pluto in the 7th House, partnership runs deep and transformative — real power dynamics with the people you're closest to, for better or worse, rarely anything casual.`,
+    pluto_8:`With your Pluto in the 8th House, this placement is fully at home — a genuine, natural capacity for regeneration through crisis, comfortable with intensity and transformation in a way most placements aren't.`,
+    pluto_9:`With your Pluto in the 9th House, your worldview undergoes real, sometimes radical shifts — philosophical or spiritual transformation that changes what you actually believe, not just what you say you believe.`,
+    pluto_10:`With your Pluto in the 10th House, your public path can run intense or turbulent — real power and authority themes in your career, sometimes involving real upheaval before real standing is established.`,
+    pluto_11:`With your Pluto in the 11th House, your involvement in groups and causes carries real intensity — genuine capacity to be a force for collective change, not just a participant in it.`,
+    pluto_12:`With your Pluto in the 12th House, transformation happens mostly beneath conscious awareness — deep, often unconscious inner work that reshapes you privately, long before it's visible to anyone else, including you.`
   }
 };
 const HOUSE_THEME={1:'Self & Identity',2:'Resources & Values',3:'Communication',4:'Home & Roots',5:'Creativity & Romance',6:'Work & Health',7:'Partnership',8:'Shared Resources',9:'Philosophy & Travel',10:'Career & Reputation',11:'Community & Hopes',12:'Subconscious & Rest'};
@@ -1585,13 +1713,58 @@ function hdBodygraphSVG(hd){
   const CENTER_COLOR={Head:'#E8B923',Ajna:'#3E8E4F',Throat:'#6B4423',G:'#E8B923',Heart:'#B23A3A',Sacral:'#B23A3A',Spleen:'#6B4423',SolarPlexus:'#6B4423',Root:'#6B4423'};
   const CENTER_TEXT={Head:NAVY,Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
   const CX=230, CY=230, R_IN=182, R_OUT=214, R_LABEL=198;
+  // Zodiac ring sits just outside the gate wheel -- 12 real 30deg sign
+  // segments, colored loosely by element (fire/earth/air/water) as an
+  // actual comprehension aid, not decoration: Gate 25 (index 0 of
+  // GATE_WHEEL_ORDER) is the real, standard Human Design Mandala's own
+  // 0deg-Aries reference point, so this ring uses the exact same toXY
+  // rotation as the gate wheel -- no separate offset to keep in sync.
+  // Sign and gate boundaries genuinely don't align (64 gates vs 12 signs
+  // don't divide evenly), which is correct, not a bug.
+  const R_ZODIAC_IN=219, R_ZODIAC_OUT=239, R_ZODIAC_LABEL=229;
+  const SIGN_COLOR={Aries:'#C0392B',Taurus:'#5B7F45',Gemini:'#4A90A4',Cancer:'#34618A',Leo:'#D2603A',Virgo:'#3F6B4F',Libra:'#6C8FC7',Scorpio:'#2F4858',Sagittarius:'#A6414C',Capricorn:'#556B4F',Aquarius:'#4FA6B0',Pisces:'#6C7FA6'};
   const toXY=(deg,r)=>{const rad=deg*Math.PI/180;return [CX+r*Math.sin(rad),CY-r*Math.cos(rad)];};
-  let svg=`<svg viewBox="0 0 460 460" style="display:block;width:100%;height:100%;">`;
+  // Wider viewBox than the body/wheel actually need, centered on the same
+  // (230,230) the body shapes below are still built around -- just extra
+  // margin on all sides so the new zodiac ring (out to R_ZODIAC_OUT) has
+  // room without shifting anything that was already correctly centered.
+  let svg=`<svg viewBox="-20 -20 500 500" style="display:block;width:100%;height:100%;">`;
+  // Zodiac sign ring, drawn first so everything else sits on top of it.
+  SIGN_ORDER.forEach((sign,i)=>{
+    const d0=i*30;
+    const [ax1,ay1]=toXY(d0,R_ZODIAC_IN), [ax2,ay2]=toXY(d0+30,R_ZODIAC_IN), [ax3,ay3]=toXY(d0+30,R_ZODIAC_OUT), [ax4,ay4]=toXY(d0,R_ZODIAC_OUT);
+    svg+=`<path d="M${ax1.toFixed(1)},${ay1.toFixed(1)} A${R_ZODIAC_IN},${R_ZODIAC_IN} 0 0 1 ${ax2.toFixed(1)},${ay2.toFixed(1)} L${ax3.toFixed(1)},${ay3.toFixed(1)} A${R_ZODIAC_OUT},${R_ZODIAC_OUT} 0 0 0 ${ax4.toFixed(1)},${ay4.toFixed(1)} Z" fill="${SIGN_COLOR[sign]}" opacity="0.85" stroke="${CREAM}" stroke-width="1"/>`;
+    const [lx,ly]=toXY(d0+15,R_ZODIAC_LABEL);
+    let faceAngle=d0+15;
+    if(faceAngle>180)faceAngle-=360;
+    if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
+    svg+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="800" letter-spacing="0.5" fill="#ffffff" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${lx.toFixed(1)} ${ly.toFixed(1)})">${sign.slice(0,3).toUpperCase()}</text>`;
+  });
   // outer gate wheel -- real order, all 64 segments, active gates for
   // this person picked out in solid navy, inactive left as a thin outline
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_IN}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   const step=360/64;
+  // Spokes -- a thin line from every gate's position on the ring inward to
+  // whichever center that gate actually belongs to, same structural "wheel"
+  // look as the reference chart. All 64 draw as a light structural layer;
+  // the gates that are actually defined for this person redraw on top in
+  // blue so the real pattern still reads clearly through the full spoke set.
+  GATE_WHEEL_ORDER.forEach((g,i)=>{
+    const d0=i*step;
+    const shape=CENTER_SHAPES[GATE_CENTER[g]];
+    if(!shape)return;
+    const [sx,sy]=toXY(d0+step/2,R_IN);
+    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${shape.cx}" y2="${shape.cy}" stroke="${WHEEL_OFF}" stroke-width="0.6" opacity="0.5"/>`;
+  });
+  GATE_WHEEL_ORDER.forEach((g,i)=>{
+    if(!active.has(g))return;
+    const d0=i*step;
+    const shape=CENTER_SHAPES[GATE_CENTER[g]];
+    if(!shape)return;
+    const [sx,sy]=toXY(d0+step/2,R_IN);
+    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${shape.cx}" y2="${shape.cy}" stroke="${BLUE}" stroke-width="1" opacity="0.7"/>`;
+  });
   GATE_WHEEL_ORDER.forEach((g,i)=>{
     const d0=i*step;
     const [x1,y1]=toXY(d0,R_IN), [x2,y2]=toXY(d0,R_OUT);
@@ -1665,7 +1838,10 @@ function ar(astro){
     let signOut=sign;
     if(p.house)signOut+=` \u00b7 House ${p.house}`;
     h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
-    if(p.house)h+=arow('House '+p.house,HOUSE_THEME[p.house]||('House '+p.house),'house',p.house);
+    // 'housecombo' keys are this specific planet in this specific house
+    // (e.g. "sun_6") -- not the generic per-house blurb, which reads the
+    // same for anyone with any planet there.
+    if(p.house)h+=arow('House '+p.house,HOUSE_THEME[p.house]||('House '+p.house),'housecombo',`${ASTRO_KEY[name]}_${p.house}`);
   };
   // lead with the Sun sign -- the placement people actually expect to see first.
   // Ascendant/Midheaven move to their own small section at the bottom instead
