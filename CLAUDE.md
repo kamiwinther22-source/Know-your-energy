@@ -1,9 +1,102 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # Know Your Energy — standing rules
 
 This file is read automatically by every Claude Code session that works in
 this repo. It exists so hard-won design decisions and repeated frustrations
 don't have to be re-explained from scratch in a new chat. If you are an
 instance of Claude reading this: these are not suggestions, they are settled.
+
+## Architecture
+
+Two independently-deployed halves live in this one repo, with no shared
+build step or framework tying them together:
+
+- **Frontend — `index.html`.** A single self-contained static file
+  (~1,900 lines): all CSS in one `<style>` block, all JS in one `<script>`
+  block at the bottom, no bundler, no framework, no `npm run build`. It is
+  both the "Landing"/entry form (birth-data inputs) and the results page —
+  `generate()` swaps `.content` for `#resultsWrap` client-side after the API
+  responds; there's no separate route or page load. Deployed by **GitHub
+  Pages**, automatically, on every push to `main` (see the CNAME gotcha
+  below) — there is no frontend deploy step to run yourself.
+- **Backend — `worker.js`.** A Cloudflare Worker (single `fetch` handler,
+  path-routed by `url.pathname`). Deployed via `wrangler deploy worker.js`,
+  automatically, by `.github/workflows/deploy.yml` on every push to `main`.
+  Talks to Cloudflare KV (the `PASSES` namespace bound in `wrangler.toml`),
+  Stripe, the third-party Human Design API (`humandesignhub.app`), and the
+  Anthropic API.
+- **Chart computation — three independent sources, fanned out per person**
+  in `assemblePersonData()` in `worker.js`:
+  1. **Numerology** (`numerology-calculator.js`) — pure local computation,
+     no I/O. Its own header comment states a locked contract:
+     `calculateFullChart()` takes exactly one person and returns raw
+     numbers only, never interpretation, never two-person/compatibility
+     logic. All cross-person comparison happens later, only inside the
+     Claude prompt.
+  2. **Astrology** (`astro-engine.js`) — pure local computation via
+     `circular-natal-horoscope-js` (a JS port of the Moshier ephemeris;
+     tropical zodiac, Placidus houses). Birth city → lat/lng goes through
+     `cities.js`, which layers a small built-in city list under
+     `cities-data.js`, a generated file that ships as an empty placeholder
+     (`CITIES_DATA = ""`) in git and is filled with ~31,000 GeoNames
+     cities fresh by `build-cities.mjs` inside the deploy workflow, on
+     every deploy — it is not regenerated-and-committed back to the repo.
+  3. **Human Design** — the only chart source that's a live network call
+     (`humandesignhub.app`'s v2 API: timezone lookup → local-time-to-offset
+     resolve → bodygraph). Requires both a birth time and a city; silently
+     omitted, with an error string threaded through instead of a chart, if
+     either is missing.
+  - Once assembled (for both people, if it's a relational reading),
+    `generateReport()` sends everything to `POST /v1/messages`
+    (`model: 'claude-sonnet-5'`, thinking disabled, the full
+    `REPORT_SYSTEM_PROMPT` as a cached system block) to produce the prose
+    "Reading." The worker returns one JSON blob —
+    `{ p1, p2, report, reportError }` — and the frontend's `render()`
+    builds every result card from it client-side; nothing is rendered
+    server-side.
+- **Payments are backend-complete but not wired into the live page.**
+  `/create-checkout-session`, `/record-pass`, and `/check-pass` in
+  `worker.js` fully implement one-time Stripe Checkout Sessions, KV-backed
+  pass records, and the `UNLIMITED_EMAILS` bypass — but `index.html`
+  currently never calls any of them. The live form only collects an email
+  (`#pEmail`), passed through `/report` as `passEmail` solely to refresh an
+  *existing* pass's snapshot; every reading today is generated for free.
+  Building an actual paywall/pricing UI into the frontend would be new
+  work, not a bug fix.
+- Env vars/secrets the Worker expects at runtime (set via `wrangler secret
+  put <NAME>`, never committed): `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`,
+  and `HumanDesign_key` (that exact mixed case — it's how `worker.js`
+  reads it from `env`, easy to typo as a conventional all-caps name).
+
+## Commands
+
+- `npm install` — installs the one dependency
+  (`circular-natal-horoscope-js`, used by `astro-engine.js`). There is no
+  other install/build step for either half of the app.
+- There is no test suite and no lint config anywhere in this repo — don't
+  assume `npm test` or an ESLint/Prettier setup exists.
+- `node build-cities.mjs` — (re)generates `cities-data.js` from the live
+  GeoNames `cities15000.zip`. Runs automatically in CI before every
+  deploy; only run it yourself to inspect the output or debug the deploy
+  step. A failed download doesn't break the build — it leaves
+  `cities-data.js` as the empty placeholder and the site falls back to
+  `cities.js`'s small built-in city list.
+- `wrangler dev worker.js` — run the Worker locally (needs the secrets
+  above available locally, e.g. via `.dev.vars`, plus network access to
+  Stripe/Anthropic/humandesignhub.app — there's no local mock for any of
+  them).
+- `wrangler deploy worker.js` — manual backend deploy; normally
+  unnecessary since `.github/workflows/deploy.yml` does this on every push
+  to `main` (`npm install` → `node build-cities.mjs` → `wrangler deploy`).
+- Previewing the frontend: just open `index.html` in a browser, or serve
+  it statically — there's nothing to build. Note it calls the *live*
+  Worker at the hardcoded `W_API` URL
+  (`https://know-your-energy.kwdoanchor.workers.dev`) in `index.html`, so
+  local frontend testing still hits the real production backend, KV, and
+  APIs.
 
 ## Non-negotiable design rules
 
@@ -102,8 +195,9 @@ gone through many rejected redesigns. These are settled, not open questions:
 - Astrology is computed **locally** (`astro-engine.js`) — no paid external
   API, no rate limit. `worker.js` strips house/Ascendant/Midheaven data when
   birth time is unknown rather than guessing from a defaulted time.
-- Stripe Checkout is wired for one-time charges only (single/month/year
-  passes) — never a subscription/auto-billing.
+- Stripe Checkout is wired **on the backend only** for one-time charges
+  (single/month/year passes, never a subscription/auto-billing) — see
+  "Architecture" above for why the live frontend doesn't use it yet.
 - Three family emails have unlimited free access (see `UNLIMITED_EMAILS` in
   `worker.js`) — don't remove this without being asked.
 - Real Claude report generation is wired into `/report` in `worker.js`
