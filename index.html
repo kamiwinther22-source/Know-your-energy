@@ -1705,12 +1705,16 @@ function hdBodygraphSVG(hd){
   const definedChannels=CHANNELS.filter(([a,b])=>active.has(a)&&active.has(b));
   const definedCenters=new Set();
   definedChannels.forEach(([a,b])=>{definedCenters.add(GATE_CENTER[a]);definedCenters.add(GATE_CENTER[b]);});
-  // NAVY is kept ONLY for text sitting on the yellow Head/G centers below --
+  // NAVY is kept ONLY for text sitting on the yellow G center below --
   // measured contrast there is 6.33:1 for navy vs 2.89:1 for the brand blue,
   // and 2.89:1 fails WCAG's 4.5:1 floor for text this size. Every other use
   // of blue in this chart (channel lines) has no such constraint and uses
-  // the real brand blue, not navy.
-  const NAVY='#193866', BLUE='#306AC0', CREAM='#f8f9f4', LINE_ON=BLUE, LINE_OFF='#c9d2e2', GATE_OFF_LIGHT='#aab8d4', GATE_OFF_DARK='#b9c6de', WHEEL_OFF='#c2ccdd';
+  // the real brand blue, not navy. No gray anywhere in this chart --
+  // undefined/inactive elements are hollow-outline versions of their own
+  // real color instead, so "have it vs. don't" reads as filled-vs-outline
+  // (the same universal convention as a checked box or a filled star)
+  // rather than needing a legend to explain what gray would have meant.
+  const NAVY='#193866', BLUE='#306AC0', CREAM='#f8f9f4', LINE_ON=BLUE;
   // Human Design center colors: real sources actually disagree here (the
   // two reference charts checked against each other showed different
   // conventions), so this isn't "the one true standard" -- it's 9 distinct
@@ -1762,7 +1766,7 @@ function hdBodygraphSVG(hd){
     const d0=i*step;
     const [sx,sy]=toXY(d0+step/2,R_IN);
     const on=active.has(g);
-    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${CX}" y2="${CY}" stroke="${on?BLUE:WHEEL_OFF}" stroke-width="${on?1:0.5}" opacity="${on?0.6:0.35}"/>`;
+    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${CX}" y2="${CY}" stroke="${BLUE}" stroke-width="${on?1:0.5}" opacity="${on?0.6:0.22}"/>`;
   });
   GATE_WHEEL_ORDER.forEach((g,i)=>{
     const d0=i*step;
@@ -1781,8 +1785,11 @@ function hdBodygraphSVG(hd){
     let faceAngle=d0+step/2;
     if(faceAngle>180)faceAngle-=360;
     if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
-    const fill=on?(CENTER_TEXT[centerName]||NAVY):WHEEL_OFF;
-    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="${on?800:600}" fill="${fill}" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${g}</text>`;
+    // Filled vs. hollow instead of solid-vs-gray -- the same universal
+    // "filled = have it, outline = don't" convention as a checked box or
+    // a filled star rating, so it reads correctly without a legend.
+    const textAttrs=on?`fill="${CENTER_TEXT[centerName]||NAVY}"`:`fill="none" stroke="${wedgeColor}" stroke-width="0.6"`;
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="${on?800:600}" ${textAttrs} font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${g}</text>`;
   });
   // channel lines, so center shapes + gate labels sit on top
   const pairSeen={};
@@ -1792,26 +1799,39 @@ function hdBodygraphSVG(hd){
     const key=[GATE_CENTER[a],GATE_CENTER[b]].sort().join('-');
     const n=pairSeen[key]=(pairSeen[key]||0)+1;
     const off=(n-1)*3; // small parallel offset if 2+ channels share the same center pair
-    const on=active.has(a)&&active.has(b);
-    svg+=`<line x1="${(c1.cx+off).toFixed(1)}" y1="${c1.cy.toFixed(1)}" x2="${(c2.cx+off).toFixed(1)}" y2="${c2.cy.toFixed(1)}" stroke="${on?LINE_ON:LINE_OFF}" stroke-width="${on?3:1.2}"/>`;
+    // No line at all for an undefined channel -- absence of a connection
+    // is already self-evident (same as a graph/network diagram with no
+    // edge drawn), no gray "ghost" line needed to say "not connected."
+    if(!active.has(a)||!active.has(b))return;
+    svg+=`<line x1="${(c1.cx+off).toFixed(1)}" y1="${c1.cy.toFixed(1)}" x2="${(c2.cx+off).toFixed(1)}" y2="${c2.cy.toFixed(1)}" stroke="${LINE_ON}" stroke-width="3"/>`;
   });
   Object.entries(CENTER_SHAPES).forEach(([name,shape])=>{
     const on=definedCenters.has(name);
     const pts=shape.pts.map(p=>p.join(',')).join(' ');
-    svg+=`<polygon points="${pts}" fill="${on?CENTER_COLOR[name]:CREAM}" stroke="${NAVY}" stroke-width="2"/>`;
+    // Outline always carries the center's own color (its "identity"),
+    // filled solid when defined, hollow/cream when not -- same filled-vs-
+    // outline logic as everything else on this chart, no gray involved.
+    svg+=`<polygon points="${pts}" fill="${on?CENTER_COLOR[name]:CREAM}" stroke="${CENTER_COLOR[name]}" stroke-width="2"/>`;
     const gates=CENTER_GATES[name];
     const cols=gates.length>6?4:3;
     const fs=7.5, rowH=8.5;
     const rows=Math.ceil(gates.length/cols);
     const startY=shape.cy-((rows-1)*rowH)/2;
+    // A gate can be individually active even when its center isn't fully
+    // defined (needs a whole channel, not just one gate) -- so hollow vs
+    // filled tracks the GATE's own state, and the hollow stroke color
+    // adapts to whatever it's sitting on (the contrast color when the
+    // center itself is filled, the center's own color when it's not) so
+    // it's never a same-color outline invisible against its own fill.
+    const hollowStroke=on?(CENTER_TEXT[name]||'#ffffff'):CENTER_COLOR[name];
     gates.forEach((g,i)=>{
       const row=Math.floor(i/cols), col=i%cols;
       const rowCount=Math.min(cols,gates.length-row*cols);
       const startX=shape.cx-((rowCount-1)*13)/2;
       const gx=startX+col*13, gy=startY+row*rowH;
       const gOn=active.has(g);
-      const fill=on?(gOn?CENTER_TEXT[name]:GATE_OFF_LIGHT):(gOn?NAVY:GATE_OFF_DARK);
-      svg+=`<text x="${gx.toFixed(1)}" y="${(gy+2.5).toFixed(1)}" text-anchor="middle" font-size="${fs}" font-weight="${gOn?800:600}" fill="${fill}" font-family="'Barlow Condensed',sans-serif">${g}</text>`;
+      const textAttrs=gOn?`fill="${on?(CENTER_TEXT[name]||NAVY):CENTER_COLOR[name]}"`:`fill="none" stroke="${hollowStroke}" stroke-width="0.5"`;
+      svg+=`<text x="${gx.toFixed(1)}" y="${(gy+2.5).toFixed(1)}" text-anchor="middle" font-size="${fs}" font-weight="${gOn?800:600}" ${textAttrs} font-family="'Barlow Condensed',sans-serif">${g}</text>`;
     });
   });
   svg+='</svg>';
