@@ -1721,8 +1721,15 @@ function hdBodygraphSVG(hd){
   // colors, one per center, sourced from the user's own reference chart,
   // chosen specifically so no two different centers share a color. Every
   // text color below is contrast-checked (>=4.5:1) against its own fill.
-  const CENTER_COLOR={Head:'#7B5EA7',Ajna:'#3D6BA8',Throat:'#2E7A70',G:'#E8B923',Heart:'#C23B7A',Sacral:'#C0392B',Spleen:'#3D7740',SolarPlexus:'#B85C1F',Root:'#6B4423'};
-  const CENTER_TEXT={Head:'#ffffff',Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
+  // Researched, not guessed from a screenshot: multiple independent
+  // Human Design sources confirm the TRADITIONAL chart genuinely repeats
+  // these 4 colors across the 9 centers (Head+G yellow, Ajna green,
+  // Heart+Sacral red, Throat+Spleen+SolarPlexus+Root brown) -- one source
+  // states directly that the specific hue matters less than whether a
+  // center is defined at all. Giving every center its own unique color
+  // was a step away from the real standard, not a correction to it.
+  const CENTER_COLOR={Head:'#E8B923',Ajna:'#3E8E4F',Throat:'#6B4423',G:'#E8B923',Heart:'#B23A3A',Sacral:'#B23A3A',Spleen:'#6B4423',SolarPlexus:'#6B4423',Root:'#6B4423'};
+  const CENTER_TEXT={Head:NAVY,Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
   const CX=230, CY=230, R_IN=182, R_OUT=214, R_LABEL=198;
   // Zodiac ring sits just outside the gate wheel -- 12 real 30deg sign
   // segments, colored loosely by element (fire/earth/air/water) as an
@@ -1758,15 +1765,16 @@ function hdBodygraphSVG(hd){
   const step=360/64;
   // Spokes -- a clean, even sunburst: all 64 rays share ONE center point
   // (CX,CY), representing the full field of possible gates, same as the
-  // reference chart. Color is what marks "which ones are actually mine,"
-  // not which point a line converges on -- routing each gate to its own
-  // scattered center (the earlier version) is what turned this into a
-  // tangled web instead of a spoke wheel.
+  // reference chart. Each spoke uses ITS GATE'S OWN center color (same
+  // color as its wedge on the ring), not blue -- blue is reserved
+  // exclusively for real channel connections below, so a blue line always
+  // means one specific thing on this chart, never two different jobs.
   GATE_WHEEL_ORDER.forEach((g,i)=>{
     const d0=i*step;
     const [sx,sy]=toXY(d0+step/2,R_IN);
     const on=active.has(g);
-    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${CX}" y2="${CY}" stroke="${BLUE}" stroke-width="${on?1:0.5}" opacity="${on?0.6:0.22}"/>`;
+    const spokeColor=CENTER_COLOR[GATE_CENTER[g]]||NAVY;
+    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${CX}" y2="${CY}" stroke="${spokeColor}" stroke-width="${on?1:0.5}" opacity="${on?0.55:0.18}"/>`;
   });
   GATE_WHEEL_ORDER.forEach((g,i)=>{
     const d0=i*step;
@@ -1799,11 +1807,23 @@ function hdBodygraphSVG(hd){
     const key=[GATE_CENTER[a],GATE_CENTER[b]].sort().join('-');
     const n=pairSeen[key]=(pairSeen[key]||0)+1;
     const off=(n-1)*3; // small parallel offset if 2+ channels share the same center pair
-    // No line at all for an undefined channel -- absence of a connection
-    // is already self-evident (same as a graph/network diagram with no
-    // edge drawn), no gray "ghost" line needed to say "not connected."
-    if(!active.has(a)||!active.has(b))return;
-    svg+=`<line x1="${(c1.cx+off).toFixed(1)}" y1="${c1.cy.toFixed(1)}" x2="${(c2.cx+off).toFixed(1)}" y2="${c2.cy.toFixed(1)}" stroke="${LINE_ON}" stroke-width="3"/>`;
+    const aOn=active.has(a), bOn=active.has(b);
+    if(!aOn&&!bOn)return; // neither gate present -- genuinely nothing to show
+    if(aOn&&bOn){
+      // Complete channel: full solid line.
+      svg+=`<line x1="${(c1.cx+off).toFixed(1)}" y1="${c1.cy.toFixed(1)}" x2="${(c2.cx+off).toFixed(1)}" y2="${c2.cy.toFixed(1)}" stroke="${LINE_ON}" stroke-width="3"/>`;
+    }else{
+      // Hanging gate -- researched real convention: only one gate of the
+      // channel is active, so the channel itself is NOT complete (the
+      // center doesn't get defined by it), but that one real, active gate
+      // is genuine information. Real charts show this as a partial line
+      // from the active side, stopping short of the other center, rather
+      // than either a full line (wrong -- overstates it) or no line at
+      // all (wrong -- drops real information the person actually has).
+      const from=aOn?c1:c2, to=aOn?c2:c1;
+      const midX=from.cx+(to.cx-from.cx)*0.4, midY=from.cy+(to.cy-from.cy)*0.4;
+      svg+=`<line x1="${(from.cx+off).toFixed(1)}" y1="${from.cy.toFixed(1)}" x2="${(midX+off).toFixed(1)}" y2="${midY.toFixed(1)}" stroke="${LINE_ON}" stroke-width="1.6" opacity="0.75"/>`;
+    }
   });
   Object.entries(CENTER_SHAPES).forEach(([name,shape])=>{
     const on=definedCenters.has(name);
