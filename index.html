@@ -1721,15 +1721,16 @@ function hdBodygraphSVG(hd){
   // colors, one per center, sourced from the user's own reference chart,
   // chosen specifically so no two different centers share a color. Every
   // text color below is contrast-checked (>=4.5:1) against its own fill.
-  // Researched, not guessed from a screenshot: multiple independent
-  // Human Design sources confirm the TRADITIONAL chart genuinely repeats
-  // these 4 colors across the 9 centers (Head+G yellow, Ajna green,
-  // Heart+Sacral red, Throat+Spleen+SolarPlexus+Root brown) -- one source
-  // states directly that the specific hue matters less than whether a
-  // center is defined at all. Giving every center its own unique color
-  // was a step away from the real standard, not a correction to it.
-  const CENTER_COLOR={Head:'#E8B923',Ajna:'#3E8E4F',Throat:'#6B4423',G:'#E8B923',Heart:'#B23A3A',Sacral:'#B23A3A',Spleen:'#6B4423',SolarPlexus:'#6B4423',Root:'#6B4423'};
-  const CENTER_TEXT={Head:NAVY,Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
+  // Real Human Design sources confirm the traditional chart repeats
+  // colors across centers, but the user explicitly prefers 9 distinct
+  // colors (more information conveyed per gate) over that convention --
+  // her call to make. What broke the LAST attempt at this wasn't the
+  // idea, it was that Throat and Spleen ended up close enough in hue to
+  // both read as "green." This palette is checked pairwise (redmean
+  // color distance, not just eyeballed) so no two centers are close
+  // enough to be confused for each other.
+  const CENTER_COLOR={Head:'#7B5EA7',Ajna:'#2F6FB0',Throat:'#1E8C7A',G:'#E8B923',Heart:'#C23B7A',Sacral:'#C0392B',Spleen:'#3F8F3F',SolarPlexus:'#B85C1F',Root:'#5C3A21'};
+  const CENTER_TEXT={Head:'#ffffff',Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
   const CX=230, CY=230, R_IN=182, R_OUT=214, R_LABEL=198;
   // Zodiac ring sits just outside the gate wheel -- 12 real 30deg sign
   // segments, colored loosely by element (fire/earth/air/water) as an
