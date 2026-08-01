@@ -70,8 +70,12 @@ body{
   color:#306AC0;
   filter:drop-shadow(0 0 14px rgba(48,106,192,0.4));
 }
-.title-glint{position:absolute;pointer-events:none;}
+.title-glint{position:absolute;pointer-events:none;animation:glint-twinkle 2.6s ease-in-out infinite;}
 .title-glint svg{display:block;width:100%;height:100%;}
+.title-glint:nth-child(2){animation-delay:0.7s;}
+.title-glint:nth-child(3){animation-delay:1.4s;}
+@keyframes glint-twinkle{0%,100%{transform:scale(0.85) rotate(0deg);opacity:0.55;}50%{transform:scale(1.2) rotate(20deg);opacity:1;}}
+@media(prefers-reduced-motion:reduce){.title-glint{animation:none;}}
 
 
 /* ---------- tagline / toggle ---------- */
@@ -564,7 +568,11 @@ const solarWrap = document.getElementById('solarWrap');
 // Tight crop around the actual rendered content (measured via getBBox, not
 // guessed) instead of the full square canvas, so the container isn't full
 // of dead margin above/below the ring cluster.
-let svg = `<svg viewBox="41 78 356 264" xmlns="http://www.w3.org/2000/svg">`;
+// viewBox widened from the original static crop (41 78 356 264) to fit the
+// full swing range of the orbit animation below -- measured via getBBox()
+// sampled across the whole animation cycle, not guessed, so labels never
+// clip mid-swing.
+let svg = `<svg viewBox="26 78 377 264" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -595,13 +603,18 @@ RINGS.forEach(r=>{
 svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
 svg += `<text x="${C}" y="${C+3}" text-anchor="middle" font-size="7.5" font-weight="800" fill="#000000">SUN</text>`;
 
-PLANETS.forEach(p=>{
+// each planet gently swings back and forth along its own orbit ring --
+// closer-in planets swing faster and through a tighter arc, outer planets
+// slower and wider, echoing (not literally simulating) real orbital speed --
+// via SMIL animateTransform rotating the whole planet+label group around the
+// sun (C,C), so it's real, continuous, visible motion rather than a static
+// snapshot. Respects prefers-reduced-motion by simply omitting the tag.
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+PLANETS.forEach((p,pi)=>{
   const t = TONES[p.tone];
   const a = p.angle * Math.PI/180;
   const dx = Math.cos(a), dy = Math.sin(a);
   const px = C + p.r*dx, py = C + p.r*dy;
-
-  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9"/>`;
 
   const gap = p.size + 5;
   const labelX = px + dx*gap;
@@ -610,11 +623,23 @@ PLANETS.forEach(p=>{
   if (dx > 0.3) anchor = 'start';
   else if (dx < -0.3) anchor = 'end';
 
+  const dur = (6 + (p.r/120)*14).toFixed(1);
+  const swing = 6 + (p.r/120)*10;
+  const a1 = (-swing).toFixed(1), a2 = swing.toFixed(1);
+  const begin = (-(pi*1.3)).toFixed(1);
+
+  svg += `<g>`;
+  if (!reduceMotion) {
+    svg += `<animateTransform attributeName="transform" type="rotate" values="0 ${C} ${C};${a2} ${C} ${C};${a1} ${C} ${C};0 ${C} ${C}" keyTimes="0;0.25;0.75;1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>`;
+  }
+  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9"/>`;
+
   const lineH = 9.6;
   svg += `<text x="${labelX}" y="${labelY}" text-anchor="${anchor}" class="p-label">${p.name}</text>`;
   p.lines.forEach((line,li)=>{
     svg += `<text x="${labelX}" y="${labelY + lineH*(li+1)}" text-anchor="${anchor}" class="p-label sub">${line}</text>`;
   });
+  svg += `</g>`;
 });
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
