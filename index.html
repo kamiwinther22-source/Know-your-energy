@@ -1711,14 +1711,14 @@ function hdBodygraphSVG(hd){
   // of blue in this chart (channel lines) has no such constraint and uses
   // the real brand blue, not navy.
   const NAVY='#193866', BLUE='#306AC0', CREAM='#f8f9f4', LINE_ON=BLUE, LINE_OFF='#c9d2e2', GATE_OFF_LIGHT='#aab8d4', GATE_OFF_DARK='#b9c6de', WHEEL_OFF='#c2ccdd';
-  // Real Human Design center colors (Jovian Archive / standard bodygraph
-  // convention, cross-checked against multiple independent HD sources):
-  // Head + G are yellow, Ajna is green, Heart + Sacral are red, and
-  // Throat + Solar Plexus + Spleen + Root are brown -- the repeats across
-  // centers are correct, not a mistake. Undefined centers stay white/cream
-  // per the same convention, unchanged below.
-  const CENTER_COLOR={Head:'#E8B923',Ajna:'#3E8E4F',Throat:'#6B4423',G:'#E8B923',Heart:'#B23A3A',Sacral:'#B23A3A',Spleen:'#6B4423',SolarPlexus:'#6B4423',Root:'#6B4423'};
-  const CENTER_TEXT={Head:NAVY,Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
+  // Human Design center colors: real sources actually disagree here (the
+  // two reference charts checked against each other showed different
+  // conventions), so this isn't "the one true standard" -- it's 9 distinct
+  // colors, one per center, sourced from the user's own reference chart,
+  // chosen specifically so no two different centers share a color. Every
+  // text color below is contrast-checked (>=4.5:1) against its own fill.
+  const CENTER_COLOR={Head:'#7B5EA7',Ajna:'#3D6BA8',Throat:'#2E7A70',G:'#E8B923',Heart:'#C23B7A',Sacral:'#C0392B',Spleen:'#3D7740',SolarPlexus:'#B85C1F',Root:'#6B4423'};
+  const CENTER_TEXT={Head:'#ffffff',Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
   const CX=230, CY=230, R_IN=182, R_OUT=214, R_LABEL=198;
   // Zodiac ring sits just outside the gate wheel -- 12 real 30deg sign
   // segments, colored loosely by element (fire/earth/air/water) as an
