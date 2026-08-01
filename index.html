@@ -1752,18 +1752,17 @@ function hdBodygraphSVG(hd){
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_IN}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   const step=360/64;
-  // Spokes -- a thin line from each DEFINED gate's position on the ring
-  // inward to whichever center it actually belongs to. Drawing all 64
-  // (including undefined gates) held up in sparse test data but turned
-  // into real visual clutter against an actual, fully-populated chart --
-  // only the gates that are actually active for this person get a spoke.
+  // Spokes -- a clean, even sunburst: all 64 rays share ONE center point
+  // (CX,CY), representing the full field of possible gates, same as the
+  // reference chart. Color is what marks "which ones are actually mine,"
+  // not which point a line converges on -- routing each gate to its own
+  // scattered center (the earlier version) is what turned this into a
+  // tangled web instead of a spoke wheel.
   GATE_WHEEL_ORDER.forEach((g,i)=>{
-    if(!active.has(g))return;
     const d0=i*step;
-    const shape=CENTER_SHAPES[GATE_CENTER[g]];
-    if(!shape)return;
     const [sx,sy]=toXY(d0+step/2,R_IN);
-    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${shape.cx}" y2="${shape.cy}" stroke="${BLUE}" stroke-width="1" opacity="0.7"/>`;
+    const on=active.has(g);
+    svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${CX}" y2="${CY}" stroke="${on?BLUE:WHEEL_OFF}" stroke-width="${on?1:0.5}" opacity="${on?0.6:0.35}"/>`;
   });
   GATE_WHEEL_ORDER.forEach((g,i)=>{
     const d0=i*step;
