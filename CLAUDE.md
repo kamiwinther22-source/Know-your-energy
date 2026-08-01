@@ -60,8 +60,15 @@ somewhere durable so it isn't dependent on memory across sessions.
    through repetition (e.g. "runs deep").
 3. Shows the full, real picture — doesn't lead with and end on the hard
    part alone, doesn't oversell positivity either.
-4. No prescriptive "growth edge" or lesson tacked on where the placement
-   doesn't actually call for one.
+4. Lesson/growth-edge framing must be earned in both directions: never
+   invented where the placement doesn't actually have one (the original
+   Scorpio error), but never suppressed or softened where it's real,
+   either. "Lesson" is a genuine, specific part of some placements —
+   Saturn, Chiron, the Nodes, numerology's Karmic Lessons and Karmic Debt
+   Numbers (13/14/16/19) — and not a default to apply everywhere else.
+   The priority is completeness: anything that may genuinely affect how
+   someone experiences their life belongs in the entry, whether or not it
+   happens to carry a "lesson" framing.
 5. Direct, economical wording — not padded, not hedging, not sideways.
 6. Observational, not advice-giving: describes what a period *is* or
    *supports*, never what happens *if you act a certain way inside it*.
