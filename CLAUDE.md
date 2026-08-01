@@ -5,6 +5,21 @@ this repo. It exists so hard-won design decisions and repeated frustrations
 don't have to be re-explained from scratch in a new chat. If you are an
 instance of Claude reading this: these are not suggestions, they are settled.
 
+## Design-process rules (not just visual rules)
+
+- **Never default to the statistically common/safe choice and call it a
+  design decision.** Blue+gold, then burnt-orange/terracotta, both got
+  reached for repeatedly because they're overrepresented in mainstream
+  2020s web/template design, not because they were actually chosen for
+  this site. If a color or pattern is the "safe" one, that's a reason to
+  reject it, not use it — she wants to stand out, not blend into what
+  every other AI-assisted site already looks like. Actively check: would
+  this read as generic/predictable to someone who's seen a lot of sites?
+- **No dressing up plain things with fancier names.** "Ink and bone"
+  instead of "black text on white background," "terracotta" instead of
+  "orange" — renaming a plain material doesn't change what's actually on
+  the screen, and she reads it as spin. Say what it plainly is.
+
 ## Codebase structure & tech stack
 
 Small, no-framework, no-build-step app: a single static HTML file plus a
