@@ -5,6 +5,78 @@ this repo. It exists so hard-won design decisions and repeated frustrations
 don't have to be re-explained from scratch in a new chat. If you are an
 instance of Claude reading this: these are not suggestions, they are settled.
 
+## Codebase structure & tech stack
+
+Small, no-framework, no-build-step app: a single static HTML file plus a
+single Cloudflare Worker file. No test suite, no linter, no bundler, no
+`node_modules` checked in.
+
+| File | Role |
+|---|---|
+| `index.html` (~2,300 lines) | The entire front end — markup, CSS, and vanilla JS all in one file. No React/Vue/build tooling. Contains the entry/data-form page (title, pricing, birth-data fields, results grid, tap-to-expand modal) described below. Key in-file data objects: `ASTRO_DEFS`, `NUM_DEFS`, `HD_DEFS`, `GATES`, `CHANNELS` (glossary/definition content), and the `ar()` function (astrology placement list renderer). Deployed via **GitHub Pages**, not the Worker. |
+| `worker.js` (~890 lines) | Cloudflare Worker — the entire backend API. Single `export default { fetch(request, env, ctx) {...} }` handler with hand-rolled `if (url.pathname === ...)` routing (no router library). Deployed via `wrangler deploy`, triggered by the `Deploy Worker` GitHub Action. |
+| `astro-engine.js` | Local astrology calculation (`computeAstrology`) — wraps `circular-natal-horoscope-js` (Moshier ephemeris). No external API, no rate limit. Imported by `worker.js`. |
+| `numerology-calculator.js` | Pure pythagorean-numerology calculations (`calculateFullChart` and its per-number helpers: life path, expression, soul urge, pinnacles, challenges, etc). Imported by `worker.js`. |
+| `cities.js` | Birth-city → lat/lng lookup (`findCity`). Two layers: the generated `cities-data.js` dataset, then a small built-in `MAJOR_CITIES` list, then a New York fallback. |
+| `cities-data.js` | **Generated file — do not hand-edit.** ~31,000 world cities from GeoNames. Starts empty in the repo; populated by `build-cities.mjs` during the deploy workflow. |
+| `build-cities.mjs` | Node script that downloads GeoNames' `cities15000.zip`, unzips it (hand-rolled zip parsing, no dependency), and writes `cities-data.js`. Runs automatically in CI before every Worker deploy; safe to fail (deploy continues with the built-in city list if the download hiccups). |
+| `wrangler.toml` | Worker config: name `know-your-energy`, entry `worker.js`, one KV binding (`PASSES`, used for pass records and the running usage/cost counter). |
+| `package.json` | One real dependency: `circular-natal-horoscope-js`. `"type": "module"` — everything is ES modules. |
+| `CNAME` | GitHub Pages custom domain: `know-your-energy.com`. |
+
+### Worker API surface (`worker.js`)
+
+All routes live in the single `fetch` handler, gated by `CORS_HEADERS` (open,
+`Access-Control-Allow-Origin: *`) and `PRIVACY_HEADERS` (no-store/no-cache).
+
+- `GET /robots.txt` — disallow-all; this `*.workers.dev` host is API-only,
+  the real site is `know-your-energy.com`.
+- `GET /astro-check` — self-test: runs a sample chart through the local
+  astrology engine, returns JSON. Useful to confirm the engine is alive
+  after a deploy.
+- `GET /usage` — no-auth running cost dashboard (HTML page) reading a
+  lifetime token/cost counter out of the `PASSES` KV namespace. Not
+  customer data, intentionally public.
+- Everything else requires `POST`:
+  - `/create-checkout-session` — creates a Stripe Checkout session for one
+    of `PLAN_CONFIG` (`single` $5, `monthly` $10, `annual` $25 — all
+    one-time `payment` mode, never `subscription`).
+  - `/record-pass` / `/check-pass` — verify a Stripe session and read/write
+    a pass record in KV (`PASSES`), including the `UNLIMITED_EMAILS`
+    bypass for the three family addresses.
+  - `/report` — the main endpoint: takes person(s) astrology + numerology +
+    Human Design data, calls the Claude API (`generateReport`,
+    `model: 'claude-sonnet-5'`, `thinking: { type: 'disabled' }`), returns
+    the generated reading JSON.
+
+### Required secrets / env (not in the repo)
+
+Set via `wrangler secret put <NAME>` (or the GitHub Actions secrets used by
+`Deploy Worker`): `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `HumanDesign_key`,
+plus `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` for the deploy action
+itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
+
+## Development workflow
+
+- **No local dev server / build step is set up for the frontend.** `index.html`
+  is opened directly or previewed as a static file; there's no bundler to run.
+- **There is no test suite and no linter in this repo.** Verify changes by
+  reading the diff carefully, and for anything visual, by taking real
+  screenshots (see the Playwright/measurement rule below) — don't invent a
+  test framework that doesn't exist here.
+- **Deploys are two independent pipelines, triggered by different things:**
+  - `worker.js` (the API) is redeployed by the `Deploy Worker` GitHub Action
+    (`.github/workflows/deploy.yml`), which runs on every push to `main`:
+    `npm install` → `node build-cities.mjs` → `wrangler deploy worker.js`.
+  - `index.html` (the static site) is redeployed by **GitHub Pages**, a
+    separate, automatic "pages build and deployment" check that also fires
+    on every push to `main` — not part of `.github/workflows/`. See the
+    gotcha below on how to actually confirm this ran.
+  - Pushing to `main` therefore redeploys both halves of the app at once;
+    there's no way to deploy just one from a normal push.
+- Work happens on feature branches (e.g. `claude/*`) and lands on `main`
+  via PR; `main` is what's live.
+
 ## Non-negotiable design rules
 
 - **The "Know Your Energy" title is always one line, in large loopy cursive
