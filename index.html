@@ -71,6 +71,15 @@ body{
 .p-label{font-size:8.6px;font-weight:600;fill:#4a5148;letter-spacing:0.02em;}
 .p-label.sub{font-size:13px;font-weight:800;fill:#000000;}
 
+/* ---------- human design: compact bodygraph preview, same 9 real centers
+   and colors as the results-page chart, illustrative defined/undefined
+   pattern (not tied to any real person -- there's no birth data yet on
+   this page, same as the solar system and number grid above it) ---------- */
+.hd-section{margin-bottom:0.9rem;display:flex;justify-content:center;}
+.hd-wrap{position:relative;width:100%;max-width:260px;}
+.hd-wrap svg{display:block;width:100%;height:auto;}
+.hd-label{font-size:11px;font-weight:800;fill:#14170f;letter-spacing:0.01em;}
+
 /* ---------- title ---------- */
 .brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
@@ -397,6 +406,10 @@ body{
     <div class="solar-wrap" id="solarWrap"></div>
   </div>
 
+  <div class="hd-section">
+    <div class="hd-wrap" id="hdWrap"></div>
+  </div>
+
   <div class="bottom-grid">
     <div class="keys-col" id="keysCol"></div>
     <div class="form-col">
@@ -660,6 +673,47 @@ PLANETS.forEach(p=>{
 });
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
+
+// ---------- human design: compact preview using the same real 9-center
+// topology and color palette as the full results-page bodygraph (kept as
+// a separate, standalone copy since the real chart's own coordinates are
+// defined much further down the script and reused inside a function that
+// runs after real chart data exists -- referencing that here would hit a
+// temporal-dead-zone error, since this preview has to render immediately
+// on page load, before any birth data is submitted). One illustrative
+// defined/undefined pattern (not a real chart -- there's no birth data
+// yet), same convention as the real chart: filled = defined, hollow
+// outline of its own color = undefined. ----------
+(function(){
+  const hdWrap = document.getElementById('hdWrap');
+  if(!hdWrap) return;
+  const HD_CENTERS = [
+    {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    color:'#7B5EA7', on:false, label:'Inspiration', lx:120, ly:6,   anchor:'middle'},
+    {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    color:'#2F6FB0', on:false, label:'Awareness',   lx:176, ly:66,  anchor:'start'},
+    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         color:'#1E8C7A', on:false, label:'Expression',  inside:true},
+    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        color:'#E8B923', on:true,  label:'Identity',    inside:true, textColor:'#193866'},
+    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 color:'#C23B7A', on:false, label:'Willpower',   lx:215, ly:190, anchor:'start'},
+    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         color:'#C0392B', on:true,  label:'Life Force',  inside:true},
+    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    color:'#3F8F3F', on:true,  label:'Intuition',   lx:14,  ly:246, anchor:'end'},
+    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            color:'#B85C1F', on:false, label:'Emotions',    lx:226, ly:246, anchor:'start'},
+    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         color:'#5C3A21', on:true,  label:'Drive',       inside:true},
+  ];
+  let svg = `<svg viewBox="-70 -20 380 380" xmlns="http://www.w3.org/2000/svg">`;
+  HD_CENTERS.forEach(c=>{
+    const pts = c.pts.map(([x,y])=>`${x},${y}`).join(' ');
+    svg += `<polygon points="${pts}" fill="${c.on?c.color:'#fbf8f0'}" stroke="${c.color}" stroke-width="2.2"/>`;
+    if(c.inside){
+      const cx = c.pts.reduce((s,p)=>s+p[0],0)/c.pts.length;
+      const cy = c.pts.reduce((s,p)=>s+p[1],0)/c.pts.length;
+      const fill = c.on ? (c.textColor||'#ffffff') : c.color;
+      svg += `<text x="${cx}" y="${cy+3.5}" text-anchor="middle" class="hd-label" fill="${fill}">${c.label}</text>`;
+    } else {
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" class="hd-label">${c.label}</text>`;
+    }
+  });
+  svg += '</svg>';
+  hdWrap.innerHTML = svg;
+})();
 
 // ---------- key-icon selling points: copied verbatim from your reference image ----------
 const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
