@@ -17,13 +17,18 @@ body{
   background-color:#fbf8f0;
   background-image:
     radial-gradient(circle 90px at 22% 9%, #ffffff 0%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0) 100%),
+    radial-gradient(circle 40px at 68% 38%, #ffffff 0%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0) 100%),
+    radial-gradient(circle 30px at 14% 62%, #ffffff 0%, rgba(255,255,255,0.5) 45%, rgba(255,255,255,0) 100%),
     radial-gradient(circle 1500px at 38% 8%, #fefcf6 0%, #fbf8f0 35%, #f3ecda 65%, #eaddc0 85%);
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
 }
-.content{width:100%;max-width:420px;}
+.content{width:100%;max-width:420px;position:relative;z-index:1;}
+.bg-glints{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.bg-glints .glint{position:absolute;}
+.bg-glints .glint svg{display:block;width:100%;height:100%;}
 
 /* ---------- numerology grid: 2 rows of 6 ---------- */
 .num-section{margin-bottom:1.1rem;}
@@ -352,6 +357,7 @@ body{
 </style>
 </head>
 <body>
+<div class="bg-glints" id="bgGlints"></div>
 <div class="content">
   <div class="num-section">
     <div class="num-grid" id="numGrid"></div>
@@ -528,6 +534,23 @@ NUMS.forEach(item=>{
   tile.addEventListener('click', ()=>openNumberDef(item));
   numGrid.appendChild(tile);
 });
+// A few small, fixed-size sparkle glints -- same restrained technique
+// as the reference sphere's accent glints, not a dense field.
+(function(){
+  const host = document.getElementById('bgGlints');
+  if(!host) return;
+  const spots = [
+    ['26%','7%',16,0.8],['70%','35%',10,0.6],['16%','60%',8,0.5],['85%','15%',7,0.4]
+  ];
+  spots.forEach(([x,y,size,op])=>{
+    const d=document.createElement('div');
+    d.className='glint';
+    d.style.left=x;d.style.top=y;
+    d.style.width=size+'px';d.style.height=size+'px';d.style.opacity=op;
+    d.innerHTML=`<svg viewBox="0 0 24 24"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#ffffff"/></svg>`;
+    host.appendChild(d);
+  });
+})();
 // Reuses the same NUM_DEFS.lifepath content the results page already
 // shows -- each tile's keyword label (Leadership, Master Teacher, etc.)
 // already mirrors that number's real Life Path theme almost exactly, so
