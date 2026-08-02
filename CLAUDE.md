@@ -415,7 +415,31 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     its job; what changes is who eventually earns past it, not how much
     a stranger gets shown). The other 11 signs haven't had a full sourced
     audit pass yet.
-  - `ASTRO_DEFS.midheaven`: not yet audited.
+  - **`ASTRO_DEFS.midheaven` (12 signs): audited, complete.** One fix:
+    Midheaven/Scorpio had the same rejected "let your reputation include
+    more transparency" framing as the other Scorpio fixes — the privacy
+    is a real asset in discretion-based work, not a flaw to soften.
+    Reworded to say that directly instead of ending on a growth edge.
+    Also confirmed Capricorn's "fully at home" claim is legitimate here
+    (natural zodiac-wheel correspondence, Capricorn↔10th house/MC — a
+    real, sourced convention distinct from planetary domicile, not a
+    category error carried over from planet entries). Other 10 signs
+    passed as-is.
+  - **`NUM_DEFS.personalyear`, `.personalmonth`, `.personalday`,
+    `.essence` (49 entries): checklist-compliance pass done, not yet a
+    full sourced-accuracy audit.** These are the only NUM_DEFS categories
+    describing an actual real-time period, so they're the ones the
+    "observational, not advice-giving" checklist rule (item 6) actually
+    binds — unlike the permanent-trait categories (Life Path, Expression,
+    etc.), which use the same established growth-edge phrasing as the
+    already-audited Sun signs and aren't subject to this rule. Found and
+    fixed roughly 20 entries across these four categories that gave
+    literal second-person commands ("Make the ask, send the invoice,
+    close the loop," "Push hard," "Cancel what you can," "Say the thing
+    you've been sitting on," etc.) instead of describing what the period
+    supports — reworded all of them to observational phrasing. Still
+    needs a real sourced-accuracy pass like Sun/Moon/etc. got; this pass
+    only fixed the advice-giving violation.
   - **`ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto, 36 entries):
     audited, complete.** Real transit-date claims fact-checked against
     ephemeris data, not just the interpretive content. One genuine
