@@ -204,13 +204,23 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
 ## Results page — settled, don't relitigate
 
 The results page (astrology/numerology/HD cards + Reading, per person) has
-gone through many rejected redesigns. These are settled, not open questions:
+gone through many rejected redesigns. **These constraints exist to stop
+specific incompetent patterns that were actually tried and failed — they
+are guardrails, not a sacred final spec.** The page is genuinely open to a
+better redesign; what's not open is reintroducing something already proven
+not to work, or deviating from what's below *arbitrarily* (a change made
+for no real reason reads as sloppy, not as a redesign — the bar is
+"genuinely better and coherent," not "different"):
 
 - **No grey and no gold anywhere on the results page** — both were tried
   (a brushed-metal grey card look, then a gold-accent replacement) and both
   were explicitly rejected ("gold is not the answer... in the never again
-  pile"). Cards are transparent (no fill, page texture shows through) with a
-  thin navy hairline border; buttons are solid navy.
+  pile"). Cards were transparent with a thin navy hairline border, solid
+  navy buttons — note navy itself is now fully rejected sitewide (see
+  Design-process rules above), so this specific color needs updating to
+  whatever the current real accent is; the "transparent card, hairline
+  border, no fill" *structure* is what was actually being protected, not
+  the navy value itself.
 - **No decorative connecting lines/glow paths between cards.** An "energy
   convergence" treatment (soft SVG light-paths flowing from each chart into
   the Reading) was built and explicitly rejected as unattractive/gimmicky/
@@ -222,7 +232,12 @@ gone through many rejected redesigns. These are settled, not open questions:
   person's Astrology/Numerology/Human Design (6 total) plus the one shared
   Reading panel. Not just similar widths — same fixed height too. This was
   a direct, repeated instruction after equal-column and equal-width passes
-  were each judged insufficient.
+  were each judged insufficient. **This one is also not sacred** — if
+  there's a genuinely better way to present the results, it's allowed to
+  break uniformity. What's not allowed is breaking it arbitrarily (e.g.
+  making one box a different fill color with no real justification) — that
+  reads as incompetent inconsistency, which is the actual thing this rule
+  was protecting against, not uniformity for its own sake.
 - **Each card shows a capped preview** of its content in the small grid
   view (`max-height`/`flex:1`, hard-clipped — no bottom fade-out
   gradient); full content only appears in the existing tap-to-expand
