@@ -14,23 +14,17 @@
    rather than a flat gradient. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#f4f4f2;
+  background-color:#e8d2a0;
+  background-image:
+    radial-gradient(circle 90px at 22% 9%, #ffffff 0%, rgba(255,255,255,0.95) 3%, rgba(255,255,255,0.55) 60%, rgba(255,255,255,0) 100%),
+    radial-gradient(circle 45px at 62% 22%, #ffffff 0%, rgba(255,255,255,0.5) 40%, rgba(255,255,255,0) 100%),
+    radial-gradient(circle 1500px at 38% 8%, #fbeecb 0%, #e8d2a0 30%, #d6c195 55%, #bfaf8d 75%);
+  background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
 }
-.content{width:100%;max-width:420px;position:relative;z-index:1;}
-.gold-orb{
-  position:absolute;left:50%;top:-60px;width:130%;max-width:640px;aspect-ratio:1/1;
-  transform:translateX(-50%);border-radius:50%;z-index:-1;pointer-events:none;
-  box-shadow:0 40px 70px -20px rgba(140,110,40,0.45);
-  background:
-    radial-gradient(circle at 30% 24%, #ffffff 0%, rgba(255,255,255,0.95) 3%, rgba(255,255,255,0.55) 9%, rgba(255,255,255,0) 20%),
-    radial-gradient(circle at 68% 70%, #ffffff 0%, rgba(255,255,255,0.5) 2%, rgba(255,255,255,0) 8%),
-    radial-gradient(circle at 38% 32%, #fbeecb 0%, #e8d2a0 42%, #c9ac72 78%, #9c8350 100%);
-}
-.gold-orb .glint{position:absolute;pointer-events:none;}
-.gold-orb .glint svg{display:block;width:100%;height:100%;}
+.content{width:100%;max-width:420px;}
 
 /* ---------- numerology grid: 2 rows of 6 ---------- */
 .num-section{margin-bottom:1.1rem;}
@@ -360,8 +354,6 @@ body{
 </head>
 <body>
 <div class="content">
-  <div class="gold-orb" id="goldOrb"></div>
-
   <div class="num-section">
     <div class="num-grid" id="numGrid"></div>
   </div>
@@ -537,24 +529,6 @@ NUMS.forEach(item=>{
   tile.addEventListener('click', ()=>openNumberDef(item));
   numGrid.appendChild(tile);
 });
-// Gold orb glints -- same hotspot+glint technique as the reference
-// swatch sphere, just scaled up: an actual bounded circle with its edge
-// visible, not a flat background pretending to have sphere lighting.
-(function(){
-  const host = document.getElementById('goldOrb');
-  if(!host) return;
-  const spots = [
-    ['18%','16%',42,0.95],['55%','32%',18,0.7],['16%','52%',14,0.55]
-  ];
-  spots.forEach(([x,y,size,op])=>{
-    const d=document.createElement('div');
-    d.className='glint';
-    d.style.left=x;d.style.top=y;
-    d.style.width=size+'px';d.style.height=size+'px';d.style.opacity=op;
-    d.innerHTML=`<svg viewBox="0 0 24 24"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#ffffff"/></svg>`;
-    host.appendChild(d);
-  });
-})();
 // Reuses the same NUM_DEFS.lifepath content the results page already
 // shows -- each tile's keyword label (Leadership, Master Teacher, etc.)
 // already mirrors that number's real Life Path theme almost exactly, so
