@@ -349,9 +349,29 @@ for no real reason reads as sloppy, not as a redesign — the bar is
 ## Open threads not yet resolved
 
 - A full audit of `ASTRO_DEFS`/`NUM_DEFS`/`HD_DEFS`/`GATES` for vague,
-  ungrounded language is in progress, not complete. NUM_DEFS and the 7
-  personal-planet ASTRO_DEFS signs have had at least one real pass; the
-  64 Gates and the outer-planet (Uranus/Neptune/Pluto) entries have not.
+  ungrounded language is in progress, not complete. Category-by-category
+  status:
+  - **`ASTRO_DEFS.sun` (12 signs): audited, complete.** All 12 checked
+    against the 10-point checklist and real astrological-consensus
+    research (mechanism, strength, shadow, growth edge per sign, cross-
+    checked against cafeastrology/numerologist.com/Wikipedia/shadow-
+    astrology sources). Scorpio and Capricorn needed real rewrites
+    (Scorpio: fixed a wrong learning-mechanism attribution; Capricorn:
+    shadow/lesson were too narrow — "delay joy"/"rest" — now names the
+    real Saturn mechanism, walling off vulnerability, and the fuller
+    lesson of learning to receive help/love, not just rest). The other
+    10 (Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Sagittarius,
+    Aquarius, Pisces) were checked against verified sources and already
+    passed the checklist — no changes made to those.
+  - `ASTRO_DEFS.moon`, `.mercury`, `.venus`, `.mars` (other personal
+    planets): had at least one earlier pass (the "runs deep" cliché
+    sweep), not yet audited against the full 10-point checklist sign by
+    sign the way Sun was.
+  - `ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto) and the ~120
+    planet-in-house combos: not yet audited.
+  - `NUM_DEFS`: had at least one real pass (9 Pinnacle rewritten and
+    approved); not fully audited entry-by-entry.
+  - `HD_DEFS` and `GATES` (64 gates): not yet audited.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
