@@ -40,24 +40,34 @@ not a locked spec — update it when something here turns out wrong.
   matched as generic regardless of how bold the colors are. Boldness in
   color doesn't rescue a predictable composition.
 
-## Reference images — what they actually signal, not literal colors to copy
+## Reference images — the actual verified technique, not a mood description
 
-- **12 gold zodiac sculptures** (her own AI-generated set): the standard for
-  dimensional, glossy craft — real specular highlights, confident scale.
-  Gold itself is now a rejected site color; what mattered was the *rendering
-  quality*, not the hue. Full illustration in this style was set aside as
-  too much execution risk for hand-coded CSS/SVG.
-- **Glass key + silver puzzle piece**: signals premium material quality and
-  an unlocking/piecing-together metaphor.
+- **12 gold zodiac sculptures** (her own AI-generated set) and **pink/blue/
+  gold swirl with sparkle** — the real, built-and-approved technique behind
+  both (tested in isolation as a gray sphere, explicitly approved after one
+  round of correction): **at least 3 separate hotspots per shape**, not one
+  gradient. Each hotspot is a radial gradient with a tight near-white core
+  (0–3% of its radius at ~95–100% white) softening through 2–3 intermediate
+  opacity stops out to a 17–26% radius, then fully transparent — soft-edged,
+  not a flat pasted circle (the first version was rejected specifically for
+  having hard-edged discs). Layer 3–8 four-point star "glint" marks on top
+  at varied sizes (7–22px) and opacities (0.7–1.0), scattered off the main
+  hotspots, not centered on them. Gold itself is a rejected site color —
+  this technique is the transferable part, not the hue.
+  Full bespoke illustration in this exact sculptural style was set aside as
+  too much execution risk for hand-coded CSS/SVG — this hotspot+glint
+  technique is the CSS-buildable substitute, not the same thing.
+- **Glass key + silver puzzle piece**: no built/verified technique yet —
+  only established as a material/mood reference (cool, silver-white,
+  premium). Don't treat this as more resolved than it is.
 - **"Hypnotic Relief" glowing key in hands** (her own separate business —
-  reference the technique only, never the asset or branding): signals
-  dramatic real light/glow, one strong focal point, confident scale. The
-  black background is explicitly **not** transferable — no dark/cosmic
-  theme, ever, full stop.
-- **Pink/blue/gold swirl with sparkle**: signals genuine specular sparkle —
-  multiple sharp hotspots with real bloom, plus scattered glint particles,
-  verified and tested in isolation (see the gray sphere test that got
-  approved). Again, not the black background.
+  reference the technique only, never the asset or branding): also not yet
+  built or verified — the observed technique is directional soft-edged
+  light rays radiating outward from one bright source, distinct from the
+  hotspot+glint technique above. Untested in this codebase so far.
+  The black background in this reference is explicitly **not**
+  transferable — no dark/cosmic theme, ever, full stop, regardless of what
+  technique is drawn from the image.
 
 ## Color — history and the actual lesson
 
@@ -72,23 +82,38 @@ Real verified hex if revisited: true violet `#7F00FF`; real-world coral is
 closer to Pantone Living Coral `#FF6F61` than CSS's named "coral" `#FF7F50`,
 which reads as orange.
 
-**The actual lesson, more important than any hex code:** color has to carry
-a hierarchy and a purpose. Two colors used at equal saturation and equal
-visual weight compete for attention instead of doing distinct jobs — that
-was the real failure across every attempt, not the specific hues chosen.
-Working structure: one dominant tone (often neutral/white, or the primary
-brand color) carrying most of the page, one true accent used sparingly and
-tied to marking something *specific and meaningful* — not a second
-decorative block of matching intensity.
+**The actual lesson, more important than any hex code — stated as a
+checkable rule, not a theme:** in every rejected attempt, two colors
+appeared at roughly the same saturation and covered roughly similar-sized
+shapes in the same view (e.g. two same-size torn fragments, one violet one
+coral, both full-strength). That's the specific, checkable failure: no
+color competing for the eye at the same intensity as another color
+anywhere in one view. The working rule: one color covers the visual
+majority of the page (a neutral base, or the single primary brand tone) —
+target roughly 70%+ of the colored area. A second color is allowed only
+where it marks one specific, distinct thing (the relational-reading choice,
+the CTA, an active/selected state) and should cover a small minority of
+the composition (rough target: under 15–20% of colored area) — never a
+second same-size decorative shape sitting next to the first.
 
 ## Layout
 
-- Real elevation via layered shadow, not a single soft blur.
-- No fading text or reduced opacity for a "muted" look, ever, anywhere.
+- Elevation = at minimum two stacked box-shadows per raised element (a
+  tight, low-opacity contact shadow close to the edge, plus a larger, softer
+  ambient shadow further out) — a single soft blur reads as flat, which is
+  what happened in earlier rounds.
+- No fading text or reduced opacity for a "muted" look — text color is
+  always full-strength: near-black on light backgrounds, near-white on dark
+  ones. Checkable: no text color should sit at a lighter/lower-contrast
+  value than its surrounding body text just for a softened look.
 - Direct, efficient wording — no dramatic-sounding language performing
   depth it doesn't have (same rule as CLAUDE.md's content-audit checklist).
-- Break the recognizable template shape — asymmetry, real elevation, and
-  scale contrast are the tools; color alone doesn't get there.
+- Checkable test for "recognizable template shape": if the composition is a
+  single centered column with one dominant color block at the top and a
+  white card below it, that's the rejected shape — regardless of color,
+  redo the composition itself. At least one major element must be
+  off-center, asymmetric, or bleed off a page edge; no version so far that
+  centered everything in one vertical stack has been kept.
 
 ## Process note
 
