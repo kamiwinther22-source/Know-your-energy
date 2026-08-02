@@ -583,7 +583,7 @@ const solarWrap = document.getElementById('solarWrap');
 // Tight crop around the actual rendered content (measured via getBBox, not
 // guessed) instead of the full square canvas, so the container isn't full
 // of dead margin above/below the ring cluster.
-let svg = `<svg viewBox="41 78 356 264" xmlns="http://www.w3.org/2000/svg">`;
+let svg = `<svg viewBox="35 55 368 330" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -603,7 +603,24 @@ Object.entries(TONES).forEach(([name, t])=>{
 // the ring line sitting underneath the crisp dashed ring, so the path itself
 // reads as glowing without becoming a solid band.
 svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.8"/></filter>`;
+svg += `<filter id="domeglow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>`;
+svg += `<linearGradient id="domeTint" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.10"/>
+  <stop offset="55%" stop-color="#ffffff" stop-opacity="0.02"/>
+  <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+</linearGradient>`;
 svg += '</defs>';
+
+// ---------- glass case: the solar system sits inside a dome, emerging
+// from a base that runs off the bottom of the crop (as if rising into
+// view) -- drawn in two passes: a base/shelf behind the rings, and the
+// dome rim + glass highlight + tint on top, since the glass front is
+// nearer the viewer than the diagram inside it. ----------
+const domeBaseY = 338, domeTopY = 64, domeL = 52, domeR = 386, domeCx = (domeL+domeR)/2;
+// base shelf the case rests on, cropped by the bottom edge -- suggests
+// it continues rising up from below rather than sitting fully in frame
+svg += `<ellipse cx="${domeCx}" cy="${domeBaseY+10}" rx="190" ry="16" fill="#000000" opacity="0.06" filter="url(#domeglow)"/>`;
+svg += `<ellipse cx="${domeCx}" cy="${domeBaseY}" rx="172" ry="11" fill="none" stroke="#ffffff" stroke-width="1.1" opacity="0.35"/>`;
 
 RINGS.forEach(r=>{
   svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#306AC0" stroke-width="2.4" opacity="0.4" filter="url(#glow)"/>`;
@@ -635,6 +652,17 @@ PLANETS.forEach(p=>{
     svg += `<text x="${labelX}" y="${labelY + lineH*(li+1)}" text-anchor="${anchor}" class="p-label sub">${line}</text>`;
   });
 });
+// dome rim, glass tint, and highlight -- painted last so they sit in
+// front of the diagram, like a real glass surface between it and the
+// viewer. The rim path is an open arc (no bottom edge) so the case
+// reads as continuing past the crop, reinforcing the "emerging" idea.
+const domePath = `M ${domeL},${domeBaseY} C ${domeL},${domeTopY+70} ${domeCx-95},${domeTopY} ${domeCx},${domeTopY} C ${domeCx+95},${domeTopY} ${domeR},${domeTopY+70} ${domeR},${domeBaseY}`;
+svg += `<path d="${domePath} L ${domeR},${domeBaseY+40} L ${domeL},${domeBaseY+40} Z" fill="url(#domeTint)"/>`;
+svg += `<path d="${domePath}" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.4" filter="url(#domeglow)"/>`;
+svg += `<path d="${domePath}" fill="none" stroke="#ffffff" stroke-width="1.1" opacity="0.55"/>`;
+// glass highlight -- a short bright arc along the upper-left curve,
+// where light actually catches a curved glass surface
+svg += `<path d="M ${domeL+18},${domeTopY+150} C ${domeL+16},${domeTopY+70} ${domeCx-70},${domeTopY+8} ${domeCx-18},${domeTopY+2}" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5" stroke-linecap="round" filter="url(#domeglow)"/>`;
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
 
