@@ -457,8 +457,26 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     mechanism; Pluto/Scorpio's "once you stop resisting it" was
     prescriptive/advice-giving — replaced with an observational phrase.
     The other 30 of 36 entries passed as-is.
-  - `NUM_DEFS`: had at least one real pass (9 Pinnacle rewritten and
-    approved); not fully audited entry-by-entry.
+  - **`NUM_DEFS` core/cycle categories (lifepath, expression, soulurge,
+    personality, birthday, attitude, balance, maturity, pinnacle,
+    challenge, karmiclessons, karmicdebt — ~185 entries): audited,
+    passing.** Checked via direct research (not subagents, to avoid
+    burning session capacity) against real sources — Life Path 8's
+    "more wealth potential than any other Life Path" claim, the "0
+    amplifies rather than adds a separate influence" convention behind
+    Birthday 10/20/30, Challenge 7's trust theme (confirmed genuinely
+    different from the Scorpio-guardedness precedent, not a repeat of
+    it — Challenge 7 is real numerology tradition about developing
+    trust generally, not about judging who's safe), and all four
+    Karmic Debt meanings (13/14/16/19) — all confirmed accurate. Also
+    confirmed Attitude and Balance are real, standard numerology
+    concepts (first-impression number and stress-coping number,
+    respectively), not invented categories. Real fix already applied:
+    Personal Year 8 was missing its shadow side and framed the whole
+    year as just money/career (real tradition: it's a harvest year
+    about reaping what's been sown, with rigidity/ruthlessness as the
+    actual shadow) — see the personalyear/month/day/essence entry
+    above for that fix and the separate advice-giving cleanup.
   - `HD_DEFS` and `GATES` (64 gates): not yet audited. Note: `GATES`
     content, on inspection, already looks substantive and well-
     constructed (consistent gift/shadow mechanism pattern per gate) —
