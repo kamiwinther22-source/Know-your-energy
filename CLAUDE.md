@@ -416,10 +416,23 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     a stranger gets shown). The other 11 signs haven't had a full sourced
     audit pass yet.
   - `ASTRO_DEFS.midheaven`: not yet audited.
-  - `ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto, 36 entries): a
-    combined content + date-verification audit is in progress as of this
-    note (checking the transit-date claims against real ephemeris data,
-    since those are checkable facts, not just interpretation).
+  - **`ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto, 36 entries):
+    audited, complete.** Real transit-date claims fact-checked against
+    ephemeris data, not just the interpretive content. One genuine
+    factual error found and fixed: Neptune's Aquarius and Pisces date
+    ranges were swapped (had Neptune moving backward through the zodiac,
+    which isn't physically possible) — corrected to Aquarius 1998–2012,
+    Pisces 2011–2026 (the interpretive text for each was already
+    correctly matched to the right sign, only the years were wrong). Two
+    minor date-precision fixes: Neptune/Aries's "the 1860s" widened to
+    "the 1860s–70s" (real prior transit ran 1861–1875), Pluto/Gemini's
+    start year corrected 1883→1882. Two style fixes: Uranus/Scorpio's
+    "force you to release something you were holding onto too tightly"
+    was the exact "carried too long" cliché pattern already banned
+    elsewhere in this file — replaced with a plain statement of the
+    mechanism; Pluto/Scorpio's "once you stop resisting it" was
+    prescriptive/advice-giving — replaced with an observational phrase.
+    The other 30 of 36 entries passed as-is.
   - `NUM_DEFS`: had at least one real pass (9 Pinnacle rewritten and
     approved); not fully audited entry-by-entry.
   - `HD_DEFS` and `GATES` (64 gates): not yet audited. Note: `GATES`
