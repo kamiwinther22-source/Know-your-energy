@@ -71,30 +71,49 @@ not a locked spec — update it when something here turns out wrong.
 
 ## Color — history and the actual lesson
 
-**Permanently rejected, do not revisit:** navy, every gold/yellow-gold tried
-(flat, mustard, antique brass), wine/burgundy/plum, forest green + brick,
-black + magenta/cranberry, orange/terracotta as a family, tan as a base
-(reads as monochrome with anything on top of it).
+**Permanently rejected, do not revisit, no exceptions:**
+- Navy, every gold/yellow-gold tried (flat, mustard, antique brass),
+  wine/burgundy/plum, forest green + brick, black + magenta/cranberry,
+  tan as a base (reads as monochrome with anything on top of it).
+- **Red, in every form, including desaturated/muted versions.** A muted
+  "mauve" (`#a4526d`) was shown as a supposedly-different, more
+  sophisticated choice and was correctly called out as still just red with
+  the saturation turned down. Wine, cranberry, coral, mauve, dusty rose,
+  rust, brick — all of these are red family. None of them are back on the
+  table by wearing a different name.
+- **Orange, in every form**, including "coral" (coral is a verified
+  red-orange blend, see the Pantone Living Coral research earlier — it's
+  not a loophole around the red/orange ban).
+- **Blue only as the one exact verified hex `#306AC0`** (real YInMn Blue,
+  already live on the site) — not an invented shade in the blue family.
+  Every other blue used in mockups so far (`#215aa8`, `#1d4f92`, `#2f66ac`,
+  `#7F00FF` violet) was a different, unrequested blue, not the one she
+  actually asked for.
 
-**Not actually rejected:** violet and coral, clarified directly — the hues
-themselves are fine. What failed was *how* they were used, not the choice.
-Real verified hex if revisited: true violet `#7F00FF`; real-world coral is
-closer to Pantone Living Coral `#FF6F61` than CSS's named "coral" `#FF7F50`,
-which reads as orange.
+**Not artificially limited to two colors.** Several rounds treated "one
+dominant + one accent" as if it were a hard ceiling. It isn't — a real
+palette can be three, four, or more colors if there's a genuine reason for
+each one. The two-color framing was a self-imposed constraint, not
+something she asked for.
 
 **The actual lesson, more important than any hex code — stated as a
 checkable rule, not a theme:** in every rejected attempt, two colors
 appeared at roughly the same saturation and covered roughly similar-sized
-shapes in the same view (e.g. two same-size torn fragments, one violet one
-coral, both full-strength). That's the specific, checkable failure: no
-color competing for the eye at the same intensity as another color
-anywhere in one view. The working rule: one color covers the visual
-majority of the page (a neutral base, or the single primary brand tone) —
-target roughly 70%+ of the colored area. A second color is allowed only
-where it marks one specific, distinct thing (the relational-reading choice,
-the CTA, an active/selected state) and should cover a small minority of
-the composition (rough target: under 15–20% of colored area) — never a
-second same-size decorative shape sitting next to the first.
+shapes in the same view (e.g. two same-size torn fragments, both
+full-strength). That's the specific, checkable failure: no color competing
+for the eye at the same intensity as another color anywhere in one view.
+The working rule: one color covers the visual majority of the page (a
+neutral base, or the single primary brand tone) — target roughly 70%+ of
+the colored area. Additional colors are allowed only where each marks one
+specific, distinct thing, and each should cover a small minority of the
+composition — never a second same-size decorative shape sitting next to
+the first.
+
+**Process failure to stop repeating:** colors have been invented from
+memory/guesswork across nearly every round instead of researched. Look at
+real, professional color-palette references before picking anything —
+verified sources, not a hex grabbed because it sounds like the right name
+for a category.
 
 ## Layout
 
