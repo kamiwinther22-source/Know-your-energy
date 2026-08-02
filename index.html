@@ -32,36 +32,40 @@ body{
 
 /* ---------- numerology grid: real Pythagorean/Lo Shu grid layout --
    1-4-7 / 2-5-8 / 3-6-9, the standard numerology chart arrangement, not
-   an arbitrary 3x3. The number IS the primary identity here (unlike a
-   planet's name, which is secondary to what it represents) -- so the
-   digit stays the dominant, full-size element inside its own tile, and
-   the keyword lives outside the tile as a plain caption underneath. */
-.num-section{margin-bottom:1.1rem;}
+   an arbitrary 3x3. No per-number captions here: a Life-Path-style
+   keyword ("Leadership" for a lone 1) is real for that specific number
+   system, but it isn't what a Lo Shu grid position means -- this grid's
+   real meaning comes from which digits are present/repeated and whether
+   a row/column/diagonal ("plane") is complete, which needs a person's
+   actual birth data, not a caption on an empty demo grid. Sized as a
+   small supporting visual, not a hero element -- research on landing-page
+   hierarchy is consistent that a headline should dominate and decorative/
+   preview visuals should read as secondary, not compete with it (CXL,
+   Unbounce: "make the most important images largest," "supporting visual"
+   is singular and modest, not a full-width hero). This grid was
+   previously larger and more prominent than the page's own title, which
+   inverts that hierarchy. */
+.num-section{margin-bottom:0.6rem;}
 .sec-label{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;text-align:center;color:#5a6350;margin-bottom:0.4rem;}
-.num-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.5rem;width:100%;max-width:340px;margin:0 auto;justify-items:center;}
+.num-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.28rem;width:100%;max-width:160px;margin:0 auto;justify-items:center;}
 .num-cell{width:100%;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
 .num-tile{
   position:relative;overflow:hidden;
   width:100%;aspect-ratio:1/1;border-radius:0;display:flex;align-items:center;justify-content:center;
   border:1px solid;
-  box-shadow:0 2px 3px -1px rgba(40,36,24,0.45),inset 0 0 0 0.5px rgba(255,255,255,0.75);
+  box-shadow:0 1px 2px -1px rgba(40,36,24,0.4),inset 0 0 0 0.5px rgba(255,255,255,0.75);
 }
 .num-tile::before{
   content:'';position:absolute;inset:0;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.2) 100%);
   pointer-events:none;
 }
-.num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:2rem;line-height:1;color:#000000;}
-.num-cell .lbl{
-  width:100%;min-width:0;white-space:normal;overflow-wrap:break-word;text-wrap:balance;
-  text-align:center;margin-top:0.3rem;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.62rem;letter-spacing:0.01em;line-height:1.15;color:#3a4133;
-}
+.num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.95rem;line-height:1;color:#000000;}
 
 /* ---------- solar system: concentric orbits, sun at center ---------- */
-.solar-section{margin-bottom:0.9rem;display:flex;flex-direction:column-reverse;align-items:center;}
+.solar-section{margin-bottom:0.6rem;display:flex;flex-direction:column-reverse;align-items:center;}
 .solar-section .sec-label{margin-top:0.3rem;margin-bottom:0;}
-.solar-wrap{position:relative;width:100%;max-width:400px;}
+.solar-wrap{position:relative;width:100%;max-width:300px;}
 .solar-wrap svg{display:block;width:100%;height:auto;}
 .p-label{font-size:8.6px;font-weight:600;fill:#4a5148;letter-spacing:0.02em;}
 .p-label.sub{font-size:13px;font-weight:800;fill:#000000;}
@@ -70,8 +74,8 @@ body{
    and colors as the results-page chart, illustrative defined/undefined
    pattern (not tied to any real person -- there's no birth data yet on
    this page, same as the solar system and number grid above it) ---------- */
-.hd-section{margin-bottom:0.9rem;display:flex;justify-content:center;}
-.hd-wrap{position:relative;width:100%;max-width:260px;}
+.hd-section{margin-bottom:0.6rem;display:flex;justify-content:center;}
+.hd-wrap{position:relative;width:100%;max-width:200px;}
 .hd-wrap svg{display:block;width:100%;height:auto;}
 .hd-label{font-size:11px;font-weight:800;fill:#14170f;letter-spacing:0.01em;}
 
@@ -547,7 +551,7 @@ NUMS.forEach(item=>{
   const t = TONES[item.tone];
   const cell = document.createElement('div');
   cell.className = 'num-cell';
-  cell.innerHTML = `<div class="num-tile" style="background:${t.grad};border-color:${t.border}"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
+  cell.innerHTML = `<div class="num-tile" style="background:${t.grad};border-color:${t.border}"><div class="n">${item.n}</div></div>`;
   cell.addEventListener('click', ()=>openNumberDef(item));
   numGrid.appendChild(cell);
 });
