@@ -34,7 +34,13 @@ body{
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
 }
-.content{width:100%;max-width:420px;position:relative;z-index:1;}
+/* min-width:0 overrides flexbox's automatic minimum size -- without it,
+   the title's nowrap text was forcing this whole flex item (and
+   everything inside it) wider than the actual phone viewport, which is
+   what was cutting off the numerology row and crowding the two chart
+   sections together on a real device. This is the real fix; the
+   font-size floor below is the other half of it. */
+.content{width:100%;max-width:420px;min-width:0;position:relative;z-index:1;}
 .bg-glints{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
@@ -76,16 +82,18 @@ body{
 .num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
 .num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.5rem;line-height:1.15;letter-spacing:0.01em;text-transform:uppercase;color:#3a4133;text-align:center;}
 
-/* ---------- astrology (left, plain -- not raised) / human design
-   (right, on its own raised platform, offset lower than astrology) --
-   direct instruction: astrology stays left and un-boxed, human design
-   stays right, boxed, and sits lower than astrology so the two columns
-   read as an intentional staggered layout, not a matched pair. ---------- */
-.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-bottom:1.1rem;align-items:start;}
-.chart-col{min-width:0;display:flex;flex-direction:column;align-items:center;}
-.chart-col.hd-col{margin-top:5.2rem;}
-.chart-col.hd-col .chart-card{
-  width:100%;position:relative;border-radius:16px;padding:0.9rem 0.5rem 1.1rem;
+/* ---------- astrology (full width, left-anchored, plain -- not raised,
+   sized to be genuinely legible) then human design BELOW it (not a
+   side-by-side row -- that's what was forcing both into cramped
+   half-width columns), boxed on its own platform and pushed to the
+   right side of the page. Stacked vertically means there is no shared
+   row for the two to compete in or overlap within. ---------- */
+.chart-stack{display:flex;flex-direction:column;margin-bottom:1.1rem;}
+.astro-block{display:flex;flex-direction:column;align-items:flex-start;}
+.astro-block .sys-section-title{text-align:left;}
+.hd-block{display:flex;justify-content:flex-end;margin-top:1.8rem;}
+.hd-block .chart-card{
+  width:min(230px,58%);position:relative;border-radius:16px;padding:0.9rem 0.5rem 1.1rem;
   display:flex;flex-direction:column;align-items:center;
   background:rgba(255,255,255,0.4);
   backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
@@ -95,7 +103,7 @@ body{
     0 18px 34px -14px rgba(30,34,38,0.4),
     0 4px 10px -4px rgba(30,34,38,0.2);
 }
-.chart-graphic{width:100%;max-width:190px;position:relative;margin-top:0.3rem;
+.chart-graphic{width:100%;position:relative;margin-top:0.3rem;
   filter:drop-shadow(0 3px 6px rgba(20,20,10,0.22));}
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
@@ -117,7 +125,12 @@ body{
    much harder problem this isn't attempting). */
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
-  font-size:clamp(2.3rem,10vw,3.4rem);white-space:nowrap;
+  /* Floor lowered from 2.3rem: on real phones narrower than ~370px CSS
+     px, that floor was wider than the viewport itself (title always one
+     line, so it can't wrap -- it has to actually shrink to fit instead).
+     Still one line, still Alex Brush, just allowed to keep scaling down
+     on the narrowest screens instead of hitting a hard floor early. */
+  font-size:clamp(1.7rem,10vw,3.4rem);white-space:nowrap;
   background:linear-gradient(100deg,#0F1758 0%,#1C2CA9 35%,#121C6C 50%,#1C2CA9 65%,#0F1758 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   filter:drop-shadow(0 0 14px rgba(28,44,169,0.4));
@@ -424,7 +437,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.num-strip,.chart-row,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.num-strip,.chart-stack,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -458,12 +471,12 @@ body{
     <div class="num-strip-row" id="numStripRow"></div>
   </div>
 
-  <div class="chart-row">
-    <div class="chart-col astro-col">
+  <div class="chart-stack">
+    <div class="astro-block">
       <div class="sys-section-title">Astrology</div>
       <div class="chart-graphic" id="solarIcon"></div>
     </div>
-    <div class="chart-col hd-col">
+    <div class="hd-block">
       <div class="chart-card">
         <div class="sys-section-title">Human Design</div>
         <div class="chart-graphic" id="hdIcon"></div>
