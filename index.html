@@ -68,22 +68,22 @@ body{
 .solar-section .sec-label{margin-top:0.3rem;margin-bottom:0;}
 .solar-wrap{position:relative;width:100%;max-width:400px;}
 .solar-wrap svg{display:block;width:100%;height:auto;}
-.p-label{font-size:7.2px;font-weight:600;fill:#4a5148;letter-spacing:0.02em;}
-.p-label.sub{font-size:10.6px;font-weight:800;fill:#000000;}
+.p-label{font-size:8.6px;font-weight:600;fill:#4a5148;letter-spacing:0.02em;}
+.p-label.sub{font-size:13px;font-weight:800;fill:#000000;}
 
 /* ---------- title ---------- */
 .brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
-/* Title color: YInMn Blue, the real pigment discovered in 2009 -- reported
-   at the time as the first genuinely new blue discovered in two centuries.
-   Verified hex (Wikipedia) is #306AC0. Flat, pure -- no navy or any other
-   tone mixed in. Measured at 4.88:1 contrast against this page's lightest
-   background tone, clear of the 3:1 WCAG minimum for text this large, so
-   navy was never actually required for legibility here. */
+/* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
+   photo of the actual pigment (mean of the well-lit, fully-saturated pixels
+   across the pile, excluding shadow crevices and blown highlight) rather
+   than a documented/"verified" hex -- the ask was to match how the color
+   looks in that photo, not to match a published reference value. Flat,
+   pure -- no navy or any other tone mixed in. */
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
   font-size:clamp(2.3rem,10vw,3.4rem);white-space:nowrap;
-  color:#306AC0;
-  filter:drop-shadow(0 0 14px rgba(48,106,192,0.4));
+  color:#1C2CA9;
+  filter:drop-shadow(0 0 14px rgba(28,44,169,0.4));
 }
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
@@ -102,7 +102,7 @@ body{
    the legibility standard doesn't -- every one verified >=4.6:1 contrast at
    its brightest point, >=10:1 at its anchor tone, same floor as the title. */
 .tagline-slide.c-blue{
-  background:linear-gradient(100deg,#193866 0%,#306AC0 35%,#1f447a 50%,#306AC0 65%,#193866 100%);
+  background:linear-gradient(100deg,#0F1758 0%,#1C2CA9 35%,#121C6C 50%,#1C2CA9 65%,#0F1758 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 .tagline-slide.c-emerald{
@@ -115,15 +115,15 @@ body{
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
-.toggle-pill.on{background:#306AC0;}
+.toggle-pill.on{background:#1C2CA9;}
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #306AC0;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
-.rel-chip:hover{background:rgba(48,106,192,0.12);}
-.rel-chip.active{background:#306AC0;color:#ffffff;}
-.rel-chip.active:hover{background:#306AC0;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip:hover{background:rgba(28,44,169,0.12);}
+.rel-chip.active{background:#1C2CA9;color:#ffffff;}
+.rel-chip.active:hover{background:#1C2CA9;}
 
 /* ---------- bottom two-column: keys | form ---------- */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
@@ -142,7 +142,7 @@ body{
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#306AC0;font-weight:800;}
+.key-hl{background:none;color:#1C2CA9;font-weight:800;}
 
 .form-col{position:relative;}
 .form-panel{
@@ -187,7 +187,7 @@ body{
 @keyframes silverspin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
-  background:linear-gradient(160deg,#749edc 0%,#306AC0 45%,#244f8f 100%);
+  background:linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
   border:1px solid rgba(255,255,255,0.55);border-radius:6px;
   color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
   transition:transform 0.18s ease,box-shadow 0.18s ease;
@@ -209,16 +209,16 @@ body{
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
-.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#306AC0;}
+.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#1C2CA9;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
-.results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#306AC0;
+.results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
   text-align:center;margin-bottom:1.4rem;}
 
 /* ---------- panel content: dark text on the light brushed-metal panel,
    brand blue for accents instead of the old gold ---------- */
-.dp{--card-text:#000000;--card-dim:#000000;--card-mid:#232a20;--card-accent:#306AC0;
-  --card-a1:rgba(10,21,48,0.28);--card-a2:rgba(10,21,48,0.15);--card-a3:rgba(255,255,255,0.4);--card-a4:rgba(48,106,192,0.12);
+.dp{--card-text:#000000;--card-dim:#000000;--card-mid:#232a20;--card-accent:#1C2CA9;
+  --card-a1:rgba(10,21,48,0.28);--card-a2:rgba(10,21,48,0.15);--card-a3:rgba(255,255,255,0.4);--card-a4:rgba(28,44,169,0.12);
   --card-stripe-odd:rgba(255,255,255,0.22);--card-stripe-even:transparent;
   color:var(--card-text);height:100%;display:flex;flex-direction:column;}
 .dph{padding:0.3rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:800;}
@@ -258,7 +258,7 @@ body{
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
 .report-preview{padding:0 0.4rem;font-family:'Alex Brush',cursive;font-size:1.5rem;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
-  color:#306AC0;}
+  color:#1C2CA9;}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
 
@@ -277,10 +277,10 @@ body{
 
 .main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;align-items:start;width:100%;max-width:460px;margin:0 auto;}
 .quad-item{position:relative;min-width:0;cursor:pointer;border-radius:10px;overflow:hidden;
-  background:transparent;border:1.5px solid rgba(48,106,192,0.75);box-shadow:0 3px 10px -4px rgba(25,56,102,0.35);
+  background:transparent;border:1.5px solid rgba(28,44,169,0.75);box-shadow:0 3px 10px -4px rgba(15,23,88,0.35);
   height:300px;display:flex;flex-direction:column;
   padding:0.55rem 0.45rem 0.6rem;}
-.quad-item .quad-title{flex-shrink:0;font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:800;color:#306AC0;margin-bottom:0.35rem;text-align:center;}
+.quad-item .quad-title{flex-shrink:0;font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:800;color:#1C2CA9;margin-bottom:0.35rem;text-align:center;}
 .quad-item .quad-wheel{flex-shrink:0;width:100%;margin-bottom:0.45rem;}
 .quad-item .quad-wheel svg{display:block;width:100%;height:auto;}
 .quad-item .dpr{font-size:0.54rem;padding:0.06rem 0;gap:0.01rem;}
@@ -289,13 +289,13 @@ body{
 .quad-item .dpdef{font-size:0.43rem;padding:0 0 0.26rem;}
 .quad-item .glyph{font-size:0.62rem;}
 .panel-auto{position:relative;width:100%;border-radius:10px;cursor:pointer;overflow:hidden;
-  background:transparent;border:1.5px solid rgba(48,106,192,0.75);box-shadow:0 3px 10px -4px rgba(25,56,102,0.35);
+  background:transparent;border:1.5px solid rgba(28,44,169,0.75);box-shadow:0 3px 10px -4px rgba(15,23,88,0.35);
   height:300px;display:flex;flex-direction:column;}
 /* Unlike panel-auto (fixed 300px, matching the 6 chart cards), this is a
    one-line service message with no real content to fill a card-sized box --
    forcing it to 300px left a large empty rectangle. Sized to its content. */
 .panel-error{position:relative;width:100%;border-radius:10px;
-  background:transparent;border:1.5px solid rgba(48,106,192,0.75);box-shadow:0 3px 10px -4px rgba(25,56,102,0.35);}
+  background:transparent;border:1.5px solid rgba(28,44,169,0.75);box-shadow:0 3px 10px -4px rgba(15,23,88,0.35);}
 .panel-error .dp{height:auto;}
 .panel-error .report-body{padding:0.5rem 0.4rem 0.6rem;}
 .quad-item .dplist,.panel-auto .dplist{flex:1;min-height:0;overflow:hidden;position:relative;}
@@ -307,7 +307,7 @@ body{
    language .term already uses everywhere else in this app for "tap this" --
    so gates read as tappable using a convention the rest of the app already
    teaches, not a new, unlabeled one. */
-.gate-chip{border:1px solid var(--card-a1);border-bottom:1.5px dotted var(--card-accent);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.48rem;padding:0.14rem 0;cursor:pointer;text-align:center;background:var(--card-stripe-odd);box-shadow:0 1px 3px -1px rgba(25,56,102,0.35);}
+.gate-chip{border:1px solid var(--card-a1);border-bottom:1.5px dotted var(--card-accent);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.48rem;padding:0.14rem 0;cursor:pointer;text-align:center;background:var(--card-stripe-odd);box-shadow:0 1px 3px -1px rgba(15,23,88,0.35);}
 .gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);background:var(--card-a4);}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
@@ -322,7 +322,7 @@ body{
   display:inline-flex;align-items:center;justify-content:center;gap:0.35rem;text-align:center;
   font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;
   padding:0.6rem 1.1rem;color:#fdfdfd;
-  background:linear-gradient(155deg,#749edc 0%,#306AC0 55%,#244f8f 100%);
+  background:linear-gradient(155deg,#707AC9 0%,#1C2CA9 55%,#15217E 100%);
   border:1px solid rgba(36,79,143,0.5);
   box-shadow:0 4px 12px -3px rgba(15,25,45,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
   transition:transform 0.15s ease, box-shadow 0.15s ease;
@@ -343,7 +343,7 @@ body{
 }
 .card-expand.open{display:block;}
 .card-expand-close{position:sticky;top:0;float:right;background:none;border:none;font-size:1.3rem;color:#000000;cursor:pointer;padding:0.3rem;line-height:1;}
-.card-expand-title{max-width:760px;margin:0 auto 0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:0.02em;text-transform:uppercase;color:#306AC0;clear:both;}
+.card-expand-title{max-width:760px;margin:0 auto 0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;clear:both;}
 .card-expand-body{max-width:600px;margin:0 auto;font-size:0.94rem;}
 .card-expand-body .dplist{overflow:visible;}
 .card-expand-body .dph{font-size:0.8rem;padding:0.4rem 0.3rem;}
@@ -361,9 +361,9 @@ body{
 @media print{
   .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
-  .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #306AC0!important;background:#fff!important;}
+  .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
-  .dp{--card-text:#000!important;--card-accent:#306AC0!important;--card-stripe-odd:transparent!important;}
+  .dp{--card-text:#000!important;--card-accent:#1C2CA9!important;--card-stripe-odd:transparent!important;}
 }
 </style>
 </head>
@@ -622,8 +622,8 @@ svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaus
 svg += '</defs>';
 
 RINGS.forEach(r=>{
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#306AC0" stroke-width="2.4" opacity="0.4" filter="url(#glow)"/>`;
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#306AC0" stroke-width="0.9" opacity="0.9"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="2.4" opacity="0.4" filter="url(#glow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="0.9" opacity="0.9"/>`;
 });
 
 // sun -- the one warm point the (now-neutral) planets orbit
@@ -1641,12 +1641,12 @@ function astroWheelSVG(astro){
   const rot=d=>(d+ROT)%360;
   const toXY=(deg,r)=>{const rad=(180-deg)*Math.PI/180;return [CX+r*Math.cos(rad),CY-r*Math.sin(rad)];};
   let svg=`<svg viewBox="0 0 460 460" style="display:block;width:100%;height:100%;">`;
-  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#306AC0" stroke-width="2"/>`;
-  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#306AC0" stroke-width="1.4" opacity="0.85"/>`;
+  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#1C2CA9" stroke-width="2"/>`;
+  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#1C2CA9" stroke-width="1.4" opacity="0.85"/>`;
   SIGN_ORDER.forEach((s,i)=>{
     const d0=rot(i*30);
     const [x1,y1]=toXY(d0,R_SIGN_IN), [x2,y2]=toXY(d0,R_OUT);
-    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#306AC0" stroke-width="1.6" opacity="0.85"/>`;
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#1C2CA9" stroke-width="1.6" opacity="0.85"/>`;
     const [gx,gy]=toXY(d0+15,R_LABEL);
     // rotate each label so it reads normally as if you're standing at the
     // center looking outward at it -- tangent to the ring, NOT running
@@ -1664,7 +1664,7 @@ function astroWheelSVG(astro){
     houses.forEach((h,i)=>{
       const d=rot(h.absoluteDegrees);
       const [x1,y1]=toXY(d,R_HOUSE_IN), [x2,y2]=toXY(d,R_SIGN_IN);
-      svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#306AC0" stroke-width="1" opacity="0.6"/>`;
+      svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#1C2CA9" stroke-width="1" opacity="0.6"/>`;
       // house number, centered in the small band just outside the inner
       // circle -- real house cusps aren't evenly spaced, so this midpoint
       // is computed per-house rather than assumed
@@ -1672,9 +1672,9 @@ function astroWheelSVG(astro){
       const span=((next.absoluteDegrees-h.absoluteDegrees)+360)%360;
       const midDeg=rot(h.absoluteDegrees+span/2);
       const [hx,hy]=toXY(midDeg,R_HOUSE_LABEL);
-      svg+=`<text x="${hx.toFixed(1)}" y="${(hy+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="700" fill="#306AC0" font-family="'Barlow Condensed',sans-serif">${h.house}</text>`;
+      svg+=`<text x="${hx.toFixed(1)}" y="${(hy+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="700" fill="#1C2CA9" font-family="'Barlow Condensed',sans-serif">${h.house}</text>`;
     });
-    svg+=`<circle cx="${CX}" cy="${CY}" r="${R_HOUSE_IN}" fill="none" stroke="#306AC0" stroke-width="1.4" opacity="0.6"/>`;
+    svg+=`<circle cx="${CX}" cy="${CY}" r="${R_HOUSE_IN}" fill="none" stroke="#1C2CA9" stroke-width="1.4" opacity="0.6"/>`;
   }
   if(astro.ascendant&&typeof astro.ascendant.absoluteDegrees==='number'){
     const d=rot(astro.ascendant.absoluteDegrees);
@@ -1777,7 +1777,7 @@ function hdBodygraphSVG(hd){
   // real color instead, so "have it vs. don't" reads as filled-vs-outline
   // (the same universal convention as a checked box or a filled star)
   // rather than needing a legend to explain what gray would have meant.
-  const NAVY='#193866', BLUE='#306AC0', CREAM='#f8f9f4', LINE_ON=BLUE;
+  const NAVY='#193866', BLUE='#1C2CA9', CREAM='#f8f9f4', LINE_ON=BLUE;
   // Human Design center colors: real sources actually disagree here (the
   // two reference charts checked against each other showed different
   // conventions), so this isn't "the one true standard" -- it's 9 distinct
