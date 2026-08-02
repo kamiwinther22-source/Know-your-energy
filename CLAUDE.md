@@ -293,6 +293,16 @@ for no real reason reads as sloppy, not as a redesign — the bar is
 
 ## Technical gotchas already paid for once
 
+- **A fix committed on a feature branch does not reach the live site until
+  it's actually merged to `main`.** A "revert the swinging-planets/sparkle-
+  title animation" commit was made and reported as done in an earlier
+  session, but only existed on a `claude/*` feature branch — `main` (and
+  therefore the live GitHub Pages site) still had the original
+  animation-adding commit with no revert, so the bug was still live weeks
+  later even though this file said it was fixed. Before telling her
+  something on the live site is fixed, verify the fix commit is actually
+  an ancestor of `origin/main` (`git merge-base --is-ancestor <sha>
+  origin/main`), not just committed somewhere.
 - Any asset (image, font) referenced by a **relative path** breaks when a
   file is sent as a standalone chat attachment — there's no shared
   filesystem between separately-sent files. Base64-embed as a data URI
@@ -383,11 +393,40 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     as Moon/Scorpio and confirmed to be a different, legitimate
     mechanism (withholding one's own half-formed thinking, not
     prescribing trust in other people) — left unchanged.
-  - `ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto) and the ~120
-    planet-in-house combos: not yet audited.
+  - **`ASTRO_DEFS.jupiter`, `.saturn` (24 entries): audited, complete.**
+    Checked against sourced dignity status (domicile/exaltation/fall) and
+    real Jupiter/Saturn tradition. All 24 passed as-is — no changes made.
+    Saturn/Scorpio's closing line ("guard yourself so tightly nothing
+    gets through") was specifically re-checked against the settled
+    Scorpio-guardedness precedent and confirmed to be a genuinely
+    different, sourced Saturn-specific shadow (over-armoring even with
+    people already trusted) rather than a repeat of the rejected
+    "trust people faster" framing — left unchanged.
+  - **`ASTRO_DEFS.housecombo` (120 planet-in-house entries): audited,
+    complete.** One real fix: `moon_12` claimed "this placement is fully
+    at home," but the Moon has no domicile/joy claim to the 12th house
+    (that belongs to Neptune/Pisces) — the false "at home" framing was
+    borrowed from the two entries that legitimately have it (moon_4,
+    mercury_3) and has been removed. The other 119 entries passed as-is.
+  - **`ASTRO_DEFS.ascendant` (12 signs): one fix applied, not fully
+    audited.** Ascendant/Scorpio had the same rejected "let a first
+    impression include a little vulnerability, not just control" framing
+    as the Sun/Moon fixes — corrected the same way (the guard is doing
+    its job; what changes is who eventually earns past it, not how much
+    a stranger gets shown). The other 11 signs haven't had a full sourced
+    audit pass yet.
+  - `ASTRO_DEFS.midheaven`: not yet audited.
+  - `ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto, 36 entries): a
+    combined content + date-verification audit is in progress as of this
+    note (checking the transit-date claims against real ephemeris data,
+    since those are checkable facts, not just interpretation).
   - `NUM_DEFS`: had at least one real pass (9 Pinnacle rewritten and
     approved); not fully audited entry-by-entry.
-  - `HD_DEFS` and `GATES` (64 gates): not yet audited.
+  - `HD_DEFS` and `GATES` (64 gates): not yet audited. Note: `GATES`
+    content, on inspection, already looks substantive and well-
+    constructed (consistent gift/shadow mechanism pattern per gate) —
+    still needs a real sourced pass before calling it audited, not
+    assumed fine because it reads well.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
