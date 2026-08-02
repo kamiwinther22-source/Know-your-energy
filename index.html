@@ -30,19 +30,15 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- numerology grid: 1-9 in a row, master numbers centered below ----------
-   The number IS the primary identity here (unlike a planet's name, which is
-   secondary to what it represents) -- so the digit stays the dominant,
-   full-size element inside its own tile, and the keyword lives outside the
-   tile as a plain caption underneath, with the full column width and no
-   fixed-height box to be squeezed into. */
+/* ---------- numerology grid: real Pythagorean/Lo Shu grid layout --
+   1-4-7 / 2-5-8 / 3-6-9, the standard numerology chart arrangement, not
+   an arbitrary 3x3. The number IS the primary identity here (unlike a
+   planet's name, which is secondary to what it represents) -- so the
+   digit stays the dominant, full-size element inside its own tile, and
+   the keyword lives outside the tile as a plain caption underneath. */
 .num-section{margin-bottom:1.1rem;}
 .sec-label{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;text-align:center;color:#5a6350;margin-bottom:0.4rem;}
-.num-grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:0.14rem;width:100%;justify-items:center;}
-.num-grid-master{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:0.14rem;width:100%;justify-items:center;margin-top:0.5rem;}
-.num-grid-master .num-cell:nth-child(1){grid-column:4;}
-.num-grid-master .num-cell:nth-child(2){grid-column:5;}
-.num-grid-master .num-cell:nth-child(3){grid-column:6;}
+.num-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.5rem;width:100%;max-width:340px;margin:0 auto;justify-items:center;}
 .num-cell{width:100%;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
 .num-tile{
   position:relative;overflow:hidden;
@@ -55,12 +51,11 @@ body{
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.2) 100%);
   pointer-events:none;
 }
-.num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.05rem;line-height:1;color:#000000;}
+.num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:2rem;line-height:1;color:#000000;}
 .num-cell .lbl{
   width:100%;min-width:0;white-space:normal;overflow-wrap:break-word;text-wrap:balance;
-  hyphens:manual;-webkit-hyphens:manual;-ms-hyphens:manual;
-  text-align:center;margin-top:0.22rem;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.5rem;letter-spacing:0.01em;line-height:1.15;color:#3a4133;
+  text-align:center;margin-top:0.3rem;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.62rem;letter-spacing:0.01em;line-height:1.15;color:#3a4133;
 }
 
 /* ---------- solar system: concentric orbits, sun at center ---------- */
@@ -87,7 +82,7 @@ body{
    across the pile, excluding shadow crevices and blown highlight) rather
    than a documented/"verified" hex -- the ask was to match how the color
    looks in that photo, not to match a published reference value. Flat,
-   pure -- no navy or any other tone mixed in. */
+   pure -- not blended with any other tone. */
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
   font-size:clamp(2.3rem,10vw,3.4rem);white-space:nowrap;
@@ -321,7 +316,7 @@ body{
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
 
-/* Solid navy pills, sized to their own content (not stretched across the
+/* Solid blue pills, sized to their own content (not stretched across the
    row) -- so they pop off the cream page instead of blending into it as
    white-on-white did. A real lift shadow so they read as pressable, and
    a small icon each for quick recognition at a glance. No shine/sheen
@@ -332,7 +327,7 @@ body{
   font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;
   padding:0.6rem 1.1rem;color:#fdfdfd;
   background:linear-gradient(155deg,#707AC9 0%,#1C2CA9 55%,#15217E 100%);
-  border:1px solid rgba(36,79,143,0.5);
+  border:1px solid rgba(21,33,126,0.5);
   box-shadow:0 4px 12px -3px rgba(15,25,45,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
   transition:transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -381,7 +376,6 @@ body{
 <div class="content">
   <div class="num-section">
     <div class="num-grid" id="numGrid"></div>
-    <div class="num-grid-master" id="numGridMaster"></div>
   </div>
 
   <div class="brand-row">
@@ -533,35 +527,29 @@ const TONES = {
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
 };
-// &shy; marks real syllable breaks (Leader-ship, Ex-pres-sion, etc.) so a
-// forced single-row, 9-across layout wraps at a deliberate, correct point
-// instead of an arbitrary mid-word character split -- hyphens:auto depends
-// on a browser/OS hyphenation dictionary that isn't reliably present
-// (confirmed absent in headless Chromium), so this is set by hand instead
-// of trusted to render inconsistently across devices.
+// Row-major DOM order for a 3-column grid gives the real Pythagorean/Lo
+// Shu numerology chart layout: row 1 = 1,4,7 -- row 2 = 2,5,8 -- row 3 =
+// 3,6,9. Master numbers (11/22/33) don't belong on this grid -- it's the
+// single-digit chart -- so they're dropped here.
 const NUMS = [
-  {n:1,  lbl:'Leader&shy;ship',     tone:'silverL'},
-  {n:2,  lbl:'Partner&shy;ship',    tone:'goldT'},
-  {n:3,  lbl:'Expres&shy;sion',     tone:'white'},
-  {n:4,  lbl:'Struc&shy;ture',      tone:'cream'},
-  {n:5,  lbl:'Free&shy;dom',        tone:'silverD'},
-  {n:6,  lbl:'Nurtur&shy;ing',      tone:'white'},
-  {n:7,  lbl:'In&shy;tro&shy;spec&shy;tion', tone:'goldT'},
-  {n:8,  lbl:'Am&shy;bi&shy;tion',  tone:'cream'},
-  {n:9,  lbl:'Com&shy;pas&shy;sion', tone:'silverL'},
-  {n:11, lbl:'In&shy;tu&shy;i&shy;tion', tone:'silverD'},
-  {n:22, lbl:'Master Builder', tone:'cream'},
-  {n:33, lbl:'Master Teacher', tone:'goldT'},
+  {n:1, lbl:'Leadership',    tone:'silverL'},
+  {n:4, lbl:'Structure',     tone:'cream'},
+  {n:7, lbl:'Introspection', tone:'goldT'},
+  {n:2, lbl:'Partnership',   tone:'goldT'},
+  {n:5, lbl:'Freedom',       tone:'silverD'},
+  {n:8, lbl:'Ambition',      tone:'cream'},
+  {n:3, lbl:'Expression',    tone:'white'},
+  {n:6, lbl:'Nurturing',     tone:'white'},
+  {n:9, lbl:'Compassion',    tone:'silverL'},
 ];
 const numGrid = document.getElementById('numGrid');
-const numGridMaster = document.getElementById('numGridMaster');
 NUMS.forEach(item=>{
   const t = TONES[item.tone];
   const cell = document.createElement('div');
   cell.className = 'num-cell';
   cell.innerHTML = `<div class="num-tile" style="background:${t.grad};border-color:${t.border}"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
   cell.addEventListener('click', ()=>openNumberDef(item));
-  (item.n === 11 || item.n === 22 || item.n === 33 ? numGridMaster : numGrid).appendChild(cell);
+  numGrid.appendChild(cell);
 });
 // A few small, fixed-size sparkle glints -- same restrained technique
 // as the reference sphere's accent glints, not a dense field.
@@ -585,7 +573,7 @@ NUMS.forEach(item=>{
 // already mirrors that number's real Life Path theme almost exactly, so
 // this is the number's genuine general meaning, not a mismatched reuse.
 function openNumberDef(item){
-  document.getElementById('cardExpandTitle').textContent=`Number ${item.n} — ${item.lbl.replace(/&shy;/g,'')}`;
+  document.getElementById('cardExpandTitle').textContent=`Number ${item.n} — ${item.lbl}`;
   document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${NUM_DEFS.lifepath[item.n]||''}</p></div>`;
   document.getElementById('cardExpand').classList.add('open');
 }
@@ -691,7 +679,7 @@ solarWrap.innerHTML = svg;
     {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    color:'#7B5EA7', on:false, label:'Inspiration', lx:120, ly:6,   anchor:'middle'},
     {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    color:'#2F6FB0', on:false, label:'Awareness',   lx:176, ly:66,  anchor:'start'},
     {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         color:'#1E8C7A', on:false, label:'Expression',  inside:true},
-    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        color:'#E8B923', on:true,  label:'Identity',    inside:true, textColor:'#193866'},
+    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        color:'#E8B923', on:true,  label:'Identity',    inside:true, textColor:'#000000'},
     {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 color:'#C23B7A', on:false, label:'Willpower',   lx:215, ly:190, anchor:'start'},
     {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         color:'#C0392B', on:true,  label:'Life Force',  inside:true},
     {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    color:'#3F8F3F', on:true,  label:'Intuition',   lx:14,  ly:246, anchor:'end'},
@@ -1822,16 +1810,17 @@ function hdBodygraphSVG(hd){
   const definedChannels=CHANNELS.filter(([a,b])=>active.has(a)&&active.has(b));
   const definedCenters=new Set();
   definedChannels.forEach(([a,b])=>{definedCenters.add(GATE_CENTER[a]);definedCenters.add(GATE_CENTER[b]);});
-  // NAVY is kept ONLY for text sitting on the yellow G center below --
-  // measured contrast there is 6.33:1 for navy vs 2.89:1 for the brand blue,
-  // and 2.89:1 fails WCAG's 4.5:1 floor for text this size. Every other use
-  // of blue in this chart (channel lines) has no such constraint and uses
-  // the real brand blue, not navy. No gray anywhere in this chart --
-  // undefined/inactive elements are hollow-outline versions of their own
-  // real color instead, so "have it vs. don't" reads as filled-vs-outline
-  // (the same universal convention as a checked box or a filled star)
-  // rather than needing a legend to explain what gray would have meant.
-  const NAVY='#193866', BLUE='#1C2CA9', CREAM='#f8f9f4', LINE_ON=BLUE;
+  // INK (plain black) is kept ONLY for text sitting on the yellow G center
+  // below -- the brand blue measures 2.89:1 there, which fails WCAG's
+  // 4.5:1 floor for text this size, and black clears it outright. Every
+  // other use of blue in this chart (channel lines) has no such
+  // constraint and uses the real brand blue. No gray anywhere in this
+  // chart -- undefined/inactive elements are hollow-outline versions of
+  // their own real color instead, so "have it vs. don't" reads as
+  // filled-vs-outline (the same universal convention as a checked box or
+  // a filled star) rather than needing a legend to explain what gray
+  // would have meant.
+  const INK='#000000', BLUE='#1C2CA9', CREAM='#f8f9f4', LINE_ON=BLUE;
   // Human Design center colors: real sources actually disagree here (the
   // two reference charts checked against each other showed different
   // conventions), so this isn't "the one true standard" -- it's 9 distinct
@@ -1847,7 +1836,7 @@ function hdBodygraphSVG(hd){
   // color distance, not just eyeballed) so no two centers are close
   // enough to be confused for each other.
   const CENTER_COLOR={Head:'#7B5EA7',Ajna:'#2F6FB0',Throat:'#1E8C7A',G:'#E8B923',Heart:'#C23B7A',Sacral:'#C0392B',Spleen:'#3F8F3F',SolarPlexus:'#B85C1F',Root:'#5C3A21'};
-  const CENTER_TEXT={Head:'#ffffff',Ajna:'#ffffff',Throat:'#ffffff',G:NAVY,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
+  const CENTER_TEXT={Head:'#ffffff',Ajna:'#ffffff',Throat:'#ffffff',G:INK,Heart:'#ffffff',Sacral:'#ffffff',Spleen:'#ffffff',SolarPlexus:'#ffffff',Root:'#ffffff'};
   const CX=230, CY=230, R_IN=182, R_OUT=214, R_LABEL=198;
   // Zodiac ring sits just outside the gate wheel -- 12 real 30deg sign
   // segments, colored loosely by element (fire/earth/air/water) as an
@@ -1877,7 +1866,7 @@ function hdBodygraphSVG(hd){
     svg+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="800" letter-spacing="0.5" fill="#ffffff" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${lx.toFixed(1)} ${ly.toFixed(1)})">${sign.slice(0,3).toUpperCase()}</text>`;
   });
   // outer gate wheel -- real order, all 64 segments, active gates for
-  // this person picked out in solid navy, inactive left as a thin outline
+  // this person picked out in solid blue, inactive left as a thin outline
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_IN}" fill="none" stroke="${BLUE}" stroke-width="1.4" opacity="0.85"/>`;
   const step=360/64;
@@ -1891,7 +1880,7 @@ function hdBodygraphSVG(hd){
     const d0=i*step;
     const [sx,sy]=toXY(d0+step/2,R_IN);
     const on=active.has(g);
-    const spokeColor=CENTER_COLOR[GATE_CENTER[g]]||NAVY;
+    const spokeColor=CENTER_COLOR[GATE_CENTER[g]]||INK;
     svg+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${CX}" y2="${CY}" stroke="${spokeColor}" stroke-width="${on?1:0.5}" opacity="${on?0.55:0.18}"/>`;
   });
   GATE_WHEEL_ORDER.forEach((g,i)=>{
@@ -1904,7 +1893,7 @@ function hdBodygraphSVG(hd){
     // on/off blue -- every gate carries its center's color even when
     // undefined (fainter), so the ring itself shows the 9-center grouping.
     const centerName=GATE_CENTER[g];
-    const wedgeColor=CENTER_COLOR[centerName]||NAVY;
+    const wedgeColor=CENTER_COLOR[centerName]||INK;
     const [ax1,ay1]=toXY(d0,R_IN), [ax2,ay2]=toXY(d0+step,R_IN), [ax3,ay3]=toXY(d0+step,R_OUT), [ax4,ay4]=toXY(d0,R_OUT);
     svg+=`<path d="M${ax1.toFixed(1)},${ay1.toFixed(1)} A${R_IN},${R_IN} 0 0 1 ${ax2.toFixed(1)},${ay2.toFixed(1)} L${ax3.toFixed(1)},${ay3.toFixed(1)} A${R_OUT},${R_OUT} 0 0 0 ${ax4.toFixed(1)},${ay4.toFixed(1)} Z" fill="${wedgeColor}" opacity="${on?0.9:0.13}"/>`;
     const [gx,gy]=toXY(d0+step/2,R_LABEL);
@@ -1914,7 +1903,7 @@ function hdBodygraphSVG(hd){
     // Filled vs. hollow instead of solid-vs-gray -- the same universal
     // "filled = have it, outline = don't" convention as a checked box or
     // a filled star rating, so it reads correctly without a legend.
-    const textAttrs=on?`fill="${CENTER_TEXT[centerName]||NAVY}"`:`fill="none" stroke="${wedgeColor}" stroke-width="0.6"`;
+    const textAttrs=on?`fill="${CENTER_TEXT[centerName]||INK}"`:`fill="none" stroke="${wedgeColor}" stroke-width="0.6"`;
     svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="${on?800:600}" ${textAttrs} font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${g}</text>`;
   });
   // channel lines, so center shapes + gate labels sit on top
@@ -1968,7 +1957,7 @@ function hdBodygraphSVG(hd){
       const startX=shape.cx-((rowCount-1)*13)/2;
       const gx=startX+col*13, gy=startY+row*rowH;
       const gOn=active.has(g);
-      const textAttrs=gOn?`fill="${on?(CENTER_TEXT[name]||NAVY):CENTER_COLOR[name]}"`:`fill="none" stroke="${hollowStroke}" stroke-width="0.5"`;
+      const textAttrs=gOn?`fill="${on?(CENTER_TEXT[name]||INK):CENTER_COLOR[name]}"`:`fill="none" stroke="${hollowStroke}" stroke-width="0.5"`;
       svg+=`<text x="${gx.toFixed(1)}" y="${(gy+2.5).toFixed(1)}" text-anchor="middle" font-size="${fs}" font-weight="${gOn?800:600}" ${textAttrs} font-family="'Barlow Condensed',sans-serif">${g}</text>`;
     });
   });
