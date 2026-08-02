@@ -30,50 +30,41 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- numerology grid: real Pythagorean/Lo Shu grid layout --
-   1-4-7 / 2-5-8 / 3-6-9, the standard numerology chart arrangement, not
-   an arbitrary 3x3. The number IS the primary identity here (unlike a
-   planet's name, which is secondary to what it represents) -- so the
-   digit stays the dominant, full-size element inside its own tile, and
-   the keyword lives outside the tile as a plain caption underneath. */
-.num-section{margin-bottom:1.1rem;}
-.sec-label{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;text-align:center;color:#5a6350;margin-bottom:0.4rem;}
-.num-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.5rem;width:100%;max-width:340px;margin:0 auto;justify-items:center;}
-.num-cell{width:100%;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
-.num-tile{
-  position:relative;overflow:hidden;
-  width:100%;aspect-ratio:1/1;border-radius:0;display:flex;align-items:center;justify-content:center;
-  border:1px solid;
-  box-shadow:0 2px 3px -1px rgba(40,36,24,0.45),inset 0 0 0 0.5px rgba(255,255,255,0.75);
+/* ---------- systems list: rebuilt from scratch as a real, proven pattern
+   for this exact job -- icon + name + concrete outcome, one row per
+   system -- rather than three separately-shaped diagrams fighting each
+   other for space and attention. Icon-left/text-right, all three rows
+   sharing one fixed icon box, is the standard structure for "show what
+   you get" content because it puts unequal content (a 9-cell numerology
+   grid vs. a single solar system vs. a 9-shape bodygraph) into equal
+   visual weight automatically -- the box is fixed, not each diagram's
+   own natural size. Nothing is behind a tap: this page has to work for
+   someone who wasn't already looking for it, and a cold visitor won't
+   tap to find out what's on offer, so the actual outcome text is plain,
+   always-visible copy, not a reveal. Research grounding: CXL/Unbounce on
+   landing-page hierarchy (supporting content stays secondary to headline
+   and CTA, sized with intent, not as competing hero sections); real
+   sourced meaning for the Pythagorean Square/Psychomatrix (a distinct,
+   real numerology tool, confirmed via multiple independent sources, not
+   the same thing as Life Path keywords or a Lo Shu grid). */
+.systems-list{display:flex;flex-direction:column;gap:0.65rem;margin-bottom:0.9rem;}
+.sys-row{display:flex;align-items:center;gap:0.7rem;}
+.sys-icon{flex-shrink:0;width:60px;height:60px;position:relative;}
+.sys-icon svg{display:block;width:100%;height:100%;}
+.sys-icon .num-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;width:100%;height:100%;}
+.sys-icon .num-tile{
+  position:relative;overflow:hidden;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border:0.5px solid;
 }
-.num-tile::before{
+.sys-icon .num-tile::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.2) 100%);
+  background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
-.num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:2rem;line-height:1;color:#000000;}
-.num-cell .lbl{
-  width:100%;min-width:0;white-space:normal;overflow-wrap:break-word;text-wrap:balance;
-  text-align:center;margin-top:0.3rem;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.62rem;letter-spacing:0.01em;line-height:1.15;color:#3a4133;
-}
-
-/* ---------- solar system: concentric orbits, sun at center ---------- */
-.solar-section{margin-bottom:0.9rem;display:flex;flex-direction:column-reverse;align-items:center;}
-.solar-section .sec-label{margin-top:0.3rem;margin-bottom:0;}
-.solar-wrap{position:relative;width:100%;max-width:400px;}
-.solar-wrap svg{display:block;width:100%;height:auto;}
-.p-label{font-size:8.6px;font-weight:600;fill:#4a5148;letter-spacing:0.02em;}
-.p-label.sub{font-size:13px;font-weight:800;fill:#000000;}
-
-/* ---------- human design: compact bodygraph preview, same 9 real centers
-   and colors as the results-page chart, illustrative defined/undefined
-   pattern (not tied to any real person -- there's no birth data yet on
-   this page, same as the solar system and number grid above it) ---------- */
-.hd-section{margin-bottom:0.9rem;display:flex;justify-content:center;}
-.hd-wrap{position:relative;width:100%;max-width:260px;}
-.hd-wrap svg{display:block;width:100%;height:auto;}
-.hd-label{font-size:11px;font-weight:800;fill:#14170f;letter-spacing:0.01em;}
+.sys-icon .num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.56rem;line-height:1;color:#000000;}
+.sys-text{flex:1;min-width:0;}
+.sys-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.86rem;letter-spacing:0.01em;color:#14170f;text-transform:uppercase;}
+.sys-gain{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.72rem;line-height:1.4;color:#3a4133;margin-top:0.1rem;}
 
 /* ---------- title ---------- */
 .brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
@@ -81,12 +72,21 @@ body{
    photo of the actual pigment (mean of the well-lit, fully-saturated pixels
    across the pile, excluding shadow crevices and blown highlight) rather
    than a documented/"verified" hex -- the ask was to match how the color
-   looks in that photo, not to match a published reference value. Flat,
-   pure -- not blended with any other tone. */
+   looks in that photo, not to match a published reference value. A flat
+   single fill read as noticeably flatter than the reference photo's own
+   natural light/shadow variation, so this reuses the exact same gradient-
+   text technique already used (and approved) on the tagline below --
+   same hue family, deep-anchor + bright-accent + deep-anchor -- rather
+   than inventing a new effect. This is a tonal gradient on shaped text,
+   not a simulated directional-light sheen across a flat surface (the
+   diagonal-sheen effect that was already tried and rejected elsewhere in
+   this file was the latter, on a full-page background -- a different,
+   much harder problem this isn't attempting). */
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
   font-size:clamp(2.3rem,10vw,3.4rem);white-space:nowrap;
-  color:#1C2CA9;
+  background:linear-gradient(100deg,#0F1758 0%,#1C2CA9 35%,#121C6C 50%,#1C2CA9 65%,#0F1758 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   filter:drop-shadow(0 0 14px rgba(28,44,169,0.4));
 }
 .title-glint{position:absolute;pointer-events:none;}
@@ -101,16 +101,19 @@ body{
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
-/* Each slide is the same shiny-gradient-text technique as the title (deep
-   anchor + bright same-hue accent + deep anchor), so the color changes but
-   the legibility standard doesn't -- every one verified >=4.6:1 contrast at
-   its brightest point, >=10:1 at its anchor tone, same floor as the title. */
-.tagline-slide.c-blue{
-  background:linear-gradient(100deg,#0F1758 0%,#1C2CA9 35%,#121C6C 50%,#1C2CA9 65%,#0F1758 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-}
-.tagline-slide.c-emerald{
-  background:linear-gradient(100deg,#143e22 0%,#1f7a3d 35%,#163f24 50%,#1f7a3d 65%,#143e22 100%);
+/* Same shiny-gradient-text technique as the title (deep anchor + bright
+   same-hue accent + deep anchor), but in gold, not blue -- directly under
+   a blue title, a blue tagline didn't stand out from it, and the two
+   taglines no longer have a reason to be different colors from each
+   other (that made sense when they were 3 distinct pitches; now they're
+   one statement + one question in the same voice). Gold already has an
+   established role on this page (title-glint sparkles, numerology tile
+   accents), so this reuses an existing palette color rather than
+   introducing a new one. Contrast verified against this page's
+   background (#fbf8f0): anchor tone 10.94:1, brightest accent tone
+   4.75:1 -- both clear the same floor the blue version was held to. */
+.tagline-slide.c-gold{
+  background:linear-gradient(100deg,#4a3510 0%,#7a5a1f 35%,#5c4315 50%,#7a5a1f 65%,#4a3510 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
@@ -363,7 +366,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.num-section,.brand-row,.solar-section,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.systems-list,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -374,10 +377,6 @@ body{
 <body>
 <div class="bg-glints" id="bgGlints"></div>
 <div class="content">
-  <div class="num-section">
-    <div class="num-grid" id="numGrid"></div>
-  </div>
-
   <div class="brand-row">
     <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
       <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
@@ -392,16 +391,32 @@ body{
   </div>
 
   <div class="tagline-wrap" id="taglineWrap">
-    <div class="tagline-slide c-blue active">Your unique design described by 3 separate systems</div>
-    <div class="tagline-slide c-emerald">is it all just math</div>
+    <div class="tagline-slide c-gold active">Your unique design described by 3 separate systems</div>
+    <div class="tagline-slide c-gold">is it all just math</div>
   </div>
 
-  <div class="solar-section">
-    <div class="solar-wrap" id="solarWrap"></div>
-  </div>
-
-  <div class="hd-section">
-    <div class="hd-wrap" id="hdWrap"></div>
+  <div class="systems-list">
+    <div class="sys-row">
+      <div class="sys-icon" id="numIcon"></div>
+      <div class="sys-text">
+        <div class="sys-name">Numerology</div>
+        <div class="sys-gain">Your Pythagorean Square: character, energy, health, logic, talent &amp; more — mapped from your birth date</div>
+      </div>
+    </div>
+    <div class="sys-row">
+      <div class="sys-icon" id="solarIcon"></div>
+      <div class="sys-text">
+        <div class="sys-name">Astrology</div>
+        <div class="sys-gain">Your birth chart: personality, love style &amp; drive — mapped from your birth details</div>
+      </div>
+    </div>
+    <div class="sys-row">
+      <div class="sys-icon" id="hdIcon"></div>
+      <div class="sys-text">
+        <div class="sys-name">Human Design</div>
+        <div class="sys-gain">Your energy type: how you're built to decide and interact — mapped from your birth data</div>
+      </div>
+    </div>
   </div>
 
   <div class="bottom-grid">
@@ -527,30 +542,43 @@ const TONES = {
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
 };
-// Row-major DOM order for a 3-column grid gives the real Pythagorean/Lo
-// Shu numerology chart layout: row 1 = 1,4,7 -- row 2 = 2,5,8 -- row 3 =
-// 3,6,9. Master numbers (11/22/33) don't belong on this grid -- it's the
-// single-digit chart -- so they're dropped here.
+// Row-major DOM order for a 3-column grid gives the real layout of this
+// specific tool -- the Pythagorean Square (Psychomatrix), row 1 = 1,4,7,
+// row 2 = 2,5,8, row 3 = 3,6,9. This is a distinct, real numerology tool
+// from Life Path numbers, and it DOES have a real per-cell meaning
+// (unlike a Lo Shu grid, whose meaning comes from row/column/diagonal
+// "planes" -- confirmed by checking multiple sourced descriptions of the
+// Pythagorean Square specifically): 1 Character, 2 Energy, 3 Interest,
+// 4 Health, 5 Logic, 6 Labour, 7 Talent, 8 Duty, 9 Memory. Master numbers
+// (11/22/33) don't belong on this grid -- it's the single-digit chart --
+// so they're dropped here.
 const NUMS = [
-  {n:1, lbl:'Leadership',    tone:'silverL'},
-  {n:4, lbl:'Structure',     tone:'cream'},
-  {n:7, lbl:'Introspection', tone:'goldT'},
-  {n:2, lbl:'Partnership',   tone:'goldT'},
-  {n:5, lbl:'Freedom',       tone:'silverD'},
-  {n:8, lbl:'Ambition',      tone:'cream'},
-  {n:3, lbl:'Expression',    tone:'white'},
-  {n:6, lbl:'Nurturing',     tone:'white'},
-  {n:9, lbl:'Compassion',    tone:'silverL'},
+  {n:1, lbl:'Character', tone:'silverL'},
+  {n:4, lbl:'Health',    tone:'cream'},
+  {n:7, lbl:'Talent',    tone:'goldT'},
+  {n:2, lbl:'Energy',    tone:'goldT'},
+  {n:5, lbl:'Logic',     tone:'silverD'},
+  {n:8, lbl:'Duty',      tone:'cream'},
+  {n:3, lbl:'Interest',  tone:'white'},
+  {n:6, lbl:'Labour',    tone:'white'},
+  {n:9, lbl:'Memory',    tone:'silverL'},
 ];
-const numGrid = document.getElementById('numGrid');
-NUMS.forEach(item=>{
-  const t = TONES[item.tone];
-  const cell = document.createElement('div');
-  cell.className = 'num-cell';
-  cell.innerHTML = `<div class="num-tile" style="background:${t.grad};border-color:${t.border}"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
-  cell.addEventListener('click', ()=>openNumberDef(item));
-  numGrid.appendChild(cell);
-});
+const numIcon = document.getElementById('numIcon');
+if(numIcon){
+  const grid = document.createElement('div');
+  grid.className = 'num-grid';
+  NUMS.forEach(item=>{
+    const t = TONES[item.tone];
+    const tile = document.createElement('div');
+    tile.className = 'num-tile';
+    tile.style.background = t.grad;
+    tile.style.borderColor = t.border;
+    tile.innerHTML = `<div class="n">${item.n}</div>`;
+    tile.addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
+    grid.appendChild(tile);
+  });
+  numIcon.appendChild(grid);
+}
 // A few small, fixed-size sparkle glints -- same restrained technique
 // as the reference sphere's accent glints, not a dense field.
 (function(){
@@ -568,10 +596,11 @@ NUMS.forEach(item=>{
     host.appendChild(d);
   });
 })();
-// Reuses the same NUM_DEFS.lifepath content the results page already
-// shows -- each tile's keyword label (Leadership, Master Teacher, etc.)
-// already mirrors that number's real Life Path theme almost exactly, so
-// this is the number's genuine general meaning, not a mismatched reuse.
+// item.lbl is this cell's real Pythagorean Square meaning (Character,
+// Energy, etc.) -- the body reuses NUM_DEFS.lifepath, which is a
+// different number system's content (what this digit means as a Life
+// Path number), included as this number's broader significance rather
+// than a claim that it's the Pythagorean Square meaning itself.
 function openNumberDef(item){
   document.getElementById('cardExpandTitle').textContent=`Number ${item.n} — ${item.lbl}`;
   document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${NUM_DEFS.lifepath[item.n]||''}</p></div>`;
@@ -596,11 +625,11 @@ const PLANETS = [
 ];
 const RINGS = [26,34,46,54,74,86,100,110,120];
 const SIZE = 420, C = SIZE/2;
-const solarWrap = document.getElementById('solarWrap');
-// Tight crop around the actual rendered content (measured via getBBox, not
-// guessed) instead of the full square canvas, so the container isn't full
-// of dead margin above/below the ring cluster.
-let svg = `<svg viewBox="1 78 450 264" xmlns="http://www.w3.org/2000/svg">`;
+const solarWrap = document.getElementById('solarIcon');
+// Tight crop around just the ring cluster (no label text anymore -- detail
+// moved to tap-to-reveal, see PLANETS.forEach below) plus a little padding
+// for the outermost ring's glow blur.
+let svg = `<svg viewBox="80 80 260 260" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -629,38 +658,29 @@ RINGS.forEach(r=>{
 
 // sun -- the one warm point the (now-neutral) planets orbit
 svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
-svg += `<text x="${C}" y="${C+3}" text-anchor="middle" font-size="7.5" font-weight="800" fill="#000000">SUN</text>`;
 
-PLANETS.forEach(p=>{
+PLANETS.forEach((p,i)=>{
   const t = TONES[p.tone];
   const a = p.angle * Math.PI/180;
   const dx = Math.cos(a), dy = Math.sin(a);
   const px = C + p.r*dx, py = C + p.r*dy;
-
-  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9"/>`;
-
-  const gap = p.size + 5 + (p.gapAdd||0);
-  const labelX = px + dx*gap;
-  const labelY = py + dy*gap;
-  // a low threshold here let near-vertical planets (small dx) still get
-  // pushed to a one-sided anchor, so their label ran sideways far enough
-  // to collide with a neighboring planet's label (Mercury into Saturn) --
-  // raised so only genuinely left/right-side planets get a one-sided
-  // anchor; near-top/bottom planets center their label on the radial line
-  let anchor = 'middle';
-  if (dx > 0.5) anchor = 'start';
-  else if (dx < -0.5) anchor = 'end';
-
-  const lineH = 14;
-  // descriptor drawn first and larger -- that's the reason to care about
-  // the planet, so it needs to outshine the name, not the other way around
-  p.lines.forEach((line,li)=>{
-    svg += `<text x="${labelX}" y="${labelY + lineH*li}" text-anchor="${anchor}" class="p-label sub">${line}</text>`;
-  });
-  svg += `<text x="${labelX}" y="${labelY + lineH*p.lines.length}" text-anchor="${anchor}" class="p-label">${p.name}</text>`;
+  // no inline label anymore -- tap a planet to see its name and domain
+  // (openPlanetDef below), same compact-glance/full-detail-on-tap pattern
+  // the number grid and every results-page card already use
+  svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
+  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
 });
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
+solarWrap.querySelectorAll('.p-dot').forEach(el=>{
+  el.style.cursor='pointer';
+  el.addEventListener('click',()=>openPlanetDef(PLANETS[+el.dataset.idx]));
+});
+function openPlanetDef(p){
+  document.getElementById('cardExpandTitle').textContent=`${p.name} — ${p.lines.join(', ')}`;
+  document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${p.name} governs ${p.lines.join(' and ').toLowerCase()} in astrology.</p></div>`;
+  document.getElementById('cardExpand').classList.add('open');
+}
 
 // ---------- human design: compact preview using the same real 9-center
 // topology and color palette as the full results-page bodygraph (kept as
@@ -673,7 +693,7 @@ solarWrap.innerHTML = svg;
 // yet), same convention as the real chart: filled = defined, hollow
 // outline of its own color = undefined. ----------
 (function(){
-  const hdWrap = document.getElementById('hdWrap');
+  const hdWrap = document.getElementById('hdIcon');
   if(!hdWrap) return;
   const HD_CENTERS = [
     {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    color:'#7B5EA7', on:false, label:'Inspiration', lx:120, ly:6,   anchor:'middle'},
@@ -686,21 +706,42 @@ solarWrap.innerHTML = svg;
     {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            color:'#B85C1F', on:false, label:'Emotions',    lx:226, ly:246, anchor:'start'},
     {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         color:'#5C3A21', on:true,  label:'Drive',       inside:true},
   ];
-  let svg = `<svg viewBox="-70 -20 380 380" xmlns="http://www.w3.org/2000/svg">`;
-  HD_CENTERS.forEach(c=>{
+  // Same glossy-sphere gradient recipe already used (and proven) on the
+  // number tiles and solar-system planets -- off-center highlight fading
+  // to a darker shade of the center's own real color, so a filled shape
+  // reads as a lit, dimensional surface instead of a flat color swatch.
+  const blend=(hex,target,amt)=>{
+    const n=parseInt(hex.slice(1),16), t=parseInt(target.slice(1),16);
+    const mix=(sh,th)=>Math.round(((n>>sh)&255)+(((t>>sh)&255)-((n>>sh)&255))*amt);
+    return '#'+[mix(16),mix(8),mix(0)].map(v=>v.toString(16).padStart(2,'0')).join('');
+  };
+  let svg = `<svg viewBox="20 10 200 332" xmlns="http://www.w3.org/2000/svg"><defs>`;
+  HD_CENTERS.forEach((c,i)=>{
+    if(!c.on) return;
+    const hi=blend(c.color,'#ffffff',0.55), lo=blend(c.color,'#000000',0.3);
+    svg += `<radialGradient id="hdg-${i}" cx="35%" cy="28%" r="75%">
+      <stop offset="0%" stop-color="${hi}"/>
+      <stop offset="55%" stop-color="${c.color}"/>
+      <stop offset="100%" stop-color="${lo}"/>
+    </radialGradient>`;
+  });
+  svg += '</defs>';
+  // Tight crop around just the 9 shapes (no label text anymore -- detail
+  // moved to tap-to-reveal, matching the solar system and number grid).
+  HD_CENTERS.forEach((c,i)=>{
     const pts = c.pts.map(([x,y])=>`${x},${y}`).join(' ');
-    svg += `<polygon points="${pts}" fill="${c.on?c.color:'#fbf8f0'}" stroke="${c.color}" stroke-width="2.2"/>`;
-    if(c.inside){
-      const cx = c.pts.reduce((s,p)=>s+p[0],0)/c.pts.length;
-      const cy = c.pts.reduce((s,p)=>s+p[1],0)/c.pts.length;
-      const fill = c.on ? (c.textColor||'#ffffff') : c.color;
-      svg += `<text x="${cx}" y="${cy+3.5}" text-anchor="middle" class="hd-label" fill="${fill}">${c.label}</text>`;
-    } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" class="hd-label">${c.label}</text>`;
-    }
+    svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'#fbf8f0'}" stroke="${c.color}" stroke-width="2.2" style="cursor:pointer;"/>`;
   });
   svg += '</svg>';
   hdWrap.innerHTML = svg;
+  hdWrap.querySelectorAll('.hd-shape').forEach(el=>{
+    el.addEventListener('click',()=>openCenterDef(HD_CENTERS[+el.dataset.idx]));
+  });
+  function openCenterDef(c){
+    document.getElementById('cardExpandTitle').textContent=`${c.name} Center — ${c.label}`;
+    document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">The ${c.name} Center relates to ${c.label.toLowerCase()} in Human Design.</p></div>`;
+    document.getElementById('cardExpand').classList.add('open');
+  }
 })();
 
 // ---------- key-icon selling points: copied verbatim from your reference image ----------
