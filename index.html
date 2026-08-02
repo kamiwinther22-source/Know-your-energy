@@ -14,14 +14,14 @@
    rather than a flat gradient. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#f4f6f0;
+  background-color:#f3f4f5;
   background-image:
-    radial-gradient(ellipse 55% 38% at 12% 8%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 62%),
-    radial-gradient(ellipse 48% 34% at 88% 18%, rgba(232,238,218,0.55) 0%, rgba(232,238,218,0) 60%),
-    radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 65%),
-    radial-gradient(ellipse 58% 46% at 84% 80%, rgba(226,234,212,0.5) 0%, rgba(226,234,212,0) 65%),
-    radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%),
-    radial-gradient(ellipse 140% 75% at 50% 0%, #f8faf4 0%, #f1f4ec 45%, #e9ede2 100%),
+    radial-gradient(ellipse 55% 38% at 12% 8%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(ellipse 48% 34% at 88% 18%, rgba(214,219,224,0.55) 0%, rgba(214,219,224,0) 60%),
+    radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 65%),
+    radial-gradient(ellipse 58% 46% at 84% 80%, rgba(208,213,219,0.5) 0%, rgba(208,213,219,0) 65%),
+    radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(ellipse 140% 75% at 50% 0%, #f8f9fa 0%, #eef0f1 45%, #e2e5e8 100%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
@@ -230,8 +230,14 @@ body{
 .stage-pair .dpdef{padding:0 0.4rem 0.3rem;}
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
 .dprow:nth-child(even){background:var(--card-stripe-even);}
-.dprl.term{cursor:pointer;border-bottom:1px dotted currentColor;}
-.dprl.term:hover{color:var(--card-accent);}
+.dprl.term{cursor:pointer;color:var(--card-accent);border-bottom:1px solid color-mix(in srgb, var(--card-accent) 45%, transparent);padding-right:0.85em;position:relative;transition:border-color 0.15s ease;}
+.dprl.term::after{
+  content:'';position:absolute;right:0;top:50%;width:0.4em;height:0.4em;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:translateY(-70%) rotate(45deg);transition:transform 0.15s ease;
+}
+.dprl.term.open::after{transform:translateY(-30%) rotate(-135deg);}
+.dprl.term:hover{border-bottom-color:var(--card-accent);}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .dpdef p{margin:0 0 0.5em;}
 .dpdef p:last-child{margin-bottom:0;}
@@ -317,14 +323,14 @@ body{
 .card-expand{
   display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;
   color:#000000;padding:1.3rem 1.3rem 3rem;font-size:16px;
-  background-color:#f4f6f0;
+  background-color:#f3f4f5;
   background-image:
-    radial-gradient(ellipse 55% 38% at 12% 8%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 62%),
-    radial-gradient(ellipse 48% 34% at 88% 18%, rgba(232,238,218,0.55) 0%, rgba(232,238,218,0) 60%),
-    radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 65%),
-    radial-gradient(ellipse 58% 46% at 84% 80%, rgba(226,234,212,0.5) 0%, rgba(226,234,212,0) 65%),
-    radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%),
-    radial-gradient(ellipse 140% 75% at 50% 0%, #f8faf4 0%, #f1f4ec 45%, #e9ede2 100%),
+    radial-gradient(ellipse 55% 38% at 12% 8%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(ellipse 48% 34% at 88% 18%, rgba(214,219,224,0.55) 0%, rgba(214,219,224,0) 60%),
+    radial-gradient(ellipse 52% 42% at 20% 64%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 65%),
+    radial-gradient(ellipse 58% 46% at 84% 80%, rgba(208,213,219,0.5) 0%, rgba(208,213,219,0) 65%),
+    radial-gradient(ellipse 46% 36% at 52% 42%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(ellipse 140% 75% at 50% 0%, #f8f9fa 0%, #eef0f1 45%, #e2e5e8 100%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-attachment:fixed;
 }
@@ -2249,7 +2255,10 @@ document.addEventListener('click', e=>{
     const term=e.target.closest('.term');
     if(term){
       const def=term.parentElement.nextElementSibling;
-      if(def&&def.classList.contains('dpdef')){ def.hidden=!def.hidden; }
+      if(def&&def.classList.contains('dpdef')){
+        def.hidden=!def.hidden;
+        term.classList.toggle('open',!def.hidden);
+      }
       return;
     }
     const gate=e.target.closest('.gate-chip');
