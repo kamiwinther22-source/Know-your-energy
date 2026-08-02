@@ -583,7 +583,7 @@ function openNumberDef(item){
 // system, each planet at its own radius within its tier and a scattered
 // (not evenly-spaced) angle, rather than one continuously-growing spiral. ----
 const PLANETS = [
-  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70},
+  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-85, gapAdd:11},
   {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:160},
   {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:38},
   {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:-158},
@@ -638,7 +638,7 @@ PLANETS.forEach(p=>{
 
   svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9"/>`;
 
-  const gap = p.size + 5;
+  const gap = p.size + 5 + (p.gapAdd||0);
   const labelX = px + dx*gap;
   const labelY = py + dy*gap;
   // a low threshold here let near-vertical planets (small dx) still get
@@ -650,7 +650,7 @@ PLANETS.forEach(p=>{
   if (dx > 0.5) anchor = 'start';
   else if (dx < -0.5) anchor = 'end';
 
-  const lineH = 11;
+  const lineH = 14;
   // descriptor drawn first and larger -- that's the reason to care about
   // the planet, so it needs to outshine the name, not the other way around
   p.lines.forEach((line,li)=>{
