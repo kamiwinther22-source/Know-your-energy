@@ -16,16 +16,19 @@ body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background-color:#e8d2a0;
   background-image:
-    radial-gradient(ellipse 55% 30% at 25% 12%, rgba(251,238,203,0.7) 0%, rgba(251,238,203,0) 55%),
-    radial-gradient(ellipse 45% 26% at 78% 82%, rgba(201,172,114,0.3) 0%, rgba(201,172,114,0) 55%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='f' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.11' numOctaves='3' seed='9' stitchTiles='stitch' result='n'/%3E%3CfeSpecularLighting in='n' surfaceScale='1.3' specularConstant='0.55' specularExponent='16' lighting-color='%23fff6de' result='s'%3E%3CfeDistantLight azimuth='235' elevation='55'/%3E%3C/feSpecularLighting%3E%3C/filter%3E%3Crect width='480' height='480' filter='url(%23f)'/%3E%3C/svg%3E");
-  background-blend-mode:normal,normal,screen;
+    radial-gradient(160px 160px at 15% 10%, rgba(255,252,242,0.9) 0%, rgba(255,252,242,0) 100%),
+    radial-gradient(90px 90px at 82% 6%, rgba(255,252,242,0.6) 0%, rgba(255,252,242,0) 100%),
+    radial-gradient(140px 140px at 88% 55%, rgba(156,131,80,0.35) 0%, rgba(156,131,80,0) 100%),
+    radial-gradient(120px 120px at 10% 70%, rgba(255,252,242,0.5) 0%, rgba(255,252,242,0) 100%);
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
 }
-.content{width:100%;max-width:420px;}
+.content{width:100%;max-width:420px;position:relative;z-index:1;}
+.bg-glints{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.bg-glints .glint{position:absolute;}
+.bg-glints .glint svg{display:block;}
 
 /* ---------- numerology grid: 2 rows of 6 ---------- */
 .num-section{margin-bottom:1.1rem;}
@@ -354,6 +357,7 @@ body{
 </style>
 </head>
 <body>
+<div class="bg-glints" id="bgGlints"></div>
 <div class="content">
 
   <div class="num-section">
@@ -531,6 +535,27 @@ NUMS.forEach(item=>{
   tile.addEventListener('click', ()=>openNumberDef(item));
   numGrid.appendChild(tile);
 });
+// Background glints -- small, FIXED pixel sizes (not scaled to the page),
+// because real specular highlights stay small regardless of surface size;
+// their size comes from light-source geometry and surface curvature, not
+// from how big the surface is. Scaling a highlight up with the container
+// is what turned "shine" into a diffuse blob in earlier attempts.
+(function(){
+  const host = document.getElementById('bgGlints');
+  if(!host) return;
+  const spots = [
+    ['12%','8%',22,0.9],['85%','5%',12,0.6],['8%','68%',14,0.5],
+    ['88%','52%',10,0.45],['20%','40%',8,0.4]
+  ];
+  spots.forEach(([x,y,size,op])=>{
+    const d=document.createElement('div');
+    d.className='glint';
+    d.style.left=x;d.style.top=y;
+    d.style.width=size+'px';d.style.height=size+'px';d.style.opacity=op;
+    d.innerHTML=`<svg viewBox="0 0 24 24"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#fffdf5"/></svg>`;
+    host.appendChild(d);
+  });
+})();
 // Reuses the same NUM_DEFS.lifepath content the results page already
 // shows -- each tile's keyword label (Leadership, Master Teacher, etc.)
 // already mirrors that number's real Life Path theme almost exactly, so
