@@ -363,10 +363,26 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     10 (Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Sagittarius,
     Aquarius, Pisces) were checked against verified sources and already
     passed the checklist — no changes made to those.
-  - `ASTRO_DEFS.moon`, `.mercury`, `.venus`, `.mars` (other personal
-    planets): had at least one earlier pass (the "runs deep" cliché
-    sweep), not yet audited against the full 10-point checklist sign by
-    sign the way Sun was.
+  - **`ASTRO_DEFS.moon`, `.mercury`, `.venus`, `.mars` (48 entries):
+    audited, complete.** Checked sign-by-sign against the 10-point
+    checklist and real sources (cafeastrology, numerologist.com,
+    astrology.com, shadow-astrology writeups), including verifying
+    dignity/rulership claims ("fully at home" lines) against actual
+    domicile/exaltation/detriment/fall status, not just phrasing. One
+    real fix: Moon/Scorpio's closing line ("risking vulnerability before
+    you have absolute proof it's safe") repeated the exact framing
+    already rejected for Sun/Scorpio — telling the reader to trust
+    faster, when the settled rule is that Scorpio's guardedness is
+    reliable, not a flaw. Reworded to name the real risk (suspicion
+    outrunning evidence) without prescribing more trust. All 47 other
+    entries (all 12 Mercury, all 12 Venus, all 12 Mars, 11 of 12 Moon)
+    passed as-is — no changes made. Two Mercury entries got advisory
+    (non-error) notes from the audit — Cancer's shadow is narrower than
+    the fullest sourced picture but not wrong, and Scorpio's "hidden
+    motives" shadow was checked against the same trust-framing concern
+    as Moon/Scorpio and confirmed to be a different, legitimate
+    mechanism (withholding one's own half-formed thinking, not
+    prescribing trust in other people) — left unchanged.
   - `ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto) and the ~120
     planet-in-house combos: not yet audited.
   - `NUM_DEFS`: had at least one real pass (9 Pinnacle rewritten and
