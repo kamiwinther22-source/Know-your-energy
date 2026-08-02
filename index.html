@@ -7,19 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: light metallic with only a slight green cast -- brighter and
-   more luminous than the earlier pass, which read as muddy sage. Mostly
-   bright near-white/silver patches with just a couple of pale green patches
-   for the whisper of tint, plus fine grain so it stays a mottled surface
-   rather than a flat gradient. */
+/* Background: a real mid-tone brushed pewter/steel, not another pale
+   near-white -- the previous cream/champagne pass was pale-on-pale with
+   the (also pale) metal tiles and glass cards sitting on top of it, which
+   is the actual cause of "boring": nothing had contrast to pop against.
+   Base value now sits solidly in the middle of the tonal range (steel
+   gray, ~#a7acb2 at its darkest corner) so the white/cream/gold number
+   tiles, the glass cards, and the blue accent all read as distinctly
+   lighter/brighter objects sitting on top of it, instead of blending in.
+   Still entirely metal-family tones (steel/platinum/pewter/champagne) --
+   no new hues introduced -- plus the same proven static grain. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#fbf8f0;
+  background-color:#c6cbcf;
   background-image:
     radial-gradient(circle 90px at 22% 9%, #ffffff 0%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0) 100%),
     radial-gradient(circle 40px at 68% 38%, #ffffff 0%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0) 100%),
-    radial-gradient(circle 30px at 14% 62%, #ffffff 0%, rgba(255,255,255,0.5) 45%, rgba(255,255,255,0) 100%),
-    radial-gradient(circle 1500px at 38% 8%, #fefcf6 0%, #fbf8f0 35%, #f3ecda 65%, #eaddc0 85%);
+    radial-gradient(circle 30px at 14% 62%, #ffffff 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0) 100%),
+    radial-gradient(circle 26px at 82% 66%, #ffffff 0%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0) 100%),
+    radial-gradient(ellipse 65% 42% at 85% 8%, rgba(233,217,182,0.65) 0%, rgba(233,217,182,0) 62%),
+    radial-gradient(ellipse 60% 40% at 12% 90%, rgba(139,148,156,0.55) 0%, rgba(139,148,156,0) 65%),
+    radial-gradient(circle 1600px at 50% 25%, #eef0f1 0%, #d3d7da 35%, #b7bcc1 68%, #a7acb2 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
@@ -30,56 +39,55 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- systems list: rebuilt from scratch as a real, proven pattern
-   for this exact job -- icon + name + concrete outcome, one row per
-   system -- rather than three separately-shaped diagrams fighting each
-   other for space and attention. Icon-left/text-right, all three rows
-   sharing one fixed icon box, is the standard structure for "show what
-   you get" content because it puts unequal content (a 9-cell numerology
-   grid vs. a single solar system vs. a 9-shape bodygraph) into equal
-   visual weight automatically -- the box is fixed, not each diagram's
-   own natural size. Nothing is behind a tap: this page has to work for
-   someone who wasn't already looking for it, and a cold visitor won't
-   tap to find out what's on offer, so the actual outcome text is plain,
-   always-visible copy, not a reveal. Research grounding: CXL/Unbounce on
-   landing-page hierarchy (supporting content stays secondary to headline
-   and CTA, sized with intent, not as competing hero sections); real
-   sourced meaning for the Pythagorean Square/Psychomatrix (a distinct,
-   real numerology tool, confirmed via multiple independent sources, not
-   the same thing as Life Path keywords or a Lo Shu grid). */
-.systems-list{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:0.9rem;}
-/* Same real glass treatment as the form panel -- these rows were bare
-   text sitting directly on the page background, which is exactly the
-   flat/dull quality no color choice fixes. A floating card (blur +
-   translucency + light edge + lift shadow) gives them actual depth. */
-.sys-row{
-  display:flex;align-items:center;gap:0.7rem;
-  padding:0.55rem 0.7rem;border-radius:14px;
-  background:rgba(255,255,255,0.38);
-  backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.55);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.75) inset,
-    0 12px 22px -12px rgba(45,55,35,0.32),
-    0 3px 7px -3px rgba(45,55,35,0.16);
+/* ---------- numerology strip: raised out of the old icon+text row list
+   into its own full-width, always-visible band right under the tagline --
+   9 real tiles in a single row (the Pythagorean Square's actual row-major
+   order), each number's one-word category printed directly under its own
+   tile so the meaning is visible at a glance, not hidden behind a tap. ---------- */
+.sys-section-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
+  letter-spacing:0.06em;text-transform:uppercase;color:#14170f;
+  text-align:center;margin-bottom:0.5rem;
 }
-.sys-icon{flex-shrink:0;width:60px;height:60px;position:relative;
+.num-strip{margin-bottom:1.1rem;}
+.num-strip-row{display:flex;justify-content:space-between;gap:0.25rem;}
+.num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
   filter:drop-shadow(0 3px 5px rgba(20,20,10,0.25));}
-.sys-icon svg{display:block;width:100%;height:100%;}
-.sys-icon .num-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;width:100%;height:100%;}
-.sys-icon .num-tile{
-  position:relative;overflow:hidden;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;border:0.5px solid;
+.num-tile-lg .swatch{
+  position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
+  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
 }
-.sys-icon .num-tile::before{
+.num-tile-lg .swatch::before{
   content:'';position:absolute;inset:0;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
-.sys-icon .num-tile .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.56rem;line-height:1;color:#000000;}
-.sys-text{flex:1;min-width:0;}
-.sys-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.86rem;letter-spacing:0.01em;color:#14170f;text-transform:uppercase;}
-.sys-gain{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.72rem;line-height:1.4;color:#3a4133;margin-top:0.1rem;}
+.num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.5rem;line-height:1.15;letter-spacing:0.01em;text-transform:uppercase;color:#3a4133;text-align:center;}
+
+/* ---------- astrology / human design: promoted out of the old icon+text
+   rows into the two real diagrams, each in its own full-width boxed card
+   (same glass-card recipe as .keys-col) so there's real room for the
+   shapes and their labels at a legible size -- squeezing both into
+   half-width side-by-side columns forced tiny text and clipped labels,
+   which is worse than giving up the side-by-side layout. The page is
+   allowed to grow taller and scroll for this; nothing here is fighting
+   to stay above the fold. */
+.chart-stack{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.1rem;}
+.chart-card{
+  position:relative;border-radius:16px;padding:1rem 1rem 1.3rem;
+  display:flex;flex-direction:column;align-items:center;
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.8) inset,
+    0 18px 34px -14px rgba(30,34,38,0.4),
+    0 4px 10px -4px rgba(30,34,38,0.2);
+}
+.chart-graphic{width:100%;max-width:320px;position:relative;margin-top:0.3rem;
+  filter:drop-shadow(0 3px 6px rgba(20,20,10,0.22));}
+.chart-graphic svg{display:block;width:100%;height:auto;}
 
 /* ---------- title ---------- */
 .brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
@@ -150,7 +158,19 @@ body{
 /* ---------- bottom two-column: keys | form ---------- */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
 
-.keys-col{padding-top:0.3rem;}
+/* Boxed now (moved here from .form-panel, which is unboxed below) --
+   same real glassmorphism recipe: blur + translucency + light edge +
+   lift shadow, so it reads as floating glass, not a flat tint. */
+.keys-col{
+  position:relative;border-radius:16px;padding:1.1rem 1rem;
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.8) inset,
+    0 18px 34px -14px rgba(45,55,35,0.35),
+    0 4px 10px -4px rgba(45,55,35,0.18);
+}
 .key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
@@ -167,24 +187,10 @@ body{
 .key-hl{background:none;color:#1C2CA9;font-weight:800;}
 
 .form-col{position:relative;}
-/* Real glassmorphism, not just a translucent flat fill: the panel already
-   had rgba(255,255,255,0.34) as a background, but with no blur behind it
-   that just reads as a plain pale box -- no different from a flat color.
-   backdrop-filter is what actually makes it read as floating glass (it
-   blurs whatever's behind the panel, so the panel itself looks like it's
-   suspended above the page rather than painted flush against it), plus a
-   light edge highlight and a real lift shadow underneath. Verified 2026
-   technique (10-20px blur, thin ~0.5 opacity white border, layered
-   shadow), not a guess. */
+/* Unboxed: the data-entry form now sits directly on the page background,
+   no card/blur/border around it -- the box moved to .keys-col instead. */
 .form-panel{
-  position:relative;border-radius:16px;padding:1.2rem 1rem 1.1rem;
-  background:rgba(255,255,255,0.4);
-  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.6);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 18px 34px -14px rgba(45,55,35,0.35),
-    0 4px 10px -4px rgba(45,55,35,0.18);
+  position:relative;padding:0.3rem 0 0;
 }
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
@@ -277,13 +283,26 @@ body{
 .stage-pair .dpdef{padding:0 0.4rem 0.3rem;}
 .dprow:nth-child(odd){background:var(--card-stripe-odd);}
 .dprow:nth-child(even){background:var(--card-stripe-even);}
-.dprl.term{cursor:pointer;color:var(--card-accent);border-bottom:1px solid color-mix(in srgb, var(--card-accent) 45%, transparent);padding-right:0.85em;position:relative;transition:border-color 0.15s ease;}
-.dprl.term::after{
-  content:'';position:absolute;right:0;top:50%;width:0.4em;height:0.4em;
-  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
-  transform:translateY(-70%) rotate(45deg);transition:transform 0.15s ease;
+/* Larger, real hit area: the previous version used an absolutely-
+   positioned chevron plus a thin padding sliver as the only extra tap
+   space, so the affordance looked tappable over a bigger area than it
+   actually was. inline-flex puts the chevron in normal flow right next
+   to the text (no positioning guesswork), and the padding/negative-margin
+   pair grows the actual clickable box on all sides without shifting the
+   visible text, so the whole label+chevron reads and taps as one unit. */
+.dprl.term{
+  cursor:pointer;color:var(--card-accent);
+  display:inline-flex;align-items:center;gap:0.3em;
+  padding:0.3em 0.35em;margin:-0.3em -0.35em;
+  border-bottom:1px solid color-mix(in srgb, var(--card-accent) 45%, transparent);
+  transition:border-color 0.15s ease;
 }
-.dprl.term.open::after{transform:translateY(-30%) rotate(-135deg);}
+.dprl.term::after{
+  content:'';flex-shrink:0;width:0.4em;height:0.4em;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg);transition:transform 0.15s ease;
+}
+.dprl.term.open::after{transform:rotate(-135deg);}
 .dprl.term:hover{border-bottom-color:var(--card-accent);}
 .dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
 .dpdef p{margin:0 0 0.5em;}
@@ -395,7 +414,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.systems-list,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.num-strip,.chart-stack,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -424,27 +443,19 @@ body{
     <div class="tagline-slide c-gold">is it all just math</div>
   </div>
 
-  <div class="systems-list">
-    <div class="sys-row">
-      <div class="sys-icon" id="numIcon"></div>
-      <div class="sys-text">
-        <div class="sys-name">Numerology</div>
-        <div class="sys-gain">Your Pythagorean Square: character, energy, health, logic, talent &amp; more — mapped from your birth date</div>
-      </div>
+  <div class="num-strip">
+    <div class="sys-section-title">Numerology — Your Pythagorean Square</div>
+    <div class="num-strip-row" id="numStripRow"></div>
+  </div>
+
+  <div class="chart-stack">
+    <div class="chart-card">
+      <div class="sys-section-title">Astrology</div>
+      <div class="chart-graphic" id="solarIcon"></div>
     </div>
-    <div class="sys-row">
-      <div class="sys-icon" id="solarIcon"></div>
-      <div class="sys-text">
-        <div class="sys-name">Astrology</div>
-        <div class="sys-gain">Your birth chart: personality, love style &amp; drive — mapped from your birth details</div>
-      </div>
-    </div>
-    <div class="sys-row">
-      <div class="sys-icon" id="hdIcon"></div>
-      <div class="sys-text">
-        <div class="sys-name">Human Design</div>
-        <div class="sys-gain">Your energy type: how you're built to decide and interact — mapped from your birth data</div>
-      </div>
+    <div class="chart-card">
+      <div class="sys-section-title">Human Design</div>
+      <div class="chart-graphic" id="hdIcon"></div>
     </div>
   </div>
 
@@ -592,21 +603,16 @@ const NUMS = [
   {n:6, lbl:'Labour',    tone:'white'},
   {n:9, lbl:'Memory',    tone:'silverL'},
 ];
-const numIcon = document.getElementById('numIcon');
-if(numIcon){
-  const grid = document.createElement('div');
-  grid.className = 'num-grid';
+const numStripRow = document.getElementById('numStripRow');
+if(numStripRow){
   NUMS.forEach(item=>{
     const t = TONES[item.tone];
     const tile = document.createElement('div');
-    tile.className = 'num-tile';
-    tile.style.background = t.grad;
-    tile.style.borderColor = t.border;
-    tile.innerHTML = `<div class="n">${item.n}</div>`;
-    tile.addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
-    grid.appendChild(tile);
+    tile.className = 'num-tile-lg';
+    tile.innerHTML = `<div class="swatch" style="background:${t.grad};border-color:${t.border};"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
+    tile.querySelector('.swatch').addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
+    numStripRow.appendChild(tile);
   });
-  numIcon.appendChild(grid);
 }
 // A few small, fixed-size sparkle glints -- same restrained technique
 // as the reference sphere's accent glints, not a dense field.
@@ -655,10 +661,11 @@ const PLANETS = [
 const RINGS = [26,34,46,54,74,86,100,110,120];
 const SIZE = 420, C = SIZE/2;
 const solarWrap = document.getElementById('solarIcon');
-// Tight crop around just the ring cluster (no label text anymore -- detail
-// moved to tap-to-reveal, see PLANETS.forEach below) plus a little padding
-// for the outermost ring's glow blur.
-let svg = `<svg viewBox="80 80 260 260" xmlns="http://www.w3.org/2000/svg">`;
+// Wider crop than the old icon-sized version -- this graphic is now the
+// prominent astrology visual, so there's real room around the ring
+// cluster for each planet's own descriptor word to sit next to it,
+// always visible rather than behind a tap.
+let svg = `<svg viewBox="10 75 380 270" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -693,11 +700,23 @@ PLANETS.forEach((p,i)=>{
   const a = p.angle * Math.PI/180;
   const dx = Math.cos(a), dy = Math.sin(a);
   const px = C + p.r*dx, py = C + p.r*dy;
-  // no inline label anymore -- tap a planet to see its name and domain
-  // (openPlanetDef below), same compact-glance/full-detail-on-tap pattern
-  // the number grid and every results-page card already use
   svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
   svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
+  // descriptor word sits right next to its planet, always visible --
+  // still tappable (whole label is part of the same hit circle) rather
+  // than hidden behind a tap, per her instruction.
+  const anchor = dx>0.2?'start':dx<-0.2?'end':'middle';
+  const lx = px + (p.size+9)*dx, ly = py + (p.size+9)*dy + 3;
+  // Two-word "X & Y" descriptors are stacked on their own line each --
+  // half the horizontal reach of one long line, so the outer-ring labels
+  // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
+  const words = p.lines[0].split(' & ');
+  if(words.length>1){
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#14170f" style="pointer-events:none;">`+
+      `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
+  } else {
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#14170f" style="pointer-events:none;">${p.lines[0]}</text>`;
+  }
 });
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
@@ -724,42 +743,56 @@ function openPlanetDef(p){
 (function(){
   const hdWrap = document.getElementById('hdIcon');
   if(!hdWrap) return;
+  // Recolored to the same 5-tone metal palette as the number tiles and
+  // solar-system planets (TONES/stopsByTone, defined above) instead of
+  // the real chart's 9 distinct hues -- that rainbow palette is a
+  // deliberate, separate choice for the results-page bodygraph and isn't
+  // touched here; this small entry-page preview now draws from the same
+  // shared metal set as everything else on this page.
   const HD_CENTERS = [
-    {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    color:'#7B5EA7', on:false, label:'Inspiration', lx:120, ly:6,   anchor:'middle'},
-    {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    color:'#2F6FB0', on:false, label:'Awareness',   lx:176, ly:66,  anchor:'start'},
-    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         color:'#1E8C7A', on:false, label:'Expression',  inside:true},
-    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        color:'#E8B923', on:true,  label:'Identity',    inside:true, textColor:'#000000'},
-    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 color:'#C23B7A', on:false, label:'Willpower',   lx:215, ly:190, anchor:'start'},
-    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         color:'#C0392B', on:true,  label:'Life Force',  inside:true},
-    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    color:'#3F8F3F', on:true,  label:'Intuition',   lx:14,  ly:246, anchor:'end'},
-    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            color:'#B85C1F', on:false, label:'Emotions',    lx:226, ly:246, anchor:'start'},
-    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         color:'#5C3A21', on:true,  label:'Drive',       inside:true},
+    {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    tone:'silverL', on:false, label:'Inspiration', lx:120, ly:6,   anchor:'middle'},
+    {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    tone:'silverD', on:false, label:'Awareness',   lx:180, ly:66,  anchor:'start'},
+    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'cream',   on:false, label:'Expression',  inside:true},
+    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'goldT',   on:true,  label:'Identity',    inside:true},
+    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'white',   on:false, label:'Willpower',   lx:220, ly:190, anchor:'start'},
+    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'silverD', on:true,  label:'Life Force',  inside:true},
+    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'cream',   on:true,  label:'Intuition',   lx:8,   ly:246, anchor:'end'},
+    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            tone:'silverL', on:false, label:'Emotions',    lx:232, ly:246, anchor:'start'},
+    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         tone:'white',   on:true,  label:'Drive',       inside:true},
   ];
   // Same glossy-sphere gradient recipe already used (and proven) on the
-  // number tiles and solar-system planets -- off-center highlight fading
-  // to a darker shade of the center's own real color, so a filled shape
-  // reads as a lit, dimensional surface instead of a flat color swatch.
-  const blend=(hex,target,amt)=>{
-    const n=parseInt(hex.slice(1),16), t=parseInt(target.slice(1),16);
-    const mix=(sh,th)=>Math.round(((n>>sh)&255)+(((t>>sh)&255)-((n>>sh)&255))*amt);
-    return '#'+[mix(16),mix(8),mix(0)].map(v=>v.toString(16).padStart(2,'0')).join('');
-  };
-  let svg = `<svg viewBox="20 10 200 332" xmlns="http://www.w3.org/2000/svg"><defs>`;
+  // number tiles and solar-system planets -- reusing the exact stop
+  // colors already computed for those (stopsByTone, above) rather than
+  // deriving a new set, so all three graphics are pixel-identical in tone.
+  let svg = `<svg viewBox="-50 -12 340 360" xmlns="http://www.w3.org/2000/svg"><defs>`;
   HD_CENTERS.forEach((c,i)=>{
-    if(!c.on) return;
-    const hi=blend(c.color,'#ffffff',0.55), lo=blend(c.color,'#000000',0.3);
+    const stops = stopsByTone[c.tone];
     svg += `<radialGradient id="hdg-${i}" cx="35%" cy="28%" r="75%">
-      <stop offset="0%" stop-color="${hi}"/>
-      <stop offset="55%" stop-color="${c.color}"/>
-      <stop offset="100%" stop-color="${lo}"/>
+      <stop offset="0%" stop-color="${stops[0]}"/>
+      <stop offset="55%" stop-color="${stops[1]}"/>
+      <stop offset="100%" stop-color="${stops[2]}"/>
     </radialGradient>`;
   });
   svg += '</defs>';
-  // Tight crop around just the 9 shapes (no label text anymore -- detail
-  // moved to tap-to-reveal, matching the solar system and number grid).
   HD_CENTERS.forEach((c,i)=>{
+    const border = TONES[c.tone].border;
     const pts = c.pts.map(([x,y])=>`${x},${y}`).join(' ');
-    svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'#fbf8f0'}" stroke="${c.color}" stroke-width="2.2" style="cursor:pointer;"/>`;
+    const cx = c.pts.reduce((s,p)=>s+p[0],0)/c.pts.length;
+    const cy = c.pts.reduce((s,p)=>s+p[1],0)/c.pts.length;
+    svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'#fbf8f0'}" stroke="${border}" stroke-width="2.2" style="cursor:pointer;"/>`;
+    // labels indicate what each center represents -- always visible,
+    // never behind a tap, same principle as the number-tile and planet
+    // labels elsewhere on this page.
+    if(c.inside){
+      const words = c.label.split(' ');
+      if(words.length>1){
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="8" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-4:11}">${w}</tspan>`).join('')}</text>`;
+      } else {
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="8" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
+      }
+    } else {
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#14170f" style="pointer-events:none;">${c.label}</text>`;
+    }
   });
   svg += '</svg>';
   hdWrap.innerHTML = svg;
