@@ -16,9 +16,10 @@ body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background-color:#e8d2a0;
   background-image:
-    radial-gradient(circle at 30% 24%, #ffffff 0%, rgba(255,255,255,0.95) 3%, rgba(255,255,255,0.55) 9%, rgba(255,255,255,0) 20%),
-    radial-gradient(circle at 68% 70%, #ffffff 0%, rgba(255,255,255,0.5) 2%, rgba(255,255,255,0) 8%),
-    radial-gradient(circle at 38% 32%, #fbeecb 0%, #e8d2a0 42%, #c9ac72 78%, #9c8350 100%);
+    radial-gradient(ellipse 55% 30% at 25% 12%, rgba(251,238,203,0.7) 0%, rgba(251,238,203,0) 55%),
+    radial-gradient(ellipse 45% 26% at 78% 82%, rgba(201,172,114,0.3) 0%, rgba(201,172,114,0) 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='f' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.11' numOctaves='3' seed='9' stitchTiles='stitch' result='n'/%3E%3CfeSpecularLighting in='n' surfaceScale='1.3' specularConstant='0.55' specularExponent='16' lighting-color='%23fff6de' result='s'%3E%3CfeDistantLight azimuth='235' elevation='55'/%3E%3C/feSpecularLighting%3E%3C/filter%3E%3Crect width='480' height='480' filter='url(%23f)'/%3E%3C/svg%3E");
+  background-blend-mode:normal,normal,screen;
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
