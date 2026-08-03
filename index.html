@@ -696,7 +696,7 @@ const solarWrap = document.getElementById('solarIcon');
 // prominent astrology visual, so there's real room around the ring
 // cluster for each planet's own descriptor word to sit next to it,
 // always visible rather than behind a tap.
-let svg = `<svg viewBox="0 68 400 285" xmlns="http://www.w3.org/2000/svg">`;
+let svg = `<svg viewBox="-35 80 455 235" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -743,10 +743,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="11" fill="#ffffff" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="15" fill="#ffffff" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="11" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="15" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -795,7 +795,7 @@ function openPlanetDef(p){
   // number tiles and solar-system planets -- reusing the exact stop
   // colors already computed for those (stopsByTone, above) rather than
   // deriving a new set, so all three graphics are pixel-identical in tone.
-  let svg = `<svg viewBox="-65 -5 365 345" xmlns="http://www.w3.org/2000/svg"><defs>`;
+  let svg = `<svg viewBox="-85 -16 401 356" xmlns="http://www.w3.org/2000/svg"><defs>`;
   HD_CENTERS.forEach((c,i)=>{
     const stops = stopsByTone[c.tone];
     svg += `<radialGradient id="hdg-${i}" cx="35%" cy="28%" r="75%">
@@ -821,12 +821,12 @@ function openPlanetDef(p){
     if(c.inside){
       const words = c.label.split(' ');
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-4:11}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="12" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-4:11}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="12" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="13" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="16" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
