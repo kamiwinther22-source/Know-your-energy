@@ -72,7 +72,10 @@ body{
   border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
 }
 .carousel-dots .dot.active{background:#ffffff;transform:scale(1.35);}
-.num-strip-row{display:flex;justify-content:space-between;gap:0.25rem;width:100%;}
+/* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
+   for its own label, so single-word labels (no spaces to wrap at)
+   overflowed sideways into the neighboring tile instead of wrapping. */
+.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.6rem 0.3rem;width:100%;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));}
 .num-tile-lg .swatch{
@@ -85,7 +88,11 @@ body{
   pointer-events:none;
 }
 .num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.5rem;line-height:1.15;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;}
+/* overflow-wrap so a long single word (no space to break at, e.g.
+   "Communicator") wraps onto a second line inside its own tile instead
+   of overflowing sideways into the next one -- that sideways overflow,
+   not tile width alone, was what caused the label text to run together. */
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.52rem;line-height:1.2;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 .chart-graphic{width:100%;position:relative;margin-top:0.3rem;
   filter:drop-shadow(0 3px 6px rgba(0,0,0,0.5));}
 .chart-graphic svg{display:block;width:100%;height:auto;}
@@ -609,6 +616,10 @@ const TONES = {
 // used for the tap-to-reveal detail (NUM_DEFS.lifepath, below) -- so the
 // always-visible word under each tile now matches what you get when you
 // tap it, instead of naming a different, unbuilt tool.
+// 6 per row x 2 rows -- single digits first, Master Numbers (11/22/33,
+// real numerology terms, not dropped this time) on their own second
+// row. Labels match NUM_DEFS.lifepath's own wording for each number
+// (e.g. 22 is literally called "the Master Builder" in that text).
 const NUMS = [
   {n:1, lbl:'Leader',       tone:'silverL'},
   {n:2, lbl:'Diplomat',     tone:'goldT'},
@@ -619,6 +630,9 @@ const NUMS = [
   {n:7, lbl:'Seeker',       tone:'goldT'},
   {n:8, lbl:'Achiever',     tone:'silverL'},
   {n:9, lbl:'Humanitarian', tone:'cream'},
+  {n:11, lbl:'Intuitive',      tone:'silverD'},
+  {n:22, lbl:'Master Builder', tone:'goldT'},
+  {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
 const numStripRow = document.getElementById('numStripRow');
 if(numStripRow){
@@ -682,7 +696,7 @@ const solarWrap = document.getElementById('solarIcon');
 // prominent astrology visual, so there's real room around the ring
 // cluster for each planet's own descriptor word to sit next to it,
 // always visible rather than behind a tap.
-let svg = `<svg viewBox="10 75 380 270" xmlns="http://www.w3.org/2000/svg">`;
+let svg = `<svg viewBox="0 68 400 285" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -729,10 +743,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#ffffff" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="11" fill="#ffffff" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="11" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -781,7 +795,7 @@ function openPlanetDef(p){
   // number tiles and solar-system planets -- reusing the exact stop
   // colors already computed for those (stopsByTone, above) rather than
   // deriving a new set, so all three graphics are pixel-identical in tone.
-  let svg = `<svg viewBox="-50 -12 340 360" xmlns="http://www.w3.org/2000/svg"><defs>`;
+  let svg = `<svg viewBox="-65 -5 365 345" xmlns="http://www.w3.org/2000/svg"><defs>`;
   HD_CENTERS.forEach((c,i)=>{
     const stops = stopsByTone[c.tone];
     svg += `<radialGradient id="hdg-${i}" cx="35%" cy="28%" r="75%">
@@ -796,19 +810,23 @@ function openPlanetDef(p){
     const pts = c.pts.map(([x,y])=>`${x},${y}`).join(' ');
     const cx = c.pts.reduce((s,p)=>s+p[0],0)/c.pts.length;
     const cy = c.pts.reduce((s,p)=>s+p[1],0)/c.pts.length;
-    svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'#fbf8f0'}" stroke="${border}" stroke-width="2.2" style="cursor:pointer;"/>`;
+    /* Undefined centers were filling with a leftover light-cream tone
+       from before the page went black -- looked like a solid pale shape
+       instead of the intended hollow-outline convention. 'none' lets the
+       actual dark card show through so filled-vs-hollow reads correctly. */
+    svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'none'}" stroke="${border}" stroke-width="2.6" style="cursor:pointer;"/>`;
     // labels indicate what each center represents -- always visible,
     // never behind a tap, same principle as the number-tile and planet
     // labels elsewhere on this page.
     if(c.inside){
       const words = c.label.split(' ');
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="8" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-4:11}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-4:11}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="8" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="13" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
@@ -834,24 +852,28 @@ function openPlanetDef(p){
 // with zero JS and no risk of measuring a stale/already-stretched
 // height on resize. Swipe via touch, drag via mouse, or tap a dot; all
 // three converge on the same goTo() so they can't get out of sync. ----------
-(function(){
+function initCarousel(){
   const carousel = document.getElementById('chartCarousel');
   const track = document.getElementById('carouselTrack');
-  if(!carousel || !track) return;
-  const slides = Array.from(track.children);
-  const dots = Array.from(document.querySelectorAll('#carouselDots .dot'));
-  const N = slides.length;
+  const dotsWrap = document.getElementById('carouselDots');
+  if(!carousel || !track || !dotsWrap || track.dataset.carouselInit) return;
+  track.dataset.carouselInit = '1';
+  const N = track.children.length;
   let idx = 0;
 
   function goTo(i, animate=true){
     idx = Math.max(0, Math.min(N-1, i));
     track.style.transition = animate ? 'transform 0.35s cubic-bezier(.22,.8,.36,1)' : 'none';
     track.style.transform = `translateX(-${idx*100}%)`;
-    dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
+    Array.from(dotsWrap.children).forEach((d,j)=>d.classList.toggle('active', j===idx));
   }
-  dots.forEach(d=>d.addEventListener('click', ()=>goTo(+d.dataset.i)));
+  // Delegated from the wrapper (not attached per-dot) so it can't be
+  // affected by exactly when/how the dot nodes themselves were created.
+  dotsWrap.addEventListener('click', e=>{
+    const dot = e.target.closest('.dot');
+    if(dot) goTo(+dot.dataset.i);
+  });
 
-  // Touch swipe
   let startX=0, startY=0, dx=0, dragging=false, axisLocked=null;
   track.addEventListener('touchstart', e=>{
     startX = e.touches[0].clientX; startY = e.touches[0].clientY;
@@ -877,7 +899,6 @@ function openPlanetDef(p){
     axisLocked = null;
   });
 
-  // Mouse drag (desktop/trackpad testing)
   let mouseDown=false, mStartX=0, mdx=0;
   track.addEventListener('mousedown', e=>{
     mouseDown = true; mStartX = e.clientX; mdx = 0;
@@ -898,7 +919,13 @@ function openPlanetDef(p){
   });
 
   goTo(0, false);
-})();
+}
+// Run now AND on load -- belt-and-suspenders against whatever timing
+// caused this to silently no-op before (guarded by data-carousel-init
+// so it can't double-attach if both actually fire).
+initCarousel();
+window.addEventListener('load', initCarousel);
+document.addEventListener('DOMContentLoaded', initCarousel);
 
 // ---------- key-icon selling points: copied verbatim from your reference image ----------
 const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
