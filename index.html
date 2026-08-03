@@ -130,7 +130,7 @@ body{
 .tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Special Elite',monospace;font-size:0.82rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
+  text-align:center;font-family:'DM Sans',sans-serif;font-size:0.85rem;line-height:1.6;font-weight:600;letter-spacing:0.01em;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
@@ -196,7 +196,7 @@ body{
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#1C2CA9;font-weight:800;}
+.key-hl{background:none;color:#9DB0FF;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
@@ -264,7 +264,7 @@ body{
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
-.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#1C2CA9;}
+.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#9DB0FF;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
@@ -459,7 +459,7 @@ body{
   <div class="chart-carousel" id="chartCarousel">
     <div class="carousel-track" id="carouselTrack">
       <div class="carousel-slide">
-        <div class="sys-section-title">Numerology — Your Pythagorean Square</div>
+        <div class="sys-section-title">Numerology — Your Core Numbers</div>
         <div class="num-strip-row" id="numStripRow"></div>
       </div>
       <div class="carousel-slide">
@@ -601,26 +601,23 @@ const TONES = {
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
 };
-// Row-major DOM order for a 3-column grid gives the real layout of this
-// specific tool -- the Pythagorean Square (Psychomatrix), row 1 = 1,4,7,
-// row 2 = 2,5,8, row 3 = 3,6,9. This is a distinct, real numerology tool
-// from Life Path numbers, and it DOES have a real per-cell meaning
-// (unlike a Lo Shu grid, whose meaning comes from row/column/diagonal
-// "planes" -- confirmed by checking multiple sourced descriptions of the
-// Pythagorean Square specifically): 1 Character, 2 Energy, 3 Interest,
-// 4 Health, 5 Logic, 6 Labour, 7 Talent, 8 Duty, 9 Memory. Master numbers
-// (11/22/33) don't belong on this grid -- it's the single-digit chart --
-// so they're dropped here.
+// Straight numeric order 1-9 (not the Pythagorean Square's row-major
+// layout, which reads as "out of order" without that grid actually being
+// built anywhere else in the app). Labels are the standard single-word
+// Life Path archetypes -- the same real numerology tradition already
+// used for the tap-to-reveal detail (NUM_DEFS.lifepath, below) -- so the
+// always-visible word under each tile now matches what you get when you
+// tap it, instead of naming a different, unbuilt tool.
 const NUMS = [
-  {n:1, lbl:'Character', tone:'silverL'},
-  {n:4, lbl:'Health',    tone:'cream'},
-  {n:7, lbl:'Talent',    tone:'goldT'},
-  {n:2, lbl:'Energy',    tone:'goldT'},
-  {n:5, lbl:'Logic',     tone:'silverD'},
-  {n:8, lbl:'Duty',      tone:'cream'},
-  {n:3, lbl:'Interest',  tone:'white'},
-  {n:6, lbl:'Labour',    tone:'white'},
-  {n:9, lbl:'Memory',    tone:'silverL'},
+  {n:1, lbl:'Leader',       tone:'silverL'},
+  {n:2, lbl:'Diplomat',     tone:'goldT'},
+  {n:3, lbl:'Communicator', tone:'white'},
+  {n:4, lbl:'Builder',      tone:'cream'},
+  {n:5, lbl:'Freedom',      tone:'silverD'},
+  {n:6, lbl:'Nurturer',     tone:'white'},
+  {n:7, lbl:'Seeker',       tone:'goldT'},
+  {n:8, lbl:'Achiever',     tone:'silverL'},
+  {n:9, lbl:'Humanitarian', tone:'cream'},
 ];
 const numStripRow = document.getElementById('numStripRow');
 if(numStripRow){
@@ -707,8 +704,8 @@ svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaus
 svg += '</defs>';
 
 RINGS.forEach(r=>{
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="2.4" opacity="0.4" filter="url(#glow)"/>`;
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="0.9" opacity="0.9"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="2.4" opacity="0.5" filter="url(#glow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="0.9" opacity="0.95"/>`;
 });
 
 // sun -- the one warm point the (now-neutral) planets orbit
