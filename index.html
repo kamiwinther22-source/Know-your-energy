@@ -37,21 +37,22 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- numerology strip: raised out of the old icon+text row list
-   into its own full-width, always-visible band right under the tagline --
-   9 real tiles in a single row (the Pythagorean Square's actual row-major
-   order), each number's one-word category printed directly under its own
-   tile so the meaning is visible at a glance, not hidden behind a tap. ---------- */
 .sys-section-title{
   font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
   letter-spacing:0.06em;text-transform:uppercase;color:#ffffff;
   text-align:center;margin-bottom:0.5rem;
 }
-/* Raised on its own platform, per direct instruction -- same glass-card
-   lift as the HD card below, not just a bare strip on the page. Glass
-   tint flipped to a light-on-black frosted panel (was white-on-light). */
-.num-strip{
-  position:relative;border-radius:16px;padding:1rem 0.5rem 1.2rem;margin-bottom:1.1rem;
+/* ---------- swipeable carousel: numerology / astrology / human design
+   share ONE raised platform now instead of three stacked sections --
+   swipe left/right (or tap a dot) moves between them. This also solves
+   the vertical-space problem: the platform is only as tall as the
+   single tallest panel, not all three stacked, which is what leaves
+   real room above the form. Height is set from real measured content
+   (see the JS below) rather than a guessed fixed number so it's exactly
+   as tall as it needs to be, no more. */
+.chart-carousel{
+  position:relative;border-radius:16px;padding:1rem 0 1rem;margin-bottom:1.1rem;
+  overflow:hidden;
   background:rgba(255,255,255,0.08);
   backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
   border:1px solid rgba(255,255,255,0.18);
@@ -60,7 +61,18 @@ body{
     0 18px 34px -14px rgba(0,0,0,0.6),
     0 4px 10px -4px rgba(0,0,0,0.4);
 }
-.num-strip-row{display:flex;justify-content:space-between;gap:0.25rem;}
+.carousel-track{display:flex;touch-action:pan-y;will-change:transform;}
+.carousel-slide{
+  flex:0 0 100%;width:100%;min-width:0;box-sizing:border-box;padding:0 1.1rem;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.carousel-dots{display:flex;justify-content:center;gap:0.45rem;margin-top:0.9rem;}
+.carousel-dots .dot{
+  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.28);
+  border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
+}
+.carousel-dots .dot.active{background:#ffffff;transform:scale(1.35);}
+.num-strip-row{display:flex;justify-content:space-between;gap:0.25rem;width:100%;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));}
 .num-tile-lg .swatch{
@@ -73,31 +85,7 @@ body{
   pointer-events:none;
 }
 .num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.5rem;line-height:1.15;letter-spacing:0.01em;text-transform:uppercase;color:#e2e2e2;text-align:center;}
-
-/* ---------- astrology (full width, left-anchored, plain -- not raised)
-   then human design BELOW it (not a side-by-side row -- that's what was
-   forcing both into cramped half-width columns), on its own raised
-   platform, right-justified. Legibility was never actually the reason
-   HD needed to be small -- both diagrams read fine at full width. The
-   left/right feel comes from ALIGNMENT (astrology hugs the left edge,
-   HD's card hugs the right edge and is only slightly narrower than full
-   width), not from shrinking one of them down. ---------- */
-.chart-stack{display:flex;flex-direction:column;margin-bottom:1.1rem;}
-.astro-block{display:flex;flex-direction:column;align-items:flex-start;}
-.astro-block .sys-section-title{text-align:left;}
-.hd-block{display:flex;justify-content:flex-end;margin-top:1.8rem;}
-.hd-block .chart-card{
-  width:84%;position:relative;border-radius:16px;padding:0.9rem 0.5rem 1.1rem;
-  display:flex;flex-direction:column;align-items:center;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.18);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.12) inset,
-    0 18px 34px -14px rgba(0,0,0,0.6),
-    0 4px 10px -4px rgba(0,0,0,0.4);
-}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.5rem;line-height:1.15;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;}
 .chart-graphic{width:100%;position:relative;margin-top:0.3rem;
   filter:drop-shadow(0 3px 6px rgba(0,0,0,0.5));}
 .chart-graphic svg{display:block;width:100%;height:auto;}
@@ -164,8 +152,8 @@ body{
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#9a9a9a;}
-.tog-lbl{cursor:pointer;color:#9a9a9a;transition:color 0.2s;user-select:none;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#ffffff;}
+.tog-lbl{cursor:pointer;color:#ffffff;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#ffffff;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
@@ -199,7 +187,7 @@ body{
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
 .key-txt{font-size:0.85rem;line-height:1.38;color:#ffffff;font-weight:500;}
-.key-txt em{font-style:normal;color:#a0a0a0;}
+.key-txt em{font-style:normal;color:#ffffff;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -218,7 +206,7 @@ body{
 }
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#9a9a9a;margin-bottom:0.2rem;font-weight:700;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#ffffff;margin-bottom:0.2rem;font-weight:700;}
 .section-lbl{font-size:0.6rem!important;color:#ffffff!important;margin-bottom:0.35rem!important;}
 .opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#ffffff;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
@@ -240,7 +228,7 @@ body{
 }
 .line-field select{width:auto;padding-right:1rem;}
 .line-field select option{color:#000000;}
-.line-field input::placeholder{color:#8a8a8a;font-style:italic;opacity:1;}
+.line-field input::placeholder{color:#ffffff;font-style:italic;opacity:1;}
 
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
@@ -270,7 +258,7 @@ body{
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
-.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#9a9a9a;margin:0.35rem 0 0;}
+.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#ffffff;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
 .err{display:none;font-size:0.7rem;color:#ff8080;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(255,80,80,0.12);border-radius:5px;border:1px solid rgba(255,80,80,0.35);font-weight:600;}
 
@@ -439,7 +427,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.num-strip,.chart-stack,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -468,26 +456,29 @@ body{
     <div class="tagline-slide c-gold">is it all just math</div>
   </div>
 
-  <div class="num-strip">
-    <div class="sys-section-title">Numerology — Your Pythagorean Square</div>
-    <div class="num-strip-row" id="numStripRow"></div>
-  </div>
-
-  <div class="chart-stack">
-    <div class="astro-block">
-      <div class="sys-section-title">Astrology</div>
-      <div class="chart-graphic" id="solarIcon"></div>
-    </div>
-    <div class="hd-block">
-      <div class="chart-card">
+  <div class="chart-carousel" id="chartCarousel">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide">
+        <div class="sys-section-title">Numerology — Your Pythagorean Square</div>
+        <div class="num-strip-row" id="numStripRow"></div>
+      </div>
+      <div class="carousel-slide">
+        <div class="sys-section-title">Astrology</div>
+        <div class="chart-graphic" id="solarIcon"></div>
+      </div>
+      <div class="carousel-slide">
         <div class="sys-section-title">Human Design</div>
         <div class="chart-graphic" id="hdIcon"></div>
       </div>
     </div>
+    <div class="carousel-dots" id="carouselDots">
+      <button type="button" class="dot active" data-i="0" aria-label="Numerology"></button>
+      <button type="button" class="dot" data-i="1" aria-label="Astrology"></button>
+      <button type="button" class="dot" data-i="2" aria-label="Human Design"></button>
+    </div>
   </div>
 
   <div class="bottom-grid">
-    <div class="keys-col" id="keysCol"></div>
     <div class="form-col">
       <div class="toggle-row">
         <span class="tog-lbl active" id="lblInd">Individual</span>
@@ -569,6 +560,7 @@ body{
         <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
       </div>
     </div>
+    <div class="keys-col" id="keysCol"></div>
   </div>
 
 </div>
@@ -739,10 +731,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#f0f0f0" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#ffffff" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#f0f0f0" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -818,7 +810,7 @@ function openPlanetDef(p){
         svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="8" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#f0f0f0" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
@@ -831,6 +823,83 @@ function openPlanetDef(p){
     document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">The ${c.name} Center relates to ${c.label.toLowerCase()} in Human Design.</p></div>`;
     document.getElementById('cardExpand').classList.add('open');
   }
+})();
+
+// ---------- swipeable carousel: numerology / astrology / human design
+// share one platform. Height is NOT set from JS/a guessed number -- the
+// track is a row flex container with the default align-items:stretch
+// and no explicit height, which is standard CSS behavior for "equal
+// height columns": an auto-height flex row sizes itself to its tallest
+// child's natural content height, then stretches every child (including
+// the shorter numerology slide) to match. That's what centers the
+// numerology row vertically inside a slide as tall as the diagrams,
+// with zero JS and no risk of measuring a stale/already-stretched
+// height on resize. Swipe via touch, drag via mouse, or tap a dot; all
+// three converge on the same goTo() so they can't get out of sync. ----------
+(function(){
+  const carousel = document.getElementById('chartCarousel');
+  const track = document.getElementById('carouselTrack');
+  if(!carousel || !track) return;
+  const slides = Array.from(track.children);
+  const dots = Array.from(document.querySelectorAll('#carouselDots .dot'));
+  const N = slides.length;
+  let idx = 0;
+
+  function goTo(i, animate=true){
+    idx = Math.max(0, Math.min(N-1, i));
+    track.style.transition = animate ? 'transform 0.35s cubic-bezier(.22,.8,.36,1)' : 'none';
+    track.style.transform = `translateX(-${idx*100}%)`;
+    dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
+  }
+  dots.forEach(d=>d.addEventListener('click', ()=>goTo(+d.dataset.i)));
+
+  // Touch swipe
+  let startX=0, startY=0, dx=0, dragging=false, axisLocked=null;
+  track.addEventListener('touchstart', e=>{
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    dx = 0; dragging = true; axisLocked = null;
+    track.style.transition = 'none';
+  }, {passive:true});
+  track.addEventListener('touchmove', e=>{
+    if(!dragging) return;
+    const x = e.touches[0].clientX, y = e.touches[0].clientY;
+    dx = x - startX;
+    if(axisLocked===null) axisLocked = Math.abs(dx) > Math.abs(y-startY) ? 'x' : 'y';
+    if(axisLocked!=='x') return;
+    const pct = (dx / carousel.offsetWidth) * 100;
+    track.style.transform = `translateX(calc(-${idx*100}% + ${pct}%))`;
+  }, {passive:true});
+  track.addEventListener('touchend', ()=>{
+    dragging = false;
+    if(axisLocked==='x'){
+      if(dx <= -40) goTo(idx+1);
+      else if(dx >= 40) goTo(idx-1);
+      else goTo(idx);
+    }
+    axisLocked = null;
+  });
+
+  // Mouse drag (desktop/trackpad testing)
+  let mouseDown=false, mStartX=0, mdx=0;
+  track.addEventListener('mousedown', e=>{
+    mouseDown = true; mStartX = e.clientX; mdx = 0;
+    track.style.transition = 'none';
+  });
+  window.addEventListener('mousemove', e=>{
+    if(!mouseDown) return;
+    mdx = e.clientX - mStartX;
+    const pct = (mdx / carousel.offsetWidth) * 100;
+    track.style.transform = `translateX(calc(-${idx*100}% + ${pct}%))`;
+  });
+  window.addEventListener('mouseup', ()=>{
+    if(!mouseDown) return;
+    mouseDown = false;
+    if(mdx <= -40) goTo(idx+1);
+    else if(mdx >= 40) goTo(idx-1);
+    else goTo(idx);
+  });
+
+  goTo(0, false);
 })();
 
 // ---------- key-icon selling points: copied verbatim from your reference image ----------
