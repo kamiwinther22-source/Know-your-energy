@@ -20,14 +20,11 @@
    makes it pop: contrast of saturation, not more background color. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#c9cac8;
-  background-image:
-    linear-gradient(180deg, #d6d7d5 0%, #c9cac8 45%, #b8b9b7 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
-  background-attachment:fixed;
+  background-color:#000000;
+  background-image:none;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
-  color:#000000;
+  color:#ffffff;
 }
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
@@ -47,24 +44,25 @@ body{
    tile so the meaning is visible at a glance, not hidden behind a tap. ---------- */
 .sys-section-title{
   font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
-  letter-spacing:0.06em;text-transform:uppercase;color:#14170f;
+  letter-spacing:0.06em;text-transform:uppercase;color:#ffffff;
   text-align:center;margin-bottom:0.5rem;
 }
 /* Raised on its own platform, per direct instruction -- same glass-card
-   lift as the HD card below, not just a bare strip on the page. */
+   lift as the HD card below, not just a bare strip on the page. Glass
+   tint flipped to a light-on-black frosted panel (was white-on-light). */
 .num-strip{
   position:relative;border-radius:16px;padding:1rem 0.5rem 1.2rem;margin-bottom:1.1rem;
-  background:rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.08);
   backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.6);
+  border:1px solid rgba(255,255,255,0.18);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 18px 34px -14px rgba(30,34,38,0.4),
-    0 4px 10px -4px rgba(30,34,38,0.2);
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 18px 34px -14px rgba(0,0,0,0.6),
+    0 4px 10px -4px rgba(0,0,0,0.4);
 }
 .num-strip-row{display:flex;justify-content:space-between;gap:0.25rem;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
-  filter:drop-shadow(0 3px 5px rgba(20,20,10,0.25));}
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
   display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
@@ -75,7 +73,7 @@ body{
   pointer-events:none;
 }
 .num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.5rem;line-height:1.15;letter-spacing:0.01em;text-transform:uppercase;color:#3a4133;text-align:center;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.5rem;line-height:1.15;letter-spacing:0.01em;text-transform:uppercase;color:#e2e2e2;text-align:center;}
 
 /* ---------- astrology (full width, left-anchored, plain -- not raised)
    then human design BELOW it (not a side-by-side row -- that's what was
@@ -92,16 +90,16 @@ body{
 .hd-block .chart-card{
   width:84%;position:relative;border-radius:16px;padding:0.9rem 0.5rem 1.1rem;
   display:flex;flex-direction:column;align-items:center;
-  background:rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.08);
   backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.6);
+  border:1px solid rgba(255,255,255,0.18);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 18px 34px -14px rgba(30,34,38,0.4),
-    0 4px 10px -4px rgba(30,34,38,0.2);
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 18px 34px -14px rgba(0,0,0,0.6),
+    0 4px 10px -4px rgba(0,0,0,0.4);
 }
 .chart-graphic{width:100%;position:relative;margin-top:0.3rem;
-  filter:drop-shadow(0 3px 6px rgba(20,20,10,0.22));}
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.5));}
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
 /* ---------- title ---------- */
@@ -128,9 +126,13 @@ body{
      Still one line, still Alex Brush, just allowed to keep scaling down
      on the narrowest screens instead of hitting a hard floor early. */
   font-size:clamp(1.7rem,10vw,3.4rem);white-space:nowrap;
-  background:linear-gradient(100deg,#0F1758 0%,#1C2CA9 35%,#121C6C 50%,#1C2CA9 65%,#0F1758 100%);
+  /* Brightened for a black background -- the previous gradient's dark
+     anchor stops (#0F1758/#121C6C) were built for contrast against a
+     light page and would nearly vanish on black. Same blue family,
+     shifted bright enough to actually read. */
+  background:linear-gradient(100deg,#4655D6 0%,#8A96EE 35%,#5364D6 50%,#8A96EE 65%,#4655D6 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-  filter:drop-shadow(0 0 14px rgba(28,44,169,0.4));
+  filter:drop-shadow(0 0 18px rgba(90,110,230,0.55));
 }
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
@@ -156,13 +158,15 @@ body{
    background (#fbf8f0): anchor tone 10.94:1, brightest accent tone
    4.75:1 -- both clear the same floor the blue version was held to. */
 .tagline-slide.c-gold{
-  background:linear-gradient(100deg,#4a3510 0%,#7a5a1f 35%,#5c4315 50%,#7a5a1f 65%,#4a3510 100%);
+  /* Brightened for black: the old dark-gold gradient was built for
+     contrast against a light page and would be nearly invisible here. */
+  background:linear-gradient(100deg,#c9a84a 0%,#f3dfa0 35%,#d9b968 50%,#f3dfa0 65%,#c9a84a 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#5a6350;}
-.tog-lbl{cursor:pointer;color:#5a6350;transition:color 0.2s;user-select:none;}
-.tog-lbl.active{color:#000000;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#9a9a9a;}
+.tog-lbl{cursor:pointer;color:#9a9a9a;transition:color 0.2s;user-select:none;}
+.tog-lbl.active{color:#ffffff;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
 .toggle-pill.on{background:#1C2CA9;}
@@ -170,7 +174,7 @@ body{
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s;}
 .rel-chip:hover{background:rgba(28,44,169,0.12);}
 .rel-chip.active{background:#1C2CA9;color:#ffffff;}
 .rel-chip.active:hover{background:#1C2CA9;}
@@ -183,19 +187,19 @@ body{
    lift shadow, so it reads as floating glass, not a flat tint. */
 .keys-col{
   position:relative;border-radius:16px;padding:1.1rem 1rem;
-  background:rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.08);
   backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.6);
+  border:1px solid rgba(255,255,255,0.18);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 18px 34px -14px rgba(45,55,35,0.35),
-    0 4px 10px -4px rgba(45,55,35,0.18);
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 18px 34px -14px rgba(0,0,0,0.6),
+    0 4px 10px -4px rgba(0,0,0,0.4);
 }
 .key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
-.key-txt{font-size:0.85rem;line-height:1.38;color:#000000;font-weight:500;}
-.key-txt em{font-style:normal;color:#8a8a8a;}
+.key-txt{font-size:0.85rem;line-height:1.38;color:#ffffff;font-weight:500;}
+.key-txt em{font-style:normal;color:#a0a0a0;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -214,28 +218,29 @@ body{
 }
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#5a6350;margin-bottom:0.2rem;font-weight:700;}
-.section-lbl{font-size:0.6rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
-.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#000000;font-weight:600;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#9a9a9a;margin-bottom:0.2rem;font-weight:700;}
+.section-lbl{font-size:0.6rem!important;color:#ffffff!important;margin-bottom:0.35rem!important;}
+.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#ffffff;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
 .row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
 
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
    with italic text for a lighter, less typewriter-formal feel. */
-.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid #6b7460;}
+.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(255,255,255,0.45);}
 .line-field::before,.line-field::after{
-  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:#6b7460;
+  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(255,255,255,0.45);
 }
 .line-field::before{left:0;}
 .line-field::after{right:0;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#000000;font-size:0.7rem;font-weight:500;
+  width:100%;background:transparent;border:none;color:#ffffff;font-size:0.7rem;font-weight:500;
   font-style:italic;font-family:'DM Sans',sans-serif;padding:0.15rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
 .line-field select{width:auto;padding-right:1rem;}
-.line-field input::placeholder{color:#5c664f;font-style:italic;opacity:1;}
+.line-field select option{color:#000000;}
+.line-field input::placeholder{color:#8a8a8a;font-style:italic;opacity:1;}
 
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
@@ -265,9 +270,9 @@ body{
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
-.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#5a6350;margin:0.35rem 0 0;}
+.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#9a9a9a;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
-.err{display:none;font-size:0.7rem;color:#a01818;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(160,24,24,0.08);border-radius:5px;border:1px solid rgba(160,24,24,0.25);font-weight:600;}
+.err{display:none;font-size:0.7rem;color:#ff8080;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(255,80,80,0.12);border-radius:5px;border:1px solid rgba(255,80,80,0.35);font-weight:600;}
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
@@ -734,10 +739,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#14170f" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#f0f0f0" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#14170f" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="9.5" fill="#f0f0f0" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -813,7 +818,7 @@ function openPlanetDef(p){
         svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="8" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#14170f" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="10" fill="#f0f0f0" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
