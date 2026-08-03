@@ -93,8 +93,14 @@ body{
    of overflowing sideways into the next one -- that sideways overflow,
    not tile width alone, was what caused the label text to run together. */
 .num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.52rem;line-height:1.2;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
-.chart-graphic{width:100%;position:relative;margin-top:0.3rem;
-  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.5));}
+/* No filter here anymore -- drop-shadow on this container was blurring
+   EVERYTHING inside it, including the text labels, not just the
+   shapes/planets it was meant for. A CSS/SVG filter applies to every
+   child, text included -- that softened edge is what actually made the
+   words hard to read, not eyesight or the font. Individual shapes still
+   get their own lift via the num-tile-lg filter and their own gradient
+   shading; text stays completely unfiltered so it's genuinely crisp. */
+.chart-graphic{width:100%;position:relative;margin-top:0.3rem;}
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
 /* ---------- title ---------- */
