@@ -1897,7 +1897,6 @@ const PLANET_COLOR={Sun:'#b8960a',Moon:'#009e96',Mercury:'#e06a00',Venus:'#c11a7
 // aspect data, so they need a place on the visible card too, not just a
 // glyph/color to draw with.
 const POINT_KEY={'North Node':'northnode','South Node':'southnode',Chiron:'chiron',Lilith:'lilith',Sirius:'sirius'};
-const ASPECT_KEY={Conjunction:'aspectconjunction',Sextile:'aspectsextile',Square:'aspectsquare',Trine:'aspecttrine',Opposition:'aspectopposition'};
 const SIGN_ORDER=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
 
 // Real astrology wheel: signs at their real fixed 30deg boundaries, planets
@@ -2257,15 +2256,6 @@ function ar(astro){
       let signOut=p.sign;
       if(p.house)signOut+=` · House ${p.house}`;
       h+=arow(glyph+name,signOut,POINT_KEY[name],null);
-    });
-  }
-  const aspects=(astro.aspects||[]).filter(a=>a.point1&&a.point2&&a.aspect);
-  if(aspects.length){
-    h+=dpsec('Aspects');
-    aspects.forEach(a=>{
-      const label=`${a.point1} ${a.aspect} ${a.point2}`;
-      const val=typeof a.orb==='number'?`${a.orb}° orb`:'';
-      h+=arow(label,val,ASPECT_KEY[a.aspect],null);
     });
   }
   return h||apend('Unavailable');
