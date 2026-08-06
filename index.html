@@ -31,18 +31,21 @@
    flat pale color alone never will, no matter how many tints stack. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Real pearl/nacre: soft, overlapping radial glows in different
-     undertones (a bright luminous highlight, then blush, ice-blue and
-     champagne) instead of one linear sweep -- a straight diagonal
-     gradient is what reads as a cheap printed stripe; light doesn't
-     travel across a curved surface in a straight line, it pools. */
+  /* Real pearl/nacre: a genuine bright gloss highlight (tight, high-
+     contrast -- actual shine, not just ambient glow), soft overlapping
+     undertone pools (blush, ice-blue, champagne, lavender), and a very
+     faint vignette toward the edges so the page reads as a lit curved
+     surface -- none of it a straight linear sweep, which is what read
+     as a cheap printed stripe. */
   background:
-    radial-gradient(ellipse 130% 60% at 24% 2%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 50%),
+    radial-gradient(ellipse 55% 34% at 30% 2%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.88) 22%, rgba(255,255,255,0) 52%),
+    radial-gradient(ellipse 130% 62% at 24% 2%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 55%),
     radial-gradient(ellipse 70% 55% at 88% 12%, rgba(255,231,236,0.4) 0%, rgba(255,231,236,0) 62%),
     radial-gradient(ellipse 65% 55% at 4% 46%, rgba(226,236,255,0.35) 0%, rgba(226,236,255,0) 62%),
     radial-gradient(ellipse 75% 60% at 82% 78%, rgba(255,246,222,0.35) 0%, rgba(255,246,222,0) 62%),
     radial-gradient(ellipse 60% 50% at 20% 96%, rgba(240,226,255,0.28) 0%, rgba(240,226,255,0) 62%),
-    #f8f6f2;
+    radial-gradient(ellipse 150% 85% at 50% 45%, rgba(0,0,0,0) 60%, rgba(50,40,45,0.05) 100%),
+    #fbfaf6;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#1a1712;
