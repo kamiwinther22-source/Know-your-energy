@@ -24,10 +24,16 @@
    made everything sitting on it (including the numerology tiles)
    register weaker. Base is near-white now; any shimmer is a whisper,
    not a color band you can name. */
+/* Real pearl shine, not just a pale tint: a soft bright highlight
+   catching the upper-left of the page like light off a curved
+   nacreous surface, over the same near-white base with a whisper of
+   color underneath. The highlight is what actually reads as "shine" --
+   flat pale color alone never will, no matter how many tints stack. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background:
-    linear-gradient(120deg, rgba(255,240,242,0.06) 0%, rgba(240,245,255,0.05) 30%, rgba(255,252,240,0.05) 60%, rgba(245,255,250,0.05) 100%),
+    radial-gradient(ellipse 140% 55% at 28% 4%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(120deg, rgba(255,240,242,0.08) 0%, rgba(240,245,255,0.07) 30%, rgba(255,252,240,0.07) 60%, rgba(245,230,242,0.09) 100%),
     #f8f6f2;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
@@ -57,16 +63,26 @@ body{
    real room above the form. Height is set from real measured content
    (see the JS below) rather than a guessed fixed number so it's exactly
    as tall as it needs to be, no more. */
+/* Real color in the card, not neutral white -- a translucent emerald
+   glass wash (matching the Emerald & Champagne accent) instead of
+   plain white-on-white, plus an actual gloss streak (the same
+   diagonal-highlight recipe used on the hero glass tiles earlier) so
+   the card itself has a visible sheen, not just a border. */
 .chart-carousel{
   position:relative;border-radius:16px;padding:1rem 0 1rem;margin-bottom:1.1rem;
   overflow:hidden;
-  background:rgba(255,255,255,0.08);
+  background:linear-gradient(155deg, rgba(255,255,255,0.8) 0%, rgba(220,198,216,0.45) 45%, rgba(255,255,255,0.7) 100%);
   backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.18);
+  border:1px solid rgba(61,27,63,0.18);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.12) inset,
-    0 18px 34px -14px rgba(0,0,0,0.6),
-    0 4px 10px -4px rgba(0,0,0,0.4);
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 18px 34px -16px rgba(61,27,63,0.28),
+    0 4px 10px -4px rgba(61,27,63,0.18);
+}
+.chart-carousel::before{
+  content:'';position:absolute;top:-40%;left:-50%;width:55%;height:220%;
+  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 50%, rgba(255,255,255,0) 100%);
+  transform:rotate(18deg);pointer-events:none;z-index:2;
 }
 /* Native horizontal scroll-snap instead of hand-rolled drag math -- the
    custom Pointer Events version got the numerology->astrology swipe
@@ -148,11 +164,10 @@ body{
      Still one line, still Alex Brush, just allowed to keep scaling down
      on the narrowest screens instead of hitting a hard floor early. */
   font-size:clamp(1.7rem,10vw,3.4rem);white-space:nowrap;
-  /* Brightened for a black background -- the previous gradient's dark
-     anchor stops (#0F1758/#121C6C) were built for contrast against a
-     light page and would nearly vanish on black. Same blue family,
-     shifted bright enough to actually read. */
-  background:linear-gradient(100deg,#4655D6 0%,#8A96EE 35%,#5364D6 50%,#8A96EE 65%,#4655D6 100%);
+  /* Aubergine & Gold accent -- real color, not the generic navy this
+     started as. Deep anchor + bright accent + deep anchor, same
+     technique as before, new hue family entirely. */
+  background:linear-gradient(100deg,#3D1B3F 0%,#8B4C86 35%,#5C2A5A 50%,#8B4C86 65%,#3D1B3F 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   filter:drop-shadow(0 0 18px rgba(90,110,230,0.55));
 }
@@ -226,13 +241,19 @@ body{
   display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;
 }
 .key-item{
+  position:relative;overflow:hidden;
   grid-column:span 1;
   display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.65rem;
   padding:1.3rem 1rem;border-radius:18px;
-  background:rgba(255,255,255,0.6);
+  background:linear-gradient(160deg, rgba(255,255,255,0.85) 0%, rgba(220,198,216,0.55) 55%, rgba(255,255,255,0.75) 100%);
   backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);
-  border:1px solid rgba(20,18,12,0.1);
-  box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 28px -16px rgba(60,50,35,0.4);
+  border:1px solid rgba(61,27,63,0.16);
+  box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 28px -16px rgba(61,27,63,0.3);
+}
+.key-item::before{
+  content:'';position:absolute;top:-40%;left:-55%;width:45%;height:220%;
+  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+  transform:rotate(18deg);pointer-events:none;
 }
 .key-item:last-child{grid-column:1/3;}
 .key-icon{flex:0 0 auto;width:34px;height:34px;}
@@ -241,7 +262,7 @@ body{
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#1C2CA9;font-weight:800;}
+.key-hl{background:none;color:#5C2A5A;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
@@ -287,7 +308,7 @@ body{
 @keyframes silverspin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
-  background:linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
+  background:linear-gradient(160deg,#8B4C86 0%,#5C2A5A 45%,#3D1B3F 100%);
   border:1px solid rgba(255,255,255,0.55);border-radius:6px;
   color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
   transition:transform 0.18s ease,box-shadow 0.18s ease;
@@ -980,11 +1001,11 @@ document.addEventListener('DOMContentLoaded', initCarousel);
 // small near-invisible padlock glyph repeated 5 times regardless of
 // what the card actually says. ----------
 const KEY_ICONS = [
-  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z" fill="#1C2CA9"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L27 7 V15 C27 22 22 27 16 29 C10 27 5 22 5 15 V7 Z" stroke="#1C2CA9" stroke-width="2" stroke-linejoin="round"/><path d="M10.5 16 L14.5 20 L22 11" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="21" rx="3" stroke="#1C2CA9" stroke-width="2"/><line x1="4" y1="13" x2="28" y2="13" stroke="#1C2CA9" stroke-width="2"/><line x1="10" y1="3" x2="10" y2="9" stroke="#1C2CA9" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="3" x2="22" y2="9" stroke="#1C2CA9" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="17" x2="22" y2="24" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="17" x2="10" y2="24" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><circle cx="11" cy="11" r="7" stroke="#1C2CA9" stroke-width="2.2"/><line x1="16" y1="16" x2="27" y2="27" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/><line x1="21" y1="21" x2="24" y2="18" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/><line x1="24" y1="24" x2="27" y2="21" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="7" width="26" height="18" rx="3" stroke="#1C2CA9" stroke-width="2"/><path d="M4 9 L16 18 L28 9" stroke="#1C2CA9" stroke-width="2" stroke-linejoin="round"/><line x1="3" y1="27" x2="29" y2="6" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z" fill="#5C2A5A"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L27 7 V15 C27 22 22 27 16 29 C10 27 5 22 5 15 V7 Z" stroke="#5C2A5A" stroke-width="2" stroke-linejoin="round"/><path d="M10.5 16 L14.5 20 L22 11" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="21" rx="3" stroke="#5C2A5A" stroke-width="2"/><line x1="4" y1="13" x2="28" y2="13" stroke="#5C2A5A" stroke-width="2"/><line x1="10" y1="3" x2="10" y2="9" stroke="#5C2A5A" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="3" x2="22" y2="9" stroke="#5C2A5A" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="17" x2="22" y2="24" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="17" x2="10" y2="24" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><circle cx="11" cy="11" r="7" stroke="#5C2A5A" stroke-width="2.2"/><line x1="16" y1="16" x2="27" y2="27" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/><line x1="21" y1="21" x2="24" y2="18" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/><line x1="24" y1="24" x2="27" y2="21" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="7" width="26" height="18" rx="3" stroke="#5C2A5A" stroke-width="2"/><path d="M4 9 L16 18 L28 9" stroke="#5C2A5A" stroke-width="2" stroke-linejoin="round"/><line x1="3" y1="27" x2="29" y2="6" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/></svg>`,
 ];
 const KEYS = [
   '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
