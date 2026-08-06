@@ -52,7 +52,7 @@ body{
 
 .sys-section-title{
   font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
-  letter-spacing:0.06em;text-transform:uppercase;color:#1a1712;
+  letter-spacing:0.06em;text-transform:uppercase;color:#f8f6f2;
   text-align:center;margin-bottom:0.5rem;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
@@ -63,26 +63,18 @@ body{
    real room above the form. Height is set from real measured content
    (see the JS below) rather than a guessed fixed number so it's exactly
    as tall as it needs to be, no more. */
-/* Real color in the card, not neutral white -- a translucent emerald
-   glass wash (matching the Emerald & Champagne accent) instead of
-   plain white-on-white, plus an actual gloss streak (the same
-   diagonal-highlight recipe used on the hero glass tiles earlier) so
-   the card itself has a visible sheen, not just a border. */
+/* Solid, flat, fully-saturated -- not another gradient-wash-plus-blur
+   card pretending to be glass. That technique (translucent tint +
+   backdrop-filter + diagonal gloss streak) is glassmorphism, a
+   specific, generic web-template pattern; no color choice fixes that
+   it's a flat rectangle dressed up to look dimensional. A bold solid
+   color block with real contrast is the actual technique, not a
+   trick standing in for one. */
 .chart-carousel{
   position:relative;border-radius:16px;padding:1rem 0 1rem;margin-bottom:1.1rem;
   overflow:hidden;
-  background:linear-gradient(155deg, rgba(255,255,255,0.8) 0%, rgba(220,198,216,0.45) 45%, rgba(255,255,255,0.7) 100%);
-  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(61,27,63,0.18);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.9) inset,
-    0 18px 34px -16px rgba(61,27,63,0.28),
-    0 4px 10px -4px rgba(61,27,63,0.18);
-}
-.chart-carousel::before{
-  content:'';position:absolute;top:-40%;left:-50%;width:55%;height:220%;
-  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 50%, rgba(255,255,255,0) 100%);
-  transform:rotate(18deg);pointer-events:none;z-index:2;
+  background:#3D1B3F;
+  box-shadow:0 18px 34px -16px rgba(61,27,63,0.5), 0 4px 10px -4px rgba(61,27,63,0.3);
 }
 /* Native horizontal scroll-snap instead of hand-rolled drag math -- the
    custom Pointer Events version got the numerology->astrology swipe
@@ -129,7 +121,7 @@ body{
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
    not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#1a1712;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#f8f6f2;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -241,28 +233,21 @@ body{
   display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;
 }
 .key-item{
-  position:relative;overflow:hidden;
+  position:relative;
   grid-column:span 1;
   display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.65rem;
   padding:1.3rem 1rem;border-radius:18px;
-  background:linear-gradient(160deg, rgba(255,255,255,0.85) 0%, rgba(220,198,216,0.55) 55%, rgba(255,255,255,0.75) 100%);
-  backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);
-  border:1px solid rgba(61,27,63,0.16);
-  box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 28px -16px rgba(61,27,63,0.3);
-}
-.key-item::before{
-  content:'';position:absolute;top:-40%;left:-55%;width:45%;height:220%;
-  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
-  transform:rotate(18deg);pointer-events:none;
+  background:#3D1B3F;
+  box-shadow:0 16px 28px -16px rgba(61,27,63,0.45);
 }
 .key-item:last-child{grid-column:1/3;}
 .key-icon{flex:0 0 auto;width:34px;height:34px;}
-.key-txt{font-size:0.82rem;line-height:1.42;color:#1a1712;font-weight:500;}
-.key-txt em{font-style:normal;color:#1a1712;}
+.key-txt{font-size:0.82rem;line-height:1.42;color:#f8f6f2;font-weight:500;}
+.key-txt em{font-style:normal;color:#f8f6f2;}
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#5C2A5A;font-weight:800;}
+.key-hl{background:none;color:#c9a34e;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
@@ -819,10 +804,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#1a1712" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#f8f6f2" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#1a1712" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#f8f6f2" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -911,7 +896,7 @@ function openPlanetDef(p){
         svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#1a1712" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#f8f6f2" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
@@ -1001,11 +986,11 @@ document.addEventListener('DOMContentLoaded', initCarousel);
 // small near-invisible padlock glyph repeated 5 times regardless of
 // what the card actually says. ----------
 const KEY_ICONS = [
-  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z" fill="#5C2A5A"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L27 7 V15 C27 22 22 27 16 29 C10 27 5 22 5 15 V7 Z" stroke="#5C2A5A" stroke-width="2" stroke-linejoin="round"/><path d="M10.5 16 L14.5 20 L22 11" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="21" rx="3" stroke="#5C2A5A" stroke-width="2"/><line x1="4" y1="13" x2="28" y2="13" stroke="#5C2A5A" stroke-width="2"/><line x1="10" y1="3" x2="10" y2="9" stroke="#5C2A5A" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="3" x2="22" y2="9" stroke="#5C2A5A" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="17" x2="22" y2="24" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="17" x2="10" y2="24" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><circle cx="11" cy="11" r="7" stroke="#5C2A5A" stroke-width="2.2"/><line x1="16" y1="16" x2="27" y2="27" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/><line x1="21" y1="21" x2="24" y2="18" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/><line x1="24" y1="24" x2="27" y2="21" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/></svg>`,
-  `<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="7" width="26" height="18" rx="3" stroke="#5C2A5A" stroke-width="2"/><path d="M4 9 L16 18 L28 9" stroke="#5C2A5A" stroke-width="2" stroke-linejoin="round"/><line x1="3" y1="27" x2="29" y2="6" stroke="#5C2A5A" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z" fill="#c9a34e"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L27 7 V15 C27 22 22 27 16 29 C10 27 5 22 5 15 V7 Z" stroke="#c9a34e" stroke-width="2" stroke-linejoin="round"/><path d="M10.5 16 L14.5 20 L22 11" stroke="#c9a34e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="21" rx="3" stroke="#c9a34e" stroke-width="2"/><line x1="4" y1="13" x2="28" y2="13" stroke="#c9a34e" stroke-width="2"/><line x1="10" y1="3" x2="10" y2="9" stroke="#c9a34e" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="3" x2="22" y2="9" stroke="#c9a34e" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="17" x2="22" y2="24" stroke="#c9a34e" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="17" x2="10" y2="24" stroke="#c9a34e" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><circle cx="11" cy="11" r="7" stroke="#c9a34e" stroke-width="2.2"/><line x1="16" y1="16" x2="27" y2="27" stroke="#c9a34e" stroke-width="2.2" stroke-linecap="round"/><line x1="21" y1="21" x2="24" y2="18" stroke="#c9a34e" stroke-width="2.2" stroke-linecap="round"/><line x1="24" y1="24" x2="27" y2="21" stroke="#c9a34e" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="7" width="26" height="18" rx="3" stroke="#c9a34e" stroke-width="2"/><path d="M4 9 L16 18 L28 9" stroke="#c9a34e" stroke-width="2" stroke-linejoin="round"/><line x1="3" y1="27" x2="29" y2="6" stroke="#c9a34e" stroke-width="2.2" stroke-linecap="round"/></svg>`,
 ];
 const KEYS = [
   '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
