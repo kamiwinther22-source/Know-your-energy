@@ -80,9 +80,9 @@ body{
 .chart-carousel{
   position:relative;border-radius:16px;padding:1rem 0 1rem;margin-bottom:1.1rem;
   overflow:hidden;
-  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #ffffff 42%, #f2f1ee 68%, #dcdbd6 88%, #c7c6c0 100%);
-  border:1px solid #8c8b80;
-  box-shadow:0 1px 0 rgba(255,255,255,0.95) inset, 0 18px 34px -16px rgba(30,30,34,0.24), 0 4px 10px -4px rgba(30,30,34,0.13);
+  background:radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%);
+  border:1px solid #b7a684;
+  box-shadow:0 1px 0 rgba(255,255,255,0.95) inset, 0 18px 34px -16px rgba(74,58,20,0.22), 0 4px 10px -4px rgba(74,58,20,0.13);
 }
 /* Native horizontal scroll-snap instead of hand-rolled drag math -- the
    custom Pointer Events version got the numerology->astrology swipe
@@ -195,11 +195,10 @@ body{
    background (#fbf8f0): anchor tone 10.94:1, brightest accent tone
    4.75:1 -- both clear the same floor the blue version was held to. */
 .tagline-slide.c-gold{
-  /* Deep bronze-gold -- the pale champagne version's brightest stops
-     (near-white cream) were tuned to glow on black and were nearly
-     invisible on the pearl background. Same gold family, dark enough
-     to actually read. */
-  background:linear-gradient(100deg,#6b5738 0%,#a68a5c 35%,#56442a 50%,#a68a5c 65%,#6b5738 100%);
+  /* Same accent gold as .key-hl (#8a6d1f) instead of a separate bronze
+     value -- one real gold across title/highlights/tagline, not two
+     unrelated golds. */
+  background:linear-gradient(100deg,#5c4415 0%,#b99a4a 35%,#8a6d1f 50%,#b99a4a 65%,#5c4415 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
@@ -245,10 +244,14 @@ body{
   grid-column:span 1;
   display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.65rem;
   padding:1.3rem 1rem;border-radius:18px;
-  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #ffffff 42%, #f2f1ee 68%, #dcdbd6 88%, #c7c6c0 100%);
-  border:1px solid #8c8b80;
   box-shadow:0 1px 0 rgba(255,255,255,0.95) inset, 0 16px 28px -16px rgba(30,30,34,0.18);
 }
+/* Same swatch recipes the number tiles already use (TONES.goldT/silverL/
+   silverD) instead of one flat grey wash -- real gold accent on two of
+   the five panels, real silver metal on the other three. */
+.key-item.t-goldT{background:radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%);border:1px solid #b7a684;}
+.key-item.t-silverL{background:radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%);border:1px solid #8c8b80;}
+.key-item.t-silverD{background:radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%);border:1px solid #6f818a;}
 .key-item:last-child{grid-column:1/3;}
 .key-icon{flex:0 0 auto;width:34px;height:34px;}
 .key-txt{font-size:0.82rem;line-height:1.42;color:#3D1B3F;font-weight:500;}
@@ -1009,7 +1012,8 @@ const KEYS = [
   'You will not receive emails from us',
 ];
 const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${KEY_ICONS[i]}</div><div class="key-txt">${t}</div></div>`).join('');
+const KEY_TONES = ['t-goldT','t-silverL','t-silverD','t-silverL','t-goldT'];
+keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item ${KEY_TONES[i]}"><div class="key-icon">${KEY_ICONS[i]}</div><div class="key-txt">${t}</div></div>`).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
