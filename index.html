@@ -20,11 +20,12 @@
    makes it pop: contrast of saturation, not more background color. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#000000;
-  background-image:none;
+  background:
+    linear-gradient(120deg, rgba(255,214,224,0.30) 0%, rgba(214,230,255,0.26) 22%, rgba(255,250,214,0.26) 45%, rgba(214,255,240,0.24) 68%, rgba(230,214,255,0.26) 100%),
+    #f1ece2;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
-  color:#ffffff;
+  color:#1a1712;
 }
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
@@ -198,33 +199,31 @@ body{
 /* ---------- bottom two-column: keys | form ---------- */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
 
-/* Boxed now (moved here from .form-panel, which is unboxed below) --
-   same real glassmorphism recipe: blur + translucency + light edge +
-   lift shadow, so it reads as floating glass, not a flat tint. */
+/* Keys changed to panels -- a real 2-column grid of boxed cards
+   (icon on top, text below) instead of a vertical bulleted list.
+   5 real items, so the 5th spans both columns rather than leaving an
+   uneven gap. Same glass-card recipe (blur + translucency + light edge
+   + lift shadow) the list version used, just per-panel now. */
 .keys-col{
-  position:relative;border-radius:16px;padding:1.1rem 1rem;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.18);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.12) inset,
-    0 18px 34px -14px rgba(0,0,0,0.6),
-    0 4px 10px -4px rgba(0,0,0,0.4);
+  display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:0.7rem;
 }
-.key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
-.key-item:last-child{margin-bottom:0;}
-.key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
-.key-txt{font-size:0.85rem;line-height:1.38;color:#ffffff;font-weight:500;}
-.key-txt em{font-style:normal;color:#ffffff;}
-/* No highlighter box -- that was 3 emphasis signals stacked at once
-   (background block + bold + a near-black tint reading as its own
-   color), which is the actual reason it read as a highlighter mark
-   instead of considered typography. Down to 2 signals -- color + the
-   existing bold weight -- still findable at a skim, without the block. */
+.key-item{
+  grid-column:span 1;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.5rem;
+  padding:1rem 0.7rem;border-radius:16px;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);
+  border:1px solid rgba(20,18,12,0.1);
+  box-shadow:0 1px 0 rgba(255,255,255,0.85) inset, 0 16px 28px -16px rgba(60,50,35,0.35);
+}
+.key-item:last-child{grid-column:1/3;}
+.key-icon{flex:0 0 auto;width:28px;height:28px;}
+.key-txt{font-size:0.8rem;line-height:1.38;color:#1a1712;font-weight:500;}
+.key-txt em{font-style:normal;color:#1a1712;}
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#9DB0FF;font-weight:800;}
+.key-hl{background:none;color:#1C2CA9;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
@@ -508,6 +507,7 @@ body{
 
   <div class="bottom-grid">
     <div class="form-col">
+      <div id="dataEntryFields" style="display:none;">
       <div class="toggle-row">
         <span class="tog-lbl active" id="lblInd">Individual</span>
         <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
@@ -583,6 +583,7 @@ body{
       </div>
 
       <div class="err" id="err"></div>
+      </div>
 
       <div class="submit-wrap">
         <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
