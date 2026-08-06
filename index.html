@@ -197,7 +197,14 @@ body{
 .rel-chip.active:hover{background:#1C2CA9;}
 
 /* ---------- bottom two-column: keys | form ---------- */
-.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
+/* Was a 2-column split (form | keys) when keys was a simple vertical
+   list at half-width. Now that keys is its own 2-column panel grid,
+   nesting that inside an already-half-width column left it too narrow
+   -- panels were overflowing past the right edge of the screen. Full
+   width, stacked, fixes that; nothing else about the panels changed. */
+.bottom-grid{display:block;}
+.bottom-grid > *{margin-bottom:0.9rem;}
+.bottom-grid > *:last-child{margin-bottom:0;}
 
 /* Keys changed to panels -- a real 2-column grid of boxed cards
    (icon on top, text below) instead of a vertical bulleted list.
@@ -209,16 +216,16 @@ body{
 }
 .key-item{
   grid-column:span 1;
-  display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.5rem;
-  padding:1rem 0.7rem;border-radius:16px;
-  background:rgba(255,255,255,0.55);
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.65rem;
+  padding:1.3rem 1rem;border-radius:18px;
+  background:rgba(255,255,255,0.6);
   backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);
   border:1px solid rgba(20,18,12,0.1);
-  box-shadow:0 1px 0 rgba(255,255,255,0.85) inset, 0 16px 28px -16px rgba(60,50,35,0.35);
+  box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 28px -16px rgba(60,50,35,0.4);
 }
 .key-item:last-child{grid-column:1/3;}
-.key-icon{flex:0 0 auto;width:28px;height:28px;}
-.key-txt{font-size:0.8rem;line-height:1.38;color:#1a1712;font-weight:500;}
+.key-icon{flex:0 0 auto;width:34px;height:34px;}
+.key-txt{font-size:0.82rem;line-height:1.42;color:#1a1712;font-weight:500;}
 .key-txt em{font-style:normal;color:#1a1712;}
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
@@ -955,18 +962,19 @@ initCarousel();
 window.addEventListener('load', initCarousel);
 document.addEventListener('DOMContentLoaded', initCarousel);
 
-// ---------- key-icon selling points: copied verbatim from your reference image ----------
-const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
-  <defs>
-    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
-    </linearGradient>
-  </defs>
-  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
-  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
-</svg>`;
+// ---------- key panel icons: one real, distinct icon per point (a
+// sparkle for the free reading, a shield for privacy, a crossed-out
+// calendar for no subscriptions, a literal key for the email-as-key
+// point, a crossed-out envelope for no emails) instead of the same
+// small near-invisible padlock glyph repeated 5 times regardless of
+// what the card actually says. ----------
+const KEY_ICONS = [
+  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z" fill="#1C2CA9"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L27 7 V15 C27 22 22 27 16 29 C10 27 5 22 5 15 V7 Z" stroke="#1C2CA9" stroke-width="2" stroke-linejoin="round"/><path d="M10.5 16 L14.5 20 L22 11" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="21" rx="3" stroke="#1C2CA9" stroke-width="2"/><line x1="4" y1="13" x2="28" y2="13" stroke="#1C2CA9" stroke-width="2"/><line x1="10" y1="3" x2="10" y2="9" stroke="#1C2CA9" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="3" x2="22" y2="9" stroke="#1C2CA9" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="17" x2="22" y2="24" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="17" x2="10" y2="24" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><circle cx="11" cy="11" r="7" stroke="#1C2CA9" stroke-width="2.2"/><line x1="16" y1="16" x2="27" y2="27" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/><line x1="21" y1="21" x2="24" y2="18" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/><line x1="24" y1="24" x2="27" y2="21" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="7" width="26" height="18" rx="3" stroke="#1C2CA9" stroke-width="2"/><path d="M4 9 L16 18 L28 9" stroke="#1C2CA9" stroke-width="2" stroke-linejoin="round"/><line x1="3" y1="27" x2="29" y2="6" stroke="#1C2CA9" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+];
 const KEYS = [
   '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
   'Your info is <mark class="key-hl">neither</mark> shared <mark class="key-hl">nor</mark> saved',
@@ -975,7 +983,7 @@ const KEYS = [
   'You will not receive emails from us',
 ];
 const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
+keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${KEY_ICONS[i]}</div><div class="key-txt">${t}</div></div>`).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
