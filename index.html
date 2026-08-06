@@ -18,11 +18,17 @@
    fine grain for texture -- no scattered highlight blobs. Blue is then
    the only saturated color anywhere on the page, which is what actually
    makes it pop: contrast of saturation, not more background color. */
+/* Real pearl is almost white, not a visible rainbow gradient -- the
+   first version stacked 5 fairly saturated color bands (0.24-0.30
+   opacity) which read as flat sherbet stripes, not a pearl sheen, and
+   made everything sitting on it (including the numerology tiles)
+   register weaker. Base is near-white now; any shimmer is a whisper,
+   not a color band you can name. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background:
-    linear-gradient(120deg, rgba(255,214,224,0.30) 0%, rgba(214,230,255,0.26) 22%, rgba(255,250,214,0.26) 45%, rgba(214,255,240,0.24) 68%, rgba(230,214,255,0.26) 100%),
-    #f1ece2;
+    linear-gradient(120deg, rgba(255,240,242,0.06) 0%, rgba(240,245,255,0.05) 30%, rgba(255,252,240,0.05) 60%, rgba(245,255,250,0.05) 100%),
+    #f8f6f2;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#1a1712;
@@ -40,7 +46,7 @@ body{
 
 .sys-section-title{
   font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
-  letter-spacing:0.06em;text-transform:uppercase;color:#ffffff;
+  letter-spacing:0.06em;text-transform:uppercase;color:#1a1712;
   text-align:center;margin-bottom:0.5rem;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
@@ -107,7 +113,7 @@ body{
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
    not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#1a1712;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -787,10 +793,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#1a1712" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#1a1712" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -879,7 +885,7 @@ function openPlanetDef(p){
         svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#1a1712" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
