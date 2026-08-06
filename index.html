@@ -61,10 +61,21 @@ body{
     0 18px 34px -14px rgba(0,0,0,0.6),
     0 4px 10px -4px rgba(0,0,0,0.4);
 }
-.carousel-track{display:flex;touch-action:pan-y;will-change:transform;}
+/* Native horizontal scroll-snap instead of hand-rolled drag math -- the
+   custom Pointer Events version got the numerology->astrology swipe
+   right on some devices but got stuck (jumped a slide immediately, then
+   wouldn't swipe back) on hers. Letting the browser's own touch/scroll
+   engine own the gesture is the reliable fix, not another round of
+   custom threshold tuning. */
+.carousel-track{
+  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
+}
+.carousel-track::-webkit-scrollbar{display:none;height:0;}
 .carousel-slide{
   flex:0 0 100%;width:100%;min-width:0;box-sizing:border-box;padding:0 1.1rem;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
+  scroll-snap-align:start;scroll-snap-stop:always;
 }
 .carousel-dots{display:flex;justify-content:center;gap:0.45rem;margin-top:0.9rem;}
 .carousel-dots .dot{
@@ -884,8 +895,14 @@ function openPlanetDef(p){
 // the shorter numerology slide) to match. That's what centers the
 // numerology row vertically inside a slide as tall as the diagrams,
 // with zero JS and no risk of measuring a stale/already-stretched
-// height on resize. Swipe via touch, drag via mouse, or tap a dot; all
-// three converge on the same goTo() so they can't get out of sync. ----------
+// height on resize. Swipe is native horizontal scroll-snap (the track
+// is a real scroll container, CSS handles the gesture) -- a hand-rolled
+// Pointer Events drag was tried here twice and both times broke on her
+// real device (missed the swipe on iPad, then jumped a slide immediately
+// and got stuck unable to swipe back). Letting the browser own touch
+// scrolling instead of reimplementing it in JS is the reliable fix.
+// Tap a dot converges on the same goTo() so it can't get out of sync
+// with a real swipe. ----------
 function initCarousel(){
   const carousel = document.getElementById('chartCarousel');
   const track = document.getElementById('carouselTrack');
@@ -895,11 +912,13 @@ function initCarousel(){
   const N = track.children.length;
   let idx = 0;
 
-  function goTo(i, animate=true){
+  function setDots(i){
+    Array.from(dotsWrap.children).forEach((d,j)=>d.classList.toggle('active', j===i));
+  }
+  function goTo(i, smooth=true){
     idx = Math.max(0, Math.min(N-1, i));
-    track.style.transition = animate ? 'transform 0.35s cubic-bezier(.22,.8,.36,1)' : 'none';
-    track.style.transform = `translateX(-${idx*100}%)`;
-    Array.from(dotsWrap.children).forEach((d,j)=>d.classList.toggle('active', j===idx));
+    track.scrollTo({left: idx * track.clientWidth, behavior: smooth ? 'smooth' : 'auto'});
+    setDots(idx);
   }
   // Delegated from the wrapper (not attached per-dot) so it can't be
   // affected by exactly when/how the dot nodes themselves were created.
@@ -908,53 +927,23 @@ function initCarousel(){
     if(dot) goTo(+dot.dataset.i);
   });
 
-  // Pointer Events instead of separate touch+mouse handlers -- one
-  // unified event model for touch/mouse/pen, well-supported in Safari
-  // since iOS/iPadOS 13. The old touch-event version worked on Android
-  // Chrome but not on iPad: Safari's native gesture recognizer can grab
-  // an ambiguous swipe for its own vertical scroll before JS finishes
-  // deciding it's horizontal, especially when the axis gets locked on
-  // the very first touchmove's tiny sub-pixel delta. Pointer Events
-  // plus setPointerCapture (keeps receiving move/up events for this
-  // pointer even if the finger drifts outside the element) plus a real
-  // movement threshold before locking an axis are the standard, correct
-  // fix for this whole class of bug, not a guess.
-  const THRESHOLD = 8;
-  let startX=0, startY=0, dx=0, dragging=false, axisLocked=null, pointerId=null;
+  // A real swipe scrolls the track natively; this just reads where it
+  // landed once it settles and updates idx/dots to match -- no gesture
+  // math, no threshold tuning, nothing that can get stuck mid-drag.
+  let scrollTimer = null;
+  track.addEventListener('scroll', ()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(()=>{
+      idx = Math.round(track.scrollLeft / track.clientWidth);
+      setDots(idx);
+    }, 100);
+  }, {passive:true});
 
-  track.addEventListener('pointerdown', e=>{
-    if(e.pointerType==='mouse' && e.button!==0) return;
-    pointerId = e.pointerId;
-    startX = e.clientX; startY = e.clientY;
-    dx = 0; dragging = true; axisLocked = null;
-    track.style.transition = 'none';
-    track.setPointerCapture(pointerId);
+  let resizeTimer = null;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(()=> goTo(idx, false), 150);
   });
-  track.addEventListener('pointermove', e=>{
-    if(!dragging || e.pointerId!==pointerId) return;
-    const x = e.clientX, y = e.clientY;
-    dx = x - startX;
-    const dyAbs = Math.abs(y - startY), dxAbs = Math.abs(dx);
-    if(axisLocked===null){
-      if(Math.max(dxAbs,dyAbs) < THRESHOLD) return; // too small to tell yet
-      axisLocked = dxAbs > dyAbs ? 'x' : 'y';
-    }
-    if(axisLocked!=='x') return;
-    const pct = (dx / carousel.offsetWidth) * 100;
-    track.style.transform = `translateX(calc(-${idx*100}% + ${pct}%))`;
-  });
-  function pointerEnd(e){
-    if(!dragging || e.pointerId!==pointerId) return;
-    dragging = false;
-    if(axisLocked==='x'){
-      if(dx <= -40) goTo(idx+1);
-      else if(dx >= 40) goTo(idx-1);
-      else goTo(idx);
-    }
-    axisLocked = null; pointerId = null;
-  }
-  track.addEventListener('pointerup', pointerEnd);
-  track.addEventListener('pointercancel', pointerEnd);
 
   goTo(0, false);
 }
