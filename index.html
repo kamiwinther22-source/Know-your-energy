@@ -89,11 +89,11 @@ body{
    not a gimmick standing in for one. Aubergine & gold live on the
    text/icons/accents on top of this, not as the card's own material. */
 .chart-carousel{
-  position:relative;border-radius:16px;padding:1rem 0 1rem;margin-bottom:1.1rem;
-  overflow:hidden;
-  background:radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%);
-  border:1px solid #b7a684;
-  box-shadow:0 1px 0 rgba(255,255,255,0.95) inset, 0 18px 34px -16px rgba(74,58,20,0.22), 0 4px 10px -4px rgba(74,58,20,0.13);
+  /* Unboxed on purpose -- a card here echoed the trust-panel cards
+     below it and the two blended together. The numbers/astro/HD tiles
+     already carry their own shine (TONES), so they don't need a
+     container card doing it again. */
+  position:relative;padding:1rem 0 1rem;margin-bottom:1.1rem;
 }
 /* Native horizontal scroll-snap instead of hand-rolled drag math -- the
    custom Pointer Events version got the numerology->astrology swipe
@@ -113,10 +113,10 @@ body{
 }
 .carousel-dots{display:flex;justify-content:center;gap:0.45rem;margin-top:0.9rem;}
 .carousel-dots .dot{
-  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.28);
+  width:6px;height:6px;border-radius:50%;background:rgba(61,27,63,0.25);
   border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
 }
-.carousel-dots .dot.active{background:#ffffff;transform:scale(1.35);}
+.carousel-dots .dot.active{background:#3D1B3F;transform:scale(1.35);}
 /* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
    for its own label, so single-word labels (no spaces to wrap at)
    overflowed sideways into the neighboring tile instead of wrapping. */
