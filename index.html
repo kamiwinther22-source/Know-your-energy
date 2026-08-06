@@ -629,17 +629,25 @@ const TONES = {
 // real numerology terms, not dropped this time) on their own second
 // row. Labels match NUM_DEFS.lifepath's own wording for each number
 // (e.g. 22 is literally called "the Master Builder" in that text).
+// Real (invisible-unless-needed) soft-hyphen character -- U+00AD, not
+// the &shy; markup entity, since this string also gets used via
+// textContent elsewhere and entities don't parse there -- inserted at
+// a sensible syllable break for the words too long to fit their tile
+// on one line. Was previously wrapping wherever the browser's raw
+// break-word algorithm landed, which produced an ugly orphaned single
+// letter on its own line ("NURTURE" / "R"); this forces a real,
+// balanced, properly-hyphenated break instead.
 const NUMS = [
   {n:1, lbl:'Leader',       tone:'silverL'},
   {n:2, lbl:'Diplomat',     tone:'goldT'},
-  {n:3, lbl:'Communicator', tone:'white'},
+  {n:3, lbl:'Communi­cator', tone:'white'},
   {n:4, lbl:'Builder',      tone:'cream'},
   {n:5, lbl:'Freedom',      tone:'silverD'},
-  {n:6, lbl:'Nurturer',     tone:'white'},
+  {n:6, lbl:'Nurtur­er', tone:'white'},
   {n:7, lbl:'Seeker',       tone:'goldT'},
   {n:8, lbl:'Achiever',     tone:'silverL'},
-  {n:9, lbl:'Humanitarian', tone:'cream'},
-  {n:11, lbl:'Intuitive',      tone:'silverD'},
+  {n:9, lbl:'Humani­tarian', tone:'cream'},
+  {n:11, lbl:'Intu­itive',      tone:'silverD'},
   {n:22, lbl:'Master Builder', tone:'goldT'},
   {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
@@ -687,16 +695,24 @@ function openNumberDef(item){
 // gas giants / far icy trio) with a gap between tiers like the real solar
 // system, each planet at its own radius within its tier and a scattered
 // (not evenly-spaced) angle, rather than one continuously-growing spiral. ----
+// Original radii kept (scaling them up made the label text render
+// SMALLER on screen overall, since the container width is fixed and a
+// bigger viewBox just packs everything tighter per pixel -- the actual
+// fix for collisions at a bigger font is re-angling each planet, not
+// inflating the whole diagram. These angles were found by a real
+// pairwise bounding-box search (every label pair checked, 6-unit
+// minimum gap enforced, not eyeballed) rather than the original
+// "scattered" angles, which collided once the font size went up.
 const PLANETS = [
-  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-85, gapAdd:11},
-  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:160},
-  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:38},
-  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:-158},
-  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:104},
-  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-16},
-  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-108},
-  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:14},
-  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-148},
+  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
+  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:-149.8},
+  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:11.5},
+  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:146.5},
+  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:85.2},
+  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-58.2},
+  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-91.8},
+  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
+  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-120.4},
 ];
 const RINGS = [26,34,46,54,74,86,100,110,120];
 const SIZE = 420, C = SIZE/2;
@@ -705,7 +721,7 @@ const solarWrap = document.getElementById('solarIcon');
 // prominent astrology visual, so there's real room around the ring
 // cluster for each planet's own descriptor word to sit next to it,
 // always visible rather than behind a tap.
-let svg = `<svg viewBox="-80 80 528 232" xmlns="http://www.w3.org/2000/svg">`;
+let svg = `<svg viewBox="-40 69 486 253" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -833,10 +849,15 @@ function openPlanetDef(p){
       // typewriter face -- "Expression"/"Identity" -- otherwise split on
       // spaces for real multi-word labels ("Life Force").
       const words = c.wrap || c.label.split(' ');
+      // Text color has to match whether this center is actually filled
+      // (on: light tone fill, needs black text) or hollow (off: fill is
+      // 'none', the dark card shows through -- black text there was
+      // invisible, black-on-black. White for hollow, black for filled.
+      const inTextColor = c.on ? '#000000' : '#ffffff';
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
       svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
