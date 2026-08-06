@@ -76,11 +76,14 @@ body{
    for its own label, so single-word labels (no spaces to wrap at)
    overflowed sideways into the neighboring tile instead of wrapping. */
 .num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.6rem 0.3rem;width:100%;}
-.num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
-  filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));}
+.num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
   display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
+  /* Shadow moved here, off the whole tile (which included the label
+     text below and was blurring it the same way the chart graphics
+     were) -- only the swatch itself gets the lift now. */
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
 }
 .num-tile-lg .swatch::before{
   content:'';position:absolute;inset:0;
@@ -92,7 +95,7 @@ body{
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
    not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.52rem;line-height:1.2;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -702,7 +705,7 @@ const solarWrap = document.getElementById('solarIcon');
 // prominent astrology visual, so there's real room around the ring
 // cluster for each planet's own descriptor word to sit next to it,
 // always visible rather than behind a tap.
-let svg = `<svg viewBox="-35 80 455 235" xmlns="http://www.w3.org/2000/svg">`;
+let svg = `<svg viewBox="-80 80 528 232" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -749,10 +752,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="15" fill="#ffffff" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="15" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -789,8 +792,8 @@ function openPlanetDef(p){
   const HD_CENTERS = [
     {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    tone:'silverL', on:false, label:'Inspiration', lx:120, ly:6,   anchor:'middle'},
     {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    tone:'silverD', on:false, label:'Awareness',   lx:180, ly:66,  anchor:'start'},
-    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'cream',   on:false, label:'Expression',  inside:true},
-    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'goldT',   on:true,  label:'Identity',    inside:true},
+    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'cream',   on:false, label:'Expression',  inside:true, wrap:['Expres-','sion']},
+    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'goldT',   on:true,  label:'Identity',    inside:true, wrap:['Iden-','tity']},
     {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'white',   on:false, label:'Willpower',   lx:220, ly:190, anchor:'start'},
     {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'silverD', on:true,  label:'Life Force',  inside:true},
     {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'cream',   on:true,  label:'Intuition',   lx:8,   ly:246, anchor:'end'},
@@ -801,7 +804,7 @@ function openPlanetDef(p){
   // number tiles and solar-system planets -- reusing the exact stop
   // colors already computed for those (stopsByTone, above) rather than
   // deriving a new set, so all three graphics are pixel-identical in tone.
-  let svg = `<svg viewBox="-85 -16 401 356" xmlns="http://www.w3.org/2000/svg"><defs>`;
+  let svg = `<svg viewBox="-118 -20 463 360" xmlns="http://www.w3.org/2000/svg"><defs>`;
   HD_CENTERS.forEach((c,i)=>{
     const stops = stopsByTone[c.tone];
     svg += `<radialGradient id="hdg-${i}" cx="35%" cy="28%" r="75%">
@@ -825,14 +828,18 @@ function openPlanetDef(p){
     // never behind a tap, same principle as the number-tile and planet
     // labels elsewhere on this page.
     if(c.inside){
-      const words = c.label.split(' ');
+      // wrap: explicit line break (with hyphen) for single long words that
+      // don't fit their shape even at this bigger size in a wider
+      // typewriter face -- "Expression"/"Identity" -- otherwise split on
+      // spaces for real multi-word labels ("Life Force").
+      const words = c.wrap || c.label.split(' ');
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="12" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-4:11}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="#000000" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="700" font-size="12" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'DM Sans',sans-serif" font-weight="700" font-size="16" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
