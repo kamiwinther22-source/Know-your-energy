@@ -116,12 +116,27 @@ body{
   display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
   /* Shadow moved here, off the whole tile (which included the label
      text below and was blurring it the same way the chart graphics
-     were) -- only the swatch itself gets the lift now. */
-  filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
+     were) -- only the swatch itself gets the lift now. A flat black
+     shadow read fine when the page was black; on the pearl/gold page it
+     went nearly invisible, which is why the tiles went dull -- switched
+     to a tinted (aubergine) contact shadow so it still has real presence
+     against a light card. */
+  filter:drop-shadow(0 4px 7px rgba(61,27,63,0.4));
+  /* Crisp embossed rim -- bright top edge, dark bottom edge -- so each
+     tile reads as a raised, lit object independent of what's behind it,
+     the same cue real coin/jewelry photography uses on white backdrops. */
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.9), inset 0 -1.5px 0 rgba(0,0,0,0.24);
 }
 .num-tile-lg .swatch::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
+  /* Tight bright catch-light + the existing diagonal shading, combined
+     with mix-blend-mode:overlay so the highlight actually punches
+     brighter against whatever tone sits under it instead of getting
+     washed out the way a flat white overlay would on a light card. */
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.6) 7%, rgba(255,255,255,0) 26%),
+    linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
+  mix-blend-mode:overlay;
   pointer-events:none;
 }
 .num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
