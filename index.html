@@ -180,10 +180,11 @@ body{
    background (#fbf8f0): anchor tone 10.94:1, brightest accent tone
    4.75:1 -- both clear the same floor the blue version was held to. */
 .tagline-slide.c-gold{
-  /* Muted champagne, not yellow -- reuses the same goldT metal tone
-     already established for the numerology tiles instead of a brighter,
-     more saturated gold that read as plain yellow on black. */
-  background:linear-gradient(100deg,#c7b78e 0%,#fdf6ea 35%,#ddccae 50%,#fdf6ea 65%,#c7b78e 100%);
+  /* Deep bronze-gold -- the pale champagne version's brightest stops
+     (near-white cream) were tuned to glow on black and were nearly
+     invisible on the pearl background. Same gold family, dark enough
+     to actually read. */
+  background:linear-gradient(100deg,#6b5738 0%,#a68a5c 35%,#56442a 50%,#a68a5c 65%,#6b5738 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
@@ -217,12 +218,16 @@ body{
    5 real items, so the 5th spans both columns rather than leaving an
    uneven gap. Same glass-card recipe (blur + translucency + light edge
    + lift shadow) the list version used, just per-panel now. */
+/* Cards in the same row now match height (grid default stretch, not
+   align-items:start) with their content centered vertically -- two very
+   different text lengths sitting side by side at natural height looked
+   like a layout mistake, not a considered grid. */
 .keys-col{
-  display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:0.7rem;
+  display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;
 }
 .key-item{
   grid-column:span 1;
-  display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.65rem;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.65rem;
   padding:1.3rem 1rem;border-radius:18px;
   background:rgba(255,255,255,0.6);
   backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);
