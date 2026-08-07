@@ -144,6 +144,14 @@ body{
   mix-blend-mode:overlay;
   pointer-events:none;
 }
+.num-tile-lg .swatch::after{
+  /* Fine grain -- this is what separates real metal from a flat gradient
+     with one light source dropped on it. A smooth radial alone is glass/
+     plastic; actual metal has a faint tactile texture even when polished. */
+  content:'';position:absolute;inset:0;opacity:0.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  pointer-events:none;
+}
 .num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
 /* overflow-wrap so a long single word (no space to break at, e.g.
    "Communicator") wraps onto a second line inside its own tile instead
@@ -256,25 +264,43 @@ body{
    align-items:start) with their content centered vertically -- two very
    different text lengths sitting side by side at natural height looked
    like a layout mistake, not a considered grid. */
+/* Compact glass pills instead of 5 giant cards -- the panels had become
+   the page's focal point, competing with the numbers/title for attention
+   instead of sitting quietly underneath them. Sized to their own
+   content, wrapping in a row, not stretched to fill a 2-col grid. */
 .keys-col{
-  display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:0.5rem;
 }
 .key-item{
-  position:relative;
-  grid-column:span 1;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.65rem;
-  padding:1.3rem 1rem;border-radius:18px;
-  box-shadow:0 1px 0 rgba(255,255,255,0.95) inset, 0 16px 28px -16px rgba(30,30,34,0.18);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;gap:0.55rem;text-align:left;
+  padding:0.55rem 0.95rem 0.55rem 0.6rem;border-radius:22px;
+  max-width:100%;
+  /* Real layered glass: backdrop blur+saturate (not a flat translucent
+     rectangle), a bright top rim / dark bottom rim for actual edge
+     thickness, a hard catchlight (not a diagonal streak), and fine grain
+     so it doesn't read as flat plastic. */
+  backdrop-filter:blur(10px) saturate(1.5);-webkit-backdrop-filter:blur(10px) saturate(1.5);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.9),
+    inset 0 -7px 12px -11px rgba(80,55,35,0.4),
+    0 10px 20px -12px rgba(80,55,35,0.3);
 }
-/* Same swatch recipes the number tiles already use (TONES.goldT/silverL/
-   silverD) instead of one flat grey wash -- real gold accent on two of
-   the five panels, real silver metal on the other three. */
-.key-item.t-goldT{background:radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%);border:1px solid #b7a684;}
-.key-item.t-silverL{background:radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%);border:1px solid #8c8b80;}
-.key-item.t-silverD{background:radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%);border:1px solid #6f818a;}
-.key-item:last-child{grid-column:1/3;}
-.key-icon{flex:0 0 auto;width:34px;height:34px;}
-.key-txt{font-size:0.82rem;line-height:1.42;color:#3D1B3F;font-weight:500;}
+.key-item::before{
+  content:'';position:absolute;left:16%;top:18%;width:22px;height:14px;margin:-7px 0 0 -11px;border-radius:50%;
+  background:radial-gradient(ellipse, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0) 80%);
+  pointer-events:none;z-index:2;
+}
+.key-item::after{
+  content:'';position:absolute;inset:0;opacity:0.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  pointer-events:none;
+}
+.key-item.t-goldT{background:rgba(255,240,214,0.32);border:1px solid rgba(216,187,116,0.55);}
+.key-item.t-silverL{background:rgba(255,255,255,0.24);border:1px solid rgba(255,255,255,0.6);}
+.key-item.t-silverD{background:rgba(224,235,255,0.24);border:1px solid rgba(255,255,255,0.55);}
+.key-icon{flex:0 0 auto;width:20px;height:20px;position:relative;z-index:1;}
+.key-txt{position:relative;z-index:1;font-size:0.68rem;line-height:1.32;color:#3D1B3F;font-weight:500;max-width:230px;}
 .key-txt em{font-style:normal;color:#3D1B3F;}
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
@@ -685,6 +711,7 @@ const TONES = {
   silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
+  copper:  { grad:'radial-gradient(circle at 30% 26%, #ffdcc0 0%, #d9925c 55%, #a85f30 100%)', border:'#8a4a26' },
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -714,9 +741,9 @@ const NUMS = [
   {n:6, lbl:'Nurtur­er', tone:'white'},
   {n:7, lbl:'Seeker',       tone:'goldT'},
   {n:8, lbl:'Achiever',     tone:'silverL'},
-  {n:9, lbl:'Humani­tarian', tone:'cream'},
+  {n:9, lbl:'Humani­tarian', tone:'copper'},
   {n:11, lbl:'Intu­itive',      tone:'silverD'},
-  {n:22, lbl:'Master Builder', tone:'goldT'},
+  {n:22, lbl:'Master Builder', tone:'copper'},
   {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
 const numStripRow = document.getElementById('numStripRow');
@@ -773,7 +800,7 @@ function openNumberDef(item){
 // "scattered" angles, which collided once the font size went up.
 const PLANETS = [
   {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
-  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:-149.8},
+  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'copper',  angle:-149.8},
   {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:11.5},
   {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:146.5},
   {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:85.2},
