@@ -91,7 +91,7 @@ single Cloudflare Worker file. No test suite, no linter, no bundler, no
 
 | File | Role |
 |---|---|
-| `index.html` (~2,300 lines) | The entire front end — markup, CSS, and vanilla JS all in one file. No React/Vue/build tooling. Contains the entry/data-form page (title, pricing, birth-data fields, results grid, tap-to-expand modal) described below. Key in-file data objects: `ASTRO_DEFS`, `NUM_DEFS`, `HD_DEFS`, `GATES`, `CHANNELS` (glossary/definition content), and the `ar()` function (astrology placement list renderer). Deployed via **GitHub Pages**, not the Worker. |
+| `index.html` (~2,600 lines) | The entire front end — markup, CSS, and vanilla JS all in one file. No React/Vue/build tooling. Contains the birth-data entry form, the swipeable numerology/astrology/Human Design preview carousel, the results grid, and the tap-to-expand modal — see "Two distinct front-end pages" below for why the page's own `<title>` currently says "Landing" even though it's really the entry form. Key in-file data objects: `ASTRO_DEFS`, `NUM_DEFS`, `HD_DEFS`, `GATES`, `CHANNELS` (long-form glossary/definition content), plus a separate, shorter `GLOSSARY` object (one-line tap-to-reveal blurbs, distinct from the long-form `*_DEFS` content), and the `ar()` function (astrology placement list renderer). Deployed via **GitHub Pages**, not the Worker. |
 | `worker.js` (~890 lines) | Cloudflare Worker — the entire backend API. Single `export default { fetch(request, env, ctx) {...} }` handler with hand-rolled `if (url.pathname === ...)` routing (no router library). Deployed via `wrangler deploy`, triggered by the `Deploy Worker` GitHub Action. |
 | `astro-engine.js` | Local astrology calculation (`computeAstrology`) — wraps `circular-natal-horoscope-js` (Moshier ephemeris). No external API, no rate limit. Imported by `worker.js`. |
 | `numerology-calculator.js` | Pure pythagorean-numerology calculations (`calculateFullChart` and its per-number helpers: life path, expression, soul urge, pinnacles, challenges, etc). Imported by `worker.js`. |
@@ -99,8 +99,15 @@ single Cloudflare Worker file. No test suite, no linter, no bundler, no
 | `cities-data.js` | **Generated file — do not hand-edit.** ~31,000 world cities from GeoNames. Starts empty in the repo; populated by `build-cities.mjs` during the deploy workflow. |
 | `build-cities.mjs` | Node script that downloads GeoNames' `cities15000.zip`, unzips it (hand-rolled zip parsing, no dependency), and writes `cities-data.js`. Runs automatically in CI before every Worker deploy; safe to fail (deploy continues with the built-in city list if the download hiccups). |
 | `wrangler.toml` | Worker config: name `know-your-energy`, entry `worker.js`, one KV binding (`PASSES`, used for pass records and the running usage/cost counter). |
-| `package.json` | One real dependency: `circular-natal-horoscope-js`. `"type": "module"` — everything is ES modules. |
+| `package.json` / `package-lock.json` | One real dependency: `circular-natal-horoscope-js`. `"type": "module"` — everything is ES modules. |
 | `CNAME` | GitHub Pages custom domain: `know-your-energy.com`. |
+| `README.md` | One-line project description only — not a substantive doc, this `CLAUDE.md` is the real reference. |
+| `landing-page-brief.md` | Working design brief for the still-unsolved cold-open landing page (see "Two distinct front-end pages" below) — color history, reference-image techniques, layout rules. Treat as current understanding, not a locked spec; it says to update it when something in it turns out wrong. |
+| `test-data.md` | Real birth data (the site owner's own, shared with explicit permission) for testing astrology/numerology/Human Design calculations against known-correct results without re-asking her each session. Not a fictional test subject — don't confuse this with the "never invent a test name" rule below, which is about *not* making up a name; this is real data she already gave you. |
+| `card-gold-bg.jpg`, `card-gold-bg-desat.jpg`, `jewel-tray.jpg` | Reference/mood images for design work (see `landing-page-brief.md`). Not currently referenced by `index.html` or `worker.js` — they're source material for a technique, not shipped assets. |
+| `.gitignore` | Just `node_modules/`. |
+
+Note on `index.html` size: it grows quickly and has repeatedly bumped into practical read/edit limits in past sessions. When editing it, prefer targeted `Read` with `offset`/`limit` or `Grep` over reading the whole file at once.
 
 ### Worker API surface (`worker.js`)
 
@@ -126,6 +133,17 @@ All routes live in the single `fetch` handler, gated by `CORS_HEADERS` (open,
     Human Design data, calls the Claude API (`generateReport`,
     `model: 'claude-sonnet-5'`, `thinking: { type: 'disabled' }`), returns
     the generated reading JSON.
+
+**Known gap, verified in the current code (not assumed):** `/report` does
+*not* check pass/payment status before generating a report — it accepts
+any request and, if `passEmail` is present, only fires a background
+`refreshPassSnapshot` afterward. `index.html`'s `generate()` function calls
+`/report` directly and never calls `/check-pass` or
+`/create-checkout-session` anywhere in the file. So right now the
+Stripe/pass system is backend-only: the endpoints exist and work, but
+nothing in the current frontend enforces a paywall or triggers checkout.
+Don't assume payment gating is live just because the Worker routes exist —
+verify against `index.html` before saying so.
 
 ### Required secrets / env (not in the repo)
 
@@ -257,16 +275,27 @@ for no real reason reads as sloppy, not as a redesign — the bar is
 
 ## Two distinct front-end pages — do not conflate them
 
-- **The entry/data form** (navy background, gold cursive title, pricing list,
-  birth-data fields) is for people who *already intentionally* came looking
-  for this app (e.g. an app-store listing). It works today and does not need
-  a redesign for that use case.
+- **The entry/data form** — gold cursive title, a swipeable numerology/
+  astrology/Human Design preview carousel, birth-data fields — is for people
+  who *already intentionally* came looking for this app (e.g. an app-store
+  listing). It works today and does not need a redesign for that use case.
+  **Don't trust a specific color description of this page for long**: it has
+  gone through many iterations (champagne-gold, steel, graphite backgrounds
+  all tried and reverted; navy removed sitewide per the Design-process rules
+  above; currently a plain black background with full-strength white text as
+  of the most recent commits touching it) and is still being actively
+  tweaked. Read the live CSS (`index.html`'s `body{...}` block near the top)
+  rather than relying on this file for the current exact palette. Note also
+  that `index.html`'s own `<title>` currently reads "Know Your Energy —
+  Landing" even though this is the entry form, not the separate cold-open
+  landing page below — a naming leftover, not a sign the two pages merged.
 - **A cold-open, scroll-stopping landing page** for people with zero context
   who know nothing about astrology/numerology/Human Design and need to be
   visually stopped mid-scroll before they'd ever read a tagline — this is a
-  genuinely separate, still-unsolved page. Past attempts got folded back
-  into the entry form and never shipped as their own thing. Don't assume
-  work on one of these pages says anything about the other.
+  genuinely separate, still-unsolved page (see `landing-page-brief.md` for
+  the working design brief). Past attempts got folded back into the entry
+  form and never shipped as their own thing. Don't assume work on one of
+  these pages says anything about the other.
 
 ## Real repo facts worth not re-discovering
 
@@ -285,11 +314,23 @@ for no real reason reads as sloppy, not as a redesign — the bar is
   rather than building a new expand mechanism.
 - The astrology card's placement list (Ascendant, Midheaven, each planet's
   sign + house) already exists and works — it's the `ar()` function in
-  `index.html`. There is no "aspects" (trines/squares) list anywhere in the
-  code; if that's ever wanted it would be new work.
+  `index.html`. There is no computed **per-chart** aspects list (Moon square
+  Mars, etc.) anywhere in the code — one existed briefly (`ASPECT_KEY`) and
+  was deliberately removed from the per-person astrology card, since aspects
+  aren't specific to the person the way placements are; if that's ever
+  wanted again it would be new work. The general glossary's `Aspects`
+  category (conjunction/sextile/square/trine/opposition *definitions*, in
+  `GLOSSARY`) is a separate reference feature and is unaffected — don't
+  confuse the two.
 - Numerology and astrology tap-to-reveal definition glossaries already exist
   and are real, substantive content (`NUM_DEFS`, `ASTRO_DEFS` in
-  `index.html`) — not placeholders.
+  `index.html`) — not placeholders. `GLOSSARY` (shorter, one-line entries)
+  is a separate object from these long-form `*_DEFS` objects — don't conflate
+  the two when auditing content.
+- Real birth data for testing is already saved in `test-data.md` (the site
+  owner's own data, shared with explicit permission) — use it to verify
+  astrology/numerology/Human Design calculations against known-correct
+  results instead of asking her to re-share it.
 
 ## Technical gotchas already paid for once
 
@@ -355,6 +396,16 @@ for no real reason reads as sloppy, not as a redesign — the bar is
   later commits. Always run `git fetch origin <branch>` and compare
   `git log -1` against `origin/<branch>` before trusting a file read or
   making an edit — don't assume the working tree is current.
+- **Hand-rolled touch/swipe gesture code (Pointer Events, manual dx/
+  threshold/axis-lock math) produced repeated real swipe bugs** in the
+  numerology/astrology/Human Design preview carousel — jumping slides on
+  minimal input, then getting stuck unable to swipe back. It was replaced
+  with a native horizontal scroll container (`overflow-x:auto` +
+  `scroll-snap-type:x mandatory`), letting the browser's own touch/scroll
+  engine own the gesture; JS now only reads `track.scrollLeft` once
+  scrolling settles and uses `track.scrollTo()` for programmatic nav (dot
+  clicks, `goTo()`). Prefer native CSS scroll-snap over reimplementing
+  swipe/drag gesture math by hand.
 
 ## Open threads not yet resolved
 
@@ -477,11 +528,41 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     about reaping what's been sown, with rigidity/ruthlessness as the
     actual shadow) — see the personalyear/month/day/essence entry
     above for that fix and the separate advice-giving cleanup.
-  - `HD_DEFS` and `GATES` (64 gates): not yet audited. Note: `GATES`
-    content, on inspection, already looks substantive and well-
-    constructed (consistent gift/shadow mechanism pattern per gate) —
-    still needs a real sourced pass before calling it audited, not
-    assumed fine because it reads well.
+  - **`HD_DEFS.hdtype` (5 Human Design types): audited, complete.**
+    Previously flagged in this tracker as never actually source-verified,
+    and it showed — entries defined each type mostly by comparison to the
+    others ("don't have that Sacral zone... the way a Generator does") and
+    reduced to a formula (one positive trait, one caution) instead of the
+    system's real mechanics. Rewrote all 5 from real sources
+    (jovianarchive.com, geneticmatrix.com, ahumandesign.com,
+    humandesigncollective.com, mindbodygreen.com) so each states its own
+    Strategy (respond / wait for invitation / inform / wait a lunar cycle)
+    and Signature-vs-Not-Self-Theme (felt-aligned vs. felt-misaligned
+    signal) completely on its own terms — Generator/Manifesting
+    Generator's binary Sacral response, Projector's lack of a sustainable
+    motor plus real systemic insight, Manifestor's direct motor-to-Throat
+    connection, Reflector's fully open chart. A first pass used the named
+    HD terminology (Strategy, Signature, Not-Self Theme) directly, which
+    reads as jargon to someone who doesn't already know the system — a
+    follow-up rewrote all 5 again in plain, experiential language
+    describing the same real mechanics without naming the framework terms.
+    Also fixed a self-containment bug: Manifesting Generator's entry
+    opened by assuming the reader had already read the Generator entry
+    first ("that same switched-on Sacral zone as Generators") — reworded
+    so it explains the mechanism from scratch like every other entry does.
+  - `HD_DEFS.hdauthority` (7 authorities: sacral, emotional, splenic, ego,
+    self-projected, mental, lunar) and `HD_DEFS.hdprofile` (12 profile
+    combinations, e.g. `1/3`, `4/6`) and `GATES` (64 gates) and `CHANNELS`
+    (36 channel pairs, topology data only — not audit content): **not yet
+    audited.** Note: `GATES` content, on inspection, already looks
+    substantive and well-constructed (consistent gift/shadow mechanism
+    pattern per gate) — still needs a real sourced pass before calling it
+    audited, not assumed fine because it reads well. Given the
+    `HD_DEFS.hdtype` experience, check `hdauthority`/`hdprofile` for the
+    same two failure modes: comparison-only definitions instead of
+    self-contained ones, and named HD jargon (Strategy, Signature,
+    Not-Self Theme, etc.) that means nothing without prior system
+    knowledge.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
