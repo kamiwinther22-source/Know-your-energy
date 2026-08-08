@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Know Your Energy</title>
+<!--
+  Cold-open landing page -- separate file from index.html (the entry/data
+  form). See landing-page-brief.md.
+
+  The swirl-photo background was removed entirely, per direct
+  instruction -- do not reintroduce it or that file. Page background is
+  unresolved, pending new direction.
+
+  hd-disc-circle.png is her real Human Design chart photo -- name blurred
+  out (the original said "Kami" on the rim, minimal blur radius, nothing
+  else touched), then a plain full-frame ellipse alpha mask applied
+  directly over the already-tightly-trimmed real photo: everything
+  outside the true disc silhouette is real transparency, zero blurred or
+  reconstructed fill. An earlier version that blur-filled small
+  background gaps inside the circle was rejected as "faking" the photo --
+  that version is gone; do not reintroduce any blur/reconstruction fill.
+  Plain transparency-only circle masking (this version) is correct and
+  approved.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+
+:root{
+  --ink:#252a30;
+  --ink-soft:#4a5057;
+}
+
+html{min-height:100%;}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+  /* Sampled directly from the wall/counter behind the disc in her real
+     HD chart photo (not invented) -- avg RGB(250,251,247). */
+  background-color:#fafbf7;
+}
+
+.page{max-width:640px;margin:0 auto;padding:2.4rem 1.2rem 3rem;position:relative;overflow:visible;}
+
+/* Asymmetric hero: title+tagline anchored left, chart circle bleeding
+   Bleed-off-edge asymmetry was tried and explicitly rejected as the
+   technique for this -- reverted to a plain centered layout. The
+   single-column-template problem this was meant to solve is still
+   open; needs a different technique, not guessed at again here. */
+.hero{position:relative;text-align:center;margin-bottom:1.6rem;}
+.brand{
+  font-family:'Alex Brush',cursive;font-weight:400;line-height:1;white-space:nowrap;
+  font-size:clamp(2rem,10vw,3.4rem);
+  color:var(--ink);
+  margin-bottom:0.7rem;
+  position:relative;z-index:2;
+}
+.copy-placeholder{
+  display:inline-block;border:1.5px dashed var(--ink-soft);border-radius:10px;
+  background:rgba(255,255,255,0.4);padding:0.6rem 0.85rem;
+  max-width:100%;
+}
+.ph-label{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.54rem;
+  letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:0.25rem;
+}
+.ph-tagline{font-family:'DM Sans',sans-serif;font-style:italic;font-size:0.85rem;color:var(--ink);}
+
+/* No card, no border, no box -- just the circular chart photo floating
+   on the page background. Contained, in-flow -- no bleed-off-edge. */
+.chart-circle{
+  width:min(78vw,320px);height:auto;
+  display:block;margin:1.4rem auto 0;
+}
+
+/* Ink-tinted, not white, not transparent-to-invisibility -- enough of
+   a surface to read as a considered card against a busy photo instead
+   of a thin outline floating with nothing behind it. */
+.trust-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;
+  max-width:340px;margin:0 auto 1.8rem;
+}
+.trust-card{
+  background:rgba(37,42,48,0.07);
+  border:1px solid rgba(37,42,48,0.32);border-radius:9px;
+  padding:0.55rem 0.6rem;text-align:left;
+}
+.trust-icon{width:16px;height:16px;margin-bottom:0.3rem;}
+.trust-txt{font-size:0.63rem;line-height:1.3;color:var(--ink);font-weight:600;}
+.trust-txt mark{background:none;color:var(--ink);font-weight:800;}
+
+/* The lead offer line -- no box, set apart with real typography instead
+   of a card, since it's the actual free-reading offer, not a bullet
+   point like the other four. */
+.trust-lead{
+  grid-column:1 / -1;background:none;border:none;padding:0 0.1rem;text-align:center;
+  margin-bottom:0.2rem;
+}
+.trust-lead .trust-icon{display:none;}
+.trust-lead .trust-txt{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:1rem;line-height:1.4;letter-spacing:0.01em;color:var(--ink);
+}
+.trust-lead .trust-txt mark{color:var(--ink);font-weight:800;}
+
+.systems-caption{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.76rem;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);text-align:center;
+}
+.systems-caption span{margin:0 0.5em;color:var(--ink-soft);font-weight:400;}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="brand">Know Your Energy</div>
+    <div class="copy-placeholder">
+      <div class="ph-label">Placeholder — replace with real tagline</div>
+      <div class="ph-tagline">[ tagline goes here ]</div>
+    </div>
+    <img class="chart-circle" src="hd-disc-circle.png" alt="Human Design chart">
+  </div>
+
+  <div class="trust-grid" id="trustList"></div>
+
+  <div class="systems-caption">Astrology<span>&middot;</span>Numerology<span>&middot;</span>Human Design</div>
+</div>
+
+<script>
+// Same wording already approved and live on the entry form's
+// key-selling-point list (index.html KEYS array) -- reused verbatim.
+const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(37,42,48,0.3))">
+  <defs>
+    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
+  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
+</svg>`;
+const KEYS = [
+  '1 full <mark>free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
+  'Your info is <mark>neither</mark> shared <mark>nor</mark> saved',
+  '<mark>No subscriptions</mark> or auto-renewals',
+  '<mark>Email</mark> is simply your key to your results and time-limited <mark>pass</mark> if you choose to purchase one.',
+  'You will not receive emails from us',
+];
+document.getElementById('trustList').innerHTML = KEYS.map((t,i)=>`
+  <div class="trust-card${i===0 ? ' trust-lead' : ''}">
+    <div class="trust-icon">${glassIcon(i)}</div>
+    <div class="trust-txt">${t}</div>
+  </div>
+`).join('');
+</script>
+</body>
+</html>
