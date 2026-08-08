@@ -14,14 +14,18 @@
 
   hd-disc-circle.png is her real Human Design chart photo -- name blurred
   out (the original said "Kami" on the rim, minimal blur radius, nothing
-  else touched), then a plain full-frame ellipse alpha mask applied
-  directly over the already-tightly-trimmed real photo: everything
+  else touched), then an alpha mask matched to the disc's own measured
+  true edge (found by pixel measurement on the source photo, not
+  guessed) is applied over a generously-margined crop: everything
   outside the true disc silhouette is real transparency, zero blurred or
-  reconstructed fill. An earlier version that blur-filled small
-  background gaps inside the circle was rejected as "faking" the photo --
-  that version is gone; do not reintroduce any blur/reconstruction fill.
-  Plain transparency-only circle masking (this version) is correct and
-  approved.
+  reconstructed fill. A first attempt fit the mask to the crop
+  rectangle's own frame instead of the disc's real (non-rectangular)
+  proportions and clipped part of the outer glass rim's thickness --
+  fixed by re-measuring the true edge directly and matching the mask to
+  it. An earlier, separate attempt that blur-filled small background
+  gaps inside the circle was rejected as "faking" the photo -- do not
+  reintroduce any blur/reconstruction fill; only real photo content or
+  true transparency, nothing in between.
 -->
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -29,7 +33,7 @@
 
 :root{
   --ink:#252a30;
-  --ink-soft:#4a5057;
+  --accent:#306AC0;
 }
 
 html{min-height:100%;}
@@ -59,13 +63,13 @@ body{
   position:relative;z-index:2;
 }
 .copy-placeholder{
-  display:inline-block;border:1.5px dashed var(--ink-soft);border-radius:10px;
+  display:inline-block;border:1.5px dashed var(--accent);border-radius:10px;
   background:rgba(255,255,255,0.4);padding:0.6rem 0.85rem;
   max-width:100%;
 }
 .ph-label{
   font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.54rem;
-  letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:0.25rem;
+  letter-spacing:0.09em;text-transform:uppercase;color:var(--accent);margin-bottom:0.25rem;
 }
 .ph-tagline{font-family:'DM Sans',sans-serif;font-style:italic;font-size:0.85rem;color:var(--ink);}
 
@@ -76,41 +80,37 @@ body{
   display:block;margin:1.4rem auto 0;
 }
 
-/* Ink-tinted, not white, not transparent-to-invisibility -- enough of
-   a surface to read as a considered card against a busy photo instead
-   of a thin outline floating with nothing behind it. */
-.trust-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;
-  max-width:340px;margin:0 auto 1.8rem;
+/* No card, no border, no fill anywhere here -- the box was competing
+   with the words for attention instead of getting out of the way. Each
+   point is just an icon + a line of real-size text; the only visual
+   weight is on the emphasized words themselves (accent color, bold). */
+.trust-list{
+  display:flex;flex-direction:column;gap:1.15rem;
+  max-width:400px;margin:0 auto 2.2rem;
 }
-.trust-card{
-  background:rgba(37,42,48,0.07);
-  border:1px solid rgba(37,42,48,0.32);border-radius:9px;
-  padding:0.55rem 0.6rem;text-align:left;
-}
-.trust-icon{width:16px;height:16px;margin-bottom:0.3rem;}
-.trust-txt{font-size:0.63rem;line-height:1.3;color:var(--ink);font-weight:600;}
-.trust-txt mark{background:none;color:var(--ink);font-weight:800;}
+.trust-row{display:flex;align-items:flex-start;gap:0.7rem;text-align:left;}
+.trust-icon{flex:0 0 auto;width:22px;height:22px;margin-top:0.12rem;}
+.trust-txt{font-size:0.95rem;line-height:1.48;color:var(--ink);font-weight:600;}
+.trust-txt mark{background:none;color:var(--accent);font-weight:800;}
 
-/* The lead offer line -- no box, set apart with real typography instead
-   of a card, since it's the actual free-reading offer, not a bullet
-   point like the other four. */
-.trust-lead{
-  grid-column:1 / -1;background:none;border:none;padding:0 0.1rem;text-align:center;
-  margin-bottom:0.2rem;
-}
-.trust-lead .trust-icon{display:none;}
+/* The lead offer line -- no box, no icon, set apart with real typography
+   since it's the actual free-reading offer, not a bullet point like the
+   other four. */
+.trust-lead{text-align:center;margin-bottom:1.5rem;}
 .trust-lead .trust-txt{
   font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:1rem;line-height:1.4;letter-spacing:0.01em;color:var(--ink);
+  font-size:1.15rem;line-height:1.4;letter-spacing:0.01em;color:var(--ink);
 }
-.trust-lead .trust-txt mark{color:var(--ink);font-weight:800;}
+.trust-lead .trust-txt mark{color:var(--accent);font-weight:800;}
 
 .systems-caption{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.76rem;
-  letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);text-align:center;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0.5em;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.15rem;
+  letter-spacing:0.05em;text-transform:uppercase;color:var(--ink);text-align:center;
+  padding-top:0.6rem;
 }
-.systems-caption span{margin:0 0.5em;color:var(--ink-soft);font-weight:400;}
+.systems-caption .sys{white-space:nowrap;}
+.systems-caption .dot{color:var(--accent);font-weight:400;}
 </style>
 </head>
 <body>
@@ -124,9 +124,14 @@ body{
     <img class="chart-circle" src="hd-disc-circle.png" alt="Human Design chart">
   </div>
 
-  <div class="trust-grid" id="trustList"></div>
+  <div class="trust-lead" id="trustLead"></div>
+  <div class="trust-list" id="trustList"></div>
 
-  <div class="systems-caption">Astrology<span>&middot;</span>Numerology<span>&middot;</span>Human Design</div>
+  <div class="systems-caption">
+    <span class="sys">Astrology</span><span class="dot">&middot;</span>
+    <span class="sys">Numerology</span><span class="dot">&middot;</span>
+    <span class="sys">Human Design</span>
+  </div>
 </div>
 
 <script>
@@ -143,15 +148,16 @@ const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:dro
   <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
   <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
 </svg>`;
+const LEAD = '1 full <mark>free</mark> astrology, numerology, human design reading for you or a relationship of any two people.';
 const KEYS = [
-  '1 full <mark>free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
   'Your info is <mark>neither</mark> shared <mark>nor</mark> saved',
   '<mark>No subscriptions</mark> or auto-renewals',
   '<mark>Email</mark> is simply your key to your results and time-limited <mark>pass</mark> if you choose to purchase one.',
   'You will not receive emails from us',
 ];
+document.getElementById('trustLead').innerHTML = `<div class="trust-txt">${LEAD}</div>`;
 document.getElementById('trustList').innerHTML = KEYS.map((t,i)=>`
-  <div class="trust-card${i===0 ? ' trust-lead' : ''}">
+  <div class="trust-row">
     <div class="trust-icon">${glassIcon(i)}</div>
     <div class="trust-txt">${t}</div>
   </div>
