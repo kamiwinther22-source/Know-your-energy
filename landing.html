@@ -80,9 +80,11 @@ body{
   display:block;margin:1.4rem auto 0;
 }
 
-/* Actual squares -- equal width and height on every box, not just
-   "boxy." aspect-ratio:1 enforces it regardless of how much text is in
-   each one; icon + text centered inside. */
+/* Actual squares -- equal width and height, aspect-ratio:1 regardless
+   of content length. The square's job is only to frame and highlight
+   the words -- it should not be the thing the eye catches first, so
+   the border/fill here stay quiet (thin, low-opacity) and the text is
+   sized up to fill most of the square's real space. */
 .trust-list{
   display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;
   max-width:360px;margin:0 auto 2.2rem;
@@ -90,13 +92,13 @@ body{
 .trust-row{
   aspect-ratio:1 / 1;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;gap:0.4rem;
-  border:1.5px solid var(--accent);border-radius:12px;
-  background:rgba(48,106,192,0.07);
+  text-align:center;gap:0.45rem;
+  border:1px solid rgba(48,106,192,0.35);border-radius:12px;
+  background:rgba(48,106,192,0.035);
   padding:0.7rem;
 }
-.trust-icon{flex:0 0 auto;width:22px;height:22px;}
-.trust-txt{font-size:0.74rem;line-height:1.32;color:var(--ink);font-weight:600;}
+.trust-icon{flex:0 0 auto;width:20px;height:20px;}
+.trust-txt{font-size:0.86rem;line-height:1.34;color:var(--ink);font-weight:700;}
 .trust-txt mark{background:none;color:var(--accent);font-weight:800;}
 
 /* The lead offer line -- no box, no icon, set apart with real typography
