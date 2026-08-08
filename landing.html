@@ -80,17 +80,22 @@ body{
   display:block;margin:1.4rem auto 0;
 }
 
-/* No card, no border, no fill anywhere here -- the box was competing
-   with the words for attention instead of getting out of the way. Each
-   point is just an icon + a line of real-size text; the only visual
-   weight is on the emphasized words themselves (accent color, bold). */
+/* Each point gets a box again -- but sized to its own content, not a
+   grid cell forced to match its neighbors, so the border hugs the text
+   instead of padding it out with empty space. Light accent-tinted fill
+   + accent border does the highlighting; no grey. */
 .trust-list{
-  display:flex;flex-direction:column;gap:1.15rem;
+  display:flex;flex-direction:column;gap:0.6rem;
   max-width:400px;margin:0 auto 2.2rem;
 }
-.trust-row{display:flex;align-items:flex-start;gap:0.7rem;text-align:left;}
-.trust-icon{flex:0 0 auto;width:22px;height:22px;margin-top:0.12rem;}
-.trust-txt{font-size:0.95rem;line-height:1.48;color:var(--ink);font-weight:600;}
+.trust-row{
+  display:flex;align-items:center;gap:0.6rem;text-align:left;
+  border:1.5px solid var(--accent);border-radius:10px;
+  background:rgba(48,106,192,0.07);
+  padding:0.55rem 0.75rem;
+}
+.trust-icon{flex:0 0 auto;width:20px;height:20px;}
+.trust-txt{font-size:0.95rem;line-height:1.4;color:var(--ink);font-weight:600;}
 .trust-txt mark{background:none;color:var(--accent);font-weight:800;}
 
 /* The lead offer line -- no box, no icon, set apart with real typography
