@@ -80,25 +80,23 @@ body{
   display:block;margin:1.4rem auto 0;
 }
 
-/* Actual squares, sized tight around the longest key point's text (the
-   "email/pass" one) -- 142px is the smallest square that text fits in
-   at this padding without wrapping past its own edges (found by
-   bisection, not guessed). All four boxes are fixed to that same size,
-   so the shorter ones stay just as tight around their own words instead
-   of stretching to fill leftover grid space. */
+/* Actual squares, sized tight around the key point with the most words
+   (the "email/pass" one, 17 words) -- no icons anymore, just the text
+   itself. 131px is the smallest square that text fits in at this
+   padding without wrapping past its own edges (found by bisection, not
+   guessed). All four boxes are fixed to that same size. */
 .trust-list{
-  display:grid;grid-template-columns:repeat(2, 142px);gap:0.7rem;
+  display:grid;grid-template-columns:repeat(2, 131px);gap:0.7rem;
   justify-content:center;margin:0 auto 2.2rem;
 }
 .trust-row{
-  width:142px;height:142px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;gap:0.35rem;
+  width:131px;height:131px;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
   border:1px solid rgba(48,106,192,0.35);border-radius:12px;
   background:rgba(48,106,192,0.035);
   padding:0.5rem;
 }
-.trust-icon{flex:0 0 auto;width:20px;height:20px;}
 .trust-txt{font-size:0.86rem;line-height:1.34;color:var(--ink);font-weight:700;}
 .trust-txt mark{background:none;color:var(--accent);font-weight:800;}
 
@@ -146,17 +144,6 @@ body{
 <script>
 // Same wording already approved and live on the entry form's
 // key-selling-point list (index.html KEYS array) -- reused verbatim.
-const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(37,42,48,0.3))">
-  <defs>
-    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
-    </linearGradient>
-  </defs>
-  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
-  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
-</svg>`;
 const LEAD = '1 full <mark>free</mark> astrology, numerology, human design reading for you or a relationship of any two people.';
 const KEYS = [
   'Your info is <mark>neither</mark> shared <mark>nor</mark> saved',
@@ -165,9 +152,8 @@ const KEYS = [
   'You will not receive emails from us',
 ];
 document.getElementById('trustLead').innerHTML = `<div class="trust-txt">${LEAD}</div>`;
-document.getElementById('trustList').innerHTML = KEYS.map((t,i)=>`
+document.getElementById('trustList').innerHTML = KEYS.map(t=>`
   <div class="trust-row">
-    <div class="trust-icon">${glassIcon(i)}</div>
     <div class="trust-txt">${t}</div>
   </div>
 `).join('');
