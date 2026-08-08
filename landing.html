@@ -101,10 +101,17 @@ body{
   display:flex;align-items:center;justify-content:center;
   text-align:center;
   border-radius:12px;
-  background:var(--gem);
+  /* Gradient runs between real lighter/darker tints of the same sampled
+     hue (computed, not eyeballed), plus a soft highlight catching the
+     top-left corner and a real drop shadow -- gives the fill the glass/
+     gem depth the chart photo itself has, instead of a flat paint chip. */
+  background:
+    radial-gradient(ellipse 65% 55% at 26% 22%, rgba(255,255,255,0.4), rgba(255,255,255,0) 72%),
+    linear-gradient(135deg, #1bb581 0%, var(--gem) 55%, #06271c 100%);
+  box-shadow:0 6px 16px rgba(6,39,28,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
   padding:0.5rem;
 }
-.trust-txt{font-size:0.86rem;line-height:1.34;color:#ffffff;font-weight:700;}
+.trust-txt{font-size:0.86rem;line-height:1.34;color:#ffffff;font-weight:700;text-shadow:0 1px 2px rgba(6,39,28,0.35);}
 .trust-txt mark{background:none;color:#ffffff;font-weight:800;text-decoration:underline;text-underline-offset:2px;}
 
 /* The lead offer line -- no box, no icon, set apart with real typography
