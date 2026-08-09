@@ -168,6 +168,13 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   forcefully every time.
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
+- **Never highlight, bold-color, or otherwise call out individual words
+  within a sentence of body text** (e.g. the old `<mark class="key-hl">`
+  treatment on words like "free"/"neither"/"nor" in the keys panel). Stated
+  at least 5 times across prior sessions and never actually removed because
+  it was never written down here — that failure is why this line exists.
+  Body copy renders as plain, uniform text; no per-word color/weight
+  emphasis, anywhere.
 - **A title's text color and its outline/frame color must never be the same
   tone.**
 - **Never write her copy.** Build visuals and layout only; leave clearly
