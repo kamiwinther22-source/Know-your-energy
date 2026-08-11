@@ -16,7 +16,13 @@
    this file. All entry-page text colors below are flipped from white
    (built for the black version) to dark ink to match. */
 body{
-  font-family:'DM Sans',sans-serif;overflow-x:hidden;position:relative;
+  /* Base font for the whole entry page is the typewriter face now --
+     explicit per-element font-family overrides below are the only
+     exceptions, and there's exactly one: the title (.brand, Alex
+     Brush). Results-page-only classes (.dp*, .report-*, .gate-*, etc.,
+     further down this file) keep their own separate typography and are
+     untouched -- that's a different page with its own settled rules. */
+  font-family:'Special Elite',monospace;overflow-x:hidden;position:relative;
   background-color:#f8f8fa;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
@@ -38,7 +44,7 @@ body{
    / accent (Special Elite, used once, sparingly) / body (DM Sans) --
    four deliberate roles instead of a different treatment per element. */
 .sys-section-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;
+  font-family:'Special Elite',monospace;font-weight:400;font-size:0.85rem;
   letter-spacing:0.05em;text-transform:uppercase;color:#17161c;
   text-align:center;margin-bottom:0.5rem;
 }
@@ -120,7 +126,7 @@ body{
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
-.num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
+.num-tile-lg .n{position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
 /* overflow-wrap so a long single word (no space to break at, e.g.
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
@@ -175,7 +181,7 @@ body{
 .tagline-wrap{position:relative;max-width:400px;margin:0 auto 1.2rem;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.9rem,10.5vw,3rem);line-height:1.15;font-weight:800;letter-spacing:0.005em;
+  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(1.6rem,9vw,2.5rem);line-height:1.2;font-weight:400;letter-spacing:0;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
@@ -197,7 +203,7 @@ body{
   color:#17161c;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#17161c;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.56rem;letter-spacing:0.02em;text-transform:uppercase;color:#17161c;}
 .tog-lbl{cursor:pointer;color:#17161c;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#17161c;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
@@ -207,7 +213,7 @@ body{
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#1C2CA9;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip{font-family:'Special Elite',monospace;font-size:0.6rem;font-weight:400;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#1C2CA9;cursor:pointer;transition:background 0.15s,color 0.15s;}
 .rel-chip:hover{background:rgba(28,44,169,0.12);}
 .rel-chip.active{background:#1C2CA9;color:#ffffff;}
 .rel-chip.active:hover{background:#1C2CA9;}
@@ -226,7 +232,7 @@ body{
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
 .key-txt{font-size:0.85rem;line-height:1.38;color:#17161c;font-weight:500;}
-.key-txt-lead{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;line-height:1.25;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;}
+.key-txt-lead{font-family:'Special Elite',monospace;font-size:1.15rem;line-height:1.3;font-weight:400;text-transform:uppercase;letter-spacing:0.02em;}
 .key-txt em{font-style:normal;color:#17161c;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
@@ -262,13 +268,13 @@ body{
 .line-field::before{left:0;}
 .line-field::after{right:0;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#17161c;font-size:0.7rem;font-weight:500;
-  font-style:italic;font-family:'DM Sans',sans-serif;padding:0.15rem 0.2rem 0;outline:none;
+  width:100%;background:transparent;border:none;color:#17161c;font-size:0.7rem;font-weight:400;
+  font-style:normal;font-family:'Special Elite',monospace;padding:0.15rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
 .line-field select{width:auto;padding-right:1rem;}
 .line-field select option{color:#000000;}
-.line-field input::placeholder{color:#6b6558;font-style:italic;opacity:1;}
+.line-field input::placeholder{color:#6b6558;font-style:normal;opacity:1;}
 
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
@@ -304,7 +310,7 @@ body{
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
-.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#1C2CA9;}
+.loading-txt{font-family:'Special Elite',monospace;font-size:0.8rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:400;color:#1C2CA9;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
