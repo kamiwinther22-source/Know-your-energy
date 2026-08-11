@@ -112,20 +112,11 @@ body{
   display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:9px;
   /* Paint, not colored pencil: flat, fully opaque, saturated fill (no
      gradient wash across the surface -- that read as streaky/uneven,
-     the way pencil coverage does). Shine comes entirely from the
-     highlight below, not from blending the base color itself. */
-  box-shadow: 0 5px 10px rgba(20,55,95,0.4);
-}
-.num-tile-lg .swatch::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  /* A soft diagonal sheen band, not a circular blob in one corner --
-     six tiles in a row each showing the identical corner-circle read as
-     a stamped-out repeat rather than shine. A diagonal streak still
-     reads as a glossy reflection but doesn't create that same-shape-
-     same-spot repetition across the row. Soft edge (not hard-edged),
-     per feedback that the softer highlight was the better one. */
-  background:linear-gradient(115deg, rgba(255,255,255,0) 28%, rgba(255,255,255,0.85) 48%, rgba(255,255,255,0) 66%);
-  filter:blur(2.5px);
+     the way pencil coverage does). The corner-circle highlight and then
+     the diagonal sheen band both read as a repeated decorative shape
+     once six tiles sat in a row -- gone. Just a thin top-edge inset
+     highlight line for a touch of gloss, not a discrete shape. */
+  box-shadow: 0 5px 10px rgba(20,55,95,0.4), inset 0 1.5px 0 rgba(255,255,255,0.75);
 }
 .num-tile-lg .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;
