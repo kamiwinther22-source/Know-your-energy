@@ -181,50 +181,38 @@ body{
    the numerology tiles/toggle-knob/planet dots elsewhere in this file),
    so they're a new layout but not a new material. */
 .key-cluster{position:relative;margin:2.6rem auto;max-width:380px;}
-.key-cluster-a{height:320px;}
-.key-cluster-b{height:250px;margin-bottom:31.5rem;}
-/* Two real bold colors -- emerald and wine, alternating -- not blue, not
-   purple, not tan, not a pink site. Silver is the moving highlight on
-   top of the color, not the fill itself. Same position/size rules as
-   before, untouched -- only the color layer changed. */
+.key-cluster-a{height:200px;}
+.key-cluster-b{height:160px;margin-bottom:44rem;}
+/* One hue family (teal), two shades -- not a color pair at all, so no
+   risk of an unintended seasonal/other reading. Light shade is full
+   saturation, not pastel; deep shade is the same hue, darker. No sweep
+   animation -- that read as a lazy cliché, dropped for good. Much
+   smaller now so the words inside are the actual focus, not the sphere. */
 .key-bubble{
   position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  text-align:center;box-sizing:border-box;padding:0.6rem;overflow:hidden;
+  text-align:center;box-sizing:border-box;padding:0.5rem;overflow:hidden;
   box-shadow:
-    inset 0 3px 5px rgba(255,255,255,0.95),
-    inset 0 -14px 20px rgba(5,8,10,0.55),
-    0 16px 26px -6px rgba(5,8,10,0.45);
-  color:#17161c;font-weight:600;line-height:1.3;
+    inset 0 2px 4px rgba(255,255,255,0.95),
+    inset 0 -9px 13px rgba(5,8,10,0.5),
+    0 10px 16px -5px rgba(5,8,10,0.4);
+  color:#062018;font-weight:700;line-height:1.25;
 }
 .kb-emerald{
-  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #a8e0c4 18%, #1f8a5f 50%, #0f4a3a 78%, #052018 100%);
-  border:1px solid #052018;
+  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #c9fff5 18%, #26e0c4 50%, #0aa88f 78%, #023f36 100%);
+  border:1px solid #023f36;
 }
 .kb-wine{
-  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #f0b3c4 18%, #a3284f 50%, #6b1633 78%, #300a17 100%);
-  border:1px solid #300a17;
+  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #7ff0dd 18%, #0aa88f 50%, #078a76 78%, #012019 100%);
+  border:1px solid #012019;
 }
-/* Real motion: a bright silver band sweeps across each sphere on a slow
-   loop, like light catching a rotating/breathing surface -- not a
-   static shine, an actual living one. */
-.key-bubble::after{
-  content:'';position:absolute;inset:-20%;pointer-events:none;
-  background:linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.7) 46%, rgba(238,241,251,0.2) 52%, transparent 68%);
-  animation:bubbleShine 5s ease-in-out infinite;
-}
-@keyframes bubbleShine{
-  0%,100%{transform:translateX(-40%);}
-  50%{transform:translateX(40%);}
-}
-@media(prefers-reduced-motion:reduce){.key-bubble::after{animation:none;display:none;}}
-.kb-txt{position:relative;z-index:1;display:block;max-width:78%;}
-.kb-lg{width:230px;height:230px;font-size:0.82rem;}
-.kb-sm{width:170px;height:170px;font-size:0.64rem;align-items:flex-start;padding-top:1.7rem;}
-.kb-a1{top:-10px;left:2px;}
-.kb-a2{top:72px;left:50%;transform:translateX(-50%);z-index:1;}
-.kb-a3{top:-4px;right:2px;}
-.kb-b1{top:0;left:2px;align-items:center;padding-top:0.6rem;}
-.kb-b2{bottom:-8px;right:4%;z-index:1;}
+.kb-txt{position:relative;z-index:1;display:block;max-width:82%;}
+.kb-lg{width:140px;height:140px;font-size:0.6rem;}
+.kb-sm{width:100px;height:100px;font-size:0.48rem;align-items:flex-start;padding-top:1rem;}
+.kb-a1{top:-6px;left:6px;}
+.kb-a2{top:46px;left:50%;transform:translateX(-50%);z-index:1;}
+.kb-a3{top:-2px;right:6px;}
+.kb-b1{top:0;left:6px;align-items:center;padding-top:0.5rem;}
+.kb-b2{bottom:-4px;right:6%;z-index:1;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
