@@ -91,7 +91,7 @@ body{
   width:8px;height:8px;border-radius:50%;background:rgba(23,22,28,0.28);
   border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
 }
-.carousel-dots .dot.active{background:#1C2CA9;transform:scale(1.4);}
+.carousel-dots .dot.active{background:#000000;transform:scale(1.4);}
 /* Swipe symbol above the dots instead of side arrow buttons -- a small
    left-right glyph that reads as "swipe here" without sitting on top
    of the carousel content itself. */
@@ -99,7 +99,13 @@ body{
 .swipe-hint svg{width:22px;height:14px;}
 /* Back to a plain grid, two rows of six, question between them --
    the circle/spiral/stadium experiments are done. */
-.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.4rem 0.22rem;width:94%;max-width:360px;margin:0 auto;}
+/* Bleeds past the carousel-slide's own 1.1rem side padding (negative
+   margin cancels it) so the tiles are the one element on this page that
+   actually reaches toward the true screen edge instead of sitting
+   politely centered in the same box as everything else -- real scale/
+   weight contrast between the hero visual and the rest of the page,
+   not just a bigger version of the same centered stack. */
+.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.5rem 0.32rem;width:calc(100% + 1.7rem);max-width:none;margin:0 -0.85rem;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
@@ -119,14 +125,14 @@ body{
    on top. */
 .num-tile-lg .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;color:transparent;
-  font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;
+  font-size:clamp(1rem,6vw,1.7rem);line-height:1;
   text-shadow:
     -0.08em -0.08em 0.03em rgba(0,0,0,0.9),
     -0.04em -0.04em 0.03em rgba(0,0,0,0.7),
     0.08em 0.08em 0.03em rgba(255,255,255,1),
     0.04em 0.04em 0.03em rgba(255,255,255,0.9);
 }
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.54rem;line-height:1.2;letter-spacing:0;text-transform:uppercase;color:#000000;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .lbl{margin-top:0.32rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.58rem;line-height:1.2;letter-spacing:0;text-transform:uppercase;color:#000000;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -203,15 +209,15 @@ body{
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
-.toggle-pill.on{background:#1C2CA9;}
+.toggle-pill.on{background:#000000;}
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'Special Elite',monospace;font-size:0.6rem;font-weight:400;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#1C2CA9;cursor:pointer;transition:background 0.15s,color 0.15s;}
-.rel-chip:hover{background:rgba(28,44,169,0.12);}
-.rel-chip.active{background:#1C2CA9;color:#ffffff;}
-.rel-chip.active:hover{background:#1C2CA9;}
+.rel-chip{font-family:'Special Elite',monospace;font-size:0.6rem;font-weight:400;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #000000;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip:hover{background:rgba(0,0,0,0.08);}
+.rel-chip.active{background:#000000;color:#ffffff;}
+.rel-chip.active:hover{background:#000000;}
 
 /* ---------- bottom two-column: keys | form ---------- */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
@@ -282,20 +288,28 @@ body{
 .glow-ring .gen-btn{position:relative;z-index:1;margin:0;border-radius:7px;}
 @keyframes silverspin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
+/* Fill is the same real brushed-steel family as the numerology tiles'
+   chrome tone (silverL/silverD stops from TONE_CONIC) instead of a flat
+   blue pill -- the spinning ring around this button was already this
+   metal; the fill fighting it with a different, unrelated material (flat
+   blue) was two materials pretending to be one object. Linear, not
+   conic, so the label sits on predictable light/dark bands left-to-right
+   rather than a ring pattern that would cut across the letters. */
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
-  background:linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
-  border:1px solid rgba(255,255,255,0.55);border-radius:6px;
+  background:linear-gradient(115deg,#eef2f4 0%,#c9d6da 18%,#6f818a 42%,#4f5a61 58%,#8ea0a8 78%,#eef2f4 100%);
+  border:1px solid rgba(255,255,255,0.6);border-radius:6px;
   color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  text-shadow:0 1px 2px rgba(0,0,0,0.85),0 0 5px rgba(0,0,0,0.5);
   transition:transform 0.18s ease,box-shadow 0.18s ease;
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,0.65),
-    inset 0 -4px 7px rgba(210,220,230,0.4),
-    0 8px 18px -6px rgba(190,200,210,0.6);}
+    inset 0 -4px 7px rgba(40,45,50,0.35),
+    0 8px 18px -6px rgba(40,45,50,0.55);}
 .gen-btn:hover{transform:translateY(-1px);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,0.7),
-    inset 0 -4px 7px rgba(210,220,230,0.45),
-    0 10px 22px -6px rgba(190,200,210,0.7);}
+    inset 0 -4px 7px rgba(40,45,50,0.4),
+    0 10px 22px -6px rgba(40,45,50,0.65);}
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
@@ -305,7 +319,7 @@ body{
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
-.loading-txt{font-family:'Special Elite',monospace;font-size:0.8rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:400;color:#1C2CA9;}
+.loading-txt{font-family:'Special Elite',monospace;font-size:0.8rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:400;color:#000000;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
