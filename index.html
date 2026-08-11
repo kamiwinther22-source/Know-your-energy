@@ -529,59 +529,6 @@ body{
       <feTurbulence type="fractalNoise" baseFrequency="0.011 0.032" numOctaves="3" seed="41" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="28" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <!-- Thick/flowing white background: layered ribbon shapes (real
-         parametric geometry -- centerline + perpendicular half-width,
-         not a hand-drawn blob), each with its OWN soft drop-shadow so
-         they stack into real physical thickness instead of one flat
-         white shape. White fill with cool-grey shading only -- no warm
-         ivory/tan, that was already tried and rejected on this
-         background once. Smaller turbulence scale than the wispTurb*
-         filters above so the edges read as poured/liquid, not shredded. -->
-    <filter id="creamMarble" x="-30%" y="-30%" width="160%" height="160%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.009 0.016" numOctaves="2" seed="11" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="creamMarble2" x="-30%" y="-30%" width="160%" height="160%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.0085 0.015" numOctaves="2" seed="23" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="creamLift1" x="-40%" y="-40%" width="180%" height="180%">
-      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#8a8d92" flood-opacity="0.32"/>
-    </filter>
-    <filter id="creamLift2" x="-40%" y="-40%" width="180%" height="180%">
-      <feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#8a8d92" flood-opacity="0.28"/>
-    </filter>
-    <filter id="creamLift3" x="-40%" y="-40%" width="180%" height="180%">
-      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#8a8d92" flood-opacity="0.25"/>
-    </filter>
-    <linearGradient id="creamBack" x1="10%" y1="0%" x2="90%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="45%" stop-color="#f5f4f0"/><stop offset="100%" stop-color="#ece9e2"/>
-    </linearGradient>
-    <!-- Back to soft near-white, not grey -- a different TINT of white
-         (a whisper of warmth), not a shade/darkening of it. This is the
-         "off-white" pass, sitting between the cool-white back layer and
-         the cream-white front layer for real depth from color
-         temperature variation, not from greying anything down. -->
-    <linearGradient id="creamMid" x1="6%" y1="0%" x2="94%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="50%" stop-color="#f7f5ef"/><stop offset="100%" stop-color="#efece3"/>
-    </linearGradient>
-    <linearGradient id="creamFront" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#fffdf8"/><stop offset="50%" stop-color="#fefbf3"/><stop offset="100%" stop-color="#f6f1e6"/>
-    </linearGradient>
-    <linearGradient id="creamSheen" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/><stop offset="22%" stop-color="#ffffff" stop-opacity="0.9"/>
-      <stop offset="34%" stop-color="#ffffff" stop-opacity="0"/><stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="72%" stop-color="#ffffff" stop-opacity="0.75"/><stop offset="84%" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <!-- A real thin silver line, the same scale as the tile ring's
-         metal outline -- not a broad grey streak, a delicate stroked
-         edge with genuine light/dark banding along it. -->
-    <linearGradient id="silverStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#eef1f4"/><stop offset="18%" stop-color="#8b95a0"/>
-      <stop offset="36%" stop-color="#ffffff"/><stop offset="54%" stop-color="#7c8790"/>
-      <stop offset="72%" stop-color="#eef2f5"/><stop offset="88%" stop-color="#96a0aa"/>
-      <stop offset="100%" stop-color="#ffffff"/>
-    </linearGradient>
   </defs>
 </svg>
 <div class="content">
@@ -782,88 +729,6 @@ body{
       </g>`;
   }
 
-  // ---------- thick/flowing white hero layer: real parametric ribbon
-  // geometry (centerline + perpendicular half-width per sample point),
-  // not a hand-drawn blob path. Three stacked passes, each with its own
-  // soft drop-shadow, is what actually reads as physical thickness --
-  // one flat shape with a single shadow does not. Anchored to the top
-  // of the page (fixed y-range) regardless of total document height, so
-  // it stays a hero treatment behind the title/numbers/tagline and does
-  // not stretch thin across the whole page or compete with the form
-  // fields further down.
-  function ribbonPath(points, halfWidths){
-    const top=[], bot=[];
-    for(let i=0;i<points.length;i++){
-      const [x,y] = points[i];
-      const prev = points[Math.max(0,i-1)];
-      const next = points[Math.min(points.length-1,i+1)];
-      let dx = next[0]-prev[0], dy = next[1]-prev[1];
-      const len = Math.hypot(dx,dy)||1;
-      dx/=len; dy/=len;
-      const nx = -dy, ny = dx;
-      const hw = halfWidths[i];
-      top.push([x+nx*hw, y+ny*hw]);
-      bot.push([x-nx*hw, y-ny*hw]);
-    }
-    let d = 'M'+top.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
-    d += ' L'+bot.slice().reverse().map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
-    d += ' Z';
-    return d;
-  }
-  function creamLayerPath(seed, yOffset, hwBase, hwAmp, W, N, growth, ampMul, freqMul){
-    const pts = [], hws = [];
-    for(let i=0;i<=N;i++){
-      const t = i/N;
-      const x = -80 + t*(W+160);
-      const y = yOffset + (130*ampMul)*Math.sin(t*Math.PI*freqMul - 0.3 + seed) + t*growth;
-      pts.push([x,y]);
-      hws.push(hwBase + hwAmp*Math.sin(t*Math.PI*2.0 + seed*1.7));
-    }
-    return ribbonPath(pts, hws);
-  }
-  // Extended much further down the page -- this used to stop around
-  // y=380 (title/tiles only), then hand off to a thin, barely-there
-  // trail for everything else. That's an accent on a blank page, not
-  // an atmosphere. Now it carries real presence down through the
-  // tagline and the first cloud cluster, the same material the whole
-  // way, before the trail takes over for the rest of the page.
-  function creamHero(W){
-    const N = 60;
-    const pathBack  = creamLayerPath(0.6, 20,  62, 24, W, N, 640, 1.25, 0.62);
-    const pathMid   = creamLayerPath(0.15, 35, 66, 24, W, N, 640, 1.2, 0.62);
-    const pathFront = creamLayerPath(-0.3, 50, 38, 15, W, N, 640, 1.15, 0.62);
-    return `
-      <g filter="url(#creamLift1)"><path d="${pathBack}" fill="url(#creamBack)" filter="url(#creamMarble)"/></g>
-      <g filter="url(#creamLift3)">
-        <path d="${pathFront}" fill="url(#creamFront)" filter="url(#creamMarble)"/>
-        <path d="${pathFront}" fill="url(#creamSheen)" filter="url(#creamMarble)"/>
-      </g>
-      <g filter="url(#creamLift2)"><path d="${pathMid}" fill="url(#creamMid)" filter="url(#creamMarble2)"/></g>
-      <!-- The actual silver accent: a thin traced line along the front
-         ribbon's own contour, same scale as the tile ring's metal
-         outline -- not a filled band standing in for it. -->
-      <path d="${pathFront}" fill="none" stroke="url(#silverStroke)" stroke-width="1.6" opacity="0.8" filter="url(#creamMarble)"/>`;
-  }
-  /* Carries the same material the rest of the way down the page --
-     stronger presence than the old thin accent tendril, still hugging
-     the right edge and still tapering out before it would ever sit
-     under form input text, but no longer so faint it reads as nothing. */
-  function creamTrail(W, H){
-    const startY = 640;
-    if(H <= startY + 40) return '';
-    const N = 40;
-    const pts=[], hws=[];
-    for(let i=0;i<=N;i++){
-      const t = i/N;
-      const y = startY + t*(H-startY);
-      const x = W - 40 + 22*Math.sin(t*Math.PI*2.1);
-      pts.push([x,y]);
-      hws.push(34*(1-t*0.82) + 4);
-    }
-    const path = ribbonPath(pts, hws);
-    return `<g filter="url(#creamLift3)"><path d="${path}" fill="url(#creamBack)" opacity="0.75" filter="url(#creamMarble2)"/></g>`;
-  }
-
   function buildWisps(){
     const svg = document.getElementById('bgWisps');
     if(!svg) return;
@@ -871,8 +736,6 @@ body{
     const numClusters = Math.max(1, Math.ceil(h / CLUSTER_H));
     let body = '';
     for(let i=0;i<numClusters;i++) body += cluster(i);
-    body += creamHero(VW);
-    body += creamTrail(VW, h);
     svg.setAttribute('viewBox', `0 0 ${VW} ${h}`);
     svg.setAttribute('height', h);
     svg.setAttribute('preserveAspectRatio','none');
