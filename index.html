@@ -134,16 +134,11 @@ body{
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
-/* No gold/yellow -- explicitly rejected as an overdone color in this
-   genre. Reuses the title's own blue ramp instead of inventing a new
-   color; the size and typeface are already very different from the
-   title (Barlow Condensed vs Alex Brush cursive, and noticeably larger),
-   so same-hue shouldn't read as "blending in" the way it would if both
-   were identical in every other way too -- worth a second look once
-   she's seen it real size. */
+/* Plain neutral ink, no gradient/color effect at all -- a placeholder
+   until she picks the real color, not another color choice made for
+   her. Same ink tone as the rest of the page's body text. */
 .tagline-slide.c-brand{
-  background:linear-gradient(100deg,#0F1758 0%,#5364D6 35%,#8A96EE 50%,#5364D6 65%,#0F1758 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  color:#17161c;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#17161c;}
