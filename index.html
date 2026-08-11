@@ -217,7 +217,7 @@ body{
   color:#000000;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.45rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.56rem;letter-spacing:0.02em;text-transform:uppercase;color:#000000;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.45rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.74rem;letter-spacing:0.02em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
@@ -227,7 +227,7 @@ body{
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'Special Elite',monospace;font-size:0.6rem;font-weight:400;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #000000;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip{font-family:'Special Elite',monospace;font-size:0.78rem;font-weight:400;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #000000;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
 .rel-chip:hover{background:rgba(0,0,0,0.08);}
 .rel-chip.active{background:#000000;color:#ffffff;}
 .rel-chip.active:hover{background:#000000;}
@@ -243,12 +243,12 @@ body{
 .clouds-above{margin-bottom:1rem;}
 .clouds-below{margin-top:1.1rem;}
 .key-cloud{position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
-  width:100px;aspect-ratio:1/0.96;padding:0.2rem 0.5rem;}
+  width:118px;aspect-ratio:1/0.96;padding:0.2rem 0.5rem;}
 .key-cloud:nth-child(2){margin-top:0.55rem;}
 .key-cloud:nth-child(3){margin-top:-0.3rem;}
 .key-cloud svg{position:absolute;inset:-34% -26%;width:168%;height:168%;overflow:visible;z-index:0;pointer-events:none;}
-.key-cloud-text{position:relative;z-index:1;text-align:center;font-size:0.6rem;line-height:1.2;color:#000000;font-weight:600;}
-.key-cloud-text.lead{font-family:'Special Elite',monospace;font-size:0.66rem;line-height:1.15;font-weight:400;text-transform:uppercase;letter-spacing:0.01em;}
+.key-cloud-text{position:relative;z-index:1;text-align:center;font-size:0.72rem;line-height:1.22;color:#000000;font-weight:600;}
+.key-cloud-text.lead{font-family:'Special Elite',monospace;font-size:0.8rem;line-height:1.15;font-weight:400;text-transform:uppercase;letter-spacing:0.01em;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -273,8 +273,8 @@ body{
 }
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
-.section-lbl{font-size:0.6rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
+.form-panel label{display:block;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;color:#000000;margin-bottom:0.25rem;font-weight:700;}
+.section-lbl{font-size:0.78rem!important;color:#000000!important;margin-bottom:0.4rem!important;}
 .opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#000000;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
 .row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
@@ -289,7 +289,7 @@ body{
 .line-field::before{left:0;}
 .line-field::after{right:0;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#000000;font-size:0.7rem;font-weight:400;
+  width:100%;background:transparent;border:none;color:#000000;font-size:0.88rem;font-weight:400;
   font-style:normal;font-family:'Special Elite',monospace;padding:0.15rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
@@ -318,7 +318,7 @@ body{
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
   background:linear-gradient(115deg,#eef2f4 0%,#c9d6da 18%,#6f818a 42%,#4f5a61 58%,#8ea0a8 78%,#eef2f4 100%);
   border:1px solid rgba(255,255,255,0.6);border-radius:6px;
-  color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  color:#ffffff;font-size:0.92rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
   text-shadow:0 1px 2px rgba(0,0,0,0.85),0 0 5px rgba(0,0,0,0.5);
   transition:transform 0.18s ease,box-shadow 0.18s ease;
   box-shadow:
@@ -333,9 +333,9 @@ body{
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
-.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#000000;margin:0.35rem 0 0;}
+.tnote{font-style:italic;font-size:0.76rem;line-height:1.4;color:#000000;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
-.err{display:none;font-size:0.7rem;color:#a3243f;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(200,40,60,0.08);border-radius:5px;border:1px solid rgba(200,40,60,0.3);font-weight:600;}
+.err{display:none;font-size:0.84rem;color:#a3243f;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(200,40,60,0.08);border-radius:5px;border:1px solid rgba(200,40,60,0.3);font-weight:600;}
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
@@ -1311,22 +1311,39 @@ function cloudSVG(){
         <feTurbulence type="fractalNoise" baseFrequency="0.028 0.048" numOctaves="3" seed="${seed+9}" result="n"/>
         <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
-      <!-- Per-puff radial gradient: objectBoundingBox units (the SVG
-           default) mean each ellipse gets its OWN independent light/
-           shadow modeling instead of one flat gradient smeared across
-           the whole cluster -- real individual lobe volume, which is
-           what "fluffy" actually needs, not just a darker edge overall. -->
-      <radialGradient id="puffGrad${id}" cx="34%" cy="26%" r="78%">
+      <!-- Per-puff radial gradient, light biased to the TOP (a real sun-
+           from-above reading, per actual cloud-painting reference: dark-
+           to-light gradient running base-upward, cool tone in shadow) --
+           objectBoundingBox units mean each ellipse gets its own
+           independent modeling instead of one flat gradient smeared
+           across the whole cluster. -->
+      <radialGradient id="puffGrad${id}" cx="38%" cy="16%" r="82%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="45%" stop-color="#f1f4f7"/>
-        <stop offset="80%" stop-color="#c7d3e0"/>
-        <stop offset="100%" stop-color="#9fb1c4"/>
+        <stop offset="40%" stop-color="#f1f4f7"/>
+        <stop offset="75%" stop-color="#c2cfdd"/>
+        <stop offset="100%" stop-color="#8fa2b8"/>
+      </radialGradient>
+      <!-- A soft reflected-light glow along the base -- bounced light
+           lifting the shadow slightly right at the bottom edge, the way
+           real clouds catch light off whatever is beneath them, instead
+           of the shadow just running to its darkest point and stopping. -->
+      <radialGradient id="cloudBounce${id}" cx="50%" cy="94%" r="46%">
+        <stop offset="0%" stop-color="#dce7f2" stop-opacity="0.65"/>
+        <stop offset="100%" stop-color="#dce7f2" stop-opacity="0"/>
       </radialGradient>
       <filter id="cloudLift${id}" x="-60%" y="-60%" width="220%" height="220%">
         <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#5b7392" flood-opacity="0.35"/>
       </filter>
+      <!-- Edge-softening blur pass -- a hard silhouette cutoff is what
+           the reference material calls out specifically as reading
+           cartoonish; a blurred underlayer lets the boundary dissolve
+           instead of ending in a crisp line. -->
+      <filter id="cloudEdgeSoft${id}" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="2.6"/>
+      </filter>
     </defs>
     <g filter="url(#cloudLift${id})">
+      <g filter="url(#cloudTurb${id})" opacity="0.55"><g filter="url(#cloudEdgeSoft${id})">${cloudPuffs(seed, '#ffffff')}</g></g>
       <!-- Undercoat: a darker, slightly offset copy of the same puff
            cluster sitting underneath, distorted with a different
            turbulence seed so its edges don't align with the top layer
@@ -1334,7 +1351,8 @@ function cloudSVG(){
            crevices between lobes, not just a flat silhouette edge. -->
       <g filter="url(#cloudTurb${id}b)">${cloudPuffs(seed+2, '#7f93a8', 3.5)}</g>
       <g filter="url(#cloudTurb${id})">${cloudPuffs(seed, `url(#puffGrad${id})`)}</g>
-      <ellipse cx="38" cy="30" rx="17" ry="12" fill="#ffffff" opacity="0.85" filter="url(#cloudTurb${id})"/>
+      <g filter="url(#cloudTurb${id})" style="mix-blend-mode:screen">${cloudPuffs(seed, `url(#cloudBounce${id})`)}</g>
+      <ellipse cx="38" cy="28" rx="16" ry="11" fill="#ffffff" opacity="0.8" filter="url(#cloudTurb${id})"/>
     </g>
   </svg>`;
 }
