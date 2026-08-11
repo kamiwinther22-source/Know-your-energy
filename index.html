@@ -31,9 +31,9 @@ body{
 .content{width:100%;max-width:420px;min-width:0;position:relative;z-index:1;}
 
 .sys-section-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
-  letter-spacing:0.06em;text-transform:uppercase;color:#17161c;
-  text-align:center;margin-bottom:0.5rem;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.5rem;
+  letter-spacing:0.05em;text-transform:uppercase;color:#17161c;
+  text-align:center;margin-bottom:0.15rem;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -47,36 +47,35 @@ body{
    the layout by spacing and the section label only, not a bounding
    rectangle. */
 .chart-carousel{
-  position:relative;padding:0.2rem 0 0.5rem;margin-bottom:0.6rem;
+  position:relative;padding:0.1rem 0 0.2rem;margin-bottom:0.2rem;
 }
 /* 3x4 grid (3 columns, 4 rows for the 12 numbers), centered as its own
-   block rather than stretched full width. */
-.num-strip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;width:100%;max-width:300px;margin:0 auto;}
+   block rather than stretched full width. Sized to fit on one screen
+   with the wheels below it -- no labels under the tiles anymore, the
+   number alone in a small chip. */
+.num-strip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.3rem;width:100%;max-width:150px;margin:0 auto;}
 /* The astrology wheel and Human Design diagram are no longer carousel
    slides -- both always visible, offset left/right below the numbers so
-   they don't stack directly on top of each other. */
-.wheel-left{width:72%;margin:1.8rem auto 0 0;}
-.wheel-right{width:72%;margin:1.8rem 0 0 auto;}
+   they don't stack directly on top of each other. Much smaller now so
+   numbers + both wheels fit in one screen with no scrolling. */
+.wheel-left{width:34%;margin:0.4rem auto 0 0;}
+.wheel-right{width:34%;margin:0.3rem 0 0 auto;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
-  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:4px;
   /* Shadow moved here, off the whole tile (which included the label
      text below and was blurring it the same way the chart graphics
      were) -- only the swatch itself gets the lift now. */
-  filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.5));
 }
 .num-tile-lg .swatch::before{
   content:'';position:absolute;inset:0;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
-.num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
-/* overflow-wrap so a long single word (no space to break at, e.g.
-   "Communicator") wraps onto a second line inside its own tile instead
-   of overflowing sideways into the next one -- that sideways overflow,
-   not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.62rem;line-height:1;color:#000000;}
+.num-tile-lg .lbl{display:none;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -84,7 +83,7 @@ body{
    words hard to read, not eyesight or the font. Individual shapes still
    get their own lift via the num-tile-lg filter and their own gradient
    shading; text stays completely unfiltered so it's genuinely crisp. */
-.chart-graphic{width:100%;position:relative;margin-top:0.3rem;}
+.chart-graphic{width:100%;position:relative;margin-top:0.1rem;}
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
 /* ---------- title ---------- */
