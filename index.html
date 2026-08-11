@@ -116,11 +116,16 @@ body{
    works per tile; the always-visible word label is gone since a tight
    touching ring has no room for it -- the tap already surfaces it. */
 .num-circle{position:relative;margin:0.4rem auto 0;}
+/* One unit per number -- tile + its word label, positioned as a group
+   so the label has real room instead of being dropped for lack of
+   space. Spread out (not edge-to-edge) since the label needs it. */
+.num-circle-unit{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;}
 .num-circle-tile{
-  position:absolute;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  border:0.5px solid;border-radius:8px;
+  position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  border:0.5px solid;border-radius:8px;flex-shrink:0;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
 }
+.num-circle-lbl{margin-top:0.25rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.52rem;line-height:1.2;letter-spacing:0;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 .num-circle-tile::before{
   content:'';position:absolute;inset:0;border-radius:8px;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
@@ -812,26 +817,24 @@ const NUMS = [
 const numCircle = document.getElementById('numCircle');
 if(numCircle){
   const N = NUMS.length;
-  const S = 56;              // tile size
-  const gapPx = 2;
-  const R = (S+gapPx) / (2*Math.sin(Math.PI/N));
-  const cx = R + S/2, cy = R + S/2;
-  numCircle.style.width = (2*R + S) + 'px';
-  numCircle.style.height = (2*R + S) + 'px';
+  const S = 46;              // tile size
+  const R = 150;             // spread out -- not edge-to-edge, just not overlapping
+  const unitW = 62;          // narrow enough that longer words wrap to 2 lines instead of spreading into neighbors
+  const cx = R + unitW/2, cy = R + unitW/2;
+  numCircle.style.width = (2*R + unitW) + 'px';
+  numCircle.style.height = (2*R + unitW) + 'px';
   NUMS.forEach((item,i)=>{
     const t = TONES[item.tone];
     const angle = -Math.PI/2 + i*(2*Math.PI/N);
     const x = cx + R*Math.cos(angle);
     const y = cy + R*Math.sin(angle);
-    const tile = document.createElement('div');
-    tile.className = 'num-circle-tile';
-    tile.style.width = S+'px'; tile.style.height = S+'px';
-    tile.style.left = (x-S/2)+'px'; tile.style.top = (y-S/2)+'px';
-    tile.style.background = TONE_CONIC[item.tone];
-    tile.style.borderColor = t.border;
-    tile.innerHTML = `<div class="n" style="font-size:${S*0.42}px;">${item.n}</div>`;
-    tile.addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
-    numCircle.appendChild(tile);
+    const unit = document.createElement('div');
+    unit.className = 'num-circle-unit';
+    unit.style.left = x+'px'; unit.style.top = y+'px';
+    unit.style.width = unitW+'px';
+    unit.innerHTML = `<div class="num-circle-tile" style="width:${S}px;height:${S}px;background:${TONE_CONIC[item.tone]};border-color:${t.border};"><div class="n" style="font-size:${S*0.42}px;">${item.n}</div></div><div class="num-circle-lbl">${item.lbl}</div>`;
+    unit.querySelector('.num-circle-tile').addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
+    numCircle.appendChild(unit);
   });
 }
 // item.lbl is this cell's real Pythagorean Square meaning (Character,
