@@ -52,9 +52,9 @@ body{
    a little extra letter-spacing, and a soft embossed text-shadow for
    dimension instead of a flat, flush-with-the-page line of type. */
 .sys-section-sub{
-  font-family:'Special Elite',monospace;font-weight:400;font-size:1.3rem;
+  font-family:'Special Elite',monospace;font-weight:400;font-size:1.1rem;
   letter-spacing:0.01em;color:#000000;text-align:center;margin:0.75rem auto 0;
-  width:fit-content;padding:0.35rem 0;
+  width:fit-content;max-width:250px;padding:0.35rem 0;
   border-top:1px solid rgba(23,22,28,0.3);border-bottom:1px solid rgba(23,22,28,0.3);
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
@@ -108,26 +108,17 @@ body{
 .carousel-arrow.prev{left:0.2rem;}
 .carousel-arrow.next{right:0.2rem;}
 .carousel-arrow:disabled{opacity:0.25;cursor:default;}
-/* Numbers arranged on a closed, touching circle instead of a grid --
-   real content sizes computed in JS (see buildNumCircle below) so the
-   ring is always exactly as big as it needs to be for however many
-   numbers exist. The question sits absolutely centered in the open
-   middle the ring leaves behind. Tap-to-reveal (openNumberDef) still
-   works per tile; the always-visible word label is gone since a tight
-   touching ring has no room for it -- the tap already surfaces it. */
-.num-circle{position:relative;margin:0.4rem auto 0;}
-/* One unit per number -- tile + its word label, positioned as a group
-   so the label has real room instead of being dropped for lack of
-   space. Spread out (not edge-to-edge) since the label needs it. */
-.num-circle-unit{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;}
-.num-circle-tile{
-  position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  border:0.5px solid;border-radius:8px;flex-shrink:0;
+/* Back to a plain grid, two rows of six, question between them --
+   the circle/spiral/stadium experiments are done. */
+.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.4rem 0.22rem;width:94%;max-width:360px;margin:0 auto;}
+.num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
+.num-tile-lg .swatch{
+  position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
+  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
 }
-.num-circle-lbl{margin-top:0.25rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.52rem;line-height:1.2;letter-spacing:0;text-transform:uppercase;color:#000000;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
-.num-circle-tile::before{
-  content:'';position:absolute;inset:0;border-radius:8px;
+.num-tile-lg .swatch::before{
+  content:'';position:absolute;inset:0;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
@@ -137,21 +128,16 @@ body{
    light direction as every sphere/tile highlight on this page) is what
    reads as a real carved recess instead of a flat black number sitting
    on top. */
-.num-circle-tile .n{
+.num-tile-lg .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;color:transparent;
-  /* em-based offsets this time -- fixed px offsets didn't scale down
-     with a smaller tile, so the shadow nearly filled the whole glyph
-     and read as a solid black blob instead of a fine engraved edge. */
+  font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;
   text-shadow:
     -0.08em -0.08em 0.03em rgba(0,0,0,0.9),
     -0.04em -0.04em 0.03em rgba(0,0,0,0.7),
     0.08em 0.08em 0.03em rgba(255,255,255,1),
     0.04em 0.04em 0.03em rgba(255,255,255,0.9);
 }
-.num-circle-q{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:auto;max-width:112px;margin:0!important;border:none!important;padding:0!important;
-}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.54rem;line-height:1.2;letter-spacing:0;text-transform:uppercase;color:#000000;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -540,9 +526,9 @@ body{
     <div class="carousel-track" id="carouselTrack">
       <div class="carousel-slide">
         <div class="sys-section-title">Numerology</div>
-        <div class="num-circle" id="numCircle">
-          <div class="sys-section-sub num-circle-q">Which number best represents you?</div>
-        </div>
+        <div class="num-strip-row" id="numStripRowA"></div>
+        <div class="sys-section-sub">Which number best represents you?</div>
+        <div class="num-strip-row" id="numStripRowB"></div>
       </div>
       <div class="carousel-slide">
         <div class="sys-section-title">Astrology</div>
@@ -813,81 +799,20 @@ const NUMS = [
   {n:22, lbl:'Master Builder', tone:'goldT'},
   {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
-// Closed, touching circle -- exact radius solved from real tile count/
-// size (law of sines for a regular polygon-like ring) rather than
-// guessed, so it always comes out touching regardless of how many
-// numbers there are.
-const numCircle = document.getElementById('numCircle');
-if(numCircle){
-  const N = NUMS.length;
-  const S = 64;              // tile size -- big enough to read without zooming
-  // Elliptical, not a perfect circle: page width is capped (~380px),
-  // but page height can just scroll further, so the vertical radius
-  // gets to be a lot more generous than the horizontal one. This is
-  // what actually lets tiles stay big -- a symmetric circle forces
-  // every tile down to whatever fits the tighter (width) dimension.
-  const unitW = 84, unitH = S + 42; // full tile+label footprint
-  const clearance = Math.sqrt(unitW*unitW + unitH*unitH);
-  // A "stadium" outline (two straight vertical sides capped by
-  // semicircles top and bottom) instead of an ellipse. An ellipse's
-  // curve gets sharper at the top/bottom the taller it's stretched --
-  // that's exactly what was crowding units there, and it can't be
-  // fixed by adding height because more height makes those ends
-  // *sharper*, not rounder. A stadium's straight sides have zero
-  // curvature, so they can extend as far as needed with no crowding
-  // risk at all -- only the two caps need a fixed, safe radius.
-  const capR = 108; // fixed cap radius -- the carousel's arrow buttons cap how wide this can ever get
-  function stadiumPoints(straightLen, n){
-    const capPerim = Math.PI*capR;         // one semicircle
-    const total = 2*straightLen + 2*capPerim;
-    const step = total/n;
-    const pts = [];
-    for(let k=0;k<n;k++){
-      let s = (k*step) % total;
-      let x, y;
-      // Verified at each segment boundary by hand (right-top -> left-top
-      // -> left-bottom -> right-bottom -> back to right-top), not just
-      // assumed correct.
-      if(s < capPerim){                              // top cap: right connection -> left connection, over the top
-        const a = s/capR;                             // 0..PI
-        x = capR*Math.cos(a); y = -straightLen/2 - capR*Math.sin(a);
-      } else if(s < capPerim + straightLen){          // left side, top-to-bottom
-        x = -capR; y = -straightLen/2 + (s-capPerim);
-      } else if(s < 2*capPerim + straightLen){        // bottom cap: left connection -> right connection, under the bottom
-        const a = (s-capPerim-straightLen)/capR;      // 0..PI
-        x = -capR*Math.cos(a); y = straightLen/2 + capR*Math.sin(a);
-      } else {                                        // right side, bottom-to-top
-        x = capR; y = straightLen/2 - (s-2*capPerim-straightLen);
-      }
-      pts.push({x, y});
-    }
-    return { pts, spacing: step };
-  }
-  let straightLen = 40;
-  let { pts: coords, spacing } = stadiumPoints(straightLen, N);
-  let guard = 0;
-  while(spacing < clearance && guard < 80){
-    straightLen += 6;
-    ({ pts: coords, spacing } = stadiumPoints(straightLen, N));
-    guard++;
-  }
-  const halfW = capR, halfH = straightLen/2 + capR;
-  const cx = halfW + unitW/2, cy = halfH + unitW/2;
-  numCircle.style.width = (2*halfW + unitW) + 'px';
-  numCircle.style.height = (2*halfH + unitW) + 'px';
-  NUMS.forEach((item,i)=>{
+// Plain grid, two rows of six, question between them.
+function buildNumRow(container, items){
+  if(!container) return;
+  items.forEach(item=>{
     const t = TONES[item.tone];
-    const x = cx + coords[i].x;
-    const y = cy + coords[i].y;
-    const unit = document.createElement('div');
-    unit.className = 'num-circle-unit';
-    unit.style.left = x+'px'; unit.style.top = y+'px';
-    unit.style.width = unitW+'px';
-    unit.innerHTML = `<div class="num-circle-tile" style="width:${S}px;height:${S}px;background:${TONE_CONIC[item.tone]};border-color:${t.border};"><div class="n" style="font-size:${S*0.42}px;">${item.n}</div></div><div class="num-circle-lbl">${item.lbl}</div>`;
-    unit.querySelector('.num-circle-tile').addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
-    numCircle.appendChild(unit);
+    const tile = document.createElement('div');
+    tile.className = 'num-tile-lg';
+    tile.innerHTML = `<div class="swatch" style="background:${TONE_CONIC[item.tone]};border-color:${t.border};"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
+    tile.querySelector('.swatch').addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
+    container.appendChild(tile);
   });
 }
+buildNumRow(document.getElementById('numStripRowA'), NUMS.slice(0,6));
+buildNumRow(document.getElementById('numStripRowB'), NUMS.slice(6,12));
 // item.lbl is this cell's real Pythagorean Square meaning (Character,
 // Energy, etc.) -- the body reuses NUM_DEFS.lifepath, which is a
 // different number system's content (what this digit means as a Life
