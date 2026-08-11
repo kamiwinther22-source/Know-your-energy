@@ -7,19 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: warm, light, and saturated-adjacent -- not sterile white,
-   never black. A pure-black page with scattered white sparkle stars is
-   the night-sky/cosmic pattern this site has rejected before; this is
-   the fix. Still one quiet, single soft falloff (not scattered patches)
-   so cards/tiles stay the interesting thing on the page -- only the tone
-   itself changed, from black to a warm ivory with a faint color cast. */
+/* Background: white ceramic, not a warm tint. Cool-neutral white base
+   with actual glazed-surface modeling -- a soft light bloom where a
+   glaze would catch the light, and a soft shadow pool opposite it, the
+   way light reads across a smooth glossy ceramic slab -- instead of one
+   flat color. Never black (the night-sky pattern this site rejected
+   before), never a warm cream cast either. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#F7EDDC;
-  background-image:radial-gradient(120% 70% at 50% -10%, rgba(255,235,225,0.65) 0%, rgba(247,237,220,0) 60%);
+  background-color:#F1F1EF;
+  background-image:
+    radial-gradient(115% 55% at 26% -8%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 52%),
+    radial-gradient(130% 85% at 82% 108%, rgba(20,20,25,0.06) 0%, rgba(20,20,25,0) 55%);
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
-  color:#181433;
+  color:#17161c;
 }
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
@@ -31,7 +33,7 @@ body{
 
 .sys-section-title{
   font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
-  letter-spacing:0.06em;text-transform:uppercase;color:#181433;
+  letter-spacing:0.06em;text-transform:uppercase;color:#17161c;
   text-align:center;margin-bottom:0.5rem;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
@@ -98,7 +100,7 @@ body{
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
    not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#181433;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -110,7 +112,7 @@ body{
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
 /* ---------- title ---------- */
-.brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 2.3rem;}
+.brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
    photo of the actual pigment (mean of the well-lit, fully-saturated pixels
    across the pile, excluding shadow crevices and blown highlight) rather
@@ -132,7 +134,7 @@ body{
      line, so it can't wrap -- it has to actually shrink to fit instead).
      Still one line, still Alex Brush, just allowed to keep scaling down
      on the narrowest screens instead of hitting a hard floor early. */
-  font-size:clamp(1.55rem,8.8vw,3.1rem);white-space:nowrap;
+  font-size:clamp(1.7rem,10vw,3.4rem);white-space:nowrap;
   /* Dark anchor stops for a light background -- restored from the
      pre-black version (#0F1758/#121C6C were sampled for contrast here),
      same shiny-text technique as the tagline below: deep anchor + bright
@@ -141,27 +143,6 @@ body{
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   filter:drop-shadow(0 0 14px rgba(90,110,230,0.3));
 }
-
-/* ---------- corner ornament: one deliberate glossy medallion, replacing
-   the scattered sparkle-star field. Same verified shine recipe as the
-   GENERATE button below (spinning conic-gradient ring + specular
-   highlight + inset shadow for depth) -- reused, not reinvented -- in a
-   new saturated jewel-tone so the page has a real color accent besides
-   the brand blue. */
-.corner-gem{position:fixed;top:8px;right:10px;width:32px;height:32px;z-index:2;pointer-events:none;}
-.corner-gem::before{content:'';position:absolute;inset:-3px;border-radius:50%;
-  background:conic-gradient(from 0deg,#7a1030 0%,#ff5d7d 12%,#ffd6de 20%,#ff5d7d 28%,#7a1030 40%,#4a0a1e 50%,#7a1030 60%,#ff5d7d 72%,#ffd6de 80%,#ff5d7d 88%,#7a1030 100%);
-  animation:silverspin 4.5s linear infinite;}
-.corner-gem::after{content:'';position:absolute;inset:3px;border-radius:50%;
-  background:
-    radial-gradient(circle at 30% 24%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 32%),
-    radial-gradient(circle at 34% 30%, #ff8fa8 0%, #e11d48 42%, #8a1030 80%, #4a0a1e 100%);
-  box-shadow:
-    inset 0 2px 3px rgba(255,255,255,0.5),
-    inset 0 -5px 8px rgba(60,5,20,0.5),
-    0 6px 14px -4px rgba(120,10,40,0.55);}
-@media(prefers-reduced-motion:reduce){.corner-gem::before{animation:none;}}
-
 
 /* ---------- tagline / toggle ---------- */
 .tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
@@ -183,9 +164,9 @@ body{
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#181433;}
-.tog-lbl{cursor:pointer;color:#181433;transition:color 0.2s;user-select:none;}
-.tog-lbl.active{color:#181433;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#17161c;}
+.tog-lbl{cursor:pointer;color:#17161c;transition:color 0.2s;user-select:none;}
+.tog-lbl.active{color:#17161c;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
 .toggle-pill.on{background:#1C2CA9;}
@@ -217,8 +198,8 @@ body{
 .key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
-.key-txt{font-size:0.85rem;line-height:1.38;color:#181433;font-weight:500;}
-.key-txt em{font-style:normal;color:#181433;}
+.key-txt{font-size:0.85rem;line-height:1.38;color:#17161c;font-weight:500;}
+.key-txt em{font-style:normal;color:#17161c;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -237,9 +218,9 @@ body{
 }
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#181433;margin-bottom:0.2rem;font-weight:700;}
-.section-lbl{font-size:0.6rem!important;color:#181433!important;margin-bottom:0.35rem!important;}
-.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#181433;font-weight:600;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#17161c;margin-bottom:0.2rem;font-weight:700;}
+.section-lbl{font-size:0.6rem!important;color:#17161c!important;margin-bottom:0.35rem!important;}
+.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#17161c;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
 .row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
 
@@ -253,7 +234,7 @@ body{
 .line-field::before{left:0;}
 .line-field::after{right:0;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#181433;font-size:0.7rem;font-weight:500;
+  width:100%;background:transparent;border:none;color:#17161c;font-size:0.7rem;font-weight:500;
   font-style:italic;font-family:'DM Sans',sans-serif;padding:0.15rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
@@ -467,7 +448,6 @@ body{
 </style>
 </head>
 <body>
-<div class="corner-gem"></div>
 <div class="content">
   <div class="brand-row">
     <div class="brand">Know Your Energy</div>
@@ -756,10 +736,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#181433" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#17161c" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#181433" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#17161c" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -846,7 +826,7 @@ function openPlanetDef(p){
         svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#181433" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#17161c" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
