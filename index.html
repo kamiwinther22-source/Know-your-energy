@@ -37,8 +37,8 @@ body{
   text-align:center;margin-bottom:0.5rem;
 }
 .sys-section-sub{
-  font-family:'Special Elite',monospace;font-weight:400;font-size:0.88rem;
-  color:#17161c;text-align:center;margin:0.55rem 0 0;
+  font-family:'Special Elite',monospace;font-weight:400;font-size:1.15rem;
+  color:#17161c;text-align:center;margin:0.6rem 0 0;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -78,16 +78,19 @@ body{
 /* Arrow buttons -- the carousel's existence has to be obvious before
    anyone tries swiping it. A round button on each edge, mid-height,
    with a plain chevron, does that immediately. */
+/* Solid dark fill instead of translucent white -- against the real
+   light background (no card behind it anymore) a pale circle had
+   almost no contrast and was effectively invisible as a swipe cue. */
 .carousel-arrow{
   position:absolute;top:50%;transform:translateY(-50%);z-index:2;
-  width:30px;height:30px;border-radius:50%;border:none;cursor:pointer;
-  background:rgba(255,255,255,0.85);box-shadow:0 3px 8px rgba(0,0,0,0.22);
+  width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
+  background:#1C2CA9;box-shadow:0 4px 10px -2px rgba(28,44,169,0.5);
   display:flex;align-items:center;justify-content:center;
 }
-.carousel-arrow svg{width:14px;height:14px;}
-.carousel-arrow.prev{left:0.4rem;}
-.carousel-arrow.next{right:0.4rem;}
-.carousel-arrow:disabled{opacity:0.35;cursor:default;}
+.carousel-arrow svg{width:16px;height:16px;}
+.carousel-arrow.prev{left:0.2rem;}
+.carousel-arrow.next{right:0.2rem;}
+.carousel-arrow:disabled{opacity:0.25;cursor:default;}
 /* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
    for its own label, so single-word labels (no spaces to wrap at)
    overflowed sideways into the neighboring tile instead of wrapping. */
@@ -105,17 +108,6 @@ body{
   content:'';position:absolute;inset:0;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
-}
-/* Small tappable-affordance badge, icon only (no invented copy) -- a
-   plain "+" in a small circle, bottom-right corner of each swatch, so
-   it's visually obvious there's more behind each tile before it's ever
-   tapped. */
-.num-tile-lg .swatch::after{
-  content:'+';position:absolute;right:3px;bottom:3px;z-index:2;
-  width:14px;height:14px;border-radius:50%;
-  background:rgba(255,255,255,0.92);color:#17161c;
-  font-family:'DM Sans',sans-serif;font-weight:800;font-size:11px;line-height:14px;text-align:center;
-  box-shadow:0 1px 3px rgba(0,0,0,0.35);
 }
 .num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
 /* overflow-wrap so a long single word (no space to break at, e.g.
@@ -509,10 +501,10 @@ body{
 
   <div class="chart-carousel" id="chartCarousel">
     <button type="button" class="carousel-arrow prev" id="carouselPrev" aria-label="Previous">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#17161c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <button type="button" class="carousel-arrow next" id="carouselNext" aria-label="Next">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#17161c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
     <div class="carousel-track" id="carouselTrack">
       <div class="carousel-slide">
