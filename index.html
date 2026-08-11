@@ -108,37 +108,38 @@ body{
 .carousel-arrow.prev{left:0.2rem;}
 .carousel-arrow.next{right:0.2rem;}
 .carousel-arrow:disabled{opacity:0.25;cursor:default;}
-/* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
-   for its own label, so single-word labels (no spaces to wrap at)
-   overflowed sideways into the neighboring tile instead of wrapping. */
-.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.4rem 0.22rem;width:94%;max-width:360px;margin:0 auto;}
-.num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
-.num-tile-lg .swatch{
-  position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
-  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
-  /* Shadow moved here, off the whole tile (which included the label
-     text below and was blurring it the same way the chart graphics
-     were) -- only the swatch itself gets the lift now. */
+/* Numbers arranged on a closed, touching circle instead of a grid --
+   real content sizes computed in JS (see buildNumCircle below) so the
+   ring is always exactly as big as it needs to be for however many
+   numbers exist. The question sits absolutely centered in the open
+   middle the ring leaves behind. Tap-to-reveal (openNumberDef) still
+   works per tile; the always-visible word label is gone since a tight
+   touching ring has no room for it -- the tap already surfaces it. */
+.num-circle{position:relative;margin:0.4rem auto 0;}
+.num-circle-tile{
+  position:absolute;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  border:0.5px solid;border-radius:8px;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
 }
-.num-tile-lg .swatch::before{
-  content:'';position:absolute;inset:0;
+.num-circle-tile::before{
+  content:'';position:absolute;inset:0;border-radius:8px;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
-/* Small solid plaque behind the digit instead of an outline -- like a
-   real coin die's number plate: a flat, consistent-color inset so the
-   digit always has reliable contrast against the conic-gradient metal's
-   alternating light/dark bands, not a stroke effect around it. */
-.num-tile-lg .n-plaque{position:relative;z-index:1;width:62%;aspect-ratio:1/1;border-radius:50%;
-  background:rgba(255,255,255,0.92);box-shadow:inset 0 1px 3px rgba(0,0,0,0.2);
-  display:flex;align-items:center;justify-content:center;}
-.num-tile-lg .n{font-family:'Special Elite',monospace;font-weight:400;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
-/* overflow-wrap so a long single word (no space to break at, e.g.
-   "Communicator") wraps onto a second line inside its own tile instead
-   of overflowing sideways into the next one -- that sideways overflow,
-   not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.6rem;line-height:1.22;letter-spacing:0;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+/* Engraved, not painted-on: transparent fill lets the tile's own metal
+   show straight through the digit shape; a dark shadow on the
+   upper-left edge and a light highlight on the lower-right edge (same
+   light direction as every sphere/tile highlight on this page) is what
+   reads as a real carved recess instead of a flat black number sitting
+   on top. */
+.num-circle-tile .n{
+  position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;color:transparent;
+  text-shadow:-1.2px -1.2px 1px rgba(0,0,0,0.65), 1.2px 1.2px 1px rgba(255,255,255,0.8);
+}
+.num-circle-q{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:auto;max-width:60%;margin:0!important;border:none!important;padding:0!important;
+}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -527,8 +528,9 @@ body{
     <div class="carousel-track" id="carouselTrack">
       <div class="carousel-slide">
         <div class="sys-section-title">Numerology</div>
-        <div class="num-strip-row" id="numStripRow"></div>
-        <div class="sys-section-sub">Which number best represents you?</div>
+        <div class="num-circle" id="numCircle">
+          <div class="sys-section-sub num-circle-q">Which number best represents you?</div>
+        </div>
       </div>
       <div class="carousel-slide">
         <div class="sys-section-title">Astrology</div>
@@ -799,15 +801,33 @@ const NUMS = [
   {n:22, lbl:'Master Builder', tone:'goldT'},
   {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
-const numStripRow = document.getElementById('numStripRow');
-if(numStripRow){
-  NUMS.forEach(item=>{
+// Closed, touching circle -- exact radius solved from real tile count/
+// size (law of sines for a regular polygon-like ring) rather than
+// guessed, so it always comes out touching regardless of how many
+// numbers there are.
+const numCircle = document.getElementById('numCircle');
+if(numCircle){
+  const N = NUMS.length;
+  const S = 56;              // tile size
+  const gapPx = 2;
+  const R = (S+gapPx) / (2*Math.sin(Math.PI/N));
+  const cx = R + S/2, cy = R + S/2;
+  numCircle.style.width = (2*R + S) + 'px';
+  numCircle.style.height = (2*R + S) + 'px';
+  NUMS.forEach((item,i)=>{
     const t = TONES[item.tone];
+    const angle = -Math.PI/2 + i*(2*Math.PI/N);
+    const x = cx + R*Math.cos(angle);
+    const y = cy + R*Math.sin(angle);
     const tile = document.createElement('div');
-    tile.className = 'num-tile-lg';
-    tile.innerHTML = `<div class="swatch" style="background:${TONE_CONIC[item.tone]};border-color:${t.border};"><div class="n-plaque"><div class="n">${item.n}</div></div></div><div class="lbl">${item.lbl}</div>`;
-    tile.querySelector('.swatch').addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
-    numStripRow.appendChild(tile);
+    tile.className = 'num-circle-tile';
+    tile.style.width = S+'px'; tile.style.height = S+'px';
+    tile.style.left = (x-S/2)+'px'; tile.style.top = (y-S/2)+'px';
+    tile.style.background = TONE_CONIC[item.tone];
+    tile.style.borderColor = t.border;
+    tile.innerHTML = `<div class="n" style="font-size:${S*0.42}px;">${item.n}</div>`;
+    tile.addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
+    numCircle.appendChild(tile);
   });
 }
 // item.lbl is this cell's real Pythagorean Square meaning (Character,
