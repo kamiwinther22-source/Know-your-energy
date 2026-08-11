@@ -233,21 +233,19 @@ body{
 .rel-chip.active:hover{background:#000000;}
 
 /* ---------- bottom two-column: keys | form ---------- */
-.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
-
-/* Boxed now (moved here from .form-panel, which is unboxed below) --
-   same real glassmorphism recipe: blur + translucency + light edge +
-   lift shadow, so it reads as floating glass, not a flat tint. */
-/* Unboxed -- same reasoning as .chart-carousel above. */
-.keys-col{
-  position:relative;padding:0;
-}
-.key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
-.key-item:last-child{margin-bottom:0;}
-.key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
-.key-txt{font-size:0.85rem;line-height:1.38;color:#000000;font-weight:500;}
-.key-txt-lead{font-family:'Special Elite',monospace;font-size:1.15rem;line-height:1.3;font-weight:400;text-transform:uppercase;letter-spacing:0.02em;}
-.key-txt em{font-style:normal;color:#000000;}
+/* ---------- key points as floating clouds ---------- */
+/* Each key point sits on its own real cloud silhouette (a wide base
+   ellipse plus overlapping circle bumps along the top, all one filled
+   shape under a single shared drop-shadow so the overlaps don't double
+   up into visible seams) instead of a plain icon+text list row. Three
+   float above the data-entry form, two float below it. */
+.clouds-above,.clouds-below{display:flex;flex-direction:column;gap:0.5rem;}
+.clouds-above{margin-bottom:0.7rem;}
+.clouds-below{margin-top:0.8rem;}
+.key-cloud{position:relative;width:100%;aspect-ratio:2.1/1;display:flex;align-items:center;justify-content:center;}
+.key-cloud svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.key-cloud-text{position:relative;z-index:1;max-width:64%;text-align:center;font-size:0.8rem;line-height:1.32;color:#000000;font-weight:500;}
+.key-cloud-text.lead{font-family:'Special Elite',monospace;font-size:1rem;line-height:1.25;font-weight:400;text-transform:uppercase;letter-spacing:0.02em;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -258,9 +256,15 @@ body{
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:#000000;font-weight:800;}
 
+/* The form's own cloud: a bumpy cloud-top silhouette (fixed height, not
+   stretched -- stretching a whole cloud shape to match the form's
+   variable height, which changes a lot between Individual and
+   Relational mode, would badly distort the bumps) sitting flush on top
+   of a plain rounded card that grows naturally with its content. */
+.form-cloud{position:relative;background:#ffffff;border-radius:26px;
+  padding:2.5rem 1.5rem 1.7rem;box-shadow:0 10px 24px rgba(60,90,130,0.2);}
+.form-cloud .cloud-top{position:absolute;top:-32px;left:0;width:100%;height:64px;overflow:visible;}
 .form-col{position:relative;}
-/* Unboxed: the data-entry form now sits directly on the page background,
-   no card/blur/border around it -- the box moved to .keys-col instead. */
 .form-panel{
   position:relative;padding:0.3rem 0 0;
 }
@@ -495,7 +499,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-cloud,.chart-carousel,.brand-row,.tagline-wrap,.clouds-above,.clouds-below,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -606,7 +610,19 @@ body{
     <div class="tagline-slide c-gold">is it all just math</div>
   </div>
 
-  <div class="bottom-grid">
+  <div class="clouds-above" id="cloudsAbove"></div>
+
+  <div class="form-cloud">
+    <svg class="cloud-top" viewBox="0 0 300 70" preserveAspectRatio="none">
+      <g filter="drop-shadow(0 -2px 4px rgba(60,90,130,0.12))">
+        <rect x="0" y="34" width="300" height="36" fill="#ffffff"/>
+        <circle cx="40" cy="42" r="30" fill="#ffffff"/>
+        <circle cx="100" cy="26" r="36" fill="#ffffff"/>
+        <circle cx="170" cy="24" r="34" fill="#ffffff"/>
+        <circle cx="235" cy="30" r="32" fill="#ffffff"/>
+        <circle cx="280" cy="44" r="26" fill="#ffffff"/>
+      </g>
+    </svg>
     <div class="form-col">
       <div class="toggle-row">
         <span class="tog-lbl active" id="lblInd">Individual</span>
@@ -688,8 +704,9 @@ body{
         <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
       </div>
     </div>
-    <div class="keys-col" id="keysCol"></div>
   </div>
+
+  <div class="clouds-below" id="cloudsBelow"></div>
 
 </div>
 
@@ -1246,18 +1263,7 @@ initCarousel();
 window.addEventListener('load', initCarousel);
 document.addEventListener('DOMContentLoaded', initCarousel);
 
-// ---------- key-icon selling points: copied verbatim from your reference image ----------
-const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
-  <defs>
-    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
-    </linearGradient>
-  </defs>
-  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
-  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
-</svg>`;
+// ---------- key points as floating clouds ----------
 const KEYS = [
   'One <mark class="key-hl">free</mark> reading',
   '<mark class="key-hl">No</mark> saved or shared info',
@@ -1265,8 +1271,23 @@ const KEYS = [
   '<mark class="key-hl">Email</mark> is your key',
   'No emails sent',
 ];
-const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt${i===0?' key-txt-lead':''}">${t}</div></div>`).join('');
+// One base ellipse plus overlapping circle bumps along the top, all
+// under a single shared filter -- same fill on every shape means the
+// overlaps blend into one silhouette instead of stacking visible seams
+// or doubled-up shadows.
+const cloudSVG = ()=>`<svg viewBox="0 0 300 160" preserveAspectRatio="none">
+  <g filter="drop-shadow(0 6px 10px rgba(60,90,130,0.22))">
+    <ellipse cx="150" cy="106" rx="128" ry="46" fill="#ffffff"/>
+    <circle cx="62" cy="70" r="44" fill="#ffffff"/>
+    <circle cx="122" cy="46" r="52" fill="#ffffff"/>
+    <circle cx="190" cy="48" r="48" fill="#ffffff"/>
+    <circle cx="250" cy="76" r="36" fill="#ffffff"/>
+  </g>
+</svg>`;
+const cloudsAbove = document.getElementById('cloudsAbove');
+const cloudsBelow = document.getElementById('cloudsBelow');
+cloudsAbove.innerHTML = KEYS.slice(0,3).map((t,i)=>`<div class="key-cloud">${cloudSVG()}<div class="key-cloud-text${i===0?' lead':''}">${t}</div></div>`).join('');
+cloudsBelow.innerHTML = KEYS.slice(3).map(t=>`<div class="key-cloud">${cloudSVG()}<div class="key-cloud-text">${t}</div></div>`).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
