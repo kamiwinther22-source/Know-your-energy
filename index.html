@@ -47,7 +47,7 @@ body{
    the layout by spacing and the section label only, not a bounding
    rectangle. */
 .chart-carousel{
-  position:relative;padding:0.4rem 0 1rem;margin-bottom:1.1rem;
+  position:relative;padding:0.2rem 0 0.5rem;margin-bottom:0.6rem;
 }
 /* Native horizontal scroll-snap instead of hand-rolled drag math -- the
    custom Pointer Events version got the numerology->astrology swipe
@@ -66,7 +66,7 @@ body{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   scroll-snap-align:start;scroll-snap-stop:always;
 }
-.carousel-dots{position:relative;z-index:1;display:flex;justify-content:center;gap:0.45rem;margin-top:0.9rem;}
+.carousel-dots{position:relative;z-index:1;display:flex;justify-content:center;gap:0.45rem;margin-top:0.5rem;}
 .carousel-dots .dot{
   width:6px;height:6px;border-radius:50%;background:rgba(24,20,51,0.22);
   border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
@@ -140,7 +140,7 @@ body{
 }
 
 /* ---------- tagline / toggle ---------- */
-.tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
+.tagline-wrap{position:relative;max-width:340px;margin:0 auto 0.5rem;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
   text-align:center;font-family:'Special Elite',monospace;font-size:0.82rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
@@ -174,19 +174,31 @@ body{
 .rel-chip.active{background:#1C2CA9;color:#ffffff;}
 .rel-chip.active:hover{background:#1C2CA9;}
 
-/* ---------- bottom two-column: keys | form ---------- */
-.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
-
-/* No card/box here either -- unboxed, same as .form-panel next to it.
-   Both columns now sit directly on the page. */
-.keys-col{
-  position:relative;padding:0.2rem 0 0;
+/* ---------- key-point bubble clusters: her own reference image showed
+   these as overlapping circles of varying size, not a bulleted list --
+   built to match that directly instead of a safer/smaller version of it.
+   Bubbles reuse TONES.cream (the same glossy-bead recipe already used on
+   the numerology tiles/toggle-knob/planet dots elsewhere in this file),
+   so they're a new layout but not a new material. */
+.key-cluster{position:relative;margin:2.6rem auto;max-width:380px;}
+.key-cluster-a{height:320px;}
+.key-cluster-b{height:250px;margin-bottom:6.5rem;}
+.key-bubble{
+  position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  text-align:center;box-sizing:border-box;padding:0.6rem;
+  background:radial-gradient(circle at 32% 26%, #fffdf8 0%, #fdf6ea 45%, #ede2ce 100%);
+  border:1px solid #d9cdb2;
+  filter:drop-shadow(0 6px 10px rgba(60,50,30,0.22));
+  color:#17161c;font-weight:600;line-height:1.3;
 }
-.key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
-.key-item:last-child{margin-bottom:0;}
-.key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
-.key-txt{font-size:0.85rem;line-height:1.38;color:#17161c;font-weight:500;}
-.key-txt em{font-style:normal;color:#17161c;}
+.kb-txt{display:block;max-width:78%;}
+.kb-lg{width:230px;height:230px;font-size:0.82rem;}
+.kb-sm{width:170px;height:170px;font-size:0.64rem;align-items:flex-start;padding-top:1.7rem;}
+.kb-a1{top:-10px;left:2px;}
+.kb-a2{top:72px;left:50%;transform:translateX(-50%);z-index:1;}
+.kb-a3{top:-4px;right:2px;}
+.kb-b1{top:0;left:2px;align-items:center;padding-top:0.6rem;}
+.kb-b2{bottom:-8px;right:4%;z-index:1;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -203,7 +215,7 @@ body{
 .form-panel{
   position:relative;padding:0.3rem 0 0;
 }
-.form-panel .f{margin-bottom:0.7rem;}
+.form-panel .f{margin-bottom:0.5rem;}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#17161c;margin-bottom:0.2rem;font-weight:700;}
 .section-lbl{font-size:0.6rem!important;color:#17161c!important;margin-bottom:0.35rem!important;}
@@ -232,7 +244,7 @@ body{
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
    still wraps it, same verified technique as the live entry form's button ---------- */
-.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
+.submit-wrap{margin-top:0.9rem;display:flex;justify-content:center;}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
 .glow-ring::before{content:'';position:absolute;inset:-100%;
   background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
@@ -240,16 +252,33 @@ body{
 .glow-ring .gen-btn{position:relative;z-index:1;margin:0;border-radius:7px;}
 @keyframes silverspin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
+/* Flowing brushed-metal streaks, not a flat gradient -- three diagonal
+   bands (bright silver-white, blue accent, deep-navy shadow) at 122deg,
+   cutting across the base fill's own 160deg axis, each with a sharp rise
+   and a longer fade rather than an even stripe -- reads as light glancing
+   off a curved surface instead of a repeating pattern. Every color reused
+   from elsewhere in this file: the white/silver from .glow-ring, the
+   accent/deep-navy from .brand's title gradient. */
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
-  background:linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
+  background:
+    linear-gradient(122deg, transparent 0%, transparent 50%, rgba(254,254,255,0.30) 57%, rgba(238,241,251,0.16) 66%, transparent 74%, transparent 100%),
+    linear-gradient(122deg, transparent 0%, transparent 22%, rgba(138,150,238,0.48) 27%, rgba(138,150,238,0.22) 35%, transparent 42%, transparent 100%),
+    linear-gradient(122deg, transparent 0%, transparent 78%, rgba(15,23,88,0.50) 84%, rgba(15,23,88,0.28) 92%, transparent 100%),
+    linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
   border:1px solid rgba(255,255,255,0.55);border-radius:6px;
   color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  text-shadow:0 1px 2px rgba(10,15,50,0.5);
   transition:transform 0.18s ease,box-shadow 0.18s ease;
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,0.65),
     inset 0 -4px 7px rgba(210,220,230,0.4),
     0 8px 18px -6px rgba(190,200,210,0.6);}
 .gen-btn:hover{transform:translateY(-1px);
+  background:
+    linear-gradient(122deg, transparent 0%, transparent 48%, rgba(254,254,255,0.32) 56%, rgba(238,241,251,0.18) 66%, transparent 75%, transparent 100%),
+    linear-gradient(122deg, transparent 0%, transparent 22%, rgba(138,150,238,0.48) 27%, rgba(138,150,238,0.22) 35%, transparent 42%, transparent 100%),
+    linear-gradient(122deg, transparent 0%, transparent 78%, rgba(15,23,88,0.50) 84%, rgba(15,23,88,0.28) 92%, transparent 100%),
+    linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,0.7),
     inset 0 -4px 7px rgba(210,220,230,0.45),
@@ -426,7 +455,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.key-cluster,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -467,8 +496,7 @@ body{
     </div>
   </div>
 
-  <div class="bottom-grid">
-    <div class="form-col">
+  <div class="form-col">
       <div class="toggle-row">
         <span class="tog-lbl active" id="lblInd">Individual</span>
         <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
@@ -548,9 +576,10 @@ body{
       <div class="submit-wrap">
         <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
       </div>
-    </div>
-    <div class="keys-col" id="keysCol"></div>
   </div>
+
+  <div class="key-cluster key-cluster-a" id="keyClusterA"></div>
+  <div class="key-cluster key-cluster-b" id="keyClusterB"></div>
 
 </div>
 
@@ -896,18 +925,9 @@ initCarousel();
 window.addEventListener('load', initCarousel);
 document.addEventListener('DOMContentLoaded', initCarousel);
 
-// ---------- key-icon selling points: copied verbatim from your reference image ----------
-const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
-  <defs>
-    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
-    </linearGradient>
-  </defs>
-  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
-  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
-</svg>`;
+// ---------- key-point bubble clusters: text copied verbatim, only the
+// container changed (bulleted list -> overlapping circles, per her
+// reference image) ----------
 const KEYS = [
   '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
   'Your info is <mark class="key-hl">neither</mark> shared <mark class="key-hl">nor</mark> saved',
@@ -915,8 +935,13 @@ const KEYS = [
   '<mark class="key-hl">Email</mark> is simply your key to your results and time-limited <mark class="key-hl">pass</mark> if you choose to purchase one.',
   'You will not receive emails from us',
 ];
-const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
+document.getElementById('keyClusterA').innerHTML =
+  `<div class="key-bubble kb-sm kb-a1"><span class="kb-txt">${KEYS[1]}</span></div>`+
+  `<div class="key-bubble kb-lg kb-a2"><span class="kb-txt">${KEYS[0]}</span></div>`+
+  `<div class="key-bubble kb-sm kb-a3"><span class="kb-txt">${KEYS[4]}</span></div>`;
+document.getElementById('keyClusterB').innerHTML =
+  `<div class="key-bubble kb-lg kb-b1"><span class="kb-txt">${KEYS[3]}</span></div>`+
+  `<div class="key-bubble kb-sm kb-b2"><span class="kb-txt">${KEYS[2]}</span></div>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
