@@ -55,7 +55,7 @@ body{
   font-family:'Special Elite',monospace;font-weight:400;font-size:1.1rem;
   letter-spacing:0.01em;color:#000000;text-align:center;margin:0.75rem auto 0;
   width:fit-content;max-width:250px;padding:0.35rem 0;
-  border-top:1px solid rgba(23,22,28,0.3);border-bottom:1px solid rgba(23,22,28,0.3);
+  border-bottom:1px solid rgba(23,22,28,0.3);
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -92,22 +92,11 @@ body{
   border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
 }
 .carousel-dots .dot.active{background:#1C2CA9;transform:scale(1.4);}
-/* Arrow buttons -- the carousel's existence has to be obvious before
-   anyone tries swiping it. A round button on each edge, mid-height,
-   with a plain chevron, does that immediately. */
-/* Solid dark fill instead of translucent white -- against the real
-   light background (no card behind it anymore) a pale circle had
-   almost no contrast and was effectively invisible as a swipe cue. */
-.carousel-arrow{
-  position:absolute;top:50%;transform:translateY(-50%);z-index:2;
-  width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
-  background:#17161c;box-shadow:0 4px 10px -2px rgba(23,22,28,0.45);
-  display:flex;align-items:center;justify-content:center;
-}
-.carousel-arrow svg{width:16px;height:16px;}
-.carousel-arrow.prev{left:0.2rem;}
-.carousel-arrow.next{right:0.2rem;}
-.carousel-arrow:disabled{opacity:0.25;cursor:default;}
+/* Swipe symbol above the dots instead of side arrow buttons -- a small
+   left-right glyph that reads as "swipe here" without sitting on top
+   of the carousel content itself. */
+.swipe-hint{display:flex;align-items:center;justify-content:center;gap:0.3rem;margin-top:0.7rem;color:#000000;opacity:0.55;}
+.swipe-hint svg{width:22px;height:14px;}
 /* Back to a plain grid, two rows of six, question between them --
    the circle/spiral/stadium experiments are done. */
 .num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.4rem 0.22rem;width:94%;max-width:360px;margin:0 auto;}
@@ -517,12 +506,6 @@ body{
   </div>
 
   <div class="chart-carousel" id="chartCarousel">
-    <button type="button" class="carousel-arrow prev" id="carouselPrev" aria-label="Previous">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <button type="button" class="carousel-arrow next" id="carouselNext" aria-label="Next">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
     <div class="carousel-track" id="carouselTrack">
       <div class="carousel-slide">
         <div class="sys-section-title">Numerology</div>
@@ -538,6 +521,12 @@ body{
         <div class="sys-section-title">Human Design</div>
         <div class="chart-graphic" id="hdIcon"></div>
       </div>
+    </div>
+    <div class="swipe-hint" aria-hidden="true">
+      <svg viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 5 3 12 9 19"/>
+        <polyline points="31 5 37 12 31 19"/>
+      </svg>
     </div>
     <div class="carousel-dots" id="carouselDots">
       <button type="button" class="dot active" data-i="0" aria-label="Numerology"></button>
@@ -1032,13 +1021,9 @@ function initCarousel(){
   track.dataset.carouselInit = '1';
   const N = track.children.length;
   let idx = 0;
-  const prevBtn = document.getElementById('carouselPrev');
-  const nextBtn = document.getElementById('carouselNext');
 
   function setDots(i){
     Array.from(dotsWrap.children).forEach((d,j)=>d.classList.toggle('active', j===i));
-    if(prevBtn) prevBtn.disabled = i===0;
-    if(nextBtn) nextBtn.disabled = i===N-1;
   }
   function goTo(i, smooth=true){
     idx = Math.max(0, Math.min(N-1, i));
@@ -1051,10 +1036,6 @@ function initCarousel(){
     const dot = e.target.closest('.dot');
     if(dot) goTo(+dot.dataset.i);
   });
-  // Arrow buttons -- makes the carousel's existence obvious immediately,
-  // not just discoverable by accidentally swiping.
-  if(prevBtn) prevBtn.addEventListener('click', ()=> goTo(idx-1));
-  if(nextBtn) nextBtn.addEventListener('click', ()=> goTo(idx+1));
 
   // A real swipe scrolls the track natively; this just reads where it
   // landed once it settles and updates idx/dots to match -- no gesture
