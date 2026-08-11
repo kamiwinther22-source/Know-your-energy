@@ -130,19 +130,19 @@ body{
    (narrow) face, so far more text fits per line at the same font-size. */
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.1rem,13vw,4.2rem);line-height:1.1;font-weight:600;letter-spacing:0;
+  text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.9rem,11vw,3.6rem);line-height:1.1;font-weight:600;letter-spacing:0;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
-/* Same shiny-gradient-text technique as the title (deep anchor + bright
-   same-hue accent + deep anchor), but in gold, not blue -- directly under
-   a blue title, a blue tagline didn't stand out from it. The near-white
-   mid-stops this used to have (#fdf6ea) matched the new light background
-   almost exactly and made the letters visually vanish mid-stroke -- fixed
-   by keeping every stop, including the "bright" one, a real saturated
-   gold with its own contrast against the page, not near-white. */
-.tagline-slide.c-gold{
-  background:linear-gradient(100deg,#6b5220 0%,#c9a54a 35%,#8a6d2e 50%,#c9a54a 65%,#6b5220 100%);
+/* No gold/yellow -- explicitly rejected as an overdone color in this
+   genre. Reuses the title's own blue ramp instead of inventing a new
+   color; the size and typeface are already very different from the
+   title (Barlow Condensed vs Alex Brush cursive, and noticeably larger),
+   so same-hue shouldn't read as "blending in" the way it would if both
+   were identical in every other way too -- worth a second look once
+   she's seen it real size. */
+.tagline-slide.c-brand{
+  background:linear-gradient(100deg,#0F1758 0%,#5364D6 35%,#8A96EE 50%,#5364D6 65%,#0F1758 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
@@ -457,8 +457,8 @@ body{
   </div>
 
   <div class="tagline-wrap" id="taglineWrap">
-    <div class="tagline-slide c-gold active">Your unique design described by 3 separate systems</div>
-    <div class="tagline-slide c-gold">is it all just math</div>
+    <div class="tagline-slide c-brand active">Your unique design described by 3 separate systems</div>
+    <div class="tagline-slide c-brand">is it all just math</div>
   </div>
 
   <div class="chart-carousel" id="chartCarousel">
