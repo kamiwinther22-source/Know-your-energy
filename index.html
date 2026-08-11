@@ -1282,19 +1282,19 @@ const KEYS = [
 // (not flat) volume, and one single soft silver shine patch -- not a
 // repeated highlight dot per puff, which is what read as "spots."
 function rand(seed){ const x = Math.sin(seed*999.123)*10000; return x - Math.floor(x); }
-function cloudPuffs(seed){
+function cloudPuffs(seed, fill, jitter){
   const n = 8;
   let shapes = '';
   const cx = 60, cy = 62;
   for(let i=0;i<n;i++){
     const a = (i/n)*Math.PI*2 + (rand(seed+i)-0.5)*0.7;
     const rr = 26 + (rand(seed+i+5)-0.5)*10;
-    const px = cx + Math.cos(a)*rr;
-    const py = cy + Math.sin(a)*rr*0.88;
+    const px = cx + Math.cos(a)*rr + (jitter||0);
+    const py = cy + Math.sin(a)*rr*0.88 + (jitter||0);
     const s = 24 + (rand(seed+i+10)-0.5)*11;
-    shapes += `<ellipse cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="${s.toFixed(1)}" ry="${(s*0.86).toFixed(1)}" fill="#fff"/>`;
+    shapes += `<ellipse cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="${s.toFixed(1)}" ry="${(s*0.86).toFixed(1)}" fill="${fill}"/>`;
   }
-  shapes += `<ellipse cx="${cx}" cy="${cy+4}" rx="32" ry="28" fill="#fff"/>`;
+  shapes += `<ellipse cx="${cx+(jitter||0)}" cy="${cy+4+(jitter||0)}" rx="32" ry="28" fill="${fill}"/>`;
   return shapes;
 }
 let cloudIdSeq = 0;
@@ -1307,27 +1307,34 @@ function cloudSVG(){
         <feTurbulence type="fractalNoise" baseFrequency="0.03 0.05" numOctaves="3" seed="${seed}" result="n"/>
         <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
-      <filter id="cloudSoft${id}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1"/></filter>
-      <radialGradient id="cloudShade${id}" cx="38%" cy="20%" r="90%">
+      <filter id="cloudTurb${id}b" x="-50%" y="-50%" width="200%" height="200%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.028 0.048" numOctaves="3" seed="${seed+9}" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <!-- Per-puff radial gradient: objectBoundingBox units (the SVG
+           default) mean each ellipse gets its OWN independent light/
+           shadow modeling instead of one flat gradient smeared across
+           the whole cluster -- real individual lobe volume, which is
+           what "fluffy" actually needs, not just a darker edge overall. -->
+      <radialGradient id="puffGrad${id}" cx="34%" cy="26%" r="78%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="38%" stop-color="#eef2f6"/>
-        <stop offset="70%" stop-color="#b8c8d8"/>
-        <stop offset="100%" stop-color="#8fa4ba"/>
-      </radialGradient>
-      <radialGradient id="cloudShine${id}" cx="34%" cy="24%" r="26%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="45%" stop-color="#f1f4f7"/>
+        <stop offset="80%" stop-color="#c7d3e0"/>
+        <stop offset="100%" stop-color="#9fb1c4"/>
       </radialGradient>
       <filter id="cloudLift${id}" x="-60%" y="-60%" width="220%" height="220%">
-        <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#5b7392" flood-opacity="0.32"/>
+        <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#5b7392" flood-opacity="0.35"/>
       </filter>
     </defs>
     <g filter="url(#cloudLift${id})">
-      <g filter="url(#cloudTurb${id})"><g filter="url(#cloudSoft${id})">${cloudPuffs(seed)}</g></g>
-      <g filter="url(#cloudTurb${id})" opacity="0.92" style="mix-blend-mode:multiply">
-        <g fill="url(#cloudShade${id})">${cloudPuffs(seed+3)}</g>
-      </g>
-      <g filter="url(#cloudTurb${id})"><g fill="url(#cloudShine${id})">${cloudPuffs(seed)}</g></g>
+      <!-- Undercoat: a darker, slightly offset copy of the same puff
+           cluster sitting underneath, distorted with a different
+           turbulence seed so its edges don't align with the top layer
+           -- what peeks out between the gaps reads as real shadow
+           crevices between lobes, not just a flat silhouette edge. -->
+      <g filter="url(#cloudTurb${id}b)">${cloudPuffs(seed+2, '#7f93a8', 3.5)}</g>
+      <g filter="url(#cloudTurb${id})">${cloudPuffs(seed, `url(#puffGrad${id})`)}</g>
+      <ellipse cx="38" cy="30" rx="17" ry="12" fill="#ffffff" opacity="0.85" filter="url(#cloudTurb${id})"/>
     </g>
   </svg>`;
 }
