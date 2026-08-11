@@ -52,9 +52,10 @@ body{
    a little extra letter-spacing, and a soft embossed text-shadow for
    dimension instead of a flat, flush-with-the-page line of type. */
 .sys-section-sub{
-  font-family:'Special Elite',monospace;font-weight:400;font-size:1.1rem;
+  font-family:'Special Elite',monospace;font-weight:400;font-size:1.3rem;
+  -webkit-text-stroke:0.4px #000000;
   letter-spacing:0.01em;color:#000000;text-align:center;margin:0.75rem auto 0;
-  width:fit-content;max-width:250px;padding:0.35rem 0;
+  width:fit-content;max-width:270px;padding:0.35rem 0;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -233,29 +234,18 @@ body{
 .rel-chip.active:hover{background:#000000;}
 
 /* ---------- bottom two-column: keys | form ---------- */
-/* ---------- key points as floating clouds ---------- */
-/* Small enough that all 3 (or 2) sit side by side in one cluster --
-   these are minor supporting trust-notes, not the page's centerpiece.
-   Roughly circular (not a stretched horizontal oval), scattered/staggered
-   rather than stacked in a straight column, the same spirit as the
-   circle arrangement asked for earlier for the numerology tiles. */
-/* Real height variation via transform (doesn't disturb the flex gap/
-   flow the way margin tricks did) -- a straight row with a tiny nudge
-   still reads as a row. This should feel like a loose scatter around
-   the form, not a shelf sitting flush above/below it. */
-.clouds-above,.clouds-below{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.4rem 0.3rem;}
-.clouds-above{margin-bottom:1.6rem;}
-/* The two bottom clouds sit at opposite corners instead of clustered
-   center -- full width, pushed to the outer edges. */
-.clouds-below{margin-top:1.7rem;justify-content:space-between;width:100%;}
+/* ---------- key points: plain typography, no container ---------- */
+/* Cloud shapes removed -- pulled the background out from behind them so
+   it's actually visible, and the shape itself was fighting to look
+   premium the same way the tiles' material did. Just text, no badge/
+   shape around it. */
+.clouds-above,.clouds-below{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.6rem 1.4rem;}
+.clouds-above{margin-bottom:1.4rem;}
+.clouds-below{margin-top:1.5rem;justify-content:space-between;width:100%;}
 .key-cloud{position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
-  width:122px;aspect-ratio:1/0.96;padding:0.2rem 0.4rem;}
-.key-cloud:nth-child(1){transform:translate(4px,14px);}
-.key-cloud:nth-child(2){transform:translate(-2px,-24px);}
-.key-cloud:nth-child(3){transform:translate(-6px,8px);}
-.key-cloud svg{position:absolute;inset:-34% -26%;width:168%;height:168%;overflow:visible;z-index:0;pointer-events:none;}
-.key-cloud-text{position:relative;z-index:1;text-align:center;font-size:0.8rem;line-height:1.2;color:#000000;font-weight:600;}
-.key-cloud-text.lead{font-family:'Special Elite',monospace;font-size:0.88rem;line-height:1.12;font-weight:400;text-transform:uppercase;letter-spacing:0.01em;}
+  max-width:130px;padding:0.2rem 0.4rem;}
+.key-cloud-text{position:relative;z-index:1;text-align:center;font-size:0.84rem;line-height:1.28;color:#000000;font-weight:600;}
+.key-cloud-text.lead{font-family:'Special Elite',monospace;font-size:0.95rem;line-height:1.2;font-weight:400;text-transform:uppercase;letter-spacing:0.02em;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -572,11 +562,11 @@ body{
          smooth grey gradient -- a genuine metallic complement in the
          background for depth, not just another shade of white. -->
     <linearGradient id="creamMid" x1="6%" y1="0%" x2="94%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="14%" stop-color="#dde3e8"/>
-      <stop offset="26%" stop-color="#f6f8fa"/><stop offset="38%" stop-color="#b9c2ca"/>
-      <stop offset="50%" stop-color="#eef1f4"/><stop offset="63%" stop-color="#c7ced5"/>
-      <stop offset="76%" stop-color="#f9fafb"/><stop offset="88%" stop-color="#cdd4da"/>
-      <stop offset="100%" stop-color="#eef1f4"/>
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="14%" stop-color="#aab6c1"/>
+      <stop offset="26%" stop-color="#fbfcfd"/><stop offset="38%" stop-color="#828f9b"/>
+      <stop offset="50%" stop-color="#f3f5f7"/><stop offset="63%" stop-color="#98a5b1"/>
+      <stop offset="76%" stop-color="#ffffff"/><stop offset="88%" stop-color="#8d9aa6"/>
+      <stop offset="100%" stop-color="#f3f5f7"/>
     </linearGradient>
     <linearGradient id="creamFront" x1="20%" y1="0%" x2="80%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/><stop offset="50%" stop-color="#ffffff"/><stop offset="100%" stop-color="#eceef0"/>
@@ -834,15 +824,19 @@ body{
   function creamHero(W){
     const N = 60;
     const pathBack  = creamLayerPath(0.6, 20,  62, 24, W, N, 640, 1.25, 0.62);
-    const pathMid   = creamLayerPath(0.15, 35, 50, 19, W, N, 640, 1.2, 0.62);
+    const pathMid   = creamLayerPath(0.15, 35, 66, 24, W, N, 640, 1.2, 0.62);
     const pathFront = creamLayerPath(-0.3, 50, 38, 15, W, N, 640, 1.15, 0.62);
     return `
       <g filter="url(#creamLift1)"><path d="${pathBack}" fill="url(#creamBack)" filter="url(#creamMarble)"/></g>
-      <g filter="url(#creamLift2)"><path d="${pathMid}" fill="url(#creamMid)" filter="url(#creamMarble2)"/></g>
       <g filter="url(#creamLift3)">
         <path d="${pathFront}" fill="url(#creamFront)" filter="url(#creamMarble)"/>
         <path d="${pathFront}" fill="url(#creamSheen)" filter="url(#creamMarble)"/>
-      </g>`;
+      </g>
+      <!-- Silver band drawn LAST, on top of everything else -- buried
+         between the other two layers it was barely visible; on top,
+         at real opacity, it actually reads as a metallic shine instead
+         of "not noticeable." -->
+      <g filter="url(#creamLift2)"><path d="${pathMid}" fill="url(#creamMid)" filter="url(#creamMarble2)"/></g>`;
   }
   /* Carries the same material the rest of the way down the page --
      stronger presence than the old thin accent tendril, still hugging
@@ -1283,108 +1277,11 @@ const KEYS = [
   '<mark class="key-hl">Email</mark> is your key',
   'No emails sent',
 ];
-// Real cloud, not a comic-book outline: puffs placed in a rough RING
-// around a center point (a circle of lumps, not a horizontal line of
-// them) so the overall envelope reads as round rather than a stretched
-// oval, with heavier turbulence distortion for real hand-drawn
-// irregularity, stronger light/shadow contrast for a genuinely puffy
-// (not flat) volume, and one single soft silver shine patch -- not a
-// repeated highlight dot per puff, which is what read as "spots."
-function rand(seed){ const x = Math.sin(seed*999.123)*10000; return x - Math.floor(x); }
-function cloudPuffs(seed, fill, jitter){
-  const n = 8;
-  let shapes = '';
-  const cx = 60, cy = 62;
-  for(let i=0;i<n;i++){
-    const a = (i/n)*Math.PI*2 + (rand(seed+i)-0.5)*0.7;
-    const rr = 26 + (rand(seed+i+5)-0.5)*10;
-    const px = cx + Math.cos(a)*rr + (jitter||0);
-    const py = cy + Math.sin(a)*rr*0.88 + (jitter||0);
-    const s = 24 + (rand(seed+i+10)-0.5)*11;
-    shapes += `<ellipse cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="${s.toFixed(1)}" ry="${(s*0.86).toFixed(1)}" fill="${fill}"/>`;
-  }
-  shapes += `<ellipse cx="${cx+(jitter||0)}" cy="${cy+4+(jitter||0)}" rx="32" ry="28" fill="${fill}"/>`;
-  return shapes;
-}
-let cloudIdSeq = 0;
-function cloudSVG(){
-  const id = cloudIdSeq++;
-  const seed = 5 + id*13;
-  return `<svg viewBox="0 0 120 120">
-    <defs>
-      <filter id="cloudTurb${id}" x="-50%" y="-50%" width="200%" height="200%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.03 0.05" numOctaves="3" seed="${seed}" result="n"/>
-        <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
-      </filter>
-      <filter id="cloudTurb${id}b" x="-50%" y="-50%" width="200%" height="200%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.028 0.048" numOctaves="3" seed="${seed+9}" result="n"/>
-        <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
-      </filter>
-      <!-- Mostly white, per direct instruction -- the darkest stop is
-           brighter/silvery now (not a flat grey), and the sparkle glints
-           below do the work of "shining" rather than a dull shadow tone. -->
-      <radialGradient id="puffGrad${id}" cx="38%" cy="16%" r="82%">
-        <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="45%" stop-color="#f8fafc"/>
-        <stop offset="80%" stop-color="#e6ecf2"/>
-        <stop offset="100%" stop-color="#d2dce6"/>
-      </radialGradient>
-      <radialGradient id="cloudBounce${id}" cx="50%" cy="94%" r="46%">
-        <stop offset="0%" stop-color="#eef4f9" stop-opacity="0.7"/>
-        <stop offset="100%" stop-color="#eef4f9" stop-opacity="0"/>
-      </radialGradient>
-      <filter id="cloudLift${id}" x="-60%" y="-60%" width="220%" height="220%">
-        <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#7f95ab" flood-opacity="0.3"/>
-      </filter>
-      <!-- Edge-softening blur pass -- a hard silhouette cutoff is what
-           the reference material calls out specifically as reading
-           cartoonish; a blurred underlayer lets the boundary dissolve
-           instead of ending in a crisp line. -->
-      <filter id="cloudEdgeSoft${id}" x="-60%" y="-60%" width="220%" height="220%">
-        <feGaussianBlur stdDeviation="2.6"/>
-      </filter>
-      <filter id="sparkGlow${id}" x="-200%" y="-200%" width="500%" height="500%">
-        <feGaussianBlur stdDeviation="1.4"/>
-      </filter>
-    </defs>
-    <g filter="url(#cloudLift${id})">
-      <g filter="url(#cloudTurb${id})" opacity="0.55"><g filter="url(#cloudEdgeSoft${id})">${cloudPuffs(seed, '#ffffff')}</g></g>
-      <!-- Undercoat: a lighter silvery (not grey) offset copy of the
-           same puff cluster underneath, distorted with a different
-           turbulence seed so its edges don't align with the top layer
-           -- what peeks out between the gaps reads as real depth
-           crevices between lobes, not a flat silhouette edge. -->
-      <g filter="url(#cloudTurb${id}b)">${cloudPuffs(seed+2, '#c7d3de', 3.5)}</g>
-      <g filter="url(#cloudTurb${id})">${cloudPuffs(seed, `url(#puffGrad${id})`)}</g>
-      <g filter="url(#cloudTurb${id})" style="mix-blend-mode:screen">${cloudPuffs(seed, `url(#cloudBounce${id})`)}</g>
-      <ellipse cx="38" cy="28" rx="16" ry="11" fill="#ffffff" opacity="0.8" filter="url(#cloudTurb${id})"/>
-      ${sparkleGlints(seed, id)}
-    </g>
-  </svg>`;
-}
-// Real sparkle: small 4-point glint stars with a soft glow halo,
-// modeled on the glitter reference photos -- distinct bright points,
-// not a wash of color. This is the "shining and sparkly" the shadow
-// tone was standing in for badly.
-function sparkleStar(cx,cy,s){
-  return `M${cx},${(cy-s).toFixed(1)} L${(cx+s*0.22).toFixed(1)},${(cy-s*0.22).toFixed(1)} L${(cx+s).toFixed(1)},${cy} L${(cx+s*0.22).toFixed(1)},${(cy+s*0.22).toFixed(1)} L${cx},${(cy+s).toFixed(1)} L${(cx-s*0.22).toFixed(1)},${(cy+s*0.22).toFixed(1)} L${(cx-s).toFixed(1)},${cy} L${(cx-s*0.22).toFixed(1)},${(cy-s*0.22).toFixed(1)} Z`;
-}
-function sparkleGlints(seed, id){
-  const n = 3;
-  let out = '';
-  for(let i=0;i<n;i++){
-    const cx = 30 + rand(seed+i+60)*60;
-    const cy = 25 + rand(seed+i+70)*55;
-    const s = 3 + rand(seed+i+80)*3.5;
-    out += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(s*2.2).toFixed(1)}" fill="#ffffff" opacity="0.55" filter="url(#sparkGlow${id})"/>`;
-    out += `<path d="${sparkleStar(cx,cy,s)}" fill="#ffffff"/>`;
-  }
-  return out;
-}
+// Plain typography, no cloud shape around it -- see .key-cloud above.
 const cloudsAbove = document.getElementById('cloudsAbove');
 const cloudsBelow = document.getElementById('cloudsBelow');
-cloudsAbove.innerHTML = KEYS.slice(0,3).map((t,i)=>`<div class="key-cloud">${cloudSVG()}<div class="key-cloud-text${i===0?' lead':''}">${t}</div></div>`).join('');
-cloudsBelow.innerHTML = KEYS.slice(3).map(t=>`<div class="key-cloud">${cloudSVG()}<div class="key-cloud-text">${t}</div></div>`).join('');
+cloudsAbove.innerHTML = KEYS.slice(0,3).map((t,i)=>`<div class="key-cloud"><div class="key-cloud-text${i===0?' lead':''}">${t}</div></div>`).join('');
+cloudsBelow.innerHTML = KEYS.slice(3).map(t=>`<div class="key-cloud"><div class="key-cloud-text">${t}</div></div>`).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
