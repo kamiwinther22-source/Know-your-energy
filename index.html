@@ -59,7 +59,7 @@ body{
    they don't stack directly on top of each other. Bigger than the
    numbers box now, not smaller. */
 .wheel-left{width:58%;margin:0.4rem auto 0 0;}
-.wheel-right{width:58%;margin:-75px 0 0 auto;}
+.wheel-right{width:58%;margin:-15px 0 0 auto;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
@@ -574,24 +574,19 @@ body{
 </div>
 
 <script>
-// ---------- numerology numbers: monochrome palette, distinguished by outline ----------
-// Correction from the previous pass: I'd sampled a real photo but that photo's
-// warm ambient light was bouncing onto the metal -- a lighting artifact of
-// that shot, not silver's actual hue. Silver here is now genuinely cool/
-// neutral steel-gray (hue ~215, near-desaturated), gold is the only warm tone
-// (as asked), white/cream stay true white/cream rather than tan-shifted.
-// Contrast against the ink text verified per stop, same as before.
-// Rebuilt from real, established metallic/precious color names instead of
-// self-derived HSL math: Platinum + classic Silver for silverL, Silver +
-// Steel + Gunmetal (lightened just enough to stay legible, same hue/sat
-// preserved) for silverD, and Champagne -- a genuinely well-known pale gold
-// that is NOT yellow/orange -- for goldT.
+// ---------- numerology numbers: light metal, but actually shiny ----------
+// The previous version stayed inside a narrow, pale value band at every
+// stop (white -> slightly-less-white) -- that's what read as flat/dull
+// colored-pencil, not metal. Real shine is contrast: a bright highlight
+// AND a genuinely dark shadow, not light fading to a lighter grey. Kept
+// the highlight and hue families light-metal (platinum/steel/champagne,
+// as asked), but every gradient now actually runs to a real dark edge.
 const TONES = {
-  cream:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #fdfaf3 55%, #f3ead9 100%)', border:'#d9cdb2' },
-  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #ffffff 55%, #f1f1f1 100%)', border:'#d8d4c9' },
-  silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
-  silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
-  goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
+  cream:   { grad:'radial-gradient(circle at 30% 26%, #fffefa 0%, #f0e6d0 50%, #6b5738 100%)', border:'#6b5738' },
+  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #dcdfe3 50%, #4a4f57 100%)', border:'#4a4f57' },
+  silverL: { grad:'radial-gradient(circle at 30% 26%, #f8f8f8 0%, #c7ccd1 50%, #3c4147 100%)', border:'#3c4147' },
+  silverD: { grad:'radial-gradient(circle at 30% 26%, #e8ebee 0%, #97a1ab 50%, #23272c 100%)', border:'#23272c' },
+  goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #d9bf85 50%, #5c4720 100%)', border:'#5c4720' },
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -726,10 +721,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="21" fill="#17161c" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="21" fill="#17161c" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="21" fill="#17161c" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="21" fill="#17161c" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -811,12 +806,12 @@ function openPlanetDef(p){
       // glass card show through -- both are light enough for dark text.
       const inTextColor = '#000000';
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="22" fill="#17161c" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="22" fill="#17161c" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
