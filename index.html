@@ -726,10 +726,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#17161c" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="21" fill="#17161c" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#17161c" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="21" fill="#17161c" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -811,12 +811,12 @@ function openPlanetDef(p){
       // glass card show through -- both are light enough for dark text.
       const inTextColor = '#000000';
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#17161c" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="22" fill="#17161c" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
