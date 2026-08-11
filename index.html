@@ -53,13 +53,13 @@ body{
    block rather than stretched full width. Sized to fit on one screen
    with the wheels below it -- no labels under the tiles anymore, the
    number alone in a small chip. */
-.num-strip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.3rem;width:100%;max-width:150px;margin:0 auto;}
+.num-strip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.25rem;width:100%;max-width:110px;margin:0 auto;}
 /* The astrology wheel and Human Design diagram are no longer carousel
    slides -- both always visible, offset left/right below the numbers so
-   they don't stack directly on top of each other. Much smaller now so
-   numbers + both wheels fit in one screen with no scrolling. */
-.wheel-left{width:34%;margin:0.4rem auto 0 0;}
-.wheel-right{width:34%;margin:0.3rem 0 0 auto;}
+   they don't stack directly on top of each other. Bigger than the
+   numbers box now, not smaller. */
+.wheel-left{width:58%;margin:0.4rem auto 0 0;}
+.wheel-right{width:58%;margin:0.3rem 0 0 auto;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
@@ -123,9 +123,14 @@ body{
 .tagline-wrap{position:relative;max-width:380px;margin:0 auto 0.7rem;}
 /* Larger than the title, per direct instruction -- title is the smaller,
    secondary element here now. */
+/* Special Elite (typewriter monospace) was the problem -- its characters
+   are inherently wide/spaced-out by design, which ate space fast at this
+   size and left no room for real tagline copy. Barlow Condensed instead
+   -- already loaded elsewhere in this file, and literally a condensed
+   (narrow) face, so far more text fits per line at the same font-size. */
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(2.1rem,13vw,4.2rem);line-height:1.15;font-weight:400;letter-spacing:0.01em;
+  text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.1rem,13vw,4.2rem);line-height:1.1;font-weight:600;letter-spacing:0;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
