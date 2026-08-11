@@ -217,7 +217,7 @@ body{
   color:#000000;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.45rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.74rem;letter-spacing:0.02em;text-transform:uppercase;color:#000000;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.4rem;margin-bottom:0.5rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.9rem;letter-spacing:0.02em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
@@ -227,7 +227,7 @@ body{
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'Special Elite',monospace;font-size:0.78rem;font-weight:400;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #000000;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip{font-family:'Special Elite',monospace;font-size:0.9rem;font-weight:400;padding:0.36rem 0.8rem;border-radius:20px;border:1.3px solid #000000;background:transparent;color:#000000;cursor:pointer;transition:background 0.15s,color 0.15s;}
 .rel-chip:hover{background:rgba(0,0,0,0.08);}
 .rel-chip.active{background:#000000;color:#ffffff;}
 .rel-chip.active:hover{background:#000000;}
@@ -243,19 +243,19 @@ body{
    flow the way margin tricks did) -- a straight row with a tiny nudge
    still reads as a row. This should feel like a loose scatter around
    the form, not a shelf sitting flush above/below it. */
-.clouds-above,.clouds-below{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.4rem 0.6rem;}
+.clouds-above,.clouds-below{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.4rem 0.3rem;}
 .clouds-above{margin-bottom:1.6rem;}
 /* The two bottom clouds sit at opposite corners instead of clustered
    center -- full width, pushed to the outer edges. */
 .clouds-below{margin-top:1.7rem;justify-content:space-between;width:100%;}
 .key-cloud{position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
-  width:118px;aspect-ratio:1/0.96;padding:0.2rem 0.5rem;}
+  width:122px;aspect-ratio:1/0.96;padding:0.2rem 0.4rem;}
 .key-cloud:nth-child(1){transform:translate(4px,14px);}
 .key-cloud:nth-child(2){transform:translate(-2px,-24px);}
 .key-cloud:nth-child(3){transform:translate(-6px,8px);}
 .key-cloud svg{position:absolute;inset:-34% -26%;width:168%;height:168%;overflow:visible;z-index:0;pointer-events:none;}
-.key-cloud-text{position:relative;z-index:1;text-align:center;font-size:0.72rem;line-height:1.22;color:#000000;font-weight:600;}
-.key-cloud-text.lead{font-family:'Special Elite',monospace;font-size:0.8rem;line-height:1.15;font-weight:400;text-transform:uppercase;letter-spacing:0.01em;}
+.key-cloud-text{position:relative;z-index:1;text-align:center;font-size:0.8rem;line-height:1.2;color:#000000;font-weight:600;}
+.key-cloud-text.lead{font-family:'Special Elite',monospace;font-size:0.88rem;line-height:1.12;font-weight:400;text-transform:uppercase;letter-spacing:0.01em;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -274,15 +274,20 @@ body{
 }
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;color:#000000;margin-bottom:0.25rem;font-weight:700;}
-.section-lbl{font-size:0.78rem!important;color:#000000!important;margin-bottom:0.4rem!important;}
+.form-panel label{display:block;font-size:0.85rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.3rem;font-weight:700;}
+.section-lbl{font-size:0.95rem!important;color:#000000!important;margin-bottom:0.45rem!important;}
 .opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#000000;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
-.row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
+.row-ampm{display:grid;grid-template-columns:130px auto;gap:0.6rem;align-items:end;justify-content:start;}
 
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
-   with italic text for a lighter, less typewriter-formal feel. */
+   with italic text for a lighter, less typewriter-formal feel. Capped
+   width on the single-column rows (date/birthplace/email/time) instead
+   of stretching the full content width -- a date or a time doesn't
+   need a 380px-long line, and the full-width line was what read as
+   "the form is dragged over to one side," not an actual layout bug. */
+.f > .line-field{max-width:260px;}
 .line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(23,22,28,0.4);}
 .line-field::before,.line-field::after{
   content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(23,22,28,0.4);
@@ -290,7 +295,7 @@ body{
 .line-field::before{left:0;}
 .line-field::after{right:0;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#000000;font-size:0.88rem;font-weight:400;
+  width:100%;background:transparent;border:none;color:#000000;font-size:1.05rem;font-weight:400;
   font-style:normal;font-family:'Special Elite',monospace;padding:0.15rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
@@ -319,7 +324,7 @@ body{
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
   background:linear-gradient(115deg,#eef2f4 0%,#c9d6da 18%,#6f818a 42%,#4f5a61 58%,#8ea0a8 78%,#eef2f4 100%);
   border:1px solid rgba(255,255,255,0.6);border-radius:6px;
-  color:#ffffff;font-size:0.92rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  color:#ffffff;font-size:1.05rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
   text-shadow:0 1px 2px rgba(0,0,0,0.85),0 0 5px rgba(0,0,0,0.5);
   transition:transform 0.18s ease,box-shadow 0.18s ease;
   box-shadow:
@@ -334,9 +339,9 @@ body{
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
-.tnote{font-style:italic;font-size:0.76rem;line-height:1.4;color:#000000;margin:0.35rem 0 0;}
+.tnote{font-style:italic;font-size:0.88rem;line-height:1.4;color:#000000;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
-.err{display:none;font-size:0.84rem;color:#a3243f;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(200,40,60,0.08);border-radius:5px;border:1px solid rgba(200,40,60,0.3);font-weight:600;}
+.err{display:none;font-size:0.94rem;color:#a3243f;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(200,40,60,0.08);border-radius:5px;border:1px solid rgba(200,40,60,0.3);font-weight:600;}
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
