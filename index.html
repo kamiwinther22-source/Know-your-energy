@@ -629,6 +629,27 @@ const TONES = {
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
 };
+// Real metal technique (researched, not guessed): a conic-gradient with
+// alternating light/dark bands radiating around the shape, which is what
+// actually reads as a polished reflective surface -- a mirror reflecting
+// a whole room, not one soft highlight. A single radial highlight (the
+// old TONES.grad, kept above for the tiny SVG planet dots where a conic
+// band pattern is too small to read at all) is the thing that was
+// reading as flat/painted rather than metal. Applied here to the
+// numerology tiles specifically because they're large enough (real HTML
+// squares, not few-pixel SVG dots) for the band pattern to actually show.
+function conicBands(darkest, dark, mid, light, lightest){
+  const seq = [darkest, light, mid, lightest, dark, mid, darkest, light, mid, lightest, dark, light, mid, lightest, dark, darkest];
+  const angles = [0,22,40,58,78,100,125,150,175,200,225,250,275,300,325,360];
+  return 'conic-gradient(from 200deg at 50% 50%, ' + seq.map((c,i)=>`${c} ${angles[i]}deg`).join(',') + ')';
+}
+const TONE_CONIC = {
+  cream:   conicBands('#8a7a5c','#b7a47e','#d9c9a8','#f3e9d3','#fffefb'),
+  white:   conicBands('#7a7a7a','#999999','#c2c2c2','#ececec','#ffffff'),
+  silverL: conicBands('#6b7078','#8b9199','#a8adb3','#d6dce1','#ffffff'),
+  silverD: conicBands('#4f5a61','#6f818a','#8ea0a8','#c9d6da','#eef2f4'),
+  goldT:   conicBands('#7c5a1c','#9a7527','#d9b263','#eecf8e','#fffdf5'),
+};
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
 // built anywhere else in the app). Labels are the standard single-word
@@ -668,7 +689,7 @@ if(numStripRow){
     const t = TONES[item.tone];
     const tile = document.createElement('div');
     tile.className = 'num-tile-lg';
-    tile.innerHTML = `<div class="swatch" style="background:${t.grad};border-color:${t.border};"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
+    tile.innerHTML = `<div class="swatch" style="background:${TONE_CONIC[item.tone]};border-color:${t.border};"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
     tile.querySelector('.swatch').addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
     numStripRow.appendChild(tile);
   });
