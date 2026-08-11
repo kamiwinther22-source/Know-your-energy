@@ -17,7 +17,7 @@
    (built for the black version) to dark ink to match. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;position:relative;
-  background-color:#f7f4ee;
+  background-color:#f8f8fa;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#17161c;
@@ -620,11 +620,14 @@ body{
 // as an obvious tiled pattern.
 (function(){
   const CLUSTER_H = 800, VW = 420;
+  // No warm ivory/cream/blush anywhere -- that's what was reading as
+  // tan, confirmed directly. White, cool pearl-grey, and a pale tint of
+  // the site's own established blue (#1C2CA9 family) only.
   const VARIANTS = [
-    { blob:'#eef2f5', turb:'#f7f0e2', wisp1:'#ffffff', wisp2:'#f2e9d6', low:'#f5ece9', anchor1:'#fffaf0', anchor2:'#e9edf0', turbFilter:'wispTurbA' },
-    { blob:'#f7f0e2', turb:'#f5ece9', wisp1:'#ffffff', wisp2:'#eef2f5', low:'#eef2f5', anchor1:'#f5ece9', anchor2:'#fffaf0', turbFilter:'wispTurbB' },
-    { blob:'#f5ece9', turb:'#eef2f5', wisp1:'#f7f0e2', wisp2:'#ffffff', low:'#f7f0e2', anchor1:'#eef2f5', anchor2:'#f5ece9', turbFilter:'wispTurbC' },
-    { blob:'#eef2f5', turb:'#f5ece9', wisp1:'#ffffff', wisp2:'#f7f0e2', low:'#ffffff', anchor1:'#f7f0e2', anchor2:'#eef2f5', turbFilter:'wispTurbD' }
+    { blob:'#eef2f5', turb:'#ffffff', wisp1:'#ffffff', wisp2:'#e4e8f7', low:'#eef2f5', anchor1:'#ffffff', anchor2:'#e4e8f7', turbFilter:'wispTurbA' },
+    { blob:'#e4e8f7', turb:'#eef2f5', wisp1:'#ffffff', wisp2:'#ffffff', low:'#ffffff', anchor1:'#eef2f5', anchor2:'#ffffff', turbFilter:'wispTurbB' },
+    { blob:'#ffffff', turb:'#e4e8f7', wisp1:'#eef2f5', wisp2:'#ffffff', low:'#eef2f5', anchor1:'#e4e8f7', anchor2:'#eef2f5', turbFilter:'wispTurbC' },
+    { blob:'#eef2f5', turb:'#ffffff', wisp1:'#ffffff', wisp2:'#e4e8f7', low:'#ffffff', anchor1:'#e4e8f7', anchor2:'#eef2f5', turbFilter:'wispTurbD' }
   ];
   function rand(seed){ const x = Math.sin(seed*999.123)*10000; return x - Math.floor(x); }
   function j(seed, base, range){ return Math.round(base + (rand(seed)-0.5)*2*range); }
