@@ -180,12 +180,10 @@ body{
    background (#fbf8f0): anchor tone 10.94:1, brightest accent tone
    4.75:1 -- both clear the same floor the blue version was held to. */
 .tagline-slide.c-gold{
-  /* The champagne version above was too light to read against the real
-     light background (tested and confirmed nearly invisible) despite an
-     old contrast note claiming otherwise -- darkened to a real bronze-
-     gold anchor, same family as the numerology gold tiles' dark stop. */
-  background:linear-gradient(100deg,#7c5a1c 0%,#c69a44 35%,#9a7527 50%,#c69a44 65%,#7c5a1c 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  /* Plain black placeholder for now -- not settled on gold. Final
+     treatment is most likely going to be a cursive font of some kind,
+     not this weight/style -- holding off on that until it's decided. */
+  color:#17161c;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#17161c;}
@@ -226,7 +224,7 @@ body{
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#2438C4;font-weight:800;}
+.key-hl{background:none;color:#17161c;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
