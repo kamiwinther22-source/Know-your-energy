@@ -864,6 +864,8 @@ const TONES = {
   silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
+  platinum:{ grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #eef1f3 55%, #d3d9dd 100%)', border:'#9aa2a8' },
+  copper:  { grad:'radial-gradient(circle at 30% 26%, #ffe8d6 0%, #d9986a 55%, #a85f36 100%)', border:'#8a4a1f' },
 };
 // Real metal technique (researched, not guessed): a conic-gradient with
 // alternating light/dark bands radiating around the shape, which is what
@@ -885,6 +887,16 @@ const TONE_CONIC = {
   silverL: conicBands('#6b7078','#8b9199','#a8adb3','#d6dce1','#ffffff'),
   silverD: conicBands('#4f5a61','#6f818a','#8ea0a8','#c9d6da','#eef2f4'),
   goldT:   conicBands('#7c5a1c','#9a7527','#d9b263','#eecf8e','#fffdf5'),
+  /* Bright/high-key silver, distinct from silverL/silverD -- those two
+     are both mid-value cool greys and read as "the same metal" next to
+     each other at a glance. This one is pushed much closer to white
+     overall (polished platinum, not brushed steel), real contrast
+     against the other tones instead of a third shade of the same grey. */
+  platinum: conicBands('#8a9098','#b8bfc6','#dde2e6','#f2f5f7','#ffffff'),
+  /* Real copper: warm reddish-brown shadow through to a warm
+     pink-white highlight -- genuinely different hue from gold (which
+     stays yellow-brown throughout), not just a darker/lighter gold. */
+  copper:  conicBands('#5c2e10','#8a4a1f','#b87333','#e0a878','#fff0e0'),
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -905,19 +917,23 @@ const TONE_CONIC = {
 // break-word algorithm landed, which produced an ugly orphaned single
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
+/* Four genuinely distinct metals now (gold, copper, platinum, silver)
+   instead of cycling between two golds and three greys that all read
+   as "silver" next to each other -- no two adjacent tiles in either
+   row share a tone. */
 const NUMS = [
-  {n:1, lbl:'Leader',       tone:'silverL'},
-  {n:2, lbl:'Diplomat',     tone:'goldT'},
-  {n:3, lbl:'Communi­cator', tone:'white'},
-  {n:4, lbl:'Builder',      tone:'cream'},
-  {n:5, lbl:'Freedom',      tone:'silverD'},
-  {n:6, lbl:'Nurtur­er', tone:'white'},
-  {n:7, lbl:'Seeker',       tone:'goldT'},
-  {n:8, lbl:'Achiever',     tone:'silverL'},
-  {n:9, lbl:'Humani­tarian', tone:'cream'},
-  {n:11, lbl:'Intu­itive',      tone:'silverD'},
-  {n:22, lbl:'Master Builder', tone:'goldT'},
-  {n:33, lbl:'Master Teacher', tone:'silverL'},
+  {n:1, lbl:'Leader',       tone:'goldT'},
+  {n:2, lbl:'Diplomat',     tone:'copper'},
+  {n:3, lbl:'Communi­cator', tone:'platinum'},
+  {n:4, lbl:'Builder',      tone:'silverD'},
+  {n:5, lbl:'Freedom',      tone:'goldT'},
+  {n:6, lbl:'Nurtur­er', tone:'copper'},
+  {n:7, lbl:'Seeker',       tone:'platinum'},
+  {n:8, lbl:'Achiever',     tone:'silverD'},
+  {n:9, lbl:'Humani­tarian', tone:'goldT'},
+  {n:11, lbl:'Intu­itive',      tone:'copper'},
+  {n:22, lbl:'Master Builder', tone:'platinum'},
+  {n:33, lbl:'Master Teacher', tone:'silverD'},
 ];
 // Plain grid, two rows of six, question between them.
 function buildNumRow(container, items){
