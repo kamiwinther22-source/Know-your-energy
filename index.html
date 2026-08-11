@@ -278,16 +278,17 @@ body{
 .section-lbl{font-size:0.95rem!important;color:#000000!important;margin-bottom:0.45rem!important;}
 .opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#000000;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
-.row-ampm{display:grid;grid-template-columns:130px auto;gap:0.6rem;align-items:end;justify-content:start;}
+.row-ampm{display:grid;grid-template-columns:130px auto;gap:0.6rem;align-items:end;justify-content:center;margin:0 auto;width:fit-content;}
 
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
    with italic text for a lighter, less typewriter-formal feel. Capped
-   width on the single-column rows (date/birthplace/email/time) instead
-   of stretching the full content width -- a date or a time doesn't
-   need a 380px-long line, and the full-width line was what read as
-   "the form is dragged over to one side," not an actual layout bug. */
-.f > .line-field{max-width:260px;}
+   width AND centered on the single-column rows (date/birthplace/email)
+   -- capping the width alone left them hugging the left edge with a
+   big gap on the right, which read as "shoved to one side," not
+   actually shorter. */
+.f > .line-field{max-width:260px;margin:0 auto;}
+.f > label{text-align:center;}
 .line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(23,22,28,0.4);}
 .line-field::before,.line-field::after{
   content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(23,22,28,0.4);
