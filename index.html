@@ -150,7 +150,7 @@ body{
 }
 .num-circle-q{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:auto;max-width:60%;margin:0!important;border:none!important;padding:0!important;
+  width:auto;max-width:112px;margin:0!important;border:none!important;padding:0!important;
 }
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
@@ -826,16 +826,59 @@ if(numCircle){
   // gets to be a lot more generous than the horizontal one. This is
   // what actually lets tiles stay big -- a symmetric circle forces
   // every tile down to whatever fits the tighter (width) dimension.
-  const Rx = 128, Ry = 195;
-  const unitW = 84;
-  const cx = Rx + unitW/2, cy = Ry + unitW/2;
-  numCircle.style.width = (2*Rx + unitW) + 'px';
-  numCircle.style.height = (2*Ry + unitW) + 'px';
+  const unitW = 84, unitH = S + 42; // full tile+label footprint
+  const clearance = Math.sqrt(unitW*unitW + unitH*unitH);
+  // A "stadium" outline (two straight vertical sides capped by
+  // semicircles top and bottom) instead of an ellipse. An ellipse's
+  // curve gets sharper at the top/bottom the taller it's stretched --
+  // that's exactly what was crowding units there, and it can't be
+  // fixed by adding height because more height makes those ends
+  // *sharper*, not rounder. A stadium's straight sides have zero
+  // curvature, so they can extend as far as needed with no crowding
+  // risk at all -- only the two caps need a fixed, safe radius.
+  const capR = 108; // fixed cap radius -- the carousel's arrow buttons cap how wide this can ever get
+  function stadiumPoints(straightLen, n){
+    const capPerim = Math.PI*capR;         // one semicircle
+    const total = 2*straightLen + 2*capPerim;
+    const step = total/n;
+    const pts = [];
+    for(let k=0;k<n;k++){
+      let s = (k*step) % total;
+      let x, y;
+      // Verified at each segment boundary by hand (right-top -> left-top
+      // -> left-bottom -> right-bottom -> back to right-top), not just
+      // assumed correct.
+      if(s < capPerim){                              // top cap: right connection -> left connection, over the top
+        const a = s/capR;                             // 0..PI
+        x = capR*Math.cos(a); y = -straightLen/2 - capR*Math.sin(a);
+      } else if(s < capPerim + straightLen){          // left side, top-to-bottom
+        x = -capR; y = -straightLen/2 + (s-capPerim);
+      } else if(s < 2*capPerim + straightLen){        // bottom cap: left connection -> right connection, under the bottom
+        const a = (s-capPerim-straightLen)/capR;      // 0..PI
+        x = -capR*Math.cos(a); y = straightLen/2 + capR*Math.sin(a);
+      } else {                                        // right side, bottom-to-top
+        x = capR; y = straightLen/2 - (s-2*capPerim-straightLen);
+      }
+      pts.push({x, y});
+    }
+    return { pts, spacing: step };
+  }
+  let straightLen = 40;
+  let { pts: coords, spacing } = stadiumPoints(straightLen, N);
+  let guard = 0;
+  while(spacing < clearance && guard < 80){
+    straightLen += 6;
+    ({ pts: coords, spacing } = stadiumPoints(straightLen, N));
+    guard++;
+  }
+  const halfW = capR, halfH = straightLen/2 + capR;
+  const cx = halfW + unitW/2, cy = halfH + unitW/2;
+  numCircle.style.width = (2*halfW + unitW) + 'px';
+  numCircle.style.height = (2*halfH + unitW) + 'px';
   NUMS.forEach((item,i)=>{
     const t = TONES[item.tone];
-    const angle = -Math.PI/2 + i*(2*Math.PI/N);
-    const x = cx + Rx*Math.cos(angle);
-    const y = cy + Ry*Math.sin(angle);
+    const x = cx + coords[i].x;
+    const y = cy + coords[i].y;
     const unit = document.createElement('div');
     unit.className = 'num-circle-unit';
     unit.style.left = x+'px'; unit.style.top = y+'px';
