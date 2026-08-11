@@ -46,8 +46,8 @@ body{
    a little extra letter-spacing, and a soft embossed text-shadow for
    dimension instead of a flat, flush-with-the-page line of type. */
 .sys-section-sub{
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:1.02rem;
-  letter-spacing:0.005em;color:#17161c;text-align:center;margin:0.75rem auto 0;
+  font-family:'Special Elite',monospace;font-weight:400;font-size:1.3rem;
+  letter-spacing:0.01em;color:#17161c;text-align:center;margin:0.75rem auto 0;
   width:fit-content;padding:0.35rem 0;
   border-top:1px solid rgba(23,22,28,0.3);border-bottom:1px solid rgba(23,22,28,0.3);
 }
@@ -105,7 +105,7 @@ body{
 /* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
    for its own label, so single-word labels (no spaces to wrap at)
    overflowed sideways into the neighboring tile instead of wrapping. */
-.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.4rem 0.22rem;width:86%;max-width:320px;margin:0 auto;}
+.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.4rem 0.22rem;width:94%;max-width:360px;margin:0 auto;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
@@ -125,7 +125,7 @@ body{
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
    not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.55rem;line-height:1.2;letter-spacing:-0.01em;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.6rem;line-height:1.22;letter-spacing:0;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -226,7 +226,7 @@ body{
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
 .key-txt{font-size:0.85rem;line-height:1.38;color:#17161c;font-weight:500;}
-.key-txt-lead{font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;line-height:1.3;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;}
+.key-txt-lead{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;line-height:1.25;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;}
 .key-txt em{font-style:normal;color:#17161c;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
