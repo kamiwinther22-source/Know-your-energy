@@ -44,16 +44,10 @@ body{
    real room above the form. Height is set from real measured content
    (see the JS below) rather than a guessed fixed number so it's exactly
    as tall as it needs to be, no more. */
+/* Unboxed -- sits directly on the page background now, no card/blur/
+   border/shadow container. */
 .chart-carousel{
-  position:relative;border-radius:16px;padding:1rem 0 1rem;margin-bottom:1.1rem;
-  overflow:hidden;
-  background:rgba(255,255,255,0.55);
-  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(20,20,30,0.1);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 18px 34px -14px rgba(60,50,40,0.18),
-    0 4px 10px -4px rgba(60,50,40,0.12);
+  position:relative;padding:1rem 0;margin-bottom:1.1rem;
 }
 /* Native horizontal scroll-snap instead of hand-rolled drag math -- the
    custom Pointer Events version got the numerology->astrology swipe
@@ -219,15 +213,9 @@ body{
 /* Boxed now (moved here from .form-panel, which is unboxed below) --
    same real glassmorphism recipe: blur + translucency + light edge +
    lift shadow, so it reads as floating glass, not a flat tint. */
+/* Unboxed -- same reasoning as .chart-carousel above. */
 .keys-col{
-  position:relative;border-radius:16px;padding:1.1rem 1rem;
-  background:rgba(255,255,255,0.55);
-  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(20,20,30,0.1);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 18px 34px -14px rgba(60,50,40,0.18),
-    0 4px 10px -4px rgba(60,50,40,0.12);
+  position:relative;padding:0;
 }
 .key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
 .key-item:last-child{margin-bottom:0;}
@@ -1085,7 +1073,7 @@ const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:dro
   <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
 </svg>`;
 const KEYS = [
-  '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
+  'One <mark class="key-hl">free</mark> reading — astrology, numerology, and human design, for you or a relationship of any two people.',
   'Your info is <mark class="key-hl">neither</mark> shared <mark class="key-hl">nor</mark> saved',
   '<mark class="key-hl">No subscriptions</mark> or auto-renewals',
   '<mark class="key-hl">Email</mark> is simply your key to your results and time-limited <mark class="key-hl">pass</mark> if you choose to purchase one.',
