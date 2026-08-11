@@ -255,18 +255,23 @@ for no real reason reads as sloppy, not as a redesign — the bar is
   built to match specific glitter reference images she shared earlier in
   conversation — never invent a sparkle effect from scratch.
 
-## Two distinct front-end pages — do not conflate them
+## Correction — there is only one audience for this page, not two
 
-- **The entry/data form** (navy background, gold cursive title, pricing list,
-  birth-data fields) is for people who *already intentionally* came looking
-  for this app (e.g. an app-store listing). It works today and does not need
-  a redesign for that use case.
-- **A cold-open, scroll-stopping landing page** for people with zero context
-  who know nothing about astrology/numerology/Human Design and need to be
-  visually stopped mid-scroll before they'd ever read a tagline — this is a
-  genuinely separate, still-unsolved page. Past attempts got folded back
-  into the entry form and never shipped as their own thing. Don't assume
-  work on one of these pages says anything about the other.
+An earlier version of this file claimed the entry/data-form page (title,
+birth-data fields, the "your unique design described by 3 separate
+systems" preview) was for people who *already intentionally* came looking
+for the app, and that a *separate*, still-unbuilt cold-open page was
+needed to catch people with zero context. **She corrected this directly
+and this was wrong:** "the entry page isn't for people who came looking
+for this — I've been clear all along that this is for people who don't
+even know anything about astrology numerology or human design. The
+entire purpose is to catch attention, have them become interested enough
+to go ahead and want to learn more about it. That is the goal." The
+entry/data-form page itself IS the cold-open, scroll-stopping page — it
+has to work for someone with zero context, not just for someone who
+already searched for this. There is no second, separate landing page to
+build later; this is the one page that has to do that job. Do not
+resurrect the "two pages, entry form is done" framing.
 
 ## Real repo facts worth not re-discovering
 
