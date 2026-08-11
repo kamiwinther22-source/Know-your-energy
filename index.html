@@ -7,25 +7,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: the actual validated wisp technique (soft blurred organic
-   shapes + turbulence-displaced edges + fine brush-stroke lines, in
-   layered white/ivory/pearl/blush shades), not the flat CSS
-   radial-gradient stand-in that shipped before -- that version only
-   used soft color pooling with no real linework, which read as lazy
-   color-only "depth." This is an actual <svg id="bgWisps"> layer (see
-   below body), sized to the real document height in JS and built from
-   blurred + turbulence-distorted paths and strokes so it reads as soft
-   atmosphere with real brushed lines in it, not flat tinted circles.
-   Four color/position variants cycle down the page with jittered
-   coordinates so nothing repeats as an obvious tiled pattern. */
+/* Background: deliberately quiet now, not more gradient variety. Every
+   prior pass (champagne, steel, graphite) kept adding scattered light/
+   dark patches, which makes the background itself visually busy and
+   competes with the actual UI for attention -- the opposite of "pop."
+   For the cards/tiles to read as the one interesting thing on the page,
+   the background needs to recede: one neutral mid-tone (not warm, not
+   cool, so it doesn't fight either the warm gold/cream tiles or the
+   cool silver ones equally), a single soft top-to-bottom falloff, and
+   fine grain for texture -- no scattered highlight blobs. Blue is then
+   the only saturated color anywhere on the page, which is what actually
+   makes it pop: contrast of saturation, not more background color. */
 body{
-  font-family:'DM Sans',sans-serif;overflow-x:hidden;position:relative;
-  background-color:#f7f4ee;
+  font-family:'DM Sans',sans-serif;overflow-x:hidden;
+  background-color:#000000;
+  background-image:none;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
-  color:#17161c;
+  color:#ffffff;
 }
-#bgWisps{position:absolute;top:0;left:0;width:100%;z-index:0;pointer-events:none;display:block;}
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
    everything inside it) wider than the actual phone viewport, which is
@@ -33,11 +33,14 @@ body{
    sections together on a real device. This is the real fix; the
    font-size floor below is the other half of it. */
 .content{width:100%;max-width:420px;min-width:0;position:relative;z-index:1;}
+.bg-glints{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.bg-glints .glint{position:absolute;}
+.bg-glints .glint svg{display:block;width:100%;height:100%;}
 
 .sys-section-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.5rem;
-  letter-spacing:0.05em;text-transform:uppercase;color:#17161c;
-  text-align:center;margin-bottom:0.15rem;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
+  letter-spacing:0.06em;text-transform:uppercase;color:#ffffff;
+  text-align:center;margin-bottom:0.5rem;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -47,48 +50,63 @@ body{
    real room above the form. Height is set from real measured content
    (see the JS below) rather than a guessed fixed number so it's exactly
    as tall as it needs to be, no more. */
-/* No card/box -- sits directly on the page, separated from the rest of
-   the layout by spacing and the section label only, not a bounding
-   rectangle. */
 .chart-carousel{
-  position:relative;padding:0.1rem 0 0.2rem;margin-bottom:0.2rem;
+  position:relative;border-radius:16px;padding:1rem 0 1rem;margin-bottom:1.1rem;
+  overflow:hidden;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 18px 34px -14px rgba(0,0,0,0.6),
+    0 4px 10px -4px rgba(0,0,0,0.4);
 }
-/* 3x4 grid (3 columns, 4 rows for the 12 numbers), centered as its own
-   block rather than stretched full width. Sized to fit on one screen
-   with the wheels below it -- no labels under the tiles anymore, the
-   number alone in a small chip. */
-.num-strip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.2rem;width:100%;max-width:75px;margin:0 auto;}
-/* The astrology wheel and Human Design diagram are no longer carousel
-   slides -- both always visible, offset left/right below the numbers so
-   they don't stack directly on top of each other. Bigger than the
-   numbers box now, not smaller. */
-.wheel-left{width:100%;margin:0.6rem 0 0;}
-.wheel-right{width:44%;margin:0.8rem 0 0 auto;}
-/* Real planets, not tiny dots or thin ring lines -- solar-system-as-
-   metaphor is what people recognize, not the orbit rings themselves.
-   Substantial glossy spheres, each named and labeled with its meaning,
-   scattered (not gridded), sized by real astrological weight. */
-.solar-field{position:relative;width:100%;height:270px;}
-.planet-sphere{position:absolute;border-radius:50%;box-sizing:border-box;}
-.planet-lbl{position:absolute;pointer-events:none;}
-.planet-lbl .pname{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;letter-spacing:0.03em;text-transform:uppercase;color:#17161c;}
-.planet-lbl .pmean{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.62rem;color:#555;margin-top:0.05rem;}
+/* Native horizontal scroll-snap instead of hand-rolled drag math -- the
+   custom Pointer Events version got the numerology->astrology swipe
+   right on some devices but got stuck (jumped a slide immediately, then
+   wouldn't swipe back) on hers. Letting the browser's own touch/scroll
+   engine own the gesture is the reliable fix, not another round of
+   custom threshold tuning. */
+.carousel-track{
+  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
+}
+.carousel-track::-webkit-scrollbar{display:none;height:0;}
+.carousel-slide{
+  flex:0 0 100%;width:100%;min-width:0;box-sizing:border-box;padding:0 1.1rem;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  scroll-snap-align:start;scroll-snap-stop:always;
+}
+.carousel-dots{display:flex;justify-content:center;gap:0.45rem;margin-top:0.9rem;}
+.carousel-dots .dot{
+  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.28);
+  border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
+}
+.carousel-dots .dot.active{background:#ffffff;transform:scale(1.35);}
+/* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
+   for its own label, so single-word labels (no spaces to wrap at)
+   overflowed sideways into the neighboring tile instead of wrapping. */
+.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.6rem 0.3rem;width:100%;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
-  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:6px;
   /* Shadow moved here, off the whole tile (which included the label
      text below and was blurring it the same way the chart graphics
      were) -- only the swatch itself gets the lift now. */
-  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
 }
 .num-tile-lg .swatch::before{
   content:'';position:absolute;inset:0;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
-.num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.62rem;line-height:1;color:#000000;}
-.num-tile-lg .lbl{display:none;}
+.num-tile-lg .n{position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
+/* overflow-wrap so a long single word (no space to break at, e.g.
+   "Communicator") wraps onto a second line inside its own tile instead
+   of overflowing sideways into the next one -- that sideways overflow,
+   not tile width alone, was what caused the label text to run together. */
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.62rem;line-height:1.25;letter-spacing:0.01em;text-transform:uppercase;color:#ffffff;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
@@ -96,7 +114,7 @@ body{
    words hard to read, not eyesight or the font. Individual shapes still
    get their own lift via the num-tile-lg filter and their own gradient
    shading; text stays completely unfiltered so it's genuinely crisp. */
-.chart-graphic{width:100%;position:relative;margin-top:0.1rem;}
+.chart-graphic{width:100%;position:relative;margin-top:0.3rem;}
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
 /* ---------- title ---------- */
@@ -123,40 +141,48 @@ body{
      Still one line, still Alex Brush, just allowed to keep scaling down
      on the narrowest screens instead of hitting a hard floor early. */
   font-size:clamp(1.7rem,10vw,3.4rem);white-space:nowrap;
-  /* Dark anchor stops for a light background -- restored from the
-     pre-black version (#0F1758/#121C6C were sampled for contrast here),
-     same shiny-text technique as the tagline below: deep anchor + bright
-     accent + deep anchor. */
-  background:linear-gradient(100deg,#0F1758 0%,#5364D6 35%,#8A96EE 50%,#5364D6 65%,#0F1758 100%);
+  /* Brightened for a black background -- the previous gradient's dark
+     anchor stops (#0F1758/#121C6C) were built for contrast against a
+     light page and would nearly vanish on black. Same blue family,
+     shifted bright enough to actually read. */
+  background:linear-gradient(100deg,#4655D6 0%,#8A96EE 35%,#5364D6 50%,#8A96EE 65%,#4655D6 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-  filter:drop-shadow(0 0 14px rgba(90,110,230,0.3));
+  filter:drop-shadow(0 0 18px rgba(90,110,230,0.55));
 }
+.title-glint{position:absolute;pointer-events:none;}
+.title-glint svg{display:block;width:100%;height:100%;}
+
 
 /* ---------- tagline / toggle ---------- */
-.tagline-wrap{position:relative;max-width:380px;margin:0 auto 0.7rem;}
-/* Larger than the title, per direct instruction -- title is the smaller,
-   secondary element here now. */
-/* Special Elite (typewriter monospace) was the problem -- its characters
-   are inherently wide/spaced-out by design, which ate space fast at this
-   size and left no room for real tagline copy. Barlow Condensed instead
-   -- already loaded elsewhere in this file, and literally a condensed
-   (narrow) face, so far more text fits per line at the same font-size. */
+.tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.9rem,11vw,3.6rem);line-height:1.1;font-weight:600;letter-spacing:0;
+  text-align:center;font-family:'Special Elite',monospace;font-size:0.82rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
-/* Plain neutral ink, no gradient/color effect at all -- a placeholder
-   until she picks the real color, not another color choice made for
-   her. Same ink tone as the rest of the page's body text. */
-.tagline-slide.c-brand{
-  color:#17161c;
+/* Same shiny-gradient-text technique as the title (deep anchor + bright
+   same-hue accent + deep anchor), but in gold, not blue -- directly under
+   a blue title, a blue tagline didn't stand out from it, and the two
+   taglines no longer have a reason to be different colors from each
+   other (that made sense when they were 3 distinct pitches; now they're
+   one statement + one question in the same voice). Gold already has an
+   established role on this page (title-glint sparkles, numerology tile
+   accents), so this reuses an existing palette color rather than
+   introducing a new one. Contrast verified against this page's
+   background (#fbf8f0): anchor tone 10.94:1, brightest accent tone
+   4.75:1 -- both clear the same floor the blue version was held to. */
+.tagline-slide.c-gold{
+  /* Muted champagne, not yellow -- reuses the same goldT metal tone
+     already established for the numerology tiles instead of a brighter,
+     more saturated gold that read as plain yellow on black. */
+  background:linear-gradient(100deg,#c7b78e 0%,#fdf6ea 35%,#ddccae 50%,#fdf6ea 65%,#c7b78e 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#17161c;}
-.tog-lbl{cursor:pointer;color:#17161c;transition:color 0.2s;user-select:none;}
-.tog-lbl.active{color:#17161c;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#ffffff;}
+.tog-lbl{cursor:pointer;color:#ffffff;transition:color 0.2s;user-select:none;}
+.tog-lbl.active{color:#ffffff;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
 .toggle-pill.on{background:#1C2CA9;}
@@ -164,42 +190,32 @@ body{
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#1C2CA9;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s;}
 .rel-chip:hover{background:rgba(28,44,169,0.12);}
 .rel-chip.active{background:#1C2CA9;color:#ffffff;}
 .rel-chip.active:hover{background:#1C2CA9;}
 
-/* ---------- key-point bubbles: real circles, not pills. Each bubble's
-   diameter is computed in JS from its own wrapped text block (see
-   sizeKeyBubbles below), so they come out genuinely different sizes --
-   a true circle sized to its own content, not a stretched capsule. Base
-   is a translucent, near-white glass fill (bubbles are "clear," per her
-   direction) with a single saturated color pooled as a sliver/glow in
-   one corner rather than filling the whole shape -- no bubble is a
-   solid block of one color. Five distinct hues spread further across
-   the wheel than this page's default warm palette (coral/gold/rose),
-   including a muted plum and a soft sky blue, so the set doesn't read
-   as "the same six colors plus a little teal." */
-.key-cluster{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.7rem;max-width:380px;margin:1.4rem auto;}
-.key-cluster-b{margin-bottom:79rem;}
-.key-bubble{
-  display:flex;align-items:center;justify-content:center;text-align:center;
-  border-radius:50%;flex-shrink:0;border:1.5px solid;
-  background:
-    radial-gradient(circle at 78% 82%, var(--acc) 0%, transparent 42%),
-    radial-gradient(circle at 26% 20%, #fffffe 0%, #fffdf9 42%, #fbf7f0 100%);
+/* ---------- bottom two-column: keys | form ---------- */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
+
+/* Boxed now (moved here from .form-panel, which is unboxed below) --
+   same real glassmorphism recipe: blur + translucency + light edge +
+   lift shadow, so it reads as floating glass, not a flat tint. */
+.keys-col{
+  position:relative;border-radius:16px;padding:1.1rem 1rem;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid rgba(255,255,255,0.18);
   box-shadow:
-    inset 0 3px 5px rgba(255,255,255,0.9),
-    inset 0 -5px 9px rgba(120,90,70,0.14),
-    0 8px 16px -6px rgba(90,70,50,0.28);
-  color:#3a2f28;font-weight:700;line-height:1.15;font-size:0.6rem;
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 18px 34px -14px rgba(0,0,0,0.6),
+    0 4px 10px -4px rgba(0,0,0,0.4);
 }
-.key-bubble .kb-txt{max-width:100px;padding:0 6px;}
-.kb-coral{--acc:#ff8f6b;border-color:#f2a488;}
-.kb-marigold{--acc:#f2a93c;border-color:#e7bb63;}
-.kb-rose{--acc:#ff6f91;border-color:#f2a0b7;}
-.kb-plum{--acc:#b06bb0;border-color:#c99bc9;}
-.kb-sky{--acc:#6fa8dc;border-color:#a8c8e8;}
+.key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
+.key-item:last-child{margin-bottom:0;}
+.key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
+.key-txt{font-size:0.85rem;line-height:1.38;color:#ffffff;font-weight:500;}
+.key-txt em{font-style:normal;color:#ffffff;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -208,45 +224,44 @@ body{
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#2438C4;font-weight:800;}
+.key-hl{background:none;color:#9DB0FF;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
    no card/blur/border around it -- the box moved to .keys-col instead. */
 .form-panel{
   position:relative;padding:0.3rem 0 0;
-  max-width:300px;margin:0 auto;
 }
-.form-panel .f{margin-bottom:0.32rem;}
+.form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#17161c;margin-bottom:0.12rem;font-weight:700;}
-.section-lbl{font-size:0.6rem!important;color:#17161c!important;margin-bottom:0.35rem!important;}
-.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#17161c;font-weight:600;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#ffffff;margin-bottom:0.2rem;font-weight:700;}
+.section-lbl{font-size:0.6rem!important;color:#ffffff!important;margin-bottom:0.35rem!important;}
+.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#ffffff;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
 .row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
 
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
    with italic text for a lighter, less typewriter-formal feel. */
-.line-field{position:relative;padding-bottom:0.2rem;border-bottom:1.3px solid rgba(24,20,51,0.4);}
+.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(255,255,255,0.45);}
 .line-field::before,.line-field::after{
-  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(24,20,51,0.4);
+  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(255,255,255,0.45);
 }
 .line-field::before{left:0;}
 .line-field::after{right:0;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#17161c;font-size:0.7rem;font-weight:500;
+  width:100%;background:transparent;border:none;color:#ffffff;font-size:0.7rem;font-weight:500;
   font-style:italic;font-family:'DM Sans',sans-serif;padding:0.15rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
 .line-field select{width:auto;padding-right:1rem;}
 .line-field select option{color:#000000;}
-.line-field input::placeholder{color:#5c5670;font-style:italic;opacity:1;}
+.line-field input::placeholder{color:#ffffff;font-style:italic;opacity:1;}
 
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
    still wraps it, same verified technique as the live entry form's button ---------- */
-.submit-wrap{margin-top:0.9rem;display:flex;justify-content:center;}
+.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
 .glow-ring::before{content:'';position:absolute;inset:-100%;
   background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
@@ -254,33 +269,16 @@ body{
 .glow-ring .gen-btn{position:relative;z-index:1;margin:0;border-radius:7px;}
 @keyframes silverspin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
-/* Flowing brushed-metal streaks, not a flat gradient -- three diagonal
-   bands (bright silver-white, blue accent, deep-navy shadow) at 122deg,
-   cutting across the base fill's own 160deg axis, each with a sharp rise
-   and a longer fade rather than an even stripe -- reads as light glancing
-   off a curved surface instead of a repeating pattern. Every color reused
-   from elsewhere in this file: the white/silver from .glow-ring, the
-   accent/deep-navy from .brand's title gradient. */
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
-  background:
-    linear-gradient(122deg, transparent 0%, transparent 50%, rgba(254,254,255,0.30) 57%, rgba(238,241,251,0.16) 66%, transparent 74%, transparent 100%),
-    linear-gradient(122deg, transparent 0%, transparent 22%, rgba(138,150,238,0.48) 27%, rgba(138,150,238,0.22) 35%, transparent 42%, transparent 100%),
-    linear-gradient(122deg, transparent 0%, transparent 78%, rgba(15,23,88,0.50) 84%, rgba(15,23,88,0.28) 92%, transparent 100%),
-    linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
+  background:linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
   border:1px solid rgba(255,255,255,0.55);border-radius:6px;
   color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
-  text-shadow:0 1px 2px rgba(10,15,50,0.5);
   transition:transform 0.18s ease,box-shadow 0.18s ease;
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,0.65),
     inset 0 -4px 7px rgba(210,220,230,0.4),
     0 8px 18px -6px rgba(190,200,210,0.6);}
 .gen-btn:hover{transform:translateY(-1px);
-  background:
-    linear-gradient(122deg, transparent 0%, transparent 48%, rgba(254,254,255,0.32) 56%, rgba(238,241,251,0.18) 66%, transparent 75%, transparent 100%),
-    linear-gradient(122deg, transparent 0%, transparent 22%, rgba(138,150,238,0.48) 27%, rgba(138,150,238,0.22) 35%, transparent 42%, transparent 100%),
-    linear-gradient(122deg, transparent 0%, transparent 78%, rgba(15,23,88,0.50) 84%, rgba(15,23,88,0.28) 92%, transparent 100%),
-    linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,0.7),
     inset 0 -4px 7px rgba(210,220,230,0.45),
@@ -294,7 +292,7 @@ body{
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:4rem 1rem;}
-.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#2438C4;}
+.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#9DB0FF;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
@@ -457,7 +455,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.key-cluster,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
@@ -466,56 +464,50 @@ body{
 </style>
 </head>
 <body>
-<svg id="bgWisps" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="wispBlurLg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
-    <filter id="wispBlurMd" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>
-    <filter id="wispBlurSm" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
-    <filter id="wispTurbA" x="-40%" y="-40%" width="180%" height="180%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="3" seed="4" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="34" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="wispTurbB" x="-40%" y="-40%" width="180%" height="180%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="3" seed="17" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="wispTurbC" x="-40%" y="-40%" width="180%" height="180%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.014 0.028" numOctaves="3" seed="29" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="32" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="wispTurbD" x="-40%" y="-40%" width="180%" height="180%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.032" numOctaves="3" seed="41" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="28" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-  </defs>
-</svg>
+<div class="bg-glints" id="bgGlints"></div>
 <div class="content">
   <div class="brand-row">
+    <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
+      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
+    </div>
+    <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
+      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
+    </div>
+    <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
+      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
+    </div>
     <div class="brand">Know Your Energy</div>
   </div>
 
   <div class="tagline-wrap" id="taglineWrap">
-    <div class="tagline-slide c-brand active">Your unique design described by 3 separate systems</div>
-    <div class="tagline-slide c-brand">is it all just math</div>
+    <div class="tagline-slide c-gold active">Your unique design described by 3 separate systems</div>
+    <div class="tagline-slide c-gold">is it all just math</div>
   </div>
 
   <div class="chart-carousel" id="chartCarousel">
-    <div class="sys-section-title">Numerology — Your Core Numbers</div>
-    <div class="num-strip-row" id="numStripRow"></div>
-
-    <div class="wheel-left">
-      <div class="sys-section-title">Astrology</div>
-      <div class="chart-graphic" id="solarIcon"></div>
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide">
+        <div class="sys-section-title">Numerology — Your Core Numbers</div>
+        <div class="num-strip-row" id="numStripRow"></div>
+      </div>
+      <div class="carousel-slide">
+        <div class="sys-section-title">Astrology</div>
+        <div class="chart-graphic" id="solarIcon"></div>
+      </div>
+      <div class="carousel-slide">
+        <div class="sys-section-title">Human Design</div>
+        <div class="chart-graphic" id="hdIcon"></div>
+      </div>
     </div>
-    <div class="wheel-right">
-      <div class="sys-section-title">Human Design</div>
-      <div class="chart-graphic" id="hdIcon"></div>
+    <div class="carousel-dots" id="carouselDots">
+      <button type="button" class="dot active" data-i="0" aria-label="Numerology"></button>
+      <button type="button" class="dot" data-i="1" aria-label="Astrology"></button>
+      <button type="button" class="dot" data-i="2" aria-label="Human Design"></button>
     </div>
   </div>
 
-  <div class="key-cluster key-cluster-a" id="keyClusterA"></div>
-
-  <div class="form-col">
+  <div class="bottom-grid">
+    <div class="form-col">
       <div class="toggle-row">
         <span class="tog-lbl active" id="lblInd">Individual</span>
         <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
@@ -595,9 +587,9 @@ body{
       <div class="submit-wrap">
         <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
       </div>
+    </div>
+    <div class="keys-col" id="keysCol"></div>
   </div>
-
-  <div class="key-cluster key-cluster-b" id="keyClusterB"></div>
 
 </div>
 
@@ -618,106 +610,24 @@ body{
 </div>
 
 <script>
-// ---------- background wisps: real blurred/turbulence-distorted brush
-// shapes (the technique from the approved demo), not flat color blobs.
-// Four color/filter variants cycle down the actual document height with
-// small jittered offsets so nothing repeats as an obvious tiled pattern.
-(function(){
-  const CLUSTER_H = 800, VW = 420;
-  const VARIANTS = [
-    { blob:'#eef2f5', turb:'#f7f0e2', wisp1:'#ffffff', wisp2:'#f2e9d6', low:'#f5ece9', anchor1:'#fffaf0', anchor2:'#e9edf0', turbFilter:'wispTurbA' },
-    { blob:'#f7f0e2', turb:'#f5ece9', wisp1:'#ffffff', wisp2:'#eef2f5', low:'#eef2f5', anchor1:'#f5ece9', anchor2:'#fffaf0', turbFilter:'wispTurbB' },
-    { blob:'#f5ece9', turb:'#eef2f5', wisp1:'#f7f0e2', wisp2:'#ffffff', low:'#f7f0e2', anchor1:'#eef2f5', anchor2:'#f5ece9', turbFilter:'wispTurbC' },
-    { blob:'#eef2f5', turb:'#f5ece9', wisp1:'#ffffff', wisp2:'#f7f0e2', low:'#ffffff', anchor1:'#f7f0e2', anchor2:'#eef2f5', turbFilter:'wispTurbD' }
-  ];
-  function rand(seed){ const x = Math.sin(seed*999.123)*10000; return x - Math.floor(x); }
-  function j(seed, base, range){ return Math.round(base + (rand(seed)-0.5)*2*range); }
-
-  function cluster(i){
-    const v = VARIANTS[i % 4];
-    const y0 = i * CLUSTER_H, s = i * 13 + 1;
-    return `
-      <g transform="translate(0,${y0})">
-        <path d="M -40,${j(s+1,180,30)} C 40,${j(s+2,100,20)} 90,${j(s+3,140,20)} 160,${j(s+4,80,20)}
-                 C 230,${j(s+5,30,20)} 260,${j(s+6,80,20)} 340,${j(s+7,50,20)}
-                 L 340,${j(s+8,220,20)} C 260,${j(s+9,240,20)} 240,${j(s+10,210,20)} 170,${j(s+11,260,20)}
-                 C 100,${j(s+12,300,20)} 80,${j(s+13,280,20)} -40,${j(s+14,340,20)} Z"
-              fill="${v.blob}" opacity="0.55" filter="url(#wispBlurLg)"/>
-        <path d="M -30,${j(s+15,420,25)} C 60,${j(s+16,360,20)} 100,${j(s+17,390,20)} 180,${j(s+18,330,20)}
-                 C 250,${j(s+19,290,20)} 280,${j(s+20,320,20)} 360,${j(s+21,270,20)}
-                 C 320,${j(s+22,320,20)} 300,${j(s+23,350,20)} 240,${j(s+24,390,20)}
-                 C 170,${j(s+25,435,20)} 150,${j(s+26,410,20)} 90,${j(s+27,460,20)}
-                 C 40,${j(s+28,500,20)} 30,${j(s+29,490,20)} -60,${j(s+30,540,20)} Z"
-              fill="${v.turb}" opacity="0.5" filter="url(#${v.turbFilter})"/>
-        <path d="M 20,${j(s+31,380,20)} C 80,${j(s+32,340,20)} 100,${j(s+33,360,20)} 150,${j(s+34,320,20)}
-                 C 200,${j(s+35,282,20)} 210,${j(s+36,300,20)} 270,${j(s+37,270,20)}"
-              fill="none" stroke="${v.wisp1}" stroke-width="13" stroke-linecap="round" opacity="0.75" filter="url(#wispBlurMd)"/>
-        <path d="M 60,${j(s+38,440,20)} C 110,${j(s+39,400,20)} 130,${j(s+40,415,20)} 180,${j(s+41,375,20)}
-                 C 225,${j(s+42,340,20)} 235,${j(s+43,355,20)} 290,${j(s+44,325,20)}"
-              fill="none" stroke="${v.wisp2}" stroke-width="7" stroke-linecap="round" opacity="0.65" filter="url(#wispBlurSm)"/>
-        <path d="M -20,${j(s+45,590,25)} C 70,${j(s+46,550,20)} 110,${j(s+47,575,20)} 180,${j(s+48,535,20)}
-                 C 250,${j(s+49,495,20)} 270,${j(s+50,520,20)} 350,${j(s+51,480,20)}
-                 C 320,${j(s+52,520,20)} 300,${j(s+53,540,20)} 250,${j(s+54,570,20)}
-                 C 190,${j(s+55,605,20)} 175,${j(s+56,585,20)} 120,${j(s+57,615,20)}
-                 C 80,${j(s+58,635,20)} 60,${j(s+59,625,20)} -30,${j(s+60,650,20)} Z"
-              fill="${v.low}" opacity="0.5" filter="url(#wispBlurLg)"/>
-        <circle cx="${j(s+61,220,30)}" cy="${j(s+62,150,20)}" r="90" fill="${v.anchor1}" opacity="0.4" filter="url(#wispBlurLg)"/>
-        <circle cx="${j(s+63,150,30)}" cy="${j(s+64,550,20)}" r="70" fill="${v.anchor2}" opacity="0.4" filter="url(#wispBlurLg)"/>
-      </g>`;
-  }
-
-  function buildWisps(){
-    const svg = document.getElementById('bgWisps');
-    if(!svg) return;
-    const h = document.body.scrollHeight;
-    const numClusters = Math.max(1, Math.ceil(h / CLUSTER_H));
-    let body = '';
-    for(let i=0;i<numClusters;i++) body += cluster(i);
-    svg.setAttribute('viewBox', `0 0 ${VW} ${h}`);
-    svg.setAttribute('height', h);
-    svg.setAttribute('preserveAspectRatio','none');
-    // defs stay put -- everything else gets rebuilt
-    const defs = svg.querySelector('defs');
-    svg.innerHTML = '';
-    if(defs) svg.appendChild(defs);
-    svg.insertAdjacentHTML('beforeend', body);
-  }
-  buildWisps();
-  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(buildWisps); }
-  window.addEventListener('resize', buildWisps);
-})();
-
-// ---------- numerology numbers: light metal, but actually shiny ----------
-// The previous version stayed inside a narrow, pale value band at every
-// stop (white -> slightly-less-white) -- that's what read as flat/dull
-// colored-pencil, not metal. Real shine is contrast: a bright highlight
-// AND a genuinely dark shadow, not light fading to a lighter grey. Kept
-// the highlight and hue families light-metal (platinum/steel/champagne,
-// as asked), but every gradient now actually runs to a real dark edge.
+// ---------- numerology numbers: monochrome palette, distinguished by outline ----------
+// Correction from the previous pass: I'd sampled a real photo but that photo's
+// warm ambient light was bouncing onto the metal -- a lighting artifact of
+// that shot, not silver's actual hue. Silver here is now genuinely cool/
+// neutral steel-gray (hue ~215, near-desaturated), gold is the only warm tone
+// (as asked), white/cream stay true white/cream rather than tan-shifted.
+// Contrast against the ink text verified per stop, same as before.
+// Rebuilt from real, established metallic/precious color names instead of
+// self-derived HSL math: Platinum + classic Silver for silverL, Silver +
+// Steel + Gunmetal (lightened just enough to stay legible, same hue/sat
+// preserved) for silverD, and Champagne -- a genuinely well-known pale gold
+// that is NOT yellow/orange -- for goldT.
 const TONES = {
-  cream:   { grad:'radial-gradient(circle at 30% 26%, #fffefa 0%, #f0e6d0 50%, #6b5738 100%)', border:'#6b5738' },
-  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #dcdfe3 50%, #4a4f57 100%)', border:'#4a4f57' },
-  silverL: { grad:'radial-gradient(circle at 30% 26%, #f8f8f8 0%, #c7ccd1 50%, #3c4147 100%)', border:'#3c4147' },
-  silverD: { grad:'radial-gradient(circle at 30% 26%, #e8ebee 0%, #97a1ab 50%, #23272c 100%)', border:'#23272c' },
-  goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #d9bf85 50%, #5c4720 100%)', border:'#5c4720' },
-};
-// Real hex stops per tone, extracted once -- still used by the Human
-// Design preview's per-center radial gradients below.
-const stopsByTone = {};
-Object.entries(TONES).forEach(([name, t])=>{ stopsByTone[name] = t.grad.match(/#[0-9a-fA-F]{6}/g); });
-// Numerology reuses the exact same bold jewel-tone palette as the
-// astrology planets below, instead of its own separate muted-metal set --
-// having two unrelated color systems on the same page read as a clash,
-// not two intentional themes.
-const JEWEL = {
-  gold:   { grad:'radial-gradient(circle at 30% 24%, #fffbe8 0%, #ffe9a3 10%, #e0aa2e 42%, #8a5c10 78%, #2e1c02 100%)', border:'#2e1c02' },
-  chrome: { grad:'radial-gradient(circle at 30% 24%, #ffffff 0%, #eef1f4 20%, #9aa4ad 58%, #2b323a 100%)',            border:'#2b323a' },
-  rose:   { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffd7de 16%, #ff6c8c 52%, #7a0a3a 100%)',               border:'#7a0a3a' },
-  coral:  { grad:'radial-gradient(circle at 30% 22%, #fff 0%, #ffcdb0 14%, #e0501f 52%, #5c1c06 100%)',               border:'#5c1c06' },
-  amber:  { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffe0a0 14%, #d98a1e 50%, #5c360a 100%)',               border:'#5c360a' },
-  wine:   { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #f0b3c4 14%, #a3284f 52%, #300a17 100%)',               border:'#300a17' },
-  teal:   { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #a8e0c4 16%, #12735a 55%, #052018 100%)',               border:'#052018' },
-  maroon: { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #e6a8b8 16%, #7a1f30 55%, #2a060d 100%)',               border:'#2a060d' },
+  cream:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #fdfaf3 55%, #f3ead9 100%)', border:'#d9cdb2' },
+  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #ffffff 55%, #f1f1f1 100%)', border:'#d8d4c9' },
+  silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
+  silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
+  goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -739,23 +649,23 @@ const JEWEL = {
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
 const NUMS = [
-  {n:1, lbl:'Leader',       tone:'chrome'},
-  {n:2, lbl:'Diplomat',     tone:'rose'},
-  {n:3, lbl:'Communi­cator', tone:'amber'},
-  {n:4, lbl:'Builder',      tone:'teal'},
-  {n:5, lbl:'Freedom',      tone:'coral'},
-  {n:6, lbl:'Nurtur­er', tone:'gold'},
-  {n:7, lbl:'Seeker',       tone:'wine'},
-  {n:8, lbl:'Achiever',     tone:'maroon'},
-  {n:9, lbl:'Humani­tarian', tone:'chrome'},
-  {n:11, lbl:'Intu­itive',      tone:'teal'},
-  {n:22, lbl:'Master Builder', tone:'gold'},
-  {n:33, lbl:'Master Teacher', tone:'rose'},
+  {n:1, lbl:'Leader',       tone:'silverL'},
+  {n:2, lbl:'Diplomat',     tone:'goldT'},
+  {n:3, lbl:'Communi­cator', tone:'white'},
+  {n:4, lbl:'Builder',      tone:'cream'},
+  {n:5, lbl:'Freedom',      tone:'silverD'},
+  {n:6, lbl:'Nurtur­er', tone:'white'},
+  {n:7, lbl:'Seeker',       tone:'goldT'},
+  {n:8, lbl:'Achiever',     tone:'silverL'},
+  {n:9, lbl:'Humani­tarian', tone:'cream'},
+  {n:11, lbl:'Intu­itive',      tone:'silverD'},
+  {n:22, lbl:'Master Builder', tone:'goldT'},
+  {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
 const numStripRow = document.getElementById('numStripRow');
 if(numStripRow){
   NUMS.forEach(item=>{
-    const t = JEWEL[item.tone];
+    const t = TONES[item.tone];
     const tile = document.createElement('div');
     tile.className = 'num-tile-lg';
     tile.innerHTML = `<div class="swatch" style="background:${t.grad};border-color:${t.border};"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
@@ -763,6 +673,23 @@ if(numStripRow){
     numStripRow.appendChild(tile);
   });
 }
+// A few small, fixed-size sparkle glints -- same restrained technique
+// as the reference sphere's accent glints, not a dense field.
+(function(){
+  const host = document.getElementById('bgGlints');
+  if(!host) return;
+  const spots = [
+    ['26%','7%',16,0.8],['70%','35%',10,0.6],['16%','60%',8,0.5],['85%','15%',7,0.4]
+  ];
+  spots.forEach(([x,y,size,op])=>{
+    const d=document.createElement('div');
+    d.className='glint';
+    d.style.left=x;d.style.top=y;
+    d.style.width=size+'px';d.style.height=size+'px';d.style.opacity=op;
+    d.innerHTML=`<svg viewBox="0 0 24 24"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#ffffff"/></svg>`;
+    host.appendChild(d);
+  });
+})();
 // item.lbl is this cell's real Pythagorean Square meaning (Character,
 // Energy, etc.) -- the body reuses NUM_DEFS.lifepath, which is a
 // different number system's content (what this digit means as a Life
@@ -774,52 +701,95 @@ function openNumberDef(item){
   document.getElementById('cardExpand').classList.add('open');
 }
 
-// ---------- solar system, rebuilt: real substantial glossy planets, not
-// tiny dots on thin ring lines. The orbit rings were never the part that
-// communicated anything -- "a planet means a word" is what people
-// recognize, so the planets themselves carry the material quality and
-// the rings are gone entirely. Colors are grounded in real astrological/
-// mythological association where one exists (Mars red, Moon silver,
-// Mercury quicksilver), not randomly assigned, and none of them are
-// blue/purple. Positions are hand-placed, scattered, no two on the same
-// row or column. */
+// ---------- solar system: monochrome, laid out like an actual snapshot in
+// time -- distinct orbital tiers (inner rocky pair / inner-mid pair / outer
+// gas giants / far icy trio) with a gap between tiers like the real solar
+// system, each planet at its own radius within its tier and a scattered
+// (not evenly-spaced) angle, rather than one continuously-growing spiral. ----
+// Original radii kept (scaling them up made the label text render
+// SMALLER on screen overall, since the container width is fixed and a
+// bigger viewBox just packs everything tighter per pixel -- the actual
+// fix for collisions at a bigger font is re-angling each planet, not
+// inflating the whole diagram. These angles were found by a real
+// pairwise bounding-box search (every label pair checked, 6-unit
+// minimum gap enforced, not eyeballed) rather than the original
+// "scattered" angles, which collided once the font size went up.
 const PLANETS = [
-  {name:'Sun',     lines:['You'],                 top:34,  left:32, size:84, grad:'radial-gradient(circle at 30% 24%, #fffbe8 0%, #ffe9a3 10%, #e0aa2e 42%, #8a5c10 78%, #2e1c02 100%)'},
-  {name:'Mercury', lines:['Communication'],        top:22,  left:60, size:34, grad:'radial-gradient(circle at 30% 24%, #ffffff 0%, #eef1f4 20%, #9aa4ad 58%, #2b323a 100%)'},
-  {name:'Venus',   lines:['Love & Beauty'],        top:56,  left:2,  size:46, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffd7de 16%, #ff6c8c 52%, #7a0a3a 100%)'},
-  {name:'Moon',    lines:['Emotions'],             top:2,   left:36, size:30, grad:'radial-gradient(circle at 30% 24%, #ffffff 0%, #eef1f4 25%, #b7bfc6 65%, #4a525a 100%)'},
-  {name:'Mars',    lines:['Drive & Action'],       top:70,  left:70, size:40, grad:'radial-gradient(circle at 30% 22%, #fff 0%, #ffcdb0 14%, #e0501f 52%, #5c1c06 100%)'},
-  {name:'Jupiter', lines:['Growth & Luck'],        top:10,  left:2,  size:58, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffe0a0 14%, #d98a1e 50%, #5c360a 100%)'},
-  {name:'Saturn',  lines:['Discipline'],           top:70,  left:46, size:46, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #f0b3c4 14%, #a3284f 52%, #300a17 100%)'},
-  {name:'Uranus',  lines:['Change'],               top:0,   left:84, size:32, grad:'radial-gradient(circle at 30% 24%, #f6ffb8 0%, #c8f000 26%, #6b8400 62%, #2b3300 100%)'},
-  {name:'Neptune', lines:['Intuition & Dreams'],   top:40,  left:82, size:38, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #a8e0c4 16%, #12735a 55%, #052018 100%)'},
-  {name:'Pluto',   lines:['Transformation'],       top:74,  left:12, size:26, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #e6a8b8 16%, #7a1f30 55%, #2a060d 100%)'},
+  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
+  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:-149.8},
+  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:11.5},
+  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:146.5},
+  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:85.2},
+  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-58.2},
+  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-91.8},
+  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
+  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-120.4},
 ];
+const RINGS = [26,34,46,54,74,86,100,110,120];
+const SIZE = 420, C = SIZE/2;
 const solarWrap = document.getElementById('solarIcon');
-solarWrap.innerHTML = `<div class="solar-field" id="solarField"></div>`;
-const solarField = document.getElementById('solarField');
+// Wider crop than the old icon-sized version -- this graphic is now the
+// prominent astrology visual, so there's real room around the ring
+// cluster for each planet's own descriptor word to sit next to it,
+// always visible rather than behind a tap.
+let svg = `<svg viewBox="-40 69 486 253" xmlns="http://www.w3.org/2000/svg">`;
+
+// glossy-sphere radial gradients, one per tone -- an off-center highlight
+// (upper-left) fading to the same darkest stop used on the number tiles,
+// so a small flat circle reads as a lit, dimensional bead rather than a dot.
+const stopsByTone = {};
+svg += '<defs>';
+Object.entries(TONES).forEach(([name, t])=>{
+  const stops = t.grad.match(/#[0-9a-fA-F]{6}/g);
+  stopsByTone[name] = stops;
+  svg += `<radialGradient id="pg-${name}" cx="35%" cy="30%" r="75%">
+    <stop offset="0%" stop-color="${stops[0]}"/>
+    <stop offset="55%" stop-color="${stops[1]}"/>
+    <stop offset="100%" stop-color="${stops[2]}"/>
+  </radialGradient>`;
+});
+// soft glow behind each orbit ring -- a wider, blurred, white duplicate of
+// the ring line sitting underneath the crisp dashed ring, so the path itself
+// reads as glowing without becoming a solid band.
+svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.8"/></filter>`;
+svg += '</defs>';
+
+RINGS.forEach(r=>{
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="2.4" opacity="0.5" filter="url(#glow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="0.9" opacity="0.95"/>`;
+});
+
+// sun -- the one warm point the (now-neutral) planets orbit
+svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
+
 PLANETS.forEach((p,i)=>{
-  const sphere = document.createElement('div');
-  sphere.className = 'planet-sphere';
-  sphere.dataset.idx = i;
-  sphere.style.cssText = `top:${p.top}%;left:${p.left}%;width:${p.size}px;height:${p.size}px;background:${p.grad};box-shadow:inset 0 3px 5px rgba(255,255,255,0.9),inset 0 ${-p.size*0.3}px ${p.size*0.4}px rgba(10,6,4,0.45),0 ${p.size*0.3}px ${p.size*0.45}px -6px rgba(10,6,4,0.4);cursor:pointer;`;
-  solarField.appendChild(sphere);
-
-  const lbl = document.createElement('div');
-  lbl.className = 'planet-lbl';
-  const lblTop = p.top + (p.size/270*100) + 1;
-  // Right-side planets grow their label leftward from the right edge
-  // instead of clamping left -- clamping caused Uranus's and Mercury's
-  // labels to collapse onto the same spot when both sat near the edge.
-  const onRight = p.left > 55;
-  const style = onRight
-    ? `top:${lblTop}%;right:${Math.max(2, 100 - p.left - (p.size/380*100))}%;max-width:34%;text-align:right;`
-    : `top:${lblTop}%;left:${Math.max(2, p.left)}%;max-width:34%;`;
-  lbl.style.cssText = style;
-  lbl.innerHTML = `<span class="pname">${p.name}</span><span class="pmean">${p.lines[0]}</span>`;
-  solarField.appendChild(lbl);
-
-  sphere.addEventListener('click',()=>openPlanetDef(p));
+  const t = TONES[p.tone];
+  const a = p.angle * Math.PI/180;
+  const dx = Math.cos(a), dy = Math.sin(a);
+  const px = C + p.r*dx, py = C + p.r*dy;
+  svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
+  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
+  // descriptor word sits right next to its planet, always visible --
+  // still tappable (whole label is part of the same hit circle) rather
+  // than hidden behind a tap, per her instruction.
+  const anchor = dx>0.2?'start':dx<-0.2?'end':'middle';
+  const lx = px + (p.size+9)*dx, ly = py + (p.size+9)*dy + 3;
+  // Two-word "X & Y" descriptors are stacked on their own line each --
+  // half the horizontal reach of one long line, so the outer-ring labels
+  // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
+  const words = p.lines[0].split(' & ');
+  if(words.length>1){
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">`+
+      `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
+  } else {
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
+  }
+});
+svg += `</svg>`;
+solarWrap.innerHTML = svg;
+solarWrap.querySelectorAll('.p-dot').forEach(el=>{
+  el.style.cursor='pointer';
+  el.addEventListener('click',()=>openPlanetDef(PLANETS[+el.dataset.idx]));
 });
 function openPlanetDef(p){
   document.getElementById('cardExpandTitle').textContent=`${p.name} — ${p.lines.join(', ')}`;
@@ -876,9 +846,10 @@ function openPlanetDef(p){
     const pts = c.pts.map(([x,y])=>`${x},${y}`).join(' ');
     const cx = c.pts.reduce((s,p)=>s+p[0],0)/c.pts.length;
     const cy = c.pts.reduce((s,p)=>s+p[1],0)/c.pts.length;
-    /* fill:'none' on undefined centers lets whatever's behind the shape
-       show through (the light glass card), so only the stroke outline
-       renders -- that's the hollow-outline convention. */
+    /* Undefined centers were filling with a leftover light-cream tone
+       from before the page went black -- looked like a solid pale shape
+       instead of the intended hollow-outline convention. 'none' lets the
+       actual dark card show through so filled-vs-hollow reads correctly. */
     svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'none'}" stroke="${border}" stroke-width="2.6" style="cursor:pointer;"/>`;
     // labels indicate what each center represents -- always visible,
     // never behind a tap, same principle as the number-tile and planet
@@ -889,17 +860,18 @@ function openPlanetDef(p){
       // typewriter face -- "Expression"/"Identity" -- otherwise split on
       // spaces for real multi-word labels ("Life Force").
       const words = c.wrap || c.label.split(' ');
-      // Both states use black text now: filled centers sit on a light
-      // tone gradient, and hollow centers (fill:'none') let the light
-      // glass card show through -- both are light enough for dark text.
-      const inTextColor = '#000000';
+      // Text color has to match whether this center is actually filled
+      // (on: light tone fill, needs black text) or hollow (off: fill is
+      // 'none', the dark card shows through -- black text there was
+      // invisible, black-on-black. White for hollow, black for filled.
+      const inTextColor = c.on ? '#000000' : '#ffffff';
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="10.5" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="22" fill="#17161c" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#ffffff" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
@@ -914,9 +886,86 @@ function openPlanetDef(p){
   }
 })();
 
-// ---------- key-point bubble clusters: text copied verbatim, only the
-// container changed (bulleted list -> overlapping circles, per her
-// reference image) ----------
+// ---------- swipeable carousel: numerology / astrology / human design
+// share one platform. Height is NOT set from JS/a guessed number -- the
+// track is a row flex container with the default align-items:stretch
+// and no explicit height, which is standard CSS behavior for "equal
+// height columns": an auto-height flex row sizes itself to its tallest
+// child's natural content height, then stretches every child (including
+// the shorter numerology slide) to match. That's what centers the
+// numerology row vertically inside a slide as tall as the diagrams,
+// with zero JS and no risk of measuring a stale/already-stretched
+// height on resize. Swipe is native horizontal scroll-snap (the track
+// is a real scroll container, CSS handles the gesture) -- a hand-rolled
+// Pointer Events drag was tried here twice and both times broke on her
+// real device (missed the swipe on iPad, then jumped a slide immediately
+// and got stuck unable to swipe back). Letting the browser own touch
+// scrolling instead of reimplementing it in JS is the reliable fix.
+// Tap a dot converges on the same goTo() so it can't get out of sync
+// with a real swipe. ----------
+function initCarousel(){
+  const carousel = document.getElementById('chartCarousel');
+  const track = document.getElementById('carouselTrack');
+  const dotsWrap = document.getElementById('carouselDots');
+  if(!carousel || !track || !dotsWrap || track.dataset.carouselInit) return;
+  track.dataset.carouselInit = '1';
+  const N = track.children.length;
+  let idx = 0;
+
+  function setDots(i){
+    Array.from(dotsWrap.children).forEach((d,j)=>d.classList.toggle('active', j===i));
+  }
+  function goTo(i, smooth=true){
+    idx = Math.max(0, Math.min(N-1, i));
+    track.scrollTo({left: idx * track.clientWidth, behavior: smooth ? 'smooth' : 'auto'});
+    setDots(idx);
+  }
+  // Delegated from the wrapper (not attached per-dot) so it can't be
+  // affected by exactly when/how the dot nodes themselves were created.
+  dotsWrap.addEventListener('click', e=>{
+    const dot = e.target.closest('.dot');
+    if(dot) goTo(+dot.dataset.i);
+  });
+
+  // A real swipe scrolls the track natively; this just reads where it
+  // landed once it settles and updates idx/dots to match -- no gesture
+  // math, no threshold tuning, nothing that can get stuck mid-drag.
+  let scrollTimer = null;
+  track.addEventListener('scroll', ()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(()=>{
+      idx = Math.round(track.scrollLeft / track.clientWidth);
+      setDots(idx);
+    }, 100);
+  }, {passive:true});
+
+  let resizeTimer = null;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(()=> goTo(idx, false), 150);
+  });
+
+  goTo(0, false);
+}
+// Run now AND on load -- belt-and-suspenders against whatever timing
+// caused this to silently no-op before (guarded by data-carousel-init
+// so it can't double-attach if both actually fire).
+initCarousel();
+window.addEventListener('load', initCarousel);
+document.addEventListener('DOMContentLoaded', initCarousel);
+
+// ---------- key-icon selling points: copied verbatim from your reference image ----------
+const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
+  <defs>
+    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
+  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
+</svg>`;
 const KEYS = [
   '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
   'Your info is <mark class="key-hl">neither</mark> shared <mark class="key-hl">nor</mark> saved',
@@ -924,36 +973,8 @@ const KEYS = [
   '<mark class="key-hl">Email</mark> is simply your key to your results and time-limited <mark class="key-hl">pass</mark> if you choose to purchase one.',
   'You will not receive emails from us',
 ];
-function makeKeyBubble(html, cls){
-  const b = document.createElement('div');
-  b.className = 'key-bubble ' + cls;
-  const t = document.createElement('span');
-  t.className = 'kb-txt';
-  t.innerHTML = html;
-  b.appendChild(t);
-  return b;
-}
-// Sizes each bubble to a true circle that fits its own wrapped text --
-// diagonal of the (already word-wrapped) text block, plus a fixed
-// cushion, so short labels come out small and long ones come out large.
-function sizeKeyBubbles(container){
-  container.querySelectorAll('.key-bubble').forEach(function(el){
-    const t = el.querySelector('.kb-txt');
-    const w = t.offsetWidth, h = t.offsetHeight;
-    const d = Math.ceil(Math.sqrt(w*w + h*h)) + 26;
-    el.style.width = d + 'px';
-    el.style.height = d + 'px';
-  });
-}
-const keyClusterA = document.getElementById('keyClusterA');
-keyClusterA.appendChild(makeKeyBubble(KEYS[1], 'kb-sky'));
-keyClusterA.appendChild(makeKeyBubble(KEYS[0], 'kb-marigold'));
-keyClusterA.appendChild(makeKeyBubble(KEYS[4], 'kb-rose'));
-sizeKeyBubbles(keyClusterA);
-const keyClusterB = document.getElementById('keyClusterB');
-keyClusterB.appendChild(makeKeyBubble(KEYS[3], 'kb-plum'));
-keyClusterB.appendChild(makeKeyBubble(KEYS[2], 'kb-coral'));
-sizeKeyBubbles(keyClusterB);
+const keysCol = document.getElementById('keysCol');
+keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
