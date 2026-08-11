@@ -800,22 +800,28 @@ body{
     d += ' Z';
     return d;
   }
-  function creamLayerPath(seed, yOffset, hwBase, hwAmp, W, N){
+  function creamLayerPath(seed, yOffset, hwBase, hwAmp, W, N, growth, ampMul, freqMul){
     const pts = [], hws = [];
     for(let i=0;i<=N;i++){
       const t = i/N;
       const x = -80 + t*(W+160);
-      const y = yOffset + 130*Math.sin(t*Math.PI*1.0 - 0.3 + seed) + t*200;
+      const y = yOffset + (130*ampMul)*Math.sin(t*Math.PI*freqMul - 0.3 + seed) + t*growth;
       pts.push([x,y]);
       hws.push(hwBase + hwAmp*Math.sin(t*Math.PI*2.0 + seed*1.7));
     }
     return ribbonPath(pts, hws);
   }
+  // Extended much further down the page -- this used to stop around
+  // y=380 (title/tiles only), then hand off to a thin, barely-there
+  // trail for everything else. That's an accent on a blank page, not
+  // an atmosphere. Now it carries real presence down through the
+  // tagline and the first cloud cluster, the same material the whole
+  // way, before the trail takes over for the rest of the page.
   function creamHero(W){
-    const N = 44;
-    const pathBack  = creamLayerPath(0.6, 20,  58, 20, W, N);
-    const pathMid   = creamLayerPath(0.15, 35, 46, 16, W, N);
-    const pathFront = creamLayerPath(-0.3, 50, 34, 12, W, N);
+    const N = 60;
+    const pathBack  = creamLayerPath(0.6, 20,  62, 24, W, N, 640, 1.25, 0.62);
+    const pathMid   = creamLayerPath(0.15, 35, 50, 19, W, N, 640, 1.2, 0.62);
+    const pathFront = creamLayerPath(-0.3, 50, 38, 15, W, N, 640, 1.15, 0.62);
     return `
       <g filter="url(#creamLift1)"><path d="${pathBack}" fill="url(#creamBack)" filter="url(#creamMarble)"/></g>
       <g filter="url(#creamLift2)"><path d="${pathMid}" fill="url(#creamMid)" filter="url(#creamMarble2)"/></g>
@@ -824,30 +830,24 @@ body{
         <path d="${pathFront}" fill="url(#creamSheen)" filter="url(#creamMarble)"/>
       </g>`;
   }
-  /* The hero ribbon stopped dead around y=350-380 with nothing below it
-     -- rich, layered, shadowed material at the top, then a flat blank
-     page for the remaining ~600px behind the form. That hard seam is
-     its own bug independent of any bigger repaint: a page shouldn't
-     look designed in one section and abandoned in the next. This is a
-     single quiet tendril of the same material (not a second hero
-     moment) hugging the right edge, tapering from a real width down to
-     almost nothing, so the transition is a gradient instead of a
-     cliff -- narrow and faint enough by the time it reaches the form
-     that it never sits under input text. */
+  /* Carries the same material the rest of the way down the page --
+     stronger presence than the old thin accent tendril, still hugging
+     the right edge and still tapering out before it would ever sit
+     under form input text, but no longer so faint it reads as nothing. */
   function creamTrail(W, H){
-    const startY = 300;
+    const startY = 640;
     if(H <= startY + 40) return '';
-    const N = 30;
+    const N = 40;
     const pts=[], hws=[];
     for(let i=0;i<=N;i++){
       const t = i/N;
       const y = startY + t*(H-startY);
-      const x = W - 34 + 14*Math.sin(t*Math.PI*1.6);
+      const x = W - 40 + 22*Math.sin(t*Math.PI*2.1);
       pts.push([x,y]);
-      hws.push(24*(1-t) + 3);
+      hws.push(34*(1-t*0.82) + 4);
     }
     const path = ribbonPath(pts, hws);
-    return `<g filter="url(#creamLift3)"><path d="${path}" fill="url(#creamBack)" opacity="0.55" filter="url(#creamMarble2)"/></g>`;
+    return `<g filter="url(#creamLift3)"><path d="${path}" fill="url(#creamBack)" opacity="0.75" filter="url(#creamMarble2)"/></g>`;
   }
 
   function buildWisps(){
