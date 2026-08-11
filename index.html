@@ -892,6 +892,8 @@ const TONES = {
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
   platinum:{ grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #eef1f3 55%, #d3d9dd 100%)', border:'#9aa2a8' },
   copper:  { grad:'radial-gradient(circle at 30% 26%, #ffe8d6 0%, #d9986a 55%, #a85f36 100%)', border:'#8a4a1f' },
+  ice:     { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #cfe0f0 55%, #9fb8d4 100%)', border:'#6f8caa' },
+  iceDeep: { grad:'radial-gradient(circle at 30% 26%, #eaf2fa 0%, #a8c2dc 55%, #6f8caa 100%)', border:'#4a6684' },
 };
 // Real metal technique (researched, not guessed): a conic-gradient with
 // alternating light/dark bands radiating around the shape, which is what
@@ -923,6 +925,14 @@ const TONE_CONIC = {
      pink-white highlight -- genuinely different hue from gold (which
      stays yellow-brown throughout), not just a darker/lighter gold. */
   copper:  conicBands('#5c2e10','#8a4a1f','#b87333','#e0a878','#fff0e0'),
+  /* One signature material (ice-blue metal) instead of four unrelated
+     ones -- restraint, not more variety. Two tones within the same
+     family (lighter/deeper ice), not a different metal, so it reads as
+     one considered material repeated with discipline. Also the one
+     place blue is used outside the title, which is otherwise banned --
+     explicitly requested here. */
+  ice:     conicBands('#4a6684','#6f8caa','#9fb8d4','#cfe0f0','#ffffff'),
+  iceDeep: conicBands('#33475e','#4a6684','#6f8caa','#9fb8d4','#e5eef7'),
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -943,23 +953,22 @@ const TONE_CONIC = {
 // break-word algorithm landed, which produced an ugly orphaned single
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
-/* Four genuinely distinct metals now (gold, copper, platinum, silver)
-   instead of cycling between two golds and three greys that all read
-   as "silver" next to each other -- no two adjacent tiles in either
-   row share a tone. */
+/* Pulled back from four competing metals to one -- ice blue, alternating
+   the lighter/deeper tone within that single family so tiles are still
+   visually distinct without turning into a materials sample board. */
 const NUMS = [
-  {n:1, lbl:'Leader',       tone:'goldT'},
-  {n:2, lbl:'Diplomat',     tone:'copper'},
-  {n:3, lbl:'Communi­cator', tone:'platinum'},
-  {n:4, lbl:'Builder',      tone:'silverD'},
-  {n:5, lbl:'Freedom',      tone:'goldT'},
-  {n:6, lbl:'Nurtur­er', tone:'copper'},
-  {n:7, lbl:'Seeker',       tone:'platinum'},
-  {n:8, lbl:'Achiever',     tone:'silverD'},
-  {n:9, lbl:'Humani­tarian', tone:'goldT'},
-  {n:11, lbl:'Intu­itive',      tone:'copper'},
-  {n:22, lbl:'Master Builder', tone:'platinum'},
-  {n:33, lbl:'Master Teacher', tone:'silverD'},
+  {n:1, lbl:'Leader',       tone:'ice'},
+  {n:2, lbl:'Diplomat',     tone:'iceDeep'},
+  {n:3, lbl:'Communi­cator', tone:'ice'},
+  {n:4, lbl:'Builder',      tone:'iceDeep'},
+  {n:5, lbl:'Freedom',      tone:'ice'},
+  {n:6, lbl:'Nurtur­er', tone:'iceDeep'},
+  {n:7, lbl:'Seeker',       tone:'iceDeep'},
+  {n:8, lbl:'Achiever',     tone:'ice'},
+  {n:9, lbl:'Humani­tarian', tone:'iceDeep'},
+  {n:11, lbl:'Intu­itive',      tone:'ice'},
+  {n:22, lbl:'Master Builder', tone:'iceDeep'},
+  {n:33, lbl:'Master Teacher', tone:'ice'},
 ];
 // Plain grid, two rows of six, question between them.
 function buildNumRow(container, items){
