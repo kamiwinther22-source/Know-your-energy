@@ -58,8 +58,17 @@ body{
    slides -- both always visible, offset left/right below the numbers so
    they don't stack directly on top of each other. Bigger than the
    numbers box now, not smaller. */
-.wheel-left{width:58%;margin:0.4rem auto 0 0;}
-.wheel-right{width:58%;margin:-15px 0 0 auto;}
+.wheel-left{width:100%;margin:0.6rem 0 0;}
+.wheel-right{width:58%;margin:0.8rem 0 0 auto;}
+/* Real planets, not tiny dots or thin ring lines -- solar-system-as-
+   metaphor is what people recognize, not the orbit rings themselves.
+   Substantial glossy spheres, each named and labeled with its meaning,
+   scattered (not gridded), sized by real astrological weight. */
+.solar-field{position:relative;width:100%;height:270px;}
+.planet-sphere{position:absolute;border-radius:50%;box-sizing:border-box;}
+.planet-lbl{position:absolute;pointer-events:none;}
+.planet-lbl .pname{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;letter-spacing:0.03em;text-transform:uppercase;color:#17161c;}
+.planet-lbl .pmean{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.62rem;color:#555;margin-top:0.05rem;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
@@ -164,7 +173,7 @@ body{
    so they're a new layout but not a new material. */
 .key-cluster{position:relative;margin:2.6rem auto;max-width:380px;}
 .key-cluster-a{height:320px;}
-.key-cluster-b{height:250px;margin-bottom:6.5rem;}
+.key-cluster-b{height:250px;margin-bottom:31.5rem;}
 /* Two real bold colors -- emerald and wine, alternating -- not blue, not
    purple, not tan, not a pink site. Silver is the moving highlight on
    top of the color, not the fill itself. Same position/size rules as
@@ -614,6 +623,10 @@ const TONES = {
   silverD: { grad:'radial-gradient(circle at 30% 26%, #e8ebee 0%, #97a1ab 50%, #23272c 100%)', border:'#23272c' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #d9bf85 50%, #5c4720 100%)', border:'#5c4720' },
 };
+// Real hex stops per tone, extracted once -- still used by the Human
+// Design preview's per-center radial gradients below.
+const stopsByTone = {};
+Object.entries(TONES).forEach(([name, t])=>{ stopsByTone[name] = t.grad.match(/#[0-9a-fA-F]{6}/g); });
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
 // built anywhere else in the app). Labels are the standard single-word
@@ -669,95 +682,52 @@ function openNumberDef(item){
   document.getElementById('cardExpand').classList.add('open');
 }
 
-// ---------- solar system: monochrome, laid out like an actual snapshot in
-// time -- distinct orbital tiers (inner rocky pair / inner-mid pair / outer
-// gas giants / far icy trio) with a gap between tiers like the real solar
-// system, each planet at its own radius within its tier and a scattered
-// (not evenly-spaced) angle, rather than one continuously-growing spiral. ----
-// Original radii kept (scaling them up made the label text render
-// SMALLER on screen overall, since the container width is fixed and a
-// bigger viewBox just packs everything tighter per pixel -- the actual
-// fix for collisions at a bigger font is re-angling each planet, not
-// inflating the whole diagram. These angles were found by a real
-// pairwise bounding-box search (every label pair checked, 6-unit
-// minimum gap enforced, not eyeballed) rather than the original
-// "scattered" angles, which collided once the font size went up.
+// ---------- solar system, rebuilt: real substantial glossy planets, not
+// tiny dots on thin ring lines. The orbit rings were never the part that
+// communicated anything -- "a planet means a word" is what people
+// recognize, so the planets themselves carry the material quality and
+// the rings are gone entirely. Colors are grounded in real astrological/
+// mythological association where one exists (Mars red, Moon silver,
+// Mercury quicksilver), not randomly assigned, and none of them are
+// blue/purple. Positions are hand-placed, scattered, no two on the same
+// row or column. */
 const PLANETS = [
-  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
-  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:-149.8},
-  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:11.5},
-  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:146.5},
-  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:85.2},
-  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-58.2},
-  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-91.8},
-  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
-  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-120.4},
+  {name:'Sun',     lines:['You'],                 top:34,  left:32, size:84, grad:'radial-gradient(circle at 30% 24%, #fffbe8 0%, #ffe9a3 10%, #e0aa2e 42%, #8a5c10 78%, #2e1c02 100%)'},
+  {name:'Mercury', lines:['Communication'],        top:22,  left:60, size:34, grad:'radial-gradient(circle at 30% 24%, #ffffff 0%, #eef1f4 20%, #9aa4ad 58%, #2b323a 100%)'},
+  {name:'Venus',   lines:['Love & Beauty'],        top:56,  left:2,  size:46, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffd7de 16%, #ff6c8c 52%, #7a0a3a 100%)'},
+  {name:'Moon',    lines:['Emotions'],             top:2,   left:36, size:30, grad:'radial-gradient(circle at 30% 24%, #ffffff 0%, #eef1f4 25%, #b7bfc6 65%, #4a525a 100%)'},
+  {name:'Mars',    lines:['Drive & Action'],       top:70,  left:70, size:40, grad:'radial-gradient(circle at 30% 22%, #fff 0%, #ffcdb0 14%, #e0501f 52%, #5c1c06 100%)'},
+  {name:'Jupiter', lines:['Growth & Luck'],        top:10,  left:2,  size:58, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffe0a0 14%, #d98a1e 50%, #5c360a 100%)'},
+  {name:'Saturn',  lines:['Discipline'],           top:70,  left:46, size:46, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #f0b3c4 14%, #a3284f 52%, #300a17 100%)'},
+  {name:'Uranus',  lines:['Change'],               top:0,   left:84, size:32, grad:'radial-gradient(circle at 30% 24%, #f6ffb8 0%, #c8f000 26%, #6b8400 62%, #2b3300 100%)'},
+  {name:'Neptune', lines:['Intuition & Dreams'],   top:40,  left:82, size:38, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #a8e0c4 16%, #12735a 55%, #052018 100%)'},
+  {name:'Pluto',   lines:['Transformation'],       top:74,  left:12, size:26, grad:'radial-gradient(circle at 30% 24%, #fff 0%, #e6a8b8 16%, #7a1f30 55%, #2a060d 100%)'},
 ];
-const RINGS = [26,34,46,54,74,86,100,110,120];
-const SIZE = 420, C = SIZE/2;
 const solarWrap = document.getElementById('solarIcon');
-// Wider crop than the old icon-sized version -- this graphic is now the
-// prominent astrology visual, so there's real room around the ring
-// cluster for each planet's own descriptor word to sit next to it,
-// always visible rather than behind a tap.
-let svg = `<svg viewBox="-40 69 486 253" xmlns="http://www.w3.org/2000/svg">`;
-
-// glossy-sphere radial gradients, one per tone -- an off-center highlight
-// (upper-left) fading to the same darkest stop used on the number tiles,
-// so a small flat circle reads as a lit, dimensional bead rather than a dot.
-const stopsByTone = {};
-svg += '<defs>';
-Object.entries(TONES).forEach(([name, t])=>{
-  const stops = t.grad.match(/#[0-9a-fA-F]{6}/g);
-  stopsByTone[name] = stops;
-  svg += `<radialGradient id="pg-${name}" cx="35%" cy="30%" r="75%">
-    <stop offset="0%" stop-color="${stops[0]}"/>
-    <stop offset="55%" stop-color="${stops[1]}"/>
-    <stop offset="100%" stop-color="${stops[2]}"/>
-  </radialGradient>`;
-});
-// soft glow behind each orbit ring -- a wider, blurred, white duplicate of
-// the ring line sitting underneath the crisp dashed ring, so the path itself
-// reads as glowing without becoming a solid band.
-svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.8"/></filter>`;
-svg += '</defs>';
-
-RINGS.forEach(r=>{
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="2.4" opacity="0.22" filter="url(#glow)"/>`;
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="0.9" opacity="0.85"/>`;
-});
-
-// sun -- the one warm point the (now-neutral) planets orbit
-svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
-
+solarWrap.innerHTML = `<div class="solar-field" id="solarField"></div>`;
+const solarField = document.getElementById('solarField');
 PLANETS.forEach((p,i)=>{
-  const t = TONES[p.tone];
-  const a = p.angle * Math.PI/180;
-  const dx = Math.cos(a), dy = Math.sin(a);
-  const px = C + p.r*dx, py = C + p.r*dy;
-  svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
-  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
-  // descriptor word sits right next to its planet, always visible --
-  // still tappable (whole label is part of the same hit circle) rather
-  // than hidden behind a tap, per her instruction.
-  const anchor = dx>0.2?'start':dx<-0.2?'end':'middle';
-  const lx = px + (p.size+9)*dx, ly = py + (p.size+9)*dy + 3;
-  // Two-word "X & Y" descriptors are stacked on their own line each --
-  // half the horizontal reach of one long line, so the outer-ring labels
-  // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
-  const words = p.lines[0].split(' & ');
-  if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="21" fill="#17161c" style="pointer-events:none;">`+
-      `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
-  } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="21" fill="#17161c" style="pointer-events:none;">${p.lines[0]}</text>`;
-  }
-});
-svg += `</svg>`;
-solarWrap.innerHTML = svg;
-solarWrap.querySelectorAll('.p-dot').forEach(el=>{
-  el.style.cursor='pointer';
-  el.addEventListener('click',()=>openPlanetDef(PLANETS[+el.dataset.idx]));
+  const sphere = document.createElement('div');
+  sphere.className = 'planet-sphere';
+  sphere.dataset.idx = i;
+  sphere.style.cssText = `top:${p.top}%;left:${p.left}%;width:${p.size}px;height:${p.size}px;background:${p.grad};box-shadow:inset 0 3px 5px rgba(255,255,255,0.9),inset 0 ${-p.size*0.3}px ${p.size*0.4}px rgba(10,6,4,0.45),0 ${p.size*0.3}px ${p.size*0.45}px -6px rgba(10,6,4,0.4);cursor:pointer;`;
+  solarField.appendChild(sphere);
+
+  const lbl = document.createElement('div');
+  lbl.className = 'planet-lbl';
+  const lblTop = p.top + (p.size/270*100) + 1;
+  // Right-side planets grow their label leftward from the right edge
+  // instead of clamping left -- clamping caused Uranus's and Mercury's
+  // labels to collapse onto the same spot when both sat near the edge.
+  const onRight = p.left > 55;
+  const style = onRight
+    ? `top:${lblTop}%;right:${Math.max(2, 100 - p.left - (p.size/380*100))}%;max-width:34%;text-align:right;`
+    : `top:${lblTop}%;left:${Math.max(2, p.left)}%;max-width:34%;`;
+  lbl.style.cssText = style;
+  lbl.innerHTML = `<span class="pname">${p.name}</span><span class="pmean">${p.lines[0]}</span>`;
+  solarField.appendChild(lbl);
+
+  sphere.addEventListener('click',()=>openPlanetDef(p));
 });
 function openPlanetDef(p){
   document.getElementById('cardExpandTitle').textContent=`${p.name} — ${p.lines.join(', ')}`;
