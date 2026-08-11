@@ -109,14 +109,20 @@ body{
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
-  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;border-radius:9px;
   /* Paint, not colored pencil: flat, fully opaque, saturated fill (no
      gradient wash across the surface -- that read as streaky/uneven,
-     the way pencil coverage does). The corner-circle highlight and then
-     the diagonal sheen band both read as a repeated decorative shape
-     once six tiles sat in a row -- gone. Just a thin top-edge inset
-     highlight line for a touch of gloss, not a discrete shape. */
-  box-shadow: 0 5px 10px rgba(20,55,95,0.4), inset 0 1.5px 0 rgba(255,255,255,0.75);
+     the way pencil coverage does). Shining silver outline: a bright
+     near-white ring right at the edge with a darker silver ring just
+     outside it for real definition -- a single flat border color would
+     just disappear against the light page, this is what actually reads
+     as a polished metal rim. */
+  border:none;
+  box-shadow:
+    0 0 0 1.5px #f4f6f8,
+    0 0 0 3px #93a0aa,
+    0 5px 10px rgba(20,55,95,0.35),
+    inset 0 1.5px 0 rgba(255,255,255,0.75);
 }
 .num-tile-lg .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;
@@ -946,21 +952,21 @@ Object.assign(TONE_CONIC, ICE_FILL);
 // break-word algorithm landed, which produced an ugly orphaned single
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
-/* Pulled back from four competing metals to one -- ice blue, alternating
-   the lighter/deeper tone within that single family so tiles are still
-   visually distinct without turning into a materials sample board. */
+/* One light ice-blue tone only now, no darker alternate -- distinction
+   between tiles comes from the shining silver outline (see .swatch),
+   not from alternating fill shades. */
 const NUMS = [
   {n:1, lbl:'Leader',       tone:'ice'},
-  {n:2, lbl:'Diplomat',     tone:'iceDeep'},
+  {n:2, lbl:'Diplomat',     tone:'ice'},
   {n:3, lbl:'Communi­cator', tone:'ice'},
-  {n:4, lbl:'Builder',      tone:'iceDeep'},
+  {n:4, lbl:'Builder',      tone:'ice'},
   {n:5, lbl:'Freedom',      tone:'ice'},
-  {n:6, lbl:'Nurtur­er', tone:'iceDeep'},
-  {n:7, lbl:'Seeker',       tone:'iceDeep'},
+  {n:6, lbl:'Nurtur­er', tone:'ice'},
+  {n:7, lbl:'Seeker',       tone:'ice'},
   {n:8, lbl:'Achiever',     tone:'ice'},
-  {n:9, lbl:'Humani­tarian', tone:'iceDeep'},
+  {n:9, lbl:'Humani­tarian', tone:'ice'},
   {n:11, lbl:'Intu­itive',      tone:'ice'},
-  {n:22, lbl:'Master Builder', tone:'iceDeep'},
+  {n:22, lbl:'Master Builder', tone:'ice'},
   {n:33, lbl:'Master Teacher', tone:'ice'},
 ];
 // Plain grid, two rows of six, question between them.
