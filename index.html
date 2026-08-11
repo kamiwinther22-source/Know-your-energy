@@ -49,33 +49,14 @@ body{
 .chart-carousel{
   position:relative;padding:0.2rem 0 0.5rem;margin-bottom:0.6rem;
 }
-/* Native horizontal scroll-snap instead of hand-rolled drag math -- the
-   custom Pointer Events version got the numerology->astrology swipe
-   right on some devices but got stuck (jumped a slide immediately, then
-   wouldn't swipe back) on hers. Letting the browser's own touch/scroll
-   engine own the gesture is the reliable fix, not another round of
-   custom threshold tuning. */
-.carousel-track{
-  position:relative;z-index:1;
-  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
-}
-.carousel-track::-webkit-scrollbar{display:none;height:0;}
-.carousel-slide{
-  flex:0 0 100%;width:100%;min-width:0;box-sizing:border-box;padding:0 1.1rem;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  scroll-snap-align:start;scroll-snap-stop:always;
-}
-.carousel-dots{position:relative;z-index:1;display:flex;justify-content:center;gap:0.45rem;margin-top:0.5rem;}
-.carousel-dots .dot{
-  width:6px;height:6px;border-radius:50%;background:rgba(24,20,51,0.22);
-  border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
-}
-.carousel-dots .dot.active{background:#1C2CA9;transform:scale(1.35);}
-/* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
-   for its own label, so single-word labels (no spaces to wrap at)
-   overflowed sideways into the neighboring tile instead of wrapping. */
-.num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.6rem 0.3rem;width:100%;}
+/* 3x4 grid (3 columns, 4 rows for the 12 numbers), centered as its own
+   block rather than stretched full width. */
+.num-strip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;width:100%;max-width:300px;margin:0 auto;}
+/* The astrology wheel and Human Design diagram are no longer carousel
+   slides -- both always visible, offset left/right below the numbers so
+   they don't stack directly on top of each other. */
+.wheel-left{width:72%;margin:1.8rem auto 0 0;}
+.wheel-right{width:72%;margin:1.8rem 0 0 auto;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
@@ -140,10 +121,12 @@ body{
 }
 
 /* ---------- tagline / toggle ---------- */
-.tagline-wrap{position:relative;max-width:340px;margin:0 auto 0.5rem;}
+.tagline-wrap{position:relative;max-width:380px;margin:0 auto 0.7rem;}
+/* Larger than the title, per direct instruction -- title is the smaller,
+   secondary element here now. */
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Special Elite',monospace;font-size:0.82rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
+  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(2.1rem,13vw,4.2rem);line-height:1.15;font-weight:400;letter-spacing:0.01em;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
@@ -475,24 +458,16 @@ body{
   </div>
 
   <div class="chart-carousel" id="chartCarousel">
-    <div class="carousel-track" id="carouselTrack">
-      <div class="carousel-slide">
-        <div class="sys-section-title">Numerology — Your Core Numbers</div>
-        <div class="num-strip-row" id="numStripRow"></div>
-      </div>
-      <div class="carousel-slide">
-        <div class="sys-section-title">Astrology</div>
-        <div class="chart-graphic" id="solarIcon"></div>
-      </div>
-      <div class="carousel-slide">
-        <div class="sys-section-title">Human Design</div>
-        <div class="chart-graphic" id="hdIcon"></div>
-      </div>
+    <div class="sys-section-title">Numerology — Your Core Numbers</div>
+    <div class="num-strip-row" id="numStripRow"></div>
+
+    <div class="wheel-left">
+      <div class="sys-section-title">Astrology</div>
+      <div class="chart-graphic" id="solarIcon"></div>
     </div>
-    <div class="carousel-dots" id="carouselDots">
-      <button type="button" class="dot active" data-i="0" aria-label="Numerology"></button>
-      <button type="button" class="dot" data-i="1" aria-label="Astrology"></button>
-      <button type="button" class="dot" data-i="2" aria-label="Human Design"></button>
+    <div class="wheel-right">
+      <div class="sys-section-title">Human Design</div>
+      <div class="chart-graphic" id="hdIcon"></div>
     </div>
   </div>
 
@@ -856,74 +831,6 @@ function openPlanetDef(p){
     document.getElementById('cardExpand').classList.add('open');
   }
 })();
-
-// ---------- swipeable carousel: numerology / astrology / human design
-// share one platform. Height is NOT set from JS/a guessed number -- the
-// track is a row flex container with the default align-items:stretch
-// and no explicit height, which is standard CSS behavior for "equal
-// height columns": an auto-height flex row sizes itself to its tallest
-// child's natural content height, then stretches every child (including
-// the shorter numerology slide) to match. That's what centers the
-// numerology row vertically inside a slide as tall as the diagrams,
-// with zero JS and no risk of measuring a stale/already-stretched
-// height on resize. Swipe is native horizontal scroll-snap (the track
-// is a real scroll container, CSS handles the gesture) -- a hand-rolled
-// Pointer Events drag was tried here twice and both times broke on her
-// real device (missed the swipe on iPad, then jumped a slide immediately
-// and got stuck unable to swipe back). Letting the browser own touch
-// scrolling instead of reimplementing it in JS is the reliable fix.
-// Tap a dot converges on the same goTo() so it can't get out of sync
-// with a real swipe. ----------
-function initCarousel(){
-  const carousel = document.getElementById('chartCarousel');
-  const track = document.getElementById('carouselTrack');
-  const dotsWrap = document.getElementById('carouselDots');
-  if(!carousel || !track || !dotsWrap || track.dataset.carouselInit) return;
-  track.dataset.carouselInit = '1';
-  const N = track.children.length;
-  let idx = 0;
-
-  function setDots(i){
-    Array.from(dotsWrap.children).forEach((d,j)=>d.classList.toggle('active', j===i));
-  }
-  function goTo(i, smooth=true){
-    idx = Math.max(0, Math.min(N-1, i));
-    track.scrollTo({left: idx * track.clientWidth, behavior: smooth ? 'smooth' : 'auto'});
-    setDots(idx);
-  }
-  // Delegated from the wrapper (not attached per-dot) so it can't be
-  // affected by exactly when/how the dot nodes themselves were created.
-  dotsWrap.addEventListener('click', e=>{
-    const dot = e.target.closest('.dot');
-    if(dot) goTo(+dot.dataset.i);
-  });
-
-  // A real swipe scrolls the track natively; this just reads where it
-  // landed once it settles and updates idx/dots to match -- no gesture
-  // math, no threshold tuning, nothing that can get stuck mid-drag.
-  let scrollTimer = null;
-  track.addEventListener('scroll', ()=>{
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(()=>{
-      idx = Math.round(track.scrollLeft / track.clientWidth);
-      setDots(idx);
-    }, 100);
-  }, {passive:true});
-
-  let resizeTimer = null;
-  window.addEventListener('resize', ()=>{
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(()=> goTo(idx, false), 150);
-  });
-
-  goTo(0, false);
-}
-// Run now AND on load -- belt-and-suspenders against whatever timing
-// caused this to silently no-op before (guarded by data-carousel-init
-// so it can't double-attach if both actually fire).
-initCarousel();
-window.addEventListener('load', initCarousel);
-document.addEventListener('DOMContentLoaded', initCarousel);
 
 // ---------- key-point bubble clusters: text copied verbatim, only the
 // container changed (bulleted list -> overlapping circles, per her
