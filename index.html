@@ -36,9 +36,15 @@ body{
   letter-spacing:0.06em;text-transform:uppercase;color:#17161c;
   text-align:center;margin-bottom:0.5rem;
 }
+/* "Pop" without color -- a thin rule above/below (real ink, not blue),
+   a little extra letter-spacing, and a soft embossed text-shadow for
+   dimension instead of a flat, flush-with-the-page line of type. */
 .sys-section-sub{
   font-family:'Special Elite',monospace;font-weight:400;font-size:1.15rem;
-  color:#17161c;text-align:center;margin:0.6rem 0 0;
+  letter-spacing:0.02em;color:#17161c;text-align:center;margin:0.75rem auto 0;
+  width:fit-content;padding:0.4rem 0;
+  border-top:1px solid rgba(23,22,28,0.3);border-bottom:1px solid rgba(23,22,28,0.3);
+  text-shadow:0 1px 0 rgba(255,255,255,0.9);
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -84,7 +90,7 @@ body{
 .carousel-arrow{
   position:absolute;top:50%;transform:translateY(-50%);z-index:2;
   width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
-  background:#1C2CA9;box-shadow:0 4px 10px -2px rgba(28,44,169,0.5);
+  background:#17161c;box-shadow:0 4px 10px -2px rgba(23,22,28,0.45);
   display:flex;align-items:center;justify-content:center;
 }
 .carousel-arrow svg{width:16px;height:16px;}
