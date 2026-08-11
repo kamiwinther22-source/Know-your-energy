@@ -221,6 +221,7 @@ body{
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
 .key-txt{font-size:0.85rem;line-height:1.38;color:#17161c;font-weight:500;}
+.key-txt-lead{font-size:1.15rem;line-height:1.25;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;}
 .key-txt em{font-style:normal;color:#17161c;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
@@ -1081,7 +1082,7 @@ const KEYS = [
   'You will not receive emails from us',
 ];
 const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
+keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt${i===0?' key-txt-lead':''}">${t}</div></div>`).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
