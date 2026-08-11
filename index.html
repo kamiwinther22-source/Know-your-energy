@@ -17,14 +17,22 @@
    stretching into something unrecognizable. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#f5f3ee;
+  /* Previous version kept every bloom within ~10 RGB units of the base
+     -- numerically "different shades of white" but below the threshold
+     a real screen actually shows, so it read as flat. Same idea (real
+     white/ivory/pearl/blush zones, no grey or tan as the dominant page
+     color), but each bloom now runs to a genuinely saturated peak
+     (opacity 1, no alpha-fade toward white) before fading to
+     transparent, so the shift is actually visible, not just present in
+     the code. */
+  background-color:#f7f4ee;
   background-image:
-    radial-gradient(55% 38% at 15% 8%,  rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 60%),
-    radial-gradient(50% 34% at 82% 20%, rgba(247,240,226,0.85) 0%, rgba(247,240,226,0) 62%),
-    radial-gradient(48% 32% at 25% 46%, rgba(238,242,245,0.8)  0%, rgba(238,242,245,0) 62%),
-    radial-gradient(52% 36% at 85% 60%, rgba(245,236,233,0.75) 0%, rgba(245,236,233,0) 62%),
-    radial-gradient(50% 34% at 20% 82%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 62%),
-    radial-gradient(46% 30% at 80% 96%, rgba(238,242,245,0.7)  0%, rgba(238,242,245,0) 62%);
+    radial-gradient(55% 38% at 15% 8%,  #ffffff 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(50% 34% at 82% 20%, #f5e3bd 0%, rgba(245,227,189,0) 62%),
+    radial-gradient(48% 32% at 25% 46%, #d7e4ec 0%, rgba(215,228,236,0) 62%),
+    radial-gradient(52% 36% at 85% 60%, #f2d9d0 0%, rgba(242,217,208,0) 62%),
+    radial-gradient(50% 34% at 20% 82%, #ffffff 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(46% 30% at 80% 96%, #d7e4ec 0%, rgba(215,228,236,0) 62%);
   background-repeat:repeat-y;
   background-size:100% 900px;
   padding:1.15rem 1rem 1.3rem;
@@ -68,7 +76,7 @@ body{
    they don't stack directly on top of each other. Bigger than the
    numbers box now, not smaller. */
 .wheel-left{width:100%;margin:0.6rem 0 0;}
-.wheel-right{width:58%;margin:0.8rem 0 0 auto;}
+.wheel-right{width:44%;margin:0.8rem 0 0 auto;}
 /* Real planets, not tiny dots or thin ring lines -- solar-system-as-
    metaphor is what people recognize, not the orbit rings themselves.
    Substantial glossy spheres, each named and labeled with its meaning,
@@ -174,45 +182,37 @@ body{
 .rel-chip.active{background:#1C2CA9;color:#ffffff;}
 .rel-chip.active:hover{background:#1C2CA9;}
 
-/* ---------- key-point bubble clusters: her own reference image showed
-   these as overlapping circles of varying size, not a bulleted list --
-   built to match that directly instead of a safer/smaller version of it.
-   Bubbles reuse TONES.cream (the same glossy-bead recipe already used on
-   the numerology tiles/toggle-knob/planet dots elsewhere in this file),
-   so they're a new layout but not a new material. */
-.key-cluster{position:relative;margin:2.6rem auto;max-width:380px;}
-.key-cluster-a{height:200px;}
-.key-cluster-b{height:160px;margin-bottom:44rem;}
-/* One hue family (teal), two shades -- not a color pair at all, so no
-   risk of an unintended seasonal/other reading. Light shade is full
-   saturation, not pastel; deep shade is the same hue, darker. No sweep
-   animation -- that read as a lazy cliché, dropped for good. Much
-   smaller now so the words inside are the actual focus, not the sphere. */
+/* ---------- key-point bubbles: real circles, not pills. Each bubble's
+   diameter is computed in JS from its own wrapped text block (see
+   sizeKeyBubbles below), so they come out genuinely different sizes --
+   a true circle sized to its own content, not a stretched capsule. Base
+   is a translucent, near-white glass fill (bubbles are "clear," per her
+   direction) with a single saturated color pooled as a sliver/glow in
+   one corner rather than filling the whole shape -- no bubble is a
+   solid block of one color. Five distinct hues spread further across
+   the wheel than this page's default warm palette (coral/gold/rose),
+   including a muted plum and a soft sky blue, so the set doesn't read
+   as "the same six colors plus a little teal." */
+.key-cluster{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.7rem;max-width:380px;margin:1.4rem auto;}
+.key-cluster-b{margin-bottom:79rem;}
 .key-bubble{
-  position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  text-align:center;box-sizing:border-box;padding:0.5rem;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  border-radius:50%;flex-shrink:0;border:1.5px solid;
+  background:
+    radial-gradient(circle at 78% 82%, var(--acc) 0%, transparent 42%),
+    radial-gradient(circle at 26% 20%, #fffffe 0%, #fffdf9 42%, #fbf7f0 100%);
   box-shadow:
-    inset 0 2px 4px rgba(255,255,255,0.95),
-    inset 0 -9px 13px rgba(5,8,10,0.5),
-    0 10px 16px -5px rgba(5,8,10,0.4);
-  color:#062018;font-weight:700;line-height:1.25;
+    inset 0 3px 5px rgba(255,255,255,0.9),
+    inset 0 -5px 9px rgba(120,90,70,0.14),
+    0 8px 16px -6px rgba(90,70,50,0.28);
+  color:#3a2f28;font-weight:700;line-height:1.15;font-size:0.6rem;
 }
-.kb-emerald{
-  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #c9fff5 18%, #26e0c4 50%, #0aa88f 78%, #023f36 100%);
-  border:1px solid #023f36;
-}
-.kb-wine{
-  background:radial-gradient(circle at 30% 24%, #ffffff 0%, #7ff0dd 18%, #0aa88f 50%, #078a76 78%, #012019 100%);
-  border:1px solid #012019;
-}
-.kb-txt{position:relative;z-index:1;display:block;max-width:82%;}
-.kb-lg{width:140px;height:140px;font-size:0.6rem;}
-.kb-sm{width:100px;height:100px;font-size:0.48rem;align-items:flex-start;padding-top:1rem;}
-.kb-a1{top:-6px;left:6px;}
-.kb-a2{top:46px;left:50%;transform:translateX(-50%);z-index:1;}
-.kb-a3{top:-2px;right:6px;}
-.kb-b1{top:0;left:6px;align-items:center;padding-top:0.5rem;}
-.kb-b2{bottom:-4px;right:6%;z-index:1;}
+.key-bubble .kb-txt{max-width:100px;padding:0 6px;}
+.kb-coral{--acc:#ff8f6b;border-color:#f2a488;}
+.kb-marigold{--acc:#f2a93c;border-color:#e7bb63;}
+.kb-rose{--acc:#ff6f91;border-color:#f2a0b7;}
+.kb-plum{--acc:#b06bb0;border-color:#c99bc9;}
+.kb-sky{--acc:#6fa8dc;border-color:#a8c8e8;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -229,9 +229,9 @@ body{
 .form-panel{
   position:relative;padding:0.3rem 0 0;
 }
-.form-panel .f{margin-bottom:0.5rem;}
+.form-panel .f{margin-bottom:0.32rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#17161c;margin-bottom:0.2rem;font-weight:700;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#17161c;margin-bottom:0.12rem;font-weight:700;}
 .section-lbl{font-size:0.6rem!important;color:#17161c!important;margin-bottom:0.35rem!important;}
 .opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#17161c;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
@@ -240,7 +240,7 @@ body{
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
    with italic text for a lighter, less typewriter-formal feel. */
-.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(24,20,51,0.4);}
+.line-field{position:relative;padding-bottom:0.2rem;border-bottom:1.3px solid rgba(24,20,51,0.4);}
 .line-field::before,.line-field::after{
   content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(24,20,51,0.4);
 }
@@ -502,6 +502,8 @@ body{
     </div>
   </div>
 
+  <div class="key-cluster key-cluster-a" id="keyClusterA"></div>
+
   <div class="form-col">
       <div class="toggle-row">
         <span class="tog-lbl active" id="lblInd">Individual</span>
@@ -584,7 +586,6 @@ body{
       </div>
   </div>
 
-  <div class="key-cluster key-cluster-a" id="keyClusterA"></div>
   <div class="key-cluster key-cluster-b" id="keyClusterB"></div>
 
 </div>
@@ -843,13 +844,36 @@ const KEYS = [
   '<mark class="key-hl">Email</mark> is simply your key to your results and time-limited <mark class="key-hl">pass</mark> if you choose to purchase one.',
   'You will not receive emails from us',
 ];
-document.getElementById('keyClusterA').innerHTML =
-  `<div class="key-bubble kb-sm kb-wine kb-a1"><span class="kb-txt">${KEYS[1]}</span></div>`+
-  `<div class="key-bubble kb-lg kb-emerald kb-a2"><span class="kb-txt">${KEYS[0]}</span></div>`+
-  `<div class="key-bubble kb-sm kb-wine kb-a3"><span class="kb-txt">${KEYS[4]}</span></div>`;
-document.getElementById('keyClusterB').innerHTML =
-  `<div class="key-bubble kb-lg kb-emerald kb-b1"><span class="kb-txt">${KEYS[3]}</span></div>`+
-  `<div class="key-bubble kb-sm kb-wine kb-b2"><span class="kb-txt">${KEYS[2]}</span></div>`;
+function makeKeyBubble(html, cls){
+  const b = document.createElement('div');
+  b.className = 'key-bubble ' + cls;
+  const t = document.createElement('span');
+  t.className = 'kb-txt';
+  t.innerHTML = html;
+  b.appendChild(t);
+  return b;
+}
+// Sizes each bubble to a true circle that fits its own wrapped text --
+// diagonal of the (already word-wrapped) text block, plus a fixed
+// cushion, so short labels come out small and long ones come out large.
+function sizeKeyBubbles(container){
+  container.querySelectorAll('.key-bubble').forEach(function(el){
+    const t = el.querySelector('.kb-txt');
+    const w = t.offsetWidth, h = t.offsetHeight;
+    const d = Math.ceil(Math.sqrt(w*w + h*h)) + 26;
+    el.style.width = d + 'px';
+    el.style.height = d + 'px';
+  });
+}
+const keyClusterA = document.getElementById('keyClusterA');
+keyClusterA.appendChild(makeKeyBubble(KEYS[1], 'kb-sky'));
+keyClusterA.appendChild(makeKeyBubble(KEYS[0], 'kb-marigold'));
+keyClusterA.appendChild(makeKeyBubble(KEYS[4], 'kb-rose'));
+sizeKeyBubbles(keyClusterA);
+const keyClusterB = document.getElementById('keyClusterB');
+keyClusterB.appendChild(makeKeyBubble(KEYS[3], 'kb-plum'));
+keyClusterB.appendChild(makeKeyBubble(KEYS[2], 'kb-coral'));
+sizeKeyBubbles(keyClusterB);
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
