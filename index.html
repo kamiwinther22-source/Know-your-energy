@@ -26,7 +26,7 @@ body{
   background-color:#f8f8fa;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
-  color:#17161c;
+  color:#000000;
 }
 #bgWisps{position:absolute;top:0;left:0;width:100%;z-index:0;pointer-events:none;display:block;}
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
@@ -45,7 +45,7 @@ body{
    four deliberate roles instead of a different treatment per element. */
 .sys-section-title{
   font-family:'Special Elite',monospace;font-weight:400;font-size:0.85rem;
-  letter-spacing:0.05em;text-transform:uppercase;color:#17161c;
+  letter-spacing:0.05em;text-transform:uppercase;color:#000000;
   text-align:center;margin-bottom:0.5rem;
 }
 /* "Pop" without color -- a thin rule above/below (real ink, not blue),
@@ -53,7 +53,7 @@ body{
    dimension instead of a flat, flush-with-the-page line of type. */
 .sys-section-sub{
   font-family:'Special Elite',monospace;font-weight:400;font-size:1.3rem;
-  letter-spacing:0.01em;color:#17161c;text-align:center;margin:0.75rem auto 0;
+  letter-spacing:0.01em;color:#000000;text-align:center;margin:0.75rem auto 0;
   width:fit-content;padding:0.35rem 0;
   border-top:1px solid rgba(23,22,28,0.3);border-bottom:1px solid rgba(23,22,28,0.3);
 }
@@ -125,7 +125,7 @@ body{
   border:0.5px solid;border-radius:8px;flex-shrink:0;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
 }
-.num-circle-lbl{margin-top:0.25rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.52rem;line-height:1.2;letter-spacing:0;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-circle-lbl{margin-top:0.25rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.52rem;line-height:1.2;letter-spacing:0;text-transform:uppercase;color:#000000;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 .num-circle-tile::before{
   content:'';position:absolute;inset:0;border-radius:8px;
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
@@ -220,12 +220,12 @@ body{
   /* Plain black placeholder for now -- not settled on gold. Final
      treatment is most likely going to be a cursive font of some kind,
      not this weight/style -- holding off on that until it's decided. */
-  color:#17161c;
+  color:#000000;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.56rem;letter-spacing:0.02em;text-transform:uppercase;color:#17161c;}
-.tog-lbl{cursor:pointer;color:#17161c;transition:color 0.2s;user-select:none;}
-.tog-lbl.active{color:#17161c;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.56rem;letter-spacing:0.02em;text-transform:uppercase;color:#000000;}
+.tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
+.tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
 .toggle-pill.on{background:#1C2CA9;}
@@ -251,9 +251,9 @@ body{
 .key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
-.key-txt{font-size:0.85rem;line-height:1.38;color:#17161c;font-weight:500;}
+.key-txt{font-size:0.85rem;line-height:1.38;color:#000000;font-weight:500;}
 .key-txt-lead{font-family:'Special Elite',monospace;font-size:1.15rem;line-height:1.3;font-weight:400;text-transform:uppercase;letter-spacing:0.02em;}
-.key-txt em{font-style:normal;color:#17161c;}
+.key-txt em{font-style:normal;color:#000000;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -262,7 +262,7 @@ body{
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#17161c;font-weight:800;}
+.key-hl{background:none;color:#000000;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
@@ -272,9 +272,9 @@ body{
 }
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#17161c;margin-bottom:0.2rem;font-weight:700;}
-.section-lbl{font-size:0.6rem!important;color:#17161c!important;margin-bottom:0.35rem!important;}
-.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#17161c;font-weight:600;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
+.section-lbl{font-size:0.6rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
+.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#000000;font-weight:600;}
 .row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
 .row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
 
@@ -288,7 +288,7 @@ body{
 .line-field::before{left:0;}
 .line-field::after{right:0;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#17161c;font-size:0.7rem;font-weight:400;
+  width:100%;background:transparent;border:none;color:#000000;font-size:0.7rem;font-weight:400;
   font-style:normal;font-family:'Special Elite',monospace;padding:0.15rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
@@ -324,7 +324,7 @@ body{
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
-.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#17161c;margin:0.35rem 0 0;}
+.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#000000;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
 .err{display:none;font-size:0.7rem;color:#a3243f;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(200,40,60,0.08);border-radius:5px;border:1px solid rgba(200,40,60,0.3);font-weight:600;}
 
@@ -933,10 +933,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#17161c" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#000000" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#17161c" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#000000" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -1017,14 +1017,14 @@ function openPlanetDef(p){
       // Both cases sit on the light card background now (filled centers
       // use a light tone fill, hollow centers let the light card show
       // through) -- dark text works for both, no more white/black split.
-      const inTextColor = '#17161c';
+      const inTextColor = '#000000';
       if(words.length>1){
         svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
       } else {
         svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#17161c" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
