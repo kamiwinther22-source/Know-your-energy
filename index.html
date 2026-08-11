@@ -7,38 +7,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: soft wispy white, layered from genuinely different white
-   shades (pure white, warm ivory, cool pearl-grey, soft blush) instead
-   of one flat tone or a single highlight blob -- the validated
-   "combining different shades of white" technique, actually wired into
-   the real page this time. Tiled down the page (900px repeat unit) so
-   the atmosphere is present the whole way down, not just at the top --
-   a page this tall can't be covered by one gradient without it
-   stretching into something unrecognizable. */
+/* Background: the actual validated wisp technique (soft blurred organic
+   shapes + turbulence-displaced edges + fine brush-stroke lines, in
+   layered white/ivory/pearl/blush shades), not the flat CSS
+   radial-gradient stand-in that shipped before -- that version only
+   used soft color pooling with no real linework, which read as lazy
+   color-only "depth." This is an actual <svg id="bgWisps"> layer (see
+   below body), sized to the real document height in JS and built from
+   blurred + turbulence-distorted paths and strokes so it reads as soft
+   atmosphere with real brushed lines in it, not flat tinted circles.
+   Four color/position variants cycle down the page with jittered
+   coordinates so nothing repeats as an obvious tiled pattern. */
 body{
-  font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Previous version kept every bloom within ~10 RGB units of the base
-     -- numerically "different shades of white" but below the threshold
-     a real screen actually shows, so it read as flat. Same idea (real
-     white/ivory/pearl/blush zones, no grey or tan as the dominant page
-     color), but each bloom now runs to a genuinely saturated peak
-     (opacity 1, no alpha-fade toward white) before fading to
-     transparent, so the shift is actually visible, not just present in
-     the code. */
+  font-family:'DM Sans',sans-serif;overflow-x:hidden;position:relative;
   background-color:#f7f4ee;
-  background-image:
-    radial-gradient(55% 38% at 15% 8%,  #ffffff 0%, rgba(255,255,255,0) 60%),
-    radial-gradient(50% 34% at 82% 20%, #f5e3bd 0%, rgba(245,227,189,0) 62%),
-    radial-gradient(48% 32% at 25% 46%, #d7e4ec 0%, rgba(215,228,236,0) 62%),
-    radial-gradient(52% 36% at 85% 60%, #f2d9d0 0%, rgba(242,217,208,0) 62%),
-    radial-gradient(50% 34% at 20% 82%, #ffffff 0%, rgba(255,255,255,0) 62%),
-    radial-gradient(46% 30% at 80% 96%, #d7e4ec 0%, rgba(215,228,236,0) 62%);
-  background-repeat:repeat-y;
-  background-size:100% 900px;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#17161c;
 }
+#bgWisps{position:absolute;top:0;left:0;width:100%;z-index:0;pointer-events:none;display:block;}
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
    everything inside it) wider than the actual phone viewport, which is
@@ -478,6 +465,29 @@ body{
 </style>
 </head>
 <body>
+<svg id="bgWisps" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="wispBlurLg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="wispBlurMd" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="wispBlurSm" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="wispTurbA" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="wispTurbB" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="3" seed="17" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="wispTurbC" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.014 0.028" numOctaves="3" seed="29" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="32" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="wispTurbD" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.032" numOctaves="3" seed="41" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="28" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
 <div class="content">
   <div class="brand-row">
     <div class="brand">Know Your Energy</div>
@@ -607,6 +617,75 @@ body{
 </div>
 
 <script>
+// ---------- background wisps: real blurred/turbulence-distorted brush
+// shapes (the technique from the approved demo), not flat color blobs.
+// Four color/filter variants cycle down the actual document height with
+// small jittered offsets so nothing repeats as an obvious tiled pattern.
+(function(){
+  const CLUSTER_H = 800, VW = 420;
+  const VARIANTS = [
+    { blob:'#eef2f5', turb:'#f7f0e2', wisp1:'#ffffff', wisp2:'#f2e9d6', low:'#f5ece9', anchor1:'#fffaf0', anchor2:'#e9edf0', turbFilter:'wispTurbA' },
+    { blob:'#f7f0e2', turb:'#f5ece9', wisp1:'#ffffff', wisp2:'#eef2f5', low:'#eef2f5', anchor1:'#f5ece9', anchor2:'#fffaf0', turbFilter:'wispTurbB' },
+    { blob:'#f5ece9', turb:'#eef2f5', wisp1:'#f7f0e2', wisp2:'#ffffff', low:'#f7f0e2', anchor1:'#eef2f5', anchor2:'#f5ece9', turbFilter:'wispTurbC' },
+    { blob:'#eef2f5', turb:'#f5ece9', wisp1:'#ffffff', wisp2:'#f7f0e2', low:'#ffffff', anchor1:'#f7f0e2', anchor2:'#eef2f5', turbFilter:'wispTurbD' }
+  ];
+  function rand(seed){ const x = Math.sin(seed*999.123)*10000; return x - Math.floor(x); }
+  function j(seed, base, range){ return Math.round(base + (rand(seed)-0.5)*2*range); }
+
+  function cluster(i){
+    const v = VARIANTS[i % 4];
+    const y0 = i * CLUSTER_H, s = i * 13 + 1;
+    return `
+      <g transform="translate(0,${y0})">
+        <path d="M -40,${j(s+1,180,30)} C 40,${j(s+2,100,20)} 90,${j(s+3,140,20)} 160,${j(s+4,80,20)}
+                 C 230,${j(s+5,30,20)} 260,${j(s+6,80,20)} 340,${j(s+7,50,20)}
+                 L 340,${j(s+8,220,20)} C 260,${j(s+9,240,20)} 240,${j(s+10,210,20)} 170,${j(s+11,260,20)}
+                 C 100,${j(s+12,300,20)} 80,${j(s+13,280,20)} -40,${j(s+14,340,20)} Z"
+              fill="${v.blob}" opacity="0.55" filter="url(#wispBlurLg)"/>
+        <path d="M -30,${j(s+15,420,25)} C 60,${j(s+16,360,20)} 100,${j(s+17,390,20)} 180,${j(s+18,330,20)}
+                 C 250,${j(s+19,290,20)} 280,${j(s+20,320,20)} 360,${j(s+21,270,20)}
+                 C 320,${j(s+22,320,20)} 300,${j(s+23,350,20)} 240,${j(s+24,390,20)}
+                 C 170,${j(s+25,435,20)} 150,${j(s+26,410,20)} 90,${j(s+27,460,20)}
+                 C 40,${j(s+28,500,20)} 30,${j(s+29,490,20)} -60,${j(s+30,540,20)} Z"
+              fill="${v.turb}" opacity="0.5" filter="url(#${v.turbFilter})"/>
+        <path d="M 20,${j(s+31,380,20)} C 80,${j(s+32,340,20)} 100,${j(s+33,360,20)} 150,${j(s+34,320,20)}
+                 C 200,${j(s+35,282,20)} 210,${j(s+36,300,20)} 270,${j(s+37,270,20)}"
+              fill="none" stroke="${v.wisp1}" stroke-width="13" stroke-linecap="round" opacity="0.75" filter="url(#wispBlurMd)"/>
+        <path d="M 60,${j(s+38,440,20)} C 110,${j(s+39,400,20)} 130,${j(s+40,415,20)} 180,${j(s+41,375,20)}
+                 C 225,${j(s+42,340,20)} 235,${j(s+43,355,20)} 290,${j(s+44,325,20)}"
+              fill="none" stroke="${v.wisp2}" stroke-width="7" stroke-linecap="round" opacity="0.65" filter="url(#wispBlurSm)"/>
+        <path d="M -20,${j(s+45,590,25)} C 70,${j(s+46,550,20)} 110,${j(s+47,575,20)} 180,${j(s+48,535,20)}
+                 C 250,${j(s+49,495,20)} 270,${j(s+50,520,20)} 350,${j(s+51,480,20)}
+                 C 320,${j(s+52,520,20)} 300,${j(s+53,540,20)} 250,${j(s+54,570,20)}
+                 C 190,${j(s+55,605,20)} 175,${j(s+56,585,20)} 120,${j(s+57,615,20)}
+                 C 80,${j(s+58,635,20)} 60,${j(s+59,625,20)} -30,${j(s+60,650,20)} Z"
+              fill="${v.low}" opacity="0.5" filter="url(#wispBlurLg)"/>
+        <circle cx="${j(s+61,220,30)}" cy="${j(s+62,150,20)}" r="90" fill="${v.anchor1}" opacity="0.4" filter="url(#wispBlurLg)"/>
+        <circle cx="${j(s+63,150,30)}" cy="${j(s+64,550,20)}" r="70" fill="${v.anchor2}" opacity="0.4" filter="url(#wispBlurLg)"/>
+      </g>`;
+  }
+
+  function buildWisps(){
+    const svg = document.getElementById('bgWisps');
+    if(!svg) return;
+    const h = document.body.scrollHeight;
+    const numClusters = Math.max(1, Math.ceil(h / CLUSTER_H));
+    let body = '';
+    for(let i=0;i<numClusters;i++) body += cluster(i);
+    svg.setAttribute('viewBox', `0 0 ${VW} ${h}`);
+    svg.setAttribute('height', h);
+    svg.setAttribute('preserveAspectRatio','none');
+    // defs stay put -- everything else gets rebuilt
+    const defs = svg.querySelector('defs');
+    svg.innerHTML = '';
+    if(defs) svg.appendChild(defs);
+    svg.insertAdjacentHTML('beforeend', body);
+  }
+  buildWisps();
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(buildWisps); }
+  window.addEventListener('resize', buildWisps);
+})();
+
 // ---------- numerology numbers: light metal, but actually shiny ----------
 // The previous version stayed inside a narrow, pale value band at every
 // stop (white -> slightly-less-white) -- that's what read as flat/dull
