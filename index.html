@@ -824,6 +824,31 @@ body{
         <path d="${pathFront}" fill="url(#creamSheen)" filter="url(#creamMarble)"/>
       </g>`;
   }
+  /* The hero ribbon stopped dead around y=350-380 with nothing below it
+     -- rich, layered, shadowed material at the top, then a flat blank
+     page for the remaining ~600px behind the form. That hard seam is
+     its own bug independent of any bigger repaint: a page shouldn't
+     look designed in one section and abandoned in the next. This is a
+     single quiet tendril of the same material (not a second hero
+     moment) hugging the right edge, tapering from a real width down to
+     almost nothing, so the transition is a gradient instead of a
+     cliff -- narrow and faint enough by the time it reaches the form
+     that it never sits under input text. */
+  function creamTrail(W, H){
+    const startY = 300;
+    if(H <= startY + 40) return '';
+    const N = 30;
+    const pts=[], hws=[];
+    for(let i=0;i<=N;i++){
+      const t = i/N;
+      const y = startY + t*(H-startY);
+      const x = W - 34 + 14*Math.sin(t*Math.PI*1.6);
+      pts.push([x,y]);
+      hws.push(24*(1-t) + 3);
+    }
+    const path = ribbonPath(pts, hws);
+    return `<g filter="url(#creamLift3)"><path d="${path}" fill="url(#creamBack)" opacity="0.55" filter="url(#creamMarble2)"/></g>`;
+  }
 
   function buildWisps(){
     const svg = document.getElementById('bgWisps');
@@ -833,6 +858,7 @@ body{
     let body = '';
     for(let i=0;i<numClusters;i++) body += cluster(i);
     body += creamHero(VW);
+    body += creamTrail(VW, h);
     svg.setAttribute('viewBox', `0 0 ${VW} ${h}`);
     svg.setAttribute('height', h);
     svg.setAttribute('preserveAspectRatio','none');
