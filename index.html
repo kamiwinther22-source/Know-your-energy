@@ -126,7 +126,12 @@ body{
   background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
   pointer-events:none;
 }
-.num-tile-lg .n{position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;}
+/* White outline behind the digit -- the conic-gradient metal swatch has
+   alternating light/dark bands underneath, and flat black text loses
+   contrast wherever it happens to land on a dark band. The outline
+   guarantees legibility regardless of what's behind it. */
+.num-tile-lg .n{position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;font-size:clamp(0.8rem,4vw,1.15rem);line-height:1;color:#000000;
+  text-shadow:-1.5px -1.5px 0 #fff,1.5px -1.5px 0 #fff,-1.5px 1.5px 0 #fff,1.5px 1.5px 0 #fff,0 0 4px #fff;}
 /* overflow-wrap so a long single word (no space to break at, e.g.
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
