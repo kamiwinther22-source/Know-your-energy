@@ -1262,8 +1262,8 @@ const KEYS = [
   'One <mark class="key-hl">free</mark> reading',
   'Your info is <mark class="key-hl">neither</mark> shared <mark class="key-hl">nor</mark> saved',
   '<mark class="key-hl">No</mark> auto-renewals',
-  '<mark class="key-hl">Email</mark> is your key to the use of the site',
-  'You will not receive emails from us',
+  '<mark class="key-hl">Email</mark> is your key',
+  'No emails sent',
 ];
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt${i===0?' key-txt-lead':''}">${t}</div></div>`).join('');
