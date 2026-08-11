@@ -139,11 +139,14 @@ body{
    on top. */
 .num-circle-tile .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;color:transparent;
+  /* em-based offsets this time -- fixed px offsets didn't scale down
+     with a smaller tile, so the shadow nearly filled the whole glyph
+     and read as a solid black blob instead of a fine engraved edge. */
   text-shadow:
-    -1.8px -1.8px 0.6px rgba(0,0,0,0.9),
-    -0.9px -0.9px 0.6px rgba(0,0,0,0.7),
-    1.8px 1.8px 0.6px rgba(255,255,255,1),
-    0.9px 0.9px 0.6px rgba(255,255,255,0.9);
+    -0.08em -0.08em 0.03em rgba(0,0,0,0.9),
+    -0.04em -0.04em 0.03em rgba(0,0,0,0.7),
+    0.08em 0.08em 0.03em rgba(255,255,255,1),
+    0.04em 0.04em 0.03em rgba(255,255,255,0.9);
 }
 .num-circle-q{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -817,17 +820,22 @@ const NUMS = [
 const numCircle = document.getElementById('numCircle');
 if(numCircle){
   const N = NUMS.length;
-  const S = 46;              // tile size
-  const R = 150;             // spread out -- not edge-to-edge, just not overlapping
-  const unitW = 62;          // narrow enough that longer words wrap to 2 lines instead of spreading into neighbors
-  const cx = R + unitW/2, cy = R + unitW/2;
-  numCircle.style.width = (2*R + unitW) + 'px';
-  numCircle.style.height = (2*R + unitW) + 'px';
+  const S = 64;              // tile size -- big enough to read without zooming
+  // Elliptical, not a perfect circle: page width is capped (~380px),
+  // but page height can just scroll further, so the vertical radius
+  // gets to be a lot more generous than the horizontal one. This is
+  // what actually lets tiles stay big -- a symmetric circle forces
+  // every tile down to whatever fits the tighter (width) dimension.
+  const Rx = 128, Ry = 195;
+  const unitW = 84;
+  const cx = Rx + unitW/2, cy = Ry + unitW/2;
+  numCircle.style.width = (2*Rx + unitW) + 'px';
+  numCircle.style.height = (2*Ry + unitW) + 'px';
   NUMS.forEach((item,i)=>{
     const t = TONES[item.tone];
     const angle = -Math.PI/2 + i*(2*Math.PI/N);
-    const x = cx + R*Math.cos(angle);
-    const y = cy + R*Math.sin(angle);
+    const x = cx + Rx*Math.cos(angle);
+    const y = cy + Ry*Math.sin(angle);
     const unit = document.createElement('div');
     unit.className = 'num-circle-unit';
     unit.style.left = x+'px'; unit.style.top = y+'px';
