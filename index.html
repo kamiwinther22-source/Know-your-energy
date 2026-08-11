@@ -259,14 +259,9 @@ body{
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:#000000;font-weight:800;}
 
-/* The form's own cloud: a bumpy cloud-top silhouette (fixed height, not
-   stretched -- stretching a whole cloud shape to match the form's
-   variable height, which changes a lot between Individual and
-   Relational mode, would badly distort the bumps) sitting flush on top
-   of a plain rounded card that grows naturally with its content. */
+/* Plain rounded card, no cloud silhouette -- the form isn't a cloud. */
 .form-cloud{position:relative;background:#ffffff;border-radius:26px;
-  padding:2.5rem 1.5rem 1.7rem;box-shadow:0 10px 24px rgba(60,90,130,0.2);}
-.form-cloud .cloud-top{position:absolute;top:-32px;left:0;width:100%;height:64px;overflow:visible;}
+  padding:1.8rem 1.5rem 1.7rem;box-shadow:0 10px 24px rgba(60,90,130,0.2);}
 .form-col{position:relative;}
 .form-panel{
   position:relative;padding:0.3rem 0 0;
@@ -616,16 +611,6 @@ body{
   <div class="clouds-above" id="cloudsAbove"></div>
 
   <div class="form-cloud">
-    <svg class="cloud-top" viewBox="0 0 300 70" preserveAspectRatio="none">
-      <g filter="drop-shadow(0 -2px 4px rgba(60,90,130,0.12))">
-        <rect x="0" y="34" width="300" height="36" fill="#ffffff"/>
-        <circle cx="40" cy="42" r="30" fill="#ffffff"/>
-        <circle cx="100" cy="26" r="36" fill="#ffffff"/>
-        <circle cx="170" cy="24" r="34" fill="#ffffff"/>
-        <circle cx="235" cy="30" r="32" fill="#ffffff"/>
-        <circle cx="280" cy="44" r="26" fill="#ffffff"/>
-      </g>
-    </svg>
     <div class="form-col">
       <div class="toggle-row">
         <span class="tog-lbl active" id="lblInd">Individual</span>
