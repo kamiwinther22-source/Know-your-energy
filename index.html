@@ -46,11 +46,10 @@ body{
    a little extra letter-spacing, and a soft embossed text-shadow for
    dimension instead of a flat, flush-with-the-page line of type. */
 .sys-section-sub{
-  font-family:'Special Elite',monospace;font-weight:400;font-size:0.92rem;
-  letter-spacing:0.01em;color:#17161c;text-align:center;margin:0.75rem auto 0;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:1.02rem;
+  letter-spacing:0.005em;color:#17161c;text-align:center;margin:0.75rem auto 0;
   width:fit-content;padding:0.35rem 0;
   border-top:1px solid rgba(23,22,28,0.3);border-bottom:1px solid rgba(23,22,28,0.3);
-  text-shadow:0 1px 0 rgba(255,255,255,0.9);
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -126,7 +125,7 @@ body{
    "Communicator") wraps onto a second line inside its own tile instead
    of overflowing sideways into the next one -- that sideways overflow,
    not tile width alone, was what caused the label text to run together. */
-.num-tile-lg .lbl{margin-top:0.3rem;font-family:'Special Elite',monospace;font-weight:400;font-size:0.54rem;line-height:1.2;letter-spacing:0.005em;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
+.num-tile-lg .lbl{margin-top:0.3rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.55rem;line-height:1.2;letter-spacing:-0.01em;text-transform:uppercase;color:#17161c;text-align:center;overflow-wrap:break-word;word-break:break-word;hyphens:auto;}
 /* No filter here anymore -- drop-shadow on this container was blurring
    EVERYTHING inside it, including the text labels, not just the
    shapes/planets it was meant for. A CSS/SVG filter applies to every
