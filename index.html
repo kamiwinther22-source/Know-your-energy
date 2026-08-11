@@ -245,7 +245,9 @@ body{
    the form, not a shelf sitting flush above/below it. */
 .clouds-above,.clouds-below{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.4rem 0.6rem;}
 .clouds-above{margin-bottom:1.6rem;}
-.clouds-below{margin-top:1.7rem;}
+/* The two bottom clouds sit at opposite corners instead of clustered
+   center -- full width, pushed to the outer edges. */
+.clouds-below{margin-top:1.7rem;justify-content:space-between;width:100%;}
 .key-cloud{position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
   width:118px;aspect-ratio:1/0.96;padding:0.2rem 0.5rem;}
 .key-cloud:nth-child(1){transform:translate(4px,14px);}
