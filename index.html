@@ -792,12 +792,19 @@ body{
     d += ' Z';
     return d;
   }
+  // Flows DOWN the page (t drives y, the natural long axis of a tall
+  // phone screen) with a gentle side-to-side sway, instead of sweeping
+  // x all the way across the width while also dropping -- that
+  // combination is what read as "a diagonal cutting across the page"
+  // rather than a ribbon draping down it.
   function creamLayerPath(seed, yOffset, hwBase, hwAmp, W, N, growth, ampMul, freqMul){
     const pts = [], hws = [];
+    const cx = W*0.5;
+    const xAmp = W*0.32*ampMul;
     for(let i=0;i<=N;i++){
       const t = i/N;
-      const x = -80 + t*(W+160);
-      const y = yOffset + (130*ampMul)*Math.sin(t*Math.PI*freqMul - 0.3 + seed) + t*growth;
+      const x = cx + xAmp*Math.sin(t*Math.PI*freqMul - 0.3 + seed);
+      const y = yOffset + t*growth;
       pts.push([x,y]);
       hws.push(hwBase + hwAmp*Math.sin(t*Math.PI*2.0 + seed*1.7));
     }
