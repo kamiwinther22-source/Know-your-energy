@@ -128,7 +128,7 @@ body{
 }
 .num-tile-lg .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;
-  color:#173254;text-shadow:0 1px 1px rgba(255,255,255,0.5);
+  color:#000000;text-shadow:0 1px 1px rgba(255,255,255,0.5);
   font-size:clamp(1rem,6vw,1.7rem);line-height:1;
 }
 /* Special Elite only ships one real weight -- font-weight alone does
@@ -898,8 +898,8 @@ const TONES = {
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
   platinum:{ grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #eef1f3 55%, #d3d9dd 100%)', border:'#9aa2a8' },
   copper:  { grad:'radial-gradient(circle at 30% 26%, #ffe8d6 0%, #d9986a 55%, #a85f36 100%)', border:'#8a4a1f' },
-  ice:     { grad:'#deeaf8', border:'#8fb0d8' },
-  iceDeep: { grad:'#a8c4e8', border:'#7398c4' },
+  ice:     { grad:'#f4f6f8', border:'#aab4bd' },
+  iceDeep: { grad:'#dfe4e9', border:'#8f9aa5' },
 };
 // Real metal technique (researched, not guessed): a conic-gradient with
 // alternating light/dark bands radiating around the shape, which is what
@@ -947,9 +947,13 @@ const TONE_CONIC = {
 // than the first flat pass -- being flat/opaque is what avoids "faded,"
 // not being dark, so this can go much paler without that problem
 // coming back.
+// Blue dropped -- it was reading as a faded, washed-out denim tone,
+// not ice. White/silver instead, the same material family as the
+// clouds and the tile's own ring, so the tile is one coherent object
+// instead of a weak second color competing with the title's blue.
 const ICE_FILL = {
-  ice:     '#deeaf8',
-  iceDeep: '#a8c4e8',
+  ice:     '#f4f6f8',
+  iceDeep: '#dfe4e9',
 };
 Object.assign(TONE_CONIC, ICE_FILL);
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
