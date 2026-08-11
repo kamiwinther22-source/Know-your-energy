@@ -624,6 +624,20 @@ const TONES = {
 // Design preview's per-center radial gradients below.
 const stopsByTone = {};
 Object.entries(TONES).forEach(([name, t])=>{ stopsByTone[name] = t.grad.match(/#[0-9a-fA-F]{6}/g); });
+// Numerology reuses the exact same bold jewel-tone palette as the
+// astrology planets below, instead of its own separate muted-metal set --
+// having two unrelated color systems on the same page read as a clash,
+// not two intentional themes.
+const JEWEL = {
+  gold:   { grad:'radial-gradient(circle at 30% 24%, #fffbe8 0%, #ffe9a3 10%, #e0aa2e 42%, #8a5c10 78%, #2e1c02 100%)', border:'#2e1c02' },
+  chrome: { grad:'radial-gradient(circle at 30% 24%, #ffffff 0%, #eef1f4 20%, #9aa4ad 58%, #2b323a 100%)',            border:'#2b323a' },
+  rose:   { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffd7de 16%, #ff6c8c 52%, #7a0a3a 100%)',               border:'#7a0a3a' },
+  coral:  { grad:'radial-gradient(circle at 30% 22%, #fff 0%, #ffcdb0 14%, #e0501f 52%, #5c1c06 100%)',               border:'#5c1c06' },
+  amber:  { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #ffe0a0 14%, #d98a1e 50%, #5c360a 100%)',               border:'#5c360a' },
+  wine:   { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #f0b3c4 14%, #a3284f 52%, #300a17 100%)',               border:'#300a17' },
+  teal:   { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #a8e0c4 16%, #12735a 55%, #052018 100%)',               border:'#052018' },
+  maroon: { grad:'radial-gradient(circle at 30% 24%, #fff 0%, #e6a8b8 16%, #7a1f30 55%, #2a060d 100%)',               border:'#2a060d' },
+};
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
 // built anywhere else in the app). Labels are the standard single-word
@@ -644,23 +658,23 @@ Object.entries(TONES).forEach(([name, t])=>{ stopsByTone[name] = t.grad.match(/#
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
 const NUMS = [
-  {n:1, lbl:'Leader',       tone:'silverL'},
-  {n:2, lbl:'Diplomat',     tone:'goldT'},
-  {n:3, lbl:'Communi­cator', tone:'white'},
-  {n:4, lbl:'Builder',      tone:'cream'},
-  {n:5, lbl:'Freedom',      tone:'silverD'},
-  {n:6, lbl:'Nurtur­er', tone:'white'},
-  {n:7, lbl:'Seeker',       tone:'goldT'},
-  {n:8, lbl:'Achiever',     tone:'silverL'},
-  {n:9, lbl:'Humani­tarian', tone:'cream'},
-  {n:11, lbl:'Intu­itive',      tone:'silverD'},
-  {n:22, lbl:'Master Builder', tone:'goldT'},
-  {n:33, lbl:'Master Teacher', tone:'silverL'},
+  {n:1, lbl:'Leader',       tone:'chrome'},
+  {n:2, lbl:'Diplomat',     tone:'rose'},
+  {n:3, lbl:'Communi­cator', tone:'amber'},
+  {n:4, lbl:'Builder',      tone:'teal'},
+  {n:5, lbl:'Freedom',      tone:'coral'},
+  {n:6, lbl:'Nurtur­er', tone:'gold'},
+  {n:7, lbl:'Seeker',       tone:'wine'},
+  {n:8, lbl:'Achiever',     tone:'maroon'},
+  {n:9, lbl:'Humani­tarian', tone:'chrome'},
+  {n:11, lbl:'Intu­itive',      tone:'teal'},
+  {n:22, lbl:'Master Builder', tone:'gold'},
+  {n:33, lbl:'Master Teacher', tone:'rose'},
 ];
 const numStripRow = document.getElementById('numStripRow');
 if(numStripRow){
   NUMS.forEach(item=>{
-    const t = TONES[item.tone];
+    const t = JEWEL[item.tone];
     const tile = document.createElement('div');
     tile.className = 'num-tile-lg';
     tile.innerHTML = `<div class="swatch" style="background:${t.grad};border-color:${t.border};"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
