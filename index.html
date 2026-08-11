@@ -109,22 +109,18 @@ body{
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
-  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:7px;
-  /* Real raised-edge bevel (light upper-left inset, dark lower-right
-     inset) on top of the existing cast shadow -- the cast shadow alone
-     made the tile float above the page but said nothing about the
-     tile's own surface; the inset pair is what makes the metal itself
-     read as domed/thick instead of a flat swatch with a shadow under it. */
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.85),
-    inset 0 -1.5px 0 rgba(0,0,0,0.4),
-    inset 1.5px 0 0 rgba(255,255,255,0.35),
-    inset -1.5px 0 0 rgba(0,0,0,0.25);
-  filter:drop-shadow(0 4px 7px rgba(0,0,0,0.55));
+  display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:9px;
+  /* Metal detail (the banded bevel, the dark shading corner) removed --
+     this is ice now, not brushed steel. Just a soft even edge and a
+     gentle cool-toned cast shadow for real lift, no shine pattern. */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+  filter:drop-shadow(0 4px 8px rgba(140,168,196,0.4));
 }
 .num-tile-lg .swatch::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(200deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.22) 100%);
+  /* Soft light catching one corner, like an ice cube in real light, not
+     a metal sheen band pattern. */
+  background:radial-gradient(circle at 28% 22%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 58%);
   pointer-events:none;
 }
 /* Engraved, not painted-on: transparent fill lets the tile's own metal
@@ -892,8 +888,8 @@ const TONES = {
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
   platinum:{ grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #eef1f3 55%, #d3d9dd 100%)', border:'#9aa2a8' },
   copper:  { grad:'radial-gradient(circle at 30% 26%, #ffe8d6 0%, #d9986a 55%, #a85f36 100%)', border:'#8a4a1f' },
-  ice:     { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #eef6fc 55%, #d8e9f5 100%)', border:'#aecbe2' },
-  iceDeep: { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #e0edf7 55%, #c3d8ea 100%)', border:'#9fbcd6' },
+  ice:     { grad:'linear-gradient(150deg, #ffffff 0%, #f2f7fb 42%, #e2ecf3 78%, #d3e0e9 100%)', border:'#c3d4de' },
+  iceDeep: { grad:'linear-gradient(150deg, #f8fbfd 0%, #e9f0f5 42%, #d6e3ea 78%, #c3d4de 100%)', border:'#b3c8d4' },
 };
 // Real metal technique (researched, not guessed): a conic-gradient with
 // alternating light/dark bands radiating around the shape, which is what
@@ -925,15 +921,20 @@ const TONE_CONIC = {
      pink-white highlight -- genuinely different hue from gold (which
      stays yellow-brown throughout), not just a darker/lighter gold. */
   copper:  conicBands('#5c2e10','#8a4a1f','#b87333','#e0a878','#fff0e0'),
-  /* One signature material (ice-blue metal) instead of four unrelated
-     ones -- restraint, not more variety. Two tones within the same
-     family (lighter/deeper ice), not a different metal, so it reads as
-     one considered material repeated with discipline. Also the one
-     place blue is used outside the title, which is otherwise banned --
-     explicitly requested here. */
-  ice:     conicBands('#a8c4dc','#c3d8ea','#dce8f4','#eff6fb','#ffffff'),
-  iceDeep: conicBands('#8fb0cc','#a8c4dc','#c3d8ea','#e0ecf6','#ffffff'),
 };
+/* Ice, not metal: no conic bands (that's what was reading as a shiny
+   brushed surface). A quiet, mostly-flat, very desaturated blue-white
+   gradient instead -- almost colorless with just a whisper of blue, the
+   way real ice reads, not the saturated, evenly-blue "clear sky" a
+   stronger tint gives. Two tones in the same family for tile-to-tile
+   distinction, not a different material. Also the one place blue is
+   used outside the title, which is otherwise banned -- explicitly
+   requested here. */
+const ICE_FILL = {
+  ice:     'linear-gradient(150deg, #ffffff 0%, #f2f7fb 42%, #e2ecf3 78%, #d3e0e9 100%)',
+  iceDeep: 'linear-gradient(150deg, #f8fbfd 0%, #e9f0f5 42%, #d6e3ea 78%, #c3d4de 100%)',
+};
+Object.assign(TONE_CONIC, ICE_FILL);
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
 // built anywhere else in the app). Labels are the standard single-word
