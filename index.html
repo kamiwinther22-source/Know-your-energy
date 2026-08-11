@@ -110,33 +110,24 @@ body{
 .num-tile-lg .swatch{
   position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
   display:flex;align-items:center;justify-content:center;border:0.5px solid;border-radius:9px;
-  /* Metal detail (the banded bevel, the dark shading corner) removed --
-     this is ice now, not brushed steel. Just a soft even edge and a
-     gentle cool-toned cast shadow for real lift, no shine pattern. */
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
-  filter:drop-shadow(0 4px 8px rgba(140,168,196,0.4));
+  /* Paint, not colored pencil: flat, fully opaque, saturated fill (no
+     gradient wash across the surface -- that read as streaky/uneven,
+     the way pencil coverage does). Shine comes entirely from the
+     highlight below, not from blending the base color itself. */
+  box-shadow: 0 5px 10px rgba(20,55,95,0.4);
 }
 .num-tile-lg .swatch::before{
-  content:'';position:absolute;inset:0;
-  /* Soft light catching one corner, like an ice cube in real light, not
-     a metal sheen band pattern. */
-  background:radial-gradient(circle at 28% 22%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 58%);
-  pointer-events:none;
+  content:'';position:absolute;inset:0;pointer-events:none;
+  /* Real shine: a crisp, high-contrast, completely unblurred reflection
+     -- no feathered/soft edge anywhere. A soft blurred highlight is
+     what was reading as hazy/unsmooth; a hard-edged bright shape is
+     what an actual glossy/lacquered surface looks like. */
+  background:radial-gradient(ellipse 34% 20% at 30% 24%, #ffffff 0%, #ffffff 55%, rgba(255,255,255,0) 100%);
 }
-/* Engraved, not painted-on: transparent fill lets the tile's own metal
-   show straight through the digit shape; a dark shadow on the
-   upper-left edge and a light highlight on the lower-right edge (same
-   light direction as every sphere/tile highlight on this page) is what
-   reads as a real carved recess instead of a flat black number sitting
-   on top. */
 .num-tile-lg .n{
-  position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;color:transparent;
+  position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;
+  color:#ffffff;text-shadow:0 1px 2px rgba(0,0,0,0.45);
   font-size:clamp(1rem,6vw,1.7rem);line-height:1;
-  text-shadow:
-    -0.08em -0.08em 0.03em rgba(0,0,0,0.9),
-    -0.04em -0.04em 0.03em rgba(0,0,0,0.7),
-    0.08em 0.08em 0.03em rgba(255,255,255,1),
-    0.04em 0.04em 0.03em rgba(255,255,255,0.9);
 }
 /* Special Elite only ships one real weight -- font-weight alone does
    nothing, the browser has no bold cut to switch to. A thin black
@@ -888,8 +879,8 @@ const TONES = {
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
   platinum:{ grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #eef1f3 55%, #d3d9dd 100%)', border:'#9aa2a8' },
   copper:  { grad:'radial-gradient(circle at 30% 26%, #ffe8d6 0%, #d9986a 55%, #a85f36 100%)', border:'#8a4a1f' },
-  ice:     { grad:'linear-gradient(150deg, #ffffff 0%, #f2f7fb 42%, #e2ecf3 78%, #d3e0e9 100%)', border:'#c3d4de' },
-  iceDeep: { grad:'linear-gradient(150deg, #f8fbfd 0%, #e9f0f5 42%, #d6e3ea 78%, #c3d4de 100%)', border:'#b3c8d4' },
+  ice:     { grad:'#2e7fd4', border:'#164272' },
+  iceDeep: { grad:'#1f5fa8', border:'#0f3862' },
 };
 // Real metal technique (researched, not guessed): a conic-gradient with
 // alternating light/dark bands radiating around the shape, which is what
@@ -930,9 +921,13 @@ const TONE_CONIC = {
    distinction, not a different material. Also the one place blue is
    used outside the title, which is otherwise banned -- explicitly
    requested here. */
+// Flat, fully saturated -- no gradient wash. The gradient version kept
+// reading as faded/streaky (colored pencil) no matter how it was tinted;
+// a solid opaque fill plus a crisp unblurred highlight (see .swatch::before
+// above) is what actually reads as paint/shine instead.
 const ICE_FILL = {
-  ice:     'linear-gradient(150deg, #ffffff 0%, #f2f7fb 42%, #e2ecf3 78%, #d3e0e9 100%)',
-  iceDeep: 'linear-gradient(150deg, #f8fbfd 0%, #e9f0f5 42%, #d6e3ea 78%, #c3d4de 100%)',
+  ice:     '#2e7fd4',
+  iceDeep: '#1f5fa8',
 };
 Object.assign(TONE_CONIC, ICE_FILL);
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
