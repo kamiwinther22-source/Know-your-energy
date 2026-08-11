@@ -118,15 +118,18 @@ body{
 }
 .num-tile-lg .swatch::before{
   content:'';position:absolute;inset:0;pointer-events:none;
-  /* Real shine: a crisp, high-contrast, completely unblurred reflection
-     -- no feathered/soft edge anywhere. A soft blurred highlight is
-     what was reading as hazy/unsmooth; a hard-edged bright shape is
-     what an actual glossy/lacquered surface looks like. */
-  background:radial-gradient(ellipse 34% 20% at 30% 24%, #ffffff 0%, #ffffff 55%, rgba(255,255,255,0) 100%);
+  /* A soft diagonal sheen band, not a circular blob in one corner --
+     six tiles in a row each showing the identical corner-circle read as
+     a stamped-out repeat rather than shine. A diagonal streak still
+     reads as a glossy reflection but doesn't create that same-shape-
+     same-spot repetition across the row. Soft edge (not hard-edged),
+     per feedback that the softer highlight was the better one. */
+  background:linear-gradient(115deg, rgba(255,255,255,0) 28%, rgba(255,255,255,0.85) 48%, rgba(255,255,255,0) 66%);
+  filter:blur(2.5px);
 }
 .num-tile-lg .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;
-  color:#ffffff;text-shadow:0 1px 2px rgba(0,0,0,0.45);
+  color:#173254;text-shadow:0 1px 1px rgba(255,255,255,0.5);
   font-size:clamp(1rem,6vw,1.7rem);line-height:1;
 }
 /* Special Elite only ships one real weight -- font-weight alone does
@@ -879,8 +882,8 @@ const TONES = {
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
   platinum:{ grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #eef1f3 55%, #d3d9dd 100%)', border:'#9aa2a8' },
   copper:  { grad:'radial-gradient(circle at 30% 26%, #ffe8d6 0%, #d9986a 55%, #a85f36 100%)', border:'#8a4a1f' },
-  ice:     { grad:'#2e7fd4', border:'#164272' },
-  iceDeep: { grad:'#1f5fa8', border:'#0f3862' },
+  ice:     { grad:'#c3d9f2', border:'#8fb0d8' },
+  iceDeep: { grad:'#a8c4e8', border:'#7398c4' },
 };
 // Real metal technique (researched, not guessed): a conic-gradient with
 // alternating light/dark bands radiating around the shape, which is what
@@ -923,11 +926,14 @@ const TONE_CONIC = {
    requested here. */
 // Flat, fully saturated -- no gradient wash. The gradient version kept
 // reading as faded/streaky (colored pencil) no matter how it was tinted;
-// a solid opaque fill plus a crisp unblurred highlight (see .swatch::before
-// above) is what actually reads as paint/shine instead.
+// a solid opaque fill plus a real sheen highlight (see .swatch::before
+// above) is what actually reads as paint/shine instead. Much lighter
+// than the first flat pass -- being flat/opaque is what avoids "faded,"
+// not being dark, so this can go much paler without that problem
+// coming back.
 const ICE_FILL = {
-  ice:     '#2e7fd4',
-  iceDeep: '#1f5fa8',
+  ice:     '#c3d9f2',
+  iceDeep: '#a8c4e8',
 };
 Object.assign(TONE_CONIC, ICE_FILL);
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
