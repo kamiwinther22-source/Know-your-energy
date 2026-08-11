@@ -107,22 +107,25 @@ body{
    not just a bigger version of the same centered stack. */
 .num-strip-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0.5rem 0.32rem;width:calc(100% + 1.7rem);max-width:none;margin:0 -0.85rem;}
 .num-tile-lg{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
+/* A flat two-tone ring wasn't actually shining, it was just two grey
+   lines. Real shine needs the same alternating light/dark band
+   technique already validated on this page's metal elsewhere -- a
+   conic-gradient can't be a box-shadow ring, so the ring is a real
+   second layer: an outer wrapper painted with the metal conic-gradient,
+   with the tile inset by padding so only a thin band of that metal
+   shows around the edge -- a genuine reflective bezel, not two solid
+   colors standing in for one. */
+.num-tile-lg .swatch-ring{
+  width:100%;aspect-ratio:1/1;border-radius:10px;padding:3px;
+  box-shadow:0 5px 10px rgba(20,55,95,0.35);
+}
 .num-tile-lg .swatch{
-  position:relative;overflow:hidden;cursor:pointer;width:100%;aspect-ratio:1/1;
-  display:flex;align-items:center;justify-content:center;border-radius:9px;
+  position:relative;overflow:hidden;cursor:pointer;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;border-radius:7px;
   /* Paint, not colored pencil: flat, fully opaque, saturated fill (no
      gradient wash across the surface -- that read as streaky/uneven,
-     the way pencil coverage does). Shining silver outline: a bright
-     near-white ring right at the edge with a darker silver ring just
-     outside it for real definition -- a single flat border color would
-     just disappear against the light page, this is what actually reads
-     as a polished metal rim. */
-  border:none;
-  box-shadow:
-    0 0 0 1.5px #f4f6f8,
-    0 0 0 3px #93a0aa,
-    0 5px 10px rgba(20,55,95,0.35),
-    inset 0 1.5px 0 rgba(255,255,255,0.75);
+     the way pencil coverage does). */
+  box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.75);
 }
 .num-tile-lg .n{
   position:relative;z-index:1;font-family:'Special Elite',monospace;font-weight:400;
@@ -973,10 +976,9 @@ const NUMS = [
 function buildNumRow(container, items){
   if(!container) return;
   items.forEach(item=>{
-    const t = TONES[item.tone];
     const tile = document.createElement('div');
     tile.className = 'num-tile-lg';
-    tile.innerHTML = `<div class="swatch" style="background:${TONE_CONIC[item.tone]};border-color:${t.border};"><div class="n">${item.n}</div></div><div class="lbl">${item.lbl}</div>`;
+    tile.innerHTML = `<div class="swatch-ring" style="background:${TONE_CONIC.silverL};"><div class="swatch" style="background:${TONE_CONIC[item.tone]};"><div class="n">${item.n}</div></div></div><div class="lbl">${item.lbl}</div>`;
     tile.querySelector('.swatch').addEventListener('click', (e)=>{ e.stopPropagation(); openNumberDef(item); });
     container.appendChild(tile);
   });
