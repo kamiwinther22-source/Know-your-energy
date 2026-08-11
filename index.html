@@ -31,18 +31,24 @@ body{
    font-size floor below is the other half of it. */
 .content{width:100%;max-width:420px;min-width:0;position:relative;z-index:1;}
 
+/* One shared "emphasis label" role -- same family/weight/case/tracking
+   used everywhere something needs to read as a short emphasized label
+   (section titles, the lead key point), instead of each spot inventing
+   its own one-off size. Real type system: hero (tagline) / label (this)
+   / accent (Special Elite, used once, sparingly) / body (DM Sans) --
+   four deliberate roles instead of a different treatment per element. */
 .sys-section-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
-  letter-spacing:0.06em;text-transform:uppercase;color:#17161c;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;
+  letter-spacing:0.05em;text-transform:uppercase;color:#17161c;
   text-align:center;margin-bottom:0.5rem;
 }
 /* "Pop" without color -- a thin rule above/below (real ink, not blue),
    a little extra letter-spacing, and a soft embossed text-shadow for
    dimension instead of a flat, flush-with-the-page line of type. */
 .sys-section-sub{
-  font-family:'Special Elite',monospace;font-weight:400;font-size:1.15rem;
-  letter-spacing:0.02em;color:#17161c;text-align:center;margin:0.75rem auto 0;
-  width:fit-content;padding:0.4rem 0;
+  font-family:'Special Elite',monospace;font-weight:400;font-size:0.92rem;
+  letter-spacing:0.01em;color:#17161c;text-align:center;margin:0.75rem auto 0;
+  width:fit-content;padding:0.35rem 0;
   border-top:1px solid rgba(23,22,28,0.3);border-bottom:1px solid rgba(23,22,28,0.3);
   text-shadow:0 1px 0 rgba(255,255,255,0.9);
 }
@@ -221,7 +227,7 @@ body{
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
 .key-txt{font-size:0.85rem;line-height:1.38;color:#17161c;font-weight:500;}
-.key-txt-lead{font-size:1.15rem;line-height:1.25;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;}
+.key-txt-lead{font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;line-height:1.3;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;}
 .key-txt em{font-style:normal;color:#17161c;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
