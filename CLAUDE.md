@@ -363,9 +363,9 @@ resurrect the "two pages, entry form is done" framing.
 
 ## Open threads not yet resolved
 
-- A full audit of `ASTRO_DEFS`/`NUM_DEFS`/`HD_DEFS`/`GATES` for vague,
-  ungrounded language is in progress, not complete. Category-by-category
-  status:
+- The full audit of `ASTRO_DEFS`/`NUM_DEFS`/`HD_DEFS`/`GATES` for vague,
+  ungrounded language is now **complete** — every category listed below
+  has been checked. Category-by-category status:
   - **`ASTRO_DEFS.sun` (12 signs): audited, complete.** All 12 checked
     against the 10-point checklist and real astrological-consensus
     research (mechanism, strength, shadow, growth edge per sign, cross-
@@ -519,9 +519,52 @@ resurrect the "two pages, entry form is done" framing.
     line keynotes (Investigator/Hermit/Martyr/Opportunist/
     Heretic/Role Model) matched real sources. No factual errors found
     in either category; no edits made. Note: both categories still
-    carry the same systemic repetitive "X is what keeps this gate/
-    period constructive" template documented below as a separate,
-    still-open issue — not something fixed on this pass.
+    carry the same repetitive "X is what keeps this gate/period
+    constructive" closing-sentence template used throughout ASTRO_DEFS
+    and NUM_DEFS — a real, still-open style issue (see below), not
+    something fixed on this pass.
+  - **New content added, not an audit of existing content: `ASTRO_DEFS`
+    now has real, sourced sign-by-sign entries for Chiron, North Node,
+    South Node, and Lilith (48 entries total) — these five "Other
+    Points" (Chiron/Nodes/Lilith/Sirius) previously showed only a
+    single generic one-line `GLOSSARY` description on the results-page
+    chart regardless of which sign they fell in, unlike every planet
+    and the Ascendant/Midheaven, which all get a full personalized
+    interpretation. The render code (`index.html`, the "Other Points"
+    block inside the astrology-card function) was also passing `null`
+    instead of the point's actual sign into the lookup, which is now
+    fixed to pass the real sign. Each of the four new categories was
+    researched against real sourced material (Chiron: the "wounded
+    healer" wound/gift-per-sign tradition; the Nodes: the standard
+    North/South axis growth-vs-comfort-zone tradition, always exactly
+    opposite signs; Lilith: the real "shamed-then-reclaimed instinct"
+    per-sign tradition) and passes the same 10-point checklist —
+    including a careful re-check of Chiron/Scorpio against the settled
+    Scorpio-guardedness precedent below: it's framed as an old wound
+    coloring present-day trust, worth telling apart from present-moment
+    judgment, not as "trust more" or "let your guard down," since
+    Chiron is a wound mechanism distinct from a Sun/Moon/Ascendant sign
+    identity's accurate discernment. **`Sirius` deliberately was not
+    given sign entries** — real fixed-star technique reads Sirius
+    through conjunctions to natal points, not sign placement (its
+    ecliptic position moves roughly 1 degree per 72 years, so it sits
+    in essentially the same sign for anyone alive today); writing 12
+    sign-specific entries for it would have been fabricated content,
+    not sourced technique. This is documented in a code comment at the
+    "Other Points" render block so it isn't mistaken for an oversight
+    later. Sirius still correctly shows its existing generic
+    conjunction-based `GLOSSARY` line.
+- **Open, not yet fixed:** a repetitive closing-sentence template —
+  "the growth edge/mastery/lesson is X, not Y" or "X is what keeps this
+  placement/gate/period constructive" — recurs across nearly all of
+  `ASTRO_DEFS` and the newer Chiron/Node/Lilith entries, and in some
+  `NUM_DEFS` categories. It isn't factually wrong anywhere it's been
+  checked, and in most placements the growth-edge framing is genuinely
+  earned (per checklist item 4), but the sentence structure itself
+  repeats often enough across categories that it may start to read as
+  formulaic rather than specific to each entry. Not fixed on this pass;
+  worth a dedicated style pass across categories later, distinct from
+  the mechanism/accuracy audit above.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
