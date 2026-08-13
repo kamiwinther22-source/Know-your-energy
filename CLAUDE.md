@@ -43,12 +43,16 @@ is heading toward a full rewrite of ~200+ entries (12 signs × 10 planets,
 ~120 planet-in-house combos, numerology's core/Pinnacle/Challenge numbers,
 all 64 Gates, HD types/authorities/profiles), not spot fixes.
 
-**Process:** work one category at a time (Sun signs first, since that's
-the most-read single category). Do the research and redraft yourself,
-batch it, bring her a compact before/after for the whole category in one
-pass — not a conversation per entry. She skims and approves, or flags
-specific ones for real discussion. Track category-by-category status
-somewhere durable so it isn't dependent on memory across sessions.
+**Process:** work one category at a time. Do the research and redraft
+yourself, batch it, bring her a compact before/after for the whole
+category in one pass — not a conversation per entry. She skims and
+approves, or flags specific ones for real discussion. Track category-by-
+category status somewhere durable so it isn't dependent on memory across
+sessions. (An earlier version of this file said to start with Sun signs
+"since that's the most-read single category" — she corrected this: every
+person's chart returns all placements at once, so no one category is
+more important than another. Sun is still a fine place to *start*, just
+not because it matters more.)
 
 **Checklist every entry must pass:**
 1. Names the real, verified mechanism for this specific placement —
@@ -60,15 +64,29 @@ somewhere durable so it isn't dependent on memory across sessions.
    through repetition (e.g. "runs deep").
 3. Shows the full, real picture — doesn't lead with and end on the hard
    part alone, doesn't oversell positivity either.
-4. Lesson/growth-edge framing must be earned in both directions: never
-   invented where the placement doesn't actually have one (the original
-   Scorpio error), but never suppressed or softened where it's real,
-   either. "Lesson" is a genuine, specific part of some placements —
-   Saturn, Chiron, the Nodes, numerology's Karmic Lessons and Karmic Debt
-   Numbers (13/14/16/19) — and not a default to apply everywhere else.
-   The priority is completeness: anything that may genuinely affect how
-   someone experiences their life belongs in the entry, whether or not it
-   happens to carry a "lesson" framing.
+4. **No lesson, no growth edge, no implied verdict about which side of a
+   trait is better — this superseded an earlier, wrong version of this
+   rule.** An earlier version of this checklist said lesson framing was
+   fine, even expected, for placements astrology treats as literal
+   lessons (Saturn, Chiron, the Nodes, Karmic Lessons/Debt Numbers). She
+   corrected this directly, after reading entries that had been "fixed"
+   under that old rule and finding the pattern itself the problem, not
+   just its wording: no entry should tell the reader a trait is something
+   to work on, soften, or grow out of — regardless of which placement
+   it's on. Her test case was her own Sun/Scorpio guardedness: she is
+   rightfully proud of it, has never regretted trusting her own judgment
+   about who to let close, and would reject any wording implying she
+   should. That same standard applies everywhere, not just to Scorpio.
+   The fix: state the tendency plainly — including something that can
+   read as friction to other people, alongside something that reads as a
+   real asset — without declaring either one the "right" way to be or the
+   direction to move toward. Name both sides and stop; let the reader
+   draw their own conclusion. **This applies retroactively to every
+   category already marked "audited, complete" below** — that status was
+   about factual/sourcing accuracy only. None of it has been checked
+   against this rule yet, and the old lesson-ending pattern is still
+   present throughout ASTRO_DEFS, NUM_DEFS, the new Chiron/Node/Lilith
+   entries, and the GATES/HD_DEFS closing-sentence template.
 5. Direct, economical wording — not padded, not hedging, not sideways.
 6. Observational, not advice-giving: describes what a period *is* or
    *supports*, never what happens *if you act a certain way inside it*.
@@ -82,6 +100,20 @@ somewhere durable so it isn't dependent on memory across sessions.
    not the prose style.
 9. Doesn't argue with a strawman left over from a previous draft.
 10. No dressing up plain things with fancier names.
+11. **No jargon, no reaching for a clever or "certain-sounding" turn of
+    phrase — plain, complete, factual sentences, stated observationally.**
+    Not shorter for its own sake: sentences must stay complete, nothing
+    trimmed down to where the meaning has to be guessed at. After writing
+    a line, check: would a reader be left wondering what this actually
+    means? If yes, rewrite it. Real example she flagged as broken: the
+    old `housecombo.moon_8` entry said emotional life was "drawn toward
+    depth rather than surface calm" — sounded moody, explained nothing.
+    Replaced with the plain mechanism: emotional life focuses on what's
+    hidden or intense rather than everyday feelings, closeness usually
+    forms through shared crisis or real vulnerability rather than casual
+    time together, and ordinary calm can feel unfamiliar or hard to
+    trust. She confirmed this version actually landed ("I got a lot more
+    out of that explanation").
 
 ## Codebase structure & tech stack
 
@@ -554,17 +586,26 @@ resurrect the "two pages, entry form is done" framing.
     "Other Points" render block so it isn't mistaken for an oversight
     later. Sirius still correctly shows its existing generic
     conjunction-based `GLOSSARY` line.
-- **Open, not yet fixed:** a repetitive closing-sentence template —
-  "the growth edge/mastery/lesson is X, not Y" or "X is what keeps this
-  placement/gate/period constructive" — recurs across nearly all of
-  `ASTRO_DEFS` and the newer Chiron/Node/Lilith entries, and in some
-  `NUM_DEFS` categories. It isn't factually wrong anywhere it's been
-  checked, and in most placements the growth-edge framing is genuinely
-  earned (per checklist item 4), but the sentence structure itself
-  repeats often enough across categories that it may start to read as
-  formulaic rather than specific to each entry. Not fixed on this pass;
-  worth a dedicated style pass across categories later, distinct from
-  the mechanism/accuracy audit above.
+- **Open, in progress — this is the actual priority, not a minor style
+  pass.** An earlier version of this file described the repeating "the
+  growth edge is X" / "the lesson is Y, not Z" closing sentence as a
+  low-priority formatting quirk to fix later. That was wrong. She
+  corrected it directly: reading a full chart (every placement returned
+  together) made clear that ending nearly every single entry on a named
+  lesson is the actual problem this whole audit exists to remove — see
+  checklist item 4 above for the corrected rule and her Scorpio test
+  case. **Status:** `ASTRO_DEFS.sun` (12 signs) has been rewritten to the
+  new standard and was in front of her for review when this note was
+  last updated. Every other category — `moon`/`mercury`/`venus`/`mars`/
+  `jupiter`/`saturn`/`uranus`/`neptune`/`pluto`/`ascendant`/`midheaven`/
+  `house`/`housecombo` in `ASTRO_DEFS`, the new `chiron`/`northnode`/
+  `southnode`/`lilith` entries (written this session, under the old
+  wrong rule — need redoing, not just auditing), every `NUM_DEFS`
+  category, and the closing-sentence template in `GATES` and `HD_DEFS`
+  — still has the old lesson-ending pattern and needs the same rewrite.
+  Do not mark any category "audited, complete" again until it's actually
+  been checked against checklist item 4's corrected rule, not just
+  against the earlier mechanism/accuracy pass.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
