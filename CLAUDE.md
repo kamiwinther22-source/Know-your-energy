@@ -439,20 +439,25 @@ resurrect the "two pages, entry form is done" framing.
     category error carried over from planet entries). Other 10 signs
     passed as-is.
   - **`NUM_DEFS.personalyear`, `.personalmonth`, `.personalday`,
-    `.essence` (49 entries): checklist-compliance pass done, not yet a
-    full sourced-accuracy audit.** These are the only NUM_DEFS categories
-    describing an actual real-time period, so they're the ones the
-    "observational, not advice-giving" checklist rule (item 6) actually
-    binds — unlike the permanent-trait categories (Life Path, Expression,
-    etc.), which use the same established growth-edge phrasing as the
-    already-audited Sun signs and aren't subject to this rule. Found and
-    fixed roughly 20 entries across these four categories that gave
-    literal second-person commands ("Make the ask, send the invoice,
-    close the loop," "Push hard," "Cancel what you can," "Say the thing
-    you've been sitting on," etc.) instead of describing what the period
-    supports — reworded all of them to observational phrasing. Still
-    needs a real sourced-accuracy pass like Sun/Moon/etc. got; this pass
-    only fixed the advice-giving violation.
+    `.essence` (49 entries): audited, complete.** These are the only
+    NUM_DEFS categories describing an actual real-time period, so
+    they're the ones the "observational, not advice-giving" checklist
+    rule (item 6) actually binds — unlike the permanent-trait categories
+    (Life Path, Expression, etc.), which use the same established
+    growth-edge phrasing as the already-audited Sun signs and aren't
+    subject to this rule. Found and fixed roughly 20 entries across
+    these four categories that gave literal second-person commands
+    ("Make the ask, send the invoice, close the loop," "Push hard,"
+    "Cancel what you can," "Say the thing you've been sitting on," etc.)
+    instead of describing what the period supports — reworded all of
+    them to observational phrasing. Sourced-accuracy pass now done too:
+    verified the standard 9-year cycle (plant/1 → nurture/2 → express/3
+    → build/4 → change/5 → tend/6 → reflect/7 → harvest/8 → release/9)
+    against real numerology sources, matches the site's framing exactly.
+    Confirmed Essence is a genuine, distinct numerology concept (a
+    name-derived background cycle, not a restatement of Personal Year)
+    and that the site's "current chapter of life" framing is accurate to
+    it. No further edits needed.
   - **`ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto, 36 entries):
     audited, complete.** Real transit-date claims fact-checked against
     ephemeris data, not just the interpretive content. One genuine
