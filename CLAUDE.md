@@ -495,11 +495,33 @@ resurrect the "two pages, entry form is done" framing.
     about reaping what's been sown, with rigidity/ruthlessness as the
     actual shadow) — see the personalyear/month/day/essence entry
     above for that fix and the separate advice-giving cleanup.
-  - `HD_DEFS` and `GATES` (64 gates): not yet audited. Note: `GATES`
-    content, on inspection, already looks substantive and well-
-    constructed (consistent gift/shadow mechanism pattern per gate) —
-    still needs a real sourced pass before calling it audited, not
-    assumed fine because it reads well.
+  - **`GATES` (64 gates) and `HD_DEFS` (types/authorities/profiles, 24
+    entries): audited, complete.** Verified the most objectively
+    checkable fact first — every gate's Center assignment — against
+    real Human Design sources: all 64 gates' centers (Head 61/63/64,
+    Ajna 4/11/17/24/43/47, Throat 8/12/16/20/23/31/33/35/45/56/62, G
+    1/2/7/10/13/15/25/46, Heart/Ego 21/26/40/51, Solar Plexus
+    6/22/30/36/37/49/55, Sacral 3/5/9/14/27/29/34/42/59, Spleen
+    18/28/32/44/48/50/57, Root 19/38/39/41/52/53/54/58/60) matched
+    exactly, no errors. Spot-checked gate names/mechanisms against
+    sourced material (Gate 2 "The Driver"/Direction of the Self, Gate 6
+    Friction/intimacy-through-conflict, Gate 19 Wanting, Gate 41
+    Contraction, Gate 45 The Gatherer, Gate 60 Acceptance, Gate 61 Inner
+    Truth) — all confirmed accurate, no clichés, no invented
+    lesson/shadow framing. `HD_DEFS`: verified all 5 Types (Generator,
+    Manifesting Generator, Projector, Manifestor, Reflector) including
+    their population percentages, all 7 Authorities (Sacral, Emotional,
+    Splenic, Ego, Self-Projected, Mental/Environmental, Lunar) —
+    specifically confirmed Mental Authority is real and distinct from
+    Self-Projected (G Center undefined vs. defined), and all 12 real
+    Profile combinations (1/3, 1/4, 2/4, 2/5, 3/5, 3/6, 4/6, 4/1, 5/1,
+    5/2, 6/2, 6/3 — the correct standard list, no invented profiles) —
+    line keynotes (Investigator/Hermit/Martyr/Opportunist/
+    Heretic/Role Model) matched real sources. No factual errors found
+    in either category; no edits made. Note: both categories still
+    carry the same systemic repetitive "X is what keeps this gate/
+    period constructive" template documented below as a separate,
+    still-open issue — not something fixed on this pass.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
