@@ -413,13 +413,21 @@ resurrect the "two pages, entry form is done" framing.
     (that belongs to Neptune/Pisces) — the false "at home" framing was
     borrowed from the two entries that legitimately have it (moon_4,
     mercury_3) and has been removed. The other 119 entries passed as-is.
-  - **`ASTRO_DEFS.ascendant` (12 signs): one fix applied, not fully
-    audited.** Ascendant/Scorpio had the same rejected "let a first
-    impression include a little vulnerability, not just control" framing
-    as the Sun/Moon fixes — corrected the same way (the guard is doing
-    its job; what changes is who eventually earns past it, not how much
-    a stranger gets shown). The other 11 signs haven't had a full sourced
-    audit pass yet.
+  - **`ASTRO_DEFS.ascendant` (12 signs): audited, complete.** Ascendant/
+    Scorpio had the same rejected "let a first impression include a
+    little vulnerability, not just control" framing as the Sun/Moon
+    fixes — corrected the same way (the guard is doing its job; what
+    changes is who eventually earns past it, not how much a stranger
+    gets shown). The other 11 signs were checked against real Rising-
+    sign sources and the checklist. Cancer's growth-edge line ("showing
+    warmth earlier... instead of waiting to be proven safe") was
+    specifically re-checked against the Scorpio precedent since the
+    wording pattern is similar, and confirmed to be a different,
+    legitimate mechanism — Cancer's shell is about self-protection from
+    vulnerability, not judgment of others' trustworthiness the way
+    Scorpio's guardedness is, and real Cancer tradition does treat
+    learning to be seen as a genuine growth theme. Left unchanged. The
+    other 10 signs passed as-is, no changes made.
   - **`ASTRO_DEFS.midheaven` (12 signs): audited, complete.** One fix:
     Midheaven/Scorpio had the same rejected "let your reputation include
     more transparency" framing as the other Scorpio fixes — the privacy
