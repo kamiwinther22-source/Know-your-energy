@@ -358,6 +358,16 @@ for no real reason reads as sloppy, not as a redesign — the bar is
 
 ## Open threads not yet resolved
 
+- **Relational charts (synastry/composite for two-person comparisons) are
+  spec'd but not built.** See `RELATIONAL_CHARTS.md` for her full
+  directions on how the Claude API should interpret two-person astrology
+  comparisons (Synastry + Composite), broken out by relationship type
+  (romantic / non-romantic / parent-child). Astrology is the only system
+  spec'd out so far — she's said this will be tweaked to also incorporate
+  numerology and Human Design. Nothing in `worker.js` or `index.html`
+  implements this yet; `/report` only generates single-person readings
+  today. Read that file before starting any relational-chart work so the
+  directions aren't reinvented or contradicted.
 - A full audit of `ASTRO_DEFS`/`NUM_DEFS`/`HD_DEFS`/`GATES` for vague,
   ungrounded language is in progress, not complete. Category-by-category
   status:
