@@ -772,7 +772,14 @@ body{
   // geometry (centerline + perpendicular half-width per sample point),
   // not a hand-drawn blob path. Three stacked passes, each with its own
   // soft drop-shadow, is what actually reads as physical thickness --
-  // one flat shape with a single shadow does not.
+  // one flat shape with a single shadow does not. Anchored to the top
+  // of the page (fixed y-range) regardless of total document height, so
+  // it stays a hero treatment behind the title/numbers/tagline and does
+  // not stretch thin across the whole page or compete with the form
+  // fields further down. This is the original, approved version --
+  // every later change to it (extending it down the page, the silver
+  // band, the diagonal sweep fix) got rejected in turn, so it's staying
+  // exactly this shape now.
   function ribbonPath(points, halfWidths){
     const top=[], bot=[];
     for(let i=0;i<points.length;i++){
@@ -792,32 +799,22 @@ body{
     d += ' Z';
     return d;
   }
-  // Flows DOWN the page (t drives y, the natural long axis of a tall
-  // phone screen) with a gentle side-to-side sway, instead of sweeping
-  // x all the way across the width while also dropping -- that
-  // combination is what read as "a diagonal cutting across the page"
-  // rather than a ribbon draping down it.
-  function creamLayerPath(seed, yOffset, hwBase, hwAmp, W, N, growth, ampMul, freqMul){
+  function creamLayerPath(seed, yOffset, hwBase, hwAmp, W, N){
     const pts = [], hws = [];
-    const cx = W*0.5;
-    const xAmp = W*0.32*ampMul;
     for(let i=0;i<=N;i++){
       const t = i/N;
-      const x = cx + xAmp*Math.sin(t*Math.PI*freqMul - 0.3 + seed);
-      const y = yOffset + t*growth;
+      const x = -80 + t*(W+160);
+      const y = yOffset + 130*Math.sin(t*Math.PI*1.0 - 0.3 + seed) + t*200;
       pts.push([x,y]);
       hws.push(hwBase + hwAmp*Math.sin(t*Math.PI*2.0 + seed*1.7));
     }
     return ribbonPath(pts, hws);
   }
-  // Extended down through the tagline and first cloud cluster (not just
-  // the title/tiles) so it reads as one continuous atmosphere, before
-  // the trail below takes over for the rest of the page.
   function creamHero(W){
-    const N = 60;
-    const pathBack  = creamLayerPath(0.6, 20,  62, 24, W, N, 640, 1.25, 0.62);
-    const pathMid   = creamLayerPath(0.15, 35, 50, 19, W, N, 640, 1.2, 0.62);
-    const pathFront = creamLayerPath(-0.3, 50, 38, 15, W, N, 640, 1.15, 0.62);
+    const N = 44;
+    const pathBack  = creamLayerPath(0.6, 20,  58, 20, W, N);
+    const pathMid   = creamLayerPath(0.15, 35, 46, 16, W, N);
+    const pathFront = creamLayerPath(-0.3, 50, 34, 12, W, N);
     return `
       <g filter="url(#creamLift1)"><path d="${pathBack}" fill="url(#creamBack)" filter="url(#creamMarble)"/></g>
       <g filter="url(#creamLift2)"><path d="${pathMid}" fill="url(#creamMid)" filter="url(#creamMarble2)"/></g>
@@ -825,24 +822,6 @@ body{
         <path d="${pathFront}" fill="url(#creamFront)" filter="url(#creamMarble)"/>
         <path d="${pathFront}" fill="url(#creamSheen)" filter="url(#creamMarble)"/>
       </g>`;
-  }
-  /* Carries the same material the rest of the way down the page,
-     hugging the right edge and tapering out before it would ever sit
-     under form input text. */
-  function creamTrail(W, H){
-    const startY = 640;
-    if(H <= startY + 40) return '';
-    const N = 40;
-    const pts=[], hws=[];
-    for(let i=0;i<=N;i++){
-      const t = i/N;
-      const y = startY + t*(H-startY);
-      const x = W - 40 + 22*Math.sin(t*Math.PI*2.1);
-      pts.push([x,y]);
-      hws.push(34*(1-t*0.82) + 4);
-    }
-    const path = ribbonPath(pts, hws);
-    return `<g filter="url(#creamLift3)"><path d="${path}" fill="url(#creamBack)" opacity="0.75" filter="url(#creamMarble2)"/></g>`;
   }
 
   function buildWisps(){
@@ -853,7 +832,6 @@ body{
     let body = '';
     for(let i=0;i<numClusters;i++) body += cluster(i);
     body += creamHero(VW);
-    body += creamTrail(VW, h);
     svg.setAttribute('viewBox', `0 0 ${VW} ${h}`);
     svg.setAttribute('height', h);
     svg.setAttribute('preserveAspectRatio','none');
