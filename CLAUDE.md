@@ -43,12 +43,16 @@ is heading toward a full rewrite of ~200+ entries (12 signs × 10 planets,
 ~120 planet-in-house combos, numerology's core/Pinnacle/Challenge numbers,
 all 64 Gates, HD types/authorities/profiles), not spot fixes.
 
-**Process:** work one category at a time (Sun signs first, since that's
-the most-read single category). Do the research and redraft yourself,
-batch it, bring her a compact before/after for the whole category in one
-pass — not a conversation per entry. She skims and approves, or flags
-specific ones for real discussion. Track category-by-category status
-somewhere durable so it isn't dependent on memory across sessions.
+**Process:** work one category at a time. Do the research and redraft
+yourself, batch it, bring her a compact before/after for the whole
+category in one pass — not a conversation per entry. She skims and
+approves, or flags specific ones for real discussion. Track category-by-
+category status somewhere durable so it isn't dependent on memory across
+sessions. (An earlier version of this file said to start with Sun signs
+"since that's the most-read single category" — she corrected this: every
+person's chart returns all placements at once, so no one category is
+more important than another. Sun is still a fine place to *start*, just
+not because it matters more.)
 
 **Checklist every entry must pass:**
 1. Names the real, verified mechanism for this specific placement —
@@ -60,15 +64,29 @@ somewhere durable so it isn't dependent on memory across sessions.
    through repetition (e.g. "runs deep").
 3. Shows the full, real picture — doesn't lead with and end on the hard
    part alone, doesn't oversell positivity either.
-4. Lesson/growth-edge framing must be earned in both directions: never
-   invented where the placement doesn't actually have one (the original
-   Scorpio error), but never suppressed or softened where it's real,
-   either. "Lesson" is a genuine, specific part of some placements —
-   Saturn, Chiron, the Nodes, numerology's Karmic Lessons and Karmic Debt
-   Numbers (13/14/16/19) — and not a default to apply everywhere else.
-   The priority is completeness: anything that may genuinely affect how
-   someone experiences their life belongs in the entry, whether or not it
-   happens to carry a "lesson" framing.
+4. **No lesson, no growth edge, no implied verdict about which side of a
+   trait is better — this superseded an earlier, wrong version of this
+   rule.** An earlier version of this checklist said lesson framing was
+   fine, even expected, for placements astrology treats as literal
+   lessons (Saturn, Chiron, the Nodes, Karmic Lessons/Debt Numbers). She
+   corrected this directly, after reading entries that had been "fixed"
+   under that old rule and finding the pattern itself the problem, not
+   just its wording: no entry should tell the reader a trait is something
+   to work on, soften, or grow out of — regardless of which placement
+   it's on. Her test case was her own Sun/Scorpio guardedness: she is
+   rightfully proud of it, has never regretted trusting her own judgment
+   about who to let close, and would reject any wording implying she
+   should. That same standard applies everywhere, not just to Scorpio.
+   The fix: state the tendency plainly — including something that can
+   read as friction to other people, alongside something that reads as a
+   real asset — without declaring either one the "right" way to be or the
+   direction to move toward. Name both sides and stop; let the reader
+   draw their own conclusion. **This applies retroactively to every
+   category already marked "audited, complete" below** — that status was
+   about factual/sourcing accuracy only. None of it has been checked
+   against this rule yet, and the old lesson-ending pattern is still
+   present throughout ASTRO_DEFS, NUM_DEFS, the new Chiron/Node/Lilith
+   entries, and the GATES/HD_DEFS closing-sentence template.
 5. Direct, economical wording — not padded, not hedging, not sideways.
 6. Observational, not advice-giving: describes what a period *is* or
    *supports*, never what happens *if you act a certain way inside it*.
@@ -82,6 +100,68 @@ somewhere durable so it isn't dependent on memory across sessions.
    not the prose style.
 9. Doesn't argue with a strawman left over from a previous draft.
 10. No dressing up plain things with fancier names.
+11. **No jargon, no reaching for a clever or "certain-sounding" turn of
+    phrase — plain, complete, factual sentences, stated observationally.**
+    Not shorter for its own sake: sentences must stay complete, nothing
+    trimmed down to where the meaning has to be guessed at. After writing
+    a line, check: would a reader be left wondering what this actually
+    means? If yes, rewrite it. Real example she flagged as broken: the
+    old `housecombo.moon_8` entry said emotional life was "drawn toward
+    depth rather than surface calm" — sounded moody, explained nothing.
+    Replaced with the plain mechanism: emotional life focuses on what's
+    hidden or intense rather than everyday feelings, closeness usually
+    forms through shared crisis or real vulnerability rather than casual
+    time together, and ordinary calm can feel unfamiliar or hard to
+    trust. She confirmed this version actually landed ("I got a lot more
+    out of that explanation").
+12. **Never reduce a placement to one or two traits.** Her real
+    complaint about an early Sun/Leo rewrite: "there's a lot more to
+    them than needing recognition." A placement should read as several
+    distinct, real facets woven together (e.g. Leo: generosity/warmth
+    given without calculation, a natural presence, pride in creative
+    work, loyalty once committed, *and* pride's harder edge — five
+    separate things, not one theme restated). Research each placement
+    broadly enough to find that range before writing it; don't lock
+    onto the single most-searched trait and elaborate on just that one.
+13. **Name what's distinctive about a trait without comparing it to
+    other people or other placements in the sentence itself.** Not "this
+    bothers you more than it bothers most people" or "lands harder on
+    you than it would on someone else" — just state what's true of this
+    placement directly. Research can and should identify what's
+    genuinely *different* about a sign (that's how you decide which
+    traits are worth including at all) — the rule is about the written
+    sentence, not the research process: the comparison should never
+    surface as comparison language in the final text. This pattern
+    ("more than most people," "harder than for other placements") turned
+    out to be nearly as widespread across ASTRO_DEFS/NUM_DEFS as the
+    lesson-ending pattern in item 4 — same retroactive scope applies.
+14. **For planet-in-sign entries specifically, ask two questions before
+    finalizing:** (1) How is this planet's placement in this sign
+    actually distinct from the Sun being in that sign — i.e. does the
+    entry read differently because it's filtered through *this* planet's
+    real domain (Moon = emotional/instinctive response, Mercury =
+    thinking/communication, Venus = love and values, Mars = drive and
+    action, etc.), not just the Sun's identity content with the planet
+    name swapped in? (2) The "blind guess" test: if you lined up entries
+    for every sign of just one planet (e.g. all 12 Moon signs) with the
+    sign names hidden, could a reader actually tell which description
+    belongs to which sign from real, distinguishing tells — or is the
+    language generic enough it could apply to several signs
+    interchangeably? If the second is true, the entry needs sharper,
+    more specific detail.
+
+**Current status of this rewrite (all of the above, not just
+factual/sourcing accuracy):** `ASTRO_DEFS.sun` (12 signs) is the only
+category confirmed against the full checklist above, including items
+12-14, as of this note. It went through several real rounds of her
+catching problems before it held — an early Leo draft got flagged for
+being reduced to one trait (recognition) instead of the sign's real
+range, then for comparison language ("harder to sit with than it is for
+other people"), and a specific claim (Pisces/fantasy-as-escape) got
+independently verified against real sources before she accepted it.
+Expect the same multi-round process for every other category — a
+first draft passing items 1-11 is not sufficient, since items 12-14 are
+new corrections that nothing has been checked against except `sun`.
 
 ## Codebase structure & tech stack
 
@@ -255,18 +335,23 @@ for no real reason reads as sloppy, not as a redesign — the bar is
   built to match specific glitter reference images she shared earlier in
   conversation — never invent a sparkle effect from scratch.
 
-## Two distinct front-end pages — do not conflate them
+## Correction — there is only one audience for this page, not two
 
-- **The entry/data form** (navy background, gold cursive title, pricing list,
-  birth-data fields) is for people who *already intentionally* came looking
-  for this app (e.g. an app-store listing). It works today and does not need
-  a redesign for that use case.
-- **A cold-open, scroll-stopping landing page** for people with zero context
-  who know nothing about astrology/numerology/Human Design and need to be
-  visually stopped mid-scroll before they'd ever read a tagline — this is a
-  genuinely separate, still-unsolved page. Past attempts got folded back
-  into the entry form and never shipped as their own thing. Don't assume
-  work on one of these pages says anything about the other.
+An earlier version of this file claimed the entry/data-form page (title,
+birth-data fields, the "your unique design described by 3 separate
+systems" preview) was for people who *already intentionally* came looking
+for the app, and that a *separate*, still-unbuilt cold-open page was
+needed to catch people with zero context. **She corrected this directly
+and this was wrong:** "the entry page isn't for people who came looking
+for this — I've been clear all along that this is for people who don't
+even know anything about astrology numerology or human design. The
+entire purpose is to catch attention, have them become interested enough
+to go ahead and want to learn more about it. That is the goal." The
+entry/data-form page itself IS the cold-open, scroll-stopping page — it
+has to work for someone with zero context, not just for someone who
+already searched for this. There is no second, separate landing page to
+build later; this is the one page that has to do that job. Do not
+resurrect the "two pages, entry form is done" framing.
 
 ## Real repo facts worth not re-discovering
 
@@ -358,10 +443,17 @@ for no real reason reads as sloppy, not as a redesign — the bar is
 
 ## Open threads not yet resolved
 
-- A full audit of `ASTRO_DEFS`/`NUM_DEFS`/`HD_DEFS`/`GATES` for vague,
-  ungrounded language is in progress, not complete. Category-by-category
-  status:
-  - **`ASTRO_DEFS.sun` (12 signs): audited, complete.** All 12 checked
+- The audit below covers the *original* checklist (items 1-11,
+  mechanism/sourcing/cliché/wording accuracy) and was completed under
+  that scope. **It does not cover items 12-14** (no single/double-trait
+  reduction, no comparison language, planet-domain/blind-guess
+  specificity) — those were added later after she caught real problems
+  in the Sun rewrite that this pass had not screened for. See the
+  "Open, in progress" note further below for the actual current status
+  against the full checklist; nothing except `ASTRO_DEFS.sun` has been
+  checked against items 12-14 yet, regardless of what "audited,
+  complete" says in the entries below.
+  - **`ASTRO_DEFS.sun` (12 signs): audited against items 1-11.** All 12 checked
     against the 10-point checklist and real astrological-consensus
     research (mechanism, strength, shadow, growth edge per sign, cross-
     checked against cafeastrology/numerologist.com/Wikipedia/shadow-
@@ -408,13 +500,21 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     (that belongs to Neptune/Pisces) — the false "at home" framing was
     borrowed from the two entries that legitimately have it (moon_4,
     mercury_3) and has been removed. The other 119 entries passed as-is.
-  - **`ASTRO_DEFS.ascendant` (12 signs): one fix applied, not fully
-    audited.** Ascendant/Scorpio had the same rejected "let a first
-    impression include a little vulnerability, not just control" framing
-    as the Sun/Moon fixes — corrected the same way (the guard is doing
-    its job; what changes is who eventually earns past it, not how much
-    a stranger gets shown). The other 11 signs haven't had a full sourced
-    audit pass yet.
+  - **`ASTRO_DEFS.ascendant` (12 signs): audited, complete.** Ascendant/
+    Scorpio had the same rejected "let a first impression include a
+    little vulnerability, not just control" framing as the Sun/Moon
+    fixes — corrected the same way (the guard is doing its job; what
+    changes is who eventually earns past it, not how much a stranger
+    gets shown). The other 11 signs were checked against real Rising-
+    sign sources and the checklist. Cancer's growth-edge line ("showing
+    warmth earlier... instead of waiting to be proven safe") was
+    specifically re-checked against the Scorpio precedent since the
+    wording pattern is similar, and confirmed to be a different,
+    legitimate mechanism — Cancer's shell is about self-protection from
+    vulnerability, not judgment of others' trustworthiness the way
+    Scorpio's guardedness is, and real Cancer tradition does treat
+    learning to be seen as a genuine growth theme. Left unchanged. The
+    other 10 signs passed as-is, no changes made.
   - **`ASTRO_DEFS.midheaven` (12 signs): audited, complete.** One fix:
     Midheaven/Scorpio had the same rejected "let your reputation include
     more transparency" framing as the other Scorpio fixes — the privacy
@@ -426,20 +526,25 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     category error carried over from planet entries). Other 10 signs
     passed as-is.
   - **`NUM_DEFS.personalyear`, `.personalmonth`, `.personalday`,
-    `.essence` (49 entries): checklist-compliance pass done, not yet a
-    full sourced-accuracy audit.** These are the only NUM_DEFS categories
-    describing an actual real-time period, so they're the ones the
-    "observational, not advice-giving" checklist rule (item 6) actually
-    binds — unlike the permanent-trait categories (Life Path, Expression,
-    etc.), which use the same established growth-edge phrasing as the
-    already-audited Sun signs and aren't subject to this rule. Found and
-    fixed roughly 20 entries across these four categories that gave
-    literal second-person commands ("Make the ask, send the invoice,
-    close the loop," "Push hard," "Cancel what you can," "Say the thing
-    you've been sitting on," etc.) instead of describing what the period
-    supports — reworded all of them to observational phrasing. Still
-    needs a real sourced-accuracy pass like Sun/Moon/etc. got; this pass
-    only fixed the advice-giving violation.
+    `.essence` (49 entries): audited, complete.** These are the only
+    NUM_DEFS categories describing an actual real-time period, so
+    they're the ones the "observational, not advice-giving" checklist
+    rule (item 6) actually binds — unlike the permanent-trait categories
+    (Life Path, Expression, etc.), which use the same established
+    growth-edge phrasing as the already-audited Sun signs and aren't
+    subject to this rule. Found and fixed roughly 20 entries across
+    these four categories that gave literal second-person commands
+    ("Make the ask, send the invoice, close the loop," "Push hard,"
+    "Cancel what you can," "Say the thing you've been sitting on," etc.)
+    instead of describing what the period supports — reworded all of
+    them to observational phrasing. Sourced-accuracy pass now done too:
+    verified the standard 9-year cycle (plant/1 → nurture/2 → express/3
+    → build/4 → change/5 → tend/6 → reflect/7 → harvest/8 → release/9)
+    against real numerology sources, matches the site's framing exactly.
+    Confirmed Essence is a genuine, distinct numerology concept (a
+    name-derived background cycle, not a restatement of Personal Year)
+    and that the site's "current chapter of life" framing is accurate to
+    it. No further edits needed.
   - **`ASTRO_DEFS` outer planets (Uranus/Neptune/Pluto, 36 entries):
     audited, complete.** Real transit-date claims fact-checked against
     ephemeris data, not just the interpretive content. One genuine
@@ -477,11 +582,93 @@ for no real reason reads as sloppy, not as a redesign — the bar is
     about reaping what's been sown, with rigidity/ruthlessness as the
     actual shadow) — see the personalyear/month/day/essence entry
     above for that fix and the separate advice-giving cleanup.
-  - `HD_DEFS` and `GATES` (64 gates): not yet audited. Note: `GATES`
-    content, on inspection, already looks substantive and well-
-    constructed (consistent gift/shadow mechanism pattern per gate) —
-    still needs a real sourced pass before calling it audited, not
-    assumed fine because it reads well.
+  - **`GATES` (64 gates) and `HD_DEFS` (types/authorities/profiles, 24
+    entries): audited, complete.** Verified the most objectively
+    checkable fact first — every gate's Center assignment — against
+    real Human Design sources: all 64 gates' centers (Head 61/63/64,
+    Ajna 4/11/17/24/43/47, Throat 8/12/16/20/23/31/33/35/45/56/62, G
+    1/2/7/10/13/15/25/46, Heart/Ego 21/26/40/51, Solar Plexus
+    6/22/30/36/37/49/55, Sacral 3/5/9/14/27/29/34/42/59, Spleen
+    18/28/32/44/48/50/57, Root 19/38/39/41/52/53/54/58/60) matched
+    exactly, no errors. Spot-checked gate names/mechanisms against
+    sourced material (Gate 2 "The Driver"/Direction of the Self, Gate 6
+    Friction/intimacy-through-conflict, Gate 19 Wanting, Gate 41
+    Contraction, Gate 45 The Gatherer, Gate 60 Acceptance, Gate 61 Inner
+    Truth) — all confirmed accurate, no clichés, no invented
+    lesson/shadow framing. `HD_DEFS`: verified all 5 Types (Generator,
+    Manifesting Generator, Projector, Manifestor, Reflector) including
+    their population percentages, all 7 Authorities (Sacral, Emotional,
+    Splenic, Ego, Self-Projected, Mental/Environmental, Lunar) —
+    specifically confirmed Mental Authority is real and distinct from
+    Self-Projected (G Center undefined vs. defined), and all 12 real
+    Profile combinations (1/3, 1/4, 2/4, 2/5, 3/5, 3/6, 4/6, 4/1, 5/1,
+    5/2, 6/2, 6/3 — the correct standard list, no invented profiles) —
+    line keynotes (Investigator/Hermit/Martyr/Opportunist/
+    Heretic/Role Model) matched real sources. No factual errors found
+    in either category; no edits made. Note: both categories still
+    carry the same repetitive "X is what keeps this gate/period
+    constructive" closing-sentence template used throughout ASTRO_DEFS
+    and NUM_DEFS — a real, still-open style issue (see below), not
+    something fixed on this pass.
+  - **New content added, not an audit of existing content: `ASTRO_DEFS`
+    now has real, sourced sign-by-sign entries for Chiron, North Node,
+    South Node, and Lilith (48 entries total) — these five "Other
+    Points" (Chiron/Nodes/Lilith/Sirius) previously showed only a
+    single generic one-line `GLOSSARY` description on the results-page
+    chart regardless of which sign they fell in, unlike every planet
+    and the Ascendant/Midheaven, which all get a full personalized
+    interpretation. The render code (`index.html`, the "Other Points"
+    block inside the astrology-card function) was also passing `null`
+    instead of the point's actual sign into the lookup, which is now
+    fixed to pass the real sign. Each of the four new categories was
+    researched against real sourced material (Chiron: the "wounded
+    healer" wound/gift-per-sign tradition; the Nodes: the standard
+    North/South axis growth-vs-comfort-zone tradition, always exactly
+    opposite signs; Lilith: the real "shamed-then-reclaimed instinct"
+    per-sign tradition) and passes the same 10-point checklist —
+    including a careful re-check of Chiron/Scorpio against the settled
+    Scorpio-guardedness precedent below: it's framed as an old wound
+    coloring present-day trust, worth telling apart from present-moment
+    judgment, not as "trust more" or "let your guard down," since
+    Chiron is a wound mechanism distinct from a Sun/Moon/Ascendant sign
+    identity's accurate discernment. **`Sirius` deliberately was not
+    given sign entries** — real fixed-star technique reads Sirius
+    through conjunctions to natal points, not sign placement (its
+    ecliptic position moves roughly 1 degree per 72 years, so it sits
+    in essentially the same sign for anyone alive today); writing 12
+    sign-specific entries for it would have been fabricated content,
+    not sourced technique. This is documented in a code comment at the
+    "Other Points" render block so it isn't mistaken for an oversight
+    later. Sirius still correctly shows its existing generic
+    conjunction-based `GLOSSARY` line.
+- **Open, in progress — this is the actual priority, not a minor style
+  pass.** An earlier version of this file described the repeating "the
+  growth edge is X" / "the lesson is Y, not Z" closing sentence as a
+  low-priority formatting quirk to fix later. That was wrong. She
+  corrected it directly, then kept correcting the rewrite in progress:
+  first that ending nearly every entry on a named lesson was the real
+  problem (checklist item 4), then that a rewritten entry (Leo) had
+  been narrowed to one or two traits instead of a sign's real range
+  (item 12), then that stating a trait by comparing it to "most people"
+  or "other placements" was its own separate problem, nearly as
+  widespread as the lesson-ending pattern (item 13), then a forward-
+  looking process note for every placement beyond Sun: check how a
+  planet's own domain (not just the sign) changes the entry, and
+  whether the entry is specific enough that someone could tell signs
+  apart blind (item 14). **Status:** `ASTRO_DEFS.sun` (12 signs) is the
+  only category actually checked against the full, corrected checklist
+  (items 1-14) — it went through several real rounds before she
+  confirmed it held, including one factual claim (Pisces and escapism)
+  she asked to see re-verified against real sources before accepting
+  it, which it was. Every other category — `moon`/`mercury`/`venus`/
+  `mars`/`jupiter`/`saturn`/`uranus`/`neptune`/`pluto`/`ascendant`/
+  `midheaven`/`house`/`housecombo` in `ASTRO_DEFS`, the `chiron`/
+  `northnode`/`southnode`/`lilith` entries, every `NUM_DEFS` category,
+  and the closing-sentence template in `GATES` and `HD_DEFS` — still
+  has the old lesson-ending pattern *and* has not been checked against
+  items 12-14 at all. Do not mark any category "audited, complete"
+  again until it's been checked against all of items 1-14, not just
+  the original mechanism/accuracy pass or just item 4.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
