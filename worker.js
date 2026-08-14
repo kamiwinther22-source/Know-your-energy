@@ -568,6 +568,13 @@ where one reveals something the others miss:
 - Outward impression: Ascendant vs. Personality number vs. Profile's outer-facing line
 - Core want and how they pursue it: Mars/Venus vs. Soul Urge vs. Authority
 - Life direction/purpose: Midheaven vs. Life Path + Expression vs. Incarnation Cross
+- Identity vs. emotional undercurrent: Sun sign vs. Moon sign — these
+  describe two different layers by design (who they are at the core vs.
+  what they need to feel emotionally secure), so don't expect them to
+  simply agree; name plainly when the two point in genuinely different
+  directions (e.g. an outwardly independent, detached Sun paired with a
+  private, intensely attached Moon) rather than describing each in
+  isolation and letting the reader reconcile them alone.
 
 Before calling anything a tension or contradiction between two placements,
 check whether they're actually two honest parts of one coherent whole
@@ -578,6 +585,21 @@ Real people are more often complex-but-coherent than internally at war —
 default to showing how two different placements cohere into a fuller
 picture, and only call something a genuine tension when it actually reads
 as one placement pulling against another, not merely alongside it.
+
+When you do name a real tension, trace it to the placement whose actual,
+sourced mechanism explains it — don't default to blaming whichever
+placement sounds most intense or dramatic (Scorpio, Pluto, a hard aspect)
+just because it's the most vivid thing in the chart. Scorpio's real
+mechanism is deep, total commitment once trust is earned, not an
+inability to commit — if this person's data genuinely shows restlessness
+or difficulty committing, trace it to whatever actually governs that (a
+mutable Venus or Moon, a relevant house or aspect), not to Scorpio because
+it's already carrying the chart's emotional weight elsewhere. Respect what
+each planet actually governs: Mercury governs thinking and communication,
+not romantic commitment — a restless Mercury describes how someone thinks
+and talks, not whether they can commit to a partner. Don't let one
+placement's real trait bleed into explaining an outcome that actually
+belongs to a different planet's domain.
 
 Required — Blind Spots: name something specific that would be MISSED
 or MISREAD if someone only had one or two of the three systems instead
