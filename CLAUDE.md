@@ -114,6 +114,54 @@ not because it matters more.)
     time together, and ordinary calm can feel unfamiliar or hard to
     trust. She confirmed this version actually landed ("I got a lot more
     out of that explanation").
+12. **Never reduce a placement to one or two traits.** Her real
+    complaint about an early Sun/Leo rewrite: "there's a lot more to
+    them than needing recognition." A placement should read as several
+    distinct, real facets woven together (e.g. Leo: generosity/warmth
+    given without calculation, a natural presence, pride in creative
+    work, loyalty once committed, *and* pride's harder edge — five
+    separate things, not one theme restated). Research each placement
+    broadly enough to find that range before writing it; don't lock
+    onto the single most-searched trait and elaborate on just that one.
+13. **Name what's distinctive about a trait without comparing it to
+    other people or other placements in the sentence itself.** Not "this
+    bothers you more than it bothers most people" or "lands harder on
+    you than it would on someone else" — just state what's true of this
+    placement directly. Research can and should identify what's
+    genuinely *different* about a sign (that's how you decide which
+    traits are worth including at all) — the rule is about the written
+    sentence, not the research process: the comparison should never
+    surface as comparison language in the final text. This pattern
+    ("more than most people," "harder than for other placements") turned
+    out to be nearly as widespread across ASTRO_DEFS/NUM_DEFS as the
+    lesson-ending pattern in item 4 — same retroactive scope applies.
+14. **For planet-in-sign entries specifically, ask two questions before
+    finalizing:** (1) How is this planet's placement in this sign
+    actually distinct from the Sun being in that sign — i.e. does the
+    entry read differently because it's filtered through *this* planet's
+    real domain (Moon = emotional/instinctive response, Mercury =
+    thinking/communication, Venus = love and values, Mars = drive and
+    action, etc.), not just the Sun's identity content with the planet
+    name swapped in? (2) The "blind guess" test: if you lined up entries
+    for every sign of just one planet (e.g. all 12 Moon signs) with the
+    sign names hidden, could a reader actually tell which description
+    belongs to which sign from real, distinguishing tells — or is the
+    language generic enough it could apply to several signs
+    interchangeably? If the second is true, the entry needs sharper,
+    more specific detail.
+
+**Current status of this rewrite (all of the above, not just
+factual/sourcing accuracy):** `ASTRO_DEFS.sun` (12 signs) is the only
+category confirmed against the full checklist above, including items
+12-14, as of this note. It went through several real rounds of her
+catching problems before it held — an early Leo draft got flagged for
+being reduced to one trait (recognition) instead of the sign's real
+range, then for comparison language ("harder to sit with than it is for
+other people"), and a specific claim (Pisces/fantasy-as-escape) got
+independently verified against real sources before she accepted it.
+Expect the same multi-round process for every other category — a
+first draft passing items 1-11 is not sufficient, since items 12-14 are
+new corrections that nothing has been checked against except `sun`.
 
 ## Codebase structure & tech stack
 
@@ -395,10 +443,17 @@ resurrect the "two pages, entry form is done" framing.
 
 ## Open threads not yet resolved
 
-- The full audit of `ASTRO_DEFS`/`NUM_DEFS`/`HD_DEFS`/`GATES` for vague,
-  ungrounded language is now **complete** — every category listed below
-  has been checked. Category-by-category status:
-  - **`ASTRO_DEFS.sun` (12 signs): audited, complete.** All 12 checked
+- The audit below covers the *original* checklist (items 1-11,
+  mechanism/sourcing/cliché/wording accuracy) and was completed under
+  that scope. **It does not cover items 12-14** (no single/double-trait
+  reduction, no comparison language, planet-domain/blind-guess
+  specificity) — those were added later after she caught real problems
+  in the Sun rewrite that this pass had not screened for. See the
+  "Open, in progress" note further below for the actual current status
+  against the full checklist; nothing except `ASTRO_DEFS.sun` has been
+  checked against items 12-14 yet, regardless of what "audited,
+  complete" says in the entries below.
+  - **`ASTRO_DEFS.sun` (12 signs): audited against items 1-11.** All 12 checked
     against the 10-point checklist and real astrological-consensus
     research (mechanism, strength, shadow, growth edge per sign, cross-
     checked against cafeastrology/numerologist.com/Wikipedia/shadow-
@@ -590,22 +645,30 @@ resurrect the "two pages, entry form is done" framing.
   pass.** An earlier version of this file described the repeating "the
   growth edge is X" / "the lesson is Y, not Z" closing sentence as a
   low-priority formatting quirk to fix later. That was wrong. She
-  corrected it directly: reading a full chart (every placement returned
-  together) made clear that ending nearly every single entry on a named
-  lesson is the actual problem this whole audit exists to remove — see
-  checklist item 4 above for the corrected rule and her Scorpio test
-  case. **Status:** `ASTRO_DEFS.sun` (12 signs) has been rewritten to the
-  new standard and was in front of her for review when this note was
-  last updated. Every other category — `moon`/`mercury`/`venus`/`mars`/
-  `jupiter`/`saturn`/`uranus`/`neptune`/`pluto`/`ascendant`/`midheaven`/
-  `house`/`housecombo` in `ASTRO_DEFS`, the new `chiron`/`northnode`/
-  `southnode`/`lilith` entries (written this session, under the old
-  wrong rule — need redoing, not just auditing), every `NUM_DEFS`
-  category, and the closing-sentence template in `GATES` and `HD_DEFS`
-  — still has the old lesson-ending pattern and needs the same rewrite.
-  Do not mark any category "audited, complete" again until it's actually
-  been checked against checklist item 4's corrected rule, not just
-  against the earlier mechanism/accuracy pass.
+  corrected it directly, then kept correcting the rewrite in progress:
+  first that ending nearly every entry on a named lesson was the real
+  problem (checklist item 4), then that a rewritten entry (Leo) had
+  been narrowed to one or two traits instead of a sign's real range
+  (item 12), then that stating a trait by comparing it to "most people"
+  or "other placements" was its own separate problem, nearly as
+  widespread as the lesson-ending pattern (item 13), then a forward-
+  looking process note for every placement beyond Sun: check how a
+  planet's own domain (not just the sign) changes the entry, and
+  whether the entry is specific enough that someone could tell signs
+  apart blind (item 14). **Status:** `ASTRO_DEFS.sun` (12 signs) is the
+  only category actually checked against the full, corrected checklist
+  (items 1-14) — it went through several real rounds before she
+  confirmed it held, including one factual claim (Pisces and escapism)
+  she asked to see re-verified against real sources before accepting
+  it, which it was. Every other category — `moon`/`mercury`/`venus`/
+  `mars`/`jupiter`/`saturn`/`uranus`/`neptune`/`pluto`/`ascendant`/
+  `midheaven`/`house`/`housecombo` in `ASTRO_DEFS`, the `chiron`/
+  `northnode`/`southnode`/`lilith` entries, every `NUM_DEFS` category,
+  and the closing-sentence template in `GATES` and `HD_DEFS` — still
+  has the old lesson-ending pattern *and* has not been checked against
+  items 12-14 at all. Do not mark any category "audited, complete"
+  again until it's been checked against all of items 1-14, not just
+  the original mechanism/accuracy pass or just item 4.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
