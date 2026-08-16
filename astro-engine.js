@@ -84,16 +84,33 @@ export function computeAstrology(input) {
     longitude: loc.lng,
   });
 
-  const horoscope = new Horoscope({
-    origin,
-    houseSystem: "placidus",
-    zodiac: "tropical",
-    aspectPoints: ["bodies", "points", "angles"],
-    aspectWithPoints: ["bodies", "points", "angles"],
-    aspectTypes: ["major"],
-    customOrbs: {},
-    language: "en",
-  });
+  const buildHoroscope = (houseSystem) =>
+    new Horoscope({
+      origin,
+      houseSystem,
+      zodiac: "tropical",
+      aspectPoints: ["bodies", "points", "angles"],
+      aspectWithPoints: ["bodies", "points", "angles"],
+      aspectTypes: ["major"],
+      customOrbs: {},
+      language: "en",
+    });
+
+  // Planet signs and house cusps are computed together in one pass by the
+  // library, so a Placidus-specific failure (its house-cusp formula can
+  // break down at extreme latitudes) would otherwise take the planet signs
+  // down with it, even though signs don't actually depend on the house
+  // system. Whole-sign houses use simple 30-degree divisions with no such
+  // failure mode, so retrying with it recovers the signs; the houses/
+  // Ascendant/Midheaven from that retry are still real, just a different
+  // (less precise) house system than the default.
+  let horoscope, houseSystemUsed = "placidus";
+  try {
+    horoscope = buildHoroscope("placidus");
+  } catch (_) {
+    horoscope = buildHoroscope("whole-sign");
+    houseSystemUsed = "whole-sign";
+  }
 
   // --- Planets (Sun through Pluto) ---
   const planets = [];
@@ -144,7 +161,7 @@ export function computeAstrology(input) {
 
   return {
     engine: "local (Moshier ephemeris via circular-natal-horoscope-js)",
-    settings: { zodiac: "tropical", houseSystem: "placidus" },
+    settings: { zodiac: "tropical", houseSystem: houseSystemUsed },
     location: {
       matchedCity: loc.name,
       country: loc.country,

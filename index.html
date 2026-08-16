@@ -2279,10 +2279,10 @@ function signDisplay(sign){
   return SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
 }
 
-function ar(astro){
-  if(!astro||astro.error)return apend('Unavailable');
+function ar(astro,errMsg){
+  if(!astro||astro.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   const planets=astro.planets||[];
-  if(!planets.length)return apend('Unavailable');
+  if(!planets.length)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   const byName={};
   planets.forEach(p=>{const name=p.name;if(name)byName[name]=p;});
   let h='';
@@ -2501,7 +2501,7 @@ function reportSlot(names,report,reportError,rowNum){
 // the markup, scattering the second person's row instead of keeping it
 // together underneath.
 function personRow(person,rowNum){
-  return quadItem(person.first,'Astrology',ar(person.astro),wheelWrap(person.astro),astroWheelSVG(person.astro),rowNum)
+  return quadItem(person.first,'Astrology',ar(person.astro,person.astroError),wheelWrap(person.astro),astroWheelSVG(person.astro),rowNum)
     +quadItem(person.first,'Numerology',nr(person.numerology),null,null,rowNum)
     +quadItem(person.first,'Human Design',hdr(person.hd),hdWheelWrap(person.hd),hdBodygraphSVG(person.hd),rowNum);
 }
@@ -2606,10 +2606,12 @@ async function generate(){
     }
     p1.numerology=result.p1.numerology;
     p1.astro=result.p1.astrology;
+    p1.astroError=result.p1.astrologyError;
     p1.hd=result.p1.humanDesign;
     if(p2&&result.p2){
       p2.numerology=result.p2.numerology;
       p2.astro=result.p2.astrology;
+      p2.astroError=result.p2.astrologyError;
       p2.hd=result.p2.humanDesign;
     }
     render(p1,p2,result.report,result.reportError);
