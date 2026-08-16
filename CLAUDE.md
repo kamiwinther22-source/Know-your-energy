@@ -458,9 +458,57 @@ resurrect the "two pages, entry form is done" framing.
   concluding a successful deploy didn't take.
 - **This sandbox's network policy blocks fetching the live domain
   directly** — arbitrary outbound requests to know-your-energy.com get a
-  403 from the proxy. There is no way to independently verify the live
-  site from inside a session; don't claim to have checked it — ask her to
-  look and describe/screenshot instead.
+  403 from the proxy. This also blocks the Worker's own
+  `*.workers.dev` host (confirmed directly — both `curl` and `WebFetch`
+  to `know-your-energy.kwdoanchor.workers.dev/astro-check` return a
+  blocked/403 response), and blocks `download.geonames.org` too, so
+  `build-cities.mjs` cannot be run locally to get the real ~34,000-city
+  dataset (the deployed one, confirmed via a "Deploy Worker" run's logs,
+  currently has 34,098 entries; the repo's own `cities-data.js` starts
+  empty and stays empty in this sandbox). There is no way to
+  independently verify the live site, hit any Worker endpoint, or
+  reproduce a bug that depends on the real city dataset from inside a
+  session — don't claim to have checked it; ask her to look/describe/
+  screenshot, or ask for the exact input that reproduces a bug so it can
+  be tested against the same local (empty-dataset, built-in-city-list-
+  only) code path instead.
+- **A real bug (not yet fully root-caused): the Astrology card can go
+  completely blank ("Status: Unavailable") instead of showing the
+  time-independent parts (planet signs) it should still be able to
+  show.** This is different from — and confirmed separate from — the
+  already-correct "no birth time" handling in `getAstrologyLocal`
+  (`worker.js`), which does properly preserve every planet/point's
+  `.sign` and only strips `house`/`ascendant`/`midheaven` when time is
+  unknown; that part was verified end-to-end (engine → worker stripping
+  logic → `index.html`'s `ar()` render function) via a real headless-
+  browser render test and works correctly. The actual bug: `astrology`
+  comes back `null` from `assemblePersonData` (i.e. `getAstrologyLocal`
+  threw), which makes the whole card blank rather than degrading
+  gracefully — and until this session, the real thrown error
+  (`astrologyError`) was computed server-side but silently discarded,
+  never reaching the frontend, so there was no way to see why. Reported
+  by her for "Joseph Earl Smith 1/27/1979" (blank time, blank location).
+  Could not reproduce locally despite real testing (exact name/DOB with
+  blank time/location; extreme-latitude birth coordinates up to 89°N run
+  directly against the real house-calculation library, which did not
+  throw; confirmed the real deployed dataset doesn't contain malformed
+  lat/lng since `build-cities.mjs` already filters `NaN` rows before
+  ever shipping) — see the network-policy note above for why the real
+  dataset/live Worker couldn't be reached to test against directly.
+  **Two real fixes shipped anyway, both live as of commit `d05ab7d`:**
+  (1) `astro-engine.js` — planet signs and house cusps were computed in
+  one atomic step by the underlying library (confirmed by reading its
+  actual constructor: `_houses` is built before `_celestialBodies`, no
+  internal try/catch), so *any* house-calculation failure, for whatever
+  reason, was taking the planet signs down with it even though signs
+  don't depend on the house system at all. Now retries with whole-sign
+  houses (a simple, failure-resistant house system) to recover the signs
+  if the default Placidus attempt throws. (2) `index.html` — the
+  Astrology card's "Unavailable" status now shows the real
+  `astrologyError` message when there is one, instead of a bare,
+  undiagnosable "Unavailable". **If this recurs, the card itself will
+  now say why** — get the exact text and that's the real root cause,
+  no more guessing needed.
 - **The local sandbox's git working directory has repeatedly, silently
   reverted to a stale old commit mid-session**, even when `origin` has
   later commits. Always run `git fetch origin <branch>` and compare
