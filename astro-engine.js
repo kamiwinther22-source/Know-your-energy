@@ -64,7 +64,7 @@ function readBody(body) {
  * @returns {Object} chart data (planets, houses, angles, aspects, location)
  */
 export function computeAstrology(input) {
-  const { year, month, day, hour, minute, cityName, countryCode, state } = input;
+  const { year, month, day, hour, minute, cityName, countryCode, state, skipAspects } = input;
 
   const loc = findCity(cityName, countryCode, state);
   if (!loc) {
@@ -84,14 +84,18 @@ export function computeAstrology(input) {
     longitude: loc.lng,
   });
 
+  // skipAspects: callers that only need body/point signs (e.g. the
+  // unknown-birth-time sign-boundary check in worker.js, which calls this
+  // twice more per request just to compare) don't need aspect data, so
+  // skip computing it rather than pay for real work nobody reads.
   const buildHoroscope = (houseSystem) =>
     new Horoscope({
       origin,
       houseSystem,
       zodiac: "tropical",
-      aspectPoints: ["bodies", "points", "angles"],
-      aspectWithPoints: ["bodies", "points", "angles"],
-      aspectTypes: ["major"],
+      aspectPoints: skipAspects ? [] : ["bodies", "points", "angles"],
+      aspectWithPoints: skipAspects ? [] : ["bodies", "points", "angles"],
+      aspectTypes: skipAspects ? [] : ["major"],
       customOrbs: {},
       language: "en",
     });
@@ -152,7 +156,7 @@ export function computeAstrology(input) {
   });
 
   // --- Aspects ---
-  const aspects = (horoscope.Aspects?.all || []).map((a) => ({
+  const aspects = skipAspects ? [] : (horoscope.Aspects?.all || []).map((a) => ({
     point1: a?.point1Label ?? a?.point1Key ?? null,
     point2: a?.point2Label ?? a?.point2Key ?? null,
     aspect: a?.label ?? a?.aspectKey ?? null,

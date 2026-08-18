@@ -137,13 +137,45 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     // a defaulted noon, not the "omitted" behavior promised on the form.
     // Sign-level positions don't depend on time-of-day, so those stay for
     // every body/point, including the ones stored outside result.planets.
+    //
+    // But a defaulted noon can still silently land on the wrong side of a
+    // sign boundary if a body changes sign sometime during the actual
+    // birth date -- rare (most bodies sit in one sign for weeks to years)
+    // but real. Check by computing sign-only charts (skipAspects: nothing
+    // else about them is needed) at the very start and very end of the
+    // same local day and diffing each body's sign between the two: equal
+    // means certain for the whole day; different means the exact birth
+    // time is what decides it, so that body is flagged rather than guessed.
+    const dayStart = computeAstrology({
+      year, month, day, hour: 0, minute: 0,
+      cityName, countryCode, state: state || "", skipAspects: true
+    });
+    const dayEnd = computeAstrology({
+      year, month, day, hour: 23, minute: 59,
+      cityName, countryCode, state: state || "", skipAspects: true
+    });
+    const byName = (list) =>
+      Object.fromEntries((list || []).filter(b => b?.name).map(b => [b.name, b]));
+    const startPlanets = byName(dayStart.planets);
+    const endPlanets = byName(dayEnd.planets);
+
+    const flagIfAmbiguous = (body, startBody, endBody) => {
+      if (!body || !startBody || !endBody) return body;
+      if (startBody.sign !== endBody.sign) {
+        return { ...body, sign: startBody.sign, signUncertain: true, signAlt: endBody.sign };
+      }
+      return body;
+    };
     const stripHouse = (b) => b ? (({ house, ...rest }) => rest)(b) : b;
-    result.planets = result.planets.map(stripHouse);
-    result.northNode = stripHouse(result.northNode);
-    result.southNode = stripHouse(result.southNode);
-    result.chiron = stripHouse(result.chiron);
-    result.sirius = stripHouse(result.sirius);
-    result.lilith = stripHouse(result.lilith);
+
+    result.planets = result.planets.map(p =>
+      stripHouse(flagIfAmbiguous(p, startPlanets[p.name], endPlanets[p.name]))
+    );
+    result.northNode = stripHouse(flagIfAmbiguous(result.northNode, dayStart.northNode, dayEnd.northNode));
+    result.southNode = stripHouse(flagIfAmbiguous(result.southNode, dayStart.southNode, dayEnd.southNode));
+    result.chiron = stripHouse(flagIfAmbiguous(result.chiron, dayStart.chiron, dayEnd.chiron));
+    result.sirius = stripHouse(flagIfAmbiguous(result.sirius, dayStart.sirius, dayEnd.sirius));
+    result.lilith = stripHouse(flagIfAmbiguous(result.lilith, dayStart.lilith, dayEnd.lilith));
     result.ascendant = null;
     result.midheaven = null;
     result.houses = [];
