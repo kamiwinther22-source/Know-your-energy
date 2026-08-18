@@ -2291,7 +2291,8 @@ function ar(astro,errMsg){
     if(!name||!sign)return;
     const glyph=PLANET_GLYPH[name]?`<span class="glyph" style="color:${PLANET_COLOR[name]||'inherit'}">${PLANET_GLYPH[name]}</span> `:'';
     let signOut=sign;
-    if(p.house)signOut+=` \u00b7 House ${p.house}`;
+    if(p.signUncertain)signOut=`${sign} or ${p.signAlt} \u2014 changes sign this day, exact birth time needed`;
+    else if(p.house)signOut+=` \u00b7 House ${p.house}`;
     h+=arow(glyph+name,signOut,ASTRO_KEY[name],sign);
     // 'housecombo' keys are this specific planet in this specific house
     // (e.g. "sun_6") -- not the generic per-house blurb, which reads the
@@ -2328,7 +2329,8 @@ function ar(astro,errMsg){
       const name=p.name;
       const glyph=PLANET_GLYPH[name]?`<span class="glyph" style="color:${PLANET_COLOR[name]||'inherit'}">${PLANET_GLYPH[name]}</span> `:'';
       let signOut=p.sign;
-      if(p.house)signOut+=` · House ${p.house}`;
+      if(p.signUncertain)signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
+      else if(p.house)signOut+=` · House ${p.house}`;
       h+=arow(glyph+name,signOut,POINT_KEY[name],p.sign);
     });
   }
