@@ -178,5 +178,6 @@ export function computeAstrology(input) {
     sirius,
     lilith,
     houses,
+    aspects,
   };
 }
