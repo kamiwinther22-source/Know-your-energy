@@ -149,6 +149,35 @@ not because it matters more.)
     language generic enough it could apply to several signs
     interchangeably? If the second is true, the entry needs sharper,
     more specific detail.
+15. **Don't default to negative-coded language for a trait when the same
+    real mechanism can be stated in neutral or positive-coded language —
+    but don't force every entry into a mechanical positive-negative-
+    positive template either.** Two separate corrections that arrived
+    together: first, she reacted physically ("my stomach felt sick")
+    to a batch of number descriptions that each ended on its shadow
+    clause as the literal last sentence — a real, distinct problem from
+    item 4's lesson-framing rule, since these weren't prescriptive
+    ("the lesson is X"), just descriptive shadow content that happened
+    to land as the closing note of the whole entry. The first fix
+    attempt bolted a "Still,/Even so," positive sentence onto the end
+    of every entry to force a sandwich shape — she corrected this too,
+    directly: forcing rich, specific content into a rigid 3-part
+    formula is its own kind of cliché, the same failure mode as the
+    template this whole audit exists to remove. Her actual standard:
+    most tendencies can be described in language that states what the
+    trait *is* rather than what it's a deficiency in, without erasing
+    the real, honest cost when one exists (item 3 still applies — don't
+    oversell positivity either). Example fix: NUM_DEFS.core's 4 entry
+    changed "that same discipline can tip into rigidity, or a quickness
+    to judge people who don't share the same standards" to "that same
+    discipline holds its own standards firmly, and doesn't bend them
+    easily for someone working a different way" — same honest fact,
+    stated as a trait rather than a flaw, no forced positive coda
+    after it. **This item's retroactive scope is still open** — it was
+    applied to the new `NUM_DEFS.core` category and needs to be checked
+    against everything else eventually, but nothing else has been
+    re-screened against it yet, including the Moon rewrite from item 14
+    that was drafted the same session before this rule existed.
 
 **Current status of this rewrite (all of the above, not just
 factual/sourcing accuracy):** `ASTRO_DEFS.sun` (12 signs) is the only
