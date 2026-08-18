@@ -472,43 +472,57 @@ resurrect the "two pages, entry form is done" framing.
   screenshot, or ask for the exact input that reproduces a bug so it can
   be tested against the same local (empty-dataset, built-in-city-list-
   only) code path instead.
-- **A real bug (not yet fully root-caused): the Astrology card can go
-  completely blank ("Status: Unavailable") instead of showing the
-  time-independent parts (planet signs) it should still be able to
-  show.** This is different from — and confirmed separate from — the
-  already-correct "no birth time" handling in `getAstrologyLocal`
-  (`worker.js`), which does properly preserve every planet/point's
-  `.sign` and only strips `house`/`ascendant`/`midheaven` when time is
-  unknown; that part was verified end-to-end (engine → worker stripping
-  logic → `index.html`'s `ar()` render function) via a real headless-
-  browser render test and works correctly. The actual bug: `astrology`
-  comes back `null` from `assemblePersonData` (i.e. `getAstrologyLocal`
-  threw), which makes the whole card blank rather than degrading
-  gracefully — and until this session, the real thrown error
-  (`astrologyError`) was computed server-side but silently discarded,
-  never reaching the frontend, so there was no way to see why. Reported
-  by her for "Joseph Earl Smith 1/27/1979" (blank time, blank location).
-  Could not reproduce locally despite real testing (exact name/DOB with
-  blank time/location; extreme-latitude birth coordinates up to 89°N run
-  directly against the real house-calculation library, which did not
-  throw; confirmed the real deployed dataset doesn't contain malformed
-  lat/lng since `build-cities.mjs` already filters `NaN` rows before
-  ever shipping) — see the network-policy note above for why the real
-  dataset/live Worker couldn't be reached to test against directly.
-  **Two real fixes shipped anyway, both live as of commit `d05ab7d`:**
-  (1) `astro-engine.js` — planet signs and house cusps were computed in
-  one atomic step by the underlying library (confirmed by reading its
-  actual constructor: `_houses` is built before `_celestialBodies`, no
-  internal try/catch), so *any* house-calculation failure, for whatever
-  reason, was taking the planet signs down with it even though signs
-  don't depend on the house system at all. Now retries with whole-sign
-  houses (a simple, failure-resistant house system) to recover the signs
-  if the default Placidus attempt throws. (2) `index.html` — the
-  Astrology card's "Unavailable" status now shows the real
-  `astrologyError` message when there is one, instead of a bare,
-  undiagnosable "Unavailable". **If this recurs, the card itself will
-  now say why** — get the exact text and that's the real root cause,
-  no more guessing needed.
+- **Fixed: the Astrology card could go completely blank ("Status:
+  Unavailable") for a real report with no birth time — "Joseph Earl
+  Smith 1/27/1979", blank time, blank location.** Root-caused and
+  resolved as of commit `17631ed`. The actual bug, once it was findable
+  at all: `computeAstrology()` (`astro-engine.js`) computed `aspects`
+  but never included the field in its returned object — a one-line
+  omission from the `return { ... }` at the bottom of the function.
+  `getAstrologyLocal`'s (`worker.js`) unknown-birth-time branch calls
+  `result.aspects.filter(...)` to drop Ascendant/Midheaven aspects when
+  time is unknown, which threw `TypeError: Cannot read properties of
+  undefined (reading 'filter')` on the missing field — caught by
+  `assemblePersonData`'s try/catch, silently turning the whole
+  astrology object into `null`, which blanked the entire card instead
+  of degrading gracefully. Only the no-birth-time path ever called
+  `.aspects`, which is why this had likely been broken all along
+  without being caught: every other exercised path (birth time
+  provided) never touches `result.aspects` at all. Fix: add `aspects`
+  to the returned object.
+  **How this actually got found — a real lesson in this bug being
+  genuinely unreachable by static analysis alone:** an earlier pass
+  this session read `getAstrologyLocal` and `computeAstrology` end-to-
+  end multiple times, traced the real library constructor by hand, and
+  tested extensively (exact name/DOB with blank time/location,
+  extreme-latitude coordinates up to 89°N against the real house-
+  calculation library) without ever reproducing a throw — because the
+  missing-field bug is real but sits one line away from anything that
+  logic-traces as suspicious, and the sandbox's network policy blocks
+  the live domain, the Worker's own `*.workers.dev` host, and
+  `download.geonames.org`, so the real 34,098-city production dataset
+  was never reachable to test against either (see the network-policy
+  note above). Two defensive improvements shipped first (commit
+  `d05ab7d`) on the reasonable but ultimately wrong theory that a
+  Placidus house-calculation edge case was the cause: (1)
+  `astro-engine.js` retries with whole-sign houses if the default
+  Placidus attempt throws, so planet signs aren't lost to a house-
+  system failure even though they don't depend on the house system —
+  still a real, worthwhile hardening, left in place. (2) `index.html`'s
+  Astrology "Unavailable" status now shows the real `astrologyError`
+  message when there is one, instead of a bare, undiagnosable
+  "Unavailable" — **this is what actually broke the case open**: she
+  retried the report live, the card showed the real error text
+  verbatim ("Unavailable — Cannot read properties of undefined (reading
+  'filter')"), and that one line of real production output pointed
+  straight at the missing-field bug in under a minute, after the prior
+  static-analysis approach had exhausted itself without finding it.
+  **Standing lesson for the next unreproducible bug report in this
+  app:** given how thoroughly this session's static analysis missed a
+  one-line bug, and how fast a real error message found it, prioritize
+  shipping error-surfacing/diagnostics *before* continuing to guess at
+  root causes by code-reading alone, whenever a bug can't be reproduced
+  locally.
 - **The local sandbox's git working directory has repeatedly, silently
   reverted to a stale old commit mid-session**, even when `origin` has
   later commits. Always run `git fetch origin <branch>` and compare
