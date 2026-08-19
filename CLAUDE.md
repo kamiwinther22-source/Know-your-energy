@@ -647,6 +647,32 @@ equivalent if one exists) — hand-inventing a new chart-like graphic
 each time is exactly the kind of avoidable repeat this file exists to
 prevent.
 
+**Major finding — the actual anti-pattern was the page skeleton itself,
+not any specific color or graphic.** After the real-carousel-graphic
+version published, she said "it's like you are trying to make something
+that blends in." Every version up to this point — regardless of which
+graphic (bubbles, ribbons, gate wheel, planet disc) or which palette
+sat in the top section — had kept the exact same underlying structure:
+a colored hero section sitting above a separate white card holding the
+form. That "colored hero, then a white card" split is itself one of the
+most common app-landing-page templates that exists, so the page kept
+reading as generic no matter what filled the hero, because the
+skeleton never actually changed. **This is the specific failure the
+standing process rule above (name what structurally changes, not just
+which color or graphic) was written to catch, and it still slipped
+through for several more rounds after being written** — worth
+re-reading that rule before every new attempt, not just once. The fix:
+removed the white card entirely. The whole page — hero graphic, title,
+tagline, key points, and the data-entry form itself — now sits on one
+continuous background gradient with no hard color break anywhere; the
+form fields are styled for legibility directly on that blue (white
+labels, white underlines, a light periwinkle for placeholder text) with
+white full-opacity labels/underlines rather than being handed a white
+box to retreat into. Published, not yet confirmed. **If this specific
+fix doesn't land, the lesson to carry forward regardless is the
+diagnostic method itself**: when a version is rejected as generic,
+check whether the actual page skeleton changed, not just its contents.
+
 **Correction — "get away from blue" was about execution, not the hue.**
 Earlier in this same redesign push she rejected a specific washed-out,
 "faded pencil-color" blue-and-white attempt and said "get away from
