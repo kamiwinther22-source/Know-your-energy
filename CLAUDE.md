@@ -382,6 +382,90 @@ already searched for this. There is no second, separate landing page to
 build later; this is the one page that has to do that job. Do not
 resurrect the "two pages, entry form is done" framing.
 
+## Entry-page hero redesign — techniques already tried and rejected
+
+She asked directly how to stop a future session from repeating an idea
+she already rejected. The honest answer: within one conversation the
+rejection is in context, but a new session or a summarized one has none
+of that unless it's written here. So it's written here. **Every item
+below was actually built, shown to her in a published design-canvas
+Artifact, and explicitly rejected** during the entry-page hero redesign
+push (the title/tagline/pitch/key-points/data-form top section — not the
+results page, which has its own separate rules above). Do not propose
+any of these again, including a "improved" or re-skinned variant of one:
+
+- **Flat, stacked, full-width color-block sections dividing the page** —
+  rejected repeatedly as "just a column," "block color design," reads as
+  a template regardless of which colors fill the blocks.
+- **A straight-line divider between two color sections, at any angle,
+  including a diagonal cut.** Explicitly: "straight lines in the color
+  separation = business site." A diagonal is still a straight line for
+  this purpose.
+- **A wavy/organic SVG-curve divider between two color sections** —
+  tried as the fix for the straight-line problem above, then separately
+  rejected on its own: "dont bother with the wavy line."
+- **A field of many thin decorative lines/hairlines over a solid color
+  background as a "depth" or "shading" treatment** — rejected as
+  "squiggly lines into block color," not real depth. (Real per-object
+  light-to-shadow gradient shading on solid filled shapes, e.g. the
+  ribbon attempt below, was closer to what she meant by depth — the
+  failure of the ribbon attempt was composition/relevance, not the
+  shading technique itself.)
+- **Two interlocking rings or circles as a focal graphic.** Pre-banned
+  before it was ever tried ("if your plan is circles that are
+  interlocking... don't waste your time"), then built anyway by mistake
+  once and caught before publishing — do not build this a third time in
+  any form (orbit motif, venn-style overlap, logo-mark, etc).
+- **A crossing/woven pair of flowing ribbon shapes as a focal graphic**
+  (meant to suggest "energy" and "relationship") — explicitly rejected:
+  "that's far worse looking with no point."
+- **Any dark/black/gunmetal dominant background** for this page,
+  regardless of what's on top of it (faceted "mirror" shards, scattered
+  glitter flecks, a line field) — rejected each time it was tried:
+  "dull grossness," "black site with colored dots." A saturated *light*
+  color can be the dominant field; a dark one should not be.
+- **A literal chrome/mirror/shattered-glass surface treatment** — tried
+  after she used the word "mirror"; rejected as not remotely reading as
+  a mirror ("mirror is like silver... that isn't even close"). She
+  withdrew the mirror idea entirely afterward ("forget I said mirror").
+  Do not revisit mirror/chrome as a direction.
+- **Muted brown, tan, or khaki tones anywhere** — form labels, field
+  placeholder text, panel fills, gradient shadow stops. Came up
+  repeatedly as a default "safe neutral" and was rejected hard each
+  time against her actual reference images, none of which contain
+  brown: "look at the pics I showed you, are they brown?" If a neutral
+  is needed, use the deep teal or white already in the palette, not an
+  earth tone.
+- **The approved pitch line rendered as continuous prose**, even when
+  broken into differently-sized/weighted phrases for visual hierarchy —
+  rejected outright: "the paragraph has no place." (The exact wording
+  from `index.html`/her copy is unchanged and still required content —
+  see the "do include all necessary data points" instruction in the
+  same message — it's the paragraph *presentation* of it that's out,
+  not the words.)
+- **Bento grids, or any layout lifted from a named current web-design
+  trend** — rejected on principle, not execution: "bent[o] grid no...
+  do not follow the trends."
+- **Faded or reduced-opacity color anywhere**, including form
+  placeholder text styled at partial opacity for a "soft" look — this is
+  also a standing rule elsewhere in this file (never fade text), but it
+  specifically recurred in this redesign for placeholder/caption text
+  and for an early "faded blue" background attempt.
+
+**What has NOT been rejected and can still be built on:** large, bold,
+standalone typographic treatment for the three key points (no
+containing shape around them) with each at a different size; giving the
+approved pitch line real typographic size/weight hierarchy *as an
+alternative to full prose* (this was accepted in isolation — only the
+combination of prose-in-sentence-form was rejected, and it's untested
+whether a non-prose presentation of the same words, e.g. broken into
+separate standalone short lines rather than one flowing sentence, would
+land); a light (not dark) dominant background; a vivid/saturated
+(not dulled-down or pastel) palette; real per-shape gradient shading
+for dimensional depth on a *contained, meaningful* graphic (not a
+full-bleed texture, not another circle/ring, not a crossing-ribbon
+pair) — what that graphic should actually be has not been solved yet.
+
 ## Real repo facts worth not re-discovering
 
 - Astrology is computed **locally** (`astro-engine.js`) — no paid external
