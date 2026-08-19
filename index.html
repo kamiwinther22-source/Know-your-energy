@@ -41,9 +41,13 @@ body{
    data-entry form, spanning the page rather than staying capped to the
    tagline's narrower 340px box. ---------- */
 .pitch-line{
-  width:100%;text-align:center;font-family:'DM Sans',sans-serif;
-  font-size:0.92rem;line-height:1.6;font-weight:500;color:#ffffff;
+  width:100%;text-align:center;font-family:'Special Elite',monospace;
+  font-size:0.92rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
   padding:0 1rem;margin:0 0 1.4rem;
+  /* Same gold gradient-text technique and exact color stops as
+     .tagline-slide.c-gold, per her instruction to match the tagline. */
+  background:linear-gradient(100deg,#c7b78e 0%,#fdf6ea 35%,#ddccae 50%,#fdf6ea 65%,#c7b78e 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
