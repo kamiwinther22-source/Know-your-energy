@@ -1199,6 +1199,72 @@ license to try one — it was reference for rendering technique only.
   "audited, complete" again until it's been checked against all of
   items 1-14 *and* she's confirmed it holds — a drafted rewrite is not
   the same thing as an approved one.
+  - **Second full pass (this session), items 12-14 plus a fresh item-4
+    re-check: real fixes made, not yet shown to her.** She asked to
+    start the rewrite on astrology and numerology and "try to finish
+    it." Given the size of what's left (~300 ASTRO_DEFS entries across
+    15 categories plus housecombo, and every remaining NUM_DEFS
+    category), a full read-and-verify pass was done across `moon`,
+    `mercury`, `venus`, `mars`, `jupiter`, `saturn`, `uranus`, `neptune`,
+    `pluto` (108 entries) plus targeted greps across the whole file for
+    the specific banned patterns (comparison language, lesson-ending
+    phrasing, repeated closing-sentence templates, banned clichés).
+    Those 108 entries passed items 1-14 as already written — no changes
+    needed, they were evidently written to the full standard even
+    though this file hadn't confirmed that yet.
+    **Real fixes made this pass:**
+    - `NUM_DEFS.maturity` (12 entries): fixed a mechanical "X carries
+      more weight in this chapter than Y" closing repeated nearly
+      verbatim across all 12, and a "releasing what no longer serves
+      you" cliché on the 9 entry (the exact pattern item 8/the
+      Design-process rules ban).
+    - **`ASTRO_DEFS.northnode` (12 entries): a real, direct violation of
+      the corrected item 4, found and fixed.** The old text ("this life
+      points toward X... in practice that means doing Y instead of
+      Z... since [the South Node pattern] was never actually the source
+      of security it looked like") is exactly the lesson/growth-edge
+      framing item 4 now bans for every placement, including Nodes —
+      the old superseded version of this rule had specifically
+      exempted Nodes, which is why this slipped through the first
+      audit pass. Rewritten to state the real structural fact (this
+      sign sits on the *less-practiced* side of the node axis) without
+      telling the reader what to do or implying the South Node pattern
+      is a flaw to move past — matching how `southnode` was already
+      correctly written (that category needed no changes).
+    - **`NUM_DEFS.karmiclessons` (9 entries) and `.karmicdebt` (4
+      entries): the same item-4 violation**, worse in the original
+      since these categories are traditionally framed entirely as
+      "lessons this lifetime is here to teach you" ("this lifetime
+      keeps putting X in your path specifically so you're forced to
+      practice Y," "what actually moves/settles/develops this pattern
+      is Z"). Rewritten to state the real structural mechanism (the
+      number is absent from the name, so that trait isn't a natural
+      instinct) and the real, honest friction that tends to follow,
+      without the teleological "life is teaching you a lesson" framing
+      or a prescriptive "here's what fixes it" closer.
+    - `ASTRO_DEFS.chiron` (12 entries): fixed a "once it's been worked
+      with, this placement tends to make/give you..." closing repeated
+      almost verbatim across all 12 — same repeated-template problem as
+      the old GATES pattern, different content. The underlying
+      wound-then-capacity-to-help-others content is real, sourced
+      Chiron tradition and was kept; only the mechanical repetition was
+      fixed.
+    - `NUM_DEFS.challenge`/`.challenge1child` (17 entries) and
+      `ASTRO_DEFS` outer planets/Chiron/Nodes/Lilith structure: checked,
+      already compliant, no changes needed.
+    **Not yet touched this pass, still open:** `ASTRO_DEFS.ascendant`,
+    `.midheaven`, `.housecombo` (120 entries), `.lilith` (has a milder,
+    arguable repeated-structure issue — "What's suppressed here isn't
+    X — it's a legitimate Y that never should have Z" across all 12 —
+    not fixed this pass, judgment call to leave it since it isn't
+    prescriptive the way the fixed patterns were; worth a second look),
+    and every other `NUM_DEFS` category (lifepath, expression, soulurge,
+    personality, birthday, attitude, balance, pinnacle, personalyear,
+    personalmonth, personalday, essence — `balance` was spot-checked via
+    grep and looks clean, the rest have not been re-read against
+    items 12-14 at all). **None of this session's fixes have been shown
+    to her yet** — same rule as everywhere else in this file: a fix
+    made is not the same as a fix confirmed.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
