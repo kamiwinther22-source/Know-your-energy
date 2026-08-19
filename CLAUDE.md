@@ -426,6 +426,15 @@ any of these again, including a "improved" or re-skinned variant of one:
 - **A wavy/organic SVG-curve divider between two color sections** —
   tried as the fix for the straight-line problem above, then separately
   rejected on its own: "dont bother with the wavy line."
+- **Any element placed at the top of the page (or anywhere) because
+  that's a convenient slot for a technique she liked, rather than
+  because it belongs there in an actual composition.** After the
+  depth-strip-above-the-title fix (see the confirmed-liked depth
+  technique note below), her response was: "dont put the depth at the
+  top of the page. create a website. stop putting things randomly with
+  no purpose." Read broadly: don't design by placing techniques in
+  open slots on the page. Every element's position needs an actual
+  compositional reason, argued for, not just "there was space here."
 - **A field of many thin decorative lines/hairlines over a solid color
   background as a "depth" or "shading" treatment** — rejected as
   "squiggly lines into block color," not real depth. (Real per-object
