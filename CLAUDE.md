@@ -458,13 +458,22 @@ any of these again, including a "improved" or re-skinned variant of one:
   brown: "look at the pics I showed you, are they brown?" If a neutral
   is needed, use the deep teal or white already in the palette, not an
   earth tone.
-- **The approved pitch line rendered as continuous prose**, even when
-  broken into differently-sized/weighted phrases for visual hierarchy —
-  rejected outright: "the paragraph has no place." (The exact wording
-  from `index.html`/her copy is unchanged and still required content —
-  see the "do include all necessary data points" instruction in the
-  same message — it's the paragraph *presentation* of it that's out,
-  not the words.)
+- **The approved pitch line rendered as continuous prose, INCLUDING when
+  broken into differently-sized/weighted phrases for visual hierarchy
+  within the sentence.** First rejected as a block: "the paragraph has
+  no place." Then, separately, the word-size-variation technique itself
+  (some words in the sentence large/bold, others small, to try to break
+  up the paragraph feel) was tried again and rejected on its own merits,
+  not just for being prose: "the different sized words doesn't create
+  pop or beauty. its just clunky. idk what it says bc i dont want to
+  read it." **Do not reach for varying word sizes inside a running
+  sentence again, in any context on this page** — it reads as clunky
+  and actively discourages reading, it does not create hierarchy.
+  Current state: the pitch line is dropped from the hero entirely (not
+  displayed in any form) rather than styled a third way. The exact
+  wording from `index.html`/her copy is unchanged and still required
+  content elsewhere if she wants it back — it's the attempt to force it
+  into this hero composition that's on hold, not the words themselves.
 - **Bento grids, or any layout lifted from a named current web-design
   trend** — rejected on principle, not execution: "bent[o] grid no...
   do not follow the trends."
@@ -474,19 +483,64 @@ any of these again, including a "improved" or re-skinned variant of one:
   specifically recurred in this redesign for placeholder/caption text
   and for an early "faded blue" background attempt.
 
+**Confirmed liked, keep building on this:** the real per-shape
+light-to-shadow gradient depth/layering technique itself (used in the
+rejected crossing-ribbon graphic) — her words: "i liked when you
+actually created layers/depth." **The one hard condition: it must never
+sit behind or overlap any text** — the crossing-ribbon version's failure
+was partly that it was positioned behind the title, competing with
+legibility. The fix tried immediately after this feedback: the same
+ribbon-shading technique, rebuilt as flowing bands confined to their
+own dedicated strip with a hard boundary, positioned above all text
+with normal document flow (not absolutely positioned behind it) so
+nothing overlaps. Published but not yet confirmed by her as landing —
+check her response before assuming this composition is settled.
+
 **What has NOT been rejected and can still be built on:** large, bold,
 standalone typographic treatment for the three key points (no
-containing shape around them) with each at a different size; giving the
-approved pitch line real typographic size/weight hierarchy *as an
-alternative to full prose* (this was accepted in isolation — only the
-combination of prose-in-sentence-form was rejected, and it's untested
-whether a non-prose presentation of the same words, e.g. broken into
-separate standalone short lines rather than one flowing sentence, would
-land); a light (not dark) dominant background; a vivid/saturated
-(not dulled-down or pastel) palette; real per-shape gradient shading
-for dimensional depth on a *contained, meaningful* graphic (not a
-full-bleed texture, not another circle/ring, not a crossing-ribbon
-pair) — what that graphic should actually be has not been solved yet.
+containing shape around them) with each at a different size; a light
+(not dark) dominant background; a vivid/saturated (not dulled-down or
+pastel) palette; real per-shape gradient shading for dimensional depth,
+confined to its own space, never behind text.
+
+**Correction — "get away from blue" was about execution, not the hue.**
+Earlier in this same redesign push she rejected a specific washed-out,
+"faded pencil-color" blue-and-white attempt and said "get away from
+blue and white... I don't wanna see it again." That was taken too
+literally as a categorical ban on the hue. She then, unprompted, shared
+three real reference images (a luminous blue/white cathedral-with-doves
+scene, a rich periwinkle-blue bedroom with warm gold chandelier glow,
+and a blue paper-cut-style portrait with real dimensional shading) and
+said directly: "why don't you try to implement what I have said and
+shown you." **Rich, saturated, luminous blue is not banned** — flat,
+pale, washed-out blue is what was actually rejected. If a future
+attempt avoids blue entirely "because she said no blue before," that is
+now a misreading of her actual feedback; check the reference images
+before assuming the hue itself is off-limits.
+
+**Confirmed: the "key points as bubbles beside the form" concept is
+hers, and she considers it the strongest idea tried so far** — not a
+Claude idea to second-guess. Her original description, given earlier in
+this session: short key-point text (a couple of words each) inside
+floating circles of different sizes, positioned to the left of the data
+entry form, like bubbles. An early execution of this was too crude
+(oversized circles with tiny buried text, flat fill, no real shading)
+and she flagged that specifically: "small text buried in oversized
+circles is not helping. so tighten up the circles. make them 3d... make
+the words legible." She also allowed that circles aren't mandatory —
+"or dont use circles but its better than anything else ive seen" — but
+the *spatial idea* (short legible callouts beside the form, varied
+size, real dimensional shading, not a flat fill) is the part to keep
+regardless of whether the container stays circular.
+
+**Also confirmed: no face, portrait, or figure imagery of any kind.**
+She clarified after sharing the blue paper-cut portrait reference that
+she meant the *shading/depth technique* used in that image, not the
+subject — "I hope you aren't still working with that lady one. that
+needs tossed completely." No attempt in this redesign has actually
+built a face/portrait (the technique was applied to abstract ribbon
+forms, never a figure), but don't take the portrait reference as
+license to try one — it was reference for rendering technique only.
 
 ## Real repo facts worth not re-discovering
 
