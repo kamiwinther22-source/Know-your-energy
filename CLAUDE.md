@@ -673,6 +673,37 @@ fix doesn't land, the lesson to carry forward regardless is the
 diagnostic method itself**: when a version is rejected as generic,
 check whether the actual page skeleton changed, not just its contents.
 
+**Correction — gold is not the answer, and cramming all three systems
+into one small graphic reads as childish, not rich.** She asked for the
+real HD bodygraph and solar disc and scattered numerology numbers all
+together, woven with ribbons "like they have a purpose." That attempt
+was built and genuinely failed on execution, not just taste: the HD
+center shapes rendered too small to read as a body diagram, collided
+with the tagline text, and the wavy ribbon bands plus scattered number
+badges read as a busy decorative pattern rather than depth. Her verdict:
+"elementary and childish instead of classy and soft and inviting,"
+"get rid of all of the gold tan, get rid of all of it." Two separate
+corrections: (1) gold as a fill/surface color is now rejected outright,
+everywhere, not just as an "invented UI accent" (the earlier note that
+the real chart's G-center gold was fine because it's "real data" no
+longer holds — she said get rid of ALL of it, full stop); (2) cramming
+multiple real graphics into a small mobile viewport at a scale where
+they can't actually read clearly is itself a quality failure, not
+solvable by using "real" data if the execution can't fit the space.
+The fix: pulled back to one graphic only (the solar disc, recolored to
+cool white/silver/pearl tones, no gold), one thin restrained ribbon
+behind it instead of a busy multi-band pattern, and gave the first key
+point genuine visual priority (brighter pearl-white tone, largest) as
+the actual "accenting" she asked for, rather than three equally-loud
+bubbles. **Honest trade-off worth surfacing, not hiding: dropping the
+planet name/meaning labels (per her separate "solar system without
+words" instruction) combined with recoloring away from the recognizable
+gold-disc look means this version answers "what is this about" less
+clearly than the labeled gold-disc version did** — this may need
+revisiting once she's seen it; do not assume removing gold and removing
+labels were free of cost just because both were explicitly requested.
+Published, not yet confirmed.
+
 **Correction — "get away from blue" was about execution, not the hue.**
 Earlier in this same redesign push she rejected a specific washed-out,
 "faded pencil-color" blue-and-white attempt and said "get away from
