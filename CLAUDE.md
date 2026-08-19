@@ -382,6 +382,28 @@ already searched for this. There is no second, separate landing page to
 build later; this is the one page that has to do that job. Do not
 resurrect the "two pages, entry form is done" framing.
 
+## Standing process rule — write feedback down as it happens, don't wait to be asked
+
+She should never have to give the same correction a 10th time. The
+instinct this whole redesign push exposed: producing another attempt
+that's a superficial variation on the last rejected one (new palette,
+same block structure; new shape, same "field of texture behind flat
+content" composition) instead of one genuinely informed by what she
+actually said. Her words: "the possibilities are actually endless and
+if you would look at what you have done and actually do different
+based on what I am saying then we would be done by now." Two concrete
+obligations follow from this, going forward, not just for this redesign:
+
+1. **Before building the next attempt after any rejection, name what
+   structurally changes** (not just which color or which decorative
+   shape) — if the answer is "same layout skeleton, different surface
+   treatment," it is not different enough to show her.
+2. **Write a real rejection into this file at the time it happens**,
+   the same detailed way the list below was written — don't wait for
+   her to ask "how do I stop you from repeating this." If a session ends
+   without that written down, the next session starts blind and burns
+   her time re-teaching it.
+
 ## Entry-page hero redesign — techniques already tried and rejected
 
 She asked directly how to stop a future session from repeating an idea
