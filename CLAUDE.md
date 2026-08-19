@@ -581,6 +581,38 @@ chart was sized large and allowed to bleed off both edges of the
 viewport rather than sitting neatly contained, specifically to answer
 that note.
 
+**Follow-up: combine confirmed-good pieces, don't swap one for
+another.** After the chart-wheel version published, she pointed out the
+key points had reverted to plain flat pill badges and the earlier
+confirmed-good real 3D glossy bubble shading (with float animation) was
+gone — "walk yourself through what I have said that I like... don't
+give me bare minimum." The fix: brought the glossy radial-gradient
+sphere treatment back for the three key points (recolored to the
+chart's own real center colors — Ajna blue, Throat teal, Heart magenta
+— instead of the banned gold, so they visually tie to the real chart
+data rather than being an arbitrary UI color choice), added float
+animation back, sped up the wheel's rotation so the motion actually
+reads at a glance, and added a soft pulsing glow at the wheel's center.
+**Standing lesson: each new version has been replacing the previous
+one's good parts instead of accumulating them — check what was already
+confirmed good before building the next attempt, don't let the newest
+idea silently drop earlier wins.**
+
+**Then: don't just stack the chart above the text either.** Immediately
+after that fix, she said "don't stick the chart at the top and just put
+text under it" — the same "arbitrary slot" problem as the earlier
+top-of-page depth strip (see above), just with the chart instead of the
+ribbon field. The fix: the chart wheel has a large genuinely empty
+circle at its own center (nothing rendered there, unlike the ribbon
+strip which was busy edge-to-edge) — the title and tagline were moved
+to sit inside that real empty space, as a non-rotating layer over the
+rotating ring, so the chart and the words are one integrated object
+instead of a graphic with a caption stacked underneath. This is
+different from the standing "never put the depth technique behind
+text" rule (still fully in effect) because the wheel's center is
+actual empty negative space by construction, not a busy graphic the
+text would have to compete with. Published, not yet confirmed.
+
 **Correction — "get away from blue" was about execution, not the hue.**
 Earlier in this same redesign push she rejected a specific washed-out,
 "faded pencil-color" blue-and-white attempt and said "get away from
