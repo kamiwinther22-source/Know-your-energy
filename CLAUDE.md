@@ -533,9 +533,53 @@ whatever replaces them needs a real reason, not just "add a gradient."
 **What has NOT been rejected and can still be built on:** large, bold,
 standalone typographic treatment for the three key points (no
 containing shape around them) with each at a different size; a light
-(not dark) dominant background; a vivid/saturated (not dulled-down or
-pastel) palette; real per-shape gradient shading for dimensional depth,
-confined to its own space, never behind text.
+(not dark) dominant background; real per-shape gradient shading for
+dimensional depth, confined to its own space, never behind text.
+
+**Major finding — include the real chart imagery. This may be the
+actual breakthrough of this whole redesign push, don't lose it.** After
+being asked directly "tell me what makes this stand out, what's it
+about, I can't tell" and answering honestly that nothing on the page
+signaled astrology/numerology/Human Design at all, she said: "why do
+you refuse to include the chart images??????? you can be different by
+including the images and not doing celestial." **This reframes the
+sitewide "no dark/cosmic/celestial theme" rule** (still fully in
+effect) — that rule bans starfields, nebulas, night-sky mood, not real
+chart/diagram imagery. A birth-chart wheel or the Human Design BodyGraph
+is a technical diagram, not a celestial theme, and showing one is
+apparently the single clearest way to answer "what is this about" for
+a zero-context visitor. The fix built immediately after: the entry
+page's hero now uses the **actual `hdBodygraphSVG` chart data from
+`index.html`** (same `CENTER_GATES`/`GATE_CENTER`/`CENTER_COLOR`/
+`SIGN_ORDER`/`SIGN_COLOR`/`GATE_WHEEL_ORDER` — real values, copied
+faithfully, not invented) rendered large and rotating slowly, with all
+gates shown active for maximum richness (this is a decorative/marketing
+rendering, not tied to a real person's chart — the inner human-body-
+shaped center polygons from the real function were left out for time,
+only the outer zodiac ring + 64-gate wheel was built). Published but
+not yet confirmed by her — check her response. **If this lands, it
+should probably become the standing direction for hero imagery on this
+page going forward**, and worth asking her whether it should pull in
+the inner body-shape centers too for full fidelity to the real chart.
+Same message also had two direct color corrections: **drop the
+gold/yellow UI accent color entirely** ("get the gold yellow piss color
+off completely" — this is about the invented gold accent used for
+buttons/badges in earlier attempts, not the real chart's own established
+per-center colors, one of which — the G center — happens to be gold;
+that one gate's color is real data, not a UI choice, and was kept), and
+**the blue/background tone should read as icy and soft**, not the
+saturated cornflower-blue used in the previous version — rebuilt as a
+pale, near-white frost-blue gradient. This refines rather than
+contradicts the earlier "vivid/saturated, not pastel" note above: that
+note was about avoiding a washed-out, faded *execution* of rich color:
+"icy and soft" describes the *ambient background tone* specifically,
+while the chart itself stays fully saturated and richly multicolor —
+the two aren't in conflict, they apply to different elements of the
+same page. She also repeated, in the same message, "get away from
+average... go dramatic in a way that screams and shows the point" — the
+chart was sized large and allowed to bleed off both edges of the
+viewport rather than sitting neatly contained, specifically to answer
+that note.
 
 **Correction — "get away from blue" was about execution, not the hue.**
 Earlier in this same redesign push she rejected a specific washed-out,
