@@ -727,6 +727,37 @@ resurrect the "two pages, entry form is done" framing.
     constructive" closing-sentence template used throughout ASTRO_DEFS
     and NUM_DEFS — a real, still-open style issue (see below), not
     something fixed on this pass.
+  - **Follow-up style pass on `GATES` (all 64) and `HD_DEFS.hdtype` (all
+    5) and `HD_DEFS.hdprofile` (9 of 12 — 1/4, 2/4, 2/5, 3/5, 4/1, 5/1,
+    5/2, 6/2, 6/3): drafted, not yet reviewed by her.** This is the
+    closing-sentence-template fix flagged as still-open above, now
+    actually done for these two categories, checked against the full
+    item 1-14 checklist rather than just the mechanism/sourcing pass.
+    Every gate previously ended on a prescriptive line telling the
+    reader what to do to keep the gate "constructive" ("naming the
+    actual desire... is what lets this gate's early spark turn into a
+    real direction," "the check is whether what's being controlled is
+    genuinely yours," etc.) — the exact lesson/growth-edge pattern item
+    4 bans, just phrased as gate-mechanics advice instead of
+    personality-trait advice. Same fix applied as elsewhere in this
+    rewrite: state the gate's real strength and its real cost as
+    parallel facts, remove the closing instruction, no verdict on which
+    side is "right." Five `HD_DEFS.hdprofile` entries had the literal
+    phrase "The lesson is..." as their closing sentence (2/4, 5/1, 5/2,
+    6/2, 6/3) — same fix. `HD_DEFS.hdauthority` (all 7) was checked
+    against the same checklist and left unchanged: its "how to work
+    with this Authority" language (ride the emotional wave, talk it out
+    with trusted people, wait a lunar cycle) is the literal HD system
+    doctrine for that Authority's Strategy, not a personality trait
+    being softened or graded — judged not to be the same pattern as the
+    Scorpio-guardedness precedent this checklist item exists to catch.
+    `HD_DEFS.hdprofile`'s other 3 entries (1/3, 3/6, 4/6) already passed
+    without changes needed. No factual/mechanism content changed in
+    this pass, sourcing accuracy from the prior audit still stands —
+    this was a style-only rewrite. **Per her standing process for this
+    audit, this has not been shown to her and is not "audited,
+    complete" — it's a drafted redraft awaiting her skim/approve, same
+    as every other category in this rewrite.**
   - **New content added, not an audit of existing content: `ASTRO_DEFS`
     now has real, sourced sign-by-sign entries for Chiron, North Node,
     South Node, and Lilith (48 entries total) — these five "Other
@@ -780,12 +811,16 @@ resurrect the "two pages, entry form is done" framing.
   it, which it was. Every other category — `moon`/`mercury`/`venus`/
   `mars`/`jupiter`/`saturn`/`uranus`/`neptune`/`pluto`/`ascendant`/
   `midheaven`/`house`/`housecombo` in `ASTRO_DEFS`, the `chiron`/
-  `northnode`/`southnode`/`lilith` entries, every `NUM_DEFS` category,
-  and the closing-sentence template in `GATES` and `HD_DEFS` — still
-  has the old lesson-ending pattern *and* has not been checked against
-  items 12-14 at all. Do not mark any category "audited, complete"
-  again until it's been checked against all of items 1-14, not just
-  the original mechanism/accuracy pass or just item 4.
+  `northnode`/`southnode`/`lilith` entries, and every `NUM_DEFS`
+  category — still has the old lesson-ending pattern *and* has not been
+  checked against items 12-14 at all. `GATES` (all 64) and
+  `HD_DEFS.hdtype`/`.hdprofile` have had the lesson-ending pattern
+  redrafted out (see the "Follow-up style pass" note above), but that
+  redraft is not yet reviewed or approved by her — do not treat it as
+  settled until she's actually seen it. Do not mark any category
+  "audited, complete" again until it's been checked against all of
+  items 1-14 *and* she's confirmed it holds — a drafted rewrite is not
+  the same thing as an approved one.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
