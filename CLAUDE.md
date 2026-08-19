@@ -642,6 +642,23 @@ license to try one — it was reference for rendering technique only.
   filesystem between separately-sent files. Base64-embed as a data URI
   instead, and verify it actually loaded (`img.complete && img.naturalWidth`,
   `document.fonts.ready`) before resending.
+- **A published design-canvas Artifact (`.dc.html` artboard, via
+  `seed-canvas.mjs`) can stretch a fixed-width mobile mockup's root
+  element taller than its actual content on a real phone**, even when a
+  local Playwright screenshot at a similar viewport height shows tight,
+  correct spacing — the local test harness and the real artifact
+  viewer's wrapper don't necessarily size the artboard the same way (the
+  wrapper appears to stretch a single artboard to fill available height
+  by default, e.g. via flex/grid `align-items: stretch`). Caught when
+  she sent a real phone screenshot showing a large dead gap that didn't
+  reproduce in a local screenshot. Fix: give the artboard's outermost
+  element (`.root` or equivalent) explicit `align-self: start` (covers
+  both flex and grid ancestors) plus `height: auto` — don't assume a
+  local Playwright screenshot at some fixed viewport height is
+  sufficient proof of correct spacing for a design-canvas mockup; ask
+  her to check a real device screenshot before treating layout spacing
+  as confirmed, the same way `index.html` changes need a real screenshot
+  check per the design rules above.
 - Android auto-boosts text size by default, which can break box-sizing
   assumptions — set `text-size-adjust: 100%`.
 - Prefer static/hardcoded CSS sizing over JS-computed/auto-sizing — dynamic
