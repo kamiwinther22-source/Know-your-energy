@@ -613,6 +613,40 @@ text" rule (still fully in effect) because the wheel's center is
 actual empty negative space by construction, not a busy graphic the
 text would have to compete with. Published, not yet confirmed.
 
+**Correction — the hand-built chart wheel was thrown out. Use the real
+carousel graphics from `index.html`, not an invented chart.** After
+the integrated wheel+title version, she said "there's not even a chart
+... use the graphics from the carousel," then "throw this on creative
+example away and start over. completely over. don't use these colors.
+go back to the reference I gave you. use the graphics that are used in
+the carousel because they are far better than this piece of shit."
+Two separate corrections in one round: (1) the *hand-built* HD gate
+wheel (rainbow per-center colors, pale icy background) wasn't reading
+as a real chart to her and wasn't wanted — the entry page already has
+its own real, tested, working carousel graphics (`index.html`, the
+`solarIcon` planet-disc generator around line 724 and the `hdIcon`
+compact bodygraph preview around line 821, both built and refined over
+many earlier sessions, both using the shared `TONES` glossy-metal-sphere
+palette — cream/white/silverL/silverD/goldT, defined ~line 632) — those
+should be reused directly, not reinvented from scratch again. (2) the
+color correction was separate from the imagery correction: go back to
+the actual reference photos (rich saturated periwinkle-blue + warm gold
+glow), not the pale icy-blue background used with the hand-built wheel.
+The fix: pulled the real `solarIcon` planet-disc SVG generator verbatim
+(same `PLANETS` array, same `TONES` gradients, same label-collision-
+avoidance logic) onto a rich blue-to-periwinkle background with a warm
+gold radial glow behind the disc — the disc's own gold/cream/silver
+tones sit naturally against that blue the same way gold sits against
+blue in her bedroom reference photo. Also fixed in the same pass: bubble
+key-point text was too small to read comfortably — sized up. Published,
+not yet confirmed. **Standing lesson, worth generalizing: before
+building any new hero graphic from scratch, check whether the entry
+page already has a real, tested graphic for that subject in `index.html`
+first** (the carousel's `solarIcon`/`hdIcon`, or a numerology
+equivalent if one exists) — hand-inventing a new chart-like graphic
+each time is exactly the kind of avoidable repeat this file exists to
+prevent.
+
 **Correction — "get away from blue" was about execution, not the hue.**
 Earlier in this same redesign push she rejected a specific washed-out,
 "faded pencil-color" blue-and-white attempt and said "get away from
