@@ -502,8 +502,33 @@ legibility. The fix tried immediately after this feedback: the same
 ribbon-shading technique, rebuilt as flowing bands confined to their
 own dedicated strip with a hard boundary, positioned above all text
 with normal document flow (not absolutely positioned behind it) so
-nothing overlaps. Published but not yet confirmed by her as landing —
-check her response before assuming this composition is settled.
+nothing overlaps. **She then rejected that specific composition too**
+("dont put the depth at the top of the page. create a website. stop
+putting things randomly with no purpose") — not because the technique
+was wrong, but because a strip at the top was itself an arbitrary slot,
+not part of a real composition. Don't reintroduce a standalone "depth
+strip" section anywhere on the page.
+
+**Separate, important color-application finding.** After landing on the
+rich-blue-bubbles version (background `#4C5FC9` flat, `#FBF8F2` flat
+form panel), she said the palette itself was fine but the way it was
+being used was boring: "I dont hate the colors. I hate the boring way
+you use them." The diagnosis: even without a hard-edged divider between
+sections, two flat solid-color rectangles stacked on top of each other
+reads as boring regardless of which colors fill them — flat fill itself
+is the problem, not just the seam between fills. The fix tried
+immediately after: replaced the two flat rectangles with **one
+continuous gradient spanning the whole page** (deep blue at the top
+through periwinkle to near-white at the bottom, where the form needs
+legibility), plus a real warm-toned radial glow near the title and a
+handful of small glowing motes drifting upward past it, plus the
+bubbles given a slow independent float instead of sitting static.
+Same exact hue family throughout, used as continuous light/atmosphere
+rather than as area fill. Published but not yet confirmed by her as
+landing — check her response before treating this as settled, and
+don't read this as "gradients always fix boring" — the actual lesson is
+flat solid-fill rectangles for major page regions are the anti-pattern,
+whatever replaces them needs a real reason, not just "add a gradient."
 
 **What has NOT been rejected and can still be built on:** large, bold,
 standalone typographic treatment for the three key points (no
