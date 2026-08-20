@@ -1265,6 +1265,30 @@ license to try one — it was reference for rendering technique only.
     items 12-14 at all). **None of this session's fixes have been shown
     to her yet** — same rule as everywhere else in this file: a fix
     made is not the same as a fix confirmed.
+  - **Refinement to item 4, given right after the North Node/Karmic
+    fixes above: "life repeatedly puts you in X situation, trying to
+    teach you Y" is NOT itself banned.** She said this directly: "I do
+    not think there's anything wrong with saying if you find yourself
+    in x situation or circumstances repeatedly, life is trying to teach
+    you Y. I would want to be sure thats accurate and that its not a
+    formula repeated everywhere." So item 4's actual target is narrower
+    than "never mention recurring circumstance or a lesson mechanism"
+    — it's (1) telling the reader their *current trait* is a flaw to
+    correct (the original Scorpio-guardedness problem: "you should
+    trust more"), and separately (2) a recurring-circumstance/lesson
+    claim that either isn't accurate to real tradition for that specific
+    placement, or is phrased as the same formula copy-pasted across
+    many entries rather than something specific to each one. Both are
+    real problems on their own, independent of each other. The North
+    Node/Karmic Lessons/Karmic Debt rewrite above already avoids both
+    (each entry names a different real mechanism checked against actual
+    tradition for that number/sign, not a fill-in-the-blank sentence),
+    so it should already clear this refined bar — but flagging the
+    distinction explicitly since it matters for every remaining
+    category: a "life keeps presenting this" mechanism can stay in the
+    text where it's genuinely accurate and phrased specific to that
+    entry; what has to go is the mechanical template and any verdict
+    that the current trait itself is wrong.
 - **Settled, not open — do not relitigate:** the precise, final rule on
   Sun/Scorpio's trust theme, stated directly by her after real research
   surfaced a genuine tension: the guardedness/slow-to-trust mechanism
