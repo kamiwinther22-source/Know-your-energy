@@ -704,6 +704,45 @@ revisiting once she's seen it; do not assume removing gold and removing
 labels were free of cost just because both were explicitly requested.
 Published, not yet confirmed.
 
+**Latest attempt — asked her to name the problems in the violet
+carved-panel version herself, first.** After the "blends in" finding
+led to a violet/indigo version with soft-UI carved panels (real
+Human Design bodygraph inside one panel, three raised medallion key
+points, another panel for the form), she asked to see it again and
+said "I think I am calm enough to explain what I'm seeing now," then
+asked Claude to diagnose the problems first, before she added her own
+read. Six real problems were named and confirmed accurate against
+this file's own standing rules: (1) the small HD polygon shapes still
+didn't read as anything recognizable — same "there's not even a
+chart" complaint, just recolored; (2) the whole page was one hue
+family (violet) at different lightness levels, not real color
+variety — the thing the "sticking to one color kills the possibility
+of something clicking" note already warned about; (3) the carved
+rounded-rectangle panels (inset shadow, raised medallions) are a real,
+recognizable "neumorphism" trend, which runs against "don't follow
+web-design trends"; (4) removing the flat white card only to replace
+it with soft rounded-rectangle cards kept the same underlying
+skeleton — stacked, bounded rectangular sections — the actual thing
+"blends in" was about, not just card color; (5) the key points were
+circles again, regardless of the 3D bezel treatment; (6) nothing
+evoked energy or two things relating, the actual words on the page.
+The fix built immediately after: dropped the HD shapes entirely and
+led with the solar disc alone (the one image that has read clearly
+as a real object every time it's been tried); added a second real
+material — white/pearl/silver, not a lighter violet — as a genuine
+second presence, not just tonal variation; replaced the carved panels
+with the confirmed-liked ribbon light-to-shadow technique, this time
+wrapped directly around the disc's own radius like a wreath instead
+of sitting in its own separate strip, so the motion belongs to the one
+real image rather than floating free; removed every panel/card
+boundary so title, disc, key points, and form all sit on one
+continuous background; and replaced the medallions with the
+standalone bold typography treatment for the key points (no
+container, confirmed workable earlier in this file). Published, not
+yet confirmed — and note the same "does this still answer what it's
+about" trade-off flagged above may resurface now that the HD chart is
+gone and only the solar disc represents the three systems.
+
 **Correction — "get away from blue" was about execution, not the hue.**
 Earlier in this same redesign push she rejected a specific washed-out,
 "faded pencil-color" blue-and-white attempt and said "get away from
