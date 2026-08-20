@@ -1276,7 +1276,16 @@ license to try one — it was reference for rendering technique only.
       that never should have Z" structure is real but not prescriptive
       (it's a flat reassurance, not an instruction), judged different
       in kind from the fixed patterns — worth her eye if she disagrees,
-      but a defensible call, not an oversight.
+      but a defensible call, not an oversight. **She resolved this
+      immediately after: "I dont want anything to be repetitive formula
+      like" — no exception for reassurance-not-instruction.** Rewrote
+      all 12 `lilith` entries with genuinely varied sentence structure
+      throughout (not just the closing line — the opener and the
+      middle "common result" connector were also verbatim-repeated
+      across all 12 and needed the same fix). Read this as a standing,
+      general instruction: a repeated sentence shape counts as a
+      formula even when it isn't prescriptive/advice-giving — don't
+      wait for her to flag each specific instance again.
     **This means every ASTRO_DEFS and NUM_DEFS category has now
     actually been checked against the full 1-14 checklist at least
     once**, closing out what this section originally described as
