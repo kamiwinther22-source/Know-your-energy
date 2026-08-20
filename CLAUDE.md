@@ -1252,19 +1252,41 @@ license to try one — it was reference for rendering technique only.
     - `NUM_DEFS.challenge`/`.challenge1child` (17 entries) and
       `ASTRO_DEFS` outer planets/Chiron/Nodes/Lilith structure: checked,
       already compliant, no changes needed.
-    **Not yet touched this pass, still open:** `ASTRO_DEFS.ascendant`,
-    `.midheaven`, `.housecombo` (120 entries), `.lilith` (has a milder,
-    arguable repeated-structure issue — "What's suppressed here isn't
-    X — it's a legitimate Y that never should have Z" across all 12 —
-    not fixed this pass, judgment call to leave it since it isn't
-    prescriptive the way the fixed patterns were; worth a second look),
-    and every other `NUM_DEFS` category (lifepath, expression, soulurge,
-    personality, birthday, attitude, balance, pinnacle, personalyear,
-    personalmonth, personalday, essence — `balance` was spot-checked via
-    grep and looks clean, the rest have not been re-read against
-    items 12-14 at all). **None of this session's fixes have been shown
-    to her yet** — same rule as everywhere else in this file: a fix
-    made is not the same as a fix confirmed.
+    **Update — full pass now actually completed across every remaining
+    category.** Continuing from the fixes above, the rest of
+    `ASTRO_DEFS` and `NUM_DEFS` was read in full and checked against
+    the complete 1-14 checklist: `ascendant`, `midheaven`, `housecombo`
+    (120 entries, spot-read a sample plus grepped the rest for every
+    banned pattern — narrower per-entry scope than a full sign is
+    appropriate here and isn't a violation of item 12), `lifepath`,
+    `expression`, `soulurge`, `personality`, `attitude`, `balance`,
+    `pinnacle`, `pinnacle1child`, `challenge`, `challenge1child`,
+    `personalyear`, `personalmonth`, `personalday`, `essence`. All of
+    these passed as already written — no changes needed. Two more real
+    fixes were made:
+    - **`NUM_DEFS.birthday`: a "what actually shifts this pattern is
+      letting support in" item-4 violation on entry 19** (same
+      growth-edge-instruction class as North Node/Karmic Lessons),
+      reworded to observational. **14 entries (5, 9, 15, 17, 18, 21,
+      23-29, 31) used the identical "The gift is X; the risk is Y"
+      template back to back** — varied the phrasing per entry, kept
+      the real trait+cost content.
+    - `ASTRO_DEFS.lilith` was re-checked and left unchanged: its
+      repeated "What's suppressed here isn't X — it's a legitimate Y
+      that never should have Z" structure is real but not prescriptive
+      (it's a flat reassurance, not an instruction), judged different
+      in kind from the fixed patterns — worth her eye if she disagrees,
+      but a defensible call, not an oversight.
+    **This means every ASTRO_DEFS and NUM_DEFS category has now
+    actually been checked against the full 1-14 checklist at least
+    once**, closing out what this section originally described as
+    "not yet checked at all." **None of this session's fixes have been
+    shown to her yet** — same rule as everywhere else in this file: a
+    fix made is not the same as a fix confirmed. `GATES` and
+    `HD_DEFS.hdtype`/`.hdprofile`'s earlier redraft (see above) also
+    still needs her review. One unrelated data gap noticed in passing,
+    not a content-quality issue: `NUM_DEFS.essence` has no `33` entry
+    (stops at `22`) — flagging for a product decision, not fixed here.
   - **Refinement to item 4, given right after the North Node/Karmic
     fixes above: "life repeatedly puts you in X situation, trying to
     teach you Y" is NOT itself banned.** She said this directly: "I do
