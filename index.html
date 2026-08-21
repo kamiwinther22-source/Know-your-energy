@@ -2569,18 +2569,29 @@ function quadItem(nm,sys,rows,preHtml,wheelSvg,rowNum){
   return `<div class="quad-item" style="grid-row:${rowNum};" data-card-idx="${idx}"><div class="quad-title">${escapeHtml(nm)} \u00b7 ${sys}</div>${wheelHtml}<div class="dplist">${rows}</div></div>`;
 }
 function reportSlot(names,report,reportError,rowNum){
-  const title=`${escapeHtml(names)} \u00b7 Reading`;
+  // Raw (unescaped) title for cardRegistry -- the modal sets this via
+  // .textContent (see cardExpandTitle further down), which is already
+  // injection-safe on its own; pre-escaping here and THEN setting it as
+  // textContent double-escapes it, showing the literal characters
+  // "&amp;" on screen instead of "&". Escape only where this title is
+  // embedded directly into an HTML string, not where it's stored raw.
+  const titleRaw=`${names} \u00b7 Reading`;
   if(!report){
     if(!reportError)return '';
-    return `<div class="panel-error" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${title}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div>`;
+    return `<div class="panel-error" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
     return `${dpsec(head)}<div class="dprow"><p class="report-body">${escapeHtml(s.body)}</p></div>`;
   }).join('');
   const sigHtml=report.signature?`<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>`:'';
-  const fullRows=sectionsHtml+sigHtml;
-  const idx=cardRegistry.push({title,rows:fullRows})-1;
+  // References: the technical placement/number/gate citations, moved out
+  // of the prose (per the system prompt's rule) into their own plain
+  // list at the end -- traceable, without cluttering the actual reading.
+  const refsHtml=(report.references&&report.references.length)?
+    dpsec('References')+`<div class="dprow"><p class="report-body" style="color:var(--card-mid);font-style:italic;">${report.references.map(escapeHtml).join(' &middot; ')}</p></div>`:'';
+  const fullRows=sectionsHtml+sigHtml+refsHtml;
+  const idx=cardRegistry.push({title:titleRaw,rows:fullRows})-1;
   return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
 }
 
