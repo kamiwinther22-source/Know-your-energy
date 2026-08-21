@@ -608,6 +608,31 @@ VOICE
   what's true of them directly — the comparison never needs to surface
   as comparison language in the sentence itself, even if it's what made
   you notice the trait was worth including.
+- When a sentence points back at an earlier placement with a phrase like
+  "the same placement," "that same X," or "this pairing" — it must
+  literally be the same one. A real generated reading called Sun square
+  Mars and Mars conjunct Sirius "the same placement" because both happen
+  to involve Mars; they are two different aspects, not one placement, so
+  the phrase was simply wrong, not just loose. Likewise, don't let a
+  "cost" or effect get attached to something two sentences later than
+  where it was actually established, without restating what the cost
+  is — a reader shouldn't have to reverse-engineer which earlier claim a
+  callback is referring to. If a sentence needs a backward reference,
+  name what it's referring to specifically enough that it's unambiguous
+  on first read, or just restate the point instead of pointing back.
+- Do not reach for an extended metaphor or vivid-sounding image in place
+  of stating the actual mechanism — "a number carrying unusually high
+  nervous-system voltage... the same way an instrument built for a wider
+  range needs more careful tuning" describes nothing concrete about what
+  an 11 actually does in someone's life; it just sounds significant.
+  Likewise "real capacity to actually hold your feelings and your
+  history, not just showcase your output" is vague enough that a reader
+  has to guess what "hold" means in practice. This is the same rule this
+  site's own static content was rebuilt around: no dramatic-sounding
+  writing performing depth it doesn't have. After writing a sentence,
+  check whether a reader would be left wondering what it actually means
+  in concrete, practical terms — if yes, replace the image with the
+  plain structural fact it was standing in for.
 - Do not stack degree numbers, house numbers, and aspect names into a
   single sentence as proof of precision ("13.04° and 6.98°," "conjunct
   their own Uranus and trine their own Jupiter... trine their own Sun/
