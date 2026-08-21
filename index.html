@@ -7,20 +7,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: warm bone, not black -- the black+scattered-glint treatment
-   this replaces was reading as the exact dark/night-sky mood this app has
-   always explicitly rejected. Real depth here comes from a fine paper-grain
-   texture (an SVG turbulence filter, not a gradient blob -- the "scattered
-   light/dark patches" failure mode from earlier passes) plus actual shadow
-   layering on the cards/tiles themselves, not from darkness. Ink text is
-   full-strength dark, never faded/muted. */
+/* Palette per her explicit spec: light and inviting; ice blue, silver,
+   light cream, and white; black reserved for 3D/shadow rendering and
+   for text (never as a decorative fill color); glossy 3D surfaces;
+   layered (not flat) background; one accent color used to pop and
+   direct attention. Two real background layers -- a pale ice-blue panel
+   sitting behind the cream content column, offset and shadowed -- so
+   there's actual z-axis depth, not a single flat plane. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#F8F3E6;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.05  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background:#FCFAF4;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
-  color:#201B14;
+  color:#0A0A0A;
+}
+/* Heavily blurred so this reads as soft ambient color sitting behind the
+   page -- a real second depth layer -- instead of a hard-edged rounded
+   rectangle slicing across the content on top of it. */
+.bg-layer{
+  position:fixed;top:-40px;right:-140px;width:380px;height:460px;z-index:0;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#EAF4FA 0%,#CFE4EF 55%,#AFCEDF 100%);
+  filter:blur(70px);opacity:0.85;
+  pointer-events:none;
+}
+.bg-layer.two{
+  top:auto;bottom:-80px;left:-160px;right:auto;width:340px;height:400px;
+  background:radial-gradient(circle at 35% 30%,#FFFFFF 0%,#F3EFE3 55%,#E7DFC9 100%);
+  filter:blur(70px);opacity:0.9;
 }
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
@@ -205,25 +219,29 @@ body{
    gotcha already documented elsewhere in this file). Making both
    coordinates explicit on both items is the real fix, not a guess. */
 .keys-col{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:0.85rem;padding-top:0.3rem;align-items:flex-start;}
+/* Glossy silver/cream spheres -- off-center highlight + inset shading +
+   real drop shadow (black, used only for the 3D effect, not as a fill). */
 .key-bubble{
   position:relative;width:98px;height:98px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;text-align:center;
   padding:0.4rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.66rem;line-height:1.18;
-  color:#201B14;
-  background:radial-gradient(circle at 32% 26%,#FBF6E9 0%,#EFE6D0 55%,#DDD0AE 100%);
+  color:#0A0A0A;
+  background:radial-gradient(circle at 30% 24%,#ffffff 0%,#f3f2f1 45%,#c2c1bc 100%);
   box-shadow:
-    0 1px 1px rgba(255,255,255,0.7) inset,
-    0 -6px 9px -6px rgba(32,27,20,0.32) inset,
-    0 7px 13px -6px rgba(32,27,20,0.38);
+    0 2px 2px rgba(255,255,255,0.85) inset,
+    0 -10px 14px -8px rgba(0,0,0,0.28) inset,
+    0 10px 16px -7px rgba(0,0,0,0.32);
 }
 .key-bubble:nth-child(even){align-self:flex-end;}
+/* Lead bubble: the one pop of saturated ice blue, glossier/brighter than
+   the rest -- this is the "color pops to guide attention" moment. */
 .key-bubble.lead{
-  color:#ffffff;font-weight:800;
-  background:radial-gradient(circle at 32% 26%,#3A56D6 0%,#1C2CA9 55%,#101A63 100%);
+  color:#0A0A0A;font-weight:800;
+  background:radial-gradient(circle at 30% 24%,#EAF6FC 0%,#8FC1DE 55%,#4A87AD 100%);
   box-shadow:
-    0 1px 1px rgba(255,255,255,0.4) inset,
-    0 -6px 10px -6px rgba(8,12,50,0.55) inset,
-    0 9px 16px -6px rgba(15,23,88,0.5);
+    0 2px 2px rgba(255,255,255,0.85) inset,
+    0 -10px 15px -8px rgba(0,20,35,0.35) inset,
+    0 12px 20px -7px rgba(0,0,0,0.38);
 }
 
 .form-col{position:relative;grid-column:2;grid-row:1;}
@@ -258,28 +276,30 @@ body{
 .line-field select option{color:#000000;}
 .line-field input::placeholder{color:rgba(32,27,20,0.45);font-style:italic;opacity:1;}
 
-/* ---------- submit button: solid brand blue with real layered elevation
-   (tight contact shadow + soft ambient throw + inner highlight) -- the
-   chrome/silver gradient + spinning ring this replaces read as a dated,
-   generic glossy web button, not a considered one. ---------- */
+/* ---------- submit button: genuinely glossy ice-blue/silver 3D surface
+   per her explicit spec -- light-to-deep ice-blue gradient, a real sheen
+   highlight across the top half, black used only for the drop shadow
+   (never as a fill color), black text for readability. ---------- */
 .submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;}
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.7rem 1.7rem;
-  background:linear-gradient(160deg,#3A56D6 0%,#1C2CA9 55%,#101A63 100%);
-  border:none;border-radius:8px;
-  color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  background:linear-gradient(160deg,#F3FAFD 0%,#AFD0E3 45%,#6FA0C0 100%);
+  border:1px solid rgba(255,255,255,0.6);border-radius:8px;
+  color:#0A0A0A;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
   transition:transform 0.18s ease,box-shadow 0.18s ease;
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.35),
-    inset 0 -5px 9px -3px rgba(8,12,50,0.5),
-    0 2px 3px rgba(32,27,20,0.25),
-    0 14px 24px -10px rgba(15,23,88,0.55);}
+    inset 0 1.5px 0 rgba(255,255,255,0.8),
+    inset 0 -6px 10px -3px rgba(20,50,70,0.35),
+    0 3px 5px rgba(0,0,0,0.18),
+    0 16px 26px -10px rgba(0,0,0,0.32);}
+.gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:8px 8px 50% 50%/8px 8px 100% 100%;
+  background:linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.1) 100%);pointer-events:none;}
 .gen-btn:hover{transform:translateY(-1px);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.4),
-    inset 0 -5px 9px -3px rgba(8,12,50,0.55),
-    0 3px 4px rgba(32,27,20,0.28),
-    0 16px 28px -10px rgba(15,23,88,0.6);}
+    inset 0 1.5px 0 rgba(255,255,255,0.85),
+    inset 0 -6px 10px -3px rgba(20,50,70,0.4),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 18px 30px -10px rgba(0,0,0,0.36);}
 .gen-btn:active{transform:translateY(1px);}
 .tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:rgba(32,27,20,0.65);margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
@@ -459,6 +479,8 @@ body{
 </style>
 </head>
 <body>
+<div class="bg-layer"></div>
+<div class="bg-layer two"></div>
 <div class="content">
   <div class="brand-row">
     <div class="brand">Know Your Energy</div>
