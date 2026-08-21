@@ -16,31 +16,20 @@
    there's actual z-axis depth, not a single flat plane. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Cool white base, not cream -- the previous #FCFAF4 plus a cream
-     second layer was what made the whole page read as tan even after
-     the gold accents were removed. Cream is now a small, secondary
-     note, not the dominant tone. */
   background:#F9FAFB;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#0A0A0A;
+  position:relative;
 }
-/* Heavily blurred so this reads as soft ambient color sitting behind the
-   page -- a real second depth layer -- instead of a hard-edged rounded
-   rectangle slicing across the content on top of it. */
-.bg-layer{
-  position:fixed;top:-40px;right:-140px;width:380px;height:460px;z-index:0;
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,#EAF4FA 0%,#CFE4EF 55%,#AFCEDF 100%);
-  filter:blur(70px);opacity:0.85;
-  pointer-events:none;
-}
-.bg-layer.two{
-  top:auto;bottom:-80px;left:-160px;right:auto;width:340px;height:400px;
-  /* Cool silver-white instead of cream/tan. */
-  background:radial-gradient(circle at 35% 30%,#FFFFFF 0%,#F0F2F3 55%,#DCE2E5 100%);
-  filter:blur(70px);opacity:0.9;
-}
+/* Real layered depth as flowing curved ribbons winding down the whole
+   page -- not geometric panels, not blurred blobs. Stretched to fill
+   the page's actual height (preserveAspectRatio="none") so the flow
+   runs the full scroll length, not just one viewport. Multiple ribbons
+   at different widths/opacities/z-depths so they read as layers passing
+   behind and in front of each other, not one flat shape. */
+.ribbon-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.ribbon-bg svg{display:block;width:100%;height:100%;}
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
    everything inside it) wider than the actual phone viewport, which is
@@ -53,7 +42,9 @@ body{
    data-entry form, spanning the page rather than staying capped to the
    tagline's narrower 340px box. ---------- */
 .pitch-line{
-  width:100%;text-align:center;font-family:'Special Elite',monospace;
+  /* DM Sans, not the typewriter font -- Special Elite here was a real
+     contributor to the "textbook" feel this was meant to move away from. */
+  width:100%;text-align:center;font-family:'DM Sans',sans-serif;
   font-size:0.92rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
   padding:0 1rem;margin:0 0 1.4rem;
   /* Solid ink, matching .tagline-slide.c-gold's fix -- see that rule's
@@ -172,7 +163,8 @@ body{
 .tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Special Elite',monospace;
+  /* DM Sans, not the typewriter font -- same "textbook" fix as .pitch-line. */
+  text-align:center;font-family:'DM Sans',sans-serif;
   /* Largest size (found by real binary-search measurement of this exact
      sentence, not guessed) that still wraps to 2 lines in this 340px-max
      container at every width from 320-430px CSS px, with a small safety
@@ -490,8 +482,30 @@ body{
 </style>
 </head>
 <body>
-<div class="bg-layer"></div>
-<div class="bg-layer two"></div>
+<div class="ribbon-bg">
+  <svg viewBox="0 0 400 2000" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="ribbonA" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#EAF4FA"/><stop offset="100%" stop-color="#AFCEDF"/>
+      </linearGradient>
+      <linearGradient id="ribbonB" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#DCE6EA"/>
+      </linearGradient>
+      <linearGradient id="ribbonC" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#CFE4EF"/><stop offset="100%" stop-color="#6FA0C0"/>
+      </linearGradient>
+      <filter id="ribbonShadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0a0a0a" flood-opacity="0.08"/>
+      </filter>
+    </defs>
+    <path d="M 340 -60 C 420 160, 120 220, 200 440 C 280 660, 440 700, 300 920 C 160 1140, 10 1160, 110 1380 C 210 1600, 400 1620, 260 1840 C 160 2010, 40 2030, 90 2200"
+          fill="none" stroke="url(#ribbonA)" stroke-width="140" stroke-linecap="round" opacity="0.55" filter="url(#ribbonShadow)"/>
+    <path d="M 60 -40 C -20 180, 260 240, 190 460 C 120 680, -40 720, 70 940 C 180 1160, 360 1180, 250 1400 C 150 1600, -20 1620, 60 1820 C 120 1970, 260 1990, 210 2160"
+          fill="none" stroke="url(#ribbonB)" stroke-width="90" stroke-linecap="round" opacity="0.7" filter="url(#ribbonShadow)"/>
+    <path d="M 220 -30 C 300 140, 60 200, 130 380 C 200 560, 340 590, 240 780 C 140 970, 30 990, 110 1180 C 190 1370, 330 1390, 230 1580 C 150 1730, 50 1750, 100 1900"
+          fill="none" stroke="url(#ribbonC)" stroke-width="46" stroke-linecap="round" opacity="0.5" filter="url(#ribbonShadow)"/>
+  </svg>
+</div>
 <div class="content">
   <div class="brand-row">
     <div class="brand">Know Your Energy</div>
