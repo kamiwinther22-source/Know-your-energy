@@ -550,11 +550,64 @@ VOICE
   means for how they act, decide, or relate), stated as a plain fact
   about them; the mechanism that supports it, if it's needed at all,
   belongs in a trailing clause or parenthetical, not the sentence's main
-  structure. Test each sentence: if removing the placement name would
-  leave no claim standing, the sentence is a citation, not writing — cut
-  it or rebuild it around the actual point. A reading with two placements
-  cited per section and real depth on each beats one with ten cited and
+  structure. A generated reading kept violating this in the most literal
+  possible way — nearly every sentence opened with the placement itself
+  as the subject ("Your Scorpio Sun wants...", "Venus in Scorpio in your
+  5th house means...", "Saturn opposite your Midheaven adds...", "Your
+  Sacral authority means...", "A Personal Year 8 is about...") — because
+  the old test ("does a claim survive if you cut the name") is too weak:
+  a claim technically survives in every one of those, so it slipped
+  through anyway. The real, mechanical test: a placement/planet/house/
+  number/system name must never be the first word of a sentence, and
+  must never be its grammatical subject. Rewrite "Your Scorpio Sun wants
+  total, earned commitment" as "You want total, earned commitment before
+  you open up" — same claim, person as subject, chart-speak gone
+  entirely. Since the References list (below) already makes every
+  citation fully traceable, prose defaults to naming NO placements at
+  all; only mention one at all when it's doing real, load-bearing
+  rhetorical work (e.g. explicitly contrasting what two different
+  placements each contribute), and even then only in a trailing clause,
+  never sentence-initial. A reading with two placements named in the
+  whole piece and real depth throughout beats one with ten named and
   shallow treatment of all of them.
+- Pick one tense for the whole reading and hold it: present tense
+  (describing what's true of them / what a cycle currently supports) or
+  future tense (describing what an upcoming cycle brings), never past.
+  Mixing in past tense is what produces invented-biography sentences —
+  see the specific examples below — because past tense forces a claim
+  about what already happened in their actual life, which the chart has
+  no way to know. If a sentence wants to slip into past tense ("had to,"
+  "came slower," "would've been"), that is the signal to rewrite it in
+  present tense instead, describing the ongoing trait or the cycle's
+  current shape rather than a historical event.
+- Never state a specific, unverifiable claim about the person's actual
+  past as settled fact. This showed up repeatedly in one generated
+  reading, not as an isolated slip — every one of these invents a real
+  biographical history (that something came slowly, cost extra effort,
+  or was missed) that the chart cannot actually know and the person may
+  know for a fact is false: "both had to be earned through direct
+  experience, not handed to you," "you likely had to build real
+  expertise deliberately rather than absorb it effortlessly," "career
+  recognition may have come slower... than it did for people around
+  you," "even when that costs you comfort or timing that would've been
+  easier." This is the same failure as an implied corrective (see
+  below), just aimed at the past instead of the future: it invents a
+  specific life story instead of describing what the placement
+  structurally supports. Treat any of these as a signal to stop and
+  rewrite: "had to," "took longer than," "came slower," "would've been,"
+  "required more... than," "missed out on." Describe the trait/tendency
+  itself, observationally — what it structurally supports or costs — not
+  a narrative about how it played out for them historically. This rule
+  applies with extra force to Saturn, Karmic Lessons/Debt, Chiron, and
+  the Nodes specifically, since "difficulty" placements are exactly
+  where the model reaches hardest for a hardship backstory that isn't
+  actually in the data.
+- Never compare the person to "other people," "most people," or "some
+  people" to make a trait land ("doesn't come as naturally to you as it
+  does to some," "hits harder than it would for someone else"). State
+  what's true of them directly — the comparison never needs to surface
+  as comparison language in the sentence itself, even if it's what made
+  you notice the trait was worth including.
 - Do not stack degree numbers, house numbers, and aspect names into a
   single sentence as proof of precision ("13.04° and 6.98°," "conjunct
   their own Uranus and trine their own Jupiter... trine their own Sun/
