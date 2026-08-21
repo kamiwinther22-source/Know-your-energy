@@ -726,8 +726,41 @@ svg += '</defs>';
 const DISC_R = Math.max(...PLANETS.map(p=>p.r)) + 14;
 svg += `<circle cx="${C}" cy="${C}" r="${DISC_R}" fill="url(#pg-goldT)" stroke="#b7a684" stroke-width="1.4"/>`;
 
+// ---------- live zodiac ring: this is the actual "chart responds as you
+// type" mechanic -- a Sun sign only needs a birth DATE (no time, no API
+// call, pure client-side math), so unlike the Human Design preview this
+// can genuinely update live. 12 thin segments, all dim until a real date
+// is typed into the Date of Birth field below; the matching segment then
+// lights up and a label appears next to the sun. Real interaction, not
+// a static picture. ----------
+const ZODIAC_SUN = [
+  {name:'Aries',start:[3,21],end:[4,19],color:'#C0392B'},
+  {name:'Taurus',start:[4,20],end:[5,20],color:'#5B7F45'},
+  {name:'Gemini',start:[5,21],end:[6,20],color:'#4A90A4'},
+  {name:'Cancer',start:[6,21],end:[7,22],color:'#34618A'},
+  {name:'Leo',start:[7,23],end:[8,22],color:'#D2603A'},
+  {name:'Virgo',start:[8,23],end:[9,22],color:'#3F6B4F'},
+  {name:'Libra',start:[9,23],end:[10,22],color:'#6C8FC7'},
+  {name:'Scorpio',start:[10,23],end:[11,21],color:'#2F4858'},
+  {name:'Sagittarius',start:[11,22],end:[12,21],color:'#A6414C'},
+  {name:'Capricorn',start:[12,22],end:[1,19],color:'#556B4F'},
+  {name:'Aquarius',start:[1,20],end:[2,18],color:'#4FA6B0'},
+  {name:'Pisces',start:[2,19],end:[3,20],color:'#6C7FA6'},
+];
+const ZR_IN = DISC_R + 2, ZR_OUT = DISC_R + 15;
+ZODIAC_SUN.forEach((z,i)=>{
+  const a0 = -90 + i*30, a1 = a0 + 30;
+  const r0 = a0*Math.PI/180, r1 = a1*Math.PI/180;
+  const x1 = C + ZR_IN*Math.cos(r0), y1 = C + ZR_IN*Math.sin(r0);
+  const x2 = C + ZR_IN*Math.cos(r1), y2 = C + ZR_IN*Math.sin(r1);
+  const x3 = C + ZR_OUT*Math.cos(r1), y3 = C + ZR_OUT*Math.sin(r1);
+  const x4 = C + ZR_OUT*Math.cos(r0), y4 = C + ZR_OUT*Math.sin(r0);
+  svg += `<path class="zodiac-seg" data-sign="${z.name}" d="M${x1.toFixed(1)},${y1.toFixed(1)} A${ZR_IN},${ZR_IN} 0 0 1 ${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} A${ZR_OUT},${ZR_OUT} 0 0 0 ${x4.toFixed(1)},${y4.toFixed(1)} Z" fill="${z.color}" opacity="0.22" style="transition:opacity 0.4s ease;"/>`;
+});
+
 // sun -- the one warm point the (now-neutral) planets orbit
 svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
+svg += `<text id="sunSignLabel" x="${C}" y="${C+36}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="15" letter-spacing="0.04em" fill="#201B14" opacity="0" style="transition:opacity 0.4s ease;text-transform:uppercase;"></text>`;
 
 // Labels moved outside the disc so white text stays legible against the
 // page background instead of sitting on top of the gold disc fill. The
@@ -770,6 +803,32 @@ function openPlanetDef(p){
   document.getElementById('cardExpandTitle').textContent=`${p.name} — ${p.lines.join(', ')}`;
   document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${p.name} governs ${p.lines.join(' and ').toLowerCase()} in astrology.</p></div>`;
   document.getElementById('cardExpand').classList.add('open');
+}
+
+// Real Sun sign from a typed MM/DD/YYYY -- month/day only, no year/time
+// needed, so this can genuinely run live as someone types (called from
+// fmtDate below on every keystroke of the Date of Birth field).
+function computeSunSign(mm, dd){
+  for(const z of ZODIAC_SUN){
+    const [sm,sd] = z.start, [em,ed] = z.end;
+    if(sm > em){ // wraps the new year (Capricorn: Dec 22 - Jan 19)
+      if((mm===sm && dd>=sd) || (mm===em && dd<=ed)) return z.name;
+    } else if((mm===sm && dd>=sd) || (mm===em && dd<=ed) || (mm>sm && mm<em)){
+      return z.name;
+    }
+  }
+  return null;
+}
+function updateSunSign(dobValue){
+  const label = document.getElementById('sunSignLabel');
+  if(!label) return;
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((dobValue||'').trim());
+  const sign = m ? computeSunSign(parseInt(m[1],10), parseInt(m[2],10)) : null;
+  solarWrap.querySelectorAll('.zodiac-seg').forEach(seg=>{
+    seg.style.opacity = (sign && seg.dataset.sign===sign) ? '0.95' : '0.22';
+  });
+  label.textContent = sign ? `Sun in ${sign}` : '';
+  label.style.opacity = sign ? '1' : '0';
 }
 
 // ---------- human design: compact preview using the same real 9-center
@@ -2547,6 +2606,9 @@ function fmtDate(el){
   if(v.length>2&&v.length<=4)v=v.slice(0,2)+'/'+v.slice(2);
   else if(v.length>4)v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4,8);
   el.value=v;
+  // Live Sun-sign wheel preview only reacts to Person One's date -- the
+  // entry-page carousel is one shared preview, not per-person.
+  if(el.id==='p1d' && typeof updateSunSign==='function') updateSunSign(v);
 }
 function fmtTime(el){
   let v=el.value.replace(/\D/g,'');
