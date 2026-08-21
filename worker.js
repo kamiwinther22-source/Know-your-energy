@@ -195,7 +195,21 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
 // Step 2: resolve local time to offset datetime
 // Step 3: call chart endpoint
 
+// A "1 request" report generation was actually burning 3 calls against
+// this API's shared 5-per-minute limit (timezone search, datetime
+// resolve, then the bodygraph fetch itself, plus its own retry) --
+// easily exceeded by one relational (2-person) report alone, or by
+// testing the same person twice inside a minute. The timezone for a
+// given city and the resolved datetime for a given date/time/timezone
+// are both deterministic -- they never change -- so they're exactly
+// the kind of thing that should be cached, not re-fetched every single
+// generation. Cached in the existing PASSES KV namespace (no expiry:
+// this data is permanent, not a session-scoped cache) under a distinct
+// key prefix so it can't collide with pass records or the usage counter.
 async function getHDTimezone(env, cityName) {
+  const cacheKey = `hdtz:${cityName.toLowerCase().trim()}`;
+  const cached = await env.PASSES.get(cacheKey);
+  if (cached !== null) return cached === '' ? null : cached;
   try {
     const res = await fetch(
       `https://api.humandesignhub.app/v2/locations/search?query=${encodeURIComponent(cityName)}`,
@@ -204,13 +218,20 @@ async function getHDTimezone(env, cityName) {
     if (!res.ok) return null;
     const data = await res.json();
     const results = Array.isArray(data) ? data : (data.results || data.data || []);
-    if (!results.length) return null;
-    const tz = results[0].timezone || results[0].iana_timezone || results[0].tz;
+    const tz = results.length ? (results[0].timezone || results[0].iana_timezone || results[0].tz) : null;
+    // Cache the real result, including a genuine "not found" -- worth
+    // remembering so a bad/unknown city name doesn't keep re-querying.
+    // A network/API failure (caught below) is NOT cached, since that's
+    // transient and deserves a real retry next time.
+    await env.PASSES.put(cacheKey, tz || '');
     return tz || null;
   } catch (_) { return null; }
 }
 
 async function resolveHDDatetime(env, dateStr, timeStr, timezone) {
+  const cacheKey = `hddt:${dateStr}|${timeStr}|${timezone}`;
+  const cached = await env.PASSES.get(cacheKey);
+  if (cached !== null) return cached === '' ? null : cached;
   try {
     const res = await fetch("https://api.humandesignhub.app/v2/timezone/resolve", {
       method: "POST",
@@ -222,7 +243,9 @@ async function resolveHDDatetime(env, dateStr, timeStr, timezone) {
     });
     if (!res.ok) return null;
     const data = await res.json();
-    return data.datetime || data.resolved_datetime || null;
+    const datetime = data.datetime || data.resolved_datetime || null;
+    await env.PASSES.put(cacheKey, datetime || '');
+    return datetime;
   } catch (_) { return null; }
 }
 
@@ -246,6 +269,14 @@ async function getHumanDesign(env, dob, timeStr, ampm, city, state) {
     datetime = `${dateStr}T${timeFormatted}:00`;
   }
 
+  // The bodygraph result for a given resolved datetime is also
+  // deterministic -- cache it too, so re-testing the exact same person
+  // (the normal shape of iterating on this app) costs zero further
+  // calls to this API after the first real one.
+  const chartCacheKey = `hdchart:${datetime}`;
+  const cachedChart = await env.PASSES.get(chartCacheKey);
+  if (cachedChart !== null) return JSON.parse(cachedChart);
+
   // Retry on a transient/rate-limit response (429, or a 5xx) -- a two-
   // person relational report makes this exact call twice, back-to-back,
   // for the same API key within milliseconds of each other, which is
@@ -262,7 +293,11 @@ async function getHumanDesign(env, dob, timeStr, ampm, city, state) {
       },
       body: JSON.stringify({ datetime })
     });
-    if (res.ok) return await res.json();
+    if (res.ok) {
+      const json = await res.json();
+      await env.PASSES.put(chartCacheKey, JSON.stringify(json));
+      return json;
+    }
     const errText = await res.text();
     lastErr = new Error(`Human Design API ${res.status}: ${errText}`);
     if (res.status !== 429 && !(res.status >= 500 && res.status < 600)) throw lastErr;
