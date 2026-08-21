@@ -151,15 +151,16 @@ body{
      every width (verified 320-430px CSS px, not guessed). Still one
      line (nowrap), still Alex Brush. */
   font-size:clamp(0.85rem,4.1vw,1.05rem);white-space:nowrap;
-  /* Dark-anchor stops restored for a light bone background -- these are
-     the original pre-black-background values (this gradient was
-     brightened for a black bg at one point; that's no longer this page's
-     background, so the brightened stops are reverted, not carried
-     forward as dead weight). Same real photo-sampled YInMn Blue hue
-     family throughout. */
-  background:linear-gradient(100deg,#0F1758 0%,#3244B8 35%,#121C6C 50%,#3244B8 65%,#0F1758 100%);
+  /* Rebuilt so the real brand blue (#1C2CA9, photo-sampled) is the
+     DOMINANT tone, not a brief accent between two near-black anchors --
+     the previous dark-anchor-heavy version read as near-navy-black at
+     this text size, not recognizably "blue," which is exactly the
+     feedback this fixes. Same hue family, just weighted so the actual
+     brand blue is what you see, with only a bright highlight sweep and
+     a glossy sheen overlay for dimension. */
+  background:linear-gradient(100deg,#1C2CA9 0%,#5B76E5 30%,#1C2CA9 50%,#5B76E5 70%,#1C2CA9 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-  filter:drop-shadow(0 2px 1px rgba(32,27,20,0.25));
+  filter:drop-shadow(0 2px 2px rgba(10,10,10,0.25));
 }
 
 /* ---------- tagline / toggle ---------- */
@@ -638,6 +639,7 @@ const TONES = {
   silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
+  iceBlue: { grad:'radial-gradient(circle at 30% 26%, #eaf6fc 0%, #a9d0e6 55%, #6fa0c0 100%)', border:'#4a87ad' },
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -707,12 +709,31 @@ function openNumberDef(item){
 // pairwise bounding-box search (every label pair checked, 6-unit
 // minimum gap enforced, not eyeballed) rather than the original
 // "scattered" angles, which collided once the font size went up.
+// Sun-sign color data, defined here (not down near computeSunSign/
+// updateSunSign) since the wheel-building code below needs it immediately
+// to generate a real glossy gradient per sign -- a flat color swap on
+// reveal would break the "everything glossy" rule the rest of this page
+// now follows.
+const ZODIAC_SUN = [
+  {name:'Aries',start:[3,21],end:[4,19],color:'#C0392B',light:'#E8A79A'},
+  {name:'Taurus',start:[4,20],end:[5,20],color:'#5B7F45',light:'#B7CDA5'},
+  {name:'Gemini',start:[5,21],end:[6,20],color:'#4A90A4',light:'#A8D3DE'},
+  {name:'Cancer',start:[6,21],end:[7,22],color:'#34618A',light:'#9BBBD6'},
+  {name:'Leo',start:[7,23],end:[8,22],color:'#D2603A',light:'#F0B295'},
+  {name:'Virgo',start:[8,23],end:[9,22],color:'#3F6B4F',light:'#A0C2AD'},
+  {name:'Libra',start:[9,23],end:[10,22],color:'#6C8FC7',light:'#C7D7EF'},
+  {name:'Scorpio',start:[10,23],end:[11,21],color:'#2F4858',light:'#94A9B6'},
+  {name:'Sagittarius',start:[11,22],end:[12,21],color:'#A6414C',light:'#DFA6AB'},
+  {name:'Capricorn',start:[12,22],end:[1,19],color:'#556B4F',light:'#AEBFA9'},
+  {name:'Aquarius',start:[1,20],end:[2,18],color:'#4FA6B0',light:'#B0E0E6'},
+  {name:'Pisces',start:[2,19],end:[3,20],color:'#6C7FA6',light:'#C4CDE3'},
+];
 const PLANETS = [
   {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
   {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:-149.8},
   {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:11.5},
   {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:146.5},
-  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:85.2},
+  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'iceBlue', angle:85.2},
   {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-58.2},
   {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-91.8},
   {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
@@ -739,50 +760,51 @@ Object.entries(TONES).forEach(([name, t])=>{
     <stop offset="100%" stop-color="${stops[2]}"/>
   </radialGradient>`;
 });
+// Glossy ring-stroke gradient (white-silver-to-ice-blue) and a soft drop
+// shadow filter, reused for every individual orbit ring below.
+svg += `<linearGradient id="ringShine" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" stop-color="#ffffff"/>
+  <stop offset="45%" stop-color="#cfe4ef"/>
+  <stop offset="100%" stop-color="#6fa0c0"/>
+</linearGradient>
+<filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+  <feDropShadow dx="0" dy="1.5" stdDeviation="1.6" flood-color="#0a0a0a" flood-opacity="0.22"/>
+</filter>`;
+// One real glossy radial gradient per sign, so the sun's reveal on a
+// typed birth date is a lit sphere in that sign's color, not a flat
+// color swap -- keeps the "everything glossy" rule on the one moving
+// part of this graphic too.
+ZODIAC_SUN.forEach(z=>{
+  svg += `<radialGradient id="sunGrad-${z.name}" cx="32%" cy="26%" r="75%">
+    <stop offset="0%" stop-color="${z.light}"/><stop offset="55%" stop-color="${z.color}"/><stop offset="100%" stop-color="${z.color}"/>
+  </radialGradient>`;
+});
 svg += '</defs>';
 
-// Single full disc replacing the old individual orbit-ring lines -- same
-// goldT metal tone already established for the numerology tiles and the
-// tagline's gold gradient text, per her instruction to use the tagline's
-// color here instead of the old blue ring lines.
-const DISC_R = Math.max(...PLANETS.map(p=>p.r)) + 14;
-svg += `<circle cx="${C}" cy="${C}" r="${DISC_R}" fill="url(#pg-goldT)" stroke="#b7a684" stroke-width="1.4"/>`;
-
-// ---------- live zodiac ring: this is the actual "chart responds as you
-// type" mechanic -- a Sun sign only needs a birth DATE (no time, no API
-// call, pure client-side math), so unlike the Human Design preview this
-// can genuinely update live. 12 thin segments, all dim until a real date
-// is typed into the Date of Birth field below; the matching segment then
-// lights up and a label appears next to the sun. Real interaction, not
-// a static picture. ----------
-const ZODIAC_SUN = [
-  {name:'Aries',start:[3,21],end:[4,19],color:'#C0392B'},
-  {name:'Taurus',start:[4,20],end:[5,20],color:'#5B7F45'},
-  {name:'Gemini',start:[5,21],end:[6,20],color:'#4A90A4'},
-  {name:'Cancer',start:[6,21],end:[7,22],color:'#34618A'},
-  {name:'Leo',start:[7,23],end:[8,22],color:'#D2603A'},
-  {name:'Virgo',start:[8,23],end:[9,22],color:'#3F6B4F'},
-  {name:'Libra',start:[9,23],end:[10,22],color:'#6C8FC7'},
-  {name:'Scorpio',start:[10,23],end:[11,21],color:'#2F4858'},
-  {name:'Sagittarius',start:[11,22],end:[12,21],color:'#A6414C'},
-  {name:'Capricorn',start:[12,22],end:[1,19],color:'#556B4F'},
-  {name:'Aquarius',start:[1,20],end:[2,18],color:'#4FA6B0'},
-  {name:'Pisces',start:[2,19],end:[3,20],color:'#6C7FA6'},
-];
-const ZR_IN = DISC_R + 2, ZR_OUT = DISC_R + 15;
-ZODIAC_SUN.forEach((z,i)=>{
-  const a0 = -90 + i*30, a1 = a0 + 30;
-  const r0 = a0*Math.PI/180, r1 = a1*Math.PI/180;
-  const x1 = C + ZR_IN*Math.cos(r0), y1 = C + ZR_IN*Math.sin(r0);
-  const x2 = C + ZR_IN*Math.cos(r1), y2 = C + ZR_IN*Math.sin(r1);
-  const x3 = C + ZR_OUT*Math.cos(r1), y3 = C + ZR_OUT*Math.sin(r1);
-  const x4 = C + ZR_OUT*Math.cos(r0), y4 = C + ZR_OUT*Math.sin(r0);
-  svg += `<path class="zodiac-seg" data-sign="${z.name}" d="M${x1.toFixed(1)},${y1.toFixed(1)} A${ZR_IN},${ZR_IN} 0 0 1 ${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} A${ZR_OUT},${ZR_OUT} 0 0 0 ${x4.toFixed(1)},${y4.toFixed(1)} Z" fill="${z.color}" opacity="0.22" style="transition:opacity 0.4s ease;"/>`;
+// ---------- real individual orbit rings, per her explicit correction:
+// a single flat filled disc clouded the fact that these dots are
+// planets in orbit and read as one large, distracting, overdrawn shape.
+// Each PLANET already carries its own real radius (r) -- this draws an
+// actual thin glossy ring at every DISTINCT radius (deduped, since a few
+// planets share a tier), fill:none so the page shows through, instead
+// of filling the whole area with one tan disc. ----------
+const ringRadii = [...new Set(PLANETS.map(p=>p.r))].sort((a,b)=>a-b);
+ringRadii.forEach(r=>{
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="url(#ringShine)" stroke-width="1.6" opacity="0.55" filter="url(#softGlow)"/>`;
 });
 
-// sun -- the one warm point the (now-neutral) planets orbit
-svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
-svg += `<text id="sunSignLabel" x="${C}" y="${C+36}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="15" letter-spacing="0.04em" fill="#201B14" opacity="0" style="transition:opacity 0.4s ease;text-transform:uppercase;"></text>`;
+// sun -- real glossy ice-blue/silver sphere by default. Sun sign only
+// needs a birth DATE (no time, no API call), so this is the one thing
+// on the entry page that can genuinely react live: once a valid date is
+// typed into Date of Birth below, this sphere's own fill and glow switch
+// to that sign's real color -- the reveal IS the sun changing, not a
+// separate ring competing with it for attention.
+const SUN_R = 16;
+svg += `<radialGradient id="sunGrad-default" cx="32%" cy="26%" r="75%">
+  <stop offset="0%" stop-color="#eaf6fc"/><stop offset="55%" stop-color="#a9d0e6"/><stop offset="100%" stop-color="#6fa0c0"/>
+</radialGradient>`;
+svg += `<circle id="sunCore" cx="${C}" cy="${C}" r="${SUN_R}" fill="url(#sunGrad-default)" stroke="#4a87ad" stroke-width="1.2" filter="url(#softGlow)" style="transition:fill 0.4s ease;"/>`;
+svg += `<text id="sunSignLabel" x="${C}" y="${C+SUN_R+22}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="15" letter-spacing="0.04em" fill="#0A0A0A" opacity="0" style="transition:opacity 0.4s ease;text-transform:uppercase;"></text>`;
 
 // Labels moved outside the disc so white text stays legible against the
 // page background instead of sitting on top of the gold disc fill. The
@@ -793,7 +815,7 @@ svg += `<text id="sunSignLabel" x="${C}" y="${C+36}" text-anchor="middle" font-f
 // (same relative circular order as the real angles, just re-spaced),
 // with a thin line drawn back to the actual planet dot -- her explicit
 // fallback for exactly this case.
-const LABEL_R = DISC_R + 34;
+const LABEL_R = Math.max(...ringRadii) + 34;
 const order = PLANETS.map((p,i)=>({i,ang:(p.angle+360)%360})).sort((a,b)=>a.ang-b.ang);
 const labelAngle = new Array(PLANETS.length);
 order.forEach((o,slot)=>{ labelAngle[o.i] = order[0].ang + slot*(360/PLANETS.length); });
@@ -829,28 +851,30 @@ function openPlanetDef(p){
 
 // Real Sun sign from a typed MM/DD/YYYY -- month/day only, no year/time
 // needed, so this can genuinely run live as someone types (called from
-// fmtDate below on every keystroke of the Date of Birth field).
+// fmtDate below on every keystroke of the Date of Birth field). ZODIAC_SUN
+// itself is defined up near PLANETS (the wheel-builder needs it immediately
+// to generate each sign's glossy gradient).
 function computeSunSign(mm, dd){
   for(const z of ZODIAC_SUN){
     const [sm,sd] = z.start, [em,ed] = z.end;
     if(sm > em){ // wraps the new year (Capricorn: Dec 22 - Jan 19)
-      if((mm===sm && dd>=sd) || (mm===em && dd<=ed)) return z.name;
+      if((mm===sm && dd>=sd) || (mm===em && dd<=ed)) return z;
     } else if((mm===sm && dd>=sd) || (mm===em && dd<=ed) || (mm>sm && mm<em)){
-      return z.name;
+      return z;
     }
   }
   return null;
 }
 function updateSunSign(dobValue){
   const label = document.getElementById('sunSignLabel');
-  if(!label) return;
+  const sun = document.getElementById('sunCore');
+  if(!label || !sun) return;
   const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((dobValue||'').trim());
-  const sign = m ? computeSunSign(parseInt(m[1],10), parseInt(m[2],10)) : null;
-  solarWrap.querySelectorAll('.zodiac-seg').forEach(seg=>{
-    seg.style.opacity = (sign && seg.dataset.sign===sign) ? '0.95' : '0.22';
-  });
-  label.textContent = sign ? `Sun in ${sign}` : '';
-  label.style.opacity = sign ? '1' : '0';
+  const z = m ? computeSunSign(parseInt(m[1],10), parseInt(m[2],10)) : null;
+  sun.style.fill = z ? `url(#sunGrad-${z.name})` : 'url(#sunGrad-default)';
+  sun.setAttribute('stroke', z ? z.color : '#4a87ad');
+  label.textContent = z ? `Sun in ${z.name}` : '';
+  label.style.opacity = z ? '1' : '0';
 }
 
 // ---------- human design: compact preview using the same real 9-center
@@ -1017,14 +1041,12 @@ const KEYS_FULL = [
   'Your info is neither shared nor saved',
   'No subscriptions or auto-renewals',
   'Email is simply your key to your results and time-limited pass if you choose to purchase one.',
-  'You will not receive emails from us',
 ];
 const KEYS = [
   'One free<br>reading',
   'Nothing<br>shared or<br>saved',
   'No subscrip&shy;tions',
   'Email is<br>just your<br>key',
-  'Zero spam,<br>ever',
 ];
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-bubble${i===0?' lead':''}" title="${KEYS_FULL[i].replace(/"/g,'&quot;')}">${t}</div>`).join('');
