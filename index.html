@@ -16,7 +16,11 @@
    there's actual z-axis depth, not a single flat plane. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background:#FCFAF4;
+  /* Cool white base, not cream -- the previous #FCFAF4 plus a cream
+     second layer was what made the whole page read as tan even after
+     the gold accents were removed. Cream is now a small, secondary
+     note, not the dominant tone. */
+  background:#F9FAFB;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#0A0A0A;
@@ -33,7 +37,8 @@ body{
 }
 .bg-layer.two{
   top:auto;bottom:-80px;left:-160px;right:auto;width:340px;height:400px;
-  background:radial-gradient(circle at 35% 30%,#FFFFFF 0%,#F3EFE3 55%,#E7DFC9 100%);
+  /* Cool silver-white instead of cream/tan. */
+  background:radial-gradient(circle at 35% 30%,#FFFFFF 0%,#F0F2F3 55%,#DCE2E5 100%);
   filter:blur(70px);opacity:0.9;
 }
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
@@ -190,17 +195,22 @@ body{
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#201B14;}
 .tog-lbl{cursor:pointer;color:rgba(32,27,20,0.55);transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#201B14;}
-.toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#d9cdb2;box-shadow:inset 0 1px 3px rgba(32,27,20,0.25);cursor:pointer;transition:background 0.2s;}
-.toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
-.toggle-pill.on{background:#1C2CA9;}
+/* Glossy silver track + knob, glossy ice-blue when on -- this was still
+   a flat tan color before, missed in the first glossy pass. */
+.toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;
+  background:linear-gradient(180deg,#dfe3e5 0%,#f3f4f5 45%,#c7ccd0 100%);
+  box-shadow:inset 0 1px 3px rgba(10,10,10,0.25);cursor:pointer;transition:background 0.2s;}
+.toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff 0%,#eef2f4 55%,#c2c8cc 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
+.toggle-pill.on{background:linear-gradient(180deg,#8fc1de 0%,#6fa0c0 55%,#4a87ad 100%);}
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid rgba(32,27,20,0.4);background:transparent;color:#201B14;cursor:pointer;transition:background 0.15s,color 0.15s;}
-.rel-chip:hover{background:rgba(28,44,169,0.08);}
-.rel-chip.active{background:#1C2CA9;color:#ffffff;border-color:#1C2CA9;}
-.rel-chip.active:hover{background:#1C2CA9;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid rgba(32,27,20,0.4);background:transparent;color:#201B14;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;}
+.rel-chip:hover{background:rgba(111,160,192,0.12);}
+.rel-chip.active{background:linear-gradient(160deg,#8fc1de 0%,#6fa0c0 55%,#4a87ad 100%);color:#ffffff;border-color:#4a87ad;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.4),0 3px 6px -2px rgba(0,0,0,0.25);}
+.rel-chip.active:hover{background:linear-gradient(160deg,#8fc1de 0%,#6fa0c0 55%,#4a87ad 100%);}
 
 /* ---------- bottom two-column: keys | form ---------- */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
@@ -662,16 +672,16 @@ const TONES = {
 // balanced, properly-hyphenated break instead.
 const NUMS = [
   {n:1, lbl:'Leader',       tone:'silverL'},
-  {n:2, lbl:'Diplomat',     tone:'goldT'},
+  {n:2, lbl:'Diplomat',     tone:'iceBlue'},
   {n:3, lbl:'Communi­cator', tone:'white'},
   {n:4, lbl:'Builder',      tone:'cream'},
   {n:5, lbl:'Freedom',      tone:'silverD'},
   {n:6, lbl:'Nurtur­er', tone:'white'},
-  {n:7, lbl:'Seeker',       tone:'goldT'},
+  {n:7, lbl:'Seeker',       tone:'iceBlue'},
   {n:8, lbl:'Achiever',     tone:'silverL'},
   {n:9, lbl:'Humani­tarian', tone:'cream'},
   {n:11, lbl:'Intu­itive',      tone:'silverD'},
-  {n:22, lbl:'Master Builder', tone:'goldT'},
+  {n:22, lbl:'Master Builder', tone:'iceBlue'},
   {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
 const numStripRow = document.getElementById('numStripRow');
@@ -900,7 +910,7 @@ function updateSunSign(dobValue){
     {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    tone:'silverL', on:false, label:'Inspiration', lx:120, ly:6,   anchor:'middle'},
     {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    tone:'silverD', on:false, label:'Awareness',   lx:180, ly:66,  anchor:'start'},
     {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'cream',   on:false, label:'Expression',  inside:true, wrap:['Expres-','sion']},
-    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'goldT',   on:true,  label:'Identity',    inside:true, wrap:['Iden-','tity']},
+    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'iceBlue',   on:true,  label:'Identity',    inside:true, wrap:['Iden-','tity']},
     {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'white',   on:false, label:'Willpower',   lx:220, ly:190, anchor:'start'},
     {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'silverD', on:true,  label:'Life Force',  inside:true},
     {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'cream',   on:true,  label:'Intuition',   lx:8,   ly:246, anchor:'end'},
