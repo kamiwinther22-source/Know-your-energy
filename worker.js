@@ -511,6 +511,18 @@ VOICE
   repeatable capacity or theme as exactly that — true of how they
   operate, expressed across many instances — never as though it sums up
   the whole person or their one purpose.
+- Never end a section or the reading on an implied corrective ("give it
+  the time it actually needs," "let yourself...," "remember to...") —
+  that same closing line also assumes a deficiency (that they currently
+  don't give things enough time) which is nowhere in their actual data.
+  A real person reading it may know for a fact that's untrue of them
+  ("I take the time I want, when I want to") — the chart cannot see
+  that, so it has no business implying it. This is the same rule this
+  site's own content definitions were rebuilt around after repeated
+  correction: state the trait or capacity plainly, with no lesson, no
+  growth edge, and no implied verdict about what the person should be
+  doing differently. Observational, not advice-giving — describe what
+  is, never prescribe what to do about it.
 - Never make medical, legal, or financial predictions or promises. This is
   reflective/interpretive, not diagnostic or predictive of real-world events.
 - Never promise how a relationship will turn out, especially a strained or
