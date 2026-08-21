@@ -37,17 +37,10 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- pitch line: full-width sentence between the carousel and the
-   data-entry form, spanning the page rather than staying capped to the
-   tagline's narrower 340px box. ---------- */
-.pitch-line{
-  width:100%;text-align:center;font-family:'Special Elite',monospace;
-  font-size:0.92rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
-  padding:0 1rem;margin:0 0 1.4rem;
-  /* Same gold gradient-text technique and exact color stops as
-     .tagline-slide.c-gold, per her instruction to match the tagline. */
-  background:linear-gradient(100deg,#c7b78e 0%,#fdf6ea 35%,#ddccae 50%,#fdf6ea 65%,#c7b78e 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+.sys-section-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
+  letter-spacing:0.06em;text-transform:uppercase;color:#ffffff;
+  text-align:center;margin-bottom:0.5rem;
 }
 /* ---------- swipeable carousel: numerology / astrology / human design
    share ONE raised platform now instead of three stacked sections --
@@ -136,14 +129,12 @@ body{
    much harder problem this isn't attempting). */
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
-  /* Shrunk so the tagline below can stay larger than the title AND fit
-     on 2 lines -- the tagline sentence is long enough that, in this
-     page's fixed-width container, "larger than title" and "2 lines"
-     together cap the tagline well under the title's old size, so the
-     title comes down to stay under it, with a real measured margin at
-     every width (verified 320-430px CSS px, not guessed). Still one
-     line (nowrap), still Alex Brush. */
-  font-size:clamp(0.85rem,4.1vw,1.05rem);white-space:nowrap;
+  /* Floor lowered from 2.3rem: on real phones narrower than ~370px CSS
+     px, that floor was wider than the viewport itself (title always one
+     line, so it can't wrap -- it has to actually shrink to fit instead).
+     Still one line, still Alex Brush, just allowed to keep scaling down
+     on the narrowest screens instead of hitting a hard floor early. */
+  font-size:clamp(1.7rem,10vw,3.4rem);white-space:nowrap;
   /* Brightened for a black background -- the previous gradient's dark
      anchor stops (#0F1758/#121C6C) were built for contrast against a
      light page and would nearly vanish on black. Same blue family,
@@ -160,13 +151,7 @@ body{
 .tagline-wrap{position:relative;max-width:340px;margin:0 auto 1.1rem;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Special Elite',monospace;
-  /* Largest size (found by real binary-search measurement of this exact
-     sentence, not guessed) that still wraps to 2 lines in this 340px-max
-     container at every width from 320-430px CSS px, with a small safety
-     margin. The title's own clamp() above is set to stay under this at
-     every width so the tagline still reads as larger than the title. */
-  font-size:clamp(0.95rem,4.6vw,1.15rem);line-height:1.3;font-weight:400;letter-spacing:0.01em;
+  text-align:center;font-family:'Special Elite',monospace;font-size:0.82rem;line-height:1.6;font-weight:400;letter-spacing:0.01em;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
@@ -194,15 +179,15 @@ body{
 .tog-lbl.active{color:#ffffff;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
-.toggle-pill.on{background:#6f818a;}
+.toggle-pill.on{background:#1C2CA9;}
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #8c8b80;background:transparent;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s;}
-.rel-chip:hover{background:rgba(154,161,173,0.15);}
-.rel-chip.active{background:#6f818a;color:#ffffff;}
-.rel-chip.active:hover{background:#6f818a;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.28rem 0.6rem;border-radius:20px;border:1.3px solid #1C2CA9;background:transparent;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.rel-chip:hover{background:rgba(28,44,169,0.12);}
+.rel-chip.active{background:#1C2CA9;color:#ffffff;}
+.rel-chip.active:hover{background:#1C2CA9;}
 
 /* ---------- bottom two-column: keys | form ---------- */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
@@ -210,11 +195,16 @@ body{
 /* Boxed now (moved here from .form-panel, which is unboxed below) --
    same real glassmorphism recipe: blur + translucency + light edge +
    lift shadow, so it reads as floating glass, not a flat tint. */
-/* Hidden for now -- key points removed from the layout per her instruction,
-   content/markup kept intact (not deleted) so they can be reintroduced
-   later. Left column of .bottom-grid is deliberately left empty, not
-   filled by anything else -- .form-col below is pinned to column 2. */
-.keys-col{display:none;}
+.keys-col{
+  position:relative;border-radius:16px;padding:1.1rem 1rem;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 18px 34px -14px rgba(0,0,0,0.6),
+    0 4px 10px -4px rgba(0,0,0,0.4);
+}
 .key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
 .key-item:last-child{margin-bottom:0;}
 .key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
@@ -230,7 +220,7 @@ body{
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:#9DB0FF;font-weight:800;}
 
-.form-col{position:relative;grid-column:2;}
+.form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
    no card/blur/border around it -- the box moved to .keys-col instead. */
 .form-panel{
@@ -274,7 +264,7 @@ body{
 @keyframes silverspin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
-  background:linear-gradient(160deg,#eef1fb 0%,#8a8fa0 45%,#5a5f70 100%);
+  background:linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
   border:1px solid rgba(255,255,255,0.55);border-radius:6px;
   color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
   transition:transform 0.18s ease,box-shadow 0.18s ease;
@@ -471,31 +461,35 @@ body{
 <div class="bg-glints" id="bgGlints"></div>
 <div class="content">
   <div class="brand-row">
-    <div class="title-glint" style="width:9px;height:9px;top:-3px;left:2%;">
+    <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
       <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
     </div>
-    <div class="title-glint" style="width:6px;height:6px;top:1px;right:4%;">
+    <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
       <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
     </div>
-    <div class="title-glint" style="width:5px;height:5px;bottom:-1px;left:16%;">
+    <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
       <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
     </div>
     <div class="brand">Know Your Energy</div>
   </div>
 
   <div class="tagline-wrap" id="taglineWrap">
-    <div class="tagline-slide c-gold active">Life is full of unseen energy and cycles always in play.</div>
+    <div class="tagline-slide c-gold active">Your unique design described by 3 separate systems</div>
+    <div class="tagline-slide c-gold">is it all just math</div>
   </div>
 
   <div class="chart-carousel" id="chartCarousel">
     <div class="carousel-track" id="carouselTrack">
       <div class="carousel-slide">
+        <div class="sys-section-title">Astrology</div>
         <div class="chart-graphic" id="solarIcon"></div>
       </div>
       <div class="carousel-slide">
+        <div class="sys-section-title">Numerology — Your Core Numbers</div>
         <div class="num-strip-row" id="numStripRow"></div>
       </div>
       <div class="carousel-slide">
+        <div class="sys-section-title">Human Design</div>
         <div class="chart-graphic" id="hdIcon"></div>
       </div>
     </div>
@@ -510,8 +504,6 @@ body{
       <button type="button" class="dot" data-i="2" aria-label="Human Design"></button>
     </div>
   </div>
-
-  <div class="pitch-line">Discover the tools you have been given for your unique path, the timing of your cycles, and how they combine with another's along the way</div>
 
   <div class="bottom-grid">
     <div class="form-col">
@@ -732,12 +724,14 @@ const PLANETS = [
   {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
   {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-120.4},
 ];
+const RINGS = [26,34,46,54,74,86,100,110,120];
 const SIZE = 420, C = SIZE/2;
 const solarWrap = document.getElementById('solarIcon');
-// Generous crop -- labels now sit outside the disc (see below), further
-// out than the old per-ring label positions, so this needs real room on
-// every side. Trimmed to the actual measured content bounds, not guessed.
-let svg = `<svg viewBox="-80 0 600 440" xmlns="http://www.w3.org/2000/svg">`;
+// Wider crop than the old icon-sized version -- this graphic is now the
+// prominent astrology visual, so there's real room around the ring
+// cluster for each planet's own descriptor word to sit next to it,
+// always visible rather than behind a tap.
+let svg = `<svg viewBox="-40 69 486 253" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -753,31 +747,20 @@ Object.entries(TONES).forEach(([name, t])=>{
     <stop offset="100%" stop-color="${stops[2]}"/>
   </radialGradient>`;
 });
+// soft glow behind each orbit ring -- a wider, blurred, white duplicate of
+// the ring line sitting underneath the crisp dashed ring, so the path itself
+// reads as glowing without becoming a solid band.
+svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.8"/></filter>`;
 svg += '</defs>';
 
-// Single full disc replacing the old individual orbit-ring lines -- same
-// goldT metal tone already established for the numerology tiles and the
-// tagline's gold gradient text, per her instruction to use the tagline's
-// color here instead of the old blue ring lines.
-const DISC_R = Math.max(...PLANETS.map(p=>p.r)) + 14;
-svg += `<circle cx="${C}" cy="${C}" r="${DISC_R}" fill="url(#pg-goldT)" stroke="#b7a684" stroke-width="1.4"/>`;
+RINGS.forEach(r=>{
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="2.4" opacity="0.5" filter="url(#glow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="0.9" opacity="0.95"/>`;
+});
 
 // sun -- the one warm point the (now-neutral) planets orbit
 svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
 
-// Labels moved outside the disc so white text stays legible against the
-// page background instead of sitting on top of the gold disc fill. The
-// 9 planets' original angles were tuned for their own distinct orbit
-// radii, not a shared outer radius -- placed at their real angles at one
-// common label radius, several land too close together and collide. So
-// each label instead gets its own evenly-spaced slot around the disc
-// (same relative circular order as the real angles, just re-spaced),
-// with a thin line drawn back to the actual planet dot -- her explicit
-// fallback for exactly this case.
-const LABEL_R = DISC_R + 34;
-const order = PLANETS.map((p,i)=>({i,ang:(p.angle+360)%360})).sort((a,b)=>a.ang-b.ang);
-const labelAngle = new Array(PLANETS.length);
-order.forEach((o,slot)=>{ labelAngle[o.i] = order[0].ang + slot*(360/PLANETS.length); });
 PLANETS.forEach((p,i)=>{
   const t = TONES[p.tone];
   const a = p.angle * Math.PI/180;
@@ -785,16 +768,21 @@ PLANETS.forEach((p,i)=>{
   const px = C + p.r*dx, py = C + p.r*dy;
   svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
   svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
-  const la = labelAngle[i] * Math.PI/180;
-  const ldx = Math.cos(la), ldy = Math.sin(la);
-  const anchor = ldx>0.2?'start':ldx<-0.2?'end':'middle';
-  const lx = C + LABEL_R*ldx, ly = C + LABEL_R*ldy + 3;
-  const lineX2 = C + (LABEL_R-16)*ldx, lineY2 = C + (LABEL_R-16)*ldy;
-  svg += `<line x1="${px}" y1="${py}" x2="${lineX2.toFixed(1)}" y2="${lineY2.toFixed(1)}" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>`;
+  // descriptor word sits right next to its planet, always visible --
+  // still tappable (whole label is part of the same hit circle) rather
+  // than hidden behind a tap, per her instruction.
+  const anchor = dx>0.2?'start':dx<-0.2?'end':'middle';
+  const lx = px + (p.size+9)*dx, ly = py + (p.size+9)*dy + 3;
+  // Two-word "X & Y" descriptors are stacked on their own line each --
+  // half the horizontal reach of one long line, so the outer-ring labels
+  // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
-  const lines = words.length>1 ? [words[0], '&amp; '+words[1], '&mdash; '+p.name] : [p.lines[0], '&mdash; '+p.name];
-  const tspans = lines.map((ln,li)=> li===0 ? `<tspan x="${lx}" y="${ly}">${ln}</tspan>` : `<tspan x="${lx}" dy="20">${ln}</tspan>`).join('');
-  svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">${tspans}</text>`;
+  if(words.length>1){
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">`+
+      `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
+  } else {
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#ffffff" style="pointer-events:none;">${p.lines[0]}</text>`;
+  }
 });
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
@@ -2443,12 +2431,13 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
   });
 });
 
-// ---------- tagline: single static line now (was a multi-slide rotation) ----------
+// ---------- tagline rotation: 3 slides, one visible at a time, same spot ----------
 (function(){
   const wrap = document.getElementById('taglineWrap');
   const slides = Array.from(wrap.querySelectorAll('.tagline-slide'));
 
-  // measure the real height so the wrapper is sized to its actual content
+  // measure the tallest slide for real (not guessed) so the wrapper height
+  // never jumps as different-length taglines rotate through
   let maxH = 0;
   slides.forEach(s=>{
     s.style.position = 'static';
@@ -2460,8 +2449,6 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
     s.style.opacity = '';
   });
   wrap.style.height = maxH + 'px';
-
-  if (slides.length < 2) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
