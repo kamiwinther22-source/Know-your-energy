@@ -756,114 +756,81 @@ const PLANETS = [
   {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
   {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-120.4},
 ];
-// Real 3-letter abbreviations, not the Unicode zodiac symbols (♈ etc.) --
-// verified those render as fixed-color emoji in this environment,
-// completely ignoring any fill/color set on them (the exact cross-
-// platform gotcha already documented elsewhere in this file). Plain
-// text is guaranteed to actually take the gold/bronze color intended.
-const ZODIAC_ABBR = {Aries:'ARI',Taurus:'TAU',Gemini:'GEM',Cancer:'CNC',Leo:'LEO',Virgo:'VIR',Libra:'LIB',Scorpio:'SCO',Sagittarius:'SAG',Capricorn:'CAP',Aquarius:'AQU',Pisces:'PSC'};
-const SIZE = 440, C = SIZE/2;
+const SIZE = 420, C = SIZE/2;
 const solarWrap = document.getElementById('solarIcon');
-let svg = `<svg viewBox="0 0 ${SIZE} ${SIZE}" xmlns="http://www.w3.org/2000/svg">`;
+// Reverted from the zodiac medallion: ornate but told a newcomer nothing
+// about what astrology actually reveals, and dwarfed the tagline. This
+// version's per-planet labels are the actual information ("Love & Beauty
+// -- Venus" etc.) -- restoring the informative version over the merely
+// decorative one, per her direct correction.
+let svg = `<svg viewBox="-80 0 600 440" xmlns="http://www.w3.org/2000/svg">`;
 
-// Plain stop-color lookup per tone -- no longer used to build gradients
-// for THIS graphic (the medallion below has its own gold gradients), but
-// the Human Design preview further down still reuses these exact stops
-// so its spheres match the numerology tiles' tones pixel-for-pixel.
 const stopsByTone = {};
-Object.entries(TONES).forEach(([name, t])=>{
-  stopsByTone[name] = t.grad.match(/#[0-9a-fA-F]{6}/g);
-});
-
-// ---------- real zodiac medallion, replacing the solar-system diagram --
-// per her direct correction, a solar system isn't astrology (it's space);
-// astrology's actual iconic image is a zodiac wheel. Built from her own
-// reference images (an ornate gold/silver medallion: radiating sunburst
-// center, a 12-segment zodiac ring, and 8 compass-point finials) --
-// approximated in real SVG gradients/filters, not a literal photo-render. ----------
 svg += '<defs>';
-svg += `<radialGradient id="medGold" cx="34%" cy="28%" r="75%">
-  <stop offset="0%" stop-color="#F7E9B0"/><stop offset="45%" stop-color="#D8AE4C"/><stop offset="100%" stop-color="#8C6A22"/>
-</radialGradient>
-<radialGradient id="medGoldAlt" cx="34%" cy="28%" r="75%">
-  <stop offset="0%" stop-color="#EFD98F"/><stop offset="45%" stop-color="#C89A38"/><stop offset="100%" stop-color="#7A5A1A"/>
-</radialGradient>
-<radialGradient id="medHub" cx="32%" cy="26%" r="75%">
-  <stop offset="0%" stop-color="#FDF3D0"/><stop offset="45%" stop-color="#E4BD5E"/><stop offset="100%" stop-color="#8C6A22"/>
-</radialGradient>
-<filter id="medShadow" x="-60%" y="-60%" width="220%" height="220%">
-  <feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#0a0a0a" flood-opacity="0.35"/>
+Object.entries(TONES).forEach(([name, t])=>{
+  const stops = t.grad.match(/#[0-9a-fA-F]{6}/g);
+  stopsByTone[name] = stops;
+  svg += `<radialGradient id="pg-${name}" cx="35%" cy="30%" r="75%">
+    <stop offset="0%" stop-color="${stops[0]}"/>
+    <stop offset="55%" stop-color="${stops[1]}"/>
+    <stop offset="100%" stop-color="${stops[2]}"/>
+  </radialGradient>`;
+});
+svg += `<linearGradient id="ringShine" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" stop-color="#ffffff"/>
+  <stop offset="45%" stop-color="#cfe4ef"/>
+  <stop offset="100%" stop-color="#6fa0c0"/>
+</linearGradient>
+<filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+  <feDropShadow dx="0" dy="1.5" stdDeviation="1.6" flood-color="#0a0a0a" flood-opacity="0.22"/>
 </filter>`;
-// One real glossy radial gradient per sign, so the hub's reveal on a
-// typed birth date is a lit sphere in that sign's color, not a flat
-// color swap.
 ZODIAC_SUN.forEach(z=>{
   svg += `<radialGradient id="sunGrad-${z.name}" cx="32%" cy="26%" r="75%">
     <stop offset="0%" stop-color="${z.light}"/><stop offset="55%" stop-color="${z.color}"/><stop offset="100%" stop-color="${z.color}"/>
   </radialGradient>`;
 });
-svg += `<radialGradient id="sunGrad-default" cx="32%" cy="26%" r="75%">
-  <stop offset="0%" stop-color="#FDF3D0"/><stop offset="55%" stop-color="#E4BD5E"/><stop offset="100%" stop-color="#8C6A22"/>
-</radialGradient>`;
 svg += '</defs>';
 
-const R_OUTER = 200, R_ZIN = 148, R_ZOUT = 196, R_MID = [98,116,132], R_HUB = 30;
-
-// 8 compass-point finials -- small kite shapes with a thin stem, longer
-// at the 4 cardinal points, shorter at the diagonals (matching the
-// reference medallions), radiating just outside the main ring.
-for(let i=0;i<8;i++){
-  const ang = i*45 - 90;
-  const long = i%2===0;
-  const len = long ? 30 : 20;
-  const a = ang*Math.PI/180;
-  const dx = Math.cos(a), dy = Math.sin(a);
-  const baseR = R_OUTER + 4, tipR = R_OUTER + 4 + len;
-  const px = -dy, py = dx; // perpendicular for finial width
-  const w = 7;
-  const bx = C + baseR*dx, by = C + baseR*dy;
-  const tx = C + tipR*dx, ty = C + tipR*dy;
-  const lx1 = bx + px*w, ly1 = by + py*w, lx2 = bx - px*w, ly2 = by - py*w;
-  svg += `<polygon points="${lx1.toFixed(1)},${ly1.toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} ${lx2.toFixed(1)},${ly2.toFixed(1)}" fill="url(#medGold)" stroke="#7A5A1A" stroke-width="0.8" filter="url(#medShadow)"/>`;
-  svg += `<line x1="${(C+R_OUTER*dx).toFixed(1)}" y1="${(C+R_OUTER*dy).toFixed(1)}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="#8C6A22" stroke-width="2.4"/>`;
-}
-
-// Outer ring + 12-segment zodiac band, alternating tone per segment for
-// subtle engraved texture, real glyphs (not planet dots) in each slice.
-svg += `<circle cx="${C}" cy="${C}" r="${R_OUTER}" fill="none" stroke="#7A5A1A" stroke-width="2.4"/>`;
-ZODIAC_SUN.forEach((z,i)=>{
-  const a0=(i*30-90)*Math.PI/180, a1=((i+1)*30-90)*Math.PI/180;
-  const x1=C+R_ZIN*Math.cos(a0), y1=C+R_ZIN*Math.sin(a0);
-  const x2=C+R_ZIN*Math.cos(a1), y2=C+R_ZIN*Math.sin(a1);
-  const x3=C+R_ZOUT*Math.cos(a1), y3=C+R_ZOUT*Math.sin(a1);
-  const x4=C+R_ZOUT*Math.cos(a0), y4=C+R_ZOUT*Math.sin(a0);
-  svg += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)} A${R_ZIN},${R_ZIN} 0 0 1 ${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} A${R_ZOUT},${R_ZOUT} 0 0 0 ${x4.toFixed(1)},${y4.toFixed(1)} Z" fill="url(#${i%2===0?'medGold':'medGoldAlt'})" stroke="#7A5A1A" stroke-width="1"/>`;
-  const gm=(i+0.5)*30-90, gr=(gm)*Math.PI/180, gx=C+((R_ZIN+R_ZOUT)/2)*Math.cos(gr), gy=C+((R_ZIN+R_ZOUT)/2)*Math.sin(gr);
-  svg += `<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="13" letter-spacing="0.03em" fill="#4A3410">${ZODIAC_ABBR[z.name]}</text>`;
+const ringRadii = [...new Set(PLANETS.map(p=>p.r))].sort((a,b)=>a-b);
+ringRadii.forEach(r=>{
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="url(#ringShine)" stroke-width="3.4" opacity="0.8" filter="url(#softGlow)"/>`;
 });
-svg += `<circle cx="${C}" cy="${C}" r="${R_ZIN}" fill="none" stroke="#7A5A1A" stroke-width="1.6"/>`;
 
-// Middle engraved rings.
-R_MID.forEach(r=>{ svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#8C6A22" stroke-width="1" opacity="0.55"/>`; });
+const SUN_R = 16;
+svg += `<radialGradient id="sunGrad-default" cx="32%" cy="26%" r="75%">
+  <stop offset="0%" stop-color="#eaf6fc"/><stop offset="55%" stop-color="#a9d0e6"/><stop offset="100%" stop-color="#6fa0c0"/>
+</radialGradient>`;
+svg += `<circle id="sunCore" cx="${C}" cy="${C}" r="${SUN_R}" fill="url(#sunGrad-default)" stroke="#4a87ad" stroke-width="2.6" filter="url(#softGlow)" style="transition:fill 0.4s ease;"/>`;
+svg += `<text id="sunSignLabel" x="${C}" y="${C+SUN_R+22}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="15" letter-spacing="0.04em" fill="#0A0A0A" opacity="0" style="transition:opacity 0.4s ease;text-transform:uppercase;"></text>`;
 
-// Radiating sunburst rays, alternating tone for a ridged-metal look.
-const RAYS=28;
-for(let i=0;i<RAYS;i++){
-  const a0=(i*360/RAYS - 90)*Math.PI/180, a1=((i+0.62)*360/RAYS - 90)*Math.PI/180;
-  const rInner=R_HUB-2, rOuter=R_MID[0]-4;
-  const x1=C+rInner*Math.cos(a0), y1=C+rInner*Math.sin(a0);
-  const x2=C+rOuter*Math.cos((a0+a1)/2), y2=C+rOuter*Math.sin((a0+a1)/2);
-  const x3=C+rInner*Math.cos(a1), y3=C+rInner*Math.sin(a1);
-  svg += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} Z" fill="url(#${i%2===0?'medGold':'medGoldAlt'})"/>`;
-}
-
-// Hub -- reveals the real Sun sign's color on a typed birth date (kept
-// as id="sunCore" so updateSunSign, unchanged, still targets it).
-svg += `<circle id="sunCore" cx="${C}" cy="${C}" r="${R_HUB}" fill="url(#sunGrad-default)" stroke="#7A5A1A" stroke-width="2.2" filter="url(#medShadow)" style="transition:fill 0.4s ease;"/>`;
-svg += `<text id="sunSignLabel" x="${C}" y="${C+R_OUTER+34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="15" letter-spacing="0.04em" fill="#0A0A0A" opacity="0" style="transition:opacity 0.4s ease;text-transform:uppercase;"></text>`;
-
+const LABEL_R = Math.max(...ringRadii) + 34;
+const order = PLANETS.map((p,i)=>({i,ang:(p.angle+360)%360})).sort((a,b)=>a.ang-b.ang);
+const labelAngle = new Array(PLANETS.length);
+order.forEach((o,slot)=>{ labelAngle[o.i] = order[0].ang + slot*(360/PLANETS.length); });
+PLANETS.forEach((p,i)=>{
+  const t = TONES[p.tone];
+  const a = p.angle * Math.PI/180;
+  const dx = Math.cos(a), dy = Math.sin(a);
+  const px = C + p.r*dx, py = C + p.r*dy;
+  svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
+  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="1.8" style="pointer-events:none;"/>`;
+  const la = labelAngle[i] * Math.PI/180;
+  const ldx = Math.cos(la), ldy = Math.sin(la);
+  const anchor = ldx>0.2?'start':ldx<-0.2?'end':'middle';
+  const lx = C + LABEL_R*ldx, ly = C + LABEL_R*ldy + 3;
+  const lineX2 = C + (LABEL_R-16)*ldx, lineY2 = C + (LABEL_R-16)*ldy;
+  svg += `<line x1="${px}" y1="${py}" x2="${lineX2.toFixed(1)}" y2="${lineY2.toFixed(1)}" stroke="rgba(10,10,10,0.55)" stroke-width="2"/>`;
+  const words = p.lines[0].split(' & ');
+  const lines = words.length>1 ? [words[0], '&amp; '+words[1], '&mdash; '+p.name] : [p.lines[0], '&mdash; '+p.name];
+  const tspans = lines.map((ln,li)=> li===0 ? `<tspan x="${lx}" y="${ly}">${ln}</tspan>` : `<tspan x="${lx}" dy="20">${ln}</tspan>`).join('');
+  svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#201B14" style="pointer-events:none;">${tspans}</text>`;
+});
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
+solarWrap.querySelectorAll('.p-dot').forEach(el=>{
+  el.style.cursor='pointer';
+  el.addEventListener('click',()=>openPlanetDef(PLANETS[+el.dataset.idx]));
+});
 function openPlanetDef(p){
   document.getElementById('cardExpandTitle').textContent=`${p.name} — ${p.lines.join(', ')}`;
   document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${p.name} governs ${p.lines.join(' and ').toLowerCase()} in astrology.</p></div>`;
