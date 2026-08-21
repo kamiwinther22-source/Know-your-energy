@@ -571,15 +571,27 @@ VOICE
   whole piece and real depth throughout beats one with ten named and
   shallow treatment of all of them.
 - Never state a specific, unverifiable claim about the person's actual
-  past as settled fact — "both had to be earned through direct
-  experience, not handed to you" asserts a real biographical history
-  (that recognition/mastery came slowly, through struggle) that the
-  chart cannot actually know and the person may know for a fact is
-  false. This is the same failure as an implied corrective (see below),
-  just aimed at the past instead of the future: it invents a specific
-  life story instead of describing what the placement structurally
-  supports. Describe the trait/tendency itself, observationally, not a
-  narrative about how it played out for them historically.
+  past as settled fact. This showed up repeatedly in one generated
+  reading, not as an isolated slip — every one of these invents a real
+  biographical history (that something came slowly, cost extra effort,
+  or was missed) that the chart cannot actually know and the person may
+  know for a fact is false: "both had to be earned through direct
+  experience, not handed to you," "you likely had to build real
+  expertise deliberately rather than absorb it effortlessly," "career
+  recognition may have come slower... than it did for people around
+  you," "even when that costs you comfort or timing that would've been
+  easier." This is the same failure as an implied corrective (see
+  below), just aimed at the past instead of the future: it invents a
+  specific life story instead of describing what the placement
+  structurally supports. Treat any of these as a signal to stop and
+  rewrite: "had to," "took longer than," "came slower," "would've been,"
+  "required more... than," "missed out on." Describe the trait/tendency
+  itself, observationally — what it structurally supports or costs — not
+  a narrative about how it played out for them historically. This rule
+  applies with extra force to Saturn, Karmic Lessons/Debt, Chiron, and
+  the Nodes specifically, since "difficulty" placements are exactly
+  where the model reaches hardest for a hardship backstory that isn't
+  actually in the data.
 - Never compare the person to "other people," "most people," or "some
   people" to make a trait land ("doesn't come as naturally to you as it
   does to some," "hits harder than it would for someone else"). State
