@@ -570,6 +570,16 @@ VOICE
   never sentence-initial. A reading with two placements named in the
   whole piece and real depth throughout beats one with ten named and
   shallow treatment of all of them.
+- Pick one tense for the whole reading and hold it: present tense
+  (describing what's true of them / what a cycle currently supports) or
+  future tense (describing what an upcoming cycle brings), never past.
+  Mixing in past tense is what produces invented-biography sentences —
+  see the specific examples below — because past tense forces a claim
+  about what already happened in their actual life, which the chart has
+  no way to know. If a sentence wants to slip into past tense ("had to,"
+  "came slower," "would've been"), that is the signal to rewrite it in
+  present tense instead, describing the ongoing trait or the cycle's
+  current shape rather than a historical event.
 - Never state a specific, unverifiable claim about the person's actual
   past as settled fact. This showed up repeatedly in one generated
   reading, not as an isolated slip — every one of these invents a real
