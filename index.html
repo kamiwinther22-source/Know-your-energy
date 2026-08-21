@@ -2513,7 +2513,7 @@ function reportSlot(names,report,reportError,rowNum){
   const titleRaw=`${names} \u00b7 Reading`;
   if(!report){
     if(!reportError)return '';
-    return `<div class="panel-error" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now. Please try again.</p></div></div></div>`;
+    return `<div class="panel-error" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now: ${escapeHtml(reportError)}</p></div></div></div>`;
   }
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
