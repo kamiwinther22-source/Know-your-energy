@@ -204,8 +204,11 @@ body{
   box-shadow:inset 0 1px 0 rgba(255,255,255,0.4),0 3px 6px -2px rgba(0,0,0,0.25);}
 .rel-chip.active:hover{background:linear-gradient(160deg,#8fc1de 0%,#6fa0c0 55%,#4a87ad 100%);}
 
-/* ---------- bottom two-column: keys | form ---------- */
-.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
+/* ---------- form: back on the right at its original width -- the bubbles
+   float in their own separate scattered band above (moved out of this
+   grid entirely), but the form itself was never meant to go full-width. ---------- */
+.bottom-grid{display:flex;justify-content:flex-end;}
+.form-col{width:100%;max-width:230px;}
 
 /* Real dimensional depth here instead of flat text -- each selling point
    from KEYS (below, in JS) condensed to a short bubble label and rendered
@@ -215,17 +218,12 @@ body{
    important point; the rest use the same neutral metal-tone gradients
    already established for the numerology tiles and solar/HD previews,
    so this reuses an existing palette rather than adding a new one. */
-/* Explicit grid-column AND grid-row on both this and .form-col --
-   .form-col has an explicit column with no explicit row, which makes
-   grid auto-placement's cursor skip past row 1 entirely and push the
-   next unplaced item to row 2 instead of beside it (the exact "holes"
-   gotcha already documented elsewhere in this file). Making both
-   coordinates explicit on both items is the real fix, not a guess. */
-.keys-col{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:0.85rem;padding-top:0.3rem;align-items:flex-start;}
-/* Glossy silver/cream spheres -- off-center highlight + inset shading +
-   real drop shadow (black, used only for the 3D effect, not as a fill). */
+/* Moved out of the form's column entirely -- floats in its own band in
+   the space the removed pitch-line paragraph used to occupy, each bubble
+   individually offset (nth-child) so they scatter, not a straight line. */
+.keys-col{position:relative;height:290px;margin-bottom:0.6rem;}
 .key-bubble{
-  position:relative;width:98px;height:98px;border-radius:50%;flex-shrink:0;
+  position:absolute;width:98px;height:98px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;text-align:center;
   padding:0.4rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.66rem;line-height:1.18;
   color:#0A0A0A;
@@ -235,7 +233,11 @@ body{
     0 -10px 14px -8px rgba(0,0,0,0.28) inset,
     0 10px 16px -7px rgba(0,0,0,0.32);
 }
-.key-bubble:nth-child(even){align-self:flex-end;}
+/* Scattered positions, not a line -- varied x AND y per bubble. */
+.key-bubble:nth-child(1){top:0;left:4%;}
+.key-bubble:nth-child(2){top:130px;left:44%;width:84px;height:84px;}
+.key-bubble:nth-child(3){top:20px;left:68%;width:76px;height:76px;font-size:0.6rem;}
+.key-bubble:nth-child(4){top:190px;left:8%;width:80px;height:80px;font-size:0.6rem;}
 /* Lead bubble: the one pop of saturated ice blue, glossier/brighter than
    the rest -- this is the "color pops to guide attention" moment. */
 .key-bubble.lead{
@@ -247,7 +249,7 @@ body{
     0 12px 20px -7px rgba(0,0,0,0.38);
 }
 
-.form-col{position:relative;grid-column:2;grid-row:1;}
+.form-col{position:relative;}
 /* Unboxed: the data-entry form now sits directly on the page background,
    no card/blur/border around it -- the box moved to .keys-col instead. */
 .form-panel{
@@ -504,6 +506,15 @@ body{
           fill="none" stroke="url(#ribbonB)" stroke-width="90" stroke-linecap="round" opacity="0.7" filter="url(#ribbonShadow)"/>
     <path d="M 220 -30 C 300 140, 60 200, 130 380 C 200 560, 340 590, 240 780 C 140 970, 30 990, 110 1180 C 190 1370, 330 1390, 230 1580 C 150 1730, 50 1750, 100 1900"
           fill="none" stroke="url(#ribbonC)" stroke-width="46" stroke-linecap="round" opacity="0.5" filter="url(#ribbonShadow)"/>
+    <!-- Bold near-black accent -- a real dramatic edge against the soft
+         ice-blue/silver/white ribbons. Confined to the wheel/bubble zone
+         (roughly y 260-1150) only -- the first version ran the full page
+         height and cut straight through the tagline sentence and the
+         form labels, which is a real legibility failure, not drama.
+         Kept out of both text-dense zones entirely instead of guessing
+         at a thinner line through them. -->
+    <path d="M 30 260 C 130 380, -10 480, 90 620 C 190 760, 340 720, 260 880 C 180 1030, 10 1010, 70 1150"
+          fill="none" stroke="#0A0A0A" stroke-width="7" stroke-linecap="round" opacity="0.85"/>
   </svg>
 </div>
 <div class="content">
@@ -539,7 +550,7 @@ body{
     </div>
   </div>
 
-  <div class="pitch-line">Discover the tools you have been given for your unique path, the timing of your cycles, and how they combine with another's along the way</div>
+  <div class="keys-col" id="keysCol"></div>
 
   <div class="bottom-grid">
     <div class="form-col">
@@ -623,7 +634,6 @@ body{
         <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
       </div>
     </div>
-    <div class="keys-col" id="keysCol"></div>
   </div>
 
 </div>
@@ -814,7 +824,7 @@ svg += '</defs>';
 // of filling the whole area with one tan disc. ----------
 const ringRadii = [...new Set(PLANETS.map(p=>p.r))].sort((a,b)=>a-b);
 ringRadii.forEach(r=>{
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="url(#ringShine)" stroke-width="1.6" opacity="0.55" filter="url(#softGlow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="url(#ringShine)" stroke-width="3.4" opacity="0.8" filter="url(#softGlow)"/>`;
 });
 
 // sun -- real glossy ice-blue/silver sphere by default. Sun sign only
@@ -827,7 +837,7 @@ const SUN_R = 16;
 svg += `<radialGradient id="sunGrad-default" cx="32%" cy="26%" r="75%">
   <stop offset="0%" stop-color="#eaf6fc"/><stop offset="55%" stop-color="#a9d0e6"/><stop offset="100%" stop-color="#6fa0c0"/>
 </radialGradient>`;
-svg += `<circle id="sunCore" cx="${C}" cy="${C}" r="${SUN_R}" fill="url(#sunGrad-default)" stroke="#4a87ad" stroke-width="1.2" filter="url(#softGlow)" style="transition:fill 0.4s ease;"/>`;
+svg += `<circle id="sunCore" cx="${C}" cy="${C}" r="${SUN_R}" fill="url(#sunGrad-default)" stroke="#4a87ad" stroke-width="2.6" filter="url(#softGlow)" style="transition:fill 0.4s ease;"/>`;
 svg += `<text id="sunSignLabel" x="${C}" y="${C+SUN_R+22}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="15" letter-spacing="0.04em" fill="#0A0A0A" opacity="0" style="transition:opacity 0.4s ease;text-transform:uppercase;"></text>`;
 
 // Labels moved outside the disc so white text stays legible against the
@@ -849,13 +859,13 @@ PLANETS.forEach((p,i)=>{
   const dx = Math.cos(a), dy = Math.sin(a);
   const px = C + p.r*dx, py = C + p.r*dy;
   svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
-  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
+  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="1.8" style="pointer-events:none;"/>`;
   const la = labelAngle[i] * Math.PI/180;
   const ldx = Math.cos(la), ldy = Math.sin(la);
   const anchor = ldx>0.2?'start':ldx<-0.2?'end':'middle';
   const lx = C + LABEL_R*ldx, ly = C + LABEL_R*ldy + 3;
   const lineX2 = C + (LABEL_R-16)*ldx, lineY2 = C + (LABEL_R-16)*ldy;
-  svg += `<line x1="${px}" y1="${py}" x2="${lineX2.toFixed(1)}" y2="${lineY2.toFixed(1)}" stroke="rgba(32,27,20,0.4)" stroke-width="1"/>`;
+  svg += `<line x1="${px}" y1="${py}" x2="${lineX2.toFixed(1)}" y2="${lineY2.toFixed(1)}" stroke="rgba(10,10,10,0.55)" stroke-width="2"/>`;
   const words = p.lines[0].split(' & ');
   const lines = words.length>1 ? [words[0], '&amp; '+words[1], '&mdash; '+p.name] : [p.lines[0], '&mdash; '+p.name];
   const tspans = lines.map((ln,li)=> li===0 ? `<tspan x="${lx}" y="${ly}">${ln}</tspan>` : `<tspan x="${lx}" dy="20">${ln}</tspan>`).join('');
