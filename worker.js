@@ -246,20 +246,29 @@ async function getHumanDesign(env, dob, timeStr, ampm, city, state) {
     datetime = `${dateStr}T${timeFormatted}:00`;
   }
 
-  const res = await fetch("https://api.humandesignhub.app/v2/simple-bodygraph", {
-    method: "POST",
-    headers: {
-      "X-API-KEY": env.HumanDesign_key,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ datetime })
-  });
-
-  if (!res.ok) {
+  // Retry on a transient/rate-limit response (429, or a 5xx) -- a two-
+  // person relational report makes this exact call twice, back-to-back,
+  // for the same API key within milliseconds of each other, which is
+  // exactly the shape of request a rate limit is designed to catch. One
+  // short retry covers that case without masking a genuine, persistent
+  // failure (a real 4xx other than 429 still throws immediately).
+  let lastErr;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await fetch("https://api.humandesignhub.app/v2/simple-bodygraph", {
+      method: "POST",
+      headers: {
+        "X-API-KEY": env.HumanDesign_key,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ datetime })
+    });
+    if (res.ok) return await res.json();
     const errText = await res.text();
-    throw new Error(`Human Design API ${res.status}: ${errText}`);
+    lastErr = new Error(`Human Design API ${res.status}: ${errText}`);
+    if (res.status !== 429 && !(res.status >= 500 && res.status < 600)) throw lastErr;
+    if (attempt === 0) await new Promise(r => setTimeout(r, 600));
   }
-  return await res.json();
+  throw lastErr;
 }
 
 function todayAsMMDDYYYY() {

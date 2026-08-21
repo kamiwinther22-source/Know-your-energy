@@ -2469,8 +2469,8 @@ function nr(num){
   return h;
 }
 
-function hdr(hd){
-  if(!hd||hd.error)return apend('Unavailable');
+function hdr(hd,errMsg){
+  if(!hd||hd.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   let h='';
   const core=[];
   if(hd.type)core.push(arow('Type',hd.type,'hdtype',normalizeHDType(hd.type)));
@@ -2594,7 +2594,7 @@ function reportSlot(names,report,reportError,rowNum){
 function personRow(person,rowNum){
   return quadItem(person.first,'Astrology',ar(person.astro,person.astroError),wheelWrap(person.astro),astroWheelSVG(person.astro),rowNum)
     +quadItem(person.first,'Numerology',nr(person.numerology),null,null,rowNum)
-    +quadItem(person.first,'Human Design',hdr(person.hd),hdWheelWrap(person.hd),hdBodygraphSVG(person.hd),rowNum);
+    +quadItem(person.first,'Human Design',hdr(person.hd,person.hdError),hdWheelWrap(person.hd),hdBodygraphSVG(person.hd),rowNum);
 }
 
 function render(p1,p2,r,reportErr){
@@ -2702,11 +2702,13 @@ async function generate(){
     p1.astro=result.p1.astrology;
     p1.astroError=result.p1.astrologyError;
     p1.hd=result.p1.humanDesign;
+    p1.hdError=result.p1.humanDesignError;
     if(p2&&result.p2){
       p2.numerology=result.p2.numerology;
       p2.astro=result.p2.astrology;
       p2.astroError=result.p2.astrologyError;
       p2.hd=result.p2.humanDesign;
+      p2.hdError=result.p2.humanDesignError;
     }
     render(p1,p2,result.report,result.reportError);
   }catch(e){
