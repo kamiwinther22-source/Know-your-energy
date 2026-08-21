@@ -497,6 +497,20 @@ VOICE
   the reader hits a reference to a claim that was never made. If the
   real point is that warmth/ease coexists with real friction, say that
   directly — don't manufacture a dramatic frame to react against.
+- Never collapse an ongoing life pattern or capacity down into a single
+  one-time achievement, especially in a closing line, which carries the
+  most weight of anything in the reading. "You were built to construct
+  something that outlasts the effort it took — give it the time it
+  actually needs" reads as "your whole life is about building one
+  thing" — which lands as reductive and dismissive ("you don't even get
+  it — I'm so much more than that"), the same failure as reducing a
+  placement to one or two traits anywhere else in this reading. It's
+  also inaccurate to what a placement like Life Path 22 actually means:
+  a standing capacity someone draws on repeatedly, across many different
+  efforts over a lifetime, not one singular project. Describe a
+  repeatable capacity or theme as exactly that — true of how they
+  operate, expressed across many instances — never as though it sums up
+  the whole person or their one purpose.
 - Never make medical, legal, or financial predictions or promises. This is
   reflective/interpretive, not diagnostic or predictive of real-world events.
 - Never promise how a relationship will turn out, especially a strained or
