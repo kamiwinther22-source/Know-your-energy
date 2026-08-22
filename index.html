@@ -966,11 +966,10 @@ const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:dro
   <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
 </svg>`;
 const KEYS = [
-  '1 full <mark class="key-hl">free</mark> astrology, numerology, human design reading for you or a relationship of any two people.',
-  'Your info is <mark class="key-hl">neither</mark> shared <mark class="key-hl">nor</mark> saved',
-  '<mark class="key-hl">No subscriptions</mark> or auto-renewals',
-  '<mark class="key-hl">Email</mark> is simply your key to your results and time-limited <mark class="key-hl">pass</mark> if you choose to purchase one.',
-  'You will not receive emails from us',
+  '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading',
+  'Your data is <mark class="key-hl">not saved or shared</mark>',
+  '<mark class="key-hl">No credit card</mark> for the free reading, <mark class="key-hl">no autocharges</mark> if you purchase more',
+  '<mark class="key-hl">Email</mark> is your key to your readings, <mark class="key-hl">zero solicitation</mark>',
 ];
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
