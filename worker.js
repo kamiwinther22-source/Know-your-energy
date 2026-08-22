@@ -567,17 +567,33 @@ VOICE
   naming. But don't let that slide into implying the outcome is guaranteed
   or "meant to be." Name what's structurally there. Leave what happens with
   it to the person, not the chart.
-- When you name a Karmic Debt, a Challenge number, or a hard aspect, frame
-  the difficulty attached to it as the calibration that unusual raw capacity
-  requires, not as a unique misfortune singling this person out. A glass
-  blower doesn't shape a vase through force alone, or the glass shatters;
-  they hold a precise balance of pressure and release. Someone carrying a
-  lot of raw intensity in their chart isn't exempt from that same
-  calibration — if anything, more capacity means more refining, not less.
-  The goal is for a hard placement to land as "this is what it looks like
-  to refine something substantial," not "why is this happening only to
-  me." That reframe — from isolating tragedy to expected refinement — is
-  worth landing deliberately, not glossed over.
+- When you name a Karmic Debt, a Challenge number, or a hard aspect, name
+  the real weight of it directly — do not soften it into pure opportunity-
+  or growth-framing, and do not describe it only as "calibration" or
+  refinement. Real, significant difficulty correlates with these
+  placements; when a chart carries several of them together (more than one
+  Karmic Debt, more than one hard Challenge number, hard Saturn/Pluto/
+  Chiron aspects stacking on top of each other), say plainly that real
+  hardship has very likely been an actual, ongoing part of this person's
+  life — not a rare exception, not a unique misfortune singling them out
+  (carrying real weight is common, not special), but not minimized into
+  something purely constructive either. State it as a present-tense
+  structural fact about what this chart carries and what it has likely
+  cost, the same register you'd use for any other trait — never as a
+  silver-lining reframe the reader has to accept before the difficulty is
+  allowed to be named. This does not license inventing a specific
+  biographical event (that rule above still holds) — name the structural
+  weight itself, not a fabricated story about how it played out.
+  Use the Pinnacle and Challenge age ranges you're given to say WHEN a
+  harder current concentrates, not just that one exists — naming the
+  actual age window a difficult Challenge or Pinnacle falls in is far more
+  specific and useful than describing a hard placement as a constant,
+  shapeless backdrop to their whole life. If several hard indicators
+  (Karmic Debts, hard aspects, difficult Challenges) cluster around the
+  same age window, name that clustering directly — that kind of
+  cross-system convergence is exactly the insight this reading exists to
+  surface, and it's more honest than treating every hard placement as
+  active everywhere, all the time, equally.
 - Never build a sentence's grammatical backbone around naming a placement
   or aspect — "Person One's Sun sits in Scorpio in the 6th house, square
   their Midheaven" as a sentence's subject is a citation wearing the
@@ -910,12 +926,19 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     const a = p.astrology || {};
 
     const pinnacle = (x) => x ? `${x.value} (${x.ageRange})` : 'unknown';
+    // Challenge numbers run during the same four age windows as their
+    // parallel Pinnacle (real, sourced numerology convention -- Pinnacles
+    // and Challenges cover the same life periods, just describe the
+    // opportunity vs. the obstacle within each). Pinnacle age ranges are
+    // already computed; reuse them here so the model can name WHEN a
+    // Challenge's difficulty concentrates, not just that it exists.
+    const challenge = (val, pin) => `${val}${pin?.ageRange ? ` (age ${pin.ageRange})` : ''}`;
     const numerologyLines = [
       `Life Path ${n.lifePath}, Expression ${n.expression}, Soul Urge ${n.soulUrge}, Personality ${n.personality}, Birthday ${n.birthday}`,
       `Attitude ${n.attitude}, Balance ${n.balance}, Maturity ${n.maturity}`,
       `Current cycle: Personal Year ${n.personalYear}, Personal Month ${n.personalMonth}, Personal Day ${n.personalDay}, Essence ${n.essenceCycle?.value} (age ${n.essenceCycle?.currentAge})`,
       `Pinnacles: 1) ${pinnacle(n.pinnacles?.pinnacle1)}  2) ${pinnacle(n.pinnacles?.pinnacle2)}  3) ${pinnacle(n.pinnacles?.pinnacle3)}  4) ${pinnacle(n.pinnacles?.pinnacle4)}`,
-      `Challenges: ${n.challengeNumbers?.challenge1}, ${n.challengeNumbers?.challenge2}, ${n.challengeNumbers?.challenge3}, ${n.challengeNumbers?.challenge4}`,
+      `Challenges: 1) ${challenge(n.challengeNumbers?.challenge1, n.pinnacles?.pinnacle1)}  2) ${challenge(n.challengeNumbers?.challenge2, n.pinnacles?.pinnacle2)}  3) ${challenge(n.challengeNumbers?.challenge3, n.pinnacles?.pinnacle3)}  4) ${challenge(n.challengeNumbers?.challenge4, n.pinnacles?.pinnacle4)}`,
       `Karmic Lessons: ${n.karmicLessons?.length ? n.karmicLessons.join(', ') : 'none'}`,
       `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(', ') : 'none'}`
     ].join('\n  ');
