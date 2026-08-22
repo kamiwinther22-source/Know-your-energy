@@ -425,7 +425,10 @@ async function recordPass(env, sessionId, p1, p2) {
   const plan = session.metadata && session.metadata.plan;
   const durationMs = PASS_DURATION_MS[plan];
   if (!durationMs) {
-    // Single-reading purchases don't create a pass — nothing to store.
+    // Single-reading purchases don't create a lasting pass — instead, mark
+    // this specific paid session as good for exactly one /report call before
+    // it expires. Deleted the moment it's spent (see consumeSingleSession).
+    await env.PASSES.put(`paidsession:${sessionId}`, "1", { expirationTtl: 3600 });
     return { ok: true, plan: plan || null };
   }
 
@@ -455,6 +458,51 @@ async function checkPassRecord(env, email) {
   const record = JSON.parse(raw);
   if (record.expiresAt < Date.now()) return { active: false };
   return { active: true, plan: record.plan, expiresAt: record.expiresAt, p1: record.p1 || null, p2: record.p2 || null };
+}
+
+// ─── FREE READING (one per email, ever, never expires) ───────────────────────
+
+function freeKey(email) {
+  return `free:${email.trim().toLowerCase()}`;
+}
+
+async function hasUsedFreeReading(env, email) {
+  return !!(await env.PASSES.get(freeKey(email)));
+}
+
+async function markFreeReadingUsed(env, email) {
+  await env.PASSES.put(freeKey(email), String(Date.now()));
+}
+
+// A verified single-reading Stripe session is good for exactly one /report
+// call — deleted the instant it's spent, so replaying the same session_id
+// can't be used to generate a second reading.
+async function consumeSingleSession(env, sessionId) {
+  if (!sessionId) return false;
+  const key = `paidsession:${sessionId}`;
+  const val = await env.PASSES.get(key);
+  if (!val) return false;
+  await env.PASSES.delete(key);
+  return true;
+}
+
+// Decides, before any real chart/report work happens, whether this request
+// should proceed. Order matters: a just-paid single session, family emails,
+// and active passes never touch the free-reading counter, so paying (or
+// being family) never "spends" the one-time free reading. Only once none of
+// those apply does the free reading get checked and — if this is the first
+// time — consumed.
+async function resolveAccess(env, email, paidSessionId) {
+  if (await consumeSingleSession(env, paidSessionId)) return { allowed: true, via: "single-session" };
+  if (!email) return { allowed: false, reason: "An email address is required." };
+  const norm = email.trim().toLowerCase();
+  if (UNLIMITED_EMAILS.includes(norm)) return { allowed: true, via: "unlimited" };
+  const pass = await checkPassRecord(env, email);
+  if (pass.active) return { allowed: true, via: "pass" };
+  if (await hasUsedFreeReading(env, email)) {
+    return { allowed: false, reason: "Your free reading has already been used." };
+  }
+  return { allowed: true, via: "free" };
 }
 
 // Refreshes the stored person snapshot for an active pass, so the most
@@ -1111,6 +1159,14 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       return jsonResponse({ error: "Invalid request body." }, 400);
     }
     try {
+      const access = await resolveAccess(env, body.passEmail, body.paidSessionId);
+      if (!access.allowed) {
+        return jsonResponse({ paymentRequired: true, reason: access.reason, plans: PLAN_CONFIG }, 402);
+      }
+      if (access.via === "free") {
+        ctx.waitUntil(markFreeReadingUsed(env, body.passEmail));
+      }
+
       const p1Data = await assemblePersonData(env, body.p1);
       const p2Data = body.p2 ? await assemblePersonData(env, body.p2) : null;
 

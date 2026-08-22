@@ -189,8 +189,14 @@ body{
 .rel-chip.active{background:#1C2CA9;color:#ffffff;}
 .rel-chip.active:hover{background:#1C2CA9;}
 
-/* ---------- bottom two-column: keys | form ---------- */
+/* ---------- bottom two-column: keys+pay (left) | form (right) ---------- */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
+.left-stack{grid-column:1;display:flex;flex-direction:column;gap:0.9rem;}
+.pay-free-note{font-size:0.78rem;color:#ffffff;font-weight:600;margin-bottom:0.9rem;line-height:1.4;}
+.pay-plans{display:flex;flex-direction:column;gap:0.55rem;}
+.pay-plan-btn{display:block;width:100%;min-width:0;text-align:center;}
+.pay-plan-btn .pp-price{display:block;font-size:0.95rem;}
+.pay-plan-btn .pp-label{display:block;font-size:0.56rem;font-weight:600;letter-spacing:0.03em;text-transform:none;margin-top:0.15rem;}
 
 /* Boxed now (moved here from .form-panel, which is unboxed below) --
    same real glassmorphism recipe: blur + translucency + light edge +
@@ -220,7 +226,7 @@ body{
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:#9DB0FF;font-weight:800;}
 
-.form-col{position:relative;}
+.form-col{position:relative;grid-column:2;}
 /* Unboxed: the data-entry form now sits directly on the page background,
    no card/blur/border around it -- the box moved to .keys-col instead. */
 .form-panel{
@@ -449,7 +455,7 @@ body{
 .card-expand-body .report-body{font-size:0.95rem;line-height:1.6;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
-  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.chart-carousel,.brand-row,.tagline-wrap,.left-stack,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
   .results-wrap{max-width:100%!important;}
   .main-grid{grid-template-columns:1fr!important;}
@@ -593,7 +599,10 @@ body{
         <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
       </div>
     </div>
-    <div class="keys-col" id="keysCol"></div>
+    <div class="left-stack">
+      <div class="keys-col" id="keysCol"></div>
+      <div class="keys-col" id="payCol"></div>
+    </div>
   </div>
 
 </div>
@@ -980,6 +989,22 @@ const KEYS = [
 ];
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
+
+// ---------- Pricing: same PLAN_CONFIG amounts as worker.js, matching the
+// site's one-time-charge model (no subscriptions). Anyone can buy any plan
+// at any time -- the first reading is free automatically, enforced server-
+// side by email, regardless of whether these buttons are ever used. ----------
+const PAY_PLANS = [
+  { plan:'single', price:'$5', label:'One More Reading' },
+  { plan:'monthly', price:'$10', label:'Unlimited — 1 Month' },
+  { plan:'annual', price:'$25', label:'Unlimited — 1 Year' }
+];
+const payCol = document.getElementById('payCol');
+payCol.innerHTML = `<div class="sys-section-title">Pricing</div>`
+  +`<div class="pay-free-note">Your first reading is free. After that, choose one:</div>`
+  +`<div class="pay-plans">${PAY_PLANS.map(p=>
+      `<button type="button" class="gen-btn pay-plan-btn" onclick="startCheckout('${p.plan}')"><span class="pp-price">${p.price}</span><span class="pp-label">${escapeHtml(p.label)}</span></button>`
+    ).join('')}</div>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
@@ -2608,13 +2633,15 @@ function parseLocation(raw){
 
 const W_API='https://know-your-energy.kwdoanchor.workers.dev';
 
-async function generate(){
-  document.getElementById('err').style.display='none';
+// Shared by generate() and startCheckout() -- both need the same validated
+// birth data (checkout needs it to hand back to /report after payment).
+function buildPeople(){
   const p1f=g('p1f'),p1l=g('p1l'),d1=g('p1d');
-  if(!p1f||!p1l||!vd(d1)){showErr('Please enter first and last name, and date of birth (MM/DD/YYYY).');return;}
+  if(!p1f||!p1l||!vd(d1)){showErr('Please enter first and last name, and date of birth (MM/DD/YYYY).');return null;}
+  if(!g('pEmail')){showErr('Please enter your email address.');return null;}
   if(isRelational){
     const p2f=g('p2f'),p2l=g('p2l'),d2=g('p2d');
-    if(!p2f||!p2l||!vd(d2)){showErr('Please enter first and last name, and date of birth for Person Two.');return;}
+    if(!p2f||!p2l||!vd(d2)){showErr('Please enter first and last name, and date of birth for Person Two.');return null;}
   }
   const loc1=parseLocation(g('p1loc'));
   const p1={
@@ -2633,19 +2660,29 @@ async function generate(){
       location: g('p2loc')
     };
   }
+  return {p1,p2};
+}
+
+async function generate(paidSessionId){
+  document.getElementById('err').style.display='none';
+  const built=buildPeople();
+  if(!built) return;
+  const {p1,p2}=built;
   document.querySelector('.content').style.display='none';
   document.getElementById('loading').style.display='block';
   try{
     const res=await fetch(W_API+'/report',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
+      body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined,paidSessionId:paidSessionId||undefined})
     });
     const result=await res.json();
     if(!res.ok){
       document.getElementById('loading').style.display='none';
       document.querySelector('.content').style.display='block';
-      showErr(result.error||'Something went wrong. Please try again.');
+      showErr(result.paymentRequired
+        ? 'Your free reading has already been used — choose a plan on the left to continue.'
+        : (result.error||'Something went wrong. Please try again.'));
       return;
     }
     p1.numerology=result.p1.numerology;
@@ -2667,6 +2704,92 @@ async function generate(){
     showErr('Connection error: '+e.message);
   }
 }
+
+// ---------- Paid plans: send to Stripe Checkout, come back and finish ----------
+// Birth data is only ever kept in sessionStorage on this device, just long
+// enough to survive the round trip to Stripe and back -- never sent anywhere
+// except to this site's own Worker.
+function restoreFormFields(saved){
+  const setVal=(id,v)=>{ const el=document.getElementById(id); if(el) el.value=v||''; };
+  setMode(!!saved.isRelational);
+  if(saved.relType){
+    relType=saved.relType;
+    document.querySelectorAll('.rel-chip').forEach(c=>c.classList.toggle('active', c.dataset.rel===saved.relType));
+  }
+  setVal('p1f',saved.p1.first); setVal('p1m',saved.p1.mid); setVal('p1l',saved.p1.last);
+  setVal('p1d',saved.p1.dob); setVal('p1loc',saved.p1.location);
+  const [t1,ap1]=(saved.p1.time||'').split(' ');
+  setVal('p1t',t1); if(ap1) document.getElementById('p1ap').value=ap1;
+  if(saved.p2){
+    setVal('p2f',saved.p2.first); setVal('p2m',saved.p2.mid); setVal('p2l',saved.p2.last);
+    setVal('p2d',saved.p2.dob); setVal('p2loc',saved.p2.location);
+    const [t2,ap2]=(saved.p2.time||'').split(' ');
+    setVal('p2t',t2); if(ap2) document.getElementById('p2ap').value=ap2;
+  }
+  setVal('pEmail',saved.email);
+}
+
+async function startCheckout(plan){
+  document.getElementById('err').style.display='none';
+  const built=buildPeople();
+  if(!built) return;
+  sessionStorage.setItem('kye_pending', JSON.stringify({
+    p1:built.p1, p2:built.p2, isRelational, relType, email:g('pEmail')
+  }));
+  try{
+    const res=await fetch(W_API+'/create-checkout-session',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({plan, email:g('pEmail')})
+    });
+    const result=await res.json();
+    if(!res.ok||!result.url){ showErr(result.error||'Could not start checkout. Please try again.'); return; }
+    window.location.href=result.url;
+  }catch(e){
+    showErr('Connection error: '+e.message);
+  }
+}
+
+// Runs once at page load. No-ops unless the URL carries a ?checkout=...
+// param, which only happens on the redirect back from Stripe.
+(async function handleCheckoutReturn(){
+  const params=new URLSearchParams(window.location.search);
+  const status=params.get('checkout');
+  if(!status) return;
+  const plan=params.get('plan');
+  const sessionId=params.get('session_id');
+  history.replaceState({}, '', window.location.pathname);
+  if(status!=='success'||!sessionId) return;
+  const savedRaw=sessionStorage.getItem('kye_pending');
+  if(!savedRaw){
+    showErr("Payment completed, but your entered birth data wasn't found on this device — please re-enter it and click Generate again.");
+    return;
+  }
+  const saved=JSON.parse(savedRaw);
+  sessionStorage.removeItem('kye_pending');
+  restoreFormFields(saved);
+  document.getElementById('loading').style.display='block';
+  document.querySelector('.content').style.display='none';
+  try{
+    const res=await fetch(W_API+'/record-pass',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({session_id:sessionId, p1:saved.p1, p2:saved.p2})
+    });
+    const result=await res.json();
+    if(!res.ok||!result.ok){
+      document.getElementById('loading').style.display='none';
+      document.querySelector('.content').style.display='block';
+      showErr(result.reason||result.error||'Could not verify payment. If you were charged, contact support.');
+      return;
+    }
+    generate(plan==='single'?sessionId:undefined);
+  }catch(e){
+    document.getElementById('loading').style.display='none';
+    document.querySelector('.content').style.display='block';
+    showErr('Connection error verifying payment: '+e.message);
+  }
+})();
 
 // ---------- tap-to-expand: cards, term definitions, gate chips ----------
 document.addEventListener('click', e=>{
