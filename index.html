@@ -85,8 +85,8 @@ body{
 .carousel-swipe-hint{display:flex;justify-content:center;margin-top:0.55rem;}
 .carousel-dots{display:flex;justify-content:center;gap:0.45rem;margin-top:0.4rem;}
 .carousel-dots .dot{
-  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.28);
-  border:none;padding:0;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
+  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.28);background-clip:content-box;
+  border:none;padding:8px;margin:-8px;cursor:pointer;transition:background 0.2s ease,transform 0.2s ease;
 }
 .carousel-dots .dot.active{background:#ffffff;transform:scale(1.35);}
 /* 2 rows of 6 -- 9 tiles crammed into one row left each tile too narrow
@@ -249,12 +249,15 @@ body{
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
    with italic text for a lighter, less typewriter-formal feel. */
-.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(255,255,255,0.45);}
+.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(255,255,255,0.45);transition:border-color 0.15s ease;}
 .line-field::before,.line-field::after{
   content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(255,255,255,0.45);
+  transition:background 0.15s ease;
 }
 .line-field::before{left:0;}
 .line-field::after{right:0;}
+.line-field:focus-within{border-bottom-color:#4655D6;}
+.line-field:focus-within::before,.line-field:focus-within::after{background:#4655D6;}
 .line-field input,.line-field select{
   width:100%;background:transparent;border:none;color:#ffffff;font-size:0.7rem;font-weight:500;
   font-style:italic;font-family:'DM Sans',sans-serif;padding:0.15rem 0.2rem 0;outline:none;
