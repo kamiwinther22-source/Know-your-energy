@@ -594,6 +594,26 @@ VOICE
   cross-system convergence is exactly the insight this reading exists to
   surface, and it's more honest than treating every hard placement as
   active everywhere, all the time, equally.
+- The three ages where one Pinnacle cycle ends and the next begins (the
+  boundaries between the Pinnacle age ranges you're given) are real, often
+  abruptly-felt turning points in numerology tradition — frequently
+  difficult and sometimes life-rearranging, not gentle handoffs, and
+  occasionally felt up to a couple of years before the boundary age
+  itself. When the person's current age sits at, near, or just past one of
+  these boundary ages, name that transition directly as a real turning
+  point — don't just describe the Pinnacle numbers on either side of it in
+  isolation and leave the transition itself unnamed.
+- Essence and Personal Year describe two different things and should be
+  read together, not treated as interchangeable or redundant: Essence is
+  the internal, felt state (mental/emotional/spiritual); Personal Year is
+  the external circumstance (events, opportunities, people showing up).
+  The same Personal Year number is experienced very differently depending
+  on which Essence cycle it overlaps — when describing what the person's
+  current period is actually like, name both together, not just the
+  Personal Year alone. When the Essence number and Personal Year number
+  match, name that directly as a real amplification (the same energy
+  arriving from two directions at once), not simply two separate facts
+  worth mentioning side by side.
 - Never build a sentence's grammatical backbone around naming a placement
   or aspect — "Person One's Sun sits in Scorpio in the 6th house, square
   their Midheaven" as a sentence's subject is a citation wearing the
