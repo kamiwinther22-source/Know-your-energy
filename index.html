@@ -3,7 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Know Your Energy — Landing</title>
+<title>Know Your Energy — Astrology, Numerology &amp; Human Design</title>
+<meta name="description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design — from just your name and birth details.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="Know Your Energy">
+<meta property="og:description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://know-your-energy.com">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Know Your Energy">
+<meta name="twitter:description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23000'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%234655D6'%3EK%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -524,67 +536,67 @@ body{
         <div class="f">
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
           <div class="row3">
-            <div><label>First</label><div class="line-field"><input id="p1f" placeholder="First"></div></div>
-            <div><label>Mid</label><div class="line-field"><input id="p1m" placeholder="Mid"></div></div>
-            <div><label>Last</label><div class="line-field"><input id="p1l" placeholder="Last"></div></div>
+            <div><label for="p1f">First</label><div class="line-field"><input id="p1f" placeholder="First" autocomplete="given-name"></div></div>
+            <div><label for="p1m">Mid</label><div class="line-field"><input id="p1m" placeholder="Mid" autocomplete="additional-name"></div></div>
+            <div><label for="p1l">Last</label><div class="line-field"><input id="p1l" placeholder="Last" autocomplete="family-name"></div></div>
           </div>
         </div>
         <div class="f">
-          <label>Date of Birth</label>
-          <div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
+          <label for="p1d">Date of Birth</label>
+          <div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div>
         </div>
         <div class="f">
-          <label>Birth Time <span class="opt-note">if known</span></label>
+          <label for="p1t">Birth Time <span class="opt-note">if known</span></label>
           <div class="row-ampm">
-            <div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)"></div>
+            <div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div>
             <div class="line-field">
-              <select id="p1ap"><option value="AM">AM</option><option value="PM">PM</option></select>
+              <select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select>
             </div>
           </div>
         </div>
         <div class="f">
-          <label>Birthplace <span class="opt-note">if known</span></label>
-          <div class="line-field"><input id="p1loc" placeholder="City, State, Country"></div>
+          <label for="p1loc">Birthplace <span class="opt-note">if known</span></label>
+          <div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div>
         </div>
 
         <div id="p2Section" style="display:none;">
           <div class="f">
             <label class="section-lbl">Person Two</label>
             <div class="row3">
-              <div><label>First</label><div class="line-field"><input id="p2f" placeholder="First"></div></div>
-              <div><label>Mid</label><div class="line-field"><input id="p2m" placeholder="Mid"></div></div>
-              <div><label>Last</label><div class="line-field"><input id="p2l" placeholder="Last"></div></div>
+              <div><label for="p2f">First</label><div class="line-field"><input id="p2f" placeholder="First"></div></div>
+              <div><label for="p2m">Mid</label><div class="line-field"><input id="p2m" placeholder="Mid"></div></div>
+              <div><label for="p2l">Last</label><div class="line-field"><input id="p2l" placeholder="Last"></div></div>
             </div>
           </div>
           <div class="f">
-            <label>Date of Birth</label>
-            <div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" oninput="fmtDate(this)"></div>
+            <label for="p2d">Date of Birth</label>
+            <div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div>
           </div>
           <div class="f">
-            <label>Birth Time <span class="opt-note">if known</span></label>
+            <label for="p2t">Birth Time <span class="opt-note">if known</span></label>
             <div class="row-ampm">
-              <div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" oninput="fmtTime(this)"></div>
+              <div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div>
               <div class="line-field">
-                <select id="p2ap"><option value="AM">AM</option><option value="PM">PM</option></select>
+                <select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select>
               </div>
             </div>
           </div>
           <div class="f">
-            <label>Birthplace <span class="opt-note">if known</span></label>
-            <div class="line-field"><input id="p2loc" placeholder="City, State, Country"></div>
+            <label for="p2loc">Birthplace <span class="opt-note">if known</span></label>
+            <div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div>
           </div>
         </div>
 
         <div class="f">
-          <label>Email Address</label>
-          <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com"></div>
+          <label for="pEmail">Email Address</label>
+          <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
         </div>
       </div>
 
       <div class="err" id="err"></div>
 
       <div class="submit-wrap">
-        <span class="glow-ring"><button type="button" class="gen-btn" onclick="generate()">Generate</button></span>
+        <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()">Generate</button></span>
       </div>
     </div>
     <div class="keys-col" id="keysCol"></div>
@@ -2602,6 +2614,8 @@ function parseLocation(raw){
 const W_API='https://know-your-energy.kwdoanchor.workers.dev';
 
 async function generate(){
+  const genBtn=document.getElementById('genBtn');
+  if(genBtn.disabled)return;
   document.getElementById('err').style.display='none';
   const p1f=g('p1f'),p1l=g('p1l'),d1=g('p1d');
   if(!p1f||!p1l||!vd(d1)){showErr('Please enter first and last name, and date of birth (MM/DD/YYYY).');return;}
@@ -2626,6 +2640,7 @@ async function generate(){
       location: g('p2loc')
     };
   }
+  genBtn.disabled=true;
   document.querySelector('.content').style.display='none';
   document.getElementById('loading').style.display='block';
   try{
@@ -2636,6 +2651,7 @@ async function generate(){
     });
     const result=await res.json();
     if(!res.ok){
+      genBtn.disabled=false;
       document.getElementById('loading').style.display='none';
       document.querySelector('.content').style.display='block';
       showErr(result.error||'Something went wrong. Please try again.');
@@ -2655,6 +2671,7 @@ async function generate(){
     }
     render(p1,p2,result.report,result.reportError);
   }catch(e){
+    genBtn.disabled=false;
     document.getElementById('loading').style.display='none';
     document.querySelector('.content').style.display='block';
     showErr('Connection error: '+e.message);
