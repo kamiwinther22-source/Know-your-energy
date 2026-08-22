@@ -451,9 +451,15 @@ body{
 @media print{
   .form-col,.chart-carousel,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
   body,.card-expand{background:#fff!important;}
-  .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
-  .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
+  .results-wrap{max-width:100%!important;}
+  .main-grid{grid-template-columns:1fr!important;}
+  .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;
+    height:auto!important;overflow:visible!important;break-inside:avoid;margin-bottom:0.6rem;
+    grid-column:1!important;grid-row:auto!important;}
+  .quad-item .dplist,.panel-auto .dplist{max-height:none!important;height:auto!important;overflow:visible!important;}
   .dp{--card-text:#000!important;--card-accent:#1C2CA9!important;--card-stripe-odd:transparent!important;}
+  .report-tray-preview{display:none!important;}
+  .report-print-full,.gate-def-print{display:block!important;}
 }
 </style>
 </head>
@@ -2418,6 +2424,7 @@ function hdr(hd,errMsg){
     h+=dpsec('Gates');
     h+=`<div class="dprow"><p class="report-body">Tap any gate below to see what it means.</p></div>`;
     h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
+    h+=`<div class="dprow gate-def-print">${hd.gates.map(g=>`<p class="report-body"><strong>Gate ${escapeHtml(g)}</strong> — ${escapeHtml(GATES[g]||'No description available.')}</p>`).join('')}</div>`;
   }
   return h||apend('Unavailable');
 }
@@ -2527,7 +2534,7 @@ function reportSlot(names,report,reportError,rowNum){
     dpsec('References')+`<div class="dprow"><p class="report-body" style="color:var(--card-mid);font-style:italic;">${report.references.map(escapeHtml).join(' &middot; ')}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml+refsHtml;
   const idx=cardRegistry.push({title:titleRaw,rows:fullRows})-1;
-  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
+  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
 }
 
 // One row = Astrology (col 1) / Numerology (col 2) / Human Design
