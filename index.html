@@ -42,13 +42,10 @@ body{
    dynamic sizing breaks on her real device; tuned against real
    screenshots. */
 .zigzag{position:relative;width:100%;height:540px;margin-bottom:0.4rem;}
-/* Background carving sits behind everything (z-index 0), the 3 systems
-   in front (z-index 1). */
-.ribbon-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 .zz-item{position:absolute;width:58%;z-index:1;}
-.zz-astro{left:2%;top:0;}
-.zz-hd{right:2%;top:180px;width:58%;}
-.zz-cube{left:2%;top:390px;width:58%;}
+.zz-astro{left:2%;top:0;width:70%;}
+.zz-hd{right:2%;top:205px;width:70%;}
+.zz-cube{left:8%;top:430px;width:48%;}
 .chart-graphic{width:100%;position:relative;margin-top:0.3rem;}
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
@@ -83,7 +80,7 @@ body{
 .page-hd{display:flex;justify-content:flex-start;padding:0 0.2rem;margin-bottom:0.2rem;}
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
-  font-size:clamp(1.5rem,7vw,2.1rem);white-space:nowrap;
+  font-size:clamp(1.1rem,5vw,1.4rem);white-space:nowrap;
   color:#000000;
   /* Title text and its outline/frame must never share the same tone --
      black fill, ice-blue-into-silver outline. */
@@ -99,7 +96,8 @@ body{
 .tagline-wrap{width:100%;margin:0.5rem 0 1.5rem;text-align:center;}
 .tagline-slide{
   font-family:'Special Elite',monospace;font-weight:400;letter-spacing:0.01em;
-  font-size:clamp(1.6rem,8vw,2.3rem);line-height:2.15;color:#000000;
+  font-size:clamp(1.15rem,5.8vw,1.55rem);line-height:2.15;color:#000000;
+  white-space:nowrap;
 }
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
@@ -401,39 +399,6 @@ body{
   </div>
 
   <div class="zigzag" id="zigzag">
-    <svg class="ribbon-svg" viewBox="0 0 358 540" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <!-- Real bas-relief carving: blur the shape's own alpha to get a
-             rounded surface-normal map, light it from one fixed direction
-             with feSpecularLighting (genuine directional highlight, not a
-             flat blur wash), then composite that highlight back onto the
-             shape's base color. This is the actual technique in the
-             reference images: one hue, carved by light and shadow. -->
-        <filter id="carve" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
-          <feSpecularLighting in="b" surfaceScale="6" specularConstant="1.1" specularExponent="16" lighting-color="#f2fbff" result="spec">
-            <feDistantLight azimuth="235" elevation="48"/>
-          </feSpecularLighting>
-          <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
-          <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b2"/>
-          <feSpecularLighting in="b2" surfaceScale="6" specularConstant="0.9" specularExponent="16" lighting-color="#04182a" result="shadow">
-            <feDistantLight azimuth="55" elevation="48"/>
-          </feSpecularLighting>
-          <feComposite in="shadow" in2="SourceAlpha" operator="in" result="shadowIn"/>
-          <feMerge>
-            <feMergeNode in="SourceGraphic"/>
-            <feMergeNode in="shadowIn"/>
-            <feMergeNode in="specIn"/>
-          </feMerge>
-        </filter>
-      </defs>
-      <path d="M-30,50 C90,130 30,250 120,330 C210,410 130,500 220,590"
-        fill="none" stroke="#2f7fb0" stroke-width="46" stroke-linecap="round" filter="url(#carve)"/>
-      <path d="M40,-20 C160,70 90,180 180,260 C270,340 180,450 260,540"
-        fill="none" stroke="#3f8ec0" stroke-width="38" stroke-linecap="round" filter="url(#carve)"/>
-      <path d="M110,-40 C220,50 150,150 230,220 C310,300 220,420 290,510"
-        fill="none" stroke="#5aa3cf" stroke-width="30" stroke-linecap="round" filter="url(#carve)"/>
-    </svg>
     <div class="zz-item zz-astro">
       <div class="chart-graphic" id="solarIcon"></div>
     </div>
@@ -653,7 +618,7 @@ const solarWrap = document.getElementById('solarIcon');
 // prominent astrology visual, so there's real room around the ring
 // cluster for each planet's own descriptor word to sit next to it,
 // always visible rather than behind a tap.
-let svg = `<svg viewBox="-40 69 486 253" xmlns="http://www.w3.org/2000/svg">`;
+let svg = `<svg viewBox="-65 44 536 303" xmlns="http://www.w3.org/2000/svg">`;
 
 // glossy-sphere radial gradients, one per tone -- an off-center highlight
 // (upper-left) fading to the same darkest stop used on the number tiles,
@@ -691,21 +656,6 @@ PLANETS.forEach((p,i)=>{
   const px = C + p.r*dx, py = C + p.r*dy;
   svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
   svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
-  // descriptor word sits right next to its planet, always visible --
-  // still tappable (whole label is part of the same hit circle) rather
-  // than hidden behind a tap, per her instruction.
-  const anchor = dx>0.2?'start':dx<-0.2?'end':'middle';
-  const lx = px + (p.size+9)*dx, ly = py + (p.size+9)*dy + 3;
-  // Two-word "X & Y" descriptors are stacked on their own line each --
-  // half the horizontal reach of one long line, so the outer-ring labels
-  // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
-  const words = p.lines[0].split(' & ');
-  if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="23" fill="#000000" style="pointer-events:none;">`+
-      `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
-  } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="23" fill="#000000" style="pointer-events:none;">${p.lines[0]}</text>`;
-  }
 });
 svg += `</svg>`;
 solarWrap.innerHTML = svg;
@@ -753,7 +703,7 @@ function openPlanetDef(p){
   // number tiles and solar-system planets -- reusing the exact stop
   // colors already computed for those (stopsByTone, above) rather than
   // deriving a new set, so all three graphics are pixel-identical in tone.
-  let svg = `<svg viewBox="-118 -20 463 360" xmlns="http://www.w3.org/2000/svg"><defs>`;
+  let svg = `<svg viewBox="-140 -20 505 360" xmlns="http://www.w3.org/2000/svg"><defs>`;
   HD_CENTERS.forEach((c,i)=>{
     const stops = stopsByTone[c.tone];
     svg += `<radialGradient id="hdg-${i}" cx="35%" cy="28%" r="75%">
@@ -773,27 +723,6 @@ function openPlanetDef(p){
        instead of the intended hollow-outline convention. 'none' lets the
        actual dark card show through so filled-vs-hollow reads correctly. */
     svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'none'}" stroke="${border}" stroke-width="2.6" style="cursor:pointer;"/>`;
-    // labels indicate what each center represents -- always visible,
-    // never behind a tap, same principle as the number-tile and planet
-    // labels elsewhere on this page.
-    if(c.inside){
-      // wrap: explicit line break (with hyphen) for single long words that
-      // don't fit their shape even at this bigger size in a wider
-      // typewriter face -- "Expression"/"Identity" -- otherwise split on
-      // spaces for real multi-word labels ("Life Force").
-      const words = c.wrap || c.label.split(' ');
-      // Both a filled center (light metal-tone gradient) and a hollow one
-      // (fill:none, the light page background shows through) are light
-      // surfaces now, so both need black text.
-      const inTextColor = '#000000';
-      if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="11" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
-      } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="11" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
-      }
-    } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="24" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
-    }
   });
   svg += '</svg>';
   hdWrap.innerHTML = svg;
