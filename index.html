@@ -91,7 +91,21 @@ body{
 }
 
 /* ---------- title ---------- */
-.brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
+/* A real ambient glow bloom behind the title, not just the tight edge-
+   glow already on the text itself -- the goal is for the title to read
+   as the page's actual light source (the first place the eye lands),
+   not just the biggest text. Same blue family as the title's own
+   gradient, no new color. z-index:0 on .brand-row gives this its own
+   local stacking context so the -1 glow layer only sits behind THIS
+   row's own content, not behind unrelated content further down the
+   page. */
+.brand-row{position:relative;z-index:0;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
+.brand-row::before{
+  content:'';position:absolute;left:50%;top:50%;z-index:-1;
+  width:150%;height:200%;transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse at center, rgba(70,85,214,0.4) 0%, rgba(70,85,214,0.2) 40%, rgba(70,85,214,0) 72%);
+  pointer-events:none;
+}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
    photo of the actual pigment (mean of the well-lit, fully-saturated pixels
    across the pile, excluding shadow crevices and blown highlight) rather
@@ -237,7 +251,18 @@ body{
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
    still wraps it, same verified technique as the live entry form's button ---------- */
-.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
+/* Same glow-bloom technique as the title, matching color -- the two
+   ends of the page share the same visual language (bright point at
+   the top, bright point at the button) so the eye is pulled toward
+   this one without a drawn connecting line, which was already tried
+   elsewhere on this site and rejected as gimmicky. */
+.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;position:relative;z-index:0;}
+.submit-wrap::before{
+  content:'';position:absolute;left:50%;top:50%;z-index:-1;
+  width:220%;height:320%;transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse at center, rgba(70,85,214,0.38) 0%, rgba(70,85,214,0.16) 45%, rgba(70,85,214,0) 72%);
+  pointer-events:none;
+}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
 .glow-ring::before{content:'';position:absolute;inset:-100%;
   background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
