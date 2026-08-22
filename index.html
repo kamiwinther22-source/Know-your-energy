@@ -30,53 +30,51 @@ body{
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
 .sys-section-title{
-  position:relative;z-index:1;
   font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.72rem;
   letter-spacing:0.06em;text-transform:uppercase;color:#000000;
   text-align:center;margin-bottom:0.5rem;
   background:#ffffff;display:inline-block;padding:0.1rem 0.5rem;border-radius:4px;
 }
-.zz-item .sys-section-title{display:block;width:fit-content;margin-left:auto;margin-right:auto;}
 /* ---------- zigzag: astrology (left) / human design (right, lower) /
-   numerology cube (left, lower still) -- one fixed staircase down the
-   page instead of a swipeable carousel, per her explicit layout spec.
-   Fixed height (not JS-measured) per the standing rule that dynamic
-   sizing breaks on her real device; tuned against real screenshots. */
-.zigzag{position:relative;width:100%;height:560px;margin-bottom:0.4rem;}
-/* Ribbon: real color and depth flowing behind the 3 images, zigzagging
-   down the page with them -- always behind (z-index 0), never over
-   words or images (those sit at z-index 1). */
+   numerology (left, lower still) -- one fixed staircase down the page,
+   all three sized to comparable visual weight (no one system dwarfing
+   another). Fixed height (not JS-measured) per the standing rule that
+   dynamic sizing breaks on her real device; tuned against real
+   screenshots. */
+.zigzag{position:relative;width:100%;height:540px;margin-bottom:0.4rem;}
+/* Background carving sits behind everything (z-index 0), the 3 systems
+   in front (z-index 1). */
 .ribbon-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-.zz-item{position:absolute;width:60%;z-index:1;}
-.zz-astro{left:0;top:0;}
-.zz-hd{right:0;top:155px;}
-.zz-cube{left:0;top:365px;width:44%;}
+.zz-item{position:absolute;width:58%;z-index:1;}
+.zz-astro{left:2%;top:0;}
+.zz-hd{right:2%;top:180px;width:58%;}
+.zz-cube{left:2%;top:390px;width:58%;}
 .chart-graphic{width:100%;position:relative;margin-top:0.3rem;}
 .chart-graphic svg{display:block;width:100%;height:auto;}
 
 /* Numerology's system-of-3 visual: a real 3x3 grid of the 9 core
-   numbers -- a cube of numbers, not a die showing one digit per face.
-   Modest size -- a supporting third visual alongside astrology/HD, not
-   the page's centerpiece. */
-.num-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.28rem;width:150px;}
+   numbers -- a cube of numbers, not a die. Sized to match the visual
+   weight of the astrology/HD graphics, not dominate them. */
+.num-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.22rem;width:118px;margin:0 auto;}
 .num-cell{
   aspect-ratio:1/1;cursor:pointer;border:1px solid rgba(0,0,0,0.2);border-radius:4px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.15rem;color:#000000;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;color:#000000;
   box-shadow:0 3px 6px -3px rgba(20,30,40,0.35),0 1px 0 rgba(255,255,255,0.6) inset;
 }
 
-/* Critical-point bubbles: small, content-sized chips (never inflated --
-   the words are the point, not the shape), floated in the empty space
-   beside each system image so they're seen at the same time as the
-   images, not buried in a separate block. */
+/* Critical-point bubbles: real glossy spheres (off-center highlight,
+   saturated mid-tone, dark rim -- actual shine, not a flat white disc
+   with an outline), sized to their own text, sitting beside pricing/
+   data entry where someone is about to act, not scattered up top. */
+.bubble-row{display:flex;flex-wrap:wrap;justify-content:center;gap:0.7rem;margin:0.8rem 0 1.3rem;}
 .bubble{
-  position:absolute;border-radius:50%;z-index:1;
-  background:radial-gradient(circle at 32% 28%,#ffffff 0%,#eaf6fc 55%,#d3edf8 100%);
-  border:2.5px solid #0F8FD4;
-  box-shadow:0 8px 16px -8px rgba(15,143,212,0.5),0 1px 0 rgba(255,255,255,0.8) inset;
+  border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 30% 24%,#ffffff 0%,#bfe6f7 22%,#4fb3e8 55%,#0d6fae 85%,#0a4a75 100%);
+  box-shadow:0 10px 18px -8px rgba(10,74,117,0.55),inset 0 2px 4px rgba(255,255,255,0.55),inset 0 -6px 10px rgba(6,40,66,0.4);
   display:flex;align-items:center;justify-content:center;text-align:center;
-  font-family:'DM Sans',sans-serif;font-size:0.64rem;font-weight:700;line-height:1.2;color:#000000;
+  font-family:'DM Sans',sans-serif;font-size:0.66rem;font-weight:800;line-height:1.22;color:#ffffff;
+  text-shadow:0 1px 2px rgba(0,40,70,0.6);
   padding:0.3rem;
 }
 
@@ -98,7 +96,7 @@ body{
 /* Large and dominant on purpose -- the first thing the eye lands on,
    ahead of the small corner title. 2 real lines of words, sized/spaced
    to physically occupy about 4 lines' worth of page height. */
-.tagline-wrap{max-width:360px;margin:0.5rem auto 1.5rem;text-align:center;}
+.tagline-wrap{width:100%;margin:0.5rem 0 1.5rem;text-align:center;}
 .tagline-slide{
   font-family:'Special Elite',monospace;font-weight:400;letter-spacing:0.01em;
   font-size:clamp(1.6rem,8vw,2.3rem);line-height:2.15;color:#000000;
@@ -126,10 +124,10 @@ body{
 .form-col{position:relative;grid-column:2;}
 .pay-col-wrap{grid-column:1;}
 .pay-free-note{font-size:0.78rem;color:#000000;font-weight:600;margin-bottom:0.9rem;line-height:1.4;}
-.pay-plans{display:flex;gap:0.4rem;}
-.pay-plan-btn{display:block;flex:1;min-width:0;padding:0.5rem 0.3rem;text-align:center;}
-.pay-plan-btn .pp-price{display:block;font-size:0.85rem;}
-.pay-plan-btn .pp-label{display:block;font-size:0.48rem;font-weight:600;letter-spacing:0.02em;text-transform:none;margin-top:0.15rem;line-height:1.2;}
+.pay-plans{display:flex;flex-direction:column;gap:0.55rem;}
+.pay-plan-btn{display:block;width:100%;min-width:0;text-align:center;}
+.pay-plan-btn .pp-price{display:block;font-size:0.95rem;}
+.pay-plan-btn .pp-label{display:block;font-size:0.56rem;font-weight:600;letter-spacing:0.03em;text-transform:none;margin-top:0.15rem;}
 
 /* Solid white card, thin black hairline, real (not flat) lift shadow --
    "carve it in," not fade -- used for the pricing block beside the form. */
@@ -403,36 +401,51 @@ body{
   </div>
 
   <div class="zigzag" id="zigzag">
-    <svg class="ribbon-svg" viewBox="0 0 100 560" preserveAspectRatio="none" aria-hidden="true">
+    <svg class="ribbon-svg" viewBox="0 0 358 540" preserveAspectRatio="none" aria-hidden="true">
       <defs>
-        <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#083f66"/>
-          <stop offset="42%" stop-color="#2bb3ec"/>
-          <stop offset="58%" stop-color="#2bb3ec"/>
-          <stop offset="100%" stop-color="#083f66"/>
-        </linearGradient>
-        <filter id="ribbonShadow" x="-50%" y="-50%" width="200%" height="200%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#0b4d80" flood-opacity="0.45"/>
+        <!-- Real bas-relief carving: blur the shape's own alpha to get a
+             rounded surface-normal map, light it from one fixed direction
+             with feSpecularLighting (genuine directional highlight, not a
+             flat blur wash), then composite that highlight back onto the
+             shape's base color. This is the actual technique in the
+             reference images: one hue, carved by light and shadow. -->
+        <filter id="carve" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
+          <feSpecularLighting in="b" surfaceScale="6" specularConstant="1.1" specularExponent="16" lighting-color="#f2fbff" result="spec">
+            <feDistantLight azimuth="235" elevation="48"/>
+          </feSpecularLighting>
+          <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+          <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b2"/>
+          <feSpecularLighting in="b2" surfaceScale="6" specularConstant="0.9" specularExponent="16" lighting-color="#04182a" result="shadow">
+            <feDistantLight azimuth="55" elevation="48"/>
+          </feSpecularLighting>
+          <feComposite in="shadow" in2="SourceAlpha" operator="in" result="shadowIn"/>
+          <feMerge>
+            <feMergeNode in="SourceGraphic"/>
+            <feMergeNode in="shadowIn"/>
+            <feMergeNode in="specIn"/>
+          </feMerge>
         </filter>
       </defs>
-      <path id="ribbonPath" d="M78,5 C80,60 76,115 74,148 C72,164 26,170 22,192 C18,240 20,295 24,333 C27,352 58,358 66,392 C70,435 68,500 72,560"
-        fill="none" stroke="url(#ribbonGrad)" stroke-width="3" stroke-linecap="round"
-        filter="url(#ribbonShadow)"/>
+      <path d="M-30,50 C90,130 30,250 120,330 C210,410 130,500 220,590"
+        fill="none" stroke="#2f7fb0" stroke-width="46" stroke-linecap="round" filter="url(#carve)"/>
+      <path d="M40,-20 C160,70 90,180 180,260 C270,340 180,450 260,540"
+        fill="none" stroke="#3f8ec0" stroke-width="38" stroke-linecap="round" filter="url(#carve)"/>
+      <path d="M110,-40 C220,50 150,150 230,220 C310,300 220,420 290,510"
+        fill="none" stroke="#5aa3cf" stroke-width="30" stroke-linecap="round" filter="url(#carve)"/>
     </svg>
     <div class="zz-item zz-astro">
-      <div class="sys-section-title">Astrology</div>
       <div class="chart-graphic" id="solarIcon"></div>
     </div>
     <div class="zz-item zz-hd">
-      <div class="sys-section-title">Human Design</div>
       <div class="chart-graphic" id="hdIcon"></div>
     </div>
     <div class="zz-item zz-cube">
-      <div class="sys-section-title">Numerology</div>
       <div class="num-grid" id="numCube"></div>
     </div>
-    <div id="bubbleLayer"></div>
   </div>
+
+  <div class="bubble-row" id="bubbleLayer"></div>
 
   <div class="bottom-row">
     <div class="pay-col-wrap">
@@ -688,10 +701,10 @@ PLANETS.forEach((p,i)=>{
   // (Jupiter, Neptune etc.) don't run past the edge of the graphic.
   const words = p.lines[0].split(' & ');
   if(words.length>1){
-    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#000000" style="pointer-events:none;">`+
+    svg += `<text x="${lx}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="23" fill="#000000" style="pointer-events:none;">`+
       `<tspan x="${lx}" y="${ly}">${words[0]}</tspan><tspan x="${lx}" y="${ly}" dy="10">&amp; ${words[1]}</tspan></text>`;
   } else {
-    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="18" fill="#000000" style="pointer-events:none;">${p.lines[0]}</text>`;
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="23" fill="#000000" style="pointer-events:none;">${p.lines[0]}</text>`;
   }
 });
 svg += `</svg>`;
@@ -774,12 +787,12 @@ function openPlanetDef(p){
       // surfaces now, so both need black text.
       const inTextColor = '#000000';
       if(words.length>1){
-        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
+        svg += `<text x="${cx}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="11" fill="${inTextColor}" style="pointer-events:none;">${words.map((w,wi)=>`<tspan x="${cx}" y="${cy}" dy="${wi===0?-3:8}">${w}</tspan>`).join('')}</text>`;
       } else {
-        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="9" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
+        svg += `<text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="'Special Elite',monospace" font-weight="400" font-size="11" fill="${inTextColor}" style="pointer-events:none;">${c.label}</text>`;
       }
     } else {
-      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="19" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
+      svg += `<text x="${c.lx}" y="${c.ly}" text-anchor="${c.anchor}" font-family="'Special Elite',monospace" font-weight="400" font-size="24" fill="#000000" style="pointer-events:none;">${c.label}</text>`;
     }
   });
   svg += '</svg>';
@@ -795,27 +808,20 @@ function openPlanetDef(p){
 })();
 
 // Critical-point bubbles: condensed from the same 5 real points as
-// before (see git history), positioned in the empty space beside each
-// system image so they're seen where the eye already is, not stacked in
-// a separate block below everything. Sized to their own text only --
-// the words are the point, not the bubble. Placement is a first-pass
-// judgment call, tuned against a real screenshot; easy to move.
-// Positioned against real measured empty zones (astro/HD/cube + title
-// bounding boxes), not guessed -- each pair fits inside its own zone's
-// actual height so nothing overlaps a title or graphic.
+// Sized to their own text only -- the words are the point, not the
+// bubble. Sits as its own row right above pricing/data entry, where
+// someone is about to act, not scattered near the top of the page.
 const BUBBLES = [
-  { t:'1 free full reading', top:'0', right:'0', d:72 },
-  { t:'Info never shared or saved', top:'80px', right:'0', d:68 },
-  { t:'No subscriptions', left:'2%', top:'225px', d:88 },
-  { t:'Email is just your key', right:'0', top:'390px', d:88 },
-  { t:'No spam, ever', right:'2%', top:'486px', d:66 }
+  { t:'1 free full reading', d:92 },
+  { t:'Info never shared or saved', d:98 },
+  { t:'No subscriptions', d:80 },
+  { t:'Email is just your key', d:86 },
+  { t:'No spam, ever', d:72 }
 ];
 const bubbleLayer = document.getElementById('bubbleLayer');
-bubbleLayer.innerHTML = BUBBLES.map(b=>{
-  const pos = ['top','left','right','bottom'].filter(k=>b[k]!==undefined)
-    .map(k=>`${k}:${b[k]}`).join(';');
-  return `<div class="bubble" style="${pos};width:${b.d}px;height:${b.d}px;">${escapeHtml(b.t)}</div>`;
-}).join('');
+bubbleLayer.innerHTML = BUBBLES.map(b=>
+  `<div class="bubble" style="width:${b.d}px;height:${b.d}px;">${escapeHtml(b.t)}</div>`
+).join('');
 
 // ---------- Pricing: same PLAN_CONFIG amounts as worker.js, matching the
 // site's one-time-charge model (no subscriptions). Anyone can buy any plan
