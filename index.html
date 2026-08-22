@@ -343,9 +343,20 @@ body{
 .card-expand-body .wheel-wrap{display:flex;justify-content:center;width:calc(100% + 2.6rem);max-width:600px;margin:0 -1.3rem 0.8rem;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
-.report-preview{padding:0 0.4rem;font-family:'Alex Brush',cursive;font-size:1.5rem;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
-  color:#1C2CA9;}
-.report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;}
+/* Brightened off the plain brand blue (#1C2CA9 measures too low-contrast
+   against the card's real black background to read as anything but a
+   faint smudge) and given the same soft glow technique already used on
+   the title, so the Reading card's collapsed preview reads as a real
+   focal point instead of empty space. */
+.report-preview{padding:0 0.4rem;font-family:'Alex Brush',cursive;font-size:1.7rem;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
+  color:#8A96EE;filter:drop-shadow(0 0 14px rgba(90,110,230,0.6));}
+.report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:0;}
+.report-tray-preview::before{
+  content:'';position:absolute;left:50%;top:50%;width:140%;height:140%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse at center, rgba(70,85,214,0.28) 0%, rgba(70,85,214,0.1) 45%, transparent 72%);
+  pointer-events:none;z-index:-1;
+}
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
 
 /* ---------- normal document-flow results layout: 3 equal columns,
@@ -1891,8 +1902,13 @@ const PLANET_GLYPH={Sun:'\u2609'+VS,Moon:'\u263d'+VS,Mercury:'\u263f'+VS,Venus:'
 const SIGN_GLYPH={Aries:'\u2648'+VS,Taurus:'\u2649'+VS,Gemini:'\u264a'+VS,Cancer:'\u264b'+VS,Leo:'\u264c'+VS,Virgo:'\u264d'+VS,Libra:'\u264e'+VS,Scorpio:'\u264f'+VS,Sagittarius:'\u2650'+VS,Capricorn:'\u2651'+VS,Aquarius:'\u2652'+VS,Pisces:'\u2653'+VS};
 const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
 
-const PLANET_COLOR={Sun:'#b8960a',Moon:'#009e96',Mercury:'#e06a00',Venus:'#c11a7e',Mars:'#c41f1a',Jupiter:'#6a35b8',Saturn:'#7a4d24',Uranus:'#1a63d6',Neptune:'#238a34',Pluto:'#2b2420',
-  'North Node':'#4a6fa5','South Node':'#8a6a4a',Chiron:'#2f6b5e',Lilith:'#7a1f3d',Sirius:'#5a5a7a'};
+// Brightened for real legibility on the actual black card background --
+// the previous values (e.g. Pluto #2b2420, near-black) were tuned for
+// the old white wheel disc this chart used to sit on; several were
+// barely distinguishable from black once that disc was removed. Same
+// hue identity per planet, just lifted to real contrast.
+const PLANET_COLOR={Sun:'#e8bc2e',Moon:'#3fd9cd',Mercury:'#ff8a2e',Venus:'#e8579e',Mars:'#e8534a',Jupiter:'#a166e0',Saturn:'#c98f4f',Uranus:'#5a96e8',Neptune:'#4fbf65',Pluto:'#9a8a80',
+  'North Node':'#7fa3d9','South Node':'#c4a47a',Chiron:'#5fb09c',Lilith:'#e0507e',Sirius:'#9a9ac2'};
 // Points shown alongside Ascendant/Midheaven -- not planets, but they're
 // already computed (astro-engine.js) and already fed into the Reading's
 // aspect data, so they need a place on the visible card too, not just a
@@ -1919,8 +1935,12 @@ function astroWheelSVG(astro){
   const ROT=(90-sunDeg+360)%360;
   const rot=d=>(d+ROT)%360;
   const toXY=(deg,r)=>{const rad=(180-deg)*Math.PI/180;return [CX+r*Math.cos(rad),CY-r*Math.sin(rad)];};
+  // No white disc fill -- that was tuned for the old light card background
+  // and just read as a grey wash once the card became transparent/black.
+  // Transparent fill lets the wheel sit directly on the actual black card,
+  // consistent with the rest of this page.
   let svg=`<svg viewBox="0 0 460 460" style="display:block;width:100%;height:100%;">`;
-  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="rgba(255,255,255,0.5)" stroke="#1C2CA9" stroke-width="2"/>`;
+  svg+=`<circle cx="${CX}" cy="${CY}" r="${R_OUT}" fill="none" stroke="#1C2CA9" stroke-width="2"/>`;
   svg+=`<circle cx="${CX}" cy="${CY}" r="${R_SIGN_IN}" fill="none" stroke="#1C2CA9" stroke-width="1.4" opacity="0.85"/>`;
   SIGN_ORDER.forEach((s,i)=>{
     const d0=rot(i*30);
@@ -1936,7 +1956,7 @@ function astroWheelSVG(astro){
     // of the ring) so every sign stays upright and readable -- strictly
     // "always facing center" would put half of them the wrong way up
     if(faceAngle>90)faceAngle-=180; else if(faceAngle<-90)faceAngle+=180;
-    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="800" fill="#000000" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
+    svg+=`<text x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="800" fill="#ffffff" font-family="'Barlow Condensed',sans-serif" transform="rotate(${faceAngle.toFixed(1)} ${gx.toFixed(1)} ${gy.toFixed(1)})">${s.toUpperCase()}</text>`;
   });
   const houses=(astro.houses||[]).filter(h=>typeof h.absoluteDegrees==='number').sort((a,b)=>a.absoluteDegrees-b.absoluteDegrees);
   if(houses.length){
@@ -1951,19 +1971,19 @@ function astroWheelSVG(astro){
       const span=((next.absoluteDegrees-h.absoluteDegrees)+360)%360;
       const midDeg=rot(h.absoluteDegrees+span/2);
       const [hx,hy]=toXY(midDeg,R_HOUSE_LABEL);
-      svg+=`<text x="${hx.toFixed(1)}" y="${(hy+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="700" fill="#1C2CA9" font-family="'Barlow Condensed',sans-serif">${h.house}</text>`;
+      svg+=`<text x="${hx.toFixed(1)}" y="${(hy+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="700" fill="#ffffff" font-family="'Barlow Condensed',sans-serif">${h.house}</text>`;
     });
     svg+=`<circle cx="${CX}" cy="${CY}" r="${R_HOUSE_IN}" fill="none" stroke="#1C2CA9" stroke-width="1.4" opacity="0.6"/>`;
   }
   if(astro.ascendant&&typeof astro.ascendant.absoluteDegrees==='number'){
     const d=rot(astro.ascendant.absoluteDegrees);
     const [x1,y1]=toXY(d,R_HOUSE_IN||0), [x2,y2]=toXY(d,R_OUT);
-    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#333" stroke-width="2.2"/>`;
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ffffff" stroke-width="2.2"/>`;
   }
   if(astro.midheaven&&typeof astro.midheaven.absoluteDegrees==='number'){
     const d=rot(astro.midheaven.absoluteDegrees);
     const [x1,y1]=toXY(d,R_HOUSE_IN||0), [x2,y2]=toXY(d,R_OUT);
-    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#333" stroke-width="2.2" stroke-dasharray="6,3"/>`;
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ffffff" stroke-width="2.2" stroke-dasharray="6,3"/>`;
   }
   // Glyphs stay at their own true degree always (never nudged sideways into
   // a neighboring wedge, no pointer line). Font size stays fixed and legible
