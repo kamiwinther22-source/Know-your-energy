@@ -960,36 +960,41 @@ function findCitationLeak(reading) {
   return null;
 }
 
+// A real customer hit this exact request refusing to produce valid
+// JSON on both the original attempt AND the one repair attempt that
+// existed before -- a persistent refusal, not a one-off blip, so a
+// single retry isn't enough of a safety margin. Up to 3 total attempts
+// now (1 original + 2 repairs), each one shown the previous bad
+// response and told exactly what was wrong with it, before giving up.
+const MAX_REPORT_ATTEMPTS = 3;
+
 async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
-
   const checkDefects = (reading) => findNamingDefect(reading, rtype, p1, p2) || findCitationLeak(reading);
 
-  let text = await callReportModel(env, userPrompt, ctx);
-  let parsed, defect;
-  try {
-    parsed = JSON.parse(extractJSON(text));
-    defect = checkDefects(parsed);
-  } catch (e) {
-    defect = e.message;
+  let text = null, lastDetail = '';
+  for (let attempt = 1; attempt <= MAX_REPORT_ATTEMPTS; attempt++) {
+    const repairNote = attempt === 1 ? undefined : {
+      badText: text,
+      correction: lastDetail
+    };
+    text = await callReportModel(env, userPrompt, ctx, repairNote);
+    try {
+      const parsed = JSON.parse(extractJSON(text));
+      const defect = checkDefects(parsed);
+      if (!defect) return parsed;
+      lastDetail = defect;
+    } catch (e) {
+      lastDetail = 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.';
+    }
+    console.error(`Report generation attempt ${attempt}/${MAX_REPORT_ATTEMPTS} failed: ${lastDetail}`);
   }
 
-  if (!parsed || defect) {
-    // One repair attempt, whether the first response broke JSON format,
-    // skipped the real names, or leaked a citation into the prose --
-    // give the model its own bad response back and a specific
-    // correction, rather than shipping a defective reading to a paying
-    // customer.
-    const correction = parsed
-      ? defect
-      : 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.';
-    text = await callReportModel(env, userPrompt, ctx, { badText: text, correction });
-    parsed = JSON.parse(extractJSON(text));
-    defect = checkDefects(parsed);
-    if (defect) throw new Error(`Reading kept failing quality checks: ${defect}`);
-  }
-
-  return parsed;
+  // Every attempt failed -- log the real technical detail for
+  // debugging, but never hand a raw parse error or model-internals
+  // string to a paying customer. The frontend shows this message
+  // verbatim, so it has to already be something a real person can read.
+  throw new Error("We're having trouble generating this specific reading right now. Please try again in a few minutes -- your chart data is saved, so you won't need to re-enter anything.");
 }
 
 export default {
