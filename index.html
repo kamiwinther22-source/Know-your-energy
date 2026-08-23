@@ -83,16 +83,24 @@ body{
    themselves never collide (an earlier overlap-via-negative-margin attempt
    let the HD portrait column's lower half render underneath the numerology
    beads -- this keeps the "clustered, not gridded" feel without that). */
+/* Dominant/secondary/small hierarchy instead of near-equal heights --
+   astrology is the real focal point (largest), HD is large too (not
+   shrunk to a small accent -- direct instruction), numerology stays
+   genuinely small since it should never be what dominates. Shifted to
+   the left edge (not centered) for real asymmetry. No negative-margin
+   overlap between HD and numerology specifically -- a past attempt at
+   that caused a documented real collision (HD's tall portrait shape
+   sliding under the numerology beads), so size/alignment variation
+   carries the "not a neat row" feel instead of risking that again. */
 .hero-accent-row{
-  position:relative;display:flex;align-items:flex-end;justify-content:center;
-  gap:0.65rem;margin:0.4rem 0 0.6rem;
+  position:relative;display:flex;align-items:flex-end;justify-content:flex-start;
+  gap:0.5rem;margin:0.6rem 0 0.8rem;padding-left:0.2rem;
 }
-.accent-item{position:relative;flex:0 0 auto;height:88px;}
+.accent-item{position:relative;flex:0 0 auto;height:220px;}
 .accent-item svg{display:block;width:auto;height:100%;filter:drop-shadow(0 0 14px rgba(255,255,255,0.55)) drop-shadow(0 0 30px rgba(255,255,255,0.3));}
 .accent-astro{align-self:center;}
-.accent-hd{height:114px;}
-.accent-num{align-self:flex-start;margin-top:14px;}
-.accent-key{align-self:center;}
+.accent-hd{height:170px;align-self:flex-end;}
+.accent-num{height:90px;align-self:flex-start;margin-top:8px;}
 .hero-accent-caption{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#ffffff;
@@ -100,7 +108,7 @@ body{
 }
 
 /* ---------- title ---------- */
-.brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
+.brand-row{position:relative;text-align:left;margin-bottom:0.6rem;padding:0 0 0 1.1rem;}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
    photo of the actual pigment (mean of the well-lit, fully-saturated pixels
    across the pile, excluding shadow crevices and blown highlight) rather
@@ -136,10 +144,10 @@ body{
 
 
 /* ---------- tagline / toggle ---------- */
-.tagline-wrap{position:relative;max-width:380px;margin:0 auto 1.3rem;}
+.tagline-wrap{position:relative;max-width:340px;margin:0 0 1.3rem 1.1rem;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
-  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(1.05rem,5.2vw,1.55rem);line-height:1.32;font-weight:400;letter-spacing:0.005em;
+  text-align:left;font-family:'Special Elite',monospace;font-size:clamp(1.05rem,5.2vw,1.55rem);line-height:1.32;font-weight:400;letter-spacing:0.005em;
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
@@ -188,7 +196,7 @@ body{
    of sitting in one straight row. Silver/chrome gradient, not flat grey. */
 .keys-col{
   display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
-  gap:0.5rem 0.7rem;margin-bottom:1.3rem;
+  gap:0.5rem 0.7rem;margin:0.4rem 0 1.6rem;
 }
 .key-item{
   border-radius:50%;padding:0.3rem;flex-shrink:0;
@@ -264,7 +272,7 @@ body{
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
    still wraps it, same verified technique as the live entry form's button ---------- */
-.submit-wrap{margin-top:1.2rem;display:flex;align-items:center;justify-content:center;gap:0.7rem;}
+.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
 .glow-ring::before{content:'';position:absolute;inset:-100%;
   background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
@@ -591,7 +599,6 @@ body{
   <div class="hero-accent-row" id="heroAccentRow">
     <div class="accent-item accent-astro" id="solarIcon"></div>
     <div class="accent-item accent-hd" id="hdIcon"></div>
-    <div class="key-item accent-key" id="heroKeyBubble"></div>
     <div class="accent-item accent-num" id="numAccent"></div>
   </div>
 
@@ -599,6 +606,12 @@ body{
     <div class="tagline-slide c-gold active">There are multiple cycles in motion from the day of your birth to your last hour</div>
     <div class="tagline-slide c-gold">is it all just math</div>
   </div>
+
+  <!-- Trust bubbles sit right after the hero art/tagline -- visible
+       immediately, above the fold. Everything below this (toggle, form)
+       is reached by scrolling; the data entry itself doesn't need to be
+       seen right away, the hook and the trust signals do. -->
+  <div class="keys-col" id="keysCol"></div>
 
   <div class="bottom-grid">
     <div class="form-col">
@@ -614,8 +627,6 @@ body{
         <button type="button" class="rel-chip" data-rel="friends">Friends</button>
         <button type="button" class="rel-chip" data-rel="other">Other</button>
       </div>
-
-      <div class="keys-col" id="keysCol"></div>
 
       <div class="form-panel">
         <div class="f">
@@ -659,7 +670,6 @@ body{
       <div class="err" id="err"></div>
 
       <div class="submit-wrap">
-        <div class="key-item" id="formKeyBubble"></div>
         <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()">Calculate</button></span>
       </div>
     </div>
@@ -982,25 +992,14 @@ function sizeKey(t){
   const len = plain.length;
   return Math.max(62, Math.min(104, Math.round(40 + len*2)));
 }
-function fillKey(el, t, tone){
-  const d = sizeKey(t);
-  const tn = TONES[tone];
-  el.style.width = d+'px';
-  el.style.height = d+'px';
-  el.style.background = tn.grad;
-  el.style.boxShadow = `0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 20px ${tn.border}b3, 0 0 42px ${tn.border}59`;
-  el.innerHTML = `<span>${t}</span>`;
-}
-// "1 free FULL reading" moved up into the hero icon cluster, and
-// "Email is your key" moved down next to the Calculate button --
-// only "Data not saved or shared" and "No autocharges" stay in the
-// bubble row above the form. Each bubble gets its own real metal --
-// gold/ice/silver/bronze -- instead of one shared color.
-fillKey(document.getElementById('heroKeyBubble'), '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading', 'gold');
-fillKey(document.getElementById('formKeyBubble'), '<mark class="key-hl">Email</mark> is your key', 'ice');
+// All 4 key bubbles together, right after the hero art -- visible
+// immediately, not buried in the icon graphics and not separated from
+// each other. Each keeps its own real metal tone.
 const KEYS = [
+  {t:'1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading', tone:'gold'},
   {t:'Data <mark class="key-hl">not saved or shared</mark>', tone:'silverL'},
   {t:'No <mark class="key-hl">autocharges</mark>', tone:'bronze'},
+  {t:'<mark class="key-hl">Email</mark> is your key', tone:'ice'},
 ];
 const keysCol = document.getElementById('keysCol');
 keysCol.innerHTML = KEYS.map(({t})=>{
