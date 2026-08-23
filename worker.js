@@ -782,6 +782,90 @@ OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
 Each section should be doing different work — don't repeat the same
 insight reworded across sections.`;
 
+// Guaranteed last resort -- built entirely from the already-computed
+// chart data, no API call, so it cannot fail the way an AI generation
+// can. If every real generation attempt is exhausted, this is what
+// runs instead of showing an error: shorter and simpler than a real
+// generated reading, but genuine, accurate content, never a blank
+// failure screen. Content matches the same real tradition already
+// verified for the tap-to-reveal glossary elsewhere in this app.
+const FALLBACK_SUN = {
+  Aries:'acts first and asks questions later, driven by a real need to be first and to test themselves against something real.',
+  Taurus:'moves at their own steady pace and builds things meant to last, valuing what’s tangible and reliable over what’s merely exciting.',
+  Gemini:'processes the world through conversation and constant new information, genuinely energized by variety and quick exchange.',
+  Cancer:'leads with emotional memory and protects what matters most, most themselves around people who’ve earned real closeness.',
+  Leo:'brings real warmth and generosity, and does their best work when it’s genuinely seen.',
+  Virgo:'notices what’s actually wrong and fixes it, finding real satisfaction in refining something until it’s right.',
+  Libra:'weighs every side of a situation and works to find real balance, especially in close relationships.',
+  Scorpio:'goes straight for what’s real underneath the surface, and keeps people at a distance until they’ve proven they belong closer.',
+  Sagittarius:'needs real room to explore, physically or intellectually, and says exactly what they think.',
+  Capricorn:'builds toward something real over the long term, and takes responsibility seriously -- sometimes more seriously than it needs to be taken.',
+  Aquarius:'thinks in terms of the group and the system, not just themselves, and doesn’t mind standing apart from convention to do it.',
+  Pisces:'absorbs the emotional undercurrent of a room and imagines what could be, sometimes as a way of getting distance from what actually is.'
+};
+const FALLBACK_LIFEPATH = {
+  1:'leadership and self-reliance -- learning to trust their own initiative and stand on their own.',
+  2:'partnership and diplomacy -- a natural sensitivity to others and a gift for bringing people together.',
+  3:'creative self-expression -- communicating, performing, or creating in a way that reaches other people.',
+  4:'building something solid -- discipline, structure, and the patience to do things right over time.',
+  5:'freedom and change -- a real need for variety, restless inside anything too fixed.',
+  6:'responsibility to others -- caretaking, community, and a real pull toward making things right for people they love.',
+  7:'inner search and analysis -- a need to understand the real mechanism behind things, often alone.',
+  8:'material mastery -- real capacity for power, authority, and building tangible success.',
+  9:'completion and compassion -- a wide, humanitarian view, and the work of letting go of what’s finished.',
+  11:'intuitive insight and inspiration -- a Master Number carrying the 2’s sensitivity at a higher, more charged pitch.',
+  22:'the Master Builder -- capable of turning a big vision into something real and lasting.',
+  33:'the Master Teacher -- channeling the 6’s care for others into a wider, more selfless service.'
+};
+const FALLBACK_HDTYPE = {
+  'Generator':'built for sustainable work through a gut-level yes -- energy that keeps refilling as long as what they’re doing has real pull behind it.',
+  'Manifesting Generator':'built like a Generator, with that same gut-level yes at the center, but with a fast, direct line to action -- moving quickly, working on more than one thing at once, and skipping steps that don’t change the outcome.',
+  'Projector':'built to see clearly how other people and systems actually work, most effective when that insight is actually invited rather than offered first.',
+  'Manifestor':'built to initiate on their own, without waiting for something outside them to respond to first.',
+  'Reflector':'built to reflect whatever’s actually happening around them, best served by taking real time -- close to a full lunar cycle -- before locking in a big decision.'
+};
+function fallbackPersonSections(p) {
+  const sun = (p.astrology?.planets || []).find(pl => pl.name === 'Sun');
+  const sunSign = sun?.sign;
+  const lifePath = p.numerology?.lifePath;
+  const hdType = p.humanDesign?.type;
+  const sections = [], refs = [];
+  if (sunSign && FALLBACK_SUN[sunSign]) {
+    sections.push({ eyebrow: 'Core Identity', title: `${p.first}'s Core Identity`, body: `${p.first} ${FALLBACK_SUN[sunSign]}` });
+    refs.push(`Sun in ${sunSign}`);
+  }
+  if (lifePath && FALLBACK_LIFEPATH[lifePath]) {
+    sections.push({ eyebrow: 'Life Path', title: `${p.first}'s Life Path`, body: `${p.first}'s numerology points toward ${FALLBACK_LIFEPATH[lifePath]}` });
+    refs.push(`Life Path ${lifePath}`);
+  }
+  if (hdType && FALLBACK_HDTYPE[hdType]) {
+    sections.push({ eyebrow: 'Design', title: `${p.first}'s Design`, body: `${p.first} is ${FALLBACK_HDTYPE[hdType]}` });
+    refs.push(hdType);
+  }
+  return { sections, refs };
+}
+function buildFallbackReading(rtype, p1, p2) {
+  const f1 = fallbackPersonSections(p1);
+  if (rtype !== 'two-person') {
+    return {
+      headline: `${p1.first}'s Reading`,
+      sections: f1.sections.length ? f1.sections : [{ eyebrow: 'Reading', title: 'Your Chart', body: `${p1.first}'s full chart data is above -- this shorter summary covers the core placements while the full reading is regenerated.` }],
+      signature: `This is a shorter, always-available summary -- the full reading can be regenerated for more depth.`,
+      references: f1.refs
+    };
+  }
+  const f2 = fallbackPersonSections(p2);
+  const sections = [];
+  f1.sections.forEach(s => sections.push(s));
+  f2.sections.forEach(s => sections.push(s));
+  return {
+    headline: `${p1.first} & ${p2.first}`,
+    sections: sections.length ? sections : [{ eyebrow: 'Reading', title: 'Your Charts', body: `${p1.first} and ${p2.first}'s full chart data is above -- this shorter summary covers the core placements while the full reading is regenerated.` }],
+    signature: `This is a shorter, always-available summary -- the full relational reading can be regenerated for more depth.`,
+    references: [...f1.refs, ...f2.refs]
+  };
+}
+
 function buildReportUserPrompt(rtype, relLabel, p1, p2) {
   const personBlock = (p) => {
     const n = p.numerology || {};
@@ -990,11 +1074,13 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
     console.error(`Report generation attempt ${attempt}/${MAX_REPORT_ATTEMPTS} failed: ${lastDetail}`);
   }
 
-  // Every attempt failed -- log the real technical detail for
-  // debugging, but never hand a raw parse error or model-internals
-  // string to a paying customer. The frontend shows this message
-  // verbatim, so it has to already be something a real person can read.
-  throw new Error("We're having trouble generating this specific reading right now. Please try again in a few minutes -- your chart data is saved, so you won't need to re-enter anything.");
+  // Every real generation attempt failed -- log the real technical
+  // detail for debugging, but a customer never sees an error at all.
+  // Fall back to a reading built directly from the chart data with no
+  // API call involved, so this literally cannot fail the way an AI
+  // generation can: a report is now guaranteed every single time.
+  console.error(`All ${MAX_REPORT_ATTEMPTS} report generation attempts failed, using deterministic fallback. Last detail: ${lastDetail}`);
+  return buildFallbackReading(rtype, p1, p2);
 }
 
 export default {
