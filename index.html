@@ -88,7 +88,7 @@ body{
   gap:0.65rem;margin:0.4rem 0 0.6rem;
 }
 .accent-item{position:relative;flex:0 0 auto;height:88px;}
-.accent-item svg{display:block;width:auto;height:100%;filter:drop-shadow(0 0 10px rgba(224,41,155,0.55));}
+.accent-item svg{display:block;width:auto;height:100%;filter:drop-shadow(0 0 16px rgba(18,214,194,0.85)) drop-shadow(0 0 34px rgba(18,214,194,0.5));}
 .accent-astro{align-self:center;}
 .accent-hd{height:114px;}
 .accent-num{align-self:flex-start;margin-top:14px;}
@@ -192,12 +192,11 @@ body{
 }
 .key-item{
   border-radius:50%;padding:0.3rem;flex-shrink:0;
-  /* Real saturated jewel tone, not a pale silver tint -- same magenta
-     family as TONES.jewel (hero icons), so the bubbles carry actual
-     color instead of being the one grey/white thing left on the page. */
-  background:radial-gradient(circle at 32% 26%, #ff5cad 0%, #e0299b 28%, #c31577 55%, #7a0f52 85%, #4a0836 100%);
-  border:1px solid rgba(255,255,255,0.35);
-  box-shadow:0 3px 14px -3px rgba(195,21,119,0.65), 0 1px 0 rgba(255,255,255,0.4) inset;
+  background:radial-gradient(circle at 32% 26%, #ffffff 0%, #e4ebee 28%, #c3ced4 55%, #8f9ca4 85%, #6f7c85 100%);
+  border:1px solid rgba(255,255,255,0.5);
+  /* Silver bubble itself is unchanged -- the glow is a genuinely
+     separate colored-light layer around it, not a recolor of it. */
+  box-shadow:0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.6) inset, 0 0 20px rgba(18,214,194,0.65), 0 0 42px rgba(18,214,194,0.35);
   line-height:1.15;font-weight:600;
 }
 /* The single inner span (not the circle itself) is the flex item doing
@@ -207,7 +206,7 @@ body{
    Centering a single wrapper span instead keeps the mark tags as normal
    inline content, so spacing and wrapping behave like ordinary text. */
 .key-item{display:flex;align-items:center;justify-content:center;text-align:center;}
-.key-item span{display:block;color:#ffffff;font-size:0.64rem;}
+.key-item span{display:block;color:#1a2230;font-size:0.64rem;}
 .key-item:nth-child(1){margin-top:0;}
 .key-item:nth-child(2){margin-top:0.55rem;}
 .key-item:nth-child(3){margin-top:-0.2rem;}
@@ -706,11 +705,6 @@ const TONES = {
   silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
   silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
   goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
-  // Real saturated jewel tone -- not a pale tint of anything above.
-  // Bright magenta-pink core (still the "lit" stop, but genuinely vivid
-  // rather than white/cream), fading to a fully saturated fuchsia and a
-  // deep plum edge -- glows against black instead of washing out.
-  jewel:   { grad:'radial-gradient(circle at 30% 26%, #ff5cad 0%, #c31577 55%, #4a0836 100%)', border:'#e0299b' },
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -732,17 +726,17 @@ const TONES = {
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
 const NUMS = [
-  {n:1, lbl:'Leader',       tone:'jewel'},
-  {n:2, lbl:'Diplomat',     tone:'silverL'},
-  {n:3, lbl:'Communi­cator', tone:'jewel'},
-  {n:4, lbl:'Builder',      tone:'silverD'},
-  {n:5, lbl:'Freedom',      tone:'jewel'},
-  {n:6, lbl:'Nurtur­er', tone:'jewel'},
-  {n:7, lbl:'Seeker',       tone:'silverL'},
-  {n:8, lbl:'Achiever',     tone:'jewel'},
-  {n:9, lbl:'Humani­tarian', tone:'silverD'},
-  {n:11, lbl:'Intu­itive',      tone:'jewel'},
-  {n:22, lbl:'Master Builder', tone:'jewel'},
+  {n:1, lbl:'Leader',       tone:'silverL'},
+  {n:2, lbl:'Diplomat',     tone:'goldT'},
+  {n:3, lbl:'Communi­cator', tone:'white'},
+  {n:4, lbl:'Builder',      tone:'cream'},
+  {n:5, lbl:'Freedom',      tone:'silverD'},
+  {n:6, lbl:'Nurtur­er', tone:'white'},
+  {n:7, lbl:'Seeker',       tone:'goldT'},
+  {n:8, lbl:'Achiever',     tone:'silverL'},
+  {n:9, lbl:'Humani­tarian', tone:'cream'},
+  {n:11, lbl:'Intu­itive',      tone:'silverD'},
+  {n:22, lbl:'Master Builder', tone:'goldT'},
   {n:33, lbl:'Master Teacher', tone:'silverL'},
 ];
 // DOM tile grid removed -- see the numAccent bead cluster below (after
@@ -790,15 +784,15 @@ function openNumberDef(item){
 // minimum gap enforced, not eyeballed) rather than the original
 // "scattered" angles, which collided once the font size went up.
 const PLANETS = [
-  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'jewel',   angle:-70.6},
-  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'jewel',   angle:-149.8},
-  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'silverL', angle:11.5},
-  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'jewel',   angle:146.5},
-  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'jewel',   angle:85.2},
+  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
+  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:-149.8},
+  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:11.5},
+  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:146.5},
+  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:85.2},
   {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-58.2},
-  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'jewel',   angle:-91.8},
-  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'jewel',   angle:23.7},
-  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'silverL', angle:-120.4},
+  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-91.8},
+  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
+  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-120.4},
 ];
 const RINGS = [26,34,46,54,74,86,100,110,120];
 const SIZE = 420, C = SIZE/2;
@@ -833,8 +827,8 @@ RINGS.forEach(r=>{
   svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="0.9" opacity="0.95"/>`;
 });
 
-// sun -- the one bright point the planets orbit
-svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-jewel)" stroke="${TONES.jewel.border}" stroke-width="1"/>`;
+// sun -- the one warm point the (now-neutral) planets orbit
+svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
 
 PLANETS.forEach((p,i)=>{
   const t = TONES[p.tone];
@@ -878,13 +872,13 @@ function openPlanetDef(p){
   const HD_CENTERS = [
     {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    tone:'silverL', on:false, label:'Inspiration'},
     {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    tone:'silverD', on:false, label:'Awareness'},
-    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'jewel',   on:false, label:'Expression'},
-    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'jewel',   on:true,  label:'Identity'},
-    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'silverL', on:false, label:'Willpower'},
-    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'jewel',   on:true,  label:'Life Force'},
-    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'jewel',   on:true,  label:'Intuition'},
-    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            tone:'silverD', on:false, label:'Emotions'},
-    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         tone:'jewel',   on:true,  label:'Drive'},
+    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'cream',   on:false, label:'Expression'},
+    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'goldT',   on:true,  label:'Identity'},
+    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'white',   on:false, label:'Willpower'},
+    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'silverD', on:true,  label:'Life Force'},
+    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'cream',   on:true,  label:'Intuition'},
+    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            tone:'silverL', on:false, label:'Emotions'},
+    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         tone:'white',   on:true,  label:'Drive'},
   ];
   // Same glossy-sphere gradient recipe already used (and proven) on the
   // number tiles and solar-system planets -- reusing the exact stop
@@ -959,11 +953,8 @@ function openPlanetDef(p){
   NUMS.slice(0,9).forEach((item,i)=>{
     const t = TONES[item.tone];
     const {cx,cy,r} = POS[i];
-    // jewel/silverD are dark enough now to need white digits; silverL
-    // stays the pale metal black text was always designed for.
-    const textFill = (item.tone==='jewel'||item.tone==='silverD') ? '#ffffff' : '#000000';
     svg += `<circle class="n-bead" data-idx="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="url(#ng-${i})" stroke="${t.border}" stroke-width="0.9" style="cursor:pointer;"/>`;
-    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="${textFill}" style="pointer-events:none;">${item.n}</text>`;
+    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="#000000" style="pointer-events:none;">${item.n}</text>`;
   });
   svg += '</svg>';
   numWrap.innerHTML = svg;
