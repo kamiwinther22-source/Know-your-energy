@@ -88,7 +88,7 @@ body{
   gap:0.65rem;margin:0.4rem 0 0.6rem;
 }
 .accent-item{position:relative;flex:0 0 auto;height:88px;}
-.accent-item svg{display:block;width:auto;height:100%;filter:drop-shadow(0 0 16px rgba(41,169,232,0.85)) drop-shadow(0 0 34px rgba(41,169,232,0.5));}
+.accent-item svg{display:block;width:auto;height:100%;filter:drop-shadow(0 0 16px rgba(77,232,245,0.85)) drop-shadow(0 0 34px rgba(77,232,245,0.5));}
 .accent-astro{align-self:center;}
 .accent-hd{height:114px;}
 .accent-num{align-self:flex-start;margin-top:14px;}
@@ -195,9 +195,9 @@ body{
   /* Real ice-blue metal, same family as the hero icons -- the bubble
      itself carries the color now, not just a glow sitting on top of
      plain silver. */
-  background:radial-gradient(circle at 32% 26%, #eaf7ff 0%, #29a9e8 45%, #0b4c7a 85%, #052c47 100%);
+  background:radial-gradient(circle at 32% 26%, #f0fdff 0%, #4de8f5 45%, #0e6b7a 85%, #063540 100%);
   border:1px solid rgba(255,255,255,0.4);
-  box-shadow:0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 22px rgba(41,169,232,0.7), 0 0 46px rgba(41,169,232,0.35);
+  box-shadow:0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 22px rgba(77,232,245,0.7), 0 0 46px rgba(77,232,245,0.35);
   line-height:1.15;font-weight:600;
 }
 /* The single inner span (not the circle itself) is the flex item doing
@@ -708,8 +708,8 @@ body{
 // variation across the beads/planets/centers without leaving this hue
 // family at all.
 const TONES = {
-  ice:    { grad:'radial-gradient(circle at 30% 26%, #eaf7ff 0%, #29a9e8 55%, #0b4c7a 100%)', border:'#6fd4ff' },
-  arctic: { grad:'radial-gradient(circle at 30% 26%, #cfefff 0%, #1476b0 55%, #052c47 100%)', border:'#3fa9da' },
+  ice:    { grad:'radial-gradient(circle at 30% 26%, #f0fdff 0%, #4de8f5 55%, #0e6b7a 100%)', border:'#7ff0ff' },
+  arctic: { grad:'radial-gradient(circle at 30% 26%, #d4f5fa 0%, #1fa8bd 55%, #063540 100%)', border:'#4fd8e8' },
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -828,8 +828,8 @@ svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaus
 svg += '</defs>';
 
 RINGS.forEach(r=>{
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#4fc3f7" stroke-width="3" opacity="0.55" filter="url(#glow)"/>`;
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#6fd4ff" stroke-width="1.6" opacity="0.95"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#4de8f5" stroke-width="3" opacity="0.55" filter="url(#glow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#7ff0ff" stroke-width="1.6" opacity="0.95"/>`;
 });
 
 // sun -- the brightest point the planets orbit
