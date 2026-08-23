@@ -519,6 +519,17 @@ a full reading from.
 This rule overrides every other instruction in this prompt, including
 the naming rule above, if they ever conflict.
 
+===== NON-NEGOTIABLE RULE: NO CITATIONS IN THE PROSE =====
+Never name a specific placement, planet, house, sign, number, or gate
+anywhere in the body text, headline, or signature — not even once, not
+even in a trailing clause, no exception. Say what it means in plain
+language instead of naming it. The only place any of these names may
+appear is the References list at the end. A reader should be able to
+read the entire reading start to finish without hitting a single
+technical term.
+This rule overrides every other instruction in this prompt if they
+ever conflict.
+
 VOICE
 - Never use a vague metaphor or image instead of stating the mechanism
   plainly ("your identity runs deep rather than wide," "what real
@@ -563,14 +574,11 @@ VOICE
   should be read together — the same Personal Year lands differently
   depending on the overlapping Essence. When the two numbers match,
   name that as a real amplification.
-- A placement/planet/house/number name must never open a sentence or
-  be its grammatical subject ("Your Scorpio Sun wants..." becomes "You
-  want total, earned commitment before you open up"). Prose defaults to
-  naming NO placements — the References list makes every citation
-  traceable — mention one only when it's doing real rhetorical work,
-  and only in a trailing clause. Never stack degree numbers or aspect
-  names into a sentence as proof of precision; that belongs only in
-  References.
+- See the non-negotiable no-citations-in-prose rule at the top of this
+  prompt — it applies to every sentence, not just sentence subjects.
+  ("Your Scorpio Sun wants..." becomes "You want total, earned
+  commitment before you open up," with "Sun in Scorpio" only in
+  References.)
 - Hold one tense: present or future, never past — except when clearly
   describing an early-childhood period for someone now an adult (e.g.
   Pinnacle 1's age range), and even then it must stay a specific
@@ -752,7 +760,7 @@ OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
     {
       "eyebrow": "Short label for this section, e.g. 'Core Drive' or 'Where You Lead'",
       "title": "A specific, non-generic section title",
-      "body": "The actual reading for this section, grounded in their specific data. Follow the naming rule at the top of this prompt exactly. Give it the room the point needs, within the length target above."
+      "body": "The actual reading for this section, grounded in their specific data. Follow the naming rule and the no-citations-in-prose rule at the top of this prompt exactly -- no placement/planet/house/sign/number/gate name anywhere in this text. Give it the room the point needs, within the length target above."
     }
   ],
   "signature": "One closing line — not a summary, a final thought that lands.",
@@ -905,30 +913,68 @@ function findNamingDefect(reading, rtype, p1, p2) {
   return null;
 }
 
+// A real customer reading had citations (e.g. "Sun in Scorpio, 6th
+// house") stacked directly into the prose, breaking readability enough
+// that they couldn't get through it. The system prompt says citations
+// belong only in References -- this checks that the model actually did
+// that, in the specific parts of the reading a reader has to get
+// through (headline/section bodies/signature), not just trusting the
+// instruction held. Deliberately excludes the References array itself
+// (citations belong there) and doesn't flag bare "Sun"/"Moon" as words
+// (too common in ordinary prose) -- only the precise "Sun/Moon in
+// <Sign>" citation form, which is never a normal sentence otherwise.
+const ZODIAC_SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+const CITATION_PATTERNS = [
+  new RegExp(`\\b(Sun|Moon)\\s+in\\s+(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
+  new RegExp(`\\b(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
+  /\b(Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto|Chiron|Ascendant|Midheaven|Lilith|Sirius)\b/i,
+  /\b(North|South)\s+Node\b/i,
+  /\bLife\s+Path\s+\d+/i, /\bExpression\s+\d+/i, /\bSoul\s+Urge\s+\d+/i, /\bPersonality\s+(number\s+)?\d+/i,
+  /\bPersonal\s+(Year|Month|Day)\s+\d+/i, /\bPinnacle\s+\d+/i, /\bChallenge\s+(number\s+)?\d+/i,
+  /\bKarmic\s+(Debt|Lesson)/i, /\bEssence\s+(cycle|number)/i,
+  /\bGate\s+\d+/i, /\b\d+(st|nd|rd|th)\s+house\b/i,
+  /\b(Sacral|Emotional|Splenic|Ego|Self-Projected|Mental|Lunar)\s+Authority\b/i,
+  /\bManifesting\s+Generator\b/i, /\b(Generator|Projector|Manifestor|Reflector)\s+type\b/i,
+  /\bIncarnation\s+Cross\b/i,
+];
+function findCitationLeak(reading) {
+  const parts = [reading.headline, reading.signature];
+  (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
+  const text = parts.filter(Boolean).join('\n');
+  for (const re of CITATION_PATTERNS) {
+    const m = text.match(re);
+    if (m) return `The reading names a specific placement in the prose ("${m[0]}"), which real customers have gotten stuck on. Rewrite the full reading with every placement/planet/sign/number/gate name removed from the body text, headline, and signature -- describe what each one means in plain language instead. Citations belong ONLY in the references list.`;
+  }
+  return null;
+}
+
 async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
+
+  const checkDefects = (reading) => findNamingDefect(reading, rtype, p1, p2) || findCitationLeak(reading);
 
   let text = await callReportModel(env, userPrompt, ctx);
   let parsed, defect;
   try {
     parsed = JSON.parse(extractJSON(text));
-    defect = findNamingDefect(parsed, rtype, p1, p2);
+    defect = checkDefects(parsed);
   } catch (e) {
     defect = e.message;
   }
 
   if (!parsed || defect) {
-    // One repair attempt, whether the first response broke JSON format
-    // or parsed fine but skipped the real names -- give the model its
-    // own bad response back and a specific correction, rather than
-    // shipping a defective reading to a paying customer.
+    // One repair attempt, whether the first response broke JSON format,
+    // skipped the real names, or leaked a citation into the prose --
+    // give the model its own bad response back and a specific
+    // correction, rather than shipping a defective reading to a paying
+    // customer.
     const correction = parsed
       ? defect
       : 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.';
     text = await callReportModel(env, userPrompt, ctx, { badText: text, correction });
     parsed = JSON.parse(extractJSON(text));
-    defect = findNamingDefect(parsed, rtype, p1, p2);
-    if (defect) throw new Error(`Reading kept failing the naming check: ${defect}`);
+    defect = checkDefects(parsed);
+    if (defect) throw new Error(`Reading kept failing quality checks: ${defect}`);
   }
 
   return parsed;
