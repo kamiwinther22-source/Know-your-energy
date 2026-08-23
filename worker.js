@@ -960,7 +960,7 @@ OUTPUT FORMAT — return ONLY valid JSON matching this shape, no other text:
     {
       "eyebrow": "Short label for this section, e.g. 'Core Drive' or 'Where You Lead'",
       "title": "A specific, non-generic section title",
-      "body": "The actual reading for this section, second person, grounded in their specific data. Give it the room the point actually needs, within the overall length target above."
+      "body": "The actual reading for this section, grounded in their specific data. Single-person reading: second person ('you'). Two-person reading: use each person's actual first name throughout, per the naming rules above -- never 'you,' 'one of you,' or 'the other' with no name attached. Give it the room the point actually needs, within the overall length target above."
     }
   ],
   "signature": "One closing line — not a summary, a final thought that lands.",
