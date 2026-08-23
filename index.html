@@ -6,6 +6,13 @@
 <title>Know Your Energy — Astrology, Numerology &amp; Human Design</title>
 <meta name="description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design — from just your name and birth details.">
 <meta name="theme-color" content="#000000">
+<!-- Tells the browser this page is deliberately dark, not that it needs
+     auto-dark/color-inversion "help" -- Chrome/Android and some other
+     browsers have a heuristic that re-colors pages which don't declare
+     this, and it can flatten a deliberate black-background + custom-
+     color design into a washed grey mess the page's own CSS never
+     produced. Real, documented browser behavior, not a guess. -->
+<meta name="color-scheme" content="dark">
 <meta property="og:title" content="Know Your Energy">
 <meta property="og:description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design.">
 <meta property="og:type" content="website">
@@ -18,6 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
+:root{color-scheme:dark;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 /* Background: deliberately quiet now, not more gradient variety. Every
    prior pass (champagne, steel, graphite) kept adding scattered light/
@@ -267,8 +275,19 @@ body{
 .err{display:none;font-size:0.7rem;color:#ff8080;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(255,80,80,0.12);border-radius:5px;border:1px solid rgba(255,80,80,0.35);font-weight:600;}
 
 /* ---------- loading state ---------- */
-.loading{display:none;text-align:center;padding:4rem 1rem;}
-.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#9DB0FF;}
+.loading{display:none;text-align:center;padding:3.5rem 1.2rem;max-width:420px;margin:0 auto;}
+.loading-spinner{width:52px;height:52px;margin:0 auto 1.3rem;border-radius:50%;
+  border:4px solid rgba(28,44,169,0.28);border-top-color:#8A96EE;
+  animation:loadspin 0.9s linear infinite;}
+@keyframes loadspin{to{transform:rotate(360deg);}}
+.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;color:#ffffff;margin-bottom:0.9rem;}
+/* This has to actually be seen -- she reported repeatedly getting
+   distracted mid-wait, refreshing, and losing everything because the old
+   version was one small dim line of text. Big, high-contrast, boxed. */
+.loading-warn{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#ffffff;
+  background:rgba(28,44,169,0.25);border:1.5px solid rgba(138,150,238,0.6);border-radius:8px;
+  padding:0.9rem 1.1rem;margin:0 0 0.9rem;line-height:1.45;}
+.loading-note{font-family:'DM Sans',sans-serif;font-size:0.8rem;color:#cfd8f5;line-height:1.55;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
@@ -389,9 +408,14 @@ body{
 .quad-item .dpsec{font-size:0.39rem;padding:0.18rem 0 0.05rem;}
 .quad-item .dpdef{font-size:0.43rem;padding:0 0 0.26rem;}
 .quad-item .glyph{font-size:0.62rem;}
+/* Deliberately NOT the fixed 300px the 6 chart cards use -- this card
+   holds one centered name (or two + "&"), nothing else, and forcing it
+   to match a chart card's height just to preserve uniformity produced a
+   huge, mostly-empty grey box, which is a real, reported problem, not a
+   uniformity issue worth keeping. Sized to its actual content instead. */
 .panel-auto{position:relative;width:100%;border-radius:10px;cursor:pointer;overflow:hidden;
   background:transparent;border:1.5px solid rgba(28,44,169,0.75);box-shadow:0 3px 10px -4px rgba(15,23,88,0.35);
-  height:300px;display:flex;flex-direction:column;}
+  height:auto;min-height:100px;display:flex;flex-direction:column;}
 /* Unlike panel-auto (fixed 300px, matching the 6 chart cards), this is a
    one-line service message with no real content to fill a card-sized box --
    forcing it to 300px left a large empty rectangle. Sized to its content. */
@@ -587,7 +611,10 @@ body{
 </div>
 
 <div class="loading" id="loading">
+  <div class="loading-spinner" aria-hidden="true"></div>
   <div class="loading-txt">Reading your chart&hellip;</div>
+  <div class="loading-warn">Please don't refresh or leave this page. Doing so will lose your results and your entered information.</div>
+  <div class="loading-note">This takes a little while because we'd rather it be thorough and accurate than fast. Thanks for your patience.</div>
 </div>
 
 <div class="results-wrap" id="resultsWrap">
@@ -917,6 +944,7 @@ function setMode(rel){
   p1Ttl.textContent = rel ? 'Person One' : 'Full Name at Birth';
   p2Section.style.display = rel ? 'block' : 'none';
   relWrap.style.display = rel ? 'flex' : 'none';
+  if(typeof saveDraft==='function')saveDraft();
 }
 togPill.addEventListener('click', ()=>setMode(!isRelational));
 togPill.addEventListener('keydown', e=>{
@@ -2363,6 +2391,7 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
     document.querySelectorAll('.rel-chip').forEach(c=>c.classList.remove('active'));
     chip.classList.add('active');
     relType = chip.dataset.rel;
+    if(typeof saveDraft==='function')saveDraft();
   });
 });
 
@@ -2498,6 +2527,52 @@ function clearSavedResult(){
   try{ localStorage.removeItem(SAVED_RESULT_KEY); }catch(_){}
 }
 
+// Same reasoning as SAVED_RESULT_KEY above, but for the un-submitted form
+// itself: a refresh (accidental, or while waiting -- see the loading-state
+// warning) used to wipe out everything typed into the data-entry fields,
+// forcing a full re-entry. Autosaved on every keystroke/change, restored
+// on load, cleared once the data has actually been used (a successful
+// generate) or the user explicitly starts over.
+const DRAFT_KEY='kye_formDraft';
+const DRAFT_FIELD_IDS=['p1f','p1m','p1l','p1d','p1t','p1ap','p1loc','p2f','p2m','p2l','p2d','p2t','p2ap','p2loc','pEmail'];
+function saveDraft(){
+  try{
+    const data={};
+    DRAFT_FIELD_IDS.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)data[id]=el.value;
+    });
+    data.isRelational=isRelational;
+    data.relType=relType;
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+  }catch(_){}
+}
+function clearDraft(){
+  try{ localStorage.removeItem(DRAFT_KEY); }catch(_){}
+}
+function restoreDraft(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    DRAFT_FIELD_IDS.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el&&data[id])el.value=data[id];
+    });
+    if(data.isRelational)setMode(true);
+    if(data.relType){
+      relType=data.relType;
+      document.querySelectorAll('.rel-chip').forEach(c=>{
+        c.classList.toggle('active', c.dataset.rel===data.relType);
+      });
+    }
+  }catch(_){}
+}
+DRAFT_FIELD_IDS.forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('input', saveDraft);
+});
+
 function render(p1,p2,r,reportErr){
   cardRegistry=[];
   const n1=p1.first+(p1.last?' '+p1.last:'');
@@ -2527,6 +2602,7 @@ function render(p1,p2,r,reportErr){
 
 function resetToForm(){
   clearSavedResult();
+  clearDraft();
   document.getElementById('resultsWrap').style.display='none';
   document.querySelector('.content').style.display='block';
   document.getElementById('loading').style.display='none';
@@ -2618,6 +2694,7 @@ async function generate(){
       p2.hd=result.p2.humanDesign;
       p2.hdError=result.p2.humanDesignError;
     }
+    clearDraft();
     render(p1,p2,result.report,result.reportError);
   }catch(e){
     genBtn.disabled=false;
@@ -2695,10 +2772,14 @@ document.addEventListener('click', e=>{
 (function(){
   try{
     const saved=localStorage.getItem(SAVED_RESULT_KEY);
-    if(!saved)return;
-    const {p1,p2,r,reportErr}=JSON.parse(saved);
-    if(p1)render(p1,p2,r,reportErr);
+    if(saved){
+      const {p1,p2,r,reportErr}=JSON.parse(saved);
+      if(p1){ render(p1,p2,r,reportErr); return; }
+    }
   }catch(_){}
+  // No finished result to restore -- fall back to restoring whatever was
+  // typed into the entry form before a reload, if anything.
+  restoreDraft();
 })();
 
 </script>
