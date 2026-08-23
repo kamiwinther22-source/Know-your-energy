@@ -350,7 +350,7 @@ body{
    unlike the sentence-length headline it couldn't hold before -- same
    glow technique already used on the site's title. */
 .report-preview{padding:0 0.6rem;font-family:'Alex Brush',cursive;font-size:clamp(1.6rem,7vw,2.1rem);line-height:1.25;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
-  color:#8A96EE;filter:drop-shadow(0 0 12px rgba(90,110,230,0.55));}
+  color:#ffffff;filter:drop-shadow(0 0 12px rgba(90,110,230,0.55));}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:0;}
 .report-tray-preview::before{
   content:'';position:absolute;left:50%;top:50%;width:140%;height:140%;
@@ -2482,6 +2482,22 @@ function personRow(person,rowNum){
     +quadItem(person.first,'Human Design',hdr(person.hd,person.hdError),hdWheelWrap(person.hd),hdBodygraphSVG(person.hd),rowNum);
 }
 
+// Persist the last generated result so navigating away and back (locking
+// the phone, switching apps, the mobile browser reclaiming a backgrounded
+// tab) doesn't silently dump the visitor back to a blank entry form --
+// each generation is a real, metered Claude API call, so losing one to a
+// reload isn't just annoying, it's a real wasted cost if they regenerate
+// rather than notice they could've just reloaded. Wrapped in try/catch:
+// a full or unavailable localStorage shouldn't ever break rendering.
+const SAVED_RESULT_KEY='kye_lastResult';
+function saveResult(p1,p2,r,reportErr){
+  try{ localStorage.setItem(SAVED_RESULT_KEY, JSON.stringify({p1,p2,r,reportErr})); }
+  catch(_){}
+}
+function clearSavedResult(){
+  try{ localStorage.removeItem(SAVED_RESULT_KEY); }catch(_){}
+}
+
 function render(p1,p2,r,reportErr){
   cardRegistry=[];
   const n1=p1.first+(p1.last?' '+p1.last:'');
@@ -2506,9 +2522,11 @@ function render(p1,p2,r,reportErr){
   document.getElementById('loading').style.display='none';
   document.getElementById('resultsWrap').style.display='block';
   document.querySelector('.content').style.display='none';
+  saveResult(p1,p2,r,reportErr);
 }
 
 function resetToForm(){
+  clearSavedResult();
   document.getElementById('resultsWrap').style.display='none';
   document.querySelector('.content').style.display='block';
   document.getElementById('loading').style.display='none';
@@ -2667,6 +2685,21 @@ document.addEventListener('click', e=>{
     }
   }
 });
+
+// Restore the last generated result on load, if there is one -- see
+// saveResult()/clearSavedResult() above. Runs at the very end of the
+// script, after every function/data structure render() depends on is
+// already defined. Wrapped in try/catch so corrupted or schema-stale
+// saved data falls back to the normal blank entry form instead of
+// breaking the page.
+(function(){
+  try{
+    const saved=localStorage.getItem(SAVED_RESULT_KEY);
+    if(!saved)return;
+    const {p1,p2,r,reportErr}=JSON.parse(saved);
+    if(p1)render(p1,p2,r,reportErr);
+  }catch(_){}
+})();
 
 </script>
 </body>
