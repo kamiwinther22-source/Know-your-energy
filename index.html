@@ -585,17 +585,17 @@ body{
     <div class="brand">Know Your Energy</div>
   </div>
 
-  <div class="tagline-wrap" id="taglineWrap">
-    <div class="tagline-slide c-gold active">There are multiple cycles in motion from the day of your birth to your last hour</div>
-    <div class="tagline-slide c-gold">is it all just math</div>
-  </div>
-
   <div class="hero-accent-row" id="heroAccentRow">
     <div class="accent-item accent-astro" id="solarIcon"></div>
     <div class="accent-item accent-hd" id="hdIcon"></div>
     <div class="accent-item accent-num" id="numAccent"></div>
   </div>
   <div class="hero-accent-caption">Astrology · Numerology · Human Design</div>
+
+  <div class="tagline-wrap" id="taglineWrap">
+    <div class="tagline-slide c-gold active">There are multiple cycles in motion from the day of your birth to your last hour</div>
+    <div class="tagline-slide c-gold">is it all just math</div>
+  </div>
 
   <div class="bottom-grid">
     <div class="form-col">
@@ -962,7 +962,7 @@ function openPlanetDef(p){
 // ---------- key selling points: short bubbles floating above the entry form ----------
 const KEYS = [
   '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading',
-  'Your data is <mark class="key-hl">not saved or shared</mark>',
+  'Data <mark class="key-hl">not saved or shared</mark>',
   'No <mark class="key-hl">autocharges</mark>',
   '<mark class="key-hl">Email</mark> is your key',
 ];
@@ -972,7 +972,7 @@ const keysCol = document.getElementById('keysCol');
 // pass read as blurry on a real device; sub-6px bold text doesn't
 // render crisply no matter how it's styled. Only the diameter scales
 // with each phrase's length, so "No autocharges" gets a smaller circle
-// than "Your data is not saved or shared" without either one's text
+// than "Data not saved or shared" without either one's text
 // shrinking to the point of illegibility.
 keysCol.innerHTML = KEYS.map(t=>{
   const plain = t.replace(/<[^>]+>/g,'');
