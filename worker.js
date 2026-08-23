@@ -676,7 +676,13 @@ Numerology:
 - Karmic Lessons/Debt: what are they here to learn or work through?
 
 Human Design:
-- Type: how are they actually designed to take action correctly?
+- Type: how are they actually designed to take action correctly? (For a
+  Manifesting Generator specifically: the speed and step-skipping is
+  real efficiency, not an absence of planning -- their actual strategy
+  is respond, then inform, not respond-and-say-nothing. Don't describe
+  this type as someone who doesn't plan or think ahead; a real customer
+  read that exact claim and it cost their confidence in the reading's
+  accuracy.)
 - Authority: how do they make the right decisions for themselves?
 - Profile: what's their role/lens for engaging with life?
 - Incarnation Cross: what's their larger life theme or purpose?
