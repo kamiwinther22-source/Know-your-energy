@@ -92,7 +92,6 @@ body{
 .accent-astro{align-self:center;}
 .accent-hd{height:114px;}
 .accent-num{align-self:flex-start;margin-top:14px;}
-.accent-key{align-self:center;}
 .hero-accent-caption{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#ffffff;
@@ -262,7 +261,7 @@ body{
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
    still wraps it, same verified technique as the live entry form's button ---------- */
-.submit-wrap{margin-top:1.2rem;display:flex;align-items:center;justify-content:center;gap:0.7rem;}
+.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
 .glow-ring::before{content:'';position:absolute;inset:-100%;
   background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
@@ -589,7 +588,6 @@ body{
   <div class="hero-accent-row" id="heroAccentRow">
     <div class="accent-item accent-astro" id="solarIcon"></div>
     <div class="accent-item accent-hd" id="hdIcon"></div>
-    <div class="key-item accent-key" id="heroKeyBubble"></div>
     <div class="accent-item accent-num" id="numAccent"></div>
   </div>
 
@@ -657,7 +655,6 @@ body{
       <div class="err" id="err"></div>
 
       <div class="submit-wrap">
-        <div class="key-item" id="formKeyBubble"></div>
         <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()">Calculate</button></span>
       </div>
     </div>
@@ -961,7 +958,14 @@ function openPlanetDef(p){
   });
 })();
 
-// ---------- key selling points: short bubbles placed around the page ----------
+// ---------- key selling points: short bubbles floating above the entry form ----------
+const KEYS = [
+  '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading',
+  'Data <mark class="key-hl">not saved or shared</mark>',
+  'No <mark class="key-hl">autocharges</mark>',
+  '<mark class="key-hl">Email</mark> is your key',
+];
+const keysCol = document.getElementById('keysCol');
 // Font size is fixed at a real legible floor (~10px) -- shrinking it
 // further to force text into a smaller circle is what made the previous
 // pass read as blurry on a real device; sub-6px bold text doesn't
@@ -969,30 +973,10 @@ function openPlanetDef(p){
 // with each phrase's length, so "No autocharges" gets a smaller circle
 // than "Data not saved or shared" without either one's text
 // shrinking to the point of illegibility.
-function sizeKey(t){
+keysCol.innerHTML = KEYS.map(t=>{
   const plain = t.replace(/<[^>]+>/g,'');
   const len = plain.length;
-  return Math.max(62, Math.min(104, Math.round(40 + len*2)));
-}
-function fillKey(el, t){
-  const d = sizeKey(t);
-  el.style.width = d+'px';
-  el.style.height = d+'px';
-  el.innerHTML = `<span>${t}</span>`;
-}
-// "1 free FULL reading" moved up into the hero icon cluster, and
-// "Email is your key" moved down next to the Calculate button --
-// only "Data not saved or shared" and "No autocharges" stay in the
-// bubble row above the form.
-fillKey(document.getElementById('heroKeyBubble'), '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading');
-fillKey(document.getElementById('formKeyBubble'), '<mark class="key-hl">Email</mark> is your key');
-const KEYS = [
-  'Data <mark class="key-hl">not saved or shared</mark>',
-  'No <mark class="key-hl">autocharges</mark>',
-];
-const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map(t=>{
-  const d = sizeKey(t);
+  const d = Math.max(62, Math.min(104, Math.round(40 + len*2)));
   return `<div class="key-item" style="width:${d}px;height:${d}px;"><span>${t}</span></div>`;
 }).join('');
 
