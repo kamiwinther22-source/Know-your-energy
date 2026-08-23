@@ -287,7 +287,9 @@ body{
 .loading-warn{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#ffffff;
   background:rgba(28,44,169,0.25);border:1.5px solid rgba(138,150,238,0.6);border-radius:8px;
   padding:0.9rem 1.1rem;margin:0 0 0.9rem;line-height:1.45;}
-.loading-note{font-family:'DM Sans',sans-serif;font-size:0.8rem;color:#ffffff;line-height:1.55;}
+/* Differs from .loading-warn above it by weight/style, not by dimming
+   the color -- full-strength white on both, per the never-fade-text rule. */
+.loading-note{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-style:italic;color:#ffffff;line-height:1.55;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
@@ -364,13 +366,12 @@ body{
 .report-print-full{display:none;}
 /* Title-page treatment: just the first name(s) in the same cursive used
    for the site's own title, styled like the cover of the reading rather
-   than a quoted excerpt or a repeated "Reading" label. Alex Brush at
-   this size reads cleanly for a short name (or two names + "&"),
-   unlike the sentence-length headline it couldn't hold before -- same
-   glow technique already used on the site's title. Fallback chain is
-   real, pre-installed script fonts (not just the generic "cursive"
-   keyword, which varies wildly by device/browser and can render as
-   something plain) in case Alex Brush itself hasn't loaded yet. */
+   than a quoted excerpt or a repeated "Reading" label. Alex Brush is
+   already fetched during the very first page load (the site title above
+   the entry form uses it too), so by the time someone reaches this
+   results screen it's already loaded/cached -- the fallback chain below
+   (real, pre-installed script fonts, not just the unpredictable generic
+   "cursive" keyword) is a safety net for the rare case it isn't. */
 .report-preview{padding:0 0.6rem;font-family:'Alex Brush','Segoe Script','Brush Script MT','Lucida Handwriting',cursive;font-size:clamp(1.6rem,7vw,2.1rem);line-height:1.25;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
   color:#ffffff;filter:drop-shadow(0 0 12px rgba(90,110,230,0.55));}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:0;}
