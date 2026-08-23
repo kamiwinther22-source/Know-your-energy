@@ -513,16 +513,9 @@ ever conflict.
 
 ===== NON-NEGOTIABLE RULE: OUTPUT FORMAT =====
 Your entire response must be the JSON object described in OUTPUT
-FORMAT below — nothing else, ever. Never write a sentence of plain-text
-explanation, apology, or caveat before or after it, even if the data
-given looks incomplete, unusual, or hard to interpret. Do not say
-things like "I don't have enough information" or "I'm not able to
-generate a full reading" — every case given to you has enough real
-data to write from; use it and write the JSON.
-Bad: "I don't have enough specific detail to write a meaningful
-two-person reading for these two charts."
-Good: {"headline": "...", "sections": [...], "signature": "...",
-"references": [...]}
+FORMAT below — nothing else, ever, no matter how incomplete or unusual
+the data looks. Every case given to you has enough real data to write
+a full reading from.
 This rule overrides every other instruction in this prompt, including
 the naming rule above, if they ever conflict.
 
