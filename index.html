@@ -179,21 +179,35 @@ body{
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
 
-/* Bubbles, not pills: a pill is a full stadium shape stretched to fill a
-   row; this is sized to exactly its own text with tight padding, so each
-   one reads as a small floating bubble, not an elongated bar. No card/
-   blur/border box around the group anymore -- they sit directly on the
-   page background and wrap freely above the form. */
+/* Actual circles, not pills or rounded rectangles -- each bubble is a
+   true circle (width forced equal to height via JS, see KEYS render
+   below), text centered and wrapped inside. No card/blur/border box
+   around the group -- they sit directly on the page background and
+   cluster at staggered heights (per-bubble margin-top below) instead
+   of sitting in one straight row. Silver/chrome gradient, not flat grey. */
 .keys-col{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:0.5rem;
-  margin-bottom:1.1rem;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
+  gap:0.5rem 0.7rem;margin-bottom:1.3rem;
 }
 .key-item{
-  display:inline-block;padding:0.32rem 0.7rem;border-radius:14px;
-  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);
-  font-size:0.72rem;line-height:1.25;color:#ffffff;font-weight:500;
-  white-space:nowrap;
+  border-radius:50%;padding:0.3rem;flex-shrink:0;
+  background:radial-gradient(circle at 32% 26%, #ffffff 0%, #e4ebee 28%, #c3ced4 55%, #8f9ca4 85%, #6f7c85 100%);
+  border:1px solid rgba(255,255,255,0.5);
+  box-shadow:0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.6) inset;
+  line-height:1.15;font-weight:600;
 }
+/* The single inner span (not the circle itself) is the flex item doing
+   the centering -- putting display:flex directly on .key-item turned
+   every <mark> inside it into its own separate flex item, which
+   silently collapsed the plain spaces between words ("1freeFULLreading").
+   Centering a single wrapper span instead keeps the mark tags as normal
+   inline content, so spacing and wrapping behave like ordinary text. */
+.key-item{display:flex;align-items:center;justify-content:center;text-align:center;}
+.key-item span{display:block;color:#1a2230;}
+.key-item:nth-child(1){margin-top:0;}
+.key-item:nth-child(2){margin-top:1.6rem;}
+.key-item:nth-child(3){margin-top:-0.5rem;}
+.key-item:nth-child(4){margin-top:0.7rem;}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -202,7 +216,7 @@ body{
 /* <mark> has a browser-default yellow background in every browser --
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:#ffffff;font-weight:800;}
+.key-hl{background:none;color:#1C2CA9;font-weight:800;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form sits directly on the page background, no
@@ -217,10 +231,11 @@ body{
 .section-lbl{font-size:0.6rem!important;color:#ffffff!important;margin-bottom:0.35rem!important;}
 /* Person's whole entry compressed into 2 rows instead of 4: identity
    (First/Mid/Last/DOB) on one row, birth specifics (Time/AM-PM/Location)
-   on the next. DOB and Location get more of the row's width since their
-   placeholders ("MM/DD/YYYY", "City, State, Country") are the longest. */
-.row-id{display:grid;grid-template-columns:0.85fr 0.55fr 0.85fr 1.15fr;gap:0.35rem;margin-bottom:0.55rem;}
-.row-birth{display:grid;grid-template-columns:0.68fr 0.46fr 1.9fr;gap:0.35rem;align-items:end;}
+   on the next. DOB moved onto the birth-details row with Time/AM-PM/
+   Location; Location gets the most width since "City, State, Country"
+   is the longest placeholder by far. */
+.row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.55rem;}
+.row-birth{display:grid;grid-template-columns:0.85fr 0.65fr 0.45fr 1.55fr;gap:0.3rem;align-items:end;}
 
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
@@ -606,9 +621,9 @@ body{
             <div><label for="p1f">First</label><div class="line-field"><input id="p1f" placeholder="First" autocomplete="given-name"></div></div>
             <div><label for="p1m">Mid</label><div class="line-field"><input id="p1m" placeholder="Mid" autocomplete="additional-name"></div></div>
             <div><label for="p1l">Last</label><div class="line-field"><input id="p1l" placeholder="Last" autocomplete="family-name"></div></div>
-            <div><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
           </div>
           <div class="row-birth">
+            <div><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
             <div><label for="p1t">Time</label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
             <div><label for="p1ap">AM/PM</label><div class="line-field"><select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div></div>
             <div><label for="p1loc">Location</label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
@@ -622,9 +637,9 @@ body{
               <div><label for="p2f">First</label><div class="line-field"><input id="p2f" placeholder="First"></div></div>
               <div><label for="p2m">Mid</label><div class="line-field"><input id="p2m" placeholder="Mid"></div></div>
               <div><label for="p2l">Last</label><div class="line-field"><input id="p2l" placeholder="Last"></div></div>
-              <div><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
             </div>
             <div class="row-birth">
+              <div><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
               <div><label for="p2t">Time</label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
               <div><label for="p2ap">AM/PM</label><div class="line-field"><select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div></div>
               <div><label for="p2loc">Location</label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
@@ -952,7 +967,18 @@ const KEYS = [
   '<mark class="key-hl">Email</mark> is your key',
 ];
 const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map(t=>`<div class="key-item">${t}</div>`).join('');
+// Each circle's diameter and font size scale to its own text length --
+// "No autocharges" and "1 free FULL reading" fit smaller circles than
+// "Your data is not saved or shared", so the four end up genuinely
+// varied bubble sizes rather than one fixed shape stretched to fit the
+// longest phrase.
+keysCol.innerHTML = KEYS.map(t=>{
+  const plain = t.replace(/<[^>]+>/g,'');
+  const len = plain.length;
+  const d = Math.max(72, Math.min(126, Math.round(56 + len*2.1)));
+  const fs = len>26?0.56:len>16?0.62:0.7;
+  return `<div class="key-item" style="width:${d}px;height:${d}px;font-size:${fs}rem;"><span>${t}</span></div>`;
+}).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
