@@ -348,8 +348,16 @@ body{
    faint smudge) and given the same soft glow technique already used on
    the title, so the Reading card's collapsed preview reads as a real
    focal point instead of empty space. */
-.report-preview{padding:0 0.4rem;font-family:'Alex Brush',cursive;font-size:1.7rem;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
-  color:#8A96EE;filter:drop-shadow(0 0 14px rgba(90,110,230,0.6));}
+/* Special Elite (not Alex Brush) -- the giant cursive script worked for a
+   single short name, but this now holds a real sentence-length headline,
+   which cursive script at that size turns into a hard-to-read tangle.
+   Same typewriter/quote treatment already used for the entry page's
+   tagline, with real quote marks since this genuinely is a quoted line
+   pulled from the actual reading, not a placeholder. */
+.report-preview{padding:0 0.6rem;font-family:'Special Elite',monospace;font-size:0.92rem;line-height:1.55;font-weight:400;letter-spacing:0.005em;text-transform:none;font-style:italic;text-align:center;
+  color:#c7d0f5;filter:drop-shadow(0 0 8px rgba(90,110,230,0.4));}
+.report-preview::before{content:'\201C';}
+.report-preview::after{content:'\201D';}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:0;}
 .report-tray-preview::before{
   content:'';position:absolute;left:50%;top:50%;width:140%;height:140%;
@@ -2455,7 +2463,15 @@ function reportSlot(names,report,reportError,rowNum){
     dpsec('References')+`<div class="dprow"><p class="report-body" style="color:var(--card-mid);font-style:italic;">${report.references.map(escapeHtml).join(' &middot; ')}</p></div>`:'';
   const fullRows=sectionsHtml+sigHtml+refsHtml;
   const idx=cardRegistry.push({title:titleRaw,rows:fullRows})-1;
-  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(names)}</p></div></div></div></div>`;
+  // The collapsed preview showed just the person's own name -- redundant,
+  // their name is already on their own astrology/numerology/HD cards next
+  // to it, and told a visitor nothing about what's actually inside. The
+  // report's real headline (a short, specific line Claude wrote for THIS
+  // reading) is real content already being generated and was just never
+  // surfaced here -- showing it instead gives an actual reason to tap in,
+  // not just a repeated name.
+  const previewText=report.headline||names;
+  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(previewText)}</p></div></div></div></div>`;
 }
 
 // One row = Astrology (col 1) / Numerology (col 2) / Human Design
