@@ -2790,7 +2790,11 @@ async function generate(){
       p2.hd=result.p2.humanDesign;
       p2.hdError=result.p2.humanDesignError;
     }
-    clearDraft();
+    // Only clear the draft once the reading actually succeeded -- if
+    // generation failed, keep the entered data around so a retry
+    // doesn't force re-typing everything (the reading-failure message
+    // tells the customer exactly that; this is what makes it true).
+    if(!result.reportError)clearDraft();
     render(p1,p2,result.report,result.reportError);
   }catch(e){
     genBtn.disabled=false;
