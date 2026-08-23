@@ -489,13 +489,67 @@ body{
 .card-expand-body .report-sig{font-size:0.95rem;line-height:1.6;padding:0.5rem 0.3rem 0;}
 @media print{
   .form-col,.hero-accent-row,.hero-accent-caption,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
-  body,.card-expand{background:#fff!important;}
-  .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;}
+  /* The Astrology/Numerology/Human Design cards (.quad-item) never
+     actually use the --card-text variable below -- they just inherit
+     body's color, which is white for the on-screen dark theme. Flipping
+     .dp's --card-text to black (further down) fixes the Reading panel,
+     which does route through that variable, but left these three card
+     types printing invisible white-on-white text until body's own
+     inherited color was fixed here too. */
+  body{background:#fff!important;color:#000!important;}
+  .card-expand{background:#fff!important;}
+  /* Switching the 3-column grid to a plain block stack is what actually
+     fixes "everything shrunk onto one page" -- grid-column/grid-row were
+     forcing 3 cards side by side and Chrome was scaling the whole thing
+     down to fit that shape on one sheet. As a block container the inline
+     grid-column/grid-row positions do nothing, so cards just flow in
+     source order: Person One's 3 cards, Reading, Person Two's 3 cards. */
+  .main-grid{display:block!important;max-width:100%!important;}
+  .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;
+    width:100%!important;max-width:640px!important;margin:0 auto 1.2rem!important;
+    height:auto!important;overflow:visible!important;
+    break-inside:avoid;page-break-inside:avoid;break-after:page;page-break-after:always;}
+  .main-grid>*:last-child{break-after:auto!important;page-break-after:auto!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
   .dp{--card-text:#000!important;--card-dim:#000!important;--card-mid:#232a20!important;--card-accent:#1C2CA9!important;--card-stripe-odd:transparent!important;}
   .quad-item .quad-wheel{color:#000!important;}
   .report-preview{color:#000!important;filter:none!important;}
   .report-tray-preview::before{display:none!important;}
+  /* The actual reading text -- see reportSlot()'s comment -- stays
+     hidden on screen (the collapsed card is just a names cover) and only
+     appears here, right under the names, when actually printing/saving. */
+  .report-print-full{display:block!important;margin-top:0.6rem;}
+  /* Unclipping the cards above still left every size declaration
+     pointed at the cramped 300px mobile-preview box (font sizes as
+     small as ~0.19rem, effectively unreadable once printed on paper).
+     Reusing the same sizes already proven legible in the tap-to-expand
+     modal (.card-expand-body, further up) instead of inventing new ones. */
+  .quad-item .quad-title,.panel-auto .dph{font-size:1rem!important;padding:0.4rem 0.3rem!important;}
+  .quad-item .dpr,.panel-auto .dpr{font-size:1rem!important;padding:0.35rem 0.3rem!important;gap:0.15rem 0.9rem!important;}
+  .quad-item .dprl,.panel-auto .dprl{font-size:0.72rem!important;}
+  .quad-item .glyph,.panel-auto .glyph{font-size:1.2rem!important;}
+  .quad-item .dprv.pend,.panel-auto .dprv.pend{font-size:0.9rem!important;}
+  .quad-item .dpsec,.panel-auto .dpsec{font-size:0.72rem!important;padding:0.35rem 0.3rem 0.1rem!important;}
+  .quad-item .dpdef,.panel-auto .dpdef{font-size:0.88rem!important;line-height:1.45!important;padding:0 0.3rem 0.5rem!important;}
+  .quad-item .gates-grid,.panel-auto .gates-grid{gap:0.4rem!important;padding:0.25rem 0.3rem 0.4rem!important;}
+  .quad-item .gate-chip,.panel-auto .gate-chip{font-size:0.95rem!important;padding:0.35rem 0!important;}
+  .quad-item .gate-def,.panel-auto .gate-def{font-size:0.88rem!important;line-height:1.45!important;padding:0.4rem 0.6rem!important;}
+  .quad-item .report-body,.panel-auto .report-body{font-size:0.95rem!important;line-height:1.6!important;padding:0 0.3rem!important;}
+  .quad-item .report-sig,.panel-auto .report-sig{font-size:0.95rem!important;line-height:1.6!important;padding:0.5rem 0.3rem 0!important;}
+  .quad-item .birthdate-row .dprl,.panel-auto .birthdate-row .dprl{font-size:0.72rem!important;}
+  .quad-item .birthdate-row .dprv,.panel-auto .birthdate-row .dprv{font-size:1.1rem!important;}
+  /* The tap-to-expand chevron is a screen-only "there's more, tap here"
+     affordance -- meaningless (and a little confusing) on a printed page
+     where nothing is tappable, so the definitions just print plainly. */
+  .dprl.term::after{display:none!important;}
+  .dprl.term{border-bottom:none!important;cursor:default!important;}
+  /* Same idea for the gates list: "tap any gate below" is screen-only
+     instruction text, and gate-def-print (see hdr()) fills in the actual
+     per-gate meanings that tapping would otherwise be the only way to see. */
+  .report-tap-hint{display:none!important;}
+  .gate-def-print{display:block!important;margin:0.4rem 0.3rem 0;padding:0;}
+  .gate-def-print p{font-family:'DM Sans',sans-serif;font-size:0.82rem;line-height:1.5;margin:0 0 0.5rem;}
+  .gate-chip{cursor:default!important;}
 }
 </style>
 </head>
@@ -2383,8 +2437,13 @@ function hdr(hd,errMsg){
   if(hd.incarnation_cross){h+=dpsec('Cross');h+=arow('Incarnation Cross',hd.incarnation_cross,'hdcross');}
   if(hd.gates&&hd.gates.length){
     h+=dpsec('Gates');
-    h+=`<div class="dprow"><p class="report-body">Tap any gate below to see what it means.</p></div>`;
-    h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div></div>`;
+    h+=`<div class="dprow report-tap-hint"><p class="report-body">Tap any gate below to see what it means.</p></div>`;
+    // .gate-def-print holds every gate's actual definition (same GATES
+    // lookup the tap interaction uses) -- hidden on screen since tapping
+    // already covers that case there, shown only in print, where nothing
+    // is tappable and "tap any gate below" would otherwise be a dead end.
+    const gateDefsPrint=hd.gates.map(g=>`<p><strong>Gate ${escapeHtml(g)}</strong> — ${escapeHtml(GATES[g]||'No description available.')}</p>`).join('');
+    h+=`<div class="dprow"><div class="gates-grid">${hd.gates.map(g=>`<button type="button" class="gate-chip" data-gate="${g}">${g}</button>`).join('')}</div><div class="gate-def" hidden></div><div class="gate-def-print">${gateDefsPrint}</div></div>`;
   }
   return h||apend('Unavailable');
 }
@@ -2498,8 +2557,14 @@ function reportSlot(names,cardNames,report,reportError,rowNum){
   // Title-page treatment: just the first name(s), centered, joined by
   // "&" for a two-person reading -- not the headline, not a repeated
   // full name (that's redundant with each person's own astrology/
-  // numerology/HD cards next to it).
-  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(cardNames)}</p></div></div></div></div>`;
+  // numerology/HD cards next to it). The real reading text (fullRows,
+  // same content the tap-to-expand modal shows) is ALSO placed in the
+  // DOM here, inside .report-print-full -- hidden on screen, shown only
+  // in @media print. Without this the actual generated reading never
+  // existed anywhere printable; only these two names did, no matter how
+  // print/overflow CSS was tuned, because the modal draws its content
+  // from cardRegistry (a JS array), not from anything in the page itself.
+  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(cardNames)}</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
 }
 
 // One row = Astrology (col 1) / Numerology (col 2) / Human Design
