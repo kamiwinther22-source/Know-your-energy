@@ -763,7 +763,7 @@ Each section should be doing different work — don't repeat the same
 insight reworded across sections.`;
 
 function buildReportUserPrompt(rtype, relLabel, p1, p2) {
-  const personBlock = (label, p) => {
+  const personBlock = (p) => {
     const n = p.numerology || {};
     const a = p.astrology || {};
 
@@ -802,8 +802,16 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
       h.gates?.length ? `Defined gates: ${h.gates.join(', ')}` : null
     ].filter(Boolean).join('\n  ');
 
+    // The person's actual first name is the block's own header -- this
+    // used to be prefixed with a literal "Person One:"/"Person Two:"
+    // label, and a real generated reading echoed those exact labels
+    // ("Person One's Moon in Capricorn...") instead of the name that
+    // followed them, no matter how forcefully the system prompt said to
+    // use names. Removing the fake label from the data entirely is a
+    // more reliable fix than any instruction telling the model to
+    // ignore it -- it simply never sees "Person One" or "Person Two" now.
     return `
-${label}: ${p.first}${p.last ? ' ' + p.last : ''}
+${p.first}${p.last ? ' ' + p.last : ''}:
 Numerology:
   ${numerologyLines}
 Astrology:
@@ -813,9 +821,9 @@ Human Design:
   };
 
   if (rtype === 'two-person') {
-    return `Relationship type: ${relLabel}\n${personBlock('Person One', p1)}\n${personBlock('Person Two', p2)}`;
+    return `Relationship type: ${relLabel}\n${personBlock(p1)}\n${personBlock(p2)}`;
   }
-  return personBlock('Person', p1);
+  return personBlock(p1);
 }
 
 function extractJSON(text) {
