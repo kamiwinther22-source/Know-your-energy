@@ -176,27 +176,24 @@ body{
 .rel-chip.active{background:#1C2CA9;color:#ffffff;}
 .rel-chip.active:hover{background:#1C2CA9;}
 
-/* ---------- bottom two-column: keys | form ---------- */
-.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;align-items:start;}
+/* ---------- bottom section: key bubbles floating above the form ---------- */
+.bottom-grid{display:block;}
 
-/* Boxed now (moved here from .form-panel, which is unboxed below) --
-   same real glassmorphism recipe: blur + translucency + light edge +
-   lift shadow, so it reads as floating glass, not a flat tint. */
+/* Bubbles, not pills: a pill is a full stadium shape stretched to fill a
+   row; this is sized to exactly its own text with tight padding, so each
+   one reads as a small floating bubble, not an elongated bar. No card/
+   blur/border box around the group anymore -- they sit directly on the
+   page background and wrap freely above the form. */
 .keys-col{
-  position:relative;border-radius:16px;padding:1.1rem 1rem;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,0.18);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.12) inset,
-    0 18px 34px -14px rgba(0,0,0,0.6),
-    0 4px 10px -4px rgba(0,0,0,0.4);
+  display:flex;flex-wrap:wrap;justify-content:center;gap:0.5rem;
+  margin-bottom:1.1rem;
 }
-.key-item{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1.1rem;}
-.key-item:last-child{margin-bottom:0;}
-.key-icon{flex:0 0 auto;width:25px;height:25px;margin-top:0.05rem;}
-.key-txt{font-size:0.85rem;line-height:1.38;color:#ffffff;font-weight:500;}
-.key-txt em{font-style:normal;color:#ffffff;}
+.key-item{
+  display:inline-block;padding:0.32rem 0.7rem;border-radius:14px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);
+  font-size:0.72rem;line-height:1.25;color:#ffffff;font-weight:500;
+  white-space:nowrap;
+}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -208,8 +205,9 @@ body{
 .key-hl{background:none;color:#ffffff;font-weight:800;}
 
 .form-col{position:relative;}
-/* Unboxed: the data-entry form now sits directly on the page background,
-   no card/blur/border around it -- the box moved to .keys-col instead. */
+/* Unboxed: the data-entry form sits directly on the page background, no
+   card/blur/border around it -- the key bubbles above it aren't boxed
+   either now, so nothing on this whole screen is. */
 .form-panel{
   position:relative;padding:0.3rem 0 0;
 }
@@ -217,9 +215,12 @@ body{
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#ffffff;margin-bottom:0.2rem;font-weight:700;}
 .section-lbl{font-size:0.6rem!important;color:#ffffff!important;margin-bottom:0.35rem!important;}
-.opt-note{font-style:normal;text-transform:none;letter-spacing:0;color:#ffffff;font-weight:600;}
-.row3{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.4rem;}
-.row-ampm{display:grid;grid-template-columns:1fr auto;gap:0.4rem;align-items:end;}
+/* Person's whole entry compressed into 2 rows instead of 4: identity
+   (First/Mid/Last/DOB) on one row, birth specifics (Time/AM-PM/Location)
+   on the next. DOB and Location get more of the row's width since their
+   placeholders ("MM/DD/YYYY", "City, State, Country") are the longest. */
+.row-id{display:grid;grid-template-columns:0.85fr 0.55fr 0.85fr 1.15fr;gap:0.35rem;margin-bottom:0.55rem;}
+.row-birth{display:grid;grid-template-columns:0.68fr 0.46fr 1.9fr;gap:0.35rem;align-items:end;}
 
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
@@ -596,58 +597,38 @@ body{
         <button type="button" class="rel-chip" data-rel="other">Other</button>
       </div>
 
+      <div class="keys-col" id="keysCol"></div>
+
       <div class="form-panel">
         <div class="f">
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
-          <div class="row3">
+          <div class="row-id">
             <div><label for="p1f">First</label><div class="line-field"><input id="p1f" placeholder="First" autocomplete="given-name"></div></div>
             <div><label for="p1m">Mid</label><div class="line-field"><input id="p1m" placeholder="Mid" autocomplete="additional-name"></div></div>
             <div><label for="p1l">Last</label><div class="line-field"><input id="p1l" placeholder="Last" autocomplete="family-name"></div></div>
+            <div><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
           </div>
-        </div>
-        <div class="f">
-          <label for="p1d">Date of Birth</label>
-          <div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div>
-        </div>
-        <div class="f">
-          <label for="p1t">Birth Time <span class="opt-note">if known</span></label>
-          <div class="row-ampm">
-            <div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div>
-            <div class="line-field">
-              <select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select>
-            </div>
+          <div class="row-birth">
+            <div><label for="p1t">Time</label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
+            <div><label for="p1ap">AM/PM</label><div class="line-field"><select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div></div>
+            <div><label for="p1loc">Location</label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
           </div>
-        </div>
-        <div class="f">
-          <label for="p1loc">Birthplace <span class="opt-note">if known</span></label>
-          <div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div>
         </div>
 
         <div id="p2Section" style="display:none;">
           <div class="f">
             <label class="section-lbl">Person Two</label>
-            <div class="row3">
+            <div class="row-id">
               <div><label for="p2f">First</label><div class="line-field"><input id="p2f" placeholder="First"></div></div>
               <div><label for="p2m">Mid</label><div class="line-field"><input id="p2m" placeholder="Mid"></div></div>
               <div><label for="p2l">Last</label><div class="line-field"><input id="p2l" placeholder="Last"></div></div>
+              <div><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
             </div>
-          </div>
-          <div class="f">
-            <label for="p2d">Date of Birth</label>
-            <div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div>
-          </div>
-          <div class="f">
-            <label for="p2t">Birth Time <span class="opt-note">if known</span></label>
-            <div class="row-ampm">
-              <div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div>
-              <div class="line-field">
-                <select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select>
-              </div>
+            <div class="row-birth">
+              <div><label for="p2t">Time</label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
+              <div><label for="p2ap">AM/PM</label><div class="line-field"><select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div></div>
+              <div><label for="p2loc">Location</label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
             </div>
-          </div>
-          <div class="f">
-            <label for="p2loc">Birthplace <span class="opt-note">if known</span></label>
-            <div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div>
           </div>
         </div>
 
@@ -663,7 +644,6 @@ body{
         <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()">Generate</button></span>
       </div>
     </div>
-    <div class="keys-col" id="keysCol"></div>
   </div>
 
 </div>
@@ -964,26 +944,15 @@ function openPlanetDef(p){
   });
 })();
 
-// ---------- key-icon selling points: copied verbatim from your reference image ----------
-const glassIcon = (idx)=>`<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(50,60,50,0.28))">
-  <defs>
-    <linearGradient id="glass-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#b6ccd6" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#7c95a1" stop-opacity="0.9"/>
-    </linearGradient>
-  </defs>
-  <circle cx="7" cy="12" r="4.2" fill="rgba(255,255,255,0.22)" stroke="url(#glass-${idx})" stroke-width="1.9"/>
-  <path d="M11 12h11M17 12v4M20.5 12v3" stroke="url(#glass-${idx})" stroke-width="1.9" stroke-linecap="round"/>
-</svg>`;
+// ---------- key selling points: short bubbles floating above the entry form ----------
 const KEYS = [
   '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading',
   'Your data is <mark class="key-hl">not saved or shared</mark>',
-  '<mark class="key-hl">No credit card</mark> for the free reading, <mark class="key-hl">no autocharges</mark> if you purchase more',
-  '<mark class="key-hl">Email</mark> is your key to your readings, <mark class="key-hl">zero solicitation</mark>',
+  'No <mark class="key-hl">autocharges</mark>',
+  '<mark class="key-hl">Email</mark> is your key',
 ];
 const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map((t,i)=>`<div class="key-item"><div class="key-icon">${glassIcon(i)}</div><div class="key-txt">${t}</div></div>`).join('');
+keysCol.innerHTML = KEYS.map(t=>`<div class="key-item">${t}</div>`).join('');
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
