@@ -519,6 +519,21 @@ Good: "[Name1] picks up on [Name2]'s intensity almost immediately, and
 This rule overrides every other stylistic instruction below if they
 ever conflict.
 
+===== NON-NEGOTIABLE RULE: OUTPUT FORMAT =====
+Your entire response must be the JSON object described in OUTPUT
+FORMAT below — nothing else, ever. Never write a sentence of plain-text
+explanation, apology, or caveat before or after it, even if the data
+given looks incomplete, unusual, or hard to interpret. Do not say
+things like "I don't have enough information" or "I'm not able to
+generate a full reading" — every case given to you has enough real
+data to write from; use it and write the JSON.
+Bad: "I don't have enough specific detail to write a meaningful
+two-person reading for these two charts."
+Good: {"headline": "...", "sections": [...], "signature": "...",
+"references": [...]}
+This rule overrides every other instruction in this prompt, including
+the naming rule above, if they ever conflict.
+
 VOICE
 - Never use a vague metaphor or image instead of stating the mechanism
   plainly ("your identity runs deep rather than wide," "what real
@@ -829,11 +844,24 @@ Human Design:
 function extractJSON(text) {
   const trimmed = text.trim();
   const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
-  return fenced ? fenced[1] : trimmed;
+  if (fenced) return fenced[1];
+  // Safety net for a response that isn't pure JSON (e.g. a stray sentence
+  // before or after the object) -- pull out the outermost {...} span
+  // instead of handing the whole string straight to JSON.parse.
+  const start = trimmed.indexOf('{');
+  const end = trimmed.lastIndexOf('}');
+  if (start !== -1 && end > start) return trimmed.slice(start, end + 1);
+  return trimmed;
 }
 
-async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
-  const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
+async function callReportModel(env, userPrompt, ctx, repairNote) {
+  const messages = repairNote
+    ? [
+        { role: 'user', content: userPrompt },
+        { role: 'assistant', content: repairNote.badText },
+        { role: 'user', content: repairNote.correction }
+      ]
+    : [{ role: 'user', content: userPrompt }];
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -849,7 +877,7 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
       system: [
         { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
       ],
-      messages: [{ role: 'user', content: userPrompt }]
+      messages
     })
   });
 
@@ -859,7 +887,27 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   if (data.stop_reason === 'max_tokens') {
     throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
   }
-  return JSON.parse(extractJSON(data.content[0].text));
+  return data.content[0].text;
+}
+
+async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
+  const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
+
+  const firstText = await callReportModel(env, userPrompt, ctx);
+  try {
+    return JSON.parse(extractJSON(firstText));
+  } catch (e) {
+    // The model occasionally breaks format and writes a plain-text
+    // caveat instead of the JSON object, despite the non-negotiable
+    // output-format rule in the system prompt. Rather than fail the
+    // whole reading on that one bad turn, give it its own bad response
+    // back and ask it to correct to JSON-only, once.
+    const repairedText = await callReportModel(env, userPrompt, ctx, {
+      badText: firstText,
+      correction: 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.'
+    });
+    return JSON.parse(extractJSON(repairedText));
+  }
 }
 
 export default {
