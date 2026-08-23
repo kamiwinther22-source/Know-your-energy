@@ -875,24 +875,63 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
   return data.content[0].text;
 }
 
+function countNameMentions(text, name) {
+  if (!name) return 0;
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`\\b${escaped}\\b`, 'gi');
+  return (text.match(re) || []).length;
+}
+
+function flattenReadingText(reading) {
+  const parts = [reading.headline, reading.signature];
+  (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
+  return parts.filter(Boolean).join('\n');
+}
+
+// A response that parses as valid JSON can still violate the naming
+// rule (a real live case used "Partner A"/"Partner B" throughout,
+// never the actual first names, despite the system prompt). Don't just
+// trust the prompt held -- actually count how many times each real
+// first name shows up before this ever reaches a paying customer.
+function findNamingDefect(reading, rtype, p1, p2) {
+  if (rtype !== 'two-person') return null;
+  const text = flattenReadingText(reading);
+  const minCount = Math.max(2, (reading.sections || []).length);
+  const p1Count = countNameMentions(text, p1.first);
+  const p2Count = countNameMentions(text, p2.first);
+  if (p1Count < minCount || p2Count < minCount) {
+    return `The reading barely used ${p1.first} and ${p2.first}'s real first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections). Every reference to either person must use their actual first name -- rewrite the full reading with the names used throughout, per the naming rule.`;
+  }
+  return null;
+}
+
 async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
 
-  const firstText = await callReportModel(env, userPrompt, ctx);
+  let text = await callReportModel(env, userPrompt, ctx);
+  let parsed, defect;
   try {
-    return JSON.parse(extractJSON(firstText));
+    parsed = JSON.parse(extractJSON(text));
+    defect = findNamingDefect(parsed, rtype, p1, p2);
   } catch (e) {
-    // The model occasionally breaks format and writes a plain-text
-    // caveat instead of the JSON object, despite the non-negotiable
-    // output-format rule in the system prompt. Rather than fail the
-    // whole reading on that one bad turn, give it its own bad response
-    // back and ask it to correct to JSON-only, once.
-    const repairedText = await callReportModel(env, userPrompt, ctx, {
-      badText: firstText,
-      correction: 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.'
-    });
-    return JSON.parse(extractJSON(repairedText));
+    defect = e.message;
   }
+
+  if (!parsed || defect) {
+    // One repair attempt, whether the first response broke JSON format
+    // or parsed fine but skipped the real names -- give the model its
+    // own bad response back and a specific correction, rather than
+    // shipping a defective reading to a paying customer.
+    const correction = parsed
+      ? defect
+      : 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.';
+    text = await callReportModel(env, userPrompt, ctx, { badText: text, correction });
+    parsed = JSON.parse(extractJSON(text));
+    defect = findNamingDefect(parsed, rtype, p1, p2);
+    if (defect) throw new Error(`Reading kept failing the naming check: ${defect}`);
+  }
+
+  return parsed;
 }
 
 export default {
