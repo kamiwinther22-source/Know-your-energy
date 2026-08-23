@@ -878,6 +878,20 @@ cards are right there on the page, and they may already have their own
 individual reading). Every question you answer here must be about the
 INTERACTION between the two of them — never one person alone.
 
+Reinforcing the VOICE section's first-name rule specifically for this
+format, since it matters most here: once there are two people, a bare
+"you," "one of you," "the other," or "both of you" leaves the reader
+with no way to tell which of them a claim is actually about, on first
+read or on any read. Every sentence must make it unambiguous which
+named person it describes, or that it genuinely applies to both — never
+ambiguous between them. The same rule applies to any aspect or
+interaction you point to: don't gesture at "an aspect between you" or
+"a placement that creates friction" in the abstract — say what it
+actually means in plain, concrete terms AND for which named person (or
+both), the same way the "never build a sentence's grammatical backbone
+around naming a placement" rule above already requires for content —
+vagueness about content and vagueness about who compound each other here.
+
 Interpret everything below through the relationship type you were given
 (parent-child / romantic / friends / other) — never default to a romantic
 reading when the relationship isn't romantic. The same placement means
