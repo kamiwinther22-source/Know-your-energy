@@ -88,7 +88,7 @@ body{
   gap:0.65rem;margin:0.4rem 0 0.6rem;
 }
 .accent-item{position:relative;flex:0 0 auto;height:88px;}
-.accent-item svg{display:block;width:auto;height:100%;filter:drop-shadow(0 0 16px rgba(77,232,245,0.85)) drop-shadow(0 0 34px rgba(77,232,245,0.5));}
+.accent-item svg{display:block;width:auto;height:100%;filter:drop-shadow(0 0 14px rgba(255,255,255,0.55)) drop-shadow(0 0 30px rgba(255,255,255,0.3));}
 .accent-astro{align-self:center;}
 .accent-hd{height:114px;}
 .accent-num{align-self:flex-start;margin-top:14px;}
@@ -192,12 +192,11 @@ body{
 }
 .key-item{
   border-radius:50%;padding:0.3rem;flex-shrink:0;
-  /* Real ice-blue metal, same family as the hero icons -- the bubble
-     itself carries the color now, not just a glow sitting on top of
-     plain silver. */
-  background:radial-gradient(circle at 32% 26%, #f0fdff 0%, #4de8f5 45%, #0e6b7a 85%, #063540 100%);
+  /* Background/glow are set per-bubble via JS (see fillKey) -- each
+     bubble carries its own real metal (silver/gold/bronze/ice) instead
+     of one shared color, matching the multi-metal theme. */
   border:1px solid rgba(255,255,255,0.4);
-  box-shadow:0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 22px rgba(77,232,245,0.7), 0 0 46px rgba(77,232,245,0.35);
+  box-shadow:0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.5) inset;
   line-height:1.15;font-weight:600;
 }
 /* The single inner span (not the circle itself) is the flex item doing
@@ -207,7 +206,7 @@ body{
    Centering a single wrapper span instead keeps the mark tags as normal
    inline content, so spacing and wrapping behave like ordinary text. */
 .key-item{display:flex;align-items:center;justify-content:center;text-align:center;}
-.key-item span{display:block;color:#ffffff;font-size:0.64rem;}
+.key-item span{display:block;color:#1a2230;font-size:0.64rem;}
 .key-item:nth-child(1){margin-top:0;}
 .key-item:nth-child(2){margin-top:0.55rem;}
 .key-item:nth-child(3){margin-top:-0.2rem;}
@@ -700,16 +699,18 @@ body{
 // Steel + Gunmetal (lightened just enough to stay legible, same hue/sat
 // preserved) for silverD, and Champagne -- a genuinely well-known pale gold
 // that is NOT yellow/orange -- for goldT.
-// Real ice-blue metallic palette -- not pale silver/cream/gold. Bright
-// icy-blue highlight (still has real blue in it, not neutral white)
-// down through a genuinely saturated electric blue into a deep arctic
-// edge, so the material reads as glowing polished metal, not washed
-// out. Two depths (ice = brighter, arctic = deeper) for real tonal
-// variation across the beads/planets/centers without leaving this hue
-// family at all.
+// Real multi-metal theme: silver, gold, and bronze as actual metals
+// (not pale tints standing in for them), plus a genuinely pale ice
+// blue as its own distinct tone among them -- not one saturated blue
+// applied to everything. "Glow" comes from the drop-shadow/box-shadow
+// light layered on top of each material, not from making the material
+// itself dark or saturated -- ice blue is supposed to be light.
 const TONES = {
-  ice:    { grad:'radial-gradient(circle at 30% 26%, #f0fdff 0%, #4de8f5 55%, #0e6b7a 100%)', border:'#7ff0ff' },
-  arctic: { grad:'radial-gradient(circle at 30% 26%, #d4f5fa 0%, #1fa8bd 55%, #063540 100%)', border:'#4fd8e8' },
+  silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
+  silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
+  gold:    { grad:'radial-gradient(circle at 30% 26%, #fff4d6 0%, #d4af37 55%, #7a5c10 100%)', border:'#b8860b' },
+  bronze:  { grad:'radial-gradient(circle at 30% 26%, #f0d9b5 0%, #cd7f32 55%, #4a2e12 100%)', border:'#8c5a2b' },
+  ice:     { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #b8e2f5 55%, #6fa8c7 100%)', border:'#a8d8f0' },
 };
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
@@ -731,18 +732,18 @@ const TONES = {
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
 const NUMS = [
-  {n:1, lbl:'Leader',       tone:'ice'},
-  {n:2, lbl:'Diplomat',     tone:'arctic'},
+  {n:1, lbl:'Leader',       tone:'silverL'},
+  {n:2, lbl:'Diplomat',     tone:'gold'},
   {n:3, lbl:'Communi­cator', tone:'ice'},
-  {n:4, lbl:'Builder',      tone:'arctic'},
-  {n:5, lbl:'Freedom',      tone:'ice'},
-  {n:6, lbl:'Nurtur­er', tone:'arctic'},
-  {n:7, lbl:'Seeker',       tone:'ice'},
-  {n:8, lbl:'Achiever',     tone:'arctic'},
-  {n:9, lbl:'Humani­tarian', tone:'ice'},
-  {n:11, lbl:'Intu­itive',      tone:'arctic'},
-  {n:22, lbl:'Master Builder', tone:'ice'},
-  {n:33, lbl:'Master Teacher', tone:'arctic'},
+  {n:4, lbl:'Builder',      tone:'bronze'},
+  {n:5, lbl:'Freedom',      tone:'silverD'},
+  {n:6, lbl:'Nurtur­er', tone:'ice'},
+  {n:7, lbl:'Seeker',       tone:'gold'},
+  {n:8, lbl:'Achiever',     tone:'silverL'},
+  {n:9, lbl:'Humani­tarian', tone:'bronze'},
+  {n:11, lbl:'Intu­itive',      tone:'ice'},
+  {n:22, lbl:'Master Builder', tone:'gold'},
+  {n:33, lbl:'Master Teacher', tone:'silverD'},
 ];
 // DOM tile grid removed -- see the numAccent bead cluster below (after
 // stopsByTone exists) for the small decorative entry-page preview. NUMS
@@ -789,15 +790,15 @@ function openNumberDef(item){
 // minimum gap enforced, not eyeballed) rather than the original
 // "scattered" angles, which collided once the font size went up.
 const PLANETS = [
-  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'arctic', angle:-70.6},
-  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'ice',    angle:-149.8},
-  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'ice',    angle:11.5},
-  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'arctic', angle:146.5},
-  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'ice',    angle:85.2},
-  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'arctic', angle:-58.2},
-  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'ice',    angle:-91.8},
-  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'arctic', angle:23.7},
-  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'ice',    angle:-120.4},
+  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
+  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'gold',    angle:-149.8},
+  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'ice',     angle:11.5},
+  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'bronze',  angle:146.5},
+  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'gold',    angle:85.2},
+  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverL', angle:-58.2},
+  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'ice',     angle:-91.8},
+  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'bronze',  angle:23.7},
+  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'silverD', angle:-120.4},
 ];
 const RINGS = [26,34,46,54,74,86,100,110,120];
 const SIZE = 420, C = SIZE/2;
@@ -828,12 +829,12 @@ svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaus
 svg += '</defs>';
 
 RINGS.forEach(r=>{
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#4de8f5" stroke-width="3" opacity="0.55" filter="url(#glow)"/>`;
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#7ff0ff" stroke-width="1.6" opacity="0.95"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#dcdcdc" stroke-width="3" opacity="0.5" filter="url(#glow)"/>`;
+  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#e8e8e8" stroke-width="1.6" opacity="0.9"/>`;
 });
 
-// sun -- the brightest point the planets orbit
-svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-ice)" stroke="${TONES.ice.border}" stroke-width="1.6"/>`;
+// sun -- real gold, the one metal that's always warm
+svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-gold)" stroke="${TONES.gold.border}" stroke-width="1.6"/>`;
 
 PLANETS.forEach((p,i)=>{
   const t = TONES[p.tone];
@@ -875,15 +876,15 @@ function openPlanetDef(p){
   // touched here; this small entry-page preview now draws from the same
   // shared metal set as everything else on this page.
   const HD_CENTERS = [
-    {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    tone:'arctic', on:false, label:'Inspiration'},
-    {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    tone:'ice',    on:false, label:'Awareness'},
-    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'ice',    on:false, label:'Expression'},
-    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'ice',    on:true,  label:'Identity'},
-    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'arctic', on:false, label:'Willpower'},
-    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'ice',    on:true,  label:'Life Force'},
-    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'arctic', on:true,  label:'Intuition'},
-    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            tone:'arctic', on:false, label:'Emotions'},
-    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         tone:'ice',    on:true,  label:'Drive'},
+    {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    tone:'silverL', on:false, label:'Inspiration'},
+    {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    tone:'silverD', on:false, label:'Awareness'},
+    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'ice',     on:false, label:'Expression'},
+    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'gold',    on:true,  label:'Identity'},
+    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'silverL', on:false, label:'Willpower'},
+    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'bronze',  on:true,  label:'Life Force'},
+    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'ice',     on:true,  label:'Intuition'},
+    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            tone:'silverD', on:false, label:'Emotions'},
+    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         tone:'bronze',  on:true,  label:'Drive'},
   ];
   // Same glossy-sphere gradient recipe already used (and proven) on the
   // number tiles and solar-system planets -- reusing the exact stop
@@ -958,10 +959,8 @@ function openPlanetDef(p){
   NUMS.slice(0,9).forEach((item,i)=>{
     const t = TONES[item.tone];
     const {cx,cy,r} = POS[i];
-    // Both ice/arctic are saturated enough now (unlike the old pale
-    // silver/cream) that white digits read correctly everywhere.
     svg += `<circle class="n-bead" data-idx="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="url(#ng-${i})" stroke="${t.border}" stroke-width="1.6" style="cursor:pointer;"/>`;
-    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="#ffffff" style="pointer-events:none;">${item.n}</text>`;
+    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="#000000" style="pointer-events:none;">${item.n}</text>`;
   });
   svg += '</svg>';
   numWrap.innerHTML = svg;
@@ -983,27 +982,36 @@ function sizeKey(t){
   const len = plain.length;
   return Math.max(62, Math.min(104, Math.round(40 + len*2)));
 }
-function fillKey(el, t){
+function fillKey(el, t, tone){
   const d = sizeKey(t);
+  const tn = TONES[tone];
   el.style.width = d+'px';
   el.style.height = d+'px';
+  el.style.background = tn.grad;
+  el.style.boxShadow = `0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 20px ${tn.border}b3, 0 0 42px ${tn.border}59`;
   el.innerHTML = `<span>${t}</span>`;
 }
 // "1 free FULL reading" moved up into the hero icon cluster, and
 // "Email is your key" moved down next to the Calculate button --
 // only "Data not saved or shared" and "No autocharges" stay in the
-// bubble row above the form.
-fillKey(document.getElementById('heroKeyBubble'), '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading');
-fillKey(document.getElementById('formKeyBubble'), '<mark class="key-hl">Email</mark> is your key');
+// bubble row above the form. Each bubble gets its own real metal --
+// gold/ice/silver/bronze -- instead of one shared color.
+fillKey(document.getElementById('heroKeyBubble'), '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading', 'gold');
+fillKey(document.getElementById('formKeyBubble'), '<mark class="key-hl">Email</mark> is your key', 'ice');
 const KEYS = [
-  'Data <mark class="key-hl">not saved or shared</mark>',
-  'No <mark class="key-hl">autocharges</mark>',
+  {t:'Data <mark class="key-hl">not saved or shared</mark>', tone:'silverL'},
+  {t:'No <mark class="key-hl">autocharges</mark>', tone:'bronze'},
 ];
 const keysCol = document.getElementById('keysCol');
-keysCol.innerHTML = KEYS.map(t=>{
+keysCol.innerHTML = KEYS.map(({t})=>{
   const d = sizeKey(t);
   return `<div class="key-item" style="width:${d}px;height:${d}px;"><span>${t}</span></div>`;
 }).join('');
+Array.from(keysCol.children).forEach((el,i)=>{
+  const tn = TONES[KEYS[i].tone];
+  el.style.background = tn.grad;
+  el.style.boxShadow = `0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 20px ${tn.border}b3, 0 0 42px ${tn.border}59`;
+});
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
