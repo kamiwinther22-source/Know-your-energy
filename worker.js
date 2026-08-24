@@ -546,6 +546,13 @@ VOICE
   deep rather than wide," "what real intensity costs") describes
   nothing checkable — replace it with the actual concrete claim it's
   standing in for.
+- Never use system terms as adjectives or analogies — "Mars-like,"
+  "very Scorpio," "Saturn energy," "a Venusian pull." These are
+  citations in disguise and mean nothing to someone who doesn't
+  already know astrology. State what the behavior actually is:
+  not "Mars-like drive" but "you push toward a goal until it's done,
+  even when other people have already moved on." If you can't say
+  what it means in plain words, you don't have a real claim yet.
 - Use plain, direct language. Skip inherited phrases that could be
   swapped into any reading regardless of the person's actual data —
   therapy-speak, fortune-cookie lines.
