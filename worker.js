@@ -339,7 +339,17 @@ async function assemblePersonData(env, person) {
     humanDesignError = "Birth time and city are required for Human Design. Chart omitted.";
   }
 
-  return { numerology, numerologyError, astrology, astrologyError, humanDesign, humanDesignError };
+  // first/last must be returned here -- this is the exact object that
+  // gets passed into generateReport() as p1/p2, and both the real AI
+  // prompt (buildReportUserPrompt) and the guaranteed fallback
+  // (buildFallbackReading) read p.first directly off of it. Without
+  // this, every reading -- AI-generated or fallback -- was building its
+  // person-identifying text from `undefined`, not the real name. This
+  // is almost certainly the actual root cause of the earlier "Partner
+  // A"/"Partner B" bug: the model wasn't breaking the naming rule, it
+  // never received a real name to use in the first place, and
+  // improvised a placeholder because "undefined" so plainly wasn't one.
+  return { first, mid, last, numerology, numerologyError, astrology, astrologyError, humanDesign, humanDesignError };
 }
 
 // ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
