@@ -1031,9 +1031,10 @@ function findNamingDefect(reading, rtype, p1, p2) {
 // <Sign>" citation form, which is never a normal sentence otherwise.
 const ZODIAC_SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
 const CITATION_PATTERNS = [
-  new RegExp(`\\b(Sun|Moon)\\s+in\\s+(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
-  new RegExp(`\\b(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
-  /\b(Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto|Chiron|Ascendant|Midheaven|Lilith|Sirius)\b/i,
+  // Match the actual citation form: "Sun in Scorpio", "Moon in Capricorn", or any planet "in <Sign>"
+  // Bare planet/sign words alone are not citations and should not be flagged --
+  // they appear naturally in plain prose (e.g. "Mars-like energy", "a Virgo kind of precision").
+  new RegExp(`\\b(Sun|Moon|Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto|Chiron|Ascendant|Midheaven|Lilith|Sirius)\\s+in\\s+(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
   /\b(North|South)\s+Node\b/i,
   /\bLife\s+Path\s+\d+/i, /\bExpression\s+\d+/i, /\bSoul\s+Urge\s+\d+/i, /\bPersonality\s+(number\s+)?\d+/i,
   /\bPersonal\s+(Year|Month|Day)\s+\d+/i, /\bPinnacle\s+\d+/i, /\bChallenge\s+(number\s+)?\d+/i,
