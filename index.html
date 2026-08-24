@@ -170,33 +170,11 @@ body{
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
-.rel-row{display:flex;flex-wrap:wrap;gap:0.7rem;justify-content:center;margin-bottom:1rem;}
-/* Real structural layering -- a solid flat shape sitting behind each
-   chip with a hard, visible offset (not a blurred shadow, an actual
-   second solid shape you can see peeking out). No gradient, no
-   simulated shine -- two flat tones stacked with real geometric depth
-   instead. Slanted-cut plate shape, distinct from every rounded pill/
-   circle already on this page. */
-.rel-chip{
-  position:relative;font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:800;
-  padding:0.55rem 1.2rem;cursor:pointer;color:#0a0c10;
-  clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);
-  background:#f2f0e8;border:none;outline:none;
-  -webkit-appearance:none;appearance:none;
-  transition:transform 0.12s;
-}
-.rel-chip::before{
-  content:'';position:absolute;inset:0;z-index:-1;
-  clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);
-  background:#14161a;
-  transform:translate(6px,6px);
-  transition:transform 0.12s,background 0.12s;
-}
-.rel-chip:hover{transform:translate(-2px,-2px);}
-.rel-chip:hover::before{transform:translate(8px,8px);}
-.rel-chip.active{background:#1C2CA9;color:#f0f2ff;}
-.rel-chip.active::before{background:#c7d0ff;}
-.rel-chip.active:hover{transform:translate(-2px,-2px);}
+.rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #ffffff;background:#ffffff;color:#0d1550;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
+.rel-chip:hover{background:#e8eaf6;}
+.rel-chip.active{background:#1C2CA9;color:#ffffff;border-color:#8A96EE;box-shadow:0 2px 10px -1px rgba(28,44,169,0.75);}
+.rel-chip.active:hover{background:#243acc;}
 
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
@@ -209,7 +187,7 @@ body{
    of sitting in one straight row. Silver/chrome gradient, not flat grey. */
 .keys-col{
   display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
-  gap:0.5rem 0.7rem;margin-bottom:2.4rem;
+  gap:0.5rem 0.7rem;margin-bottom:1.3rem;
 }
 .key-item{
   border-radius:50%;padding:0.3rem;flex-shrink:0;
