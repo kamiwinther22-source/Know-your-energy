@@ -236,7 +236,7 @@ body{
 .form-panel{
   position:relative;padding:0.3rem 0 0;
 }
-.form-panel .f{margin-bottom:0.7rem;}
+.form-panel .f{margin-bottom:0.9rem;}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#ffffff;margin-bottom:0.2rem;font-weight:700;}
 .section-lbl{font-size:0.6rem!important;color:#ffffff!important;margin-bottom:0.35rem!important;}
@@ -246,12 +246,12 @@ body{
    Location; Location gets the most width since "City, State, Country"
    is the longest placeholder by far. */
 .row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.55rem;}
-.row-birth{display:grid;grid-template-columns:0.85fr 0.65fr 0.45fr 1.55fr;gap:0.3rem;align-items:end;}
+.row-birth{display:grid;grid-template-columns:1.2fr 0.65fr 0.55fr 1.6fr;gap:0.3rem;align-items:end;}
 
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
    with italic text for a lighter, less typewriter-formal feel. */
-.line-field{position:relative;padding-bottom:0.3rem;border-bottom:1.3px solid rgba(255,255,255,0.45);transition:border-color 0.15s ease;}
+.line-field{position:relative;padding-bottom:0.5rem;border-bottom:1.3px solid rgba(255,255,255,0.45);transition:border-color 0.15s ease;}
 .line-field::before,.line-field::after{
   content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(255,255,255,0.45);
   transition:background 0.15s ease;
@@ -261,8 +261,8 @@ body{
 .line-field:focus-within{border-bottom-color:#4655D6;}
 .line-field:focus-within::before,.line-field:focus-within::after{background:#4655D6;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#ffffff;font-size:0.7rem;font-weight:500;
-  font-style:italic;font-family:'DM Sans',sans-serif;padding:0.15rem 0.2rem 0;outline:none;
+  width:100%;background:transparent;border:none;color:#ffffff;font-size:clamp(0.83rem, 0.23rem + 2.7vw, 0.88rem);font-weight:500;
+  font-style:italic;font-family:'DM Sans',sans-serif;padding:0.4rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
 .line-field select{width:auto;padding-right:1rem;}
