@@ -1085,7 +1085,6 @@ const GLOSSARY={
   challenge:"A recurring obstacle to work through during that chapter.",
   karmiclessons:"Traits missing from your name that you're here to develop.",
   karmicdebt:"A number marking a lesson carried over for you to resolve.",
-  pythagoreansquare:"How many times each digit 1-9 shows up in your birthdate, mapped to nine fixed personal traits.",
 
   hdtype:"Your energetic strategy for engaging with the world.",
   hdprofile:"The role your personality plays out — your life's ‘costume’.",
@@ -1105,13 +1104,12 @@ const GLOSSARY_LABEL={
   birthday:'Birthday',attitude:'Attitude',balance:'Balance',maturity:'Maturity',
   personalyear:'Personal Year',personalmonth:'Personal Month',personalday:'Personal Day',essence:'Essence',
   pinnacle:'Pinnacle',challenge:'Challenge',karmiclessons:'Karmic Lessons',karmicdebt:'Karmic Debt',
-  pythagoreansquare:'Pythagorean Square',
   hdtype:'Type',hdprofile:'Profile',hdauthority:'Authority',hdcross:'Incarnation Cross'
 };
 const GLOSSARY_LAYOUT=[
   ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven','house','chiron','northnode','southnode','lilith','sirius']],
   ['Aspects',['aspectconjunction','aspectsextile','aspectsquare','aspecttrine','aspectopposition']],
-  ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','karmiclessons','karmicdebt','pythagoreansquare']],
+  ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','karmiclessons','karmicdebt']],
   ['Human Design',['hdtype','hdprofile','hdauthority','hdcross']]
 ];
 function titleCaseWords(s){return s.replace(/\b\w/g,c=>c.toUpperCase());}
@@ -2436,22 +2434,23 @@ function pinnacleChallengeRow(n,pinnacle,challengeVal){
   return `<div class="dprow"><div class="stage-range">${escapeHtml(pinnacle.ageRange)}</div><div class="stage-pair">${pcCol('Pinnacle '+n,pinnacle.value,'pinnacle',pinnacle.value,pinnSpec)}${pcCol('Challenge '+n,challengeVal,'challenge',challengeVal,chalSpec)}</div></div>`;
 }
 
-// Pythagorean Square (Psychomatrix): birthdate digit-repetition count, one
-// per cell 1-9, each cell a fixed trait. Grid position mirrors the real
-// technique's layout (row 1: 1,4,7 -- row 2: 2,5,8 -- row 3: 3,6,9).
-const PYSQUARE_LABELS={1:'Character/Will',2:'Energy',3:'Interests',4:'Health',5:'Logic/Intuition',6:'Labor',7:'Talent/Luck',8:'Duty',9:'Memory'};
-function pySquareGrid(sq){
-  if(!sq||!sq.grid)return apend('Unavailable');
-  const cell=n=>pcCol(PYSQUARE_LABELS[n],sq.grid[n]??0,'pythagoreansquare');
-  return `<div class="dprow"><div class="stage-pair">${cell(1)}${cell(4)}${cell(7)}</div></div>`+
-    `<div class="dprow"><div class="stage-pair">${cell(2)}${cell(5)}${cell(8)}</div></div>`+
-    `<div class="dprow"><div class="stage-pair">${cell(3)}${cell(6)}${cell(9)}</div></div>`;
-}
-
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
+  // All timing/cycle content grouped together at the top -- Personal
+  // Year/Month/Day, Essence, Maturity, and the Pinnacle/Challenge life
+  // stages are all "what's active when," as opposed to the fixed,
+  // permanent numbers (Life Path, Expression, etc.) below them.
+  h+=dpsec('Active Cycles');
   h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',num.personalYear,'personalyear',num.personalYear)}${pcCol('Personal Month',num.personalMonth,'personalmonth',num.personalMonth)}${pcCol('Personal Day',num.personalDay,'personalday',num.personalDay)}</div></div>`;
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=dpsec('Pinnacles & Challenges — By Life Stage');
+  h+=pinnacleChallengeRow(1,num.pinnacles.pinnacle1,num.challengeNumbers.challenge1);
+  h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
+  h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
+  h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
+  h+=dpsec('Core Numbers');
   h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
   h+=arow('Birthday',num.birthday,'birthday',num.birthday);
   h+=arow('Attitude',num.attitude,'attitude',num.attitude);
@@ -2459,18 +2458,8 @@ function nr(num){
   h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
   h+=arow('Personality',num.personality,'personality',num.personality);
   h+=arow('Balance',num.balance,'balance',num.balance);
-  h+=dpsec('Right Now');
-  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
-  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
   h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
   h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
-  h+=dpsec('Pinnacles & Challenges — By Life Stage');
-  h+=pinnacleChallengeRow(1,num.pinnacles.pinnacle1,num.challengeNumbers.challenge1);
-  h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
-  h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
-  h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
-  h+=dpsec('Pythagorean Square');
-  h+=pySquareGrid(num.pythagoreanSquare);
   return h;
 }
 
