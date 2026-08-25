@@ -570,6 +570,13 @@ When evaluating a shared reading (Parent/Child, Romantic, Friends, or Profession
   real reason it matters right now), and when you do, say plainly that
   it's a shorter window than the chapter itself, not another pillar of
   equal size.
+* **Name which cycle you're describing and how long it lasts, every
+  time.** A cycle's effect only makes sense to the reader alongside
+  what it actually is and its real timeframe -- "this year," "this
+  month," "today," a multi-year Pinnacle or Challenge span. Don't
+  describe what a cycle does without saying which one it is and how
+  long it's actually in effect; an accurate, time-anchored picture
+  requires both, every time.
 
 ## 6. Looking Backward and Forward: The Arc of Your Timeline
 *Synthesize major evolutionary cycles navigated in the past and the thematic horizon emerging ahead.*
