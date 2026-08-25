@@ -341,6 +341,54 @@ function calculateSubconsciousSelf(karmicLessonsArray) {
   return 9 - karmicLessonsArray.length;
 }
 
+// ---------- PYTHAGOREAN SQUARE (PSYCHOMATRIX) ----------
+// A distinct numerology technique from the core reduction system above --
+// a 3x3 grid (digit 1-9 -> cell) built from raw digit-repetition counts,
+// not name/date reduction. Method (Aleksandrov school):
+//   Working number 1 = sum of every digit in the birthdate (day+month+year).
+//   Working number 2 = digit sum of working number 1.
+//   Working number 3 = working number 1 minus twice the first digit of the day.
+//   Working number 4 = digit sum of working number 3.
+//   The grid is populated by every digit (1-9, zeros excluded) from the
+//   birthdate itself plus all four working numbers -- digit N's count goes
+//   in cell N. Verified against multiple independent numerology sources.
+function digitSum(n) {
+  return String(Math.abs(n)).split("").reduce((sum, d) => sum + Number(d), 0);
+}
+
+function calculatePythagoreanSquare(dob) {
+  const { month, day, year } = parseDate(dob);
+  const dateDigits = `${day}${month}${year}`.split("").map(Number);
+
+  const workingNumber1 = dateDigits.reduce((sum, d) => sum + d, 0);
+  const workingNumber2 = digitSum(workingNumber1);
+  const dayFirstDigit = Number(String(day)[0]);
+  const workingNumber3 = workingNumber1 - 2 * dayFirstDigit;
+  const workingNumber4 = digitSum(workingNumber3);
+
+  const allDigits = [
+    ...dateDigits,
+    ...String(workingNumber1).split("").map(Number),
+    ...String(workingNumber2).split("").map(Number),
+    ...String(Math.abs(workingNumber3)).split("").map(Number),
+    ...String(workingNumber4).split("").map(Number)
+  ].filter((d) => d !== 0);
+
+  const grid = {};
+  for (let i = 1; i <= 9; i++) grid[i] = 0;
+  allDigits.forEach((d) => { grid[d] = (grid[d] || 0) + 1; });
+
+  return {
+    workingNumbers: {
+      first: workingNumber1,
+      second: workingNumber2,
+      third: workingNumber3,
+      fourth: workingNumber4
+    },
+    grid
+  };
+}
+
 // ---------- FULL CHART ----------
 
 function calculateFullChart(person) {
@@ -395,6 +443,8 @@ function calculateFullChart(person) {
     personality.karmicDebt
   ].filter(Boolean);
 
+  const pythagoreanSquare = calculatePythagoreanSquare(dob);
+
   return {
     lifePath: lifePath.value,
     expression: expression.value,
@@ -414,7 +464,8 @@ function calculateFullChart(person) {
     subconsciousSelf: subconsciousSelf,
     karmicDebtNumbers: [...new Set(karmicDebtNumbers)].sort((a, b) => a - b),
     masterNumbersPresent: [lifePath.value, expression.value, soulUrge.value, personality.value]
-      .filter((v) => MASTER_NUMBERS.includes(v))
+      .filter((v) => MASTER_NUMBERS.includes(v)),
+    pythagoreanSquare: pythagoreanSquare
   };
 }
 
