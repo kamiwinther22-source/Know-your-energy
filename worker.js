@@ -559,6 +559,17 @@ When evaluating a shared reading (Parent/Child, Romantic, Friends, or Profession
 ## 5. The Current Weather: Active Cycles, Synchronization, and Temporal Chapters
 *Synthesize the exact moment in time by mapping out active life chapters, evaluating whether the internal essence and outer cycles are currently locked in sync or pulling in opposite directions.*
 * **What it means for you:** What this specific chapter is asking of you, how your internal pacing matches your external reality, and how to navigate any friction between them.
+* **Match each cycle's weight to its actual timescale.** The Personal
+  Year and Essence are the real backdrop for this chapter -- they hold
+  for the reading's shelf life. The Personal Day does not: it's a
+  single day, already different tomorrow, and must never be folded
+  into the chapter-level picture as if it carries the same weight as
+  the Year or Essence -- name it separately, as today's texture, not
+  as part of the durable pattern. The Personal Month sits in between:
+  mention it only when it's actually doing real interpretive work (a
+  real reason it matters right now), and when you do, say plainly that
+  it's a shorter window than the chapter itself, not another pillar of
+  equal size.
 
 ## 6. Looking Backward and Forward: The Arc of Your Timeline
 *Synthesize major evolutionary cycles navigated in the past and the thematic horizon emerging ahead.*
