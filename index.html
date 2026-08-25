@@ -179,7 +179,8 @@ body{
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
-.rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0.7rem;}
+.rel-picker{margin:1.4rem 0 1.6rem;}
+.rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
 .rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
 .rel-chip:hover{background:#243acc;}
 .rel-chip.active{background:#ffffff;color:#0d1550;border-color:#ffffff;box-shadow:0 2px 10px -1px rgba(255,255,255,0.45);}
@@ -617,12 +618,6 @@ body{
     <div class="form-col">
       <div class="keys-col" id="keysCol"></div>
 
-      <div class="toggle-row">
-        <span class="tog-lbl active" id="lblInd">Individual</span>
-        <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
-        <span class="tog-lbl" id="lblRel">Relational</span>
-      </div>
-
       <div class="form-panel">
         <div class="f">
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
@@ -656,11 +651,19 @@ body{
           </div>
         </div>
 
-        <div class="rel-row" id="relWrap" style="display:none;">
-          <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
-          <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
-          <button type="button" class="rel-chip" data-rel="friends">Friends</button>
-          <button type="button" class="rel-chip" data-rel="other">Other</button>
+        <div class="rel-picker">
+          <div class="toggle-row">
+            <span class="tog-lbl active" id="lblInd">Individual</span>
+            <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
+            <span class="tog-lbl" id="lblRel">Relational</span>
+          </div>
+
+          <div class="rel-row" id="relWrap" style="display:none;">
+            <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
+            <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
+            <button type="button" class="rel-chip" data-rel="friends">Friends</button>
+            <button type="button" class="rel-chip" data-rel="other">Other</button>
+          </div>
         </div>
 
         <div class="f">
