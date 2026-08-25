@@ -534,6 +534,7 @@ When evaluating a shared reading (Parent/Child, Romantic, Friends, or Profession
 4. **Honor Lived Reality:** Ground every discussion of difficulty, struggle, or resistance in authentic, respectful acknowledgment of how those patterns genuinely tax your energy, without exaggerating or minimizing their weight.
 5. **Keep the Body Purely Narrative:** Write all body paragraphs as a direct, unified psychological analysis, keeping system names, astrological placements, numbers, and technical source references completely out of the main text.
 6. **Consolidate References:** Place all specific system references, technical chart placements, active cycle calculations, and source credits into a clean "Notes & Sources" section located strictly at the very bottom of the report.
+7. **Use Real Names, Never a Placeholder:** For a single-person reading, address the person directly as "you." For a relational reading, use each person's actual first name every single time they're referenced -- never a placeholder or label like "Partner A," "the parent," "one of you," or any other stand-in, no matter how natural it feels in the sentence.
 
 ---
 
