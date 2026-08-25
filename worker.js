@@ -707,24 +707,6 @@ function buildFallbackReading(rtype, p1, p2) {
   };
 }
 
-// Pythagorean Square (Psychomatrix) -- a distinct numerology technique from
-// the core name/date reduction system: a birthdate digit-repetition count,
-// one per cell 1-9, each cell mapped to a fixed trait. A count of 0 means
-// that trait isn't innate/automatic for this person, not that it's absent
-// from the report -- only surface it where the count actually says something
-// real, per the report's existing balance/neutrality guidelines.
-const PYTHAGOREAN_SQUARE_LABELS = {
-  1: 'Character/Will', 2: 'Energy', 3: 'Interests/Learning', 4: 'Health',
-  5: 'Logic/Intuition', 6: 'Labor/Work Ethic', 7: 'Talent/Luck', 8: 'Duty', 9: 'Memory'
-};
-function pythagoreanSquareLine(sq) {
-  if (!sq?.grid) return null;
-  const cells = Object.entries(PYTHAGOREAN_SQUARE_LABELS)
-    .map(([n, label]) => `${label} ${sq.grid[n] ?? 0}`)
-    .join(', ');
-  return `Pythagorean Square (birthdate digit-repetition grid, count = strength/frequency of that trait, 0 = not innate): ${cells}`;
-}
-
 function buildReportUserPrompt(rtype, relLabel, p1, p2) {
   const personBlock = (p) => {
     const n = p.numerology || {};
@@ -745,9 +727,8 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
       `Pinnacles: 1) ${pinnacle(n.pinnacles?.pinnacle1)}  2) ${pinnacle(n.pinnacles?.pinnacle2)}  3) ${pinnacle(n.pinnacles?.pinnacle3)}  4) ${pinnacle(n.pinnacles?.pinnacle4)}`,
       `Challenges: 1) ${challenge(n.challengeNumbers?.challenge1, n.pinnacles?.pinnacle1)}  2) ${challenge(n.challengeNumbers?.challenge2, n.pinnacles?.pinnacle2)}  3) ${challenge(n.challengeNumbers?.challenge3, n.pinnacles?.pinnacle3)}  4) ${challenge(n.challengeNumbers?.challenge4, n.pinnacles?.pinnacle4)}`,
       `Karmic Lessons: ${n.karmicLessons?.length ? n.karmicLessons.join(', ') : 'none'}`,
-      `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(', ') : 'none'}`,
-      pythagoreanSquareLine(n.pythagoreanSquare)
-    ].filter(Boolean).join('\n  ');
+      `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(', ') : 'none'}`
+    ].join('\n  ');
 
     const planetLine = (pl) => `${pl.name} in ${pl.sign} ${pl.degreesInSign}°${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
     const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
