@@ -736,6 +736,19 @@ freedom AND pursue it cautiously, without conflict. Only call something
 a genuine tension when it actually reads as one placement pulling
 against another.
 
+A textbook meaning for a placement or aspect is a starting point, not
+the final answer. Describe how it plays out for THIS person's actual
+chart — their real sign, house, and aspect, checked against everything
+else true about them — not the generic version of what that aspect
+means for anyone who has it. If the generic version usually assumes a
+specific motivation or desire (e.g. Saturn square/opposite Midheaven
+is often described as "reaching for recognition"), check that
+assumption against the rest of the chart before including it — state
+the structural fact on its own when the motivation isn't something
+the rest of the chart actually supports ("effort and outward
+recognition don't line up" is true whether or not the person even
+wants the recognition).
+
 When you do name a real tension, trace it to the placement whose actual
 mechanism explains it — don't default to blaming whichever placement
 sounds most dramatic (Scorpio, Pluto, a hard aspect) just because it's
