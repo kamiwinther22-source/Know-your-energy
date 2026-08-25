@@ -2403,7 +2403,20 @@ function pinnacleChallengeRow(n,pinnacle,challengeVal){
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
+  // All timing/cycle content grouped together at the top -- Personal
+  // Year/Month/Day, Essence, Maturity, and the Pinnacle/Challenge life
+  // stages are all "what's active when," as opposed to the fixed,
+  // permanent numbers (Life Path, Expression, etc.) below them.
+  h+=dpsec('Active Cycles');
   h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',num.personalYear,'personalyear',num.personalYear)}${pcCol('Personal Month',num.personalMonth,'personalmonth',num.personalMonth)}${pcCol('Personal Day',num.personalDay,'personalday',num.personalDay)}</div></div>`;
+  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
+  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=dpsec('Pinnacles & Challenges — By Life Stage');
+  h+=pinnacleChallengeRow(1,num.pinnacles.pinnacle1,num.challengeNumbers.challenge1);
+  h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
+  h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
+  h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
+  h+=dpsec('Core Numbers');
   h+=arow('Life Path',num.lifePath,'lifepath',num.lifePath);
   h+=arow('Birthday',num.birthday,'birthday',num.birthday);
   h+=arow('Attitude',num.attitude,'attitude',num.attitude);
@@ -2411,16 +2424,8 @@ function nr(num){
   h+=arow('Soul Urge',num.soulUrge,'soulurge',num.soulUrge);
   h+=arow('Personality',num.personality,'personality',num.personality);
   h+=arow('Balance',num.balance,'balance',num.balance);
-  h+=dpsec('Right Now');
-  h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
-  h+=arow('Maturity',num.maturity,'maturity',num.maturity);
   h+=karmicRow('Karmic Lessons',num.karmicLessons,'karmiclessons');
   h+=karmicRow('Karmic Debt',num.karmicDebtNumbers,'karmicdebt');
-  h+=dpsec('Pinnacles & Challenges — By Life Stage');
-  h+=pinnacleChallengeRow(1,num.pinnacles.pinnacle1,num.challengeNumbers.challenge1);
-  h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);
-  h+=pinnacleChallengeRow(3,num.pinnacles.pinnacle3,num.challengeNumbers.challenge3);
-  h+=pinnacleChallengeRow(4,num.pinnacles.pinnacle4,num.challengeNumbers.challenge4);
   return h;
 }
 
