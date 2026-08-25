@@ -584,6 +584,18 @@ When evaluating a shared reading (Parent/Child, Romantic, Friends, or Profession
 ## 6. Looking Backward and Forward: The Arc of Your Timeline
 *Synthesize major evolutionary cycles navigated in the past and the thematic horizon emerging ahead.*
 * **What it means for you:** Honoring the weight of what has been cleared, and understanding the general trajectory of the road opening up.
+* **Ground the past in the real numbers you were given, not a generic
+  developmental narrative.** Use the actual Pinnacle 1 and Pinnacle 2
+  values and their real age-range transitions -- don't describe past
+  decades in vague "phase of growth" language when specific numbers
+  and specific transition ages already exist. When a past Pinnacle
+  number, or a recurring Essence cycle across that same span, points
+  toward instability, upheaval, or forced change rather than structure
+  or steady building, say that honestly instead of defaulting to
+  methodical-sounding language just because other parts of the chart
+  lean that way. A Pinnacle-to-Pinnacle transition age is a real,
+  often abrupt turning point -- name its real weight directly rather
+  than softening it into simply "life-changing."
 
 ## 7. Grounded Integration
 *Provide actionable, low-pressure takeaways synthesized from the complete blueprint.*
