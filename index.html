@@ -468,6 +468,12 @@ body{
 .gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);background:var(--card-a4);}
 .gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
 .gate-def-print{display:none;}
+.date-explorer{margin:0 0.3rem 0.4rem;padding:0.4rem 0.6rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;}
+.date-explorer-head{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;flex-wrap:wrap;}
+.date-explorer-input{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.95rem;color:var(--card-text);background:transparent;border:none;border-bottom:1.3px solid var(--card-a1);padding:0.15rem 0;}
+.date-explorer-input:focus{outline:none;border-bottom-color:var(--card-accent);}
+.date-explorer-results{margin-top:0.3rem;}
+.date-explorer-results:empty{margin-top:0;}
 
 /* Solid blue pills, sized to their own content (not stretched across the
    row) -- so they pop off the cream page instead of blending into it as
@@ -2560,6 +2566,7 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
 // but auto-height so nothing is clipped. No hand-computed pixel canvas --
 // real CSS flex handles sizing and wrapping. ----------
 let cardRegistry=[];
+let PEOPLE_FOR_DATE_EXPLORER=[];
 
 const BTN_ICON_REFRESH='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 106.3 16.3M20 11V5M20 11h-6"/></svg>';
 const BTN_ICON_PRINT='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4.5A1.5 1.5 0 013 16.5v-5A1.5 1.5 0 014.5 10h15a1.5 1.5 0 011.5 1.5v5a1.5 1.5 0 01-1.5 1.5H18M6 14h12v7H6z"/></svg>';
@@ -2633,6 +2640,102 @@ function reportSlot(names,cardNames,report,reportError,rowNum){
   return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(cardNames)}</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
 }
 
+// ---------- numerology date explorer ----------
+// Lets someone check the numerology cycle picture for ANY date, past or
+// future, not just today -- reuses the exact same calculateFullChart()
+// the report itself runs on (loaded client-side via dynamic import, so
+// there's one real source of truth for this math, not a second copy of
+// it drifting out of sync in the browser).
+function todayISO(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function isoToMDY(iso){
+  const [y,m,d]=iso.split('-');
+  return `${m}/${d}/${y}`;
+}
+function dateExplorerControl(personIdx){
+  if(personIdx==null)return null;
+  return `<div class="date-explorer"><div class="date-explorer-head"><span class="dprl">Check a different date</span><input type="date" class="date-explorer-input" value="${todayISO()}" data-person-idx="${personIdx}" onchange="onDateExplorerChange(this)"></div><div class="date-explorer-results" id="dateExplorer-${personIdx}"></div></div>`;
+}
+// Pinnacle/Period Cycle age ranges are stored as strings like "birth–30",
+// "31–39", "59–onward" (the exact format calculatePinnacles/
+// calculatePeriodCycles always produce) -- parsed back into numbers here
+// to find which stage actually contains a given age.
+function parseAgeRange(str){
+  const [lo,hi]=str.split('–');
+  return { low: lo==='birth'?0:Number(lo), high: hi==='onward'?Infinity:Number(hi) };
+}
+function stageForAge(age,stages){
+  return stages.find(s=>{
+    const {low,high}=parseAgeRange(s.obj.ageRange);
+    return age>=low&&age<=high;
+  })||stages[stages.length-1];
+}
+function activePinnacleChallenge(age,pinnacles,challengeNumbers){
+  const stages=[1,2,3,4].map(n=>({n,obj:pinnacles['pinnacle'+n]}));
+  const active=stageForAge(age,stages);
+  return {n:active.n,value:active.obj.value,ageRange:active.obj.ageRange,challengeValue:challengeNumbers['challenge'+active.n]};
+}
+function activePeriodCycle(age,periodCycles){
+  const stages=[1,2,3].map(n=>({n,obj:periodCycles['period'+n]}));
+  return stageForAge(age,stages);
+}
+// Real numerology tradition treats Maturity as a gradual strengthening
+// (sourced range: begins registering around 30-35, stronger through the
+// 40s, often dominant by the mid-50s) rather than a single switch-on
+// date the way Pinnacle/Period transitions are -- this stays a fuzzy
+// band on purpose instead of a fabricated precise cutoff.
+function maturityBand(age){
+  if(age<30)return 'not yet typically active';
+  if(age<40)return 'beginning to register';
+  if(age<55)return 'increasingly active';
+  return 'fully active';
+}
+function dateExplorerRows(chart,age){
+  const pinn=activePinnacleChallenge(age,chart.pinnacles,chart.challengeNumbers);
+  const period=activePeriodCycle(age,chart.periodCycles);
+  let h='';
+  h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',chart.personalYear,'personalyear',chart.personalYear)}${pcCol('Personal Month',chart.personalMonth,'personalmonth',chart.personalMonth)}${pcCol('Personal Day',chart.personalDay,'personalday',chart.personalDay)}</div></div>`;
+  h+=arow('Essence (age '+age+')',chart.essenceCycle.value,'essence',chart.essenceCycle.value);
+  h+=arow('Maturity',chart.maturity,'maturity',chart.maturity,`At age ${age}, this number's influence is ${maturityBand(age)} -- Maturity strengthens gradually rather than switching on at one exact date.`);
+  h+=`<div class="dprow"><div class="stage-range">${escapeHtml(period.obj.ageRange)}</div><div class="stage-pair">${pcCol('Period '+period.n,period.obj.value,'periodcycle',period.obj.value)}</div></div>`;
+  h+=`<div class="dprow"><div class="stage-range">${escapeHtml(pinn.ageRange)}</div><div class="stage-pair">${pcCol('Pinnacle '+pinn.n,pinn.value,'pinnacle',pinn.value)}${pcCol('Challenge '+pinn.n,pinn.challengeValue,'challenge',pinn.challengeValue)}</div></div>`;
+  return h;
+}
+async function onDateExplorerChange(inputEl){
+  const idx=Number(inputEl.dataset.personIdx);
+  const person=PEOPLE_FOR_DATE_EXPLORER[idx];
+  const resultsEl=document.getElementById('dateExplorer-'+idx);
+  if(!resultsEl)return;
+  if(!person||!inputEl.value){resultsEl.innerHTML='';return;}
+  const currentDate=isoToMDY(inputEl.value);
+  const age=getAgeAtDateClient(person.dob,currentDate);
+  if(age<0){
+    resultsEl.innerHTML='<div class="dprow"><p class="report-body">That date is before this person was born.</p></div>';
+    return;
+  }
+  resultsEl.innerHTML='<div class="dprow"><p class="report-body">Calculating…</p></div>';
+  try{
+    const {calculateFullChart}=await import('./numerology-calculator.js');
+    const chart=calculateFullChart({first:person.first,middle:person.mid,last:person.last,dob:person.dob,currentDate});
+    resultsEl.innerHTML=dateExplorerRows(chart,chart.essenceCycle.currentAge);
+  }catch(e){
+    resultsEl.innerHTML='<div class="dprow"><p class="report-body">Could not calculate for that date.</p></div>';
+  }
+}
+// Local mirror of numerology-calculator.js's getCurrentAge() -- needed
+// here (before the dynamic import resolves) purely to catch the
+// before-birth edge case early with a clear message instead of letting
+// a negative age silently produce a nonsense Pinnacle/Period match.
+function getAgeAtDateClient(dob,dateStr){
+  const [m1,d1,y1]=dob.split('/').map(Number);
+  const [m2,d2,y2]=dateStr.split('/').map(Number);
+  let age=y2-y1;
+  if(!(m2>m1||(m2===m1&&d2>=d1)))age-=1;
+  return age;
+}
+
 // One row = Astrology (col 1) / Numerology (col 2) / Human Design
 // (col 3), all equal width. Each card gets an EXPLICIT grid-row -- Astrology's wheel
 // makes its card taller than Numerology/HD, which stretches that whole
@@ -2640,9 +2743,9 @@ function reportSlot(names,cardNames,report,reportError,rowNum){
 // empty col-1/col-3 slots beside Reading with whatever card comes next in
 // the markup, scattering the second person's row instead of keeping it
 // together underneath.
-function personRow(person,rowNum){
+function personRow(person,rowNum,personIdx){
   return quadItem(person.first,'Astrology',ar(person.astro,person.astroError),wheelWrap(person.astro),astroWheelSVG(person.astro),rowNum)
-    +quadItem(person.first,'Numerology',nr(person.numerology),null,null,rowNum)
+    +quadItem(person.first,'Numerology',nr(person.numerology),dateExplorerControl(personIdx),null,rowNum)
     +quadItem(person.first,'Human Design',hdr(person.hd,person.hdError),hdWheelWrap(person.hd),hdBodygraphSVG(person.hd),rowNum);
 }
 
@@ -2710,6 +2813,11 @@ DRAFT_FIELD_IDS.forEach(id=>{
 
 function render(p1,p2,r,reportErr){
   cardRegistry=[];
+  // Kept globally (not just as render()'s local params) so the date
+  // explorer's onchange handler -- which fires long after render()
+  // returns, whenever someone actually picks a date -- can still look up
+  // whichever person's raw first/mid/last/dob it needs by index.
+  PEOPLE_FOR_DATE_EXPLORER=[p1,p2].filter(Boolean);
   const n1=p1.first+(p1.last?' '+p1.last:'');
   const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
   // First names only, for the collapsed Reading card's title-page display --
@@ -2721,11 +2829,11 @@ function render(p1,p2,r,reportErr){
   // buttons in the empty columns 1 and 3 of that same row, row 3 = P2
   // mirrored below -- solo readings just end after Reading, no reserved
   // empty space.
-  let h=personRow(p1,1)
+  let h=personRow(p1,1,0)
     +topBtn('Run Another Reading','resetToForm()',BTN_ICON_REFRESH,'grid-column:1;grid-row:2;')
     +reportSlot(namesForTitle,cardNames,r,reportErr,2)
     +topBtn('Save / Print Reading','window.print()',BTN_ICON_PRINT,'grid-column:3;grid-row:2;');
-  if(p2)h+=personRow(p2,3);
+  if(p2)h+=personRow(p2,3,1);
   document.getElementById('mainGrid').innerHTML=h;
   document.getElementById('bottomBtns').innerHTML=topBtn('Share','shareReading()',BTN_ICON_SHARE);
 
