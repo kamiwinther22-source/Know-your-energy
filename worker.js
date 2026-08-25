@@ -696,7 +696,12 @@ Numerology:
 - Maturity: who do they grow into later in life?
 - Attitude: how do they instinctively react to new situations?
 - Balance: how do they regain steadiness under stress?
-- Personal Year/Month/Day, Essence: what theme is active for them right now?
+- Personal Year/Month/Day, Essence (their cycle right now): assume the
+  reader has never studied numerology. Name what each active number
+  actually means in real numerological terms -- not just a one-word
+  theme -- then say what that looks like playing out in their life at
+  this exact point, in real, concrete detail. This is what's happening
+  for them right now, not a footnote -- give it real space.
 - Pinnacles/Challenges: what's the opportunity and the obstacle in each life phase?
 - Karmic Lessons/Debt: what are they here to learn or work through?
 
@@ -770,6 +775,12 @@ Numerology — interaction between numbers:
 - Expression-Expression: do their natural talents work together or compete?
 - Soul Urge-Soul Urge: do they want the same kinds of things at their core?
 - Personality-Personality: how do their outward "first impression" styles mesh?
+- Current cycles (each person's Personal Year/Month/Day, Essence): assume
+  the reader has never studied numerology. Name what each person's active
+  numbers actually mean in real numerological terms, in real detail --
+  then say how the two cycles interact right now, at this exact point:
+  supporting each other, pulling apart, or just running on different
+  tracks. Give this real space, not a passing mention.
 
 Human Design — interaction between designs:
 - Type-Type: does one person's energy mechanics support or drain the other's?
