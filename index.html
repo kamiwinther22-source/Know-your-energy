@@ -1083,6 +1083,7 @@ const GLOSSARY={
   essence:"The vibration you're living through at your current age.",
   pinnacle:"A multi-year chapter of life and the opportunity it offers.",
   challenge:"A recurring obstacle to work through during that chapter.",
+  periodcycle:"A long background current running underneath your life during that span, built from one piece of your birth date on its own — not blended with the others the way some of your chart's other life-stage numbers are.",
   karmiclessons:"Traits missing from your name that you're here to develop.",
   karmicdebt:"A number marking a lesson carried over for you to resolve.",
 
@@ -1103,13 +1104,13 @@ const GLOSSARY_LABEL={
   lifepath:'Life Path',expression:'Expression',soulurge:'Soul Urge',personality:'Personality',
   birthday:'Birthday',attitude:'Attitude',balance:'Balance',maturity:'Maturity',
   personalyear:'Personal Year',personalmonth:'Personal Month',personalday:'Personal Day',essence:'Essence',
-  pinnacle:'Pinnacle',challenge:'Challenge',karmiclessons:'Karmic Lessons',karmicdebt:'Karmic Debt',
+  pinnacle:'Pinnacle',challenge:'Challenge',periodcycle:'Period Cycle',karmiclessons:'Karmic Lessons',karmicdebt:'Karmic Debt',
   hdtype:'Type',hdprofile:'Profile',hdauthority:'Authority',hdcross:'Incarnation Cross'
 };
 const GLOSSARY_LAYOUT=[
   ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven','house','chiron','northnode','southnode','lilith','sirius']],
   ['Aspects',['aspectconjunction','aspectsextile','aspectsquare','aspecttrine','aspectopposition']],
-  ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','karmiclessons','karmicdebt']],
+  ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','periodcycle','karmiclessons','karmicdebt']],
   ['Human Design',['hdtype','hdprofile','hdauthority','hdcross']]
 ];
 function titleCaseWords(s){return s.replace(/\b\w/g,c=>c.toUpperCase());}
@@ -1723,6 +1724,26 @@ const NUM_DEFS={
     11:`An 11 Pinnacle (a master number, kept unreduced) intensifies whatever chapter it touches with heightened intuition and idealism — you may find yourself unusually perceptive, sensitive to others, and pulled toward something larger than ordinary ambition, especially in your closest relationships. It's a demanding energy to carry well, bringing both real perceptiveness and real overwhelm depending on how much of that heightened input actually gets processed rather than just absorbed.`,
     22:`A 22 Pinnacle is genuinely demanding and potentially highly rewarding — this chapter hands you both a big vision and the practical means to build it into something real and lasting, often pushing you toward entrepreneurship or large-scale projects. The opportunity is legacy-level achievement, and the pressure that comes with it is proportionally heavy: this chapter tends to separate people who can execute at that scale from those who get overwhelmed by it.`,
     33:`A 33 Pinnacle is the rarest of the master chapters — it centers your years on caring for others at scale, often through teaching, healing, or some form of large-scale nurturing that goes beyond your own household. The opportunity is real: a genuine capacity to lift people up without expecting anything back. The test is proportional to the gift, since a chapter built around giving this freely can quietly drain you without real limits on what gets taken on, and for whom.`
+  },
+  // Period Cycles run underneath a Pinnacle chapter, not on top of it --
+  // this is background energy coloring HOW these years get lived, not the
+  // specific opportunity that chapter offers (that's what Pinnacle covers).
+  // Written distinctly from the Pinnacle entries above: same real
+  // numerological meaning per number, different lens (energy/approach
+  // vs. opportunity/theme).
+  periodcycle:{
+    1:`This period runs on independence as background energy — initiative and self-direction color how you move through it, whatever these years actually turn out to be about. Decisions tend to get made solo rather than talked through first, and starting something new comes more naturally here than joining what's already in motion. That same self-directed current can also mean real difficulty deferring to someone else's lead or pace during these same years.`,
+    2:`This period runs on cooperation as background energy — reading other people accurately and working well alongside them colors how you move through these years, whatever they're actually about on the surface. Patience comes more easily here, and partnership tends to feel more natural than going it alone. That same tuned-in quality can also mean real sensitivity to friction or disharmony nearby, even friction that isn't actually about you.`,
+    3:`This period runs on self-expression as background energy — communication, humor, and creativity color how you move through these years no matter what they're actually built around. Ideas and feelings find their way into words, art, or conversation more readily here, and a social, expressive current runs underneath the period. That same expressive pull can also mean focus scatters across several interests at once instead of settling into one.`,
+    4:`This period runs on discipline as background energy — steady effort and practical follow-through color how you move through these years, whatever they actually ask of you. Order and reliability come more naturally here, and building something durable feels more available than improvising. That same steady current can also mean real resistance to sudden change or disruption to the routine during these years.`,
+    5:`This period runs on change as background energy — variety, movement, and adaptability color how you move through these years no matter what they're actually about. Restlessness sits closer to the surface here, and new experience tends to pull at you more than repetition does. That same current can also mean real difficulty settling into one commitment or routine for very long during this span.`,
+    6:`This period runs on responsibility as background energy — care for the people close to you colors how you move through these years, whatever they're actually built around. Home, family, or the people who depend on you tend to sit closer to the center of daily life here. That same current can also mean real pull toward taking on more responsibility for others than anyone actually asked for.`,
+    7:`This period runs on introspection as background energy — reflection and a need to understand things more deeply color how you move through these years, whatever they're actually about on the surface. Solitude feels more necessary here, and surface-level answers tend to satisfy less than usual. That same current can also mean real distance from people during this span, even people you're otherwise close to.`,
+    8:`This period runs on ambition as background energy — authority, achievement, and material concerns color how you move through these years no matter what they're actually built around. Confidence in your own judgment about money, power, or leadership tends to run higher here. That same current can also mean real friction around control during this span, whether that's holding it or having it challenged.`,
+    9:`This period runs on completion as background energy — closing loops and giving to something bigger than yourself color how you move through these years, whatever they're actually about. Compassion for people outside your immediate circle tends to run higher here, and holding onto things past their natural end feels harder than usual. That same current can also mean loss — of a phase, a role, a version of a plan — sits closer to this span than most.`,
+    11:`This period runs on heightened intuition as background energy — a master vibration that intensifies whatever else is happening, sharpening sensitivity to people and situations beyond what the reduced number 2 would carry on its own. Ideas and impressions tend to arrive with unusual speed and clarity here. That same intensity can also mean real overwhelm from taking in more than is comfortable to process at once during this span.`,
+    22:`This period runs on large-scale building as background energy — a master vibration that intensifies whatever else is happening, adding real capacity to turn a big vision into something concrete and lasting beyond what the reduced number 4 would carry alone. Ambition here tends to scale up rather than stay modest. That same intensity can also mean real pressure during this span, since the capability it carries invites more responsibility than an ordinary chapter would.`,
+    33:`This period runs on large-scale care as background energy — a master vibration that intensifies whatever else is happening, extending compassion and responsibility for others well past your own immediate circle, beyond what the reduced number 6 would carry alone. Giving to people who need it tends to come with real, natural ease here. That same intensity can also mean real risk of depletion during this span, since a capacity this generous rarely comes with built-in limits on what gets taken on.`
   },
   // The 1st Pinnacle is the one chapter that runs through actual childhood,
   // not adulthood -- real numerology tradition treats it as distinctly
@@ -2434,6 +2455,10 @@ function pinnacleChallengeRow(n,pinnacle,challengeVal){
   return `<div class="dprow"><div class="stage-range">${escapeHtml(pinnacle.ageRange)}</div><div class="stage-pair">${pcCol('Pinnacle '+n,pinnacle.value,'pinnacle',pinnacle.value,pinnSpec)}${pcCol('Challenge '+n,challengeVal,'challenge',challengeVal,chalSpec)}</div></div>`;
 }
 
+function periodCycleRow(n,period){
+  return `<div class="dprow"><div class="stage-range">${escapeHtml(period.ageRange)}</div><div class="stage-pair">${pcCol('Period '+n,period.value,'periodcycle',period.value)}</div></div>`;
+}
+
 function nr(num){
   if(!num)return apend('Unavailable');
   let h='';
@@ -2445,6 +2470,10 @@ function nr(num){
   h+=`<div class="dprow"><div class="stage-pair birthdate-row">${pcCol('Personal Year',num.personalYear,'personalyear',num.personalYear)}${pcCol('Personal Month',num.personalMonth,'personalmonth',num.personalMonth)}${pcCol('Personal Day',num.personalDay,'personalday',num.personalDay)}</div></div>`;
   h+=arow('Essence (age '+num.essenceCycle.currentAge+')',num.essenceCycle.value,'essence',num.essenceCycle.value);
   h+=arow('Maturity',num.maturity,'maturity',num.maturity);
+  h+=dpsec('Period Cycles — Three Long Chapters');
+  h+=periodCycleRow(1,num.periodCycles.period1);
+  h+=periodCycleRow(2,num.periodCycles.period2);
+  h+=periodCycleRow(3,num.periodCycles.period3);
   h+=dpsec('Pinnacles & Challenges — By Life Stage');
   h+=pinnacleChallengeRow(1,num.pinnacles.pinnacle1,num.challengeNumbers.challenge1);
   h+=pinnacleChallengeRow(2,num.pinnacles.pinnacle2,num.challengeNumbers.challenge2);

@@ -252,6 +252,35 @@ function calculatePinnacles(dob, lifePathRawValue) {
   };
 }
 
+// ---------- PERIOD CYCLES ----------
+// A distinct technique from Pinnacles: three long chapters, each drawn from
+// ONE raw piece of the birthdate on its own (month, then day, then year --
+// each reduced separately), not a blended sum of two parts the way each
+// Pinnacle is. Real, sourced numerology convention (Hans Decoz / World
+// Numerology, cross-checked against multiple independent sources):
+//   Period 1 = reduced birth month, birth -> age (37 - Life Path).
+//   Period 2 = reduced birth day, next 27 years exactly.
+//   Period 3 = reduced birth year, onward from there.
+// The age-formula base (37, one more than Pinnacles' 36) uses the same
+// reduceFully(lifePathRawValue) treatment Pinnacles already use, for
+// consistency within this file -- deliberate, not an oversight.
+function calculatePeriodCycles(dob, lifePathRawValue) {
+  const { month, day, year } = parseDate(dob);
+  const period1 = reducePreserveMasters(month);
+  const period2 = reducePreserveMasters(day);
+  const period3 = reducePreserveMasters(year);
+
+  const lifePathForAgeFormula = reduceFully(lifePathRawValue);
+  const firstPeriodEndAge = 37 - lifePathForAgeFormula;
+  const secondPeriodEndAge = firstPeriodEndAge + 27;
+
+  return {
+    period1: { value: period1.value, ageRange: `birth–${firstPeriodEndAge}` },
+    period2: { value: period2.value, ageRange: `${firstPeriodEndAge + 1}–${secondPeriodEndAge}` },
+    period3: { value: period3.value, ageRange: `${secondPeriodEndAge + 1}–onward` }
+  };
+}
+
 // ---------- MATURITY NUMBER ----------
 // Who a person grows into later in life. Life Path + Expression, reduced.
 // Relevant for long-term trajectory, not just who someone is right now.
@@ -376,6 +405,7 @@ function calculateFullChart(person) {
   })();
 
   const pinnacles = calculatePinnacles(dob, rawLifePathForPinnacles);
+  const periodCycles = calculatePeriodCycles(dob, rawLifePathForPinnacles);
   const maturity = calculateMaturityNumber(lifePath.value, expression.value);
 
   const personalYear = calculatePersonalYear(dob, currentDate);
@@ -405,6 +435,7 @@ function calculateFullChart(person) {
     balance: balance.value,
     challengeNumbers: challenges,
     pinnacles: pinnacles,
+    periodCycles: periodCycles,
     maturity: maturity.value,
     personalYear: personalYear.value,
     personalMonth: personalMonth.value,
