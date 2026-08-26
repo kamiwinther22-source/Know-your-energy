@@ -1136,7 +1136,7 @@ function deepGlossaryRows(key){
     labelFor=n=>`House ${n} — ${HOUSE_THEME[n]||''}`;
   }else if(ASTRO_DEFS[key]){
     variants=ASTRO_DEFS[key];
-    labelFor=sign=>`${SIGN_GLYPH[sign]||''} ${sign}`;
+    labelFor=sign=>sign;
   }else if(NUM_DEFS[key]){
     variants=NUM_DEFS[key];
     labelFor=n=>`Number ${n}`;
@@ -2048,19 +2048,51 @@ function dpsec(l){return `<div class="dpsec">${l}</div>`;}
 const ASTRO_KEY={Sun:'sun',Moon:'moon',Mercury:'mercury',Venus:'venus',Mars:'mars',Jupiter:'jupiter',Saturn:'saturn',
   Uranus:'uranus',Neptune:'neptune',Pluto:'pluto'};
 const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','Mars']],['Social',['Jupiter','Saturn']],['Outer',['Uranus','Neptune','Pluto']]];
-const VS='\ufe0e';
-const PLANET_GLYPH={Sun:'\u2609'+VS,Moon:'\u263d'+VS,Mercury:'\u263f'+VS,Venus:'\u2640'+VS,Mars:'\u2642'+VS,Jupiter:'\u2643'+VS,Saturn:'\u2644'+VS,Uranus:'\u2645'+VS,Neptune:'\u2646'+VS,Pluto:'\u2647'+VS,
-  'North Node':'\u260a'+VS,'South Node':'\u260b'+VS,Chiron:'\u26b7'+VS,Lilith:'\u26b8'+VS,Sirius:'\u2726'+VS};
-const SIGN_GLYPH={Aries:'\u2648'+VS,Taurus:'\u2649'+VS,Gemini:'\u264a'+VS,Cancer:'\u264b'+VS,Leo:'\u264c'+VS,Virgo:'\u264d'+VS,Libra:'\u264e'+VS,Scorpio:'\u264f'+VS,Sagittarius:'\u2650'+VS,Capricorn:'\u2651'+VS,Aquarius:'\u2652'+VS,Pisces:'\u2653'+VS};
-const SIGN_NAME={Ari:'Aries',Tau:'Taurus',Gem:'Gemini',Can:'Cancer',Leo:'Leo',Vir:'Virgo',Lib:'Libra',Sco:'Scorpio',Sag:'Sagittarius',Cap:'Capricorn',Aqu:'Aquarius',Pis:'Pisces'};
+// Planet/point glyphs used to be plain Unicode astrological symbols
+// (\u2609 \u263d \u2640 etc). Real bug, not cosmetic: those codepoints have ambiguous
+// text-vs-emoji presentation, and plenty of real phones (Android
+// included) render them as fixed-color emoji regardless of any CSS
+// color set on them -- the glyph shows up, just never in the color the
+// code asked for, and often too small/blob-like to read. Hand-drawn SVG
+// paths can't be swapped for a platform emoji the way a character can,
+// so they're the actual fix, not just a differently-sized version of
+// the same bug. Every path lives in a 24x24 box and is drawn with
+// currentColor so the existing per-planet color mechanism still works.
+const PLANET_SVG={
+  Sun:'<circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/>',
+  Moon:'<path d="M13 3a9 9 0 1 0 0 18 7.2 7.2 0 0 1 0-18Z" fill="currentColor"/>',
+  Mercury:'<path d="M8.3 5.3a3.7 3.7 0 0 1 7.4 0" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12.5" r="4.3" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="16.8" x2="12" y2="21.5" stroke="currentColor" stroke-width="1.8"/><line x1="9.3" y1="19.3" x2="14.7" y2="19.3" stroke="currentColor" stroke-width="1.8"/>',
+  Venus:'<circle cx="12" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="13" x2="12" y2="21" stroke="currentColor" stroke-width="1.8"/><line x1="8.3" y1="17.3" x2="15.7" y2="17.3" stroke="currentColor" stroke-width="1.8"/>',
+  Mars:'<circle cx="10" cy="14" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="13.3" y1="10.7" x2="20" y2="4" stroke="currentColor" stroke-width="1.8"/><polyline points="14,4 20,4 20,10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+  Jupiter:'<path d="M5.5 5.5c0 3.3 2.7 5 5.7 5H18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="15" y1="3.5" x2="15" y2="21" stroke="currentColor" stroke-width="1.8"/>',
+  Saturn:'<line x1="9" y1="3.5" x2="9" y2="14.5" stroke="currentColor" stroke-width="1.8"/><line x1="6.2" y1="7" x2="11.8" y2="7" stroke="currentColor" stroke-width="1.8"/><path d="M9 14.5c0 4 4.3 4 4.3 0.8c0-2.6-2.3-3.6-4.3-2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  Uranus:'<line x1="6.3" y1="4" x2="6.3" y2="14" stroke="currentColor" stroke-width="1.8"/><line x1="17.7" y1="4" x2="17.7" y2="14" stroke="currentColor" stroke-width="1.8"/><line x1="6.3" y1="9" x2="17.7" y2="9" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9" r="1.7" fill="currentColor"/><line x1="12" y1="14" x2="12" y2="17.3" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="19.8" r="2.1" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+  Neptune:'<line x1="12" y1="6.5" x2="12" y2="21" stroke="currentColor" stroke-width="1.8"/><line x1="6" y1="6" x2="6" y2="13" stroke="currentColor" stroke-width="1.8"/><line x1="18" y1="6" x2="18" y2="13" stroke="currentColor" stroke-width="1.8"/><path d="M6 9.5c2 3.2 10 3.2 12 0" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="8.5" y1="18" x2="15.5" y2="18" stroke="currentColor" stroke-width="1.8"/>',
+  Pluto:'<circle cx="12" cy="7.3" r="2.8" fill="currentColor"/><path d="M6.8 9.5a5.2 5.2 0 0 0 10.4 0" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="13" x2="12" y2="21" stroke="currentColor" stroke-width="1.8"/><line x1="9" y1="17.5" x2="15" y2="17.5" stroke="currentColor" stroke-width="1.8"/>',
+  'North Node':'<path d="M6 9.3a6 6 0 0 1 12 0" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="10.8" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="10.8" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+  'South Node':'<path d="M6 14.7a6 6 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="13.2" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="13.2" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+  Chiron:'<circle cx="12" cy="16.3" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="12.3" x2="12" y2="3" stroke="currentColor" stroke-width="1.8"/><line x1="9" y1="6.3" x2="15" y2="6.3" stroke="currentColor" stroke-width="1.8"/>',
+  Lilith:'<circle cx="12.5" cy="9" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 5.3c-2.2-1.2-3.4 1.1-1.7 2.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12.5" y1="14" x2="12.5" y2="21" stroke="currentColor" stroke-width="1.8"/><line x1="9.3" y1="18" x2="15.7" y2="18" stroke="currentColor" stroke-width="1.8"/>',
+  Sirius:'<path d="M12 2.5c0.7 5 2 6.3 7 7c-5 0.7-6.3 2-7 7c-0.7-5-2-6.3-7-7c5-0.7 6.3-2 7-7Z" fill="currentColor"/>'
+};
+// Sized in em so it scales with whatever text context it sits in
+// (results card vs. the larger expanded modal), vertically nudged to
+// sit on the same baseline as the name text beside it.
+function glyphIcon(name,color){
+  const path=PLANET_SVG[name];
+  if(!path)return '';
+  return `<span class="glyph" style="color:${color||'inherit'}"><svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.15em" aria-hidden="true">${path}</svg></span> `;
+}
 
-// Brightened for real legibility on the actual black card background --
-// the previous values (e.g. Pluto #2b2420, near-black) were tuned for
-// the old white wheel disc this chart used to sit on; several were
-// barely distinguishable from black once that disc was removed. Same
-// hue identity per planet, just lifted to real contrast.
-const PLANET_COLOR={Sun:'#e8bc2e',Moon:'#3fd9cd',Mercury:'#ff8a2e',Venus:'#e8579e',Mars:'#e8534a',Jupiter:'#a166e0',Saturn:'#c98f4f',Uranus:'#5a96e8',Neptune:'#4fbf65',Pluto:'#9a8a80',
-  'North Node':'#7fa3d9','South Node':'#c4a47a',Chiron:'#5fb09c',Lilith:'#e0507e',Sirius:'#9a9ac2'};
+// The actual live card background is the cream/tan modal (#e8d2a0,
+// .card-expand), not black -- the previous "brightened for a black
+// background" palette measured at 1.2-2.6:1 contrast against the real
+// background, which is why the ink was reading as barely-there. Every
+// value below is verified >=4.3:1 (most >=5:1) against #e8d2a0 by
+// actual WCAG contrast-ratio math, not eyeballed. Same hue identity per
+// planet, just deep/saturated enough to hold up on the real background.
+const PLANET_COLOR={Sun:'#734a00',Moon:'#0a5a53',Mercury:'#8a3a08',Venus:'#9c1554',Mars:'#961f16',Jupiter:'#5a2a8a',Saturn:'#6b4413',Uranus:'#1a4a8a',Neptune:'#12592b',Pluto:'#4a2e22',
+  'North Node':'#1e4b7a','South Node':'#6b4a1e',Chiron:'#155a4c',Lilith:'#8a1140',Sirius:'#3a3a6b'};
 // Points shown alongside Ascendant/Midheaven -- not planets, but they're
 // already computed (astro-engine.js) and already fed into the Reading's
 // aspect data, so they need a place on the visible card too, not just a
@@ -2170,8 +2202,13 @@ function astroWheelSVG(astro){
     const trueDeg=rot(p.absoluteDegrees);
     const [x,y]=toXY(trueDeg,r);
     const color=PLANET_COLOR[p.name]||'#333';
-    const glyph=PLANET_GLYPH[p.name]||p.name[0];
-    svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${GLYPH_FONT}" font-weight="700" fill="${color}" stroke="#241a05" stroke-width="0.6" paint-order="stroke fill">${glyph.replace(VS,'')}</text>`;
+    const path=PLANET_SVG[p.name];
+    if(path){
+      const scale=(GLYPH_FONT/24).toFixed(3);
+      svg+=`<g transform="translate(${(x-GLYPH_FONT/2).toFixed(1)},${(y-GLYPH_FONT/2).toFixed(1)}) scale(${scale})" style="color:${color}">${path}</g>`;
+    }else{
+      svg+=`<text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${GLYPH_FONT}" font-weight="700" fill="${color}">${p.name[0]}</text>`;
+    }
   });
   svg+='</svg>';
   return svg;
@@ -2379,10 +2416,6 @@ function hdWheelWrap(hd){
   return `<div class="wheel-wrap">${svg}</div>`;
 }
 
-function signDisplay(sign){
-  return SIGN_GLYPH[sign]?`${SIGN_GLYPH[sign]} ${SIGN_NAME[sign]||sign}`:sign;
-}
-
 function ar(astro,errMsg){
   if(!astro||astro.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   const planets=astro.planets||[];
@@ -2393,7 +2426,7 @@ function ar(astro,errMsg){
   const emitPlanet=p=>{
     const name=p.name, sign=p.sign;
     if(!name||!sign)return;
-    const glyph=PLANET_GLYPH[name]?`<span class="glyph" style="color:${PLANET_COLOR[name]||'inherit'}">${PLANET_GLYPH[name]}</span> `:'';
+    const glyph=glyphIcon(name,PLANET_COLOR[name]);
     let signOut=sign;
     if(p.signUncertain)signOut=`${sign} or ${p.signAlt} \u2014 changes sign this day, exact birth time needed`;
     else if(p.house)signOut+=` \u00b7 House ${p.house}`;
@@ -2431,7 +2464,7 @@ function ar(astro,errMsg){
     h+=dpsec('Other Points');
     extraPoints.forEach(p=>{
       const name=p.name;
-      const glyph=PLANET_GLYPH[name]?`<span class="glyph" style="color:${PLANET_COLOR[name]||'inherit'}">${PLANET_GLYPH[name]}</span> `:'';
+      const glyph=glyphIcon(name,PLANET_COLOR[name]);
       let signOut=p.sign;
       if(p.signUncertain)signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
       else if(p.house)signOut+=` · House ${p.house}`;
