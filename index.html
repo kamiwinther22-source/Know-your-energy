@@ -564,11 +564,28 @@ body{
      grid-column/grid-row positions do nothing, so cards just flow in
      source order: Person One's 3 cards, Reading, Person Two's 3 cards. */
   .main-grid{display:block!important;max-width:100%!important;}
+  /* break-inside:avoid on the card itself used to mean "keep this whole
+     box on one page" -- fine for the shorter cards, but the Astrology
+     card (10 planets + chart points + 5 other points) is now taller than
+     a single printed page, and a box too tall to honor "don't split me"
+     is exactly the case Chrome's print engine handles badly: verified via
+     a real generated PDF, it tried to keep the box together by rendering
+     it a second time starting at the next page, producing duplicated
+     content across two pages instead of one continuous card. Each
+     individual placement ROW is short and safe to keep whole; the CARD
+     as a container is allowed to flow across pages when it's genuinely
+     too long for one, which is the real fix, not a smaller one. */
   .quad-item,.panel-auto{box-shadow:none!important;border:1.5px solid #1C2CA9!important;background:#fff!important;
     width:100%!important;max-width:640px!important;margin:0 auto 1.2rem!important;
     height:auto!important;overflow:visible!important;
-    break-inside:avoid;page-break-inside:avoid;break-after:page;page-break-after:always;}
+    break-after:page;page-break-after:always;}
   .main-grid>*:last-child{break-after:auto!important;page-break-after:auto!important;}
+  .quad-item .dprow,.panel-auto .dprow{break-inside:avoid;page-break-inside:avoid;}
+  /* Zebra striping is a screen legibility aid -- on paper it's ink spent
+     on every other row, across however many pages a real chart runs,
+     for zero benefit once rows are already visually separated by real
+     page structure. Print should be the plainest, least-ink version. */
+  .quad-item .dprow:nth-child(odd),.panel-auto .dprow:nth-child(odd){background:transparent!important;}
   .quad-item .dplist,.panel-auto .dplist{max-height:none!important;overflow:visible!important;}
   .dp{--card-text:#000!important;--card-dim:#000!important;--card-mid:#232a20!important;--card-accent:#1C2CA9!important;--card-stripe-odd:transparent!important;}
   .quad-item .quad-wheel{color:#000!important;}
@@ -599,7 +616,15 @@ body{
   .quad-item .birthdate-row .dprv,.panel-auto .birthdate-row .dprv{font-size:1.1rem!important;}
   /* The tap-to-expand chevron is a screen-only "there's more, tap here"
      affordance -- meaningless (and a little confusing) on a printed page
-     where nothing is tappable, so the definitions just print plainly. */
+     where nothing is tappable, so the definitions just print plainly.
+     Real gap this depended on but never actually had: every .dpdef is
+     given the HTML `hidden` attribute at generation time (arow/pcCol/
+     deepGlossaryRows) so it stays collapsed until tapped -- nothing
+     here was overriding that for print, so definitions were silently
+     never printing at all, just the bare placement/value pairs. `hidden`
+     is a real HTML attribute, not a class, so it needs an attribute
+     selector to override, not just a class rule. */
+  .dpdef[hidden]{display:block!important;}
   .dprl.term::after{display:none!important;}
   .dprl.term{border-bottom:none!important;cursor:default!important;}
   /* Same idea for the gates list: "tap any gate below" is screen-only
