@@ -699,12 +699,25 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
       `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
     ].filter(Boolean).join('\n  ');
 
+    // hasHD gates the whole block on a real chart actually having come
+    // back -- p.humanDesign stays null not just when time/city are
+    // missing, but also when the HD API call itself failed (rate limit,
+    // timeout, bad key). Previously this fell through to `|| 'unknown'`
+    // and still printed a full "Human Design:" section reading "unknown
+    // type, unknown profile, unknown authority" -- real-looking input
+    // text the system prompt's own coverage rule never told the model
+    // how to handle (that rule only anticipates missing time/city, where
+    // it says to omit HD entirely). Gating on hasHD makes every no-chart
+    // case -- missing time/city or a failed API call alike -- actually
+    // omit the section, instead of handing the model a fake chart to
+    // guess at.
     const h = p.humanDesign || {};
-    const hdLines = [
-      `${h.type || 'unknown'} type, ${h.profile || 'unknown'} profile, ${h.authority || 'unknown'} authority`,
+    const hasHD = !!h.type;
+    const hdLines = hasHD ? [
+      `${h.type} type, ${h.profile || 'unknown'} profile, ${h.authority || 'unknown'} authority`,
       h.incarnation_cross ? `Incarnation Cross: ${h.incarnation_cross}` : null,
       h.gates?.length ? `Defined gates: ${h.gates.join(', ')}` : null
-    ].filter(Boolean).join('\n  ');
+    ].filter(Boolean).join('\n  ') : null;
 
     // The person's actual first name is the block's own header -- this
     // used to be prefixed with a literal "Person One:"/"Person Two:"
@@ -719,9 +732,9 @@ ${p.first}${p.last ? ' ' + p.last : ''}:
 Numerology:
   ${numerologyLines}
 Astrology:
-  ${astrologyLines}
+  ${astrologyLines}${hasHD ? `
 Human Design:
-  ${hdLines}`;
+  ${hdLines}` : ''}`;
   };
 
   if (rtype === 'two-person') {
