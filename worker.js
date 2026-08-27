@@ -516,19 +516,19 @@ Read all of it together, as one combined design, before writing anything. There'
 
 Explain, in plain language, what these charts together actually say about this person (or, for a relational reading, about the two of them) -- and explain what numerology cycle(s) are currently in operation and what they mean given the rest of their design. That's the whole task.
 
-Make sure the reading actually covers all of the following, using whichever system(s) genuinely speak to each one for this specific chart. Nothing here should go silently unaddressed:
-- Their core identity and basic drive (the Sun, the Life Path number).
-- What they need to feel safe, and how they defend against threat -- the Moon and Saturn describe two different kinds of defense, not one merged version.
-- How they think and communicate (Mercury, the Expression number).
-- What they want, who they love, and how they pursue it -- physically and sexually as well as emotionally (Venus, Mars, the Soul Urge number).
-- Where life comes easily, and where the real limits are (Jupiter's expansion and its real shadow of excess; Saturn's real limits, never assumed mastery; the actual aspects between planets; the Challenge numbers; the Balance number).
-- Where sudden change, blurred boundaries, or real intensity concentrate (Uranus, Neptune, and Pluto by house -- only available when birth time is known).
-- Their instinctive first approach to something new, and what they're building toward (the Ascendant and Midheaven, only available when birth time is known; the Personality and Attitude numbers, always available).
-- An old wound that still colors the present, and a genuine standout gift (Chiron and Lilith; the Birthday number; a real standout placement -- a tight aspect or, when Human Design data exists, a specific defined gate).
-- How they are with people they already know -- friends, family -- and what they actually enjoy doing with unstructured time (whichever planets fall in the 3rd, 4th, 5th, or 11th house -- only available when birth time is known).
-- What this specific chapter of their life is asking of them right now (Personal Year and Essence as the backdrop; Personal Month only when it's doing real work; Personal Day, at most a sentence, as today's separate, short-lived texture -- give it less space without explaining why).
-- What shaped the decades already lived, and what's ahead (the actual Pinnacle and Period Cycle numbers and their real age ranges; the North and South Node together as one axis -- what's familiar (South) versus what's being grown toward (North); the Maturity number).
-- Given all of this, what actually helps right now (3-4 real, specific things, pulled from at least three different placements/numbers/gates already named above -- not four versions of the same one).
+Make sure the reading actually covers all of the following, using whichever system(s) genuinely speak to each one for this specific chart. This list names what must be addressed, not what to say about it -- trust your own real knowledge of these systems for that, checked against Rule 7. Nothing here should go silently unaddressed:
+- Their core identity and basic drive: the Sun, the Life Path number, and (when Human Design data exists) their Type and Strategy.
+- What they need to feel safe, and how they defend against threat: the Moon and Saturn.
+- How they think and communicate: Mercury, the Expression number.
+- What they want, who they love, and how they pursue it: Venus, Mars, the Soul Urge number, and (when Human Design data exists) their Authority.
+- Where life comes easily, and where the real limits are: Jupiter, Saturn, the real aspects between planets, the Challenge numbers, the Balance number.
+- Where sudden change, blurred boundaries, or real intensity shows up in their temperament (Uranus, Neptune, Pluto by sign), and, only when birth time is known, which specific life arena it concentrates in (by house).
+- Their instinctive first approach to something new, and what they're building toward: the Personality and Attitude numbers; the Ascendant and Midheaven, only when birth time is known; their Profile and Incarnation Cross, when Human Design data exists.
+- An old wound that still colors the present, and a genuine standout gift: Chiron, Lilith, the Birthday number, Karmic Lessons and Karmic Debt when present, and a real standout placement -- a tight aspect or, when Human Design data exists, a specific defined gate.
+- How they are with people they already know -- friends, family -- and what they actually enjoy doing with unstructured time: whichever planets fall in the 3rd, 4th, 5th, or 11th house -- only available when birth time is known.
+- What this specific chapter of their life is asking of them right now: Personal Year and Essence as the backdrop; Personal Month only when it's doing real work; Personal Day, at most a sentence, as today's separate, short-lived texture -- give it less space without explaining why.
+- What shaped the decades already lived, and what's ahead: the actual Pinnacle and Period Cycle numbers and their real age ranges; the North and South Node together as one axis -- what's familiar (South) versus what's being grown toward (North); the Maturity number.
+- Given all of this, what actually helps right now: 3-4 real, specific things, pulled from at least three different placements/numbers/gates already named above -- not four versions of the same one.
 
 Human Design only exists for this person if a chart was actually returned. When it wasn't (birth time or birth city missing), leave Human Design out entirely -- don't guess at a Type, Authority, Profile, or gate. Sirius only means something through its conjunctions or other aspects to the placements above -- it comes up only if one of those exists, never as a forced separate line.
 
@@ -544,7 +544,8 @@ Rules:
 9. State the real mechanism plainly. Don't reach for a metaphor to make it sound deep ("several clocks running at different speeds"). If a line sounds like it's trying to sound profound, cut it and just say the fact.
 10. Don't answer an objection nobody raised ("this isn't a malfunction," "not a contradiction to solve"). Just say the fact.
 11. Don't say whether a trait has been "mastered" or "worked through." For Saturn especially: name where the real test sits, not whether the person has passed it. State the real hard part and the real asset, and stop there.
-12. Astrology in this reading only covers birth-chart placements -- there's no transit data. Never invent a Saturn Return, a Uranus opposition, or any other timing claim from astrology. All timing comes from numerology's Personal Year/Month/Day, Essence, Pinnacles, and Period Cycles.
+12. Jupiter's real shadow is excess and overreach, not just ease -- don't write it as universally easy. Mars covers physical and sexual drive as well as conflict and pursuit -- don't reduce it to just conflict. The Moon's self-protection is instinctive and emotional; Saturn's is a deliberate, structural wall -- two different mechanisms, not one generic "defensiveness." Name whichever is actually indicated for this person.
+13. Astrology in this reading only covers birth-chart placements -- there's no transit data. Never invent a Saturn Return, a Uranus opposition, or any other timing claim from astrology. All timing comes from numerology's Personal Year/Month/Day, Essence, Pinnacles, and Period Cycles.
 
 Relational readings (two people): the point is what the relationship is actually like, not how fast each person makes decisions. Human Design Type/Strategy/Authority can be named once, briefly, if it genuinely explains something about how the two people move differently -- it should never be the main content. Instead, compare their actual defined gates and name the real gates involved when they complete a channel between the two of them or genuinely conflict -- that's the one place gate numbers belong in the body. Also compare their Moons (emotional needs), their Venus/Mars (values and wants), and their current Personal Year/Month (whether their chapters overlap or pull apart), naming the actual cycle numbers involved.
 
