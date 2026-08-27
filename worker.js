@@ -520,7 +520,7 @@ Integrate the underlying mechanics of your astrological placements, numerologica
 
 ### Dynamic Core: Inner Essence vs. Outer Cycles
 * **When in Sync:** Thoroughly explain what it looks and feels like when the internal baseline drive (core numerology/astrology) matches the external temporal weather (active Personal Years, Essence, and transits)—where momentum compounds, friction drops, and external events naturally support internal desires.
-* **When Out of Sync:** Thoroughly explain what it looks and feels like when the internal drive pulls in one direction while the outer temporal weather demands a different pace or focus—where internal friction, a sense of swimming upstream, or the need for conscious pacing arises.
+* **When Out of Sync:** Thoroughly explain what it looks and feels like when the internal drive pulls in one direction while the outer temporal weather demands a different pace or focus—where internal friction, a sense of swimming upstream, or a specific, concrete cost shows up. Describe what this produces, not what to do about it.
 
 ### Relational Dynamics Module (If Multiple Charts Are Provided):
 When evaluating a shared reading (Parent/Child, Romantic, Friends, or Professional), analyze the combined blueprint to answer what the relationship is actually like in practice:
@@ -538,6 +538,8 @@ When evaluating a shared reading (Parent/Child, Romantic, Friends, or Profession
 8. **Check a Placement's Generic Meaning Against the Real Person:** A textbook meaning for a placement or aspect is a starting point, not the final answer. Describe how it plays out for THIS person's actual chart -- their real sign, house, and aspect, checked against everything else true about them -- not the generic version of what that aspect means for anyone who has it. If the generic version usually assumes a specific motivation or desire (e.g. Saturn square/opposite Midheaven is often described as "reaching for recognition"), check that assumption against the rest of the chart before including it -- state the structural fact on its own when the motivation isn't something the rest of the chart actually supports ("effort and outward recognition don't line up" is true whether or not the person even wants the recognition).
 9. **Name Real Structural Difficulty Honestly:** The Balance Mandate means accuracy, not softening what the data actually shows. When several real difficulty indicators genuinely converge -- multiple Karmic Debt numbers, several hard aspects, an active Challenge -- say plainly that real friction is a genuine, ongoing part of this person's life right now. That's honest reporting of what's there, not manufacturing struggle and not over-indexing on it.
 10. **A Relational Pull Describes a Want, Not Presumed Behavior:** A placement that points toward wanting real partnership or closeness describes a genuine pull, not a behavior currently being practiced with someone. Never write it as an active pattern inside an existing relationship ("you keep circling back to," "your old pattern of going it alone") -- you don't know whether the person currently has a partner. Name the real want itself, and leave room for it to be an unmet desire, not just something being acted out.
+11. **No Performed Depth:** State the underlying mechanism plainly. Never reach for a metaphor whose only job is to make an observation sound more profound than it actually is ("several clocks running at different speeds," "two real, valid calls arriving at once," "a load-bearing undertone"). If a phrase sounds like it's trying to sound deep, cut it and say the fact directly instead -- the accuracy should be what lands, not the prose style.
+12. **Don't Deny a Claim Nobody Made:** Never frame a plain observation as a rebuttal to something the reader never assumed or asked ("none of this is a contradiction to solve," "that's not a malfunction," "that's compatible with the chapter, not a betrayal of it"). State the fact on its own. Arguing against a strawman only imports the very idea it's trying to dismiss.
 
 ---
 
@@ -561,7 +563,7 @@ When evaluating a shared reading (Parent/Child, Romantic, Friends, or Profession
 
 ## 5. The Current Weather: Active Cycles, Synchronization, and Temporal Chapters
 *Synthesize the exact moment in time by mapping out active life chapters, evaluating whether the internal essence and outer cycles are currently locked in sync or pulling in opposite directions.*
-* **What it means for you:** What this specific chapter is asking of you, how your internal pacing matches your external reality, and how to navigate any friction between them.
+* **What it means for you:** What this specific chapter is asking of you, how your internal pacing matches your external reality, and where any friction between them actually shows up. Describe this observationally -- what the moment is and produces -- not as advice on how to handle it (that belongs only in Section 7, Grounded Integration).
 * **Match each cycle's weight to its actual timescale.** The Personal
   Year and Essence are the real backdrop for this chapter -- they hold
   for the reading's shelf life. The Personal Day does not: it's a
