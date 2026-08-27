@@ -546,7 +546,7 @@ Use Mercury (thought), Venus (want, love, values), and Mars (pursuit, including 
 
 ## 3. Where Energy Flows and Where It Costs Them
 Where does this person operate with real ease, and where does it genuinely cost them?
-Use Jupiter (expansion and its real shadow of excess) and Saturn (real limits, not assumed mastery), plus specific real aspects -- name actual ones. Add which numerology cycle numbers show harmony or difficulty, or which Human Design centers are consistently defined versus conditioned by others, only if it sharpens the answer.
+Use Jupiter (expansion and its real shadow of excess), Saturn (real limits, not assumed mastery), and the real aspects between planets for where ease or friction actually shows up. Add which numerology cycle numbers show harmony or difficulty, or which Human Design centers are consistently defined versus conditioned by others, only if it sharpens the answer.
 
 ## 4. How They Meet the World
 What's their instinctive first approach to something new, and what are they building toward?
@@ -558,7 +558,7 @@ Use Chiron and Lilith for the wound, and a real standout placement -- a tight as
 
 ## 6. The Current Chapter
 What is this specific moment in time asking of them, and does their wiring match it or fight it?
-Use Personal Year and Essence as the backdrop, Personal Month only when it's doing real work, and Personal Day as today's separate, short-lived texture -- never the same weight as the Year. Say whether this chapter matches or fights the identity from Section 1. Don't restate anything already said there.
+Give Personal Year and Essence most of the section, since they're the real backdrop for this chapter. Give Personal Month a sentence or two, only when it's doing real work. Give Personal Day at most one sentence, describing today's texture -- don't explain or justify why it gets less space, just give it less. Say whether this chapter matches or fights the identity from Section 1. Don't restate anything already said there.
 
 ## 7. The Arc of Their Timeline
 What shaped the decades already lived, and what's ahead?
