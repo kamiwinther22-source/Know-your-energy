@@ -538,7 +538,7 @@ For two-person readings: the point is what the relationship is actually like, no
 
 ## 1. Core Identity & Emotional Wiring
 Who are they underneath, and what do they need to feel safe?
-Use the Sun for current identity (not the North Node -- that belongs in Section 7). Use the Moon and Saturn for their two different kinds of defense. Add the Life Path number or Human Design Type/Strategy only if it sharpens the answer.
+Use the Sun for current identity. Use the Moon and Saturn for their two different kinds of defense. Add the Life Path number or Human Design Type/Strategy only if it sharpens the answer.
 
 ## 2. How They Think, Want, and Pursue
 How do they process the world, what do they want, who do they love, and how do they go after it?
