@@ -293,10 +293,19 @@ body{
 
 /* ---------- loading state ---------- */
 .loading{display:none;text-align:center;padding:3.5rem 1.2rem;max-width:420px;margin:0 auto;}
-.loading-spinner{width:52px;height:52px;margin:0 auto 1.3rem;border-radius:50%;
-  border:4px solid rgba(28,44,169,0.28);border-top-color:#8A96EE;
-  animation:loadspin 0.9s linear infinite;}
-@keyframes loadspin{to{transform:rotate(360deg);}}
+/* Hourglass loading indicator -- she reported the wait already feels
+   long, and a frozen-looking screen during that wait reads as broken.
+   Animated via a small requestAnimationFrame loop (see the <script>
+   right after the #loading markup), not CSS @keyframes -- tested that
+   approach first (animating an SVG rect's own height/y through CSS
+   keyframes) and it silently rendered nothing every frame, an SVG/CSS
+   interaction that isn't reliable here. Direct setAttribute() calls
+   are the well-established, verified-working alternative. Each rect
+   keeps a static CSS clip-path polygon so it reads as a triangular
+   sand shape at any height. */
+.hourglass{margin:0 auto 1.3rem;display:block;}
+.hg-sand-top{clip-path:polygon(0% 0%,100% 0%,50% 100%);}
+.hg-sand-bottom{clip-path:polygon(50% 0%,100% 100%,0% 100%);}
 .loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;color:#ffffff;margin-bottom:0.9rem;}
 /* This has to actually be seen -- she reported repeatedly getting
    distracted mid-wait, refreshing, and losing everything because the old
@@ -722,11 +731,35 @@ body{
 </div>
 
 <div class="loading" id="loading">
-  <div class="loading-spinner" aria-hidden="true"></div>
+  <svg class="hourglass" aria-hidden="true" viewBox="0 0 60 84" width="52" height="72">
+    <path class="hg-outline" d="M8,4 H52 M8,80 H52 M8,4 L28,40 L8,80 M52,4 L32,40 L52,80" fill="none" stroke="#8A96EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect class="hg-sand-top" x="13" width="34" fill="#8A96EE"/>
+    <rect class="hg-sand-bottom" x="13" width="34" fill="#8A96EE"/>
+    <circle class="hg-drop" cx="30" cy="41" r="1.6" fill="#8A96EE"/>
+  </svg>
   <div class="loading-txt">Reading your chart&hellip;</div>
   <div class="loading-warn">Please don't refresh or leave this page. Doing so will lose your results and your entered information.</div>
   <div class="loading-note">This takes a little while because we'd rather it be thorough and accurate than fast. Thanks for your patience.</div>
 </div>
+<script>
+(function(){
+  const top=document.querySelector('.hg-sand-top'), bottom=document.querySelector('.hg-sand-bottom'), drop=document.querySelector('.hg-drop');
+  if(!top||!bottom||!drop) return;
+  const CYCLE=4000, DROP_CYCLE=700;
+  function frame(now){
+    const p=Math.min((now%CYCLE)/(CYCLE*0.9),1);
+    top.setAttribute('y', 9+p*28);
+    top.setAttribute('height', 30-p*28);
+    bottom.setAttribute('y', 76-p*28);
+    bottom.setAttribute('height', 2+p*28);
+    const dt=(now%DROP_CYCLE)/DROP_CYCLE;
+    drop.setAttribute('cy', 41+dt*24);
+    drop.setAttribute('opacity', dt<0.1 ? dt/0.1 : (dt>0.8 ? (1-dt)/0.2 : 1));
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
 
 <div class="results-wrap" id="resultsWrap">
   <div class="ttl">Know Your Energy</div>
