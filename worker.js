@@ -517,18 +517,18 @@ Each section below answers one real question a person has about themselves. Astr
 Translate every placement, number, and gate into plain meaning: what does this actually look like in someone's daily life? Placement names, numbers, and gate numbers belong only in the references list at the end, never in the body text.
 
 Rules:
-1. Report what's actually there. Give real strengths, real neutral traits, and real difficulty equal weight -- don't invent struggle, and don't oversell the positive either.
+1. Report what's actually there. Give real strengths, real neutral traits, and the real hard parts equal weight -- don't invent struggle, and don't oversell the positive either.
 2. Say each thing once. If you're about to restate a point you already made, even in new words or a new metaphor, stop -- use a placement, number, or gate you haven't drawn on yet instead.
 3. Write like a smart, direct friend talking to the person -- not a technical manual.
-4. When something is genuinely difficult, say specifically what happens as a result -- less time, less money, a strained relationship, physical fatigue -- instead of just calling it "hard." Only use energy/drain language for Human Design's own centers, Type, and Strategy, or for comparing two people's gates -- that's the one place "energy" is the literal, correct word.
+4. When something is genuinely hard, say specifically what happens as a result -- less time, less money, a strained relationship, physical fatigue -- instead of just leaving it at "hard." Only use energy/drain language for Human Design's own centers, Type, and Strategy, or for comparing two people's gates -- that's the one place "energy" is the literal, correct word.
 5. Keep the body of the reading free of system names, placement names, numbers, and gate numbers -- describe what they mean, not what they're called. Put every actual placement/number/gate used in the references list only.
 6. Use the person's real first name (or "you," for a single reading) -- never "Partner A," "the parent," or any placeholder.
 7. Check a textbook meaning against this specific chart before using it. If the rest of the chart doesn't support the usual assumed motive (e.g. Saturn opposite Midheaven is often read as "wanting recognition"), state the plain structural fact instead ("effort and recognition don't line up") without assuming the motive either way.
-8. When several real difficulty markers line up -- multiple Karmic Debt numbers, several hard aspects, an active Challenge -- say plainly that this is a genuinely hard stretch. Don't soften it, and don't invent difficulty that isn't there either.
+8. When several things point to real trouble at once -- multiple Karmic Debt numbers, several hard aspects, an active Challenge -- say plainly that this is a genuinely rough stretch. Don't soften it, and don't invent problems that aren't there either.
 9. A placement that shows wanting partnership or closeness describes a want, not a current relationship. Don't write it as something the person is already doing with someone ("you keep circling back to") -- you don't know if they have a partner.
 10. State the real mechanism plainly. Don't reach for a metaphor to make it sound deep ("several clocks running at different speeds"). If a line sounds like it's trying to sound profound, cut it and just say the fact.
 11. Don't answer an objection nobody raised ("this isn't a malfunction," "not a contradiction to solve"). Just say the fact.
-12. Don't say whether a trait has been "mastered" or "worked through." For Saturn especially: name where the real test sits, not whether the person has passed it. State the real difficulty and the real asset, and stop there.
+12. Don't say whether a trait has been "mastered" or "worked through." For Saturn especially: name where the real test sits, not whether the person has passed it. State the real hard part and the real asset, and stop there.
 13. Astrology in this reading only covers birth-chart placements -- there's no transit data. Never invent a Saturn Return, a Uranus opposition, or any other timing claim from astrology. All timing comes from numerology's Personal Year/Month/Day, Essence, Pinnacles, and Period Cycles.
 14. Keep these pairs separate, don't merge them: the Sun (who someone is now) and the North Node (the direction they're growing toward); the Moon's emotional defenses and Saturn's structural defenses; Mars's physical/sexual drive and its role in conflict (it's both, not just conflict); Jupiter's real ease and its real shadow of excess (it's not always easy).
 
@@ -546,7 +546,7 @@ Use Mercury (thought), Venus (want, love, values), and Mars (pursuit, including 
 
 ## 3. Ease and Challenges
 Where does life come easily to this person, and where are the real challenges?
-Use Jupiter (expansion and its real shadow of excess), Saturn (real limits, not assumed mastery), and the real aspects between planets for where ease or challenge actually shows up. Add which numerology cycle numbers show harmony or difficulty, or which Human Design centers are consistently defined versus conditioned by others, only if it sharpens the answer.
+Use Jupiter (expansion and its real shadow of excess), Saturn (real limits, not assumed mastery), and the real aspects between planets for where ease or challenge actually shows up. Add which numerology cycle numbers show harmony or strain, or which Human Design centers are consistently defined versus conditioned by others, only if it sharpens the answer.
 
 ## 4. How They Meet the World
 What's their instinctive first approach to something new, and what are they building toward?
