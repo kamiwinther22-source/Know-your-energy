@@ -520,7 +520,7 @@ Rules:
 1. Report what's actually there. Give real strengths, real neutral traits, and real difficulty equal weight -- don't invent struggle, and don't oversell the positive either.
 2. Say each thing once. If you're about to restate a point you already made, even in new words or a new metaphor, stop -- use a placement, number, or gate you haven't drawn on yet instead.
 3. Write like a smart, direct friend talking to the person -- not a technical manual.
-4. When something is genuinely difficult, say what it actually costs -- time, money, a strained relationship, physical fatigue -- in plain terms that fit that specific thing. Only use energy/drain language for Human Design's own centers, Type, and Strategy, or for comparing two people's gates -- that's the one place "energy" is the literal, correct word.
+4. When something is genuinely difficult, say specifically what happens as a result -- less time, less money, a strained relationship, physical fatigue -- instead of just calling it "hard." Only use energy/drain language for Human Design's own centers, Type, and Strategy, or for comparing two people's gates -- that's the one place "energy" is the literal, correct word.
 5. Keep the body of the reading free of system names, placement names, numbers, and gate numbers -- describe what they mean, not what they're called. Put every actual placement/number/gate used in the references list only.
 6. Use the person's real first name (or "you," for a single reading) -- never "Partner A," "the parent," or any placeholder.
 7. Check a textbook meaning against this specific chart before using it. If the rest of the chart doesn't support the usual assumed motive (e.g. Saturn opposite Midheaven is often read as "wanting recognition"), state the plain structural fact instead ("effort and recognition don't line up") without assuming the motive either way.
@@ -544,9 +544,9 @@ Use the Sun for current identity (not the North Node -- that belongs in Section 
 How do they process the world, what do they want, who do they love, and how do they go after it?
 Use Mercury (thought), Venus (want, love, values), and Mars (pursuit, including physical and sexual drive, not just conflict). Add Expression, Soul Urge, or Human Design Authority only if it sharpens the answer.
 
-## 3. Where Energy Flows and Where It Costs Them
-Where does this person operate with real ease, and where does it genuinely cost them?
-Use Jupiter (expansion and its real shadow of excess), Saturn (real limits, not assumed mastery), and the real aspects between planets for where ease or friction actually shows up. Add which numerology cycle numbers show harmony or difficulty, or which Human Design centers are consistently defined versus conditioned by others, only if it sharpens the answer.
+## 3. Ease and Challenges
+Where does life come easily to this person, and where are the real challenges?
+Use Jupiter (expansion and its real shadow of excess), Saturn (real limits, not assumed mastery), and the real aspects between planets for where ease or challenge actually shows up. Add which numerology cycle numbers show harmony or difficulty, or which Human Design centers are consistently defined versus conditioned by others, only if it sharpens the answer.
 
 ## 4. How They Meet the World
 What's their instinctive first approach to something new, and what are they building toward?
@@ -586,9 +586,9 @@ ONLY this JSON object, no markdown headers, no text outside it:
   "references": ["Every placement/number/gate actually used, short technical shorthand, one per entry. This is the only place any of that belongs."]
 }
 Use the 8 sections above (Core Identity & Emotional Wiring, How They
-Think Want and Pursue, Where Energy Flows and Where It Costs Them, How
-They Meet the World, Old Wounds and Real Gifts, The Current Chapter,
-The Arc of Their Timeline, What Actually Helps) in that order.`;
+Think Want and Pursue, Ease and Challenges, How They Meet the World,
+Old Wounds and Real Gifts, The Current Chapter, The Arc of Their
+Timeline, What Actually Helps) in that order.`;
 
 // Guaranteed last resort -- built entirely from the already-computed
 // chart data, no API call, so it cannot fail the way an AI generation
