@@ -799,8 +799,29 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
       ]
     : [{ role: 'user', content: userPrompt }];
 
+  // Nothing here previously bounded how long a single attempt could take
+  // if the connection to Anthropic stalled -- no timeout on the fetch, no
+  // timeout on the SSE read loop. A real live case sat on "Failed to
+  // fetch" for minutes even after the browser-side keep-alive fix, which
+  // only prevents the connection from LOOKING idle to an intermediary; it
+  // does nothing if the upstream request to Anthropic itself never
+  // completes. This aborts a stalled attempt after real silence, not a
+  // fixed ceiling on the whole call -- any actual data (a thinking delta
+  // included, not just text) resets the clock, so a legitimately slow
+  // high-effort generation that's still actively streaming is never cut
+  // short; only a connection that's gone genuinely quiet is.
+  const controller = new AbortController();
+  const STALL_MS = 45000;
+  let stallTimer;
+  const armStallTimer = () => {
+    clearTimeout(stallTimer);
+    stallTimer = setTimeout(() => controller.abort(), STALL_MS);
+  };
+  armStallTimer();
+
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
+    signal: controller.signal,
     headers: {
       'x-api-key': env.ANTHROPIC_API_KEY,
       'anthropic-version': '2023-06-01',
@@ -834,7 +855,11 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
     })
   });
 
-  if (!res.ok) throw new Error(`Claude API error: ${await res.text()}`);
+  armStallTimer();
+  if (!res.ok) {
+    clearTimeout(stallTimer);
+    throw new Error(`Claude API error: ${await res.text()}`);
+  }
 
   // Manual SSE parse -- this codebase calls the API with raw fetch
   // throughout, no SDK, so streaming means reading Anthropic's
@@ -855,6 +880,7 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
+    armStallTimer();
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split('\n');
     buffer = lines.pop();
@@ -877,6 +903,7 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
     }
   }
 
+  clearTimeout(stallTimer);
   if (ctx) ctx.waitUntil(recordUsage(env, usage));
   if (stopReason === 'max_tokens') {
     throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
@@ -981,11 +1008,26 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
 
   let text = null, lastDetail = '';
   for (let attempt = 1; attempt <= MAX_REPORT_ATTEMPTS; attempt++) {
-    const repairNote = attempt === 1 ? undefined : {
-      badText: text,
-      correction: lastDetail
-    };
-    text = await callReportModel(env, userPrompt, ctx, repairNote);
+    // A repair note only makes sense when the previous attempt actually
+    // produced text to correct -- a network-level failure (a stalled
+    // connection, a Claude API error) has none, so that attempt starts
+    // fresh instead of building a repair conversation around nothing.
+    const repairNote = (attempt > 1 && text) ? { badText: text, correction: lastDetail } : undefined;
+    try {
+      text = await callReportModel(env, userPrompt, ctx, repairNote);
+    } catch (error) {
+      // Previously any callReportModel failure (a stalled connection, a
+      // Claude API error) propagated straight out of this whole function,
+      // skipping both the remaining retries AND the guaranteed fallback
+      // below -- a real customer saw a raw API error string instead of
+      // ever reaching the "this literally cannot fail" fallback the
+      // comment below already promised. Treat it as just another failed
+      // attempt instead.
+      text = null;
+      lastDetail = error.message;
+      console.error(`Report generation attempt ${attempt}/${MAX_REPORT_ATTEMPTS} failed: ${lastDetail}`);
+      continue;
+    }
     try {
       const parsed = JSON.parse(extractJSON(text));
       const defect = checkDefects(parsed);
