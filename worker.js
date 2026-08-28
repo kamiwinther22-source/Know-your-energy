@@ -131,6 +131,19 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     state: state || ""
   });
 
+  // A "fallback-default" location means cities.js matched nothing at all
+  // -- not even the built-in major-city list -- and silently substituted
+  // New York's coordinates. Ascendant, Midheaven, and every house cusp
+  // are latitude/longitude-sensitive, so silently computing them for the
+  // wrong place on Earth produces a confidently wrong chart with no sign
+  // anything went wrong. A customer paying for this deserves a clear
+  // "we couldn't find your city" over a wrong chart that looks correct.
+  if (result.location.source === "fallback-default") {
+    throw new Error(
+      `Could not find "${city}" as a recognized city. Please check the spelling, or try the nearest larger city -- your chart depends on the exact birth location, so it can't be computed without a real match.`
+    );
+  }
+
   if (!hasRealTime) {
     // Ascendant, Midheaven, and house placements all depend on the exact
     // clock time of birth — without it they'd just be guesses computed from
@@ -264,9 +277,17 @@ async function getHumanDesign(env, dob, timeStr, ampm, city, state) {
     datetime = await resolveHDDatetime(env, dateStr, timeFormatted, timezone);
   }
 
-  // Fallback if resolution fails — no offset, API still calculates
+  // No silent fallback here anymore: an un-zoned datetime string used to
+  // get sent to the bodygraph API as-is, letting it assume some default
+  // offset for the local time we actually gave it in a real timezone --
+  // a wrong UTC moment computed with total confidence, which can flip
+  // gates, Type, even Authority, with no sign anything went wrong. A
+  // customer paying for this deserves a clear "couldn't resolve your
+  // timezone" over a wrong chart that looks correct.
   if (!datetime) {
-    datetime = `${dateStr}T${timeFormatted}:00`;
+    throw new Error(
+      `Could not resolve a timezone for "${cityName}". Human Design needs the exact UTC moment of birth, so the chart can't be safely computed without it.`
+    );
   }
 
   // The bodygraph result for a given resolved datetime is also
@@ -879,7 +900,7 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
     try {
       const parsed = JSON.parse(extractJSON(text));
       const defect = checkDefects(parsed);
-      if (!defect) return parsed;
+      if (!defect) return { reading: parsed, usedFallback: false };
       lastDetail = defect;
     } catch (e) {
       lastDetail = 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.';
@@ -888,12 +909,15 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   }
 
   // Every real generation attempt failed -- log the real technical
-  // detail for debugging, but a customer never sees an error at all.
-  // Fall back to a reading built directly from the chart data with no
-  // API call involved, so this literally cannot fail the way an AI
-  // generation can: a report is now guaranteed every single time.
+  // detail for debugging. A customer still always gets a reading (this
+  // literally cannot fail the way an AI generation can), but usedFallback
+  // now travels with it -- previously nothing distinguished this shorter,
+  // deterministic version from a real personalized one except a single
+  // buried sentence in its own signature line. A customer paying full
+  // price deserves a visible notice, not a sentence they have to notice
+  // themselves.
   console.error(`All ${MAX_REPORT_ATTEMPTS} report generation attempts failed, using deterministic fallback. Last detail: ${lastDetail}`);
-  return buildFallbackReading(rtype, p1, p2);
+  return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
 }
 
 export default {
@@ -1021,9 +1045,11 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       const p1Data = await assemblePersonData(env, body.p1);
       const p2Data = body.p2 ? await assemblePersonData(env, body.p2) : null;
 
-      let report = null, reportError = null;
+      let report = null, reportError = null, reportUsedFallback = false;
       try {
-        report = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
+        const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
+        report = result.reading;
+        reportUsedFallback = result.usedFallback;
       } catch (error) {
         reportError = error.message;
       }
@@ -1032,7 +1058,7 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
         ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
       }
 
-      return jsonResponse({ p1: p1Data, p2: p2Data, report, reportError });
+      return jsonResponse({ p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback });
     } catch (error) {
       return jsonResponse({ error: error.message }, 500);
     }
