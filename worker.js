@@ -807,7 +807,7 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
       // Thinking was disabled here after an earlier truncation bug --
       // thinking and output tokens share one max_tokens ceiling, so a
       // real thinking budget with too-low a ceiling cut generation off
-      // mid-reading. Re-enabling as a real test: Sonnet 5 only supports
+      // mid-reading. Re-enabled as a real test: Sonnet 5 only supports
       // adaptive thinking (budget_tokens is rejected outright), with
       // effort controlling depth instead -- "high" for real intelligence-
       // sensitive cross-referencing work, not the default. max_tokens
@@ -816,6 +816,13 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
       max_tokens: 48000,
       thinking: { type: 'adaptive' },
       output_config: { effort: 'high' },
+      // A non-streaming call with a real thinking pass at high effort
+      // hit a real Cloudflare 524 -- the generation genuinely took
+      // longer than the edge's timeout for one long silent response.
+      // Streaming keeps the connection actively receiving data the
+      // whole time instead of one long wait, which is the documented
+      // fix for exactly this failure mode on a large max_tokens request.
+      stream: true,
       system: [
         { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
       ],
@@ -824,17 +831,54 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
   });
 
   if (!res.ok) throw new Error(`Claude API error: ${await res.text()}`);
-  const data = await res.json();
-  if (ctx) ctx.waitUntil(recordUsage(env, data.usage));
-  if (data.stop_reason === 'max_tokens') {
+
+  // Manual SSE parse -- this codebase calls the API with raw fetch
+  // throughout, no SDK, so streaming means reading Anthropic's
+  // documented event sequence by hand: message_start carries the
+  // initial (input-side) usage, content_block_start says whether a
+  // block is "thinking" or "text" so deltas can be routed correctly,
+  // content_block_delta carries the actual text (and thinking, which
+  // is discarded -- nothing here needs to show it), and message_delta
+  // carries the final stop_reason and the real cumulative output_tokens.
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let textOut = '';
+  const blockTypes = {};
+  let usage = null;
+  let stopReason = null;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop();
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      let evt;
+      try { evt = JSON.parse(line.slice(6)); } catch (_) { continue; }
+      if (evt.type === 'message_start') {
+        usage = evt.message?.usage || null;
+      } else if (evt.type === 'content_block_start') {
+        blockTypes[evt.index] = evt.content_block?.type;
+      } else if (evt.type === 'content_block_delta') {
+        if (blockTypes[evt.index] === 'text' && evt.delta?.type === 'text_delta') {
+          textOut += evt.delta.text;
+        }
+      } else if (evt.type === 'message_delta') {
+        if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
+        if (evt.usage) usage = { ...usage, ...evt.usage };
+      }
+    }
+  }
+
+  if (ctx) ctx.waitUntil(recordUsage(env, usage));
+  if (stopReason === 'max_tokens') {
     throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
   }
-  // With thinking enabled, content[0] is now a thinking block, not the
-  // text block -- find the actual text block by type instead of
-  // assuming a fixed position, or this silently returns undefined.
-  const textBlock = (data.content || []).find(b => b.type === 'text');
-  if (!textBlock) throw new Error('Claude API response had no text block.');
-  return textBlock.text;
+  if (!textOut) throw new Error('Claude API response had no text content.');
+  return textOut;
 }
 
 function countNameMentions(text, name) {
