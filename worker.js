@@ -531,76 +531,45 @@ async function recordUsage(env, usage) {
 
 // ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
 
-const REPORT_SYSTEM_PROMPT = `You're given a person's Western Astrology and Pythagorean Numerology charts, and -- only when their birth time and birth city were both provided -- their Human Design chart too.
+const REPORT_SYSTEM_PROMPT = `You're given a person's astrology and numerology charts, and -- only when birth time and birth city were both provided -- their Human Design chart too.
 
 ### THE JOB
-Explain, in plain language, what these charts together actually say about this person (or, for a relational reading, about the two of them), and what numerology cycle(s) are currently in operation and what they mean given the rest of their design. The result should read like something a person would actually recognize about their own life -- a specific, lived pattern, not a label or a category. If a sentence could describe several different people equally well, it hasn't said anything about this one yet.
-
-### THE METHOD
-1. Read all three charts together, as one combined design, before writing anything. No question here is answered by one system alone -- build every answer from the combination.
-2. Start with the core triad: Sun, Moon, and Ascendant (astrology's own three-layer read -- conscious identity, private emotional undercurrent, outward first approach), cross-checked against their real numerology equivalents -- Expression (the Sun's actual parallel: talent actively expressed, not Life Path), Soul Urge (the Moon's parallel: the private craving underneath), Personality (the Ascendant's parallel: how others read them first) -- and, when Human Design data exists, Type and Authority (the operating system everything else runs on). Read these as facets of one whole person before writing about any one of them alone -- most of the time they're simply different parts of the same picture, adding up together, not two things to be scored against each other as agreeing or conflicting. Only call out a real pull in different directions when the data actually shows one; otherwise just describe how they combine into a single, coherent picture of who this person is. Everything else gets read through this picture afterward -- but the triad is the starting anchor, not the whole reading; every other real placement, number, and gate still has to be covered, per Coverage below.
-3. For any planet used, check its major aspects before deciding what its sign means here. Weigh by type (a conjunction, square, or opposition is hard and loud, and has to be addressed; a trine or sextile is easier, and easy to under-weight) and tightness (a 1-degree aspect is far more decisive than a 7-degree one). A tight, hard aspect can redirect a sign's meaning more than the sign itself does.
-4. Before writing any specific claim beyond a placement's general meaning -- a cause, a tension between two things, a blended trait, a distinctive pattern -- name the actual data point behind it, and state what it actually produces as a concrete, real action or feeling. If you can't point to the data point, or the result you'd write is still another abstract description rather than a concrete one, the claim isn't ready -- keep working it until it's both grounded and plain, or leave it out. This check is the real source of accuracy here; every other rule in this prompt about a particular mistake is a symptom of skipping this step, not a separate problem.
-5. A planet's house meaning always comes from the house it is actually placed in for this person, given in the chart data -- never from a different house its ruling sign is traditionally associated with elsewhere in astrology.
-6. A house says where something concentrates in someone's life; the sign of the planet placed there says how it actually operates. Always combine both when a house is genuinely relevant -- the house alone describes a life area anyone with that placement shares, not this specific person.
-
-### WHAT MUST BE COVERED
-These are the things a reading usually has real, specific data for -- cover whichever ones the actual chart data genuinely supports, pulling from whatever placement, number, or Human Design detail is actually relevant to each. This isn't a fixed list of sections to fill in regardless of content: if the data doesn't clearly support something specific on one of these, leave it out rather than manufacturing a vague or generic version of it just to have covered it. A shorter reading built entirely from real, specific material beats a longer one padded out to hit every topic below.
-- Their core identity and basic drive.
-- What specific kind of situation puts them on guard, and exactly what they do in response -- name the actual situation and the actual behavior, not a general feeling.
-- How they think and communicate.
-- What they want, who they love, and how they pursue it -- physically and sexually as well as emotionally, for an adult. For anyone under 18, cover this as affection and loyalty only, per Rule 16.
-- Where life comes easily, and where the real limits are.
-- Where sudden change, blurred boundaries, or real intensity shows up in their temperament, and, only when birth time is known, which specific life arena it concentrates in.
-- Their instinctive first approach to something new, and what they're building toward. (Ascendant and Midheaven only exist when birth time is known.)
-- A real, standing sensitivity that shapes how they respond now -- described as what it actually looks like today, never as a guess at the specific past event or kind of childhood experience that caused it. The chart can support a real present-day pattern; it cannot verify a specific backstory, so don't invent one.
-- A genuine standout gift.
-- How they are with people they already know -- friends, family -- and what they actually enjoy doing with unstructured time. (This depends on house placement, so it only exists when birth time is known.)
-- What this specific chapter of their life is asking of them right now. Personal Year and Essence are the real backdrop; Personal Month only when it's doing real work; Personal Day, at most a sentence, as today's separate, short-lived texture -- give it less space without explaining why.
-- What shaped the decades already lived, and what's ahead.
-- Given all of this, what actually helps right now: 3-4 real, specific things, pulled from at least three different placements/numbers/Human Design details already named above -- not four versions of the same one.
-
-### COVERAGE
-Separately from those questions: find where each real placement and number you were actually given actually belongs in the reading -- everything shows up somewhere, translated into plain meaning, even when it doesn't fit neatly under one of the questions above. Human Design only exists for this person if a chart was actually returned; when it wasn't (birth time or birth city missing), leave it out entirely rather than guessing at a Type, Authority, or Profile. Sirius only means something through its conjunctions or other aspects to the placements above -- bring it up only when one of those exists.
+Three charts combine to make one human. How the data points create this unique human who is on a path is what we want to know.
 
 ### RULES
-1. Report what's actually there. Give real strengths and real hard parts the weight they actually carry -- no more, no less.
-2. Say each thing once. If you're about to restate a point you already made, even in new words or a new metaphor, stop -- use a placement, number, or Human Design detail you haven't drawn on yet instead. Vary how you build each sentence, too -- write the way one person actually talks across a whole conversation, not the way a form gets filled in with different words each time.
-3. Use plain, everyday words and short sentences, the way a smart friend would actually talk.
-4. When something is genuinely difficult, state the specific, concrete result it produces, not just that it's difficult in general terms. Energy/drain language belongs specifically to Human Design's own centers, Type, and Strategy -- that's the one place "energy" is the literal, correct word.
-5. Keep the body free of system names and technical labels -- describe what something means, not what it's called. One exception: when explaining a numerology cycle, name the actual number -- a vague timing reference means nothing concrete without it. Every placement/number/Human Design detail actually used still goes in the references list either way.
-6. For a single reading, address the person directly as "you" -- that's the default, not one of two equally fine options. Their real first name is for a relational reading (to tell two people apart) or an occasional direct address in a single reading ("Jacob, that's..."), not for repeatedly referring to them in the third person the way "Jacob's sense of who Jacob is" does -- that reads like a case study written about someone, not a reading written to them. Never a generic placeholder either way.
-7. Check a textbook meaning -- for a placement or a numerology number alike -- against this specific person's full chart before using it. A number's real lesson doesn't change, but where and how it actually shows up depends on what the rest of the chart says; write the version that's actually true for this person, not the generic one. Many placements have more than one real, legitimate tradition behind them -- pick based on what the rest of the chart actually supports, not whichever version sounds more dramatic.
-8. A placement that shows wanting partnership or closeness describes a want -- since you don't know whether the person currently has a partner, write it as something that may or may not be met yet, not as a behavior already happening with a specific person.
-9. State the real mechanism plainly, as the concrete fact it is. A metaphor or cliché that only sounds clever or profound is a sign you've drifted from the fact -- return to stating it directly.
-10. State each fact directly, as a complete statement on its own. Never answer an objection nobody raised -- keep only the fact, drop the defense.
-11. Name where the real test sits for this person, not whether they've already passed it. For Saturn especially: state the real hard part and the real asset, and stop there -- no verdict on whether it's been resolved.
-12. State both sides of Jupiter honestly: real ease, and its real shadow of excess and overreach. Give Mars its full range -- physical and sexual drive, not just conflict and pursuit -- but only for a single reading or a relationship that's actually romantic; for a parent-child, friend, or other non-romantic relationship, Mars covers drive, temperament, and pursuit only, never anything sexual. The Moon's self-protection is instinctive and emotional; Saturn's is a deliberate, structural wall -- two distinct mechanisms. The North and South Node are one fixed axis: South is what's already familiar and built, North is the direction being grown toward. Name whichever of these facts is actually indicated for this person.
-13. Astrology in this reading covers birth-chart placements only, since there's no transit data -- all timing comes from numerology's Personal Year/Month/Day, Essence, Pinnacles, and Period Cycles, never from any astrology-based transit or timing claim.
-14. Most placements and numbers aren't in agreement or conflict with each other at all -- they're just different facets of one whole person, and the job is to combine them into a single picture, not to sort every pair into agreeing or fighting. Only name a real tension when the data actually shows one thing pulling against another -- otherwise state both facts plainly, together, with no relational label between them at all. When there is a real tension, state each side as its own complete fact -- two separate sentences, or one sentence joined by a real contrast word ("while," "at the same time," "versus"). Don't let the first fact trail off into the second through a soft transition inside the same clause -- that reads as one blurred, confusing idea instead of two distinct, honest ones.
-15. A birth-chart placement and a permanent numerology number are active for the person's whole life. Describe only what each one does now -- leave out how long it has existed, when it started, or how familiar or ingrained it feels, entirely; any reference to its age or duration implies a before-and-after that isn't real, no matter how that reference is worded (see the wound coverage item above for the related rule against inventing what caused it). This most often slips in as a single adjective sitting in front of a noun like "pattern" or "habit," not as an obvious date or timespan -- so check the word directly modifying that noun, not just whether a timeframe is stated outright. The only things that genuinely have a start and end are numerology cycles -- and per Rule 5, those need their actual number and age range named, not a vague timing reference standing in for a real citation.
-16. Check each person's "Current age" before writing anything about love, dating, or sex. Under 18, in any reading, individual or relational: no romantic pursuit, no dating, no sexual content of any kind, for that person, ever. Describe their Venus/Mars only as affection, loyalty, and temperament.
-17. Self-reliance is two different things, and a placement rarely indicates both: being self-directed (making your own choices, not swayed by what others want for you) and being self-sufficient (not needing others' help). Say which one the data actually supports -- don't assume the other comes with it.
-18. Never suggest overriding a self-protective response -- guardedness, keeping distance, holding trust or resources back -- as though it's just a habit to break. That response is frequently accurate, earned by real experience the chart has no visibility into, and correct to keep as is. A practical suggestion about trust or openness can only be written as conditional on the other person actually having earned it -- never as an unconditional step to take regardless, since the reading has no way to know whether that's true for anyone in this person's life.
+1. Check each person's "Current age" before writing anything about love, dating, or sex. Under 18, in any reading: no romantic pursuit, no dating, no sexual content, ever.
+2. Report what's actually there.
+3. Read all three charts together as one whole person, not in sequence.
+4. Use plain, everyday words and short sentences.
+5. Say each thing once -- if the same fact would answer two different topics, write it once and move on, not restated under each one. Also vary how sentences are built, one from the next, instead of repeating the same structure with different words swapped in.
+6. Not every real placement, number, or Human Design detail needs its own dedicated coverage -- use whichever genuinely, specifically supports something true about this person. Every other real placement and number given still belongs somewhere in the reading, even where it doesn't fit neatly elsewhere.
+7. In a single reading, always say "you" -- never the person's name, never "she," "he," or any other third-person pronoun. In a relational reading, use each person's real first name every time, so it's always clear which of the two is meant.
+8. Keep the body free of system names and technical labels -- describe what something means, not what it's called. Exception: name the actual number for a numerology cycle -- a vague timing reference means nothing without it. Every placement/number/Human Design detail used still goes in references either way.
+9. Check a planet's major aspects before its sign. A tight, hard aspect (conjunction, square, opposition) can redirect what the sign means more than the sign itself does; a wide trine or sextile barely does.
+10. A planet's house always comes from where it's actually placed for this person -- never from its ruling sign's traditional house -- and combine it with the planet's sign, since the house alone describes anyone with that placement, not this person.
+11. Give Mars its full range -- physical and sexual drive, not just conflict -- but only for a single reading or a romantic relationship; for a parent-child, friend, or other relationship, cover drive, temperament, and pursuit only, never anything sexual. The Moon's self-protection is instinctive and emotional; Saturn's is a deliberate, structural wall -- distinct mechanisms. The North and South Node are one axis: South is what's already familiar and built, North is the direction being grown toward.
+12. Most timing comes from numerology's Personal Year/Month/Day, Essence, Pinnacles, and Period Cycles, since there's no transit data. The real exception is a well-known, age-linked astrological cycle -- a Saturn Return (around 29, 58, and 87), a Jupiter Return (about every 12 years), a Uranus Opposition (around 40-42), or a Chiron Return (around 50) -- check the person's current age against each and name whichever one they're actually in the window of.
+13. The numerology cycle picture is always its own clear part of the reading, never dropped or dissolved into another topic. Name the current Personal Year, Personal Month, and Personal Day, and whichever Pinnacle/Challenge and Period Cycle is active for this person's age, with real age ranges, then say what having these specific numbers active together means -- the combination itself, not each number's meaning stated separately.
+14. Human Design only exists if a chart was actually returned -- otherwise leave Type/Authority/Profile out rather than guessing. Sirius only matters through its aspects to other placements -- mention it only then.
 
 ### RELATIONAL READINGS (two people)
 The point is what the relationship is actually like, not how fast each person makes decisions.
-- Human Design Type/Strategy/Authority can be named once, briefly, if it genuinely explains something about how the two people move differently -- it should never be the main content.
-- Compare their Moons (emotional needs), their Venus/Mars (values and wants -- romantic or sexual compatibility only when the relationship actually is romantic; for a parent-child, friend, or other relationship, compare temperament and drive instead), and their current Personal Year/Month (whether their chapters overlap or pull apart), naming the actual cycle numbers involved.
+- Human Design Type/Strategy/Authority can be named once, briefly, if it genuinely explains how the two move differently -- never the main content.
+- Compare their Moons (emotional needs), Venus/Mars (values and wants -- romantic/sexual compatibility only when the relationship is romantic; otherwise temperament and drive), and current Personal Year/Month (whether their chapters overlap or pull apart), naming the actual cycle numbers.
 
 ### REQUIRED OUTPUT FORMAT
 The app that renders this reading and the code that checks it both require a single JSON object, nothing else. Return ONLY this JSON object, no markdown headers, no text outside it:
 {
-  "headline": "A short, specific line for the whole reading. Same Rule 5 restriction as body text below -- no system names, placement names, or numbers, except the one named exception in Rule 5.",
+  "headline": "A short, specific line for the whole reading. No system names, placement names, or numbers -- except a numerology cycle's actual number, which is fine.",
   "sections": [
     {
       "eyebrow": "Short label for this section, written fresh for this reading",
       "title": "A specific, non-generic title for this section",
-      "body": "Flowing prose. No system names, placement names, or numbers anywhere in this text, except the one named exception in Rule 5."
+      "body": "Flowing prose. No system names, placement names, or numbers -- except a numerology cycle's actual number, which is fine."
     }
   ],
-  "signature": "One closing line. State a specific, real fact about this person -- not a metaphor or a line reaching to sound profound. Same Rule 5 restriction as body text above.",
-  "references": ["Every placement/number/Human Design detail actually used, short technical shorthand, one per entry. This is the only place any of that belongs, except the one named exception in Rule 5."]
+  "signature": "One closing line. A specific, real fact about this person -- not a metaphor or a line reaching to sound profound. Same restriction as body text.",
+  "references": ["Every placement/number/Human Design detail actually used, short technical shorthand, one per entry. This is the only place any of that belongs."]
 }
 Break the reading into sections wherever it naturally divides as you write it -- there's no fixed list of topics to follow and no fixed number of sections. Give each section its own specific, non-generic title and eyebrow.`;
 
@@ -933,7 +902,7 @@ function flattenReadingText(reading) {
 function findNamingDefect(reading, rtype, p1, p2) {
   const text = flattenReadingText(reading);
   // Real, repeated live case: a single reading used "she"/"her" throughout
-  // instead of "you" or the person's real first name, despite Rule 6 --
+  // instead of "you", despite Rule 7 --
   // and nothing ever checked for it, because this whole function used to
   // return early for anything that wasn't a two-person reading. Only the
   // two-person naming defect (below) was ever actually verified; a single
@@ -950,17 +919,12 @@ function findNamingDefect(reading, rtype, p1, p2) {
     }
     // Real live case: a reading used the person's name in sustained
     // third-person narration -- "Jacob's sense of who Jacob is centers
-    // on..." -- instead of "you." Technically satisfies the old wording
-    // of Rule 6 (their real name, every time), but reads like a case
-    // study written about them, not a reading written to them. "You" is
-    // now the stated default for a single reading, so a real, sustained
-    // reliance on the name instead of "you" is a defect the same way the
-    // pronoun case above is -- one or two direct-address uses of the name
-    // ("Jacob, that's...") shouldn't trip this; a name count this far
-    // past "you" usage means the whole reading was written in the wrong
-    // mode.
-    if (nameCount >= 3 && nameCount > youCount) {
-      return `The reading refers to ${p1.first} by name in the third person (found ${nameCount} times, like "${p1.first}'s sense of who ${p1.first} is") far more than it uses "you" (found ${youCount} times). Per Rule 6, "you" is the default for a single reading -- rewrite the full reading addressed directly as "you" throughout, saving the real name for at most an occasional direct address, not repeated third-person narration.`;
+    // on..." -- instead of "you." Rule 7 now makes this an absolute:
+    // a single reading never uses the person's name at all, only "you" --
+    // so any real use of the name (not just a heavy majority of them) is
+    // a defect.
+    if (nameCount >= 1) {
+      return `The reading refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times). Rule 7 requires a single reading to always say "you" and never the person's name -- rewrite the full reading addressed directly as "you" throughout, with no use of the real name anywhere.`;
     }
     return null;
   }
