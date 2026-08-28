@@ -1,5 +1,6 @@
 import { calculateFullChart } from './numerology-calculator.js';
 import { computeAstrology } from './astro-engine.js';
+import { GATES } from './gates-data.js';
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -743,10 +744,19 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     // guess at.
     const h = p.humanDesign || {};
     const hasHD = !!h.type;
+    // A bare gate number ("Defined gates: 4, 5, 6...") gives the model
+    // nothing to work from but its own general knowledge of a niche
+    // system -- unlike astrology (full sign/house/aspect data below) and
+    // numerology (full number + age-range data above), which both get
+    // real facts to interpret. Pulling each defined gate's actual name,
+    // Center, and mechanism from GATES gives gates the same real-data
+    // grounding, instead of leaving 20+ niche symbols to be recalled from
+    // memory alone.
+    const gateLine = (g) => GATES[g] ? `Gate ${g} -- ${GATES[g]}` : `Gate ${g}`;
     const hdLines = hasHD ? [
       `${h.type} type, ${h.profile || 'unknown'} profile, ${h.authority || 'unknown'} authority`,
       h.incarnation_cross ? `Incarnation Cross: ${h.incarnation_cross}` : null,
-      h.gates?.length ? `Defined gates: ${h.gates.join(', ')}` : null
+      h.gates?.length ? `Defined gates:\n  ${h.gates.map(gateLine).join('\n  ')}` : null
     ].filter(Boolean).join('\n  ') : null;
 
     // The person's actual first name is the block's own header -- this
