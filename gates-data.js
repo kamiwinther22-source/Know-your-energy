@@ -72,3 +72,17 @@ export const GATES = {
   63:`Doubt. In the Head Center. This gate questions things that already appear settled or completed — not out of negativity, but because verifying what's already been decided is the actual mental pressure this gate is built to carry. That doubt is often what catches a real flaw others missed, and left unchecked against actual evidence, the same doubt can also spiral into questioning things that were genuinely fine.`,
   64:`Confusion. In the Head Center. This gate holds a flood of past impressions and images without yet having the context to make sense of them — mental pressure that feels like confusion because it genuinely is confusion, until enough new experience gives the old impressions a frame to click into. That confusion is the actual raw material for real understanding later, arriving well before the understanding itself does.`
 };
+
+// The 36 real Human Design channels -- each is the two gate-numbers that
+// pair to form one complete, defined circuit. Structural data (which
+// numbers pair up), not interpretive content -- same list as index.html's
+// CHANNELS array, used here so the report prompt can tell the model which
+// of a person's defined gates form an actual complete channel (the real,
+// coherent, most load-bearing HD unit) versus an individual "hanging"
+// gate with no partner defined.
+export const CHANNELS = [
+  [64,47],[61,24],[63,4],[17,62],[43,23],[11,56],[16,48],[20,57],[20,34],[32,54],
+  [28,38],[18,58],[20,10],[31,7],[8,1],[33,13],[10,34],[15,5],[2,14],[46,29],
+  [10,57],[57,34],[50,27],[45,21],[59,6],[42,53],[3,60],[9,52],[26,44],[25,51],
+  [40,37],[35,36],[12,22],[49,19],[55,39],[30,41]
+];

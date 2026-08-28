@@ -1,6 +1,6 @@
 import { calculateFullChart } from './numerology-calculator.js';
 import { computeAstrology } from './astro-engine.js';
-import { GATES } from './gates-data.js';
+import { GATES, CHANNELS } from './gates-data.js';
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -562,7 +562,9 @@ A real reading always addresses all of the following. For each one, pull from wh
 - Given all of this, what actually helps right now: 3-4 real, specific things, pulled from at least three different placements/numbers/gates already named above -- not four versions of the same one.
 
 ### COVERAGE
-Separately from those questions: find where each real placement, number, and gate you were actually given actually belongs in the reading -- everything shows up somewhere, translated into plain meaning, even when it doesn't fit neatly under one of the questions above. Human Design only exists for this person if a chart was actually returned; when it wasn't (birth time or birth city missing), leave it out entirely rather than guessing at a Type, Authority, Profile, or gate. Sirius only means something through its conjunctions or other aspects to the placements above -- bring it up only when one of those exists.
+Separately from those questions: find where each real placement and number you were actually given actually belongs in the reading -- everything shows up somewhere, translated into plain meaning, even when it doesn't fit neatly under one of the questions above. Human Design only exists for this person if a chart was actually returned; when it wasn't (birth time or birth city missing), leave it out entirely rather than guessing at a Type, Authority, Profile, or gate. Sirius only means something through its conjunctions or other aspects to the placements above -- bring it up only when one of those exists.
+
+Gates are the one exception to "everything shows up somewhere": a person can have 20+ of them, most individually thin on their own, and forcing every single one into the reading produces length and repetition without real insight. A defined channel (both its gates active) is a complete, coherent circuit and the strongest gate-level signal available -- draw on every real one of those. An individual gate with no partner defined is real but secondary -- use it only where it's genuinely the clearest, most specific fit for something you already need to cover; there's no requirement to work every remaining one in.
 
 ### RULES
 1. Report what's actually there. Give real strengths and real hard parts the weight they actually carry -- no more, no less.
@@ -750,13 +752,34 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     // numerology (full number + age-range data above), which both get
     // real facts to interpret. Pulling each defined gate's actual name,
     // Center, and mechanism from GATES gives gates the same real-data
-    // grounding, instead of leaving 20+ niche symbols to be recalled from
+    // grounding, instead of leaving niche symbols to be recalled from
     // memory alone.
-    const gateLine = (g) => GATES[g] ? `Gate ${g} -- ${GATES[g]}` : `Gate ${g}`;
+    //
+    // A channel (both of a pair's gates defined) is the real, complete,
+    // coherent HD circuit -- a single unified theme, not two separate
+    // facts -- so it gets the full real content for both gates. A gate
+    // with no partner defined ("hanging") is real too, but on its own,
+    // and there are usually far more of these than there are channels;
+    // giving all of them the same full-paragraph treatment as a complete
+    // channel was pushing 20+ niche, individually-thin facts into every
+    // reading (per Coverage below, that used to be mandatory for every
+    // single one) without adding proportionate insight -- so hanging
+    // gates get name + Center only, real but compact, secondary data.
+    const gateFull = (g) => GATES[g] ? `Gate ${g} -- ${GATES[g]}` : `Gate ${g}`;
+    const gateSummary = (g) => {
+      const full = GATES[g];
+      if (!full) return `Gate ${g}`;
+      return `Gate ${g} -- ${full.split('. ').slice(0, 2).join('. ')}.`;
+    };
+    const gateSet = new Set((h.gates || []).map(Number));
+    const definedChannels = CHANNELS.filter(([a, b]) => gateSet.has(a) && gateSet.has(b));
+    const channeledGates = new Set(definedChannels.flat());
+    const hangingGates = (h.gates || []).filter(g => !channeledGates.has(Number(g)));
     const hdLines = hasHD ? [
       `${h.type} type, ${h.profile || 'unknown'} profile, ${h.authority || 'unknown'} authority`,
       h.incarnation_cross ? `Incarnation Cross: ${h.incarnation_cross}` : null,
-      h.gates?.length ? `Defined gates:\n  ${h.gates.map(gateLine).join('\n  ')}` : null
+      definedChannels.length ? `Defined channels (both gates active -- a complete, coherent circuit, the strongest Human Design signal here):\n  ${definedChannels.map(([a, b]) => `Channel ${a}-${b}:\n    ${gateFull(a)}\n    ${gateFull(b)}`).join('\n  ')}` : null,
+      hangingGates.length ? `Other defined gates (real, but no partner gate defined -- a standalone signal, not a complete circuit):\n  ${hangingGates.map(gateSummary).join('\n  ')}` : null
     ].filter(Boolean).join('\n  ') : null;
 
     // The person's actual first name is the block's own header -- this

@@ -310,6 +310,8 @@ body{
    correctly tapered instead of just "changing size." */
 .hourglass{margin:0 auto 1.3rem;display:block;}
 .loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;color:#ffffff;margin-bottom:0.9rem;}
+/* Full-strength white, same as everything else on this page -- no fading. */
+.loading-timer{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:700;color:#ffffff;letter-spacing:0.03em;margin-bottom:0.9rem;}
 /* This has to actually be seen -- she reported repeatedly getting
    distracted mid-wait, refreshing, and losing everything because the old
    version was one small dim line of text. Big, high-contrast, boxed. */
@@ -747,6 +749,7 @@ body{
     <circle class="hg-drop" cx="30" cy="41" r="1.6" fill="#8A96EE"/>
   </svg>
   <div class="loading-txt">Reading your chart&hellip;</div>
+  <div class="loading-timer" id="loadingTimer">0:00</div>
   <div class="loading-warn">Please don't refresh or leave this page. Doing so will lose your results and your entered information.</div>
   <div class="loading-note">This takes a little while because we'd rather it be thorough and accurate than fast. Thanks for your patience.</div>
 </div>
@@ -2949,6 +2952,7 @@ function render(p1,p2,r,reportErr,reportUsedFallback){
   document.getElementById('mainGrid').innerHTML=h;
   document.getElementById('bottomBtns').innerHTML=topBtn('Share','shareReading()',BTN_ICON_SHARE);
 
+  stopLoadingTimer();
   document.getElementById('loading').style.display='none';
   document.getElementById('resultsWrap').style.display='block';
   document.querySelector('.content').style.display='none';
@@ -2956,6 +2960,7 @@ function render(p1,p2,r,reportErr,reportUsedFallback){
 }
 
 function resetToForm(){
+  stopLoadingTimer();
   clearSavedResult();
   clearDraft();
   document.getElementById('resultsWrap').style.display='none';
@@ -3021,6 +3026,26 @@ function parseLocation(raw){
   };
 }
 
+// Minutes:seconds elapsed while the report is being written -- a plain
+// setInterval against a stored start time, not a frame counter, so it
+// stays accurate regardless of how often the tab actually repaints.
+let loadingTimerInterval=null, loadingTimerStart=null;
+function startLoadingTimer(){
+  loadingTimerStart=Date.now();
+  const el=document.getElementById('loadingTimer');
+  if(!el)return;
+  el.textContent='0:00';
+  clearInterval(loadingTimerInterval);
+  loadingTimerInterval=setInterval(()=>{
+    const secs=Math.floor((Date.now()-loadingTimerStart)/1000);
+    el.textContent=`${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+  },250);
+}
+function stopLoadingTimer(){
+  clearInterval(loadingTimerInterval);
+  loadingTimerInterval=null;
+}
+
 const W_API='https://know-your-energy.kwdoanchor.workers.dev';
 
 async function generate(){
@@ -3053,6 +3078,7 @@ async function generate(){
   genBtn.disabled=true;
   document.querySelector('.content').style.display='none';
   document.getElementById('loading').style.display='block';
+  startLoadingTimer();
   try{
     const res=await fetch(W_API+'/report',{
       method:'POST',
@@ -3062,6 +3088,7 @@ async function generate(){
     const result=await res.json();
     if(!res.ok){
       genBtn.disabled=false;
+      stopLoadingTimer();
       document.getElementById('loading').style.display='none';
       document.querySelector('.content').style.display='block';
       showErr(result.error||'Something went wrong. Please try again.');
@@ -3087,6 +3114,7 @@ async function generate(){
     render(p1,p2,result.report,result.reportError,result.reportUsedFallback);
   }catch(e){
     genBtn.disabled=false;
+    stopLoadingTimer();
     document.getElementById('loading').style.display='none';
     document.querySelector('.content').style.display='block';
     showErr('Connection error: '+e.message);
