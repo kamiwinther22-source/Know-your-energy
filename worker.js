@@ -563,7 +563,7 @@ Separately from those questions: find where each real placement, number, and gat
 
 ### RULES
 1. Report what's actually there. Give real strengths and real hard parts the weight they actually carry -- no more, no less.
-2. Say each thing once. If you're about to restate a point you already made, even in new words or a new metaphor, stop -- use a placement, number, or gate you haven't drawn on yet instead.
+2. Say each thing once. If you're about to restate a point you already made, even in new words or a new metaphor, stop -- use a placement, number, or gate you haven't drawn on yet instead. Vary how you build each sentence, too -- write the way one person actually talks across a whole conversation, not the way a form gets filled in with different words each time.
 3. Use plain, everyday words and short sentences, the way a smart friend would actually talk.
 4. When something is genuinely difficult, state the specific, concrete result it produces, not just that it's difficult in general terms. Energy/drain language belongs specifically to Human Design's own centers, Type, and Strategy, or to comparing two people's gates -- that's the one place "energy" is the literal, correct word.
 5. Keep the body free of system names and technical labels -- describe what something means, not what it's called. Two exceptions: when explaining a numerology cycle, name the actual number -- a vague timing reference means nothing concrete without it. When explaining a real connection or conflict between two people's Human Design gates, name the actual gates -- same reason. Every placement/number/gate actually used still goes in the references list either way.
