@@ -2676,13 +2676,69 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
 let cardRegistry=[];
 let PEOPLE_FOR_DATE_EXPLORER=[];
 
+// ---------- read-aloud ("Listen") ----------
+// Reuses cardRegistry -- the same {title, rows} entries the tap-to-expand
+// modal already draws from -- as the one source of truth for what's on
+// the page, instead of re-deriving readable text from the raw chart/
+// report data a second time. Plain browser speechSynthesis: free, no API
+// key, no added generation time, matches the actual ask (something reads
+// this out loud while you do something else), not a personalized voice.
+let speechQueue=[];
+function stripHtmlToText(html){
+  const d=document.createElement('div');
+  d.innerHTML=html;
+  return d.textContent.replace(/\s+/g,' ').trim();
+}
+function getReadableSegments(){
+  return cardRegistry.map(entry=>{
+    const body=stripHtmlToText((entry.preHtml||'')+entry.rows);
+    return body?`${entry.title}. ${body}`:'';
+  }).filter(Boolean);
+}
+function updateListenBtn(active){
+  const btn=document.getElementById('listenBtn');
+  const label=btn&&btn.querySelector('span');
+  if(label)label.textContent=active?'Stop':'Listen';
+}
+function speakNext(){
+  if(!speechQueue.length){ updateListenBtn(false); return; }
+  const utter=new SpeechSynthesisUtterance(speechQueue.shift());
+  utter.onend=speakNext;
+  utter.onerror=speakNext;
+  speechSynthesis.speak(utter);
+}
+function stopListening(){
+  speechQueue=[];
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  updateListenBtn(false);
+}
+function toggleListen(){
+  if(!window.speechSynthesis){
+    alert("Your browser doesn't support reading text aloud.");
+    return;
+  }
+  if(speechSynthesis.speaking||speechSynthesis.pending){
+    stopListening();
+    return;
+  }
+  const segments=getReadableSegments();
+  if(!segments.length)return;
+  // Chrome has a known bug where one very long utterance (a full reading
+  // is easily 1000+ words) silently stops partway through. Splitting into
+  // sentence-sized chunks, chained through onend, avoids that.
+  speechQueue=segments.flatMap(seg=>seg.match(/[^.!?]+[.!?]*/g)||[seg]);
+  updateListenBtn(true);
+  speakNext();
+}
+
 const BTN_ICON_REFRESH='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 106.3 16.3M20 11V5M20 11h-6"/></svg>';
 const BTN_ICON_PRINT='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4.5A1.5 1.5 0 013 16.5v-5A1.5 1.5 0 014.5 10h15a1.5 1.5 0 011.5 1.5v5a1.5 1.5 0 01-1.5 1.5H18M6 14h12v7H6z"/></svg>';
 const BTN_ICON_SHARE='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>';
-function topBtn(label,onclick,icon,gridPos){
+const BTN_ICON_LISTEN='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 9 9 9 13 5 13 19 9 15 5 15 5 9"/><path d="M17 8a5 5 0 010 8M20 5a9 9 0 010 14"/></svg>';
+function topBtn(label,onclick,icon,gridPos,id){
   const style=gridPos?` style="${gridPos}"`:'';
   const cls=gridPos?'side-btn grid-nav-btn':'side-btn';
-  return `<div class="${cls}"${style} onclick="${onclick}">${icon||''}<span>${label}</span></div>`;
+  return `<div class="${cls}"${style}${id?` id="${id}"`:''} onclick="${onclick}">${icon||''}<span>${label}</span></div>`;
 }
 // Shares a link to the site, never the person's own chart data -- that
 // would contradict "your info is neither shared nor saved" a few lines
@@ -2950,7 +3006,8 @@ function render(p1,p2,r,reportErr,reportUsedFallback){
     +topBtn('Save / Print Reading','window.print()',BTN_ICON_PRINT,'grid-column:3;grid-row:2;');
   if(p2)h+=personRow(p2,3,1);
   document.getElementById('mainGrid').innerHTML=h;
-  document.getElementById('bottomBtns').innerHTML=topBtn('Share','shareReading()',BTN_ICON_SHARE);
+  document.getElementById('bottomBtns').innerHTML=topBtn('Share','shareReading()',BTN_ICON_SHARE)
+    +topBtn('Listen','toggleListen()',BTN_ICON_LISTEN,null,'listenBtn');
 
   stopLoadingTimer();
   document.getElementById('loading').style.display='none';
@@ -2961,6 +3018,7 @@ function render(p1,p2,r,reportErr,reportUsedFallback){
 
 function resetToForm(){
   stopLoadingTimer();
+  stopListening();
   clearSavedResult();
   clearDraft();
   document.getElementById('resultsWrap').style.display='none';
