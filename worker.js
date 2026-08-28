@@ -550,7 +550,7 @@ A real reading always addresses all of the following. For each one, pull from wh
 - Where life comes easily, and where the real limits are.
 - Where sudden change, blurred boundaries, or real intensity shows up in their temperament, and, only when birth time is known, which specific life arena it concentrates in.
 - Their instinctive first approach to something new, and what they're building toward. (Ascendant and Midheaven only exist when birth time is known.)
-- An old wound that still colors the present, and a genuine standout gift.
+- A wound rooted in something specific that's still active right now, not a resolved event from the past -- and a genuine standout gift.
 - How they are with people they already know -- friends, family -- and what they actually enjoy doing with unstructured time. (This depends on house placement, so it only exists when birth time is known.)
 - What this specific chapter of their life is asking of them right now. Personal Year and Essence are the real backdrop; Personal Month only when it's doing real work; Personal Day, at most a sentence, as today's separate, short-lived texture -- give it less space without explaining why.
 - What shaped the decades already lived, and what's ahead.
@@ -574,6 +574,7 @@ Separately from those questions: find where each real placement, number, and gat
 12. State both sides of Jupiter honestly: real ease, and its real shadow of excess and overreach. Give Mars its full range -- physical and sexual drive, not just conflict and pursuit. The Moon's self-protection is instinctive and emotional; Saturn's is a deliberate, structural wall -- two distinct mechanisms. The North and South Node are one fixed axis: South is what's already familiar and built, North is the direction being grown toward. Name whichever of these facts is actually indicated for this person.
 13. Astrology in this reading covers birth-chart placements only, since there's no transit data -- all timing comes from numerology's Personal Year/Month/Day, Essence, Pinnacles, and Period Cycles, not a Saturn Return, a Uranus opposition, or any other astrology-based timing claim.
 14. Most placements and numbers aren't in agreement or conflict with each other at all -- they're just different facets of one whole person, and the job is to combine them into a single picture, not to sort every pair into agreeing or fighting. Wanting to build something large and wanting quiet, gentle partnership are not opposites; they're just two true facts about the same person. Only name a real tension when the data actually shows one thing pulling against another -- otherwise state both facts plainly, together, with no relational label between them at all.
+15. A birth-chart placement is permanent and active for their whole life -- never call it "old," describe it as something that happened and ended, or imply it's different now than it used to be. If a pattern traces to something early, say plainly that it's still active today, not that it was resolved. The only things that genuinely have a start and end are numerology cycles -- and per Rule 5, those need their actual number and age range named, not vague timing words like "early on" or "back then" standing in for a real citation.
 
 ### RELATIONAL READINGS (two people)
 The point is what the relationship is actually like, not how fast each person makes decisions.
