@@ -798,18 +798,18 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      // Thinking was disabled here after an earlier truncation bug --
-      // thinking and output tokens share one max_tokens ceiling, so a
-      // real thinking budget with too-low a ceiling cut generation off
-      // mid-reading. Re-enabled as a real test: Sonnet 5 only supports
-      // adaptive thinking (budget_tokens is rejected outright), with
-      // effort controlling depth instead -- "high" for real intelligence-
-      // sensitive cross-referencing work, not the default. max_tokens
-      // raised well above what output alone needs, to leave real room
-      // for thinking without repeating the original truncation failure.
-      max_tokens: 48000,
-      thinking: { type: 'adaptive' },
-      output_config: { effort: 'high' },
+      // Thinking was tried enabled (adaptive, effort: high, max_tokens
+      // 48000) as an experiment, but that setting was never validated
+      // end-to-end and real live reports started taking multiple minutes
+      // and then failing outright with "Failed to fetch" -- consistent
+      // with a generation genuinely running long enough to hit a real
+      // platform-level ceiling somewhere in the chain. The prompt itself
+      // was also just rewritten to be far simpler and more direct, which
+      // needs less reasoning to hold together, not more. Back to the
+      // settled, fast setting: thinking disabled, max_tokens sized for
+      // output alone.
+      max_tokens: 24000,
+      thinking: { type: 'disabled' },
       // A non-streaming call with a real thinking pass at high effort
       // hit a real Cloudflare 524 -- the generation genuinely took
       // longer than the edge's timeout for one long silent response.
