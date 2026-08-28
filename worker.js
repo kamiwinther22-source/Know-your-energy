@@ -1,6 +1,5 @@
 import { calculateFullChart } from './numerology-calculator.js';
 import { computeAstrology } from './astro-engine.js';
-import { GATES, CHANNELS } from './gates-data.js';
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -559,19 +558,17 @@ A real reading always addresses all of the following. For each one, pull from wh
 - How they are with people they already know -- friends, family -- and what they actually enjoy doing with unstructured time. (This depends on house placement, so it only exists when birth time is known.)
 - What this specific chapter of their life is asking of them right now. Personal Year and Essence are the real backdrop; Personal Month only when it's doing real work; Personal Day, at most a sentence, as today's separate, short-lived texture -- give it less space without explaining why.
 - What shaped the decades already lived, and what's ahead.
-- Given all of this, what actually helps right now: 3-4 real, specific things, pulled from at least three different placements/numbers/gates already named above -- not four versions of the same one.
+- Given all of this, what actually helps right now: 3-4 real, specific things, pulled from at least three different placements/numbers/Human Design details already named above -- not four versions of the same one.
 
 ### COVERAGE
-Separately from those questions: find where each real placement and number you were actually given actually belongs in the reading -- everything shows up somewhere, translated into plain meaning, even when it doesn't fit neatly under one of the questions above. Human Design only exists for this person if a chart was actually returned; when it wasn't (birth time or birth city missing), leave it out entirely rather than guessing at a Type, Authority, Profile, or gate. Sirius only means something through its conjunctions or other aspects to the placements above -- bring it up only when one of those exists.
-
-Gates are the one exception to "everything shows up somewhere": a person can have 20+ of them, most individually thin on their own, and forcing every single one into the reading produces length and repetition without real insight. A defined channel (both its gates active) is a complete, coherent circuit and the strongest gate-level signal available -- draw on every real one of those. An individual gate with no partner defined is real but secondary -- use it only where it's genuinely the clearest, most specific fit for something you already need to cover; there's no requirement to work every remaining one in.
+Separately from those questions: find where each real placement and number you were actually given actually belongs in the reading -- everything shows up somewhere, translated into plain meaning, even when it doesn't fit neatly under one of the questions above. Human Design only exists for this person if a chart was actually returned; when it wasn't (birth time or birth city missing), leave it out entirely rather than guessing at a Type, Authority, or Profile. Sirius only means something through its conjunctions or other aspects to the placements above -- bring it up only when one of those exists.
 
 ### RULES
 1. Report what's actually there. Give real strengths and real hard parts the weight they actually carry -- no more, no less.
-2. Say each thing once. If you're about to restate a point you already made, even in new words or a new metaphor, stop -- use a placement, number, or gate you haven't drawn on yet instead. Vary how you build each sentence, too -- write the way one person actually talks across a whole conversation, not the way a form gets filled in with different words each time.
+2. Say each thing once. If you're about to restate a point you already made, even in new words or a new metaphor, stop -- use a placement, number, or Human Design detail you haven't drawn on yet instead. Vary how you build each sentence, too -- write the way one person actually talks across a whole conversation, not the way a form gets filled in with different words each time.
 3. Use plain, everyday words and short sentences, the way a smart friend would actually talk.
-4. When something is genuinely difficult, state the specific, concrete result it produces, not just that it's difficult in general terms. Energy/drain language belongs specifically to Human Design's own centers, Type, and Strategy, or to comparing two people's gates -- that's the one place "energy" is the literal, correct word.
-5. Keep the body free of system names and technical labels -- describe what something means, not what it's called. Two exceptions: when explaining a numerology cycle, name the actual number -- a vague timing reference means nothing concrete without it. When explaining a real connection or conflict between two people's Human Design gates, name the actual gates -- same reason. Every placement/number/gate actually used still goes in the references list either way.
+4. When something is genuinely difficult, state the specific, concrete result it produces, not just that it's difficult in general terms. Energy/drain language belongs specifically to Human Design's own centers, Type, and Strategy -- that's the one place "energy" is the literal, correct word.
+5. Keep the body free of system names and technical labels -- describe what something means, not what it's called. One exception: when explaining a numerology cycle, name the actual number -- a vague timing reference means nothing concrete without it. Every placement/number/Human Design detail actually used still goes in the references list either way.
 6. Use the person's real first name (or "you," for a single reading), every time they're referenced -- never a generic placeholder instead of it.
 7. Check a textbook meaning -- for a placement or a numerology number alike -- against this specific person's full chart before using it. A number's real lesson doesn't change, but where and how it actually shows up depends on what the rest of the chart says; write the version that's actually true for this person, not the generic one. Many placements have more than one real, legitimate tradition behind them -- pick based on what the rest of the chart actually supports, not whichever version sounds more dramatic.
 8. A placement that shows wanting partnership or closeness describes a want -- since you don't know whether the person currently has a partner, write it as something that may or may not be met yet, not as a behavior already happening with a specific person.
@@ -589,22 +586,21 @@ Gates are the one exception to "everything shows up somewhere": a person can hav
 ### RELATIONAL READINGS (two people)
 The point is what the relationship is actually like, not how fast each person makes decisions.
 - Human Design Type/Strategy/Authority can be named once, briefly, if it genuinely explains something about how the two people move differently -- it should never be the main content.
-- Instead, compare their actual defined gates and name the real gates involved when they complete a channel between the two of them or genuinely conflict -- that's the one place gate numbers belong in the body.
 - Compare their Moons (emotional needs), their Venus/Mars (values and wants -- romantic or sexual compatibility only when the relationship actually is romantic; for a parent-child, friend, or other relationship, compare temperament and drive instead), and their current Personal Year/Month (whether their chapters overlap or pull apart), naming the actual cycle numbers involved.
 
 ### REQUIRED OUTPUT FORMAT
 The app that renders this reading and the code that checks it both require a single JSON object, nothing else. Return ONLY this JSON object, no markdown headers, no text outside it:
 {
-  "headline": "A short, specific line for the whole reading. Same Rule 5 restriction as body text below -- no system names, placement names, numbers, or gate numbers, except the two named exceptions in Rule 5.",
+  "headline": "A short, specific line for the whole reading. Same Rule 5 restriction as body text below -- no system names, placement names, or numbers, except the one named exception in Rule 5.",
   "sections": [
     {
       "eyebrow": "Short label for this section, written fresh for this reading",
       "title": "A specific, non-generic title for this section",
-      "body": "Flowing prose. No system names, placement names, numbers, or gate numbers anywhere in this text, except the two named exceptions in Rule 5."
+      "body": "Flowing prose. No system names, placement names, or numbers anywhere in this text, except the one named exception in Rule 5."
     }
   ],
   "signature": "One closing line. State a specific, real fact about this person -- not a metaphor or a line reaching to sound profound. Same Rule 5 restriction as body text above.",
-  "references": ["Every placement/number/gate actually used, short technical shorthand, one per entry. This is the only place any of that belongs, except the two named exceptions in Rule 5."]
+  "references": ["Every placement/number/Human Design detail actually used, short technical shorthand, one per entry. This is the only place any of that belongs, except the one named exception in Rule 5."]
 }
 Break the reading into sections wherever it naturally divides as you write it -- there's no fixed list of topics to follow and no fixed number of sections. Give each section its own specific, non-generic title and eyebrow.`;
 
@@ -746,40 +742,14 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     // guess at.
     const h = p.humanDesign || {};
     const hasHD = !!h.type;
-    // A bare gate number ("Defined gates: 4, 5, 6...") gives the model
-    // nothing to work from but its own general knowledge of a niche
-    // system -- unlike astrology (full sign/house/aspect data below) and
-    // numerology (full number + age-range data above), which both get
-    // real facts to interpret. Pulling each defined gate's actual name,
-    // Center, and mechanism from GATES gives gates the same real-data
-    // grounding, instead of leaving niche symbols to be recalled from
-    // memory alone.
-    //
-    // A channel (both of a pair's gates defined) is the real, complete,
-    // coherent HD circuit -- a single unified theme, not two separate
-    // facts -- so it gets the full real content for both gates. A gate
-    // with no partner defined ("hanging") is real too, but on its own,
-    // and there are usually far more of these than there are channels;
-    // giving all of them the same full-paragraph treatment as a complete
-    // channel was pushing 20+ niche, individually-thin facts into every
-    // reading (per Coverage below, that used to be mandatory for every
-    // single one) without adding proportionate insight -- so hanging
-    // gates get name + Center only, real but compact, secondary data.
-    const gateFull = (g) => GATES[g] ? `Gate ${g} -- ${GATES[g]}` : `Gate ${g}`;
-    const gateSummary = (g) => {
-      const full = GATES[g];
-      if (!full) return `Gate ${g}`;
-      return `Gate ${g} -- ${full.split('. ').slice(0, 2).join('. ')}.`;
-    };
-    const gateSet = new Set((h.gates || []).map(Number));
-    const definedChannels = CHANNELS.filter(([a, b]) => gateSet.has(a) && gateSet.has(b));
-    const channeledGates = new Set(definedChannels.flat());
-    const hangingGates = (h.gates || []).filter(g => !channeledGates.has(Number(g)));
+    // Gates (individual and channel-paired alike) were cut entirely --
+    // real, sourced grounding data for them didn't make them worth the
+    // added generation time for what they were adding to the reading.
+    // Type/Authority/Profile stay: that's the "operating system" layer
+    // THE METHOD already treats as load-bearing, not gate-level detail.
     const hdLines = hasHD ? [
       `${h.type} type, ${h.profile || 'unknown'} profile, ${h.authority || 'unknown'} authority`,
-      h.incarnation_cross ? `Incarnation Cross: ${h.incarnation_cross}` : null,
-      definedChannels.length ? `Defined channels (both gates active -- a complete, coherent circuit, the strongest Human Design signal here):\n  ${definedChannels.map(([a, b]) => `Channel ${a}-${b}:\n    ${gateFull(a)}\n    ${gateFull(b)}`).join('\n  ')}` : null,
-      hangingGates.length ? `Other defined gates (real, but no partner gate defined -- a standalone signal, not a complete circuit):\n  ${hangingGates.map(gateSummary).join('\n  ')}` : null
+      h.incarnation_cross ? `Incarnation Cross: ${h.incarnation_cross}` : null
     ].filter(Boolean).join('\n  ') : null;
 
     // The person's actual first name is the block's own header -- this
