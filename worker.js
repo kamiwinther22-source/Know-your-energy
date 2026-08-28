@@ -950,8 +950,11 @@ export default {
     if (url.pathname === "/usage") {
       const raw = await env.PASSES.get(USAGE_KV_KEY);
       const t = raw ? JSON.parse(raw) : { requests: 0, inputTokens: 0, outputTokens: 0, cacheCreationTokens: 0, cacheReadTokens: 0 };
-      // Claude Sonnet 5 introductory pricing (through 2026-08-31): $2/$10 per
-      // million input/output tokens. Update these if pricing changes.
+      // Claude Sonnet 5 pricing: $2/$10 per million input/output tokens.
+      // Originally introductory through 2026-08-31 with a planned increase
+      // to $3/$15 on 2026-09-01 -- Anthropic made $2/$10 permanent instead
+      // (announced 2026-08-10), so that increase isn't happening. Update
+      // these rates if that ever changes again.
       const INPUT_RATE = 2 / 1_000_000;
       const OUTPUT_RATE = 10 / 1_000_000;
       const CACHE_WRITE_RATE = INPUT_RATE * 1.25;
@@ -975,7 +978,7 @@ ${row('Cache read tokens', t.cacheReadTokens.toLocaleString())}
 ${row('Estimated total cost', '$' + cost.toFixed(2))}
 ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
 </table>
-<p class="note">Estimate uses Claude Sonnet 5 introductory pricing ($2/$10 per million input/output tokens, through 2026-08-31) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees.</p>
+<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees.</p>
 </body></html>`;
       return new Response(html, { headers: { "Content-Type": "text/html; charset=UTF-8", ...CORS_HEADERS } });
     }
