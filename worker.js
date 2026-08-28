@@ -541,6 +541,7 @@ Explain, in plain language, what these charts together actually say about this p
 2. Start with the core triad: Sun, Moon, and Ascendant (astrology's own three-layer read -- conscious identity, private emotional undercurrent, outward first approach), cross-checked against their real numerology equivalents -- Expression (the Sun's actual parallel: talent actively expressed, not Life Path), Soul Urge (the Moon's parallel: the private craving underneath), Personality (the Ascendant's parallel: how others read them first) -- and, when Human Design data exists, Type and Authority (the operating system everything else runs on). Read these as facets of one whole person before writing about any one of them alone -- most of the time they're simply different parts of the same picture, adding up together, not two things to be scored against each other as agreeing or conflicting. Only call out a real pull in different directions when the data actually shows one; otherwise just describe how they combine into a single, coherent picture of who this person is. Everything else gets read through this picture afterward -- but the triad is the starting anchor, not the whole reading; every other real placement, number, and gate still has to be covered, per Coverage below.
 3. For any planet used, check its major aspects before deciding what its sign means here. Weigh by type (a conjunction, square, or opposition is hard and loud, and has to be addressed; a trine or sextile is easier, and easy to under-weight) and tightness (a 1-degree aspect is far more decisive than a 7-degree one). A tight, hard aspect can redirect a sign's meaning more than the sign itself does.
 4. Before writing any specific claim beyond a placement's general meaning -- a cause, a tension between two things, a blended trait, a distinctive pattern -- name the actual data point behind it. If you can't point to one, the claim is something you're inventing to make the reading feel complete, not something you actually observed, and it doesn't belong in the reading. This check is the real source of accuracy here; every other rule in this prompt about a particular mistake is a symptom of skipping this step, not a separate problem.
+5. A planet's house meaning always comes from the house it is actually placed in for this person, given in the chart data -- never from a different house its ruling sign is traditionally associated with elsewhere in astrology.
 
 ### WHAT MUST BE COVERED
 A real reading always addresses all of the following. For each one, pull from whatever the chart data actually shows is genuinely relevant -- you have the complete data for all three charts, so use real judgment, not a fixed list of placements. Nothing below is optional to address, even though which data answers it is entirely your call:
@@ -839,8 +840,25 @@ function flattenReadingText(reading) {
 // trust the prompt held -- actually count how many times each real
 // first name shows up before this ever reaches a paying customer.
 function findNamingDefect(reading, rtype, p1, p2) {
-  if (rtype !== 'two-person') return null;
   const text = flattenReadingText(reading);
+  // Real, repeated live case: a single reading used "she"/"her" throughout
+  // instead of "you" or the person's real first name, despite Rule 6 --
+  // and nothing ever checked for it, because this whole function used to
+  // return early for anything that wasn't a two-person reading. Only the
+  // two-person naming defect (below) was ever actually verified; a single
+  // reading's pronoun compliance shipped on trust alone. Flag it the same
+  // way: count third-person pronouns against actual "you"/name usage, and
+  // require a real, sustained pattern (not one incidental slip) before
+  // forcing a full rewrite.
+  if (rtype !== 'two-person') {
+    const nameCount = countNameMentions(text, p1.first);
+    const youCount = (text.match(/\byou(?:r|rs|self)?\b/gi) || []).length;
+    const thirdPersonCount = (text.match(/\b(she|her|hers|he|him|his)\b/gi) || []).length;
+    if (thirdPersonCount >= 3 && thirdPersonCount > (nameCount + youCount)) {
+      return `The reading refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you" or her real first name (found ${nameCount + youCount} times combined). A single reading must use "you" or the person's actual first name every time they're referenced, never a third-person pronoun -- rewrite the full reading that way throughout.`;
+    }
+    return null;
+  }
   const minCount = Math.max(2, (reading.sections || []).length);
   const p1Count = countNameMentions(text, p1.first);
   const p2Count = countNameMentions(text, p2.first);
