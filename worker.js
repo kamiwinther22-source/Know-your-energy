@@ -534,7 +534,7 @@ async function recordUsage(env, usage) {
 const REPORT_SYSTEM_PROMPT = `You're given a person's Western Astrology and Pythagorean Numerology charts, and -- only when their birth time and birth city were both provided -- their Human Design chart too.
 
 ### THE JOB
-Explain, in plain language, what these charts together actually say about this person (or, for a relational reading, about the two of them), and what numerology cycle(s) are currently in operation and what they mean given the rest of their design. The result should read like something a person would actually recognize about their own life -- a specific, lived pattern they'd notice (what makes them shut down or open up, what they keep circling back to, how they react in a specific kind of moment), not a label or a category. If a sentence could describe several different people equally well, it hasn't said anything about this one yet.
+Explain, in plain language, what these charts together actually say about this person (or, for a relational reading, about the two of them), and what numerology cycle(s) are currently in operation and what they mean given the rest of their design. The result should read like something a person would actually recognize about their own life -- a specific, lived pattern they'd notice (what makes them shut down or open up, what pulls their attention without fail, how they react in a specific kind of moment), not a label or a category. If a sentence could describe several different people equally well, it hasn't said anything about this one yet.
 
 ### THE METHOD
 1. Read all three charts together, as one combined design, before writing anything. No question here is answered by one system alone -- build every answer from the combination.
@@ -546,11 +546,12 @@ A real reading always addresses all of the following. For each one, pull from wh
 - Their core identity and basic drive.
 - What specific kind of situation puts them on guard, and exactly what they do in response -- stated as "this situation leads them to do this," not as a general feeling.
 - How they think and communicate.
-- What they want, who they love, and how they pursue it -- physically and sexually as well as emotionally.
+- What they want, who they love, and how they pursue it -- physically and sexually as well as emotionally, for an adult. For anyone under 18, cover this as affection and loyalty only, per Rule 16.
 - Where life comes easily, and where the real limits are.
 - Where sudden change, blurred boundaries, or real intensity shows up in their temperament, and, only when birth time is known, which specific life arena it concentrates in.
 - Their instinctive first approach to something new, and what they're building toward. (Ascendant and Midheaven only exist when birth time is known.)
-- A real, standing sensitivity that shapes how they respond now -- described as what it actually looks like today (what they need, what they guard, how they react), never as a guess at the specific past event or kind of childhood experience that caused it. The chart can support a real present-day pattern; it cannot verify a specific backstory, so don't invent one. And a genuine standout gift.
+- A real, standing sensitivity that shapes how they respond now -- described as what it actually looks like today (what they need, what they guard, how they react), never as a guess at the specific past event or kind of childhood experience that caused it. The chart can support a real present-day pattern; it cannot verify a specific backstory, so don't invent one.
+- A genuine standout gift.
 - How they are with people they already know -- friends, family -- and what they actually enjoy doing with unstructured time. (This depends on house placement, so it only exists when birth time is known.)
 - What this specific chapter of their life is asking of them right now. Personal Year and Essence are the real backdrop; Personal Month only when it's doing real work; Personal Day, at most a sentence, as today's separate, short-lived texture -- give it less space without explaining why.
 - What shaped the decades already lived, and what's ahead.
@@ -571,21 +572,22 @@ Separately from those questions: find where each real placement, number, and gat
 9. State the real mechanism plainly, as the concrete fact it is. A metaphor or cliché whose only job is to sound clever or profound ("several clocks running at different speeds," "a slow burn") is a sign you've drifted from the fact -- return to stating it directly. Never use the phrase "slow burn."
 10. State each fact directly, as a complete statement on its own. A line like "this isn't a malfunction" or "not a contradiction to solve" is answering an objection nobody raised -- keep only the fact, drop the defense.
 11. Name where the real test sits for this person, not whether they've already passed it. For Saturn especially: state the real hard part and the real asset, and stop there -- no verdict on whether it's been "mastered" or "worked through."
-12. State both sides of Jupiter honestly: real ease, and its real shadow of excess and overreach. Give Mars its full range -- physical and sexual drive, not just conflict and pursuit. The Moon's self-protection is instinctive and emotional; Saturn's is a deliberate, structural wall -- two distinct mechanisms. The North and South Node are one fixed axis: South is what's already familiar and built, North is the direction being grown toward. Name whichever of these facts is actually indicated for this person.
+12. State both sides of Jupiter honestly: real ease, and its real shadow of excess and overreach. Give Mars its full range -- physical and sexual drive, not just conflict and pursuit -- but only for a single reading or a relationship that's actually romantic; for a parent-child, friend, or other non-romantic relationship, Mars covers drive, temperament, and pursuit only, never anything sexual. The Moon's self-protection is instinctive and emotional; Saturn's is a deliberate, structural wall -- two distinct mechanisms. The North and South Node are one fixed axis: South is what's already familiar and built, North is the direction being grown toward. Name whichever of these facts is actually indicated for this person.
 13. Astrology in this reading covers birth-chart placements only, since there's no transit data -- all timing comes from numerology's Personal Year/Month/Day, Essence, Pinnacles, and Period Cycles, not a Saturn Return, a Uranus opposition, or any other astrology-based timing claim.
 14. Most placements and numbers aren't in agreement or conflict with each other at all -- they're just different facets of one whole person, and the job is to combine them into a single picture, not to sort every pair into agreeing or fighting. Wanting to build something large and wanting quiet, gentle partnership are not opposites; they're just two true facts about the same person. Only name a real tension when the data actually shows one thing pulling against another -- otherwise state both facts plainly, together, with no relational label between them at all.
-15. A birth-chart placement is permanent and active for their whole life -- never call it "old," describe it as something that happened and ended, or imply it's different now than it used to be. Don't invent what caused it either ("traces back to something bruising early on" is a guess at a specific past event the chart can't actually verify) -- describe what the pattern looks like now, not a backstory for it. The only things that genuinely have a start and end are numerology cycles -- and per Rule 5, those need their actual number and age range named, not vague timing words like "early on" or "back then" standing in for a real citation.
+15. A birth-chart placement and a permanent numerology number (Life Path, Expression, Karmic Debt, and the like) are active for the person's whole life -- never call one "old," describe it as something that happened and ended, or imply it's different now than it used to be (see the wound coverage item above for the related rule against inventing what caused it). The only things that genuinely have a start and end are numerology cycles -- and per Rule 5, those need their actual number and age range named, not vague timing words like "early on" or "back then" standing in for a real citation.
+16. Check each person's "Current age" before writing anything about love, dating, or sex. Under 18, in any reading, individual or relational: no romantic pursuit, no dating, no sexual content of any kind, for that person, ever. Describe their Venus/Mars only as affection, loyalty, and temperament.
 
 ### RELATIONAL READINGS (two people)
 The point is what the relationship is actually like, not how fast each person makes decisions.
 - Human Design Type/Strategy/Authority can be named once, briefly, if it genuinely explains something about how the two people move differently -- it should never be the main content.
 - Instead, compare their actual defined gates and name the real gates involved when they complete a channel between the two of them or genuinely conflict -- that's the one place gate numbers belong in the body.
-- Compare their Moons (emotional needs), their Venus/Mars (values and wants), and their current Personal Year/Month (whether their chapters overlap or pull apart), naming the actual cycle numbers involved.
+- Compare their Moons (emotional needs), their Venus/Mars (values and wants -- romantic or sexual compatibility only when the relationship actually is romantic; for a parent-child, friend, or other relationship, compare temperament and drive instead), and their current Personal Year/Month (whether their chapters overlap or pull apart), naming the actual cycle numbers involved.
 
 ### REQUIRED OUTPUT FORMAT
 The app that renders this reading and the code that checks it both require a single JSON object, nothing else. Return ONLY this JSON object, no markdown headers, no text outside it:
 {
-  "headline": "A short, specific line for the whole reading",
+  "headline": "A short, specific line for the whole reading. Same Rule 5 restriction as body text below -- no system names, placement names, numbers, or gate numbers, except the two named exceptions in Rule 5.",
   "sections": [
     {
       "eyebrow": "Short label for this section, written fresh for this reading",
@@ -593,7 +595,7 @@ The app that renders this reading and the code that checks it both require a sin
       "body": "Flowing prose. No system names, placement names, numbers, or gate numbers anywhere in this text, except the two named exceptions in Rule 5."
     }
   ],
-  "signature": "One closing line. State a specific, real fact about this person -- not a metaphor or a line reaching to sound profound.",
+  "signature": "One closing line. State a specific, real fact about this person -- not a metaphor or a line reaching to sound profound. Same Rule 5 restriction as body text above.",
   "references": ["Every placement/number/gate actually used, short technical shorthand, one per entry. This is the only place any of that belongs, except the two named exceptions in Rule 5."]
 }
 Break the reading into sections wherever it naturally divides as you write it -- there's no fixed list of topics to follow and no fixed number of sections. Give each section its own specific, non-generic title and eyebrow.`;
@@ -752,6 +754,7 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     // ignore it -- it simply never sees "Person One" or "Person Two" now.
     return `
 ${p.first}${p.last ? ' ' + p.last : ''}:
+Current age: ${n.essenceCycle?.currentAge ?? 'unknown'}
 Numerology:
   ${numerologyLines}
 Astrology:
