@@ -523,7 +523,7 @@ Explain, in plain language, what these charts together actually say about this p
 ### WHAT MUST BE COVERED
 A real reading always addresses all of the following. For each one, pull from whatever the chart data actually shows is genuinely relevant -- you have the complete data for all three charts, so use real judgment, not a fixed list of placements. Nothing below is optional to address, even though which data answers it is entirely your call:
 - Their core identity and basic drive.
-- What makes them feel safe, and what they actually do when they don't.
+- What specific kind of situation puts them on guard, and exactly what they do in response -- stated as "this situation leads them to do this," not as a general feeling.
 - How they think and communicate.
 - What they want, who they love, and how they pursue it -- physically and sexually as well as emotionally.
 - Where life comes easily, and where the real limits are.
