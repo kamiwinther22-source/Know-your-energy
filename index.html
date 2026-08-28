@@ -540,6 +540,10 @@ body{
 }
 .card-expand.open{display:block;}
 .card-expand-close{position:sticky;top:0;float:right;background:none;border:none;font-size:1.8rem;color:#000000;cursor:pointer;padding:0.3rem;line-height:1;}
+/* Sticky at the top opposite the close X, so it's reachable without
+   scrolling back up through a long card -- she asked for this after
+   finding the only Listen control was at the very bottom of the page. */
+.card-expand-listen{position:sticky;top:0.3rem;float:left;z-index:1;}
 .card-expand-title{max-width:760px;margin:0 auto 0.9rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;clear:both;}
 .card-expand-body{max-width:600px;margin:0 auto;font-size:1.25rem;}
 .card-expand-body .dplist{overflow:visible;}
@@ -795,6 +799,7 @@ body{
 
 <div class="card-expand" id="cardExpand">
   <button type="button" class="card-expand-close" id="cardExpandClose">&#10005;</button>
+  <div class="card-expand-listen side-btn" id="cardExpandListenBtn" onclick="toggleModalListen()"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 9 9 9 13 5 13 19 9 15 5 15 5 9"/><path d="M17 8a5 5 0 010 8M20 5a9 9 0 010 14"/></svg><span>Listen</span></div>
   <div class="card-expand-title" id="cardExpandTitle"></div>
   <div class="card-expand-body" id="cardExpandBody"></div>
 </div>
@@ -878,6 +883,7 @@ const NUMS = [
 // Path number), included as this number's broader significance rather
 // than a claim that it's the Pythagorean Square meaning itself.
 function openNumberDef(item){
+  stopListening();
   document.getElementById('cardExpandTitle').textContent=`Number ${item.n} — ${item.lbl}`;
   document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${NUM_DEFS.core[item.n]||''}</p></div>`;
   document.getElementById('cardExpand').classList.add('open');
@@ -958,6 +964,7 @@ solarWrap.querySelectorAll('.p-dot').forEach(el=>{
   el.addEventListener('click',()=>openPlanetDef(PLANETS[+el.dataset.idx]));
 });
 function openPlanetDef(p){
+  stopListening();
   document.getElementById('cardExpandTitle').textContent=`${p.name} — ${p.lines.join(', ')}`;
   document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${p.name} governs ${p.lines.join(' and ').toLowerCase()} in astrology.</p></div>`;
   document.getElementById('cardExpand').classList.add('open');
@@ -1024,6 +1031,7 @@ function openPlanetDef(p){
     el.addEventListener('click',()=>openCenterDef(HD_CENTERS[+el.dataset.idx]));
   });
   function openCenterDef(c){
+    stopListening();
     document.getElementById('cardExpandTitle').textContent=`${c.name} Center — ${c.label}`;
     document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">The ${c.name} Center relates to ${c.label.toLowerCase()} in Human Design.</p></div>`;
     document.getElementById('cardExpand').classList.add('open');
@@ -1242,6 +1250,7 @@ function buildGlossaryHTML(){
   }).join('')+gateSection;
 }
 function openGlossary(){
+  stopListening();
   document.getElementById('cardExpandTitle').textContent='Glossary';
   document.getElementById('cardExpandBody').innerHTML=buildGlossaryHTML();
   document.getElementById('cardExpand').classList.add('open');
@@ -2684,6 +2693,12 @@ let PEOPLE_FOR_DATE_EXPLORER=[];
 // key, no added generation time, matches the actual ask (something reads
 // this out loud while you do something else), not a personalized voice.
 let speechQueue=[];
+// Which button's label to flip back to "Listen" when speech ends/stops --
+// the page-level button (whole results page) and the modal's own button
+// (whichever card/definition is currently expanded) share this one
+// speechSynthesis session, since a device only has one voice speaking at
+// a time regardless of which button started it.
+let activeListenBtnId=null;
 function stripHtmlToText(html){
   const d=document.createElement('div');
   d.innerHTML=html;
@@ -2696,12 +2711,13 @@ function getReadableSegments(){
   }).filter(Boolean);
 }
 function updateListenBtn(active){
-  const btn=document.getElementById('listenBtn');
+  if(!activeListenBtnId)return;
+  const btn=document.getElementById(activeListenBtnId);
   const label=btn&&btn.querySelector('span');
   if(label)label.textContent=active?'Stop':'Listen';
 }
 function speakNext(){
-  if(!speechQueue.length){ updateListenBtn(false); return; }
+  if(!speechQueue.length){ updateListenBtn(false); activeListenBtnId=null; return; }
   const utter=new SpeechSynthesisUtterance(speechQueue.shift());
   utter.onend=speakNext;
   utter.onerror=speakNext;
@@ -2711,6 +2727,16 @@ function stopListening(){
   speechQueue=[];
   if(window.speechSynthesis)speechSynthesis.cancel();
   updateListenBtn(false);
+  activeListenBtnId=null;
+}
+// Chrome has a known bug where one very long utterance (a full reading is
+// easily 1000+ words) silently stops partway through. Splitting into
+// sentence-sized chunks, chained through onend, avoids that.
+function startListening(segments,btnId){
+  activeListenBtnId=btnId;
+  speechQueue=segments.flatMap(seg=>seg.match(/[^.!?]+[.!?]*/g)||[seg]);
+  updateListenBtn(true);
+  speakNext();
 }
 function toggleListen(){
   if(!window.speechSynthesis){
@@ -2723,12 +2749,24 @@ function toggleListen(){
   }
   const segments=getReadableSegments();
   if(!segments.length)return;
-  // Chrome has a known bug where one very long utterance (a full reading
-  // is easily 1000+ words) silently stops partway through. Splitting into
-  // sentence-sized chunks, chained through onend, avoids that.
-  speechQueue=segments.flatMap(seg=>seg.match(/[^.!?]+[.!?]*/g)||[seg]);
-  updateListenBtn(true);
-  speakNext();
+  startListening(segments,'listenBtn');
+}
+// Reads whatever's currently shown in the tap-to-expand modal -- works
+// for a full person/reading card and for a small glossary definition
+// alike, since both draw from the same #cardExpandTitle/#cardExpandBody.
+function toggleModalListen(){
+  if(!window.speechSynthesis){
+    alert("Your browser doesn't support reading text aloud.");
+    return;
+  }
+  if(speechSynthesis.speaking||speechSynthesis.pending){
+    stopListening();
+    return;
+  }
+  const title=document.getElementById('cardExpandTitle').textContent.trim();
+  const body=document.getElementById('cardExpandBody').textContent.replace(/\s+/g,' ').trim();
+  if(!body)return;
+  startListening([title?`${title}. ${body}`:body],'cardExpandListenBtn');
 }
 
 const BTN_ICON_REFRESH='<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 106.3 16.3M20 11V5M20 11h-6"/></svg>';
@@ -3226,6 +3264,7 @@ document.addEventListener('click', e=>{
 
   const closeExpand=e.target.closest('#cardExpandClose');
   if(closeExpand){
+    stopListening();
     document.getElementById('cardExpand').classList.remove('open');
     return;
   }
@@ -3234,6 +3273,7 @@ document.addEventListener('click', e=>{
   if(card){
     const entry=cardRegistry[card.dataset.cardIdx];
     if(entry){
+      stopListening();
       document.getElementById('cardExpandTitle').textContent=entry.title;
       document.getElementById('cardExpandBody').innerHTML=(entry.preHtml||'')+entry.rows;
       document.getElementById('cardExpand').classList.add('open');
