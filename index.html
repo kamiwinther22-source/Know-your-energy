@@ -3086,7 +3086,10 @@ async function generate(){
       body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
     });
     const result=await res.json();
-    if(!res.ok){
+    // /report now streams keep-alive bytes while it works (see worker.js),
+    // so every outcome comes back as HTTP 200 -- a hard failure shows up
+    // as result.error instead of a non-ok status, so check both.
+    if(!res.ok||result.error){
       genBtn.disabled=false;
       stopLoadingTimer();
       document.getElementById('loading').style.display='none';

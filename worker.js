@@ -545,7 +545,7 @@ Explain, in plain language, what these charts together actually say about this p
 6. A house says where something concentrates in someone's life; the sign of the planet placed there says how it actually operates. Always combine both when a house is genuinely relevant -- the house alone describes a life area anyone with that placement shares, not this specific person.
 
 ### WHAT MUST BE COVERED
-A real reading always addresses all of the following. For each one, pull from whatever the chart data actually shows is genuinely relevant -- you have the complete data for all three charts, so use real judgment, not a fixed list of placements. Nothing below is optional to address, even though which data answers it is entirely your call:
+These are the things a reading usually has real, specific data for -- cover whichever ones the actual chart data genuinely supports, pulling from whatever placement, number, or Human Design detail is actually relevant to each. This isn't a fixed list of sections to fill in regardless of content: if the data doesn't clearly support something specific on one of these, leave it out rather than manufacturing a vague or generic version of it just to have covered it. A shorter reading built entirely from real, specific material beats a longer one padded out to hit every topic below.
 - Their core identity and basic drive.
 - What specific kind of situation puts them on guard, and exactly what they do in response -- name the actual situation and the actual behavior, not a general feeling.
 - How they think and communicate.
@@ -1133,26 +1133,71 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
     } catch (e) {
       return jsonResponse({ error: "Invalid request body." }, 400);
     }
-    try {
-      const p1Data = await assemblePersonData(env, body.p1);
-      const p2Data = body.p2 ? await assemblePersonData(env, body.p2) : null;
 
-      let report = null, reportError = null, reportUsedFallback = false;
+    // Chart lookups plus real AI generation can run several minutes under
+    // thinking + high effort. The old code returned nothing to the browser
+    // at all until every bit of that finished -- a single HTTP response
+    // that sits completely silent for that whole time. That's exactly the
+    // shape of connection an intermediary (Cloudflare's own edge waiting
+    // on the first response byte, a mobile carrier's NAT, hotel/office
+    // wifi) can and does drop as "idle," which is what a real customer
+    // sees as a bare "Failed to fetch" with no actual error message --
+    // the same class of problem `stream: true` already fixed for the
+    // Worker's own call to the Anthropic API, just one hop further out.
+    // Opening the response immediately and writing small whitespace
+    // keep-alive bytes while the real work runs keeps the connection
+    // visibly alive the whole time. This is safe: JSON.parse ignores
+    // insignificant leading/trailing whitespace around the real value, so
+    // a body of keep-alive spaces followed by the real JSON still parses
+    // correctly once the browser's fetch resolves.
+    //
+    // Every outcome -- success, a chart-lookup failure, an unexpected
+    // error -- now arrives as HTTP 200 with the real detail inside the
+    // JSON body, since the status code has to be committed before any of
+    // that is known. index.html's fetch handler checks `result.error` on
+    // every response now, not just `!res.ok`, to match.
+    const { readable, writable } = new TransformStream();
+    const writer = writable.getWriter();
+    const encoder = new TextEncoder();
+    const heartbeat = setInterval(() => {
+      writer.write(encoder.encode(' ')).catch(() => {});
+    }, 10000);
+
+    ctx.waitUntil((async () => {
+      let responseBody;
       try {
-        const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
-        report = result.reading;
-        reportUsedFallback = result.usedFallback;
+        const p1Data = await assemblePersonData(env, body.p1);
+        const p2Data = body.p2 ? await assemblePersonData(env, body.p2) : null;
+
+        let report = null, reportError = null, reportUsedFallback = false;
+        try {
+          const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
+          report = result.reading;
+          reportUsedFallback = result.usedFallback;
+        } catch (error) {
+          reportError = error.message;
+        }
+
+        if (body.passEmail) {
+          ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
+        }
+
+        responseBody = JSON.stringify({ p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback });
       } catch (error) {
-        reportError = error.message;
+        responseBody = JSON.stringify({ error: error.message });
+      } finally {
+        clearInterval(heartbeat);
+        try {
+          await writer.write(encoder.encode(responseBody));
+          await writer.close();
+        } catch (e) {
+          // Client already disconnected -- nothing left to write to.
+        }
       }
+    })());
 
-      if (body.passEmail) {
-        ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
-      }
-
-      return jsonResponse({ p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback });
-    } catch (error) {
-      return jsonResponse({ error: error.message }, 500);
-    }
+    return new Response(readable, {
+      headers: { "Content-Type": "application/json", ...CORS_HEADERS, ...PRIVACY_HEADERS }
+    });
   }
 };
