@@ -804,8 +804,18 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      max_tokens: 24000,
-      thinking: { type: 'disabled' },
+      // Thinking was disabled here after an earlier truncation bug --
+      // thinking and output tokens share one max_tokens ceiling, so a
+      // real thinking budget with too-low a ceiling cut generation off
+      // mid-reading. Re-enabling as a real test: Sonnet 5 only supports
+      // adaptive thinking (budget_tokens is rejected outright), with
+      // effort controlling depth instead -- "high" for real intelligence-
+      // sensitive cross-referencing work, not the default. max_tokens
+      // raised well above what output alone needs, to leave real room
+      // for thinking without repeating the original truncation failure.
+      max_tokens: 48000,
+      thinking: { type: 'adaptive' },
+      output_config: { effort: 'high' },
       system: [
         { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
       ],
@@ -819,7 +829,12 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
   if (data.stop_reason === 'max_tokens') {
     throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
   }
-  return data.content[0].text;
+  // With thinking enabled, content[0] is now a thinking block, not the
+  // text block -- find the actual text block by type instead of
+  // assuming a fixed position, or this silently returns undefined.
+  const textBlock = (data.content || []).find(b => b.type === 'text');
+  if (!textBlock) throw new Error('Claude API response had no text block.');
+  return textBlock.text;
 }
 
 function countNameMentions(text, name) {
