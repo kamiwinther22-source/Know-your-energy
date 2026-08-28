@@ -798,24 +798,24 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      // Thinking was tried enabled (adaptive, effort: high, max_tokens
-      // 48000) as an experiment, but that setting was never validated
-      // end-to-end and real live reports started taking multiple minutes
-      // and then failing outright with "Failed to fetch" -- consistent
-      // with a generation genuinely running long enough to hit a real
-      // platform-level ceiling somewhere in the chain. The prompt itself
-      // was also just rewritten to be far simpler and more direct, which
-      // needs less reasoning to hold together, not more. Back to the
-      // settled, fast setting: thinking disabled, max_tokens sized for
-      // output alone.
-      max_tokens: 24000,
-      thinking: { type: 'disabled' },
-      // A non-streaming call with a real thinking pass at high effort
-      // hit a real Cloudflare 524 -- the generation genuinely took
-      // longer than the edge's timeout for one long silent response.
-      // Streaming keeps the connection actively receiving data the
-      // whole time instead of one long wait, which is the documented
-      // fix for exactly this failure mode on a large max_tokens request.
+      // Thinking disabled was tried and rejected: it produced noticeably
+      // worse readings. Thinking enabled (adaptive) is the agreed setting
+      // for the real generation pass. Effort is medium, not high --
+      // high made a single attempt slow and expensive enough that a
+      // validation-triggered retry (below) could triple both. A repair
+      // attempt is a narrow, single-defect fix (wrong pronoun, bad JSON),
+      // not a job that needs a full reasoning pass, so it skips thinking
+      // entirely and gets a much smaller max_tokens -- output only, no
+      // thinking budget to share it with.
+      ...(repairNote
+        ? { max_tokens: 24000, thinking: { type: 'disabled' } }
+        : { max_tokens: 48000, thinking: { type: 'adaptive' }, output_config: { effort: 'medium' } }),
+      // A non-streaming call with a real thinking pass hit a real
+      // Cloudflare 524 -- the generation genuinely took longer than the
+      // edge's timeout for one long silent response. Streaming keeps the
+      // connection actively receiving data the whole time instead of one
+      // long wait, which is the documented fix for exactly this failure
+      // mode on a large max_tokens request.
       stream: true,
       system: [
         { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
