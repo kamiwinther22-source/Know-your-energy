@@ -2982,12 +2982,42 @@ function fmtTime(el){
   if(v.length>2)v=v.slice(0,2)+':'+v.slice(2,4);
   el.value=v;
 }
+// All 50 states + DC, real and complete -- used only to split a run-together
+// or 2-part location string, not to validate/guess at anything uncertain.
+const US_STATE_NAMES=["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming","District of Columbia"];
+// Longest name first -- "West Virginia" has to be tried before "Virginia" or
+// the shorter name matches first and wrongly eats "West" into the city half.
+const US_STATE_NAMES_BY_LENGTH=[...US_STATE_NAMES].sort((a,b)=>b.length-a.length);
+function isUSState(s){ return US_STATE_NAMES.some(st=>st.toLowerCase()===s.toLowerCase()); }
 function parseLocation(raw){
-  const parts=raw.split(',').map(s=>s.trim()).filter(Boolean);
+  let parts=raw.split(',').map(s=>s.trim()).filter(Boolean);
+  // A real US city was found "Unavailable" once because it was typed as one
+  // run-together string ("Sioux City Iowa", no comma) -- the placeholder
+  // says "City, State, Country" but real people don't always punctuate it
+  // that way. If there's no comma at all, try splitting off a real state
+  // name from the end before giving up and treating the whole thing as a
+  // single (unmatchable) city name.
+  if(parts.length===1){
+    const single=parts[0];
+    for(const state of US_STATE_NAMES_BY_LENGTH){
+      const re=new RegExp('\\s+'+state.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'$','i');
+      if(re.test(single)){ parts=[single.replace(re,'').trim(), state]; break; }
+    }
+  }
+  if(parts.length===2){
+    // "City, State" (country implied as the US) is the overwhelmingly
+    // common 2-part case for this app -- previously the 2nd part always
+    // went into country, leaving state blank. That happened to still
+    // resolve to the US default by accident (toCountryCode falls back to
+    // "US" for anything unrecognized), but silently dropped the real state,
+    // which is exactly what disambiguates a city name shared by multiple
+    // states.
+    return { city: parts[0], state: isUSState(parts[1])?parts[1]:'', country: isUSState(parts[1])?'':parts[1] };
+  }
   return {
     city: parts[0]||'',
     state: parts.length===3?parts[1]:'',
-    country: parts.length===3?parts[2]:(parts[1]||'')
+    country: parts.length===3?parts[2]:''
   };
 }
 
