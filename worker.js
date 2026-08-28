@@ -569,7 +569,7 @@ Separately from those questions: find where each real placement and number you w
 3. Use plain, everyday words and short sentences, the way a smart friend would actually talk.
 4. When something is genuinely difficult, state the specific, concrete result it produces, not just that it's difficult in general terms. Energy/drain language belongs specifically to Human Design's own centers, Type, and Strategy -- that's the one place "energy" is the literal, correct word.
 5. Keep the body free of system names and technical labels -- describe what something means, not what it's called. One exception: when explaining a numerology cycle, name the actual number -- a vague timing reference means nothing concrete without it. Every placement/number/Human Design detail actually used still goes in the references list either way.
-6. Use the person's real first name (or "you," for a single reading), every time they're referenced -- never a generic placeholder instead of it.
+6. For a single reading, address the person directly as "you" -- that's the default, not one of two equally fine options. Their real first name is for a relational reading (to tell two people apart) or an occasional direct address in a single reading ("Jacob, that's..."), not for repeatedly referring to them in the third person the way "Jacob's sense of who Jacob is" does -- that reads like a case study written about someone, not a reading written to them. Never a generic placeholder either way.
 7. Check a textbook meaning -- for a placement or a numerology number alike -- against this specific person's full chart before using it. A number's real lesson doesn't change, but where and how it actually shows up depends on what the rest of the chart says; write the version that's actually true for this person, not the generic one. Many placements have more than one real, legitimate tradition behind them -- pick based on what the rest of the chart actually supports, not whichever version sounds more dramatic.
 8. A placement that shows wanting partnership or closeness describes a want -- since you don't know whether the person currently has a partner, write it as something that may or may not be met yet, not as a behavior already happening with a specific person.
 9. State the real mechanism plainly, as the concrete fact it is. A metaphor or cliché that only sounds clever or profound is a sign you've drifted from the fact -- return to stating it directly.
@@ -947,6 +947,20 @@ function findNamingDefect(reading, rtype, p1, p2) {
     const thirdPersonCount = (text.match(/\b(she|her|hers|he|him|his)\b/gi) || []).length;
     if (thirdPersonCount >= 3 && thirdPersonCount > (nameCount + youCount)) {
       return `The reading refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you" or her real first name (found ${nameCount + youCount} times combined). A single reading must use "you" or the person's actual first name every time they're referenced, never a third-person pronoun -- rewrite the full reading that way throughout.`;
+    }
+    // Real live case: a reading used the person's name in sustained
+    // third-person narration -- "Jacob's sense of who Jacob is centers
+    // on..." -- instead of "you." Technically satisfies the old wording
+    // of Rule 6 (their real name, every time), but reads like a case
+    // study written about them, not a reading written to them. "You" is
+    // now the stated default for a single reading, so a real, sustained
+    // reliance on the name instead of "you" is a defect the same way the
+    // pronoun case above is -- one or two direct-address uses of the name
+    // ("Jacob, that's...") shouldn't trip this; a name count this far
+    // past "you" usage means the whole reading was written in the wrong
+    // mode.
+    if (nameCount >= 3 && nameCount > youCount) {
+      return `The reading refers to ${p1.first} by name in the third person (found ${nameCount} times, like "${p1.first}'s sense of who ${p1.first} is") far more than it uses "you" (found ${youCount} times). Per Rule 6, "you" is the default for a single reading -- rewrite the full reading addressed directly as "you" throughout, saving the real name for at most an occasional direct address, not repeated third-person narration.`;
     }
     return null;
   }
