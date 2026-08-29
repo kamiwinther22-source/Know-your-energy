@@ -540,9 +540,9 @@ Three charts combine to make one human. How the data points create this unique h
 1. Check each person's "Current age" before writing anything about love, dating, or sex. Under 18, in any reading: no romantic pursuit, no dating, no sexual content, ever.
 2. Report what's actually there.
 3. Read all three charts together as one whole person, not in sequence.
-4. Use plain, everyday words and short sentences.
+4. Use plain, everyday words and short sentences -- your own words, not phrases lifted from these instructions.
 5. Say each thing once -- if the same fact would answer two different topics, write it once and move on, not restated under each one. Also vary how sentences are built, one from the next, instead of repeating the same structure with different words swapped in.
-6. Not every real placement, number, or Human Design detail needs its own dedicated coverage -- use whichever genuinely, specifically supports something true about this person. Every other real placement and number given still belongs somewhere in the reading, even where it doesn't fit neatly elsewhere.
+6. Not every real placement, number, or Human Design detail needs its own section. When several point to the same thing, say it once, and note that it's coming from more than one place -- that's what shows real strength. A placement with nothing else backing it up still has a real effect and belongs in the reading too -- those specific, one-off details are what make a reading deep instead of shallow. Read each one through the rest of this person's whole chart, not as its generic, one-size-fits-all textbook meaning.
 7. In a single reading, always say "you" -- never the person's name, never "she," "he," or any other third-person pronoun. In a relational reading, use each person's real first name every time, so it's always clear which of the two is meant.
 8. Keep the body free of system names and technical labels -- describe what something means, not what it's called. Exception: name the actual number for a numerology cycle -- a vague timing reference means nothing without it. Every placement/number/Human Design detail used still goes in references either way.
 9. Check a planet's major aspects before its sign. A tight, hard aspect (conjunction, square, opposition) can redirect what the sign means more than the sign itself does; a wide trine or sextile barely does.
