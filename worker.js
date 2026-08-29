@@ -531,7 +531,9 @@ async function recordUsage(env, usage) {
 
 // ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
 
-const REPORT_SYSTEM_PROMPT = `You are an expert astrologer, numerologist, and Human Design reader. Combine all three systems into one description of a single person.
+const REPORT_SYSTEM_PROMPT = `Check the person's current age before writing anything about love, dating, or sex. Under 18: none of it, ever.
+
+You are an expert astrologer, numerologist, and Human Design reader. Combine all three systems into one description of a single person.
 
 Describe the person, not the chart. Every sentence is about "you" (or, in a two-person reading, their real name). A placement, number, or aspect can prove a claim is true -- it can never be the claim itself.
 
@@ -557,7 +559,6 @@ Weigh a planet's major aspects before its sign -- a tight conjunction, square, o
 Cover Mars as physical/sexual drive, not just conflict, in a single or romantic reading; otherwise drive, temperament, and pursuit only -- nothing sexual. Moon's self-protection is instinctive/emotional; Saturn's is deliberate/structural -- distinct. North/South Node are one axis: South is familiar, North is the direction being grown toward.
 
 ### NON-NEGOTIABLE
-- Check current age before writing anything about love, dating, or sex. Under 18: none of it, ever.
 - Single reading: "you" only, never a name or third-person pronoun. Two-person: real first names, every time.
 - Include Human Design only if a chart was returned. Mention Sirius only through its aspects.
 - Describe the relationship itself, not each person's process. Name HD Type/Strategy/Authority once, only if it explains a real difference -- never the main content.
@@ -1187,19 +1188,33 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       writer.write(encoder.encode(' ')).catch(() => {});
     }, 10000);
 
+    // Diagnostic logging -- a real "Failed to fetch" was reported live with
+    // no way to tell whether it happened before, during, or after the
+    // Anthropic call, or whether ctx.waitUntil() itself got torn down
+    // before this finished (Cloudflare's own docs describe a ~30s extension
+    // window for waitUntil() that this generation, with thinking + effort,
+    // can plausibly exceed -- but that limit's exact behavior is disputed
+    // even in Cloudflare's own docs, so this isn't asserted as the cause).
+    // These timestamps turn the next occurrence into something checkable in
+    // the real Worker logs instead of another unreproducible guess.
+    const reportStart = Date.now();
+    console.log(`[report] start rtype=${body.rtype}`);
     ctx.waitUntil((async () => {
       let responseBody;
       try {
         const p1Data = await assemblePersonData(env, body.p1);
         const p2Data = body.p2 ? await assemblePersonData(env, body.p2) : null;
+        console.log(`[report] person data assembled at +${Date.now() - reportStart}ms`);
 
         let report = null, reportError = null, reportUsedFallback = false;
         try {
           const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
           report = result.reading;
           reportUsedFallback = result.usedFallback;
+          console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback}`);
         } catch (error) {
           reportError = error.message;
+          console.error(`[report] generation threw at +${Date.now() - reportStart}ms: ${error.message}`);
         }
 
         if (body.passEmail) {
@@ -1208,14 +1223,16 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
 
         responseBody = JSON.stringify({ p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback });
       } catch (error) {
+        console.error(`[report] top-level throw at +${Date.now() - reportStart}ms: ${error.message}`);
         responseBody = JSON.stringify({ error: error.message });
       } finally {
         clearInterval(heartbeat);
         try {
           await writer.write(encoder.encode(responseBody));
           await writer.close();
+          console.log(`[report] response written at +${Date.now() - reportStart}ms`);
         } catch (e) {
-          // Client already disconnected -- nothing left to write to.
+          console.error(`[report] writer failed at +${Date.now() - reportStart}ms (client likely disconnected): ${e.message}`);
         }
       }
     })());
