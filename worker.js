@@ -545,6 +545,8 @@ Name every number and placement directly (Life Path, Soul Urge, Karmic Lessons, 
 
 State each fact once, in the section it fits best. Only call two facts opposed when the data actually shows real opposition, and only when both sides are actually the same kind of claim -- keeping feelings private is not the same thing as a private life. Every sentence needs a real fact behind it. If it leans on an intensifying word to sound convincing instead, the fact is missing -- find the fact.
 
+Never reuse the same connector phrase (like "linked with," "in tension with") more than once in a section. Repeating a sentence's structure to chain facts together is as much a repeat as repeating the fact itself -- build each sentence a different way.
+
 Big cycles (Personal Year, Essence, Pinnacle, Period Cycle): name each with its number and age range. Then state what happens when they combine -- not a list of what each one means on its own.
 
 Small cycles (Personal Month, Day): name both. State how they combine on their own faster timescale -- the Month sets the mood, the Day works within it. Omit this pair if there's nothing specific to say.
