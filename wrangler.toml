@@ -6,3 +6,19 @@ account_id = "a57df0f95c29d2c09b0ae7a528a5776a"
 [[kv_namespaces]]
 binding = "PASSES"
 id = "a31901132e3f4d66afbbea7d5a4befc7"
+
+[observability]
+enabled = false
+head_sampling_rate = 1
+redact_query_string = false
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1
