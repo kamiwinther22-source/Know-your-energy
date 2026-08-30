@@ -4,7 +4,12 @@ import { computeAstrology } from './astro-engine.js';
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization"
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  // /report exposes its job ID via X-Job-Id so index.html can fall back to
+  // polling /report-status by job ID if the streamed connection drops
+  // mid-generation -- without this, a cross-origin fetch() can't read any
+  // response header it wasn't explicitly told it may read.
+  "Access-Control-Expose-Headers": "X-Job-Id"
 };
 
 const PRIVACY_HEADERS = {
@@ -1205,31 +1210,55 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
     // Real, confirmed root cause of live "Failed to fetch" reports (per
     // Cloudflare's own Workers Logs -- a "waitUntil() tasks did not
     // complete within the allowed time after invocation end and have been
-    // cancelled" warning, not a guess): this used to tie the entire chart
-    // lookup + AI generation to ONE HTTP connection staying open the whole
-    // time, kept alive with whitespace heartbeat bytes. Cloudflare's docs
-    // say an actively-streaming response should keep a Worker invocation
-    // alive on its own -- but if the actual client connection drops for
-    // any real-world reason (a phone losing signal, the screen locking, a
-    // carrier's NAT closing an idle-feeling connection), the invocation
-    // only gets 30 more seconds to finish once that happens, and a
-    // two-person reading with real thinking can outlast that easily.
+    // cancelled" warning, not a guess): the entire chart lookup + AI
+    // generation was tied to ONE HTTP connection staying open the whole
+    // time. If the client's connection actually drops (a phone losing
+    // signal, the screen locking, a carrier's NAT closing an idle-feeling
+    // connection), Cloudflare gives ctx.waitUntil() only 30 more seconds
+    // to finish -- confirmed against Cloudflare's own docs, not disputed:
+    // "ctx.waitUntil() can extend execution for up to 30 seconds after the
+    // response is sent or the client disconnects... If any Promises have
+    // not settled after 30 seconds, they are canceled." That 30-second cap
+    // applies no matter how the work is organized -- it is NOT specific to
+    // the streaming-connection approach.
     //
-    // Fixed at the architecture level, not with a shorter heartbeat: this
-    // endpoint now returns a job ID immediately (fast, low-risk request),
-    // starts the real work in the background regardless of what the
-    // client's connection does, and writes the result to KV under that
-    // job ID when done. index.html polls /report-status for it instead of
-    // holding one connection open -- if a poll fails or the connection
-    // drops, the client just asks again a few seconds later; the actual
-    // generation was never tied to that connection surviving.
+    // A prior version of this endpoint tried to route around that by
+    // returning a job ID immediately and doing all the real work only
+    // inside ctx.waitUntil(). That made things categorically worse: since
+    // the tiny {jobId} response finishes sending almost instantly, EVERY
+    // report -- not just ones with a dropped connection -- hit the same
+    // 30-second cutoff, because generation routinely takes far longer than
+    // that. There is no way to make work in ctx.waitUntil() survive a
+    // disconnect for longer than 30 seconds; genuinely surviving an
+    // arbitrary-length disconnect needs infrastructure outside a single
+    // request's lifecycle entirely (Durable Objects, Queues, or
+    // Workflows) -- not implemented here.
+    //
+    // What this endpoint actually does instead, combining what worked
+    // before with a real recovery path for the disconnect case: keep this
+    // connection open with whitespace keep-alive bytes for the whole
+    // generation (proven to work as long as the connection survives --
+    // that was never the broken part), AND durably record the same result
+    // to KV under a job ID as it becomes available. If this connection
+    // does drop, index.html falls back to polling /report-status with
+    // that job ID -- recovering the reading whenever the drop happens
+    // late enough that the background write below still lands inside its
+    // own 30-second grace window, instead of losing it outright as before
+    // today's job/polling attempt existed.
     const jobId = crypto.randomUUID();
     await env.PASSES.put(jobKey(jobId), JSON.stringify({ status: "pending" }), { expirationTtl: 3600 });
+
+    const { readable, writable } = new TransformStream();
+    const writer = writable.getWriter();
+    const encoder = new TextEncoder();
+    const heartbeat = setInterval(() => {
+      writer.write(encoder.encode(" ")).catch(() => {});
+    }, 10000);
 
     const reportStart = Date.now();
     console.log(`[report] start rtype=${body.rtype} jobId=${jobId}`);
     ctx.waitUntil((async () => {
-      let record;
+      let streamBody, kvRecord;
       try {
         // p1 and p2's chart data (each involving its own Human Design
         // network lookup) is fetched concurrently, not one after the
@@ -1257,15 +1286,36 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
           ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
         }
 
-        record = { status: "done", p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback };
+        const payload = { p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback };
+        streamBody = JSON.stringify(payload);
+        kvRecord = { status: "done", ...payload };
       } catch (error) {
         console.error(`[report] top-level throw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
-        record = { status: "error", error: error.message };
+        streamBody = JSON.stringify({ error: error.message });
+        kvRecord = { status: "error", error: error.message };
       }
-      await env.PASSES.put(jobKey(jobId), JSON.stringify(record), { expirationTtl: 3600 });
+      clearInterval(heartbeat);
+      // Write the durable KV copy first -- this is what /report-status
+      // reads, and it's what makes the fallback poll path work even if
+      // the write to this connection's own stream (right below) fails
+      // because the client already disconnected.
+      await env.PASSES.put(jobKey(jobId), JSON.stringify(kvRecord), { expirationTtl: 3600 });
       console.log(`[report] job record written at +${Date.now() - reportStart}ms jobId=${jobId}`);
+      try {
+        await writer.write(encoder.encode(streamBody));
+        await writer.close();
+      } catch (e) {
+        console.error(`[report] writer failed at +${Date.now() - reportStart}ms (client likely disconnected, but KV record above is already saved): ${e.message}`);
+      }
     })());
 
-    return jsonResponse({ jobId });
+    return new Response(readable, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Job-Id": jobId,
+        ...CORS_HEADERS,
+        ...PRIVACY_HEADERS
+      }
+    });
   }
 };

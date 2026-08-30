@@ -3197,80 +3197,86 @@ async function generate(){
     showErr(msg);
   };
 
-  // /report no longer holds one connection open for the whole generation
-  // (that's the real, confirmed cause of live "Failed to fetch" reports --
-  // a real client-side connection drop plus Cloudflare's own 30-second
-  // waitUntil grace period, see worker.js). It now hands back a job ID
-  // immediately, and the actual chart lookup + AI generation runs on the
-  // server regardless of what this browser's connection does. Polling
-  // /report-status means a single dropped or slow poll costs nothing --
-  // the next one just asks again -- instead of losing the whole reading.
-  let jobId;
+  // /report keeps its connection open with keep-alive bytes for the whole
+  // generation (this is what actually lets a multi-minute reading finish --
+  // Cloudflare only gives background work 30 more seconds once a client
+  // truly disconnects, no matter how the work is organized server-side, so
+  // there's no way to make it fully independent of this connection without
+  // new backend infrastructure). If this connection does drop mid-generation
+  // (a phone losing signal, the screen locking), the response's X-Job-Id
+  // header -- already received by the time fetch() resolves, since headers
+  // arrive before the streamed body finishes -- lets this fall back to
+  // polling /report-status instead of losing the reading outright.
+  let jobId=null, result=null, primaryFailed=false;
   try{
     const res=await fetch(W_API+'/report',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
     });
-    const result=await res.json();
+    jobId=res.headers.get('X-Job-Id');
+    result=await res.json();
     if(!res.ok||result.error){ bail(result.error||'Something went wrong. Please try again.'); return; }
-    jobId=result.jobId;
   }catch(e){
-    bail('Connection error: '+e.message);
-    return;
+    if(!jobId){ bail('Connection error: '+e.message); return; }
+    primaryFailed=true;
   }
 
-  const POLL_MS=4000, MAX_WAIT_MS=8*60*1000;
-  const pollStart=Date.now();
-  while(true){
-    if(Date.now()-pollStart>MAX_WAIT_MS){
-      bail('This is taking longer than expected. Please try again.');
-      return;
-    }
-    await new Promise(r=>setTimeout(r,POLL_MS));
-    let result;
-    try{
-      const res=await fetch(W_API+'/report-status',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({jobId})
-      });
-      result=await res.json();
-      if(!res.ok||result.error){
-        // A job-not-found/expired error is real and terminal; a transient
-        // network hiccup on this one poll is not -- but both come back as
-        // result.error here, so a single failed poll just tries again on
-        // the next tick rather than aborting the whole wait immediately.
+  if(primaryFailed){
+    const POLL_MS=4000, MAX_WAIT_MS=8*60*1000;
+    const pollStart=Date.now();
+    while(true){
+      if(Date.now()-pollStart>MAX_WAIT_MS){
+        bail('This is taking longer than expected. Please try again.');
+        return;
+      }
+      await new Promise(r=>setTimeout(r,POLL_MS));
+      let pollResult;
+      try{
+        const res=await fetch(W_API+'/report-status',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({jobId})
+        });
+        pollResult=await res.json();
+        if(!res.ok||pollResult.error){
+          // A job-not-found/expired error is real and terminal; a transient
+          // network hiccup on this one poll is not -- but both come back as
+          // pollResult.error here, so a single failed poll just tries again
+          // on the next tick rather than aborting the whole wait immediately.
+          continue;
+        }
+      }catch(e){
         continue;
       }
-    }catch(e){
-      continue;
+      if(pollResult.status==='pending')continue;
+      // status is 'done' -- reshape to match what the primary streamed
+      // response provides, since the rest of this function reads that shape.
+      result={p1:pollResult.p1,p2:pollResult.p2,report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback};
+      break;
     }
-    if(result.status==='pending')continue;
-    // status is 'done' -- render exactly what the old single-response
-    // shape provided, since the job record mirrors it.
-    p1.numerology=result.p1.numerology;
-    p1.astro=result.p1.astrology;
-    p1.astroError=result.p1.astrologyError;
-    p1.hd=result.p1.humanDesign;
-    p1.hdError=result.p1.humanDesignError;
-    if(p2&&result.p2){
-      p2.numerology=result.p2.numerology;
-      p2.astro=result.p2.astrology;
-      p2.astroError=result.p2.astrologyError;
-      p2.hd=result.p2.humanDesign;
-      p2.hdError=result.p2.humanDesignError;
-    }
-    // Only clear the draft once the reading actually succeeded -- if
-    // generation failed, keep the entered data around so a retry
-    // doesn't force re-typing everything (the reading-failure message
-    // tells the customer exactly that; this is what makes it true).
-    if(!result.reportError)clearDraft();
-    genBtn.disabled=false;
-    stopLoadingTimer();
-    render(p1,p2,result.report,result.reportError,result.reportUsedFallback);
-    return;
   }
+
+  p1.numerology=result.p1.numerology;
+  p1.astro=result.p1.astrology;
+  p1.astroError=result.p1.astrologyError;
+  p1.hd=result.p1.humanDesign;
+  p1.hdError=result.p1.humanDesignError;
+  if(p2&&result.p2){
+    p2.numerology=result.p2.numerology;
+    p2.astro=result.p2.astrology;
+    p2.astroError=result.p2.astrologyError;
+    p2.hd=result.p2.humanDesign;
+    p2.hdError=result.p2.humanDesignError;
+  }
+  // Only clear the draft once the reading actually succeeded -- if
+  // generation failed, keep the entered data around so a retry
+  // doesn't force re-typing everything (the reading-failure message
+  // tells the customer exactly that; this is what makes it true).
+  if(!result.reportError)clearDraft();
+  genBtn.disabled=false;
+  stopLoadingTimer();
+  render(p1,p2,result.report,result.reportError,result.reportUsedFallback);
 }
 
 // ---------- tap-to-expand: cards, term definitions, gate chips ----------
