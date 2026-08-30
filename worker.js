@@ -433,6 +433,10 @@ function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
 }
 
+function jobKey(jobId) {
+  return `job:${jobId}`;
+}
+
 // Only the plain birth-data fields needed to refill the form — never the
 // computed numerology/astrology/Human Design output, which is regenerated
 // fresh from these each time.
@@ -1169,6 +1173,25 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       }
     }
 
+    if (url.pathname === "/report-status") {
+      let statusBody;
+      try {
+        statusBody = await request.json();
+      } catch (e) {
+        return jsonResponse({ error: "Invalid request body." }, 400);
+      }
+      if (!statusBody.jobId) {
+        return jsonResponse({ error: "Missing jobId." }, 400);
+      }
+      const raw = await env.PASSES.get(jobKey(statusBody.jobId));
+      if (!raw) {
+        // Either a bad jobId, or the 1-hour TTL on the job record expired --
+        // both look the same to the caller, and both mean "nothing to show."
+        return jsonResponse({ error: "Job not found or expired. Please try again." }, 404);
+      }
+      return jsonResponse(JSON.parse(raw));
+    }
+
     if (url.pathname !== "/report") {
       return jsonResponse({ error: "Unknown endpoint" }, 404);
     }
@@ -1179,95 +1202,70 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       return jsonResponse({ error: "Invalid request body." }, 400);
     }
 
-    // Chart lookups plus real AI generation can run several minutes under
-    // thinking + high effort. The old code returned nothing to the browser
-    // at all until every bit of that finished -- a single HTTP response
-    // that sits completely silent for that whole time. That's exactly the
-    // shape of connection an intermediary (Cloudflare's own edge waiting
-    // on the first response byte, a mobile carrier's NAT, hotel/office
-    // wifi) can and does drop as "idle," which is what a real customer
-    // sees as a bare "Failed to fetch" with no actual error message --
-    // the same class of problem `stream: true` already fixed for the
-    // Worker's own call to the Anthropic API, just one hop further out.
-    // Opening the response immediately and writing small whitespace
-    // keep-alive bytes while the real work runs keeps the connection
-    // visibly alive the whole time. This is safe: JSON.parse ignores
-    // insignificant leading/trailing whitespace around the real value, so
-    // a body of keep-alive spaces followed by the real JSON still parses
-    // correctly once the browser's fetch resolves.
+    // Real, confirmed root cause of live "Failed to fetch" reports (per
+    // Cloudflare's own Workers Logs -- a "waitUntil() tasks did not
+    // complete within the allowed time after invocation end and have been
+    // cancelled" warning, not a guess): this used to tie the entire chart
+    // lookup + AI generation to ONE HTTP connection staying open the whole
+    // time, kept alive with whitespace heartbeat bytes. Cloudflare's docs
+    // say an actively-streaming response should keep a Worker invocation
+    // alive on its own -- but if the actual client connection drops for
+    // any real-world reason (a phone losing signal, the screen locking, a
+    // carrier's NAT closing an idle-feeling connection), the invocation
+    // only gets 30 more seconds to finish once that happens, and a
+    // two-person reading with real thinking can outlast that easily.
     //
-    // Every outcome -- success, a chart-lookup failure, an unexpected
-    // error -- now arrives as HTTP 200 with the real detail inside the
-    // JSON body, since the status code has to be committed before any of
-    // that is known. index.html's fetch handler checks `result.error` on
-    // every response now, not just `!res.ok`, to match.
-    const { readable, writable } = new TransformStream();
-    const writer = writable.getWriter();
-    const encoder = new TextEncoder();
-    const heartbeat = setInterval(() => {
-      writer.write(encoder.encode(' ')).catch(() => {});
-    }, 10000);
+    // Fixed at the architecture level, not with a shorter heartbeat: this
+    // endpoint now returns a job ID immediately (fast, low-risk request),
+    // starts the real work in the background regardless of what the
+    // client's connection does, and writes the result to KV under that
+    // job ID when done. index.html polls /report-status for it instead of
+    // holding one connection open -- if a poll fails or the connection
+    // drops, the client just asks again a few seconds later; the actual
+    // generation was never tied to that connection surviving.
+    const jobId = crypto.randomUUID();
+    await env.PASSES.put(jobKey(jobId), JSON.stringify({ status: "pending" }), { expirationTtl: 3600 });
 
-    // Diagnostic logging -- a real "Failed to fetch" was reported live with
-    // no way to tell whether it happened before, during, or after the
-    // Anthropic call, or whether ctx.waitUntil() itself got torn down
-    // before this finished (Cloudflare's own docs describe a ~30s extension
-    // window for waitUntil() that this generation, with thinking + effort,
-    // can plausibly exceed -- but that limit's exact behavior is disputed
-    // even in Cloudflare's own docs, so this isn't asserted as the cause).
-    // These timestamps turn the next occurrence into something checkable in
-    // the real Worker logs instead of another unreproducible guess.
     const reportStart = Date.now();
-    console.log(`[report] start rtype=${body.rtype}`);
+    console.log(`[report] start rtype=${body.rtype} jobId=${jobId}`);
     ctx.waitUntil((async () => {
-      let responseBody;
+      let record;
       try {
-        // Speed fix for relational readings: p1 and p2's chart data (each
-        // involving its own Human Design network lookup) were fetched one
-        // after the other. They don't depend on each other, so fetching
-        // both at once cuts that wait roughly in half. No change to what
-        // gets written -- assemblePersonData never throws (every step has
-        // its own try/catch, always returns an object with error fields
-        // on failure), so running both together is safe, not just faster.
+        // p1 and p2's chart data (each involving its own Human Design
+        // network lookup) is fetched concurrently, not one after the
+        // other -- they're independent, and assemblePersonData never
+        // throws (every step has its own try/catch, always returns an
+        // object with error fields on failure), so this is safe.
         const [p1Data, p2Data] = await Promise.all([
           assemblePersonData(env, body.p1),
           body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
         ]);
-        console.log(`[report] person data assembled at +${Date.now() - reportStart}ms`);
+        console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
 
         let report = null, reportError = null, reportUsedFallback = false;
         try {
           const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
           report = result.reading;
           reportUsedFallback = result.usedFallback;
-          console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback}`);
+          console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback} jobId=${jobId}`);
         } catch (error) {
           reportError = error.message;
-          console.error(`[report] generation threw at +${Date.now() - reportStart}ms: ${error.message}`);
+          console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
         }
 
         if (body.passEmail) {
           ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
         }
 
-        responseBody = JSON.stringify({ p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback });
+        record = { status: "done", p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback };
       } catch (error) {
-        console.error(`[report] top-level throw at +${Date.now() - reportStart}ms: ${error.message}`);
-        responseBody = JSON.stringify({ error: error.message });
-      } finally {
-        clearInterval(heartbeat);
-        try {
-          await writer.write(encoder.encode(responseBody));
-          await writer.close();
-          console.log(`[report] response written at +${Date.now() - reportStart}ms`);
-        } catch (e) {
-          console.error(`[report] writer failed at +${Date.now() - reportStart}ms (client likely disconnected): ${e.message}`);
-        }
+        console.error(`[report] top-level throw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
+        record = { status: "error", error: error.message };
       }
+      await env.PASSES.put(jobKey(jobId), JSON.stringify(record), { expirationTtl: 3600 });
+      console.log(`[report] job record written at +${Date.now() - reportStart}ms jobId=${jobId}`);
     })());
 
-    return new Response(readable, {
-      headers: { "Content-Type": "application/json", ...CORS_HEADERS, ...PRIVACY_HEADERS }
-    });
+    return jsonResponse({ jobId });
   }
 };
