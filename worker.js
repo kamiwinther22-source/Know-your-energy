@@ -547,6 +547,8 @@ Name every number and placement directly (Life Path, Soul Urge, Karmic Lessons, 
 
 State each fact once, in the section it fits best. Only call two facts opposed when the data actually shows real opposition, and only when both sides are actually the same kind of claim -- keeping feelings private is not the same thing as a private life. Every sentence needs a real fact behind it. If it leans on an intensifying word to sound convincing instead, the fact is missing -- find the fact.
 
+After a real claim, don't add a "not X" that denies something nobody said, just to sound sharpened. If the negation doesn't state a new fact, cut it.
+
 Never build a sentence by naming how two things relate (linked with, in tension with, in friction with, flows with, or any other relationship word) and then explaining what that produces. State what the person actually does or experiences first, as a direct claim -- a placement can be the reason behind it, never the grammatical subject of the sentence. This is about the shape of the sentence, not any specific word -- switching to a new relationship word is still the same defect.
 
 Big cycles (Personal Year, Essence, Pinnacle, Period Cycle): name each with its number and age range. Then state what happens when they combine -- not a list of what each one means on its own.
