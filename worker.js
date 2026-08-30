@@ -1220,8 +1220,17 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
     ctx.waitUntil((async () => {
       let responseBody;
       try {
-        const p1Data = await assemblePersonData(env, body.p1);
-        const p2Data = body.p2 ? await assemblePersonData(env, body.p2) : null;
+        // Speed fix for relational readings: p1 and p2's chart data (each
+        // involving its own Human Design network lookup) were fetched one
+        // after the other. They don't depend on each other, so fetching
+        // both at once cuts that wait roughly in half. No change to what
+        // gets written -- assemblePersonData never throws (every step has
+        // its own try/catch, always returns an object with error fields
+        // on failure), so running both together is safe, not just faster.
+        const [p1Data, p2Data] = await Promise.all([
+          assemblePersonData(env, body.p1),
+          body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
+        ]);
         console.log(`[report] person data assembled at +${Date.now() - reportStart}ms`);
 
         let report = null, reportError = null, reportUsedFallback = false;
