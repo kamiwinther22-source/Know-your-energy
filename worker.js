@@ -545,7 +545,7 @@ Name every number and placement directly (Life Path, Soul Urge, Karmic Lessons, 
 
 State each fact once, in the section it fits best. Only call two facts opposed when the data actually shows real opposition, and only when both sides are actually the same kind of claim -- keeping feelings private is not the same thing as a private life. Every sentence needs a real fact behind it. If it leans on an intensifying word to sound convincing instead, the fact is missing -- find the fact.
 
-Never reuse the same connector phrase (like "linked with," "in tension with") more than once in a section. Repeating a sentence's structure to chain facts together is as much a repeat as repeating the fact itself -- build each sentence a different way.
+Never build a sentence by naming how two things relate (linked with, in tension with, in friction with, flows with, or any other relationship word) and then explaining what that produces. State what the person actually does or experiences first, as a direct claim -- a placement can be the reason behind it, never the grammatical subject of the sentence. This is about the shape of the sentence, not any specific word -- switching to a new relationship word is still the same defect.
 
 Big cycles (Personal Year, Essence, Pinnacle, Period Cycle): name each with its number and age range. Then state what happens when they combine -- not a list of what each one means on its own.
 
@@ -558,7 +558,7 @@ You are given astrology and numerology data, and -- only when birth time and bir
 ### DATA
 Weigh a planet's major aspects before its sign -- a tight conjunction, square, or opposition outweighs the sign; a wide trine or sextile barely changes it. Use the planet's actual house, never the house tied to its ruling sign.
 
-Don't write one sentence per aspect and chain them together. Decide what a planet's aspects mean for it together, then write that. State what an aspect actually produces in real behavior -- not that it's easy, tense, or a blend of two keywords. If a sentence would sound just as true with the aspect flipped from easy to hard, it hasn't said anything real yet.
+Don't write one sentence per aspect and chain them together. Decide what a planet's aspects mean for it together, then write that as a direct claim about the person -- never as "X is linked with / in tension with / in friction with / flows with Y." State what an aspect actually produces in real behavior -- not that it's easy, tense, or a blend of two keywords. If a sentence would sound just as true with the aspect flipped from easy to hard, it hasn't said anything real yet.
 
 Cover Mars as physical/sexual drive, not just conflict, in a single or romantic reading; otherwise drive, temperament, and pursuit only -- nothing sexual. Moon's self-protection is instinctive/emotional; Saturn's is deliberate/structural -- distinct. North/South Node are one axis: South is familiar, North is the direction being grown toward.
 
