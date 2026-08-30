@@ -819,9 +819,21 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
       // not a job that needs a full reasoning pass, so it skips thinking
       // entirely and gets a much smaller max_tokens -- output only, no
       // thinking budget to share it with.
+      // max_tokens raised 48000 -> 72000: a real two-person reading hit
+      // the fallback after this session's prompt additions (per-item
+      // recall, thematic cross-system synthesis) made a relational
+      // reading -- combining two full charts, not one -- generate
+      // enough thinking + output to risk hitting the old ceiling
+      // mid-generation, which fails JSON validation, burns a retry, and
+      // can exhaust all 3 attempts into the deterministic fallback. This
+      // is headroom, not a quality knob: a generation that already fit
+      // under 48000 finishes exactly the same; only one that was being
+      // cut off actually changes. Sonnet 5 supports up to 128000 output
+      // tokens (confirmed via the claude-api skill), so this is still
+      // well under the real ceiling.
       ...(repairNote
         ? { max_tokens: 24000, thinking: { type: 'disabled' } }
-        : { max_tokens: 48000, thinking: { type: 'adaptive' }, output_config: { effort: 'medium' } }),
+        : { max_tokens: 72000, thinking: { type: 'adaptive' }, output_config: { effort: 'medium' } }),
       // A non-streaming call with a real thinking pass hit a real
       // Cloudflare 524 -- the generation genuinely took longer than the
       // edge's timeout for one long silent response. Streaming keeps the
