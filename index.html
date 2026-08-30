@@ -3188,6 +3188,24 @@ async function generate(){
   document.querySelector('.content').style.display='none';
   document.getElementById('loading').style.display='block';
   startLoadingTimer();
+
+  const bail=(msg)=>{
+    genBtn.disabled=false;
+    stopLoadingTimer();
+    document.getElementById('loading').style.display='none';
+    document.querySelector('.content').style.display='block';
+    showErr(msg);
+  };
+
+  // /report no longer holds one connection open for the whole generation
+  // (that's the real, confirmed cause of live "Failed to fetch" reports --
+  // a real client-side connection drop plus Cloudflare's own 30-second
+  // waitUntil grace period, see worker.js). It now hands back a job ID
+  // immediately, and the actual chart lookup + AI generation runs on the
+  // server regardless of what this browser's connection does. Polling
+  // /report-status means a single dropped or slow poll costs nothing --
+  // the next one just asks again -- instead of losing the whole reading.
+  let jobId;
   try{
     const res=await fetch(W_API+'/report',{
       method:'POST',
@@ -3195,17 +3213,42 @@ async function generate(){
       body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
     });
     const result=await res.json();
-    // /report now streams keep-alive bytes while it works (see worker.js),
-    // so every outcome comes back as HTTP 200 -- a hard failure shows up
-    // as result.error instead of a non-ok status, so check both.
-    if(!res.ok||result.error){
-      genBtn.disabled=false;
-      stopLoadingTimer();
-      document.getElementById('loading').style.display='none';
-      document.querySelector('.content').style.display='block';
-      showErr(result.error||'Something went wrong. Please try again.');
+    if(!res.ok||result.error){ bail(result.error||'Something went wrong. Please try again.'); return; }
+    jobId=result.jobId;
+  }catch(e){
+    bail('Connection error: '+e.message);
+    return;
+  }
+
+  const POLL_MS=4000, MAX_WAIT_MS=8*60*1000;
+  const pollStart=Date.now();
+  while(true){
+    if(Date.now()-pollStart>MAX_WAIT_MS){
+      bail('This is taking longer than expected. Please try again.');
       return;
     }
+    await new Promise(r=>setTimeout(r,POLL_MS));
+    let result;
+    try{
+      const res=await fetch(W_API+'/report-status',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({jobId})
+      });
+      result=await res.json();
+      if(!res.ok||result.error){
+        // A job-not-found/expired error is real and terminal; a transient
+        // network hiccup on this one poll is not -- but both come back as
+        // result.error here, so a single failed poll just tries again on
+        // the next tick rather than aborting the whole wait immediately.
+        continue;
+      }
+    }catch(e){
+      continue;
+    }
+    if(result.status==='pending')continue;
+    // status is 'done' -- render exactly what the old single-response
+    // shape provided, since the job record mirrors it.
     p1.numerology=result.p1.numerology;
     p1.astro=result.p1.astrology;
     p1.astroError=result.p1.astrologyError;
@@ -3223,13 +3266,10 @@ async function generate(){
     // doesn't force re-typing everything (the reading-failure message
     // tells the customer exactly that; this is what makes it true).
     if(!result.reportError)clearDraft();
-    render(p1,p2,result.report,result.reportError,result.reportUsedFallback);
-  }catch(e){
     genBtn.disabled=false;
     stopLoadingTimer();
-    document.getElementById('loading').style.display='none';
-    document.querySelector('.content').style.display='block';
-    showErr('Connection error: '+e.message);
+    render(p1,p2,result.report,result.reportError,result.reportUsedFallback);
+    return;
   }
 }
 
