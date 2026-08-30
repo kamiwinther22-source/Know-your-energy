@@ -619,7 +619,19 @@ body{
   .quad-item .dprl,.panel-auto .dprl{font-size:0.72rem!important;}
   .quad-item .glyph,.panel-auto .glyph{font-size:1.2rem!important;}
   .quad-item .dprv.pend,.panel-auto .dprv.pend{font-size:0.9rem!important;}
-  .quad-item .dpsec,.panel-auto .dpsec{font-size:0.72rem!important;padding:0.35rem 0.3rem 0.1rem!important;}
+  .quad-item .dpsec,.panel-auto .dpsec{font-size:0.72rem!important;padding:0.35rem 0.3rem 0.1rem!important;
+    break-after:avoid-page!important;page-break-after:avoid!important;}
+  /* A .dpsec heading (e.g. "FOUNDATION -- THE MASTER BUILDER...") and the
+     .dprow paragraph right after it are separate sibling elements, not one
+     wrapped block -- with nothing telling the print engine to keep them
+     together, a page break was landing right between them, leaving the
+     heading alone at the bottom of one page and its whole paragraph
+     starting fresh on the next. break-after:avoid-page above stops the
+     break from landing right after the heading; this pairs it with the
+     immediately-following block so the two move to the next page together
+     if they don't both fit, instead of only the heading being pushed down. */
+  .quad-item .dpsec+.dprow,.panel-auto .dpsec+.dprow{break-before:avoid-page!important;page-break-before:avoid!important;}
+  .quad-item .report-body,.panel-auto .report-body,.quad-item .report-sig,.panel-auto .report-sig{orphans:3;widows:3;}
   .quad-item .dpdef,.panel-auto .dpdef{font-size:0.88rem!important;line-height:1.45!important;padding:0 0.3rem 0.5rem!important;}
   .quad-item .gates-grid,.panel-auto .gates-grid{gap:0.4rem!important;padding:0.25rem 0.3rem 0.4rem!important;}
   .quad-item .gate-chip,.panel-auto .gate-chip{font-size:0.95rem!important;padding:0.35rem 0!important;}
@@ -2145,7 +2157,7 @@ const ASTRO_GROUPS=[['Luminaries',['Sun','Moon']],['Inner',['Mercury','Venus','M
 // currentColor so the existing per-planet color mechanism still works.
 const PLANET_SVG={
   Sun:'<circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/>',
-  Moon:'<path d="M13 3a9 9 0 1 0 0 18 7.2 7.2 0 0 1 0-18Z" fill="currentColor"/>',
+  Moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>',
   Mercury:'<path d="M8.3 5.3a3.7 3.7 0 0 1 7.4 0" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12.5" r="4.3" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="16.8" x2="12" y2="21.5" stroke="currentColor" stroke-width="1.8"/><line x1="9.3" y1="19.3" x2="14.7" y2="19.3" stroke="currentColor" stroke-width="1.8"/>',
   Venus:'<circle cx="12" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="13" x2="12" y2="21" stroke="currentColor" stroke-width="1.8"/><line x1="8.3" y1="17.3" x2="15.7" y2="17.3" stroke="currentColor" stroke-width="1.8"/>',
   Mars:'<circle cx="10" cy="14" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="13.3" y1="10.7" x2="20" y2="4" stroke="currentColor" stroke-width="1.8"/><polyline points="14,4 20,4 20,10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
