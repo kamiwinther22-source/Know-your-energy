@@ -141,7 +141,13 @@ body{
    pushes the tagline down the page (per her note that this arrangement
    requires that) -- it's the space the corner bubbles need to sit in
    without overlapping the text. */
-.tagline-frame{position:relative;max-width:380px;margin:0 auto;padding:64px 58px 70px;}
+/* margin-bottom is real space AFTER the frame ends -- separate from the
+   padding-bottom above, which only makes room inside the frame for the
+   bottom two corner bubbles (position:absolute, bottom:0). Those bubbles
+   align to the frame's own padding edge, so padding-bottom alone creates
+   no visible gap to whatever comes next in the page; margin-bottom is
+   what actually pushes the form down away from them. */
+.tagline-frame{position:relative;max-width:380px;margin:0 auto 40px;padding:64px 58px 70px;}
 .tagline-wrap{position:relative;margin:0;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
@@ -149,24 +155,7 @@ body{
   opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
 .tagline-slide.active{opacity:1;pointer-events:auto;}
-/* Same shiny-gradient-text technique as the title (deep anchor + bright
-   same-hue accent + deep anchor), but in gold, not blue -- directly under
-   a blue title, a blue tagline didn't stand out from it, and the two
-   taglines no longer have a reason to be different colors from each
-   other (that made sense when they were 3 distinct pitches; now they're
-   one statement + one question in the same voice). Gold already has an
-   established role on this page (title-glint sparkles, numerology tile
-   accents), so this reuses an existing palette color rather than
-   introducing a new one. Contrast verified against this page's
-   background (#fbf8f0): anchor tone 10.94:1, brightest accent tone
-   4.75:1 -- both clear the same floor the blue version was held to. */
-.tagline-slide.c-gold{
-  /* Muted champagne, not yellow -- reuses the same goldT metal tone
-     already established for the numerology tiles instead of a brighter,
-     more saturated gold that read as plain yellow on black. */
-  background:linear-gradient(100deg,#c7b78e 0%,#fdf6ea 35%,#ddccae 50%,#fdf6ea 65%,#c7b78e 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-}
+.tagline-slide.c-gold{color:#000000;}
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
@@ -205,17 +194,22 @@ body{
 .keys-col .key-item:nth-child(2){top:0;right:0;}
 .keys-col .key-item:nth-child(3){bottom:0;left:0;}
 .keys-col .key-item:nth-child(4){bottom:0;right:0;}
-/* Technique confirmed: dark center, this contrast curve, the soft
-   diffuse patch in the lower-left (feathered, not a hard-edged wedge).
-   Color confirmed separately as wrong every time it turned warm/gold --
-   entirely cool now, base AND patch, no warm anywhere. */
+/* Clear glass, not opaque metal: mostly transparent so the white page
+   shows through, a bright glossy highlight top-left, a faint cool tint
+   pooling at the bottom for depth, a thin rim so the circle still reads
+   as an edge against a white page, and backdrop-filter so anything that
+   later sits behind the bubble (or overlaps another bubble) genuinely
+   blurs through it rather than just tinting a flat color. */
 .key-item{
   position:relative;overflow:hidden;
   border-radius:50%;padding:0.3rem;flex-shrink:0;
   background:
-    radial-gradient(ellipse 55% 45% at 24% 78%, rgba(150,165,178,0.55) 0%, rgba(150,165,178,0.3) 45%, rgba(150,165,178,0) 80%),
-    radial-gradient(circle at 50% 50%, #05060a 0%, #090c11 38%, #131820 58%, #313c4b 74%, #6d7f93 86%, #b9c8d8 96%, #dde5ee 100%);
-  box-shadow:0 3px 10px -3px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.5) inset;
+    radial-gradient(circle at 30% 26%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 14%, rgba(255,255,255,0.08) 34%, rgba(255,255,255,0.02) 55%),
+    radial-gradient(ellipse 70% 55% at 55% 88%, rgba(150,175,200,0.28) 0%, rgba(150,175,200,0) 70%),
+    rgba(255,255,255,0.06);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  border:1px solid rgba(40,55,75,0.22);
+  box-shadow:0 6px 14px -6px rgba(20,30,45,0.3), inset 0 1px 3px rgba(255,255,255,0.95), inset 0 -8px 12px -8px rgba(30,45,65,0.25);
   line-height:1.15;font-weight:600;
 }
 .key-item::after{
@@ -235,11 +229,10 @@ body{
    Centering a single wrapper span instead keeps the mark tags as normal
    inline content, so spacing and wrapping behave like ordinary text. */
 .key-item{display:flex;align-items:center;justify-content:center;text-align:center;}
-/* Bumped up a size and given a crisp small-offset outline (four tight
-   1px-blur shadows, not just one soft blur) on top of the existing glow
-   shadow -- a soft blur alone still let the text blend into the lighter
-   parts of the glass; a real outline holds contrast anywhere on it. */
-.key-item span{display:block;color:#ffffff;font-size:0.72rem;text-shadow:0 1px 1px #000,0 -1px 1px #000,1px 0 1px #000,-1px 0 1px #000,0 0 6px rgba(0,0,0,0.85);}
+/* Dark text with a light halo, not white with a dark outline -- the
+   glass is translucent now (was a near-black opaque gradient before),
+   so white text has nothing dark left under it to read against. */
+.key-item span{display:block;color:#12161e;font-size:0.72rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-item:nth-child(1){margin-top:0;}
 .key-item:nth-child(2){margin-top:0.55rem;}
 .key-item:nth-child(3){margin-top:-0.2rem;}
@@ -2726,11 +2719,18 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
 
+  // Fade the outgoing slide out FULLY before fading the next one in --
+  // both slides sit in the exact same spot (position:absolute), so a
+  // simultaneous crossfade (old fading in while new fades out) briefly
+  // shows both texts superimposed, which reads as broken/garbled text.
+  // Sequential fade-out-then-fade-in guarantees only one is ever visible.
+  const FADE_MS = 700;
   let idx = 0;
   setInterval(()=>{
     slides[idx].classList.remove('active');
-    idx = (idx + 1) % slides.length;
-    slides[idx].classList.add('active');
+    const nextIdx = (idx + 1) % slides.length;
+    setTimeout(()=>{ slides[nextIdx].classList.add('active'); }, FADE_MS);
+    idx = nextIdx;
   }, 4200);
 })();
 
