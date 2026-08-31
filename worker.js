@@ -1030,11 +1030,26 @@ function findCitationLeak(reading) {
       matches.push({ start: m.index, end: m.index + m[0].length, text: m[0] });
     }
   }
-  matches.sort((a, b) => a.start - b.start);
-  for (let i = 1; i < matches.length; i++) {
-    const gapText = text.slice(matches[i - 1].end, matches[i].start);
+  // Multiple patterns can match the same span -- "Sun in Scorpio" (the
+  // Sun-in-Sign pattern) fully contains "Scorpio" (the bare-sign
+  // pattern). Sorting by start ascending, longest-first as a tiebreak,
+  // then dropping any match that starts before the last KEPT match's
+  // end collapses that overlap into one citation instead of two --
+  // without this, "Sun in Scorpio" alone produced a zero-width gap
+  // between its own overlapping matches and false-positived as a
+  // "stack" on literally the most common sentence shape in a reading,
+  // which is what was silently failing every real attempt and forcing
+  // the guaranteed fallback to run instead.
+  matches.sort((a, b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
+  const spans = [];
+  for (const m of matches) {
+    const last = spans[spans.length - 1];
+    if (!last || m.start >= last.end) spans.push(m);
+  }
+  for (let i = 1; i < spans.length; i++) {
+    const gapText = text.slice(spans[i - 1].end, spans[i].start);
     if (gapText.length <= CITATION_STACK_GAP && /^[\s,;.\-–—]*(and|in|with|of)?[\s,;.\-–—]*$/i.test(gapText)) {
-      return `The reading stacks citations directly into the prose with no real sentence around them ("${matches[i - 1].text}${gapText}${matches[i].text}"), which real customers have gotten stuck on. Naming ONE placement or number and explaining it in the same sentence is fine and expected -- the defect is two or more stacked back-to-back with nothing connecting them. Rewrite the full reading so every citation sits inside its own real, explained sentence instead of a stacked list.`;
+      return `The reading stacks citations directly into the prose with no real sentence around them ("${spans[i - 1].text}${gapText}${spans[i].text}"), which real customers have gotten stuck on. Naming ONE placement or number and explaining it in the same sentence is fine and expected -- the defect is two or more stacked back-to-back with nothing connecting them. Rewrite the full reading so every citation sits inside its own real, explained sentence instead of a stacked list.`;
     }
   }
   return null;
