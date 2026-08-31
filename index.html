@@ -248,26 +248,48 @@ body{
 .row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.55rem;}
 .row-birth{display:grid;grid-template-columns:1.2fr 0.65fr 0.55fr 1.6fr;gap:0.3rem;align-items:end;}
 
-/* Thin underline field with small tick marks at the start and stop points of
-   the writing line -- "|____________|" -- instead of a boxed/indented input,
-   with italic text for a lighter, less typewriter-formal feel. */
-.line-field{position:relative;padding-bottom:0.5rem;border-bottom:1.3px solid rgba(0,0,0,0.45);transition:border-color 0.15s ease;}
-.line-field::before,.line-field::after{
-  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(0,0,0,0.45);
-  transition:background 0.15s ease;
+/* Carved into the page, not a line underneath the text -- no border, no
+   fill color, no grey panel behind it. The recessed look is built purely
+   from shading: a dark shadow along the top/left inner edge (where the
+   groove would fall into shadow) and a soft light edge along the
+   bottom/right (where it would catch light), both inset so they read as
+   depth in the page itself rather than a drawn line or a colored box.
+   The field's own background stays fully transparent -- it's still the
+   page's own white showing through, at every state. */
+.line-field{
+  position:relative;border-radius:7px;
+  padding:0.4rem 0.3rem;
+  background:transparent;
+  box-shadow:
+    inset 1.5px 2px 3px rgba(0,0,0,0.22),
+    inset -1px -1px 1.5px rgba(255,255,255,0.9);
+  transition:box-shadow 0.15s ease;
 }
-.line-field::before{left:0;}
-.line-field::after{right:0;}
-.line-field:focus-within{border-bottom-color:#4655D6;}
-.line-field:focus-within::before,.line-field:focus-within::after{background:#4655D6;}
+.line-field:focus-within{
+  box-shadow:
+    inset 1.5px 2px 3px rgba(70,85,214,0.28),
+    inset -1px -1px 1.5px rgba(255,255,255,0.9);
+}
 .line-field input,.line-field select{
   width:100%;background:transparent;border:none;color:#000000;font-size:clamp(0.83rem, 0.23rem + 2.7vw, 0.88rem);font-weight:500;
-  font-style:italic;font-family:'DM Sans',sans-serif;padding:0.4rem 0.2rem 0;outline:none;
+  font-style:italic;font-family:'DM Sans',sans-serif;padding:0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
 .line-field select{width:auto;padding-right:1rem;}
 .line-field select option{color:#000000;}
 .line-field input::placeholder{color:#000000;font-style:italic;opacity:1;}
+/* Chrome/Android autofill forces its own background color (shows as a
+   grey box) that normal background rules can't override -- this is the
+   real, standard defeat for it: an absurdly large inset box-shadow
+   painted in the page's own white, so autofilled fields still look like
+   every other carved field instead of a flat grey rectangle. */
+.line-field input:-webkit-autofill,
+.line-field input:-webkit-autofill:hover,
+.line-field input:-webkit-autofill:focus{
+  -webkit-text-fill-color:#000000;
+  transition:background-color 9999s ease-in-out 0s;
+  box-shadow:0 0 0 1000px #ffffff inset;
+}
 
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
