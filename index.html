@@ -135,7 +135,14 @@ body{
 
 
 /* ---------- tagline / toggle ---------- */
-.tagline-wrap{position:relative;max-width:380px;margin:0 auto 1.3rem;}
+/* Exploratory layout per her sketch: 4 bubbles at the corners of a
+   frame, tagline text centered in the middle of that frame instead of
+   sitting below the bubbles in a row. Padding on the frame is what
+   pushes the tagline down the page (per her note that this arrangement
+   requires that) -- it's the space the corner bubbles need to sit in
+   without overlapping the text. */
+.tagline-frame{position:relative;max-width:380px;margin:0 auto;padding:64px 58px 70px;}
+.tagline-wrap{position:relative;margin:0;}
 .tagline-slide{
   position:absolute;top:0;left:0;width:100%;
   text-align:center;font-family:'Special Elite',monospace;font-size:clamp(1.05rem,5.2vw,1.55rem);line-height:1.32;font-weight:400;letter-spacing:0.005em;
@@ -187,16 +194,40 @@ body{
    cluster at staggered heights (per-bubble margin-top below) instead
    of sitting in one straight row. Silver/chrome gradient, not flat grey. */
 .keys-col{
-  display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
-  gap:0.5rem 0.7rem;margin-bottom:1.3rem;
+  position:static;margin:0;
 }
+/* Each bubble pinned to its own corner of .tagline-frame instead of
+   flowing in a row -- nth-child order matches the KEYS array order
+   (free reading, data privacy, no autocharges, email-as-key), so the
+   first two land on top, last two on the bottom. */
+.keys-col .key-item{position:absolute;margin-top:0!important;}
+.keys-col .key-item:nth-child(1){top:0;left:0;}
+.keys-col .key-item:nth-child(2){top:0;right:0;}
+.keys-col .key-item:nth-child(3){bottom:0;left:0;}
+.keys-col .key-item:nth-child(4){bottom:0;right:0;}
+/* Technique confirmed: dark center, this contrast curve, the soft
+   diffuse patch in the lower-left (feathered, not a hard-edged wedge).
+   Color confirmed separately as wrong every time it turned warm/gold --
+   entirely cool now, base AND patch, no warm anywhere. */
 .key-item{
+  position:relative;overflow:hidden;
   border-radius:50%;padding:0.3rem;flex-shrink:0;
-  background:radial-gradient(circle at 32% 26%, #ffffff 0%, #e4ebee 28%, #c3ced4 55%, #8f9ca4 85%, #6f7c85 100%);
-  border:1px solid rgba(255,255,255,0.5);
-  box-shadow:0 3px 10px -3px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.6) inset;
+  background:
+    radial-gradient(ellipse 55% 45% at 24% 78%, rgba(150,165,178,0.55) 0%, rgba(150,165,178,0.3) 45%, rgba(150,165,178,0) 80%),
+    radial-gradient(circle at 50% 50%, #05060a 0%, #090c11 38%, #131820 58%, #313c4b 74%, #6d7f93 86%, #b9c8d8 96%, #dde5ee 100%);
+  box-shadow:0 3px 10px -3px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.5) inset;
   line-height:1.15;font-weight:600;
 }
+.key-item::after{
+  content:'';position:absolute;width:20%;height:20%;top:66%;right:18%;
+  background:radial-gradient(circle,#ffffff 0%,#e8eef6 40%,rgba(232,238,246,0) 75%);
+  clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
+  filter:drop-shadow(0 0 3px rgba(255,255,255,0.9));
+}
+.key-item:nth-child(2)::after{top:70%;right:12%;width:15%;height:15%;}
+.key-item:nth-child(3)::after{top:32%;right:62%;width:13%;height:13%;}
+.key-item:nth-child(4)::after{top:68%;right:58%;width:16%;height:16%;}
+.key-item span{position:relative;z-index:1;}
 /* The single inner span (not the circle itself) is the flex item doing
    the centering -- putting display:flex directly on .key-item turned
    every <mark> inside it into its own separate flex item, which
@@ -204,7 +235,11 @@ body{
    Centering a single wrapper span instead keeps the mark tags as normal
    inline content, so spacing and wrapping behave like ordinary text. */
 .key-item{display:flex;align-items:center;justify-content:center;text-align:center;}
-.key-item span{display:block;color:#1a2230;font-size:0.64rem;}
+/* Bumped up a size and given a crisp small-offset outline (four tight
+   1px-blur shadows, not just one soft blur) on top of the existing glow
+   shadow -- a soft blur alone still let the text blend into the lighter
+   parts of the glass; a real outline holds contrast anywhere on it. */
+.key-item span{display:block;color:#ffffff;font-size:0.72rem;text-shadow:0 1px 1px #000,0 -1px 1px #000,1px 0 1px #000,-1px 0 1px #000,0 0 6px rgba(0,0,0,0.85);}
 .key-item:nth-child(1){margin-top:0;}
 .key-item:nth-child(2){margin-top:0.55rem;}
 .key-item:nth-child(3){margin-top:-0.2rem;}
@@ -685,15 +720,16 @@ body{
     <div class="accent-item accent-num" id="numAccent"></div>
   </div>
 
-  <div class="tagline-wrap" id="taglineWrap">
-    <div class="tagline-slide c-gold active">Do you know the cycles in motion in your life right now?</div>
-    <div class="tagline-slide c-gold">is it all just math</div>
+  <div class="tagline-frame">
+    <div class="keys-col" id="keysCol"></div>
+    <div class="tagline-wrap" id="taglineWrap">
+      <div class="tagline-slide c-gold active">Do you know the cycles in motion in your life right now?</div>
+      <div class="tagline-slide c-gold">is it all just math</div>
+    </div>
   </div>
 
   <div class="bottom-grid">
     <div class="form-col">
-      <div class="keys-col" id="keysCol"></div>
-
       <div class="form-panel">
         <div class="f">
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
@@ -760,7 +796,15 @@ body{
 
 <div class="loading" id="loading">
   <svg class="hourglass" aria-hidden="true" viewBox="0 0 60 84" width="52" height="72">
-    <path class="hg-outline" d="M8,4 H52 M8,80 H52 M8,4 L28,40 L8,80 M52,4 L32,40 L52,80" fill="none" stroke="#8A96EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Sides are cubic-bezier curves (bulging bowl shape), not straight
+         diagonal lines -- verified by rendering this exact path in
+         isolation before and after; straight lines read as two sharp
+         triangles meeting at a point, this reads as a rounded hourglass.
+         The sand animation JS still interpolates its fill edges along a
+         straight line between the same endpoints, which is a real, minor
+         simplification -- it sits a hair inside the curved glass wall
+         instead of flush against it, not glitching outside it. -->
+    <path class="hg-outline" d="M8,4 H52 M8,80 H52 M8,4 C8,20 20,30 29,40 C20,50 8,60 8,80 M52,4 C52,20 40,30 31,40 C40,50 52,60 52,80" fill="none" stroke="#8A96EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
     <polygon class="hg-sand-top" fill="#8A96EE"/>
     <polygon class="hg-sand-bottom" fill="#8A96EE"/>
     <circle class="hg-drop" cx="30" cy="41" r="1.6" fill="#8A96EE"/>
