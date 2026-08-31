@@ -40,11 +40,11 @@
    makes it pop: contrast of saturation, not more background color. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#000000;
+  background-color:#ffffff;
   background-image:none;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
-  color:#ffffff;
+  color:#000000;
 }
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
@@ -94,7 +94,7 @@ body{
 .accent-num{align-self:flex-start;margin-top:14px;}
 .hero-accent-caption{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#ffffff;
+  font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;
   margin-bottom:0.9rem;
 }
 
@@ -168,9 +168,9 @@ body{
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
 @media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#ffffff;}
-.tog-lbl{cursor:pointer;color:#ffffff;transition:color 0.2s;user-select:none;}
-.tog-lbl.active{color:#ffffff;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
+.tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
+.tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
 .toggle-pill.on{background:#1C2CA9;}
@@ -263,8 +263,8 @@ body{
 }
 .form-panel .f{margin-bottom:0.9rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#ffffff;margin-bottom:0.2rem;font-weight:700;}
-.section-lbl{font-size:0.6rem!important;color:#ffffff!important;margin-bottom:0.35rem!important;}
+.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
+.section-lbl{font-size:0.6rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
 /* Person's whole entry compressed into 2 rows instead of 4: identity
    (First/Mid/Last/DOB) on one row, birth specifics (Time/AM-PM/Location)
    on the next. DOB moved onto the birth-details row with Time/AM-PM/
@@ -276,9 +276,9 @@ body{
 /* Thin underline field with small tick marks at the start and stop points of
    the writing line -- "|____________|" -- instead of a boxed/indented input,
    with italic text for a lighter, less typewriter-formal feel. */
-.line-field{position:relative;padding-bottom:0.5rem;border-bottom:1.3px solid rgba(255,255,255,0.45);transition:border-color 0.15s ease;}
+.line-field{position:relative;padding-bottom:0.5rem;border-bottom:1.3px solid rgba(0,0,0,0.45);transition:border-color 0.15s ease;}
 .line-field::before,.line-field::after{
-  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(255,255,255,0.45);
+  content:'';position:absolute;bottom:-0.5px;width:1.3px;height:6px;background:rgba(0,0,0,0.45);
   transition:background 0.15s ease;
 }
 .line-field::before{left:0;}
@@ -286,13 +286,13 @@ body{
 .line-field:focus-within{border-bottom-color:#4655D6;}
 .line-field:focus-within::before,.line-field:focus-within::after{background:#4655D6;}
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#ffffff;font-size:clamp(0.83rem, 0.23rem + 2.7vw, 0.88rem);font-weight:500;
+  width:100%;background:transparent;border:none;color:#000000;font-size:clamp(0.83rem, 0.23rem + 2.7vw, 0.88rem);font-weight:500;
   font-style:italic;font-family:'DM Sans',sans-serif;padding:0.4rem 0.2rem 0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
 .line-field select{width:auto;padding-right:1rem;}
 .line-field select option{color:#000000;}
-.line-field input::placeholder{color:#ffffff;font-style:italic;opacity:1;}
+.line-field input::placeholder{color:#000000;font-style:italic;opacity:1;}
 
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
@@ -322,7 +322,7 @@ body{
 .gen-btn:active{transform:translateY(1px);}
 .gen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:6px 6px 50% 50%/6px 6px 100% 100%;
   background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.06) 100%);pointer-events:none;}
-.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#ffffff;margin:0.35rem 0 0;}
+.tnote{font-style:italic;font-size:0.62rem;line-height:1.4;color:#000000;margin:0.35rem 0 0;}
 .tnote.tight{margin:0.2rem 0 0.65rem;}
 .err{display:none;font-size:0.7rem;color:#ff8080;margin:0.5rem 0 0;padding:0.4rem 0.6rem;background:rgba(255,80,80,0.12);border-radius:5px;border:1px solid rgba(255,80,80,0.35);font-weight:600;}
 
@@ -344,18 +344,18 @@ body{
    funnel walls at every frame, so the drain reads as continuous and
    correctly tapered instead of just "changing size." */
 .hourglass{margin:0 auto 1.3rem;display:block;}
-.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;color:#ffffff;margin-bottom:0.9rem;}
-/* Full-strength white, same as everything else on this page -- no fading. */
-.loading-timer{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:700;color:#ffffff;letter-spacing:0.03em;margin-bottom:0.9rem;}
+.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;color:#000000;margin-bottom:0.9rem;}
+/* Full-strength black, same as everything else on this page -- no fading. */
+.loading-timer{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:700;color:#000000;letter-spacing:0.03em;margin-bottom:0.9rem;}
 /* This has to actually be seen -- she reported repeatedly getting
    distracted mid-wait, refreshing, and losing everything because the old
    version was one small dim line of text. Big, high-contrast, boxed. */
-.loading-warn{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#ffffff;
+.loading-warn{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#000000;
   background:rgba(28,44,169,0.25);border:1.5px solid rgba(138,150,238,0.6);border-radius:8px;
   padding:0.9rem 1.1rem;margin:0 0 0.9rem;line-height:1.45;}
 /* Differs from .loading-warn above it by weight/style, not by dimming
-   the color -- full-strength white on both, per the never-fade-text rule. */
-.loading-note{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-style:italic;color:#ffffff;line-height:1.55;}
+   the color -- full-strength black on both, per the never-fade-text rule. */
+.loading-note{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-style:italic;color:#000000;line-height:1.55;}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
@@ -439,7 +439,7 @@ body{
    (real, pre-installed script fonts, not just the unpredictable generic
    "cursive" keyword) is a safety net for the rare case it isn't. */
 .report-preview{padding:0 0.6rem;font-family:'Alex Brush','Segoe Script','Brush Script MT','Lucida Handwriting',cursive;font-size:clamp(1.6rem,7vw,2.1rem);line-height:1.25;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
-  color:#ffffff;filter:drop-shadow(0 0 12px rgba(90,110,230,0.55));}
+  color:#000000;filter:drop-shadow(0 0 12px rgba(90,110,230,0.55));}
 .report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:0;}
 .report-tray-preview::before{
   content:'';position:absolute;left:50%;top:50%;width:140%;height:140%;
