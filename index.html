@@ -748,7 +748,7 @@ body{
 
         <div id="p2Section" style="display:none;">
           <div class="f">
-            <label class="section-lbl">Person Two</label>
+            <label class="section-lbl">Full Name at Birth</label>
             <div class="row-id">
               <div><label for="p2f">First</label><div class="line-field"><input id="p2f" placeholder="First"></div></div>
               <div><label for="p2m">Mid</label><div class="line-field"><input id="p2m" placeholder="Mid"></div></div>
@@ -1177,7 +1177,7 @@ function setMode(rel){
   togPill.classList.toggle('on', rel);
   lblInd.classList.toggle('active', !rel);
   lblRel.classList.toggle('active', rel);
-  p1Ttl.textContent = rel ? 'Person One' : 'Full Name at Birth';
+  p1Ttl.textContent = 'Full Name at Birth';
   p2Section.style.display = rel ? 'block' : 'none';
   relWrap.style.display = rel ? 'flex' : 'none';
   if(typeof saveDraft==='function')saveDraft();
