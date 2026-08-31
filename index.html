@@ -67,13 +67,16 @@ body{
 /* Overlapping the top of the bubble, not sitting in its own row above it
    -- her direct correction: "I want it over the circle like I have it...
    put it exactly where I placed it." Positioned relative to the whole
-   triangle (not pushing tri-base down), centered on the bubble's own top
-   edge so half sits in the open gap above the circle and half overlaps
-   onto it, matching her annotation. Sized wider than the shrunk title
-   was (close to the bubble's own width) to match "the same size, taking
-   up the exact same amount of space" she drew it at. */
+   triangle (not pushing tri-base down), sized wider than the shrunk
+   title was (close to the bubble's own width) to match "the same size,
+   taking up the exact same amount of space" she drew it at. Lowered a
+   further 8px per her follow-up so the text sits closer to the bubble,
+   with its own bottom edge measured to land ~4px above the real top
+   edge of the astro/HD circles (215.66px in a 400px-wide test render) --
+   her explicit constraint: the text must never go lower than that, or
+   overlap either chart. */
 .icon-triangle .brand-row{
-  position:absolute;left:50%;top:calc(104px + 0.15rem);
+  position:absolute;left:50%;top:calc(112px + 0.15rem);
   transform:translate(-50%,-50%);
   width:max-content;max-width:92%;margin:0;padding:0;
   pointer-events:none;z-index:2;
