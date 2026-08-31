@@ -337,7 +337,7 @@ function todayAsMMDDYYYY() {
   return `${pad(now.getMonth() + 1)}/${pad(now.getDate())}/${now.getFullYear()}`;
 }
 
-async function assemblePersonData(env, person) {
+function assemblePersonDataBase(person) {
   const { first, mid, last, dob, time, ampm, city, state, country } = person;
 
   let numerology = null, numerologyError = null;
@@ -354,17 +354,6 @@ async function assemblePersonData(env, person) {
     astrology = getAstrologyLocal(dob, time, ampm, city, state, country);
   } catch (e) { astrologyError = e.message; }
 
-  let humanDesign = null, humanDesignError = null;
-  const hasTime = time && time.trim().length > 0;
-  const hasCity = city && city.trim().length > 0;
-  if (hasTime && hasCity) {
-    try {
-      humanDesign = await getHumanDesign(env, dob, time, ampm, city, state);
-    } catch (e) { humanDesignError = e.message; }
-  } else {
-    humanDesignError = "Birth time and city are required for Human Design. Chart omitted.";
-  }
-
   // first/last must be returned here -- this is the exact object that
   // gets passed into generateReport() as p1/p2, and both the real AI
   // prompt (buildReportUserPrompt) and the guaranteed fallback
@@ -375,7 +364,22 @@ async function assemblePersonData(env, person) {
   // A"/"Partner B" bug: the model wasn't breaking the naming rule, it
   // never received a real name to use in the first place, and
   // improvised a placeholder because "undefined" so plainly wasn't one.
-  return { first, mid, last, numerology, numerologyError, astrology, astrologyError, humanDesign, humanDesignError };
+  return { first, mid, last, numerology, numerologyError, astrology, astrologyError, humanDesign: null, humanDesignError: null };
+}
+
+async function fetchHumanDesignForPerson(env, person) {
+  const { dob, time, ampm, city, state } = person;
+  const hasTime = time && time.trim().length > 0;
+  const hasCity = city && city.trim().length > 0;
+  if (!hasTime || !hasCity) {
+    return { humanDesign: null, humanDesignError: "Birth time and city are required for Human Design. Chart omitted." };
+  }
+  try {
+    const humanDesign = await getHumanDesign(env, dob, time, ampm, city, state);
+    return { humanDesign, humanDesignError: null };
+  } catch (e) {
+    return { humanDesign: null, humanDesignError: e.message };
+  }
 }
 
 // ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
@@ -1304,20 +1308,23 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
     ctx.waitUntil((async () => {
       let streamBody, kvRecord;
       try {
-        // p1 and p2's chart data (each involving its own Human Design
-        // network lookup) is fetched concurrently, not one after the
-        // other -- they're independent, and assemblePersonData never
-        // throws (every step has its own try/catch, always returns an
-        // object with error fields on failure), so this is safe.
-        const [p1Data, p2Data] = await Promise.all([
-          assemblePersonData(env, body.p1),
-          body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
-        ]);
-        console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
+        // Start Human Design lookups immediately, but don't block Claude on
+        // them: report generation can begin from numerology + astrology and
+        // HD can merge into the final payload when it returns.
+        const p1HDPromise = fetchHumanDesignForPerson(env, body.p1);
+        const p2HDPromise = body.p2 ? fetchHumanDesignForPerson(env, body.p2) : Promise.resolve(null);
+        const p1Base = assemblePersonDataBase(body.p1);
+        const p2Base = body.p2 ? assemblePersonDataBase(body.p2) : null;
+        console.log(`[report] base person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
+
+        // Keep the report input shape stable; only Human Design fields are
+        // placeholders until the async HD lookups finish.
+        const p1ForReport = p1Base;
+        const p2ForReport = p2Base;
 
         let report = null, reportError = null, reportUsedFallback = false;
         try {
-          const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
+          const result = await generateReport(env, body.rtype, body.relLabel, p1ForReport, p2ForReport, ctx);
           report = result.reading;
           reportUsedFallback = result.usedFallback;
           console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback} jobId=${jobId}`);
@@ -1325,6 +1332,11 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
           reportError = error.message;
           console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
         }
+
+        const [p1HD, p2HD] = await Promise.all([p1HDPromise, p2HDPromise]);
+        const p1Data = { ...p1Base, ...p1HD };
+        const p2Data = p2Base ? { ...p2Base, ...p2HD } : null;
+        console.log(`[report] human design merged at +${Date.now() - reportStart}ms jobId=${jobId}`);
 
         if (body.passEmail) {
           ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
