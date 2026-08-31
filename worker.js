@@ -542,13 +542,21 @@ async function recordUsage(env, usage) {
 
 const REPORT_SYSTEM_PROMPT = `Check the person's current age before writing anything about love, dating, or sex. Under 18: none of it, ever.
 
-You are an expert astrologer, numerologist, and Human Design reader. Combine all three systems into one description of a single person.
+You are an expert astrologer and numerologist. The person reading this wants to actually understand themselves or their relationship -- not be impressed by language that sounds mystical or profound. Draw on your own real, extensive knowledge of both systems, not a shortened or generic version of it, to explain what each real placement and number actually means. State it in practical, plain language: what a person does, feels, or experiences -- never a term dressed up to sound deep. Thorough means real depth on what the data actually supports, not more topics covered at a shallow level.
 
-Before writing, decide on the real, recurring things about this person's life that the data actually supports -- how they handle closeness, what drives them, how they experience change, and so on -- drawing on astrology, numerology, and Human Design together for each one. Build each section around one of those, never around one system's data alone. Don't process one system's placements in order and then move to the next system -- if astrology and numerology point at the same real trait, say it once, using both as evidence, not as two separate mini-sections.
+Before writing, decide on the real, recurring things about this person's life that the data actually supports -- how they handle closeness, what drives them, how they experience change, and so on -- drawing on astrology and numerology together for each one. Build each section around one of those, never around one system's data alone. Don't process one system's placements in order and then move to the next system -- if astrology and numerology point at the same real trait, say it once, using both as evidence, not as two separate mini-sections.
+
+For a two-person reading, before writing, compare both charts for real, felt connection points -- not everything technically present, only what two real people would actually notice or feel between them:
+- Astrology: Sun-Moon aspects between the two charts, Venus-Mars aspects, Moon-Moon aspects, and any tight conjunction from one person's planet onto the other's planet, angle (Ascendant/Midheaven), or Chiron. Also check whether a named astrological return active for either person (see below) lands on a placement in the other person's chart.
+- Numerology: compare Life Path, Expression, and Soul Urge between the two people. Life Path shows whether their fundamental directions pull compatible or divergent; Soul Urge shows whether their underlying wants align or differ; Expression shows whether their natural talents overlap or complement. State what the actual interaction produces, not just whether the numbers match. Also note any Karmic Lesson or Karmic Debt number both people share -- when shared, neither person can cover the other's gap in that particular lesson, which is worth naming; when it isn't shared, it's an individual fact about that one person, not a claim about the relationship.
+
+Leave out anything that's real but too faint, wide, or abstract to actually be noticed or experienced between two specific people.
+
+A relational reading must establish the real draw between two people -- what pulls them together -- before it covers friction or self-protection. Connection comes first.
 
 Describe the person, not the chart. Every sentence is about "you" (or, in a two-person reading, their real name). A placement, number, or aspect can prove a claim is true -- it can never be the claim itself. A pattern, theme, or energy shared between placements or people must be treated the same way: it can prove a claim true, but it can never be the claim itself. State what the person does, wants, or feels; the pattern is the reason why, not the claim.
 
-Use the full depth of established tradition for each placement, number, or Human Design detail used. For each one, ask yourself what it actually means for this person -- then write the answer to that question, not the first surface-level thing that comes to mind. Most have several real, distinct traits -- naming only one is incomplete. Depth also means the right chart position (the same Karmic Debt means something different in a Life Path than in a Birthday number) and the right direction (your own need to trust yourself is not the same fact as others needing to trust you).
+Use the full depth of established tradition for each placement or number used. For each one, ask yourself what it actually means for this person -- then write the answer to that question, not the first surface-level thing that comes to mind. Most have several real, distinct traits -- naming only one is incomplete. Depth also means the right chart position (the same Karmic Debt means something different in a Life Path than in a Birthday number) and the right direction (your own need to trust yourself is not the same fact as others needing to trust you).
 
 Some placements' real, established tradition includes faith, spirituality, or a higher power -- Karmic Lesson 7 is a confirmed case: its actual tradition is trust in a higher power or a spiritual dimension beyond what can be proven, together with developing real proficiency in something instead of staying surface-level -- not the flattened, secular "introspection" this has repeatedly come back as instead. Name it plainly when the real tradition says it -- a higher power, faith, the divine -- rather than substituting safer-sounding, watered-down language that drops the actual claim.
 
@@ -562,13 +570,9 @@ After a real claim, don't add a "not X" that denies something nobody said, just 
 
 Never build a sentence by naming how two things relate (linked with, in tension with, in friction with, flows with, or any other relationship word) and then explaining what that produces. State what the person actually does or experiences first, as a direct claim -- a placement can be the reason behind it, never the grammatical subject of the sentence. This is about the shape of the sentence, not any specific word -- switching to a new relationship word is still the same defect.
 
-Big cycles (Personal Year, Essence, Pinnacle, Period Cycle): name each with its number and age range. Then state what happens when they combine -- not a list of what each one means on its own.
+Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) and any active astrological return describe one life stage, not separate facts -- combine them into a single explanation of where this person actually stands right now. Name each with its number and age range, give its full real meaning (Pinnacle especially covers several distinct things -- wisdom, service, creative output, not just completion or endings), then state what the combination means together. Personal Month and Day are a separate, much shorter timescale -- never merge them into this life-stage picture; they belong elsewhere, and only when there's something specific to say.
 
-Small cycles (Personal Month, Day): name both. State how they combine on their own faster timescale -- the Month sets the mood, the Day works within it. Omit this pair if there's nothing specific to say.
-
-If both apply: show the small cycle as one instance of the big chapter.
-
-You are given astrology and numerology data, and -- only when birth time and birth city were both provided -- Human Design data. If birth time is missing, the Ascendant, Midheaven, and house placements are missing with it -- leave them out rather than guessing. There is no astrological transit data, so timing comes from the numerology cycles above, plus a named astrological return -- Saturn Return (around 29, 58, or 87), Jupiter Return (about every 12 years), Uranus Opposition (around 40-42), or Chiron Return (around 50) -- only when the person's current age is inside that window.
+You are given astrology and numerology data. If birth time is missing, the Ascendant, Midheaven, and house placements are missing with it -- leave them out rather than guessing. There is no astrological transit data, so timing comes from the numerology cycles above, plus a named astrological return -- Saturn Return (around 29, 58, or 87), Jupiter Return (about every 12 years), Uranus Opposition (around 40-42), or Chiron Return (around 50) -- only when the person's current age is inside that window.
 
 ### DATA
 Weigh a planet's major aspects before its sign -- a tight conjunction, square, or opposition outweighs the sign; a wide trine or sextile barely changes it. Use the planet's actual house, never the house tied to its ruling sign.
@@ -579,8 +583,7 @@ Cover Mars as physical/sexual drive, not just conflict, in a single or romantic 
 
 ### NON-NEGOTIABLE
 - Single reading: "you" only, never a name or third-person pronoun. Two-person: real first names, every time.
-- Include Human Design only if a chart was returned. Mention Sirius only through its aspects.
-- Describe the relationship itself, not each person's process. Name HD Type/Strategy/Authority once, only if it explains a real difference -- never the main content.
+- Describe the relationship itself, not each person's process.
 
 ### OUTPUT FORMAT
 Return only a single JSON object. No markdown, no text outside it:
@@ -594,7 +597,7 @@ Return only a single JSON object. No markdown, no text outside it:
     }
   ],
   "signature": "One closing line. A specific fact about this person, not a metaphor.",
-  "references": ["Every placement, number, and Human Design detail actually used, short technical shorthand, one per entry."]
+  "references": ["Every placement and number actually used, short technical shorthand, one per entry."]
 }
 Divide the reading into as many sections as the content naturally requires. There is no fixed topic list and no fixed section count. Give each section its own specific title and eyebrow.`;
 
@@ -735,7 +738,13 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     // omit the section, instead of handing the model a fake chart to
     // guess at.
     const h = p.humanDesign || {};
-    const hasHD = !!h.type;
+    // Set aside entirely for now, to test whether astrology + numerology
+    // alone can produce quality, thorough readings before deciding
+    // whether Human Design earns a place back in -- not a permanent
+    // removal. Flip this back to `!!h.type` to restore it; nothing else
+    // about the HD pipeline (fetching, assemblePersonData) changed.
+    const INCLUDE_HUMAN_DESIGN_IN_REPORT = false;
+    const hasHD = INCLUDE_HUMAN_DESIGN_IN_REPORT && !!h.type;
     // Gates (individual and channel-paired alike) were cut entirely --
     // real, sourced grounding data for them didn't make them worth the
     // added generation time for what they were adding to the reading.
@@ -974,15 +983,23 @@ function findNamingDefect(reading, rtype, p1, p2) {
 }
 
 // A real customer reading had citations (e.g. "Sun in Scorpio, 6th
-// house") stacked directly into the prose, breaking readability enough
-// that they couldn't get through it. The system prompt says citations
-// belong only in References -- this checks that the model actually did
-// that, in the specific parts of the reading a reader has to get
-// through (headline/section bodies/signature), not just trusting the
-// instruction held. Deliberately excludes the References array itself
-// (citations belong there) and doesn't flag bare "Sun"/"Moon" as words
-// (too common in ordinary prose) -- only the precise "Sun/Moon in
-// <Sign>" citation form, which is never a normal sentence otherwise.
+// house, square Mars in Leo, 9th house") stacked directly into the
+// prose with no real sentence around them, breaking readability enough
+// that they couldn't get through it. The system prompt now tells the
+// model to name a placement directly AND explain it in the same
+// sentence (see REPORT_SYSTEM_PROMPT) -- a single named placement
+// inside a real, explained sentence is exactly what's wanted, not a
+// defect. This used to flag ANY single occurrence of a sign/planet/
+// number name anywhere in the prose and force a full rewrite stripping
+// it out entirely, which directly fought that instruction: it made
+// naming-and-explaining impossible, forcing the model into a repair
+// pass that reached for vague, unnamed paraphrases instead (this is
+// the confirmed mechanism behind Karmic Lesson 7 repeatedly coming
+// back as bare "introspection" -- the model wasn't allowed to just say
+// "Karmic Lesson 7" and explain it). What actually needs catching is
+// the original problem specifically: two or more citation-style terms
+// sitting back-to-back with nothing but punctuation between them --
+// never a single term inside real, connected prose.
 const ZODIAC_SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
 const CITATION_PATTERNS = [
   new RegExp(`\\b(Sun|Moon)\\s+in\\s+(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
@@ -992,18 +1009,31 @@ const CITATION_PATTERNS = [
   /\bLife\s+Path\s+\d+/i, /\bExpression\s+\d+/i, /\bSoul\s+Urge\s+\d+/i, /\bPersonality\s+(number\s+)?\d+/i,
   /\bPersonal\s+(Year|Month|Day)\s+\d+/i, /\bPinnacle\s+\d+/i, /\bChallenge\s+(number\s+)?\d+/i,
   /\bKarmic\s+(Debt|Lesson)/i, /\bEssence\s+(cycle|number)/i,
-  /\bGate\s+\d+/i, /\b\d+(st|nd|rd|th)\s+house\b/i,
-  /\b(Sacral|Emotional|Splenic|Ego|Self-Projected|Mental|Lunar)\s+Authority\b/i,
-  /\bManifesting\s+Generator\b/i, /\b(Generator|Projector|Manifestor|Reflector)\s+type\b/i,
-  /\bIncarnation\s+Cross\b/i,
+  /\b\d+(st|nd|rd|th)\s+house\b/i,
 ];
+// A gap this short between two citation-style matches means only
+// punctuation/connectors fit in between (", ", " and ", " in ", " -- ")
+// -- a real stacked-citation dump, not two named things each explained
+// in their own sentence.
+const CITATION_STACK_GAP = 12;
 function findCitationLeak(reading) {
   const parts = [reading.headline, reading.signature];
   (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
   const text = parts.filter(Boolean).join('\n');
+  const matches = [];
   for (const re of CITATION_PATTERNS) {
-    const m = text.match(re);
-    if (m) return `The reading names a specific placement in the prose ("${m[0]}"), which real customers have gotten stuck on. Rewrite the full reading with every placement/planet/sign/number/gate name removed from the body text, headline, and signature -- describe what each one means in plain language instead. Citations belong ONLY in the references list.`;
+    const global = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
+    let m;
+    while ((m = global.exec(text)) !== null) {
+      matches.push({ start: m.index, end: m.index + m[0].length, text: m[0] });
+    }
+  }
+  matches.sort((a, b) => a.start - b.start);
+  for (let i = 1; i < matches.length; i++) {
+    const gapText = text.slice(matches[i - 1].end, matches[i].start);
+    if (gapText.length <= CITATION_STACK_GAP && /^[\s,;.\-–—]*(and|in|with|of)?[\s,;.\-–—]*$/i.test(gapText)) {
+      return `The reading stacks citations directly into the prose with no real sentence around them ("${matches[i - 1].text}${gapText}${matches[i].text}"), which real customers have gotten stuck on. Naming ONE placement or number and explaining it in the same sentence is fine and expected -- the defect is two or more stacked back-to-back with nothing connecting them. Rewrite the full reading so every citation sits inside its own real, explained sentence instead of a stacked list.`;
+    }
   }
   return null;
 }
