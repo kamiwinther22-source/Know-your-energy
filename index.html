@@ -63,7 +63,22 @@ body{
    graphics and the bubble still read as a triangle with the bubble at
    its center. Tapping a planet dot / HD center / number bead still opens
    the same tap-to-reveal definition modal used everywhere else. */
-.icon-triangle{margin:0.5rem auto 0.3rem;}
+.icon-triangle{position:relative;margin:0.5rem auto 0.3rem;}
+/* Overlapping the top of the bubble, not sitting in its own row above it
+   -- her direct correction: "I want it over the circle like I have it...
+   put it exactly where I placed it." Positioned relative to the whole
+   triangle (not pushing tri-base down), centered on the bubble's own top
+   edge so half sits in the open gap above the circle and half overlaps
+   onto it, matching her annotation. Sized wider than the shrunk title
+   was (close to the bubble's own width) to match "the same size, taking
+   up the exact same amount of space" she drew it at. */
+.icon-triangle .brand-row{
+  position:absolute;left:50%;top:calc(104px + 0.15rem);
+  transform:translate(-50%,-50%);
+  width:max-content;max-width:92%;margin:0;padding:0;
+  pointer-events:none;z-index:2;
+}
+.icon-triangle .brand{font-size:clamp(1.5rem,8vw,2.2rem);}
 .tri-top{display:flex;justify-content:center;}
 .tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.3rem;margin-top:0.15rem;}
 .accent-item{position:relative;flex:0 0 auto;height:78px;}
@@ -658,19 +673,6 @@ body{
 <body>
 <div class="bg-glints" id="bgGlints"></div>
 <div class="content">
-  <div class="brand-row">
-    <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
-      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
-    </div>
-    <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
-      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
-    </div>
-    <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
-      <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
-    </div>
-    <div class="brand">Know Your Energy</div>
-  </div>
-
   <div class="tagline-frame">
     <div class="tagline-slide tagline-top c-gold">Do you know your personal cycles currently in motion?</div>
 
@@ -678,6 +680,20 @@ body{
       <div class="tri-top">
         <div class="accent-item accent-num" id="numAccent"></div>
       </div>
+
+      <div class="brand-row">
+        <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
+          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
+        </div>
+        <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
+          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
+        </div>
+        <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
+          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
+        </div>
+        <div class="brand">Know Your Energy</div>
+      </div>
+
       <div class="tri-base">
         <div class="accent-item accent-astro" id="solarIcon"></div>
         <div class="keys-col" id="keysCol"></div>
