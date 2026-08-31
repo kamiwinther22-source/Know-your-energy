@@ -57,41 +57,18 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- hero accent cluster: the three system graphics used to be a
-   full-width swipeable carousel, one taking a whole "chapter" of the page
-   at a time with its own heading -- that made a purely illustrative graphic
-   (no real per-visitor data exists yet, nothing has been submitted) compete
-   with the actual hook copy above it for attention. The words are the
-   pitch; these are now small, staggered accents underneath them -- closer
-   in spirit to a loose cluster than a row of equal icons, deliberately not
-   grid-aligned (see the sizing rules just below for why they're staggered
-   by height/alignment rather than true overlap). Each graphic dropped its
-   always-visible text labels for the same reason (labels made a "just an
-   accent" visual read as a mechanical infographic, and forced it to stay
-   large enough to keep the words legible) -- tapping a planet dot / HD
-   center / number bead still opens the same tap-to-reveal definition modal
-   used everywhere else on the site, so nothing was actually deleted, it
-   just moved behind a tap like every other glossary term here. */
-/* Sized by HEIGHT, not width -- the three graphics have very different
-   natural proportions (astro/num are roughly square, HD is a tall narrow
-   portrait column of stacked shapes), so a shared width would make HD's
-   real height wildly different from the other two. Driving off height
-   keeps their visual "weight" comparable. HD sits tallest, in the middle,
-   flanked by the other two at a shorter height and different vertical
-   alignment (center / flex-end / flex-start+offset) -- staggered, not a
-   uniform row, but with a real horizontal gap between each so the shapes
-   themselves never collide (an earlier overlap-via-negative-margin attempt
-   let the HD portrait column's lower half render underneath the numerology
-   beads -- this keeps the "clustered, not gridded" feel without that). */
-.hero-accent-row{
-  position:relative;display:flex;align-items:flex-end;justify-content:center;
-  gap:0.65rem;margin:0.4rem 0 0.6rem;
-}
-.accent-item{position:relative;flex:0 0 auto;height:88px;}
+/* ---------- hero accent cluster: numerology at the top, astrology and HD
+   flanking the key bubble below it -- flipped from HD-at-top per her
+   direct instruction ("flip flop it with numerology"). The three
+   graphics and the bubble still read as a triangle with the bubble at
+   its center. Tapping a planet dot / HD center / number bead still opens
+   the same tap-to-reveal definition modal used everywhere else. */
+.icon-triangle{margin:0.5rem auto 0.3rem;}
+.tri-top{display:flex;justify-content:center;}
+.tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.3rem;margin-top:0.15rem;}
+.accent-item{position:relative;flex:0 0 auto;height:78px;}
 .accent-item svg{display:block;width:auto;height:100%;}
-.accent-astro{align-self:center;}
-.accent-hd{height:114px;}
-.accent-num{align-self:flex-start;margin-top:14px;}
+.accent-num{height:104px;}
 .hero-accent-caption{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;
@@ -116,12 +93,13 @@ body{
    much harder problem this isn't attempting). */
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
-  /* Floor lowered from 2.3rem: on real phones narrower than ~370px CSS
-     px, that floor was wider than the viewport itself (title always one
-     line, so it can't wrap -- it has to actually shrink to fit instead).
-     Still one line, still Alex Brush, just allowed to keep scaling down
-     on the narrowest screens instead of hitting a hard floor early. */
-  font-size:clamp(1.7rem,10vw,3.4rem);white-space:nowrap;
+  /* No longer sized to be the page's focal point -- her call directly:
+     "I don't believe there's any reason to have the title as a focal
+     point at all." Sized instead to sit clearly smaller than
+     .tagline-top (see that rule for the real per-width numbers this was
+     measured against). Still one line, still Alex Brush, never omitted --
+     that part of the rule didn't change, only its size. */
+  font-size:clamp(0.95rem,4vw,1.3rem);white-space:nowrap;
   /* Brightened for a black background -- the previous gradient's dark
      anchor stops (#0F1758/#121C6C) were built for contrast against a
      light page and would nearly vanish on black. Same blue family,
@@ -135,28 +113,27 @@ body{
 
 
 /* ---------- tagline / toggle ---------- */
-/* Exploratory layout per her sketch: 4 bubbles at the corners of a
-   frame, tagline text centered in the middle of that frame instead of
-   sitting below the bubbles in a row. Padding on the frame is what
-   pushes the tagline down the page (per her note that this arrangement
-   requires that) -- it's the space the corner bubbles need to sit in
-   without overlapping the text. */
-/* margin-bottom is real space AFTER the frame ends -- separate from the
-   padding-bottom above, which only makes room inside the frame for the
-   bottom two corner bubbles (position:absolute, bottom:0). Those bubbles
-   align to the frame's own padding edge, so padding-bottom alone creates
-   no visible gap to whatever comes next in the page; margin-bottom is
-   what actually pushes the form down away from them. */
-.tagline-frame{position:relative;max-width:380px;margin:0 auto 40px;padding:64px 58px 70px;}
-.tagline-wrap{position:relative;margin:0;}
+/* Both tagline lines shown at once, stacked, with the single remaining
+   key bubble centered in the gap between them -- per her sketch. */
+.tagline-frame{position:relative;max-width:380px;margin:0 auto 40px;padding:0 30px;}
 .tagline-slide{
-  position:absolute;top:0;left:0;width:100%;
+  width:100%;margin:0;
   text-align:center;font-family:'Special Elite',monospace;font-size:clamp(1.05rem,5.2vw,1.55rem);line-height:1.32;font-weight:400;letter-spacing:0.005em;
-  opacity:0;transition:opacity 0.7s ease;pointer-events:none;
 }
-.tagline-slide.active{opacity:1;pointer-events:auto;}
 .tagline-slide.c-gold{color:#000000;}
-@media(prefers-reduced-motion:reduce){.tagline-slide{transition:none;}}
+/* Once the title dropped its own "focal point" size (see .brand), this
+   became solvable: bigger than the title AND 2 lines. Measured against
+   this exact sentence at real phone widths (360-430px), a 2-line wrap
+   needs the effective width close to the full viewport, not just the
+   tagline-frame's own (narrower, max-width:380px) content box -- so this
+   breaks out of that frame's width/padding entirely (position + left 50%
+   + negative transform) rather than trying to claw back a few px of
+   padding, which wasn't enough room on its own. */
+.tagline-top{
+  font-size:clamp(1.15rem,5.2vw,1.4rem);
+  position:relative;left:50%;transform:translateX(-50%);
+  width:calc(100vw - 32px);margin-bottom:0.3rem;
+}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
@@ -176,40 +153,30 @@ body{
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
 
-/* Actual circles, not pills or rounded rectangles -- each bubble is a
-   true circle (width forced equal to height via JS, see KEYS render
-   below), text centered and wrapped inside. No card/blur/border box
-   around the group -- they sit directly on the page background and
-   cluster at staggered heights (per-bubble margin-top below) instead
-   of sitting in one straight row. Silver/chrome gradient, not flat grey. */
-.keys-col{
-  position:static;margin:0;
-}
-/* Each bubble pinned to its own corner of .tagline-frame instead of
-   flowing in a row -- nth-child order matches the KEYS array order
-   (free reading, data privacy, no autocharges, email-as-key), so the
-   first two land on top, last two on the bottom. */
-.keys-col .key-item{position:absolute;margin-top:0!important;}
-.keys-col .key-item:nth-child(1){top:0;left:0;}
-.keys-col .key-item:nth-child(2){top:0;right:0;}
-.keys-col .key-item:nth-child(3){bottom:0;left:0;}
-.keys-col .key-item:nth-child(4){bottom:0;right:0;}
-/* Clear glass, not opaque metal: mostly transparent so the white page
-   shows through, a bright glossy highlight top-left, a faint cool tint
-   pooling at the bottom for depth, a thin rim so the circle still reads
-   as an edge against a white page, and backdrop-filter so anything that
-   later sits behind the bubble (or overlaps another bubble) genuinely
-   blurs through it rather than just tinting a flat color. */
+/* The one bubble, sitting in the middle of the astro/numerology icons
+   flanking it, one flex item among the three in .tri-base. */
+.keys-col{flex:0 0 auto;}
+/* Glass sphere, not a flat translucent circle: on a plain white page
+   there's nothing behind the bubble to blur, so transparency alone reads
+   as "faint grey circle," not glass. What actually sells glass here is
+   the shape language real glass spheres show in photos -- a darker,
+   cool-tinted rim where the glass is thickest (refraction), a sharp
+   bright highlight up top where a light source would catch it, a dimmer
+   secondary highlight opposite it, a crisp edge to hold the silhouette,
+   and a real drop shadow so it reads as a 3D object sitting above the
+   page rather than a flat decal. */
 .key-item{
   position:relative;overflow:hidden;
   border-radius:50%;padding:0.3rem;flex-shrink:0;
   background:
-    radial-gradient(circle at 30% 26%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 14%, rgba(255,255,255,0.08) 34%, rgba(255,255,255,0.02) 55%),
-    radial-gradient(ellipse 70% 55% at 55% 88%, rgba(150,175,200,0.28) 0%, rgba(150,175,200,0) 70%),
-    rgba(255,255,255,0.06);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  border:1px solid rgba(40,55,75,0.22);
-  box-shadow:0 6px 14px -6px rgba(20,30,45,0.3), inset 0 1px 3px rgba(255,255,255,0.95), inset 0 -8px 12px -8px rgba(30,45,65,0.25);
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.6) 11%, rgba(255,255,255,0.12) 26%, rgba(255,255,255,0.02) 46%, rgba(210,222,235,0.22) 68%, rgba(165,185,210,0.5) 100%),
+    radial-gradient(circle at 70% 76%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 22%);
+  border:1.5px solid rgba(110,132,158,0.45);
+  box-shadow:
+    0 10px 18px -8px rgba(20,30,50,0.35),
+    inset 0 2px 4px rgba(255,255,255,1),
+    inset 0 -10px 16px -6px rgba(90,115,145,0.5),
+    inset 6px -6px 10px -5px rgba(140,165,195,0.35);
   line-height:1.15;font-weight:600;
 }
 .key-item::after{
@@ -218,9 +185,6 @@ body{
   clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
   filter:drop-shadow(0 0 3px rgba(255,255,255,0.9));
 }
-.key-item:nth-child(2)::after{top:70%;right:12%;width:15%;height:15%;}
-.key-item:nth-child(3)::after{top:32%;right:62%;width:13%;height:13%;}
-.key-item:nth-child(4)::after{top:68%;right:58%;width:16%;height:16%;}
 .key-item span{position:relative;z-index:1;}
 /* The single inner span (not the circle itself) is the flex item doing
    the centering -- putting display:flex directly on .key-item turned
@@ -232,11 +196,7 @@ body{
 /* Dark text with a light halo, not white with a dark outline -- the
    glass is translucent now (was a near-black opaque gradient before),
    so white text has nothing dark left under it to read against. */
-.key-item span{display:block;color:#12161e;font-size:0.72rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
-.key-item:nth-child(1){margin-top:0;}
-.key-item:nth-child(2){margin-top:0.55rem;}
-.key-item:nth-child(3){margin-top:-0.2rem;}
-.key-item:nth-child(4){margin-top:0.3rem;}
+.key-item span{display:block;color:#12161e;font-size:0.92rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 /* No highlighter box -- that was 3 emphasis signals stacked at once
    (background block + bold + a near-black tint reading as its own
    color), which is the actual reason it read as a highlighter mark
@@ -247,6 +207,10 @@ body{
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:inherit;font-weight:800;}
 
+/* Replaces the 3 deleted key bubbles' messages -- plain text where each
+   one is actually relevant instead of a decorative circle. Same #1C2CA9
+   already used for the toggle pill, rel-chip, and focus border. */
+.privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
 .form-col{position:relative;}
 /* Unboxed: the data-entry form sits directly on the page background, no
    card/blur/border around it -- the key bubbles above it aren't boxed
@@ -589,7 +553,7 @@ body{
 .card-expand-body .report-body{font-size:1.2rem;line-height:1.65;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:1.2rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
 @media print{
-  .form-col,.hero-accent-row,.hero-accent-caption,.brand-row,.tagline-wrap,.keys-col,.grid-nav-btn,.bottom-btns{display:none!important;}
+  .form-col,.hero-accent-row,.hero-accent-caption,.brand-row,.tagline-frame,.grid-nav-btn,.bottom-btns{display:none!important;}
   /* The Astrology/Numerology/Human Design cards (.quad-item) never
      actually use the --card-text variable below -- they just inherit
      body's color, which is white for the on-screen dark theme. Flipping
@@ -707,23 +671,27 @@ body{
     <div class="brand">Know Your Energy</div>
   </div>
 
-  <div class="hero-accent-row" id="heroAccentRow">
-    <div class="accent-item accent-astro" id="solarIcon"></div>
-    <div class="accent-item accent-hd" id="hdIcon"></div>
-    <div class="accent-item accent-num" id="numAccent"></div>
-  </div>
-
   <div class="tagline-frame">
-    <div class="keys-col" id="keysCol"></div>
-    <div class="tagline-wrap" id="taglineWrap">
-      <div class="tagline-slide c-gold active">Do you know the cycles in motion in your life right now?</div>
-      <div class="tagline-slide c-gold">is it all just math</div>
+    <div class="tagline-slide tagline-top c-gold">Do you know your personal cycles currently in motion?</div>
+
+    <div class="icon-triangle" id="heroAccentRow">
+      <div class="tri-top">
+        <div class="accent-item accent-num" id="numAccent"></div>
+      </div>
+      <div class="tri-base">
+        <div class="accent-item accent-astro" id="solarIcon"></div>
+        <div class="keys-col" id="keysCol"></div>
+        <div class="accent-item accent-hd" id="hdIcon"></div>
+      </div>
     </div>
+
+    <div class="tagline-slide c-gold">Do you want to know how you effect others? or how they effect you?</div>
   </div>
 
   <div class="bottom-grid">
     <div class="form-col">
       <div class="form-panel">
+        <div class="privacy-note">Data never saved</div>
         <div class="f">
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
           <div class="row-id">
@@ -772,6 +740,7 @@ body{
         </div>
 
         <div class="f">
+          <div class="privacy-note">email is just a key/no soliciting</div>
           <label for="pEmail">Email Address</label>
           <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
         </div>
@@ -861,19 +830,6 @@ body{
 // that shot, not silver's actual hue. Silver here is now genuinely cool/
 // neutral steel-gray (hue ~215, near-desaturated), gold is the only warm tone
 // (as asked), white/cream stay true white/cream rather than tan-shifted.
-// Contrast against the ink text verified per stop, same as before.
-// Rebuilt from real, established metallic/precious color names instead of
-// self-derived HSL math: Platinum + classic Silver for silverL, Silver +
-// Steel + Gunmetal (lightened just enough to stay legible, same hue/sat
-// preserved) for silverD, and Champagne -- a genuinely well-known pale gold
-// that is NOT yellow/orange -- for goldT.
-const TONES = {
-  cream:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #fdfaf3 55%, #f3ead9 100%)', border:'#d9cdb2' },
-  white:   { grad:'radial-gradient(circle at 30% 26%, #ffffff 0%, #ffffff 55%, #f1f1f1 100%)', border:'#d8d4c9' },
-  silverL: { grad:'radial-gradient(circle at 30% 26%, #f3f2f1 0%, #dddcda 55%, #c2c1bc 100%)', border:'#8c8b80' },
-  silverD: { grad:'radial-gradient(circle at 30% 26%, #dddcdc 0%, #bcc1c4 55%, #b0c1c8 100%)', border:'#6f818a' },
-  goldT:   { grad:'radial-gradient(circle at 30% 26%, #fdf6ea 0%, #ede2ce 55%, #ddccae 100%)', border:'#b7a684' },
-};
 // Straight numeric order 1-9 (not the Pythagorean Square's row-major
 // layout, which reads as "out of order" without that grid actually being
 // built anywhere else in the app). Labels are the standard single-word
@@ -893,23 +849,25 @@ const TONES = {
 // break-word algorithm landed, which produced an ugly orphaned single
 // letter on its own line ("NURTURE" / "R"); this forces a real,
 // balanced, properly-hyphenated break instead.
+// Colors 1-9 are her direct, literal spec: 1-yellow, 2-white, 3-purple,
+// 4-blue, 5-green, 6-red, 7-orange, 8-black, 9-fuchsia.
 const NUMS = [
-  {n:1, lbl:'Leader',       tone:'silverL'},
-  {n:2, lbl:'Diplomat',     tone:'goldT'},
-  {n:3, lbl:'Communi­cator', tone:'white'},
-  {n:4, lbl:'Builder',      tone:'cream'},
-  {n:5, lbl:'Freedom',      tone:'silverD'},
-  {n:6, lbl:'Nurtur­er', tone:'white'},
-  {n:7, lbl:'Seeker',       tone:'goldT'},
-  {n:8, lbl:'Achiever',     tone:'silverL'},
-  {n:9, lbl:'Humani­tarian', tone:'cream'},
-  {n:11, lbl:'Intu­itive',      tone:'silverD'},
-  {n:22, lbl:'Master Builder', tone:'goldT'},
-  {n:33, lbl:'Master Teacher', tone:'silverL'},
+  {n:1, lbl:'Leader',       color:'#F5C518'},
+  {n:2, lbl:'Diplomat',     color:'#FFFFFF'},
+  {n:3, lbl:'Communi­cator', color:'#7B3FA0'},
+  {n:4, lbl:'Builder',      color:'#1C2CA9'},
+  {n:5, lbl:'Freedom',      color:'#2E8B47'},
+  {n:6, lbl:'Nurtur­er', color:'#C0392B'},
+  {n:7, lbl:'Seeker',       color:'#D2691E'},
+  {n:8, lbl:'Achiever',     color:'#000000'},
+  {n:9, lbl:'Humani­tarian', color:'#C2185B'},
+  {n:11, lbl:'Intu­itive'},
+  {n:22, lbl:'Master Builder'},
+  {n:33, lbl:'Master Teacher'},
 ];
-// DOM tile grid removed -- see the numAccent bead cluster below (after
-// stopsByTone exists) for the small decorative entry-page preview. NUMS
-// itself is still real content, used both there and by openNumberDef.
+// DOM tile grid removed -- see the numAccent bead cluster below for the
+// small decorative entry-page preview. NUMS itself is still real
+// content, used both there and by openNumberDef.
 // A few small, fixed-size sparkle glints -- same restrained technique
 // as the reference sphere's accent glints, not a dense field.
 (function(){
@@ -939,162 +897,14 @@ function openNumberDef(item){
   document.getElementById('cardExpand').classList.add('open');
 }
 
-// ---------- solar system: monochrome, laid out like an actual snapshot in
-// time -- distinct orbital tiers (inner rocky pair / inner-mid pair / outer
-// gas giants / far icy trio) with a gap between tiers like the real solar
-// system, each planet at its own radius within its tier and a scattered
-// (not evenly-spaced) angle, rather than one continuously-growing spiral. ----
-// Original radii kept (scaling them up made the label text render
-// SMALLER on screen overall, since the container width is fixed and a
-// bigger viewBox just packs everything tighter per pixel -- the actual
-// fix for collisions at a bigger font is re-angling each planet, not
-// inflating the whole diagram. These angles were found by a real
-// pairwise bounding-box search (every label pair checked, 6-unit
-// minimum gap enforced, not eyeballed) rather than the original
-// "scattered" angles, which collided once the font size went up.
-const PLANETS = [
-  {name:'Mercury', lines:['Communication'],      r:26,  size:3.6, tone:'silverD', angle:-70.6},
-  {name:'Venus',   lines:['Love & Beauty'],      r:34,  size:4.4, tone:'cream',   angle:-149.8},
-  {name:'Moon',    lines:['Emotions'],           r:46,  size:4.2, tone:'white',   angle:11.5},
-  {name:'Mars',    lines:['Drive & Action'],     r:54,  size:3.8, tone:'silverL', angle:146.5},
-  {name:'Jupiter', lines:['Growth & Luck'],      r:74,  size:6.6, tone:'goldT',   angle:85.2},
-  {name:'Saturn',  lines:['Discipline'],         r:86,  size:6.0, tone:'silverD', angle:-58.2},
-  {name:'Uranus',  lines:['Change'],             r:100, size:4.6, tone:'silverL', angle:-91.8},
-  {name:'Neptune', lines:['Intuition & Dreams'], r:110, size:4.6, tone:'cream',   angle:23.7},
-  {name:'Pluto',   lines:['Transformation'],     r:120, size:3.4, tone:'white',   angle:-120.4},
-];
-const RINGS = [26,34,46,54,74,86,100,110,120];
-const SIZE = 420, C = SIZE/2;
-const solarWrap = document.getElementById('solarIcon');
-// Tight square crop around just the rings/sun/planets -- this is a small
-// decorative accent now, not a labeled diagram, so it no longer needs the
-// wide crop that used to leave room for each planet's descriptor word.
-let svg = `<svg viewBox="72 72 276 276" xmlns="http://www.w3.org/2000/svg">`;
-
-// glossy-sphere radial gradients, one per tone -- an off-center highlight
-// (upper-left) fading to the same darkest stop used on the number tiles,
-// so a small flat circle reads as a lit, dimensional bead rather than a dot.
-const stopsByTone = {};
-svg += '<defs>';
-Object.entries(TONES).forEach(([name, t])=>{
-  const stops = t.grad.match(/#[0-9a-fA-F]{6}/g);
-  stopsByTone[name] = stops;
-  svg += `<radialGradient id="pg-${name}" cx="35%" cy="30%" r="75%">
-    <stop offset="0%" stop-color="${stops[0]}"/>
-    <stop offset="55%" stop-color="${stops[1]}"/>
-    <stop offset="100%" stop-color="${stops[2]}"/>
-  </radialGradient>`;
-});
-// soft glow behind each orbit ring -- a wider, blurred, white duplicate of
-// the ring line sitting underneath the crisp dashed ring, so the path itself
-// reads as glowing without becoming a solid band.
-svg += `<filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.8"/></filter>`;
-svg += '</defs>';
-
-RINGS.forEach(r=>{
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="2.4" opacity="0.5" filter="url(#glow)"/>`;
-  svg += `<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#9DB0FF" stroke-width="0.9" opacity="0.95"/>`;
-});
-
-// sun -- the one warm point the (now-neutral) planets orbit
-svg += `<circle cx="${C}" cy="${C}" r="14" fill="url(#pg-goldT)" stroke="#b9a97e" stroke-width="1"/>`;
-
-PLANETS.forEach((p,i)=>{
-  const t = TONES[p.tone];
-  const a = p.angle * Math.PI/180;
-  const dx = Math.cos(a), dy = Math.sin(a);
-  const px = C + p.r*dx, py = C + p.r*dy;
-  svg += `<circle class="p-dot" data-idx="${i}" cx="${px}" cy="${py}" r="${Math.max(p.size,7)}" fill="transparent"/>`;
-  svg += `<circle cx="${px}" cy="${py}" r="${p.size}" fill="url(#pg-${p.tone})" stroke="${t.border}" stroke-width="0.9" style="pointer-events:none;"/>`;
-});
-svg += `</svg>`;
-solarWrap.innerHTML = svg;
-solarWrap.querySelectorAll('.p-dot').forEach(el=>{
-  el.style.cursor='pointer';
-  el.addEventListener('click',()=>openPlanetDef(PLANETS[+el.dataset.idx]));
-});
-function openPlanetDef(p){
-  stopListening();
-  document.getElementById('cardExpandTitle').textContent=`${p.name} — ${p.lines.join(', ')}`;
-  document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${p.name} governs ${p.lines.join(' and ').toLowerCase()} in astrology.</p></div>`;
-  document.getElementById('cardExpand').classList.add('open');
-}
-
-// ---------- human design: compact preview using the same real 9-center
-// topology and color palette as the full results-page bodygraph (kept as
-// a separate, standalone copy since the real chart's own coordinates are
-// defined much further down the script and reused inside a function that
-// runs after real chart data exists -- referencing that here would hit a
-// temporal-dead-zone error, since this preview has to render immediately
-// on page load, before any birth data is submitted). One illustrative
-// defined/undefined pattern (not a real chart -- there's no birth data
-// yet), same convention as the real chart: filled = defined, hollow
-// outline of its own color = undefined. ----------
-(function(){
-  const hdWrap = document.getElementById('hdIcon');
-  if(!hdWrap) return;
-  // Recolored to the same 5-tone metal palette as the number tiles and
-  // solar-system planets (TONES/stopsByTone, defined above) instead of
-  // the real chart's 9 distinct hues -- that rainbow palette is a
-  // deliberate, separate choice for the results-page bodygraph and isn't
-  // touched here; this small entry-page preview now draws from the same
-  // shared metal set as everything else on this page.
-  const HD_CENTERS = [
-    {name:'Head',  pts:[[120,18],[101,52],[139,52]],                    tone:'silverL', on:false, label:'Inspiration'},
-    {name:'Ajna',  pts:[[101,60],[139,60],[120,94]],                    tone:'silverD', on:false, label:'Awareness'},
-    {name:'Throat',pts:[[97,102],[143,102],[143,146],[97,146]],         tone:'cream',   on:false, label:'Expression'},
-    {name:'G',     pts:[[120,158],[154,192],[120,226],[86,192]],        tone:'goldT',   on:true,  label:'Identity'},
-    {name:'Heart', pts:[[201,175],[201,199],[173,187]],                 tone:'white',   on:false, label:'Willpower'},
-    {name:'Sacral',pts:[[97,238],[143,238],[143,282],[97,282]],         tone:'silverD', on:true,  label:'Life Force'},
-    {name:'Spleen',pts:[[28,222],[28,262],[66,242]],                    tone:'cream',   on:true,  label:'Intuition'},
-    {name:'SolarPlexus',pts:[[212,222],[212,262],[174,242]],            tone:'silverL', on:false, label:'Emotions'},
-    {name:'Root',  pts:[[97,290],[143,290],[143,334],[97,334]],         tone:'white',   on:true,  label:'Drive'},
-  ];
-  // Same glossy-sphere gradient recipe already used (and proven) on the
-  // number tiles and solar-system planets -- reusing the exact stop
-  // colors already computed for those (stopsByTone, above) rather than
-  // deriving a new set, so all three graphics are pixel-identical in tone.
-  // Tight crop around just the 9 shapes -- no more always-visible per-
-  // center labels, so no margin is needed for label text to spill into.
-  let svg = `<svg viewBox="18 8 204 336" xmlns="http://www.w3.org/2000/svg"><defs>`;
-  HD_CENTERS.forEach((c,i)=>{
-    const stops = stopsByTone[c.tone];
-    svg += `<radialGradient id="hdg-${i}" cx="35%" cy="28%" r="75%">
-      <stop offset="0%" stop-color="${stops[0]}"/>
-      <stop offset="55%" stop-color="${stops[1]}"/>
-      <stop offset="100%" stop-color="${stops[2]}"/>
-    </radialGradient>`;
-  });
-  svg += '</defs>';
-  HD_CENTERS.forEach((c,i)=>{
-    const border = TONES[c.tone].border;
-    const pts = c.pts.map(([x,y])=>`${x},${y}`).join(' ');
-    /* Undefined centers were filling with a leftover light-cream tone
-       from before the page went black -- looked like a solid pale shape
-       instead of the intended hollow-outline convention. 'none' lets the
-       actual dark card show through so filled-vs-hollow reads correctly. */
-    svg += `<polygon class="hd-shape" data-idx="${i}" points="${pts}" fill="${c.on?`url(#hdg-${i})`:'none'}" stroke="${border}" stroke-width="2.6" style="cursor:pointer;pointer-events:all;"/>`;
-  });
-  svg += '</svg>';
-  hdWrap.innerHTML = svg;
-  hdWrap.querySelectorAll('.hd-shape').forEach(el=>{
-    el.addEventListener('click',()=>openCenterDef(HD_CENTERS[+el.dataset.idx]));
-  });
-  function openCenterDef(c){
-    stopListening();
-    document.getElementById('cardExpandTitle').textContent=`${c.name} Center — ${c.label}`;
-    document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">The ${c.name} Center relates to ${c.label.toLowerCase()} in Human Design.</p></div>`;
-    document.getElementById('cardExpand').classList.add('open');
-  }
-})();
-
-// ---------- numerology accent: small scattered bead cluster, same glossy-
-// sphere technique (and the same stopsByTone gradients) as the solar-system
-// planets above, deliberately NOT a grid -- organic scatter to match. Only
-// 1-9 shown (not the master numbers) -- this is a decorative preview, not
-// a claim to be exhaustive; the full set is still real content inside the
-// actual report. No word labels, same reasoning as the other two accents:
-// tapping a bead still opens the real definition via openNumberDef. ----------
+// ---------- numerology accent: small scattered bead cluster, flat-filled
+// in her own literal per-number colors (see NUMS above) instead of the
+// old pale metal-tone gradients -- deliberately NOT a grid, an organic
+// scatter to match. Only 1-9 shown (not the master numbers) -- this is a
+// decorative preview, not a claim to be exhaustive; the full set is
+// still real content inside the actual report. No word labels, same
+// reasoning as the other two accents: tapping a bead still opens the
+// real definition via openNumberDef. ----------
 (function(){
   const numWrap = document.getElementById('numAccent');
   if(!numWrap) return;
@@ -1111,21 +921,19 @@ function openPlanetDef(p){
     {cx:80,  cy:118, r:14},
     {cx:115, cy:105, r:12},
   ];
-  let svg = `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs>`;
+  // Per-bead text color chosen by real contrast math against its own
+  // fill (WCAG ratio, not eyeballed) -- black text reads fine on the
+  // light beads (yellow/white/green/orange) but is close to invisible on
+  // the dark ones (purple/blue/red/black/fuchsia), which get white text
+  // instead. White (2) also gets a real dark border so it doesn't
+  // disappear against the page's own white background.
+  const TEXT_COLOR = {1:'#000000',2:'#000000',3:'#ffffff',4:'#ffffff',5:'#000000',6:'#ffffff',7:'#000000',8:'#ffffff',9:'#ffffff'};
+  let svg = `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">`;
   NUMS.slice(0,9).forEach((item,i)=>{
-    const stops = stopsByTone[item.tone];
-    svg += `<radialGradient id="ng-${i}" cx="35%" cy="28%" r="75%">
-      <stop offset="0%" stop-color="${stops[0]}"/>
-      <stop offset="55%" stop-color="${stops[1]}"/>
-      <stop offset="100%" stop-color="${stops[2]}"/>
-    </radialGradient>`;
-  });
-  svg += '</defs>';
-  NUMS.slice(0,9).forEach((item,i)=>{
-    const t = TONES[item.tone];
     const {cx,cy,r} = POS[i];
-    svg += `<circle class="n-bead" data-idx="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="url(#ng-${i})" stroke="${t.border}" stroke-width="0.9" style="cursor:pointer;"/>`;
-    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="#000000" style="pointer-events:none;">${item.n}</text>`;
+    const border = item.n===2 ? 'rgba(20,25,35,0.35)' : 'rgba(0,0,0,0.15)';
+    svg += `<circle class="n-bead" data-idx="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="${item.color}" stroke="${border}" stroke-width="1.2" style="cursor:pointer;"/>`;
+    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="${TEXT_COLOR[item.n]}" style="pointer-events:none;">${item.n}</text>`;
   });
   svg += '</svg>';
   numWrap.innerHTML = svg;
@@ -1134,27 +942,10 @@ function openPlanetDef(p){
   });
 })();
 
-// ---------- key selling points: short bubbles floating above the entry form ----------
-const KEYS = [
-  '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading',
-  'Data <mark class="key-hl">not saved or shared</mark>',
-  'No <mark class="key-hl">autocharges</mark>',
-  '<mark class="key-hl">Email</mark> is your key',
-];
-const keysCol = document.getElementById('keysCol');
-// Font size is fixed at a real legible floor (~10px) -- shrinking it
-// further to force text into a smaller circle is what made the previous
-// pass read as blurry on a real device; sub-6px bold text doesn't
-// render crisply no matter how it's styled. Only the diameter scales
-// with each phrase's length, so "No autocharges" gets a smaller circle
-// than "Data not saved or shared" without either one's text
-// shrinking to the point of illegibility.
-keysCol.innerHTML = KEYS.map(t=>{
-  const plain = t.replace(/<[^>]+>/g,'');
-  const len = plain.length;
-  const d = Math.max(62, Math.min(104, Math.round(40 + len*2)));
-  return `<div class="key-item" style="width:${d}px;height:${d}px;"><span>${t}</span></div>`;
-}).join('');
+// ---------- key selling point: single bubble centered between the two taglines ----------
+const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
+document.getElementById('keysCol').innerHTML =
+  `<div class="key-item" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);"><span>${KEY_TEXT}</span></div>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
@@ -2550,6 +2341,90 @@ function hdWheelWrap(hd){
   return `<div class="wheel-wrap">${svg}</div>`;
 }
 
+// ---------- astro + HD entry-page accents: the REAL results-page chart
+// functions (astroWheelSVG / hdBodygraphSVG), fed illustrative example
+// data and shrunk down -- not a simplified redraw. Her direct instruction
+// after seeing the simplified version: "is there a reason you cannot use
+// the chart that I attached? it doesn't have to be legible... I want the
+// actual chart just shrink it." Has to run down here, after everything
+// these two functions depend on (SIGN_ORDER, PLANET_SVG/PLANET_COLOR,
+// CENTER_SHAPES, CENTER_GATES, GATE_CENTER, CHANNELS, GATE_WHEEL_ORDER)
+// is actually defined -- calling them any earlier hits a temporal-dead-
+// zone error. No real per-visitor data exists yet at this point in the
+// page, so this is a fixed illustrative example chart, not tied to any
+// real person. Both real functions draw a fixed-aspect (1:1) square SVG
+// with an inline width/height:100%, so the accent-item gets an explicit
+// equal width+height here instead of the height-only/auto-width sizing
+// the other (non-square) accent icons use. ----------
+(function(){
+  const astroWrap = document.getElementById('solarIcon');
+  const hdWrap = document.getElementById('hdIcon');
+  if(!astroWrap && !hdWrap) return;
+  // A real CSS clamp() string, not a fixed px number -- astro + bubble +
+  // HD (plus gaps) genuinely overflowed narrow phones (~360px and under)
+  // at a fixed 96px each. Verified this range doesn't overflow down to a
+  // 320px viewport, and still reaches the full 96px on wider phones.
+  const SIDE = 'clamp(64px,20vw,96px)';
+
+  // Both real chart functions size their strokes/text for the FULL-size
+  // results-page display (viewBox ~460-500 units, shown near 1:1). Squeezed
+  // into a 96px icon, a "2-unit" stroke renders under a physical pixel --
+  // that's the actual mechanism behind both her complaints: astro reads as
+  // thin/absent (it's almost entirely strokes, no fill area, so it has the
+  // least to fall back on), and HD reads as blurred (its 60+ tiny gate-
+  // number text labels anti-alias into visual noise at this size, and text
+  // isn't something a stroke fix touches at all). vector-effect:non-
+  // scaling-stroke keeps every line/ring/border a real, constant CSS pixel
+  // width regardless of the viewBox-to-96px scale ratio; removing the text
+  // elements (gate numbers, sign abbreviations) drops the actual source of
+  // the noise, not just blurs over it -- she's already said legibility
+  // doesn't matter here, so nothing legible is being lost. Scoped to these
+  // two injected copies only, via direct DOM styling after injection --
+  // the real astroWheelSVG/hdBodygraphSVG functions themselves, and the
+  // real full-size results-page charts, are untouched.
+  function sharpenForIcon(wrap){
+    wrap.querySelectorAll('text').forEach(el=>el.remove());
+    wrap.querySelectorAll('circle,line,path,polygon').forEach(el=>{
+      el.style.vectorEffect='non-scaling-stroke';
+    });
+  }
+
+  if(astroWrap){
+    const DEMO_ASTRO = {
+      planets: [
+        {name:'Sun',     absoluteDegrees:215},
+        {name:'Moon',    absoluteDegrees:280},
+        {name:'Mercury', absoluteDegrees:200},
+        {name:'Venus',   absoluteDegrees:190},
+        {name:'Mars',    absoluteDegrees:325},
+        {name:'Jupiter', absoluteDegrees:45},
+        {name:'Saturn',  absoluteDegrees:100},
+        {name:'Uranus',  absoluteDegrees:355},
+        {name:'Neptune', absoluteDegrees:340},
+        {name:'Pluto',   absoluteDegrees:260},
+      ],
+      houses: Array.from({length:12},(_,i)=>({house:i+1, absoluteDegrees:(215+i*30)%360})),
+      ascendant: {absoluteDegrees:215},
+      midheaven: {absoluteDegrees:125},
+    };
+    astroWrap.style.width = SIDE;
+    astroWrap.style.height = SIDE;
+    astroWrap.innerHTML = astroWheelSVG(DEMO_ASTRO);
+    sharpenForIcon(astroWrap);
+  }
+
+  if(hdWrap){
+    // A fixed illustrative gate list -- 5 complete channels (both gates
+    // active) across 8 of the 9 centers, plus real per-channel colored
+    // connections, the same as a real chart would show.
+    const DEMO_HD = { gates: [64,47,57,34,43,23,9,52,1,6,45,21] };
+    hdWrap.style.width = SIDE;
+    hdWrap.style.height = SIDE;
+    hdWrap.innerHTML = hdBodygraphSVG(DEMO_HD);
+    sharpenForIcon(hdWrap);
+  }
+})();
+
 function ar(astro,errMsg){
   if(!astro||astro.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   const planets=astro.planets||[];
@@ -2696,43 +2571,6 @@ document.querySelectorAll('.rel-chip').forEach(chip=>{
     if(typeof saveDraft==='function')saveDraft();
   });
 });
-
-// ---------- tagline rotation: 3 slides, one visible at a time, same spot ----------
-(function(){
-  const wrap = document.getElementById('taglineWrap');
-  const slides = Array.from(wrap.querySelectorAll('.tagline-slide'));
-
-  // measure the tallest slide for real (not guessed) so the wrapper height
-  // never jumps as different-length taglines rotate through
-  let maxH = 0;
-  slides.forEach(s=>{
-    s.style.position = 'static';
-    s.style.opacity = '1';
-    maxH = Math.max(maxH, s.getBoundingClientRect().height);
-  });
-  slides.forEach(s=>{
-    s.style.position = 'absolute';
-    s.style.opacity = '';
-  });
-  wrap.style.height = maxH + 'px';
-
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) return;
-
-  // Fade the outgoing slide out FULLY before fading the next one in --
-  // both slides sit in the exact same spot (position:absolute), so a
-  // simultaneous crossfade (old fading in while new fades out) briefly
-  // shows both texts superimposed, which reads as broken/garbled text.
-  // Sequential fade-out-then-fade-in guarantees only one is ever visible.
-  const FADE_MS = 700;
-  let idx = 0;
-  setInterval(()=>{
-    slides[idx].classList.remove('active');
-    const nextIdx = (idx + 1) % slides.length;
-    setTimeout(()=>{ slides[nextIdx].classList.add('active'); }, FADE_MS);
-    idx = nextIdx;
-  }, 4200);
-})();
 
 // ---------- normal document-flow results layout: nav buttons up top /
 // astrology + Human Design bare (no card chrome), roughly half the screen
