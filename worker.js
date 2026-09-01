@@ -568,7 +568,9 @@ It is essential that the writing not be filled with the names of the data points
 
 State each fact one time. There is zero need for a certain length of the report so there is no need to fill space by recording the same things over and over. 
 
-Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) and any active astrological return describe one life stage, not separate facts -- combine them into a single explanation of where this person actually stands right now. Name each with its number and age range, give its full real meaning, then state what the combination means together. Personal Month and Day are a separate, much shorter timescale -- never merge them into this life-stage picture; they belong elsewhere, and only when there's something specific to say.
+Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) and any active astrological return describe one life stage, not separate facts -- combine them into a single explanation of where this person actually stands right now. Name each with its number and age range, give its full real meaning, then state what the combination means together. Instead of leaving it at broad themes, give concrete examples based on the entirety of the 3 charts, what it likely will be experienced as. 
+
+Personal Month and Day are a separate, much shorter timescale -- never merge them into this life-stage picture; they belong elsewhere, and only when there's something specific to say.
 Explain how the 2 sets of cycles would effect the way the individuals experience each other.
 
 You are given astrology and numerology data. If birth time is missing, the Ascendant, Midheaven, and house placements are missing with it -- leave them out rather than guessing. There is no astrological transit data, so timing comes from the numerology cycles above, plus a named astrological return -- Saturn Return (around 29, 58, or 87), Jupiter Return (about every 12 years), Uranus Opposition (around 40-42), or Chiron Return (around 50) -- only when the person's current age is inside that window.
