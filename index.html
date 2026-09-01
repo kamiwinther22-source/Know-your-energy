@@ -3130,15 +3130,33 @@ async function generate(){
   // header -- already received by the time fetch() resolves, since headers
   // arrive before the streamed body finishes -- lets this fall back to
   // polling /report-status instead of losing the reading outright.
+  //
+  // That fallback only ever fires on a real rejection, though -- and a
+  // stalled connection on the CLIENT side (a backgrounded tab, a network
+  // handoff that never resolves either way) doesn't reject. It just never
+  // settles, so the loading screen sits there indefinitely with no error
+  // and no fallback ever triggers -- a real, reported case, not a
+  // hypothetical. These two race()s give both awaits a hard ceiling so a
+  // genuine stall gets treated the same as a connection error instead of
+  // hanging forever: short for headers (jobId comes back almost
+  // immediately, well before generation even starts, so a long wait here
+  // means something's actually wrong before generation begins), long for
+  // the full body (a real relational generation can legitimately take
+  // several minutes, so this must not fire on ordinary slow-but-working
+  // requests).
+  const timeoutAfter=(ms)=>new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),ms));
   let jobId=null, result=null, primaryFailed=false;
   try{
-    const res=await fetch(W_API+'/report',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
-    });
+    const res=await Promise.race([
+      fetch(W_API+'/report',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
+      }),
+      timeoutAfter(60000)
+    ]);
     jobId=res.headers.get('X-Job-Id');
-    result=await res.json();
+    result=await Promise.race([res.json(), timeoutAfter(360000)]);
     if(!res.ok||result.error){ bail(result.error||'Something went wrong. Please try again.'); return; }
   }catch(e){
     if(!jobId){ bail('Connection error: '+e.message); return; }
