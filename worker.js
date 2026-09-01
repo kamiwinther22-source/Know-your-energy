@@ -672,13 +672,25 @@ function buildFallbackReading(rtype, p1, p2) {
     };
   }
   const f2 = fallbackPersonSections(p2);
-  const sections = [];
-  f1.sections.forEach(s => sections.push(s));
-  f2.sections.forEach(s => sections.push(s));
+  // Real fix, not a smaller version of the old bug: this used to just
+  // concatenate each person's individual fallback sections back to back
+  // (f1's sections, then f2's) under a shared headline -- which produces
+  // two individual mini-readings sitting next to each other, not
+  // anything about the relationship. Labeling that "relational" was
+  // false advertising, not a lighter version of a real one. There's no
+  // honest way to fake relational synthesis without either inventing
+  // interpretive content (not this function's call to make) or a second
+  // AI call (defeats the purpose of a fallback that must not depend on
+  // the thing that just failed) -- so this now says plainly what
+  // happened and directs a retry, instead of presenting a fake reading.
   return {
     headline: `${p1.first} & ${p2.first}`,
-    sections: sections.length ? sections : [{ eyebrow: 'Reading', title: 'Your Charts', body: `${p1.first} and ${p2.first}'s full chart data is above -- this shorter summary covers the core placements while the full reading is regenerated.` }],
-    signature: `This is a shorter, always-available summary -- the full relational reading can be regenerated for more depth.`,
+    sections: [{
+      eyebrow: 'Reading',
+      title: 'Please Try Again',
+      body: `${p1.first} and ${p2.first}'s full chart data is above, but a relational reading has to actually compare both charts together -- there's no honest shorter version of that. Please generate the reading again for the real, full relational reading.`
+    }],
+    signature: `This backup couldn't safely summarize a relational reading -- running it again is the real fix.`,
     references: [...f1.refs, ...f2.refs]
   };
 }
