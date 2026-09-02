@@ -806,6 +806,9 @@ function extractJSON(text) {
 }
 
 async function callReportModel(env, userPrompt, ctx, repairNote) {
+  if (!env.ANTHROPIC_API_KEY || !env.ANTHROPIC_API_KEY.trim()) {
+    throw new Error('Anthropic API key is missing from the worker environment.');
+  }
   const messages = repairNote
     ? [
         { role: 'user', content: userPrompt },
@@ -826,61 +829,74 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
   // high-effort generation that's still actively streaming is never cut
   // short; only a connection that's gone genuinely quiet is.
   const controller = new AbortController();
-  const STALL_MS = 45000;
+  const STALL_MS = 120000;
+  let abortedForSilence = false;
   let stallTimer;
   const armStallTimer = () => {
     clearTimeout(stallTimer);
-    stallTimer = setTimeout(() => controller.abort(), STALL_MS);
+    stallTimer = setTimeout(() => {
+      abortedForSilence = true;
+      controller.abort();
+    }, STALL_MS);
   };
   armStallTimer();
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    signal: controller.signal,
-    headers: {
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-5',
-      // Thinking disabled was tried and rejected: it produced noticeably
-      // worse readings. Thinking enabled (adaptive) is the agreed setting
-      // for the real generation pass. Effort is medium, not high --
-      // high made a single attempt slow and expensive enough that a
-      // validation-triggered retry (below) could triple both. A repair
-      // attempt is a narrow, single-defect fix (wrong pronoun, bad JSON),
-      // not a job that needs a full reasoning pass, so it skips thinking
-      // entirely and gets a much smaller max_tokens -- output only, no
-      // thinking budget to share it with.
-      // max_tokens raised 48000 -> 72000: a real two-person reading hit
-      // the fallback after this session's prompt additions (per-item
-      // recall, thematic cross-system synthesis) made a relational
-      // reading -- combining two full charts, not one -- generate
-      // enough thinking + output to risk hitting the old ceiling
-      // mid-generation, which fails JSON validation, burns a retry, and
-      // can exhaust all 3 attempts into the deterministic fallback. This
-      // is headroom, not a quality knob: a generation that already fit
-      // under 48000 finishes exactly the same; only one that was being
-      // cut off actually changes. Sonnet 5 supports up to 128000 output
-      // tokens (confirmed via the claude-api skill), so this is still
-      // well under the real ceiling.
-      ...(repairNote
-        ? { max_tokens: 24000, thinking: { type: 'disabled' } }
-        : { max_tokens: 72000, thinking: { type: 'adaptive' }, output_config: { effort: 'medium' } }),
-      // A non-streaming call with a real thinking pass hit a real
-      // Cloudflare 524 -- the generation genuinely took longer than the
-      // edge's timeout for one long silent response. Streaming keeps the
-      // connection actively receiving data the whole time instead of one
-      // long wait, which is the documented fix for exactly this failure
-      // mode on a large max_tokens request.
-      stream: true,
-      system: [
-        { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
-      ],
-      messages
-    })
-  });
+  let res;
+  try {
+    res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'x-api-key': env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-5',
+        // Thinking disabled was tried and rejected: it produced noticeably
+        // worse readings. Thinking enabled (adaptive) is the agreed setting
+        // for the real generation pass. Effort is medium, not high --
+        // high made a single attempt slow and expensive enough that a
+        // validation-triggered retry (below) could triple both. A repair
+        // attempt is a narrow, single-defect fix (wrong pronoun, bad JSON),
+        // not a job that needs a full reasoning pass, so it skips thinking
+        // entirely and gets a much smaller max_tokens -- output only, no
+        // thinking budget to share it with.
+        // max_tokens raised 48000 -> 72000: a real two-person reading hit
+        // the fallback after this session's prompt additions (per-item
+        // recall, thematic cross-system synthesis) made a relational
+        // reading -- combining two full charts, not one -- generate
+        // enough thinking + output to risk hitting the old ceiling
+        // mid-generation, which fails JSON validation, burns a retry, and
+        // can exhaust all 3 attempts into the deterministic fallback. This
+        // is headroom, not a quality knob: a generation that already fit
+        // under 48000 finishes exactly the same; only one that was being
+        // cut off actually changes. Sonnet 5 supports up to 128000 output
+        // tokens (confirmed via the claude-api skill), so this is still
+        // well under the real ceiling.
+        ...(repairNote
+          ? { max_tokens: 24000, thinking: { type: 'disabled' } }
+          : { max_tokens: 72000, thinking: { type: 'adaptive' }, output_config: { effort: 'medium' } }),
+        // A non-streaming call with a real thinking pass hit a real
+        // Cloudflare 524 -- the generation genuinely took longer than the
+        // edge's timeout for one long silent response. Streaming keeps the
+        // connection actively receiving data the whole time instead of one
+        // long wait, which is the documented fix for exactly this failure
+        // mode on a large max_tokens request.
+        stream: true,
+        system: [
+          { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
+        ],
+        messages
+      })
+    });
+  } catch (error) {
+    clearTimeout(stallTimer);
+    if (abortedForSilence || error?.name === 'AbortError') {
+      throw new Error(`Claude API stopped streaming for ${Math.round(STALL_MS / 1000)} seconds and the request was aborted.`);
+    }
+    throw error;
+  }
 
   armStallTimer();
   if (!res.ok) {

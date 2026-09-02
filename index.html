@@ -3180,12 +3180,16 @@ async function generate(){
           body:JSON.stringify({jobId})
         });
         pollResult=await res.json();
-        if(!res.ok||pollResult.error){
-          // A job-not-found/expired error is real and terminal; a transient
-          // network hiccup on this one poll is not -- but both come back as
-          // pollResult.error here, so a single failed poll just tries again
-          // on the next tick rather than aborting the whole wait immediately.
+        if(!res.ok){
+          if(res.status===404){
+            bail(pollResult.error||'Job not found or expired. Please try again.');
+            return;
+          }
           continue;
+        }
+        if(pollResult.status==='error'||pollResult.error){
+          bail(pollResult.error||'Something went wrong. Please try again.');
+          return;
         }
       }catch(e){
         continue;
