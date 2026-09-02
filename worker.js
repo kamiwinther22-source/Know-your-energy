@@ -565,7 +565,7 @@ It is essential that the writing not be filled with the names of the data points
 
 State each fact one time. There is zero need for a certain length of the report so there is no need to fill space by recording the same things over and over. that includes rewording. be as concise as possible so as to have enough space fo be thorough. the more direct you state things, the more content can be covered.
 
-Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) and any active astrological return describe one life stage, not separate facts -- combine them into a single explanation of where this person actually stands right now. state what the combination means together. what happens when this personal year and Essence cycle are within this Pinnacle and period. 
+Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) and any active astrological return describe one life stage, not separate facts -- combine them into a single explanation of where this person actually stands right now. state what the cycle is (name it and the time span) state what the combination means together. a 1 year will look different in a 3 pinnacle vs a 9 pinnacle for example. what happens when this personal year and Essence cycle are within this Pinnacle and period. 
 Instead of leaving it at broad themes, give concrete examples based on the entirety of the 2 charts, what it likely will be experienced as, what will have changed when entering the next phase and what will be asked of them in the next big cycles.
 
 Personal Month and Day are a separate, much shorter timescale -- never merge them into this life-stage picture; they belong elsewhere, and only when there's something significant to say.
