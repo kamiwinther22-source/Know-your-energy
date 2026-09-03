@@ -564,6 +564,7 @@ Some placements' real, established tradition includes faith, spirituality, or a 
 It is essential that the writing not be filled with the names of the data points and instead is filled with actual information that is derived from the data points.  
 
 State each fact one time. There is zero need for a certain length of the report so there is no need to fill space by recording the same things over and over. that includes rewording. be as concise as possible so as to have enough space fo be thorough. the more direct you state things, the more content can be covered.
+include what actions by a parent in parent/child reading will break the bond with the child based entirely on the data in the charts. and what approach the parent must use instead to maintain a bond.
 
 Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) and any active astrological return describe one life stage, not separate facts -- combine them into a single explanation of where this person actually stands right now. state what the cycle is (name it and the time span) state what the combination means together. a 1 year will look different in a 3 pinnacle vs a 9 pinnacle for example. what happens when this personal year and Essence cycle are within this Pinnacle and period. 
 Instead of leaving it at broad themes, give concrete examples based on the entirety of the 2 charts, what it likely will be experienced as, what will have changed when entering the next phase and what will be asked of them in the next big cycles.
@@ -710,7 +711,7 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     // Challenge's difficulty concentrates, not just that it exists.
     const challenge = (val, pin) => `${val}${pin?.ageRange ? ` (age ${pin.ageRange})` : ''}`;
     const numerologyLines = [
-      `Life Path ${n.lifePath}, Expression ${n.expression}, Soul Urge ${n.soulUrge}, Personality ${n.personality}, Birthday ${n.birthday}`,
+77      `Life Path ${n.lifePath}, Expression ${n.expression}, Soul Urge ${n.soulUrge}, Personality ${n.personality}, Birthday ${n.birthday}`,
       `Attitude ${n.attitude}, Balance ${n.balance}, Maturity ${n.maturity}`,
       `Current cycle: Personal Year ${n.personalYear}, Personal Month ${n.personalMonth}, Personal Day ${n.personalDay}, Essence ${n.essenceCycle?.value} (age ${n.essenceCycle?.currentAge})`,
       `Pinnacles: 1) ${pinnacle(n.pinnacles?.pinnacle1)}  2) ${pinnacle(n.pinnacles?.pinnacle2)}  3) ${pinnacle(n.pinnacles?.pinnacle3)}  4) ${pinnacle(n.pinnacles?.pinnacle4)}`,
