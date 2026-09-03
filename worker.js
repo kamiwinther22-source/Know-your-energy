@@ -1065,13 +1065,10 @@ function findCitationLeak(reading) {
   return null;
 }
 
-// A real customer hit this exact request refusing to produce valid
-// JSON on both the original attempt AND the one repair attempt that
-// existed before -- a persistent refusal, not a one-off blip, so a
-// single retry isn't enough of a safety margin. Up to 3 total attempts
-// now (1 original + 2 repairs), each one shown the previous bad
-// response and told exactly what was wrong with it, before giving up.
-const MAX_REPORT_ATTEMPTS = 3;
+// One attempt only, then straight to the deterministic fallback -- no
+// repair retries. If it fails, it fails fast instead of burning two
+// extra model calls first.
+const MAX_REPORT_ATTEMPTS = 1;
 
 async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
   const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
