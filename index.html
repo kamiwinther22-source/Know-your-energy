@@ -3396,7 +3396,21 @@ document.addEventListener('click', e=>{
     const saved=localStorage.getItem(SAVED_RESULT_KEY);
     if(saved){
       const {p1,p2,r,reportErr,reportUsedFallback,fallbackReason}=JSON.parse(saved);
-      if(p1){ render(p1,p2,r,reportErr,reportUsedFallback,false,fallbackReason); return; }
+      if(p1){
+        // r and reportErr are both saved null while a reading is actively
+        // generating (render() saves state unconditionally, including the
+        // pending state -- see renderCharts()) -- a real, normal moment to
+        // reload from. But this restore path always passes pending:false,
+        // and there's no jobId saved to resume polling with, so the
+        // request that was in flight is simply gone. Passing both through
+        // as null here made reportSlot() return '' -- no card, no error,
+        // not even an empty placeholder -- which is what actually read as
+        // "that entire area just disappeared." A real message instead of
+        // silence, since there's genuinely nothing left to wait for.
+        const reportErrToShow=(!r&&!reportErr)?'Your reading was still generating when this page reloaded. Tap "Run Another Reading" to try again.':reportErr;
+        render(p1,p2,r,reportErrToShow,reportUsedFallback,false,fallbackReason);
+        return;
+      }
     }
   }catch(_){}
   // No finished result to restore -- fall back to restoring whatever was
