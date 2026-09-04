@@ -778,6 +778,15 @@ body{
             <button type="button" class="rel-chip" data-rel="friends">Friends</button>
             <button type="button" class="rel-chip" data-rel="other">Other</button>
           </div>
+
+          <!-- TEMPORARY test control: generates a relational reading built
+               entirely from Human Design data (no astrology/numerology),
+               to compare against the normal combined reading. Remove this
+               block, #hdOnlyTest's use in generate(), and the matching
+               worker.js hdOnly branch once the test is done. -->
+          <label id="hdOnlyTestWrap" style="display:none;font-size:0.8rem;opacity:0.85;">
+            <input type="checkbox" id="hdOnlyTest"> TEST: Human Design–only reading
+          </label>
         </div>
 
         <div class="f">
@@ -1005,6 +1014,7 @@ function setMode(rel){
   p1Ttl.textContent = 'Full Name at Birth';
   p2Section.style.display = rel ? 'block' : 'none';
   relWrap.style.display = rel ? 'flex' : 'none';
+  document.getElementById('hdOnlyTestWrap').style.display = rel ? 'block' : 'none'; // TEMPORARY, see note above
   if(typeof saveDraft==='function')saveDraft();
 }
 togPill.addEventListener('click', ()=>setMode(!isRelational));
@@ -3151,7 +3161,7 @@ async function generate(){
       fetch(W_API+'/report',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined})
+        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
       }),
       timeoutAfter(60000)
     ]);
