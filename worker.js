@@ -745,9 +745,12 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     const astrologyLines = [
       a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
       (a.planets || []).map(planetLine).join(', '),
-      [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('South Node', a.southNode), angle('Chiron', a.chiron), angle('Sirius', a.sirius), angle('Lilith', a.lilith)].filter(Boolean).join(', '),
+      [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('South Node', a.southNode), angle('Chiron', a.chiron), angle('Lilith', a.lilith)].filter(Boolean).join(', '),
       a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(', ')}` : null,
-      `Major aspects: ${(a.aspects || []).map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
+      // Sirius is deliberately excluded here (and everywhere else in the
+      // app) -- removed per direct instruction, not just hidden from
+      // the visible chart, so it can't surface in a generated reading either.
+      `Major aspects: ${(a.aspects || []).filter(x => x.point1 !== 'Sirius' && x.point2 !== 'Sirius').map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
     ].filter(Boolean).join('\n  ');
 
     // hasHD gates the whole block on a real chart actually having come
