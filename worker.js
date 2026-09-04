@@ -192,7 +192,6 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     result.northNode = stripHouse(flagIfAmbiguous(result.northNode, dayStart.northNode, dayEnd.northNode));
     result.southNode = stripHouse(flagIfAmbiguous(result.southNode, dayStart.southNode, dayEnd.southNode));
     result.chiron = stripHouse(flagIfAmbiguous(result.chiron, dayStart.chiron, dayEnd.chiron));
-    result.sirius = stripHouse(flagIfAmbiguous(result.sirius, dayStart.sirius, dayEnd.sirius));
     result.lilith = stripHouse(flagIfAmbiguous(result.lilith, dayStart.lilith, dayEnd.lilith));
     result.ascendant = null;
     result.midheaven = null;
@@ -747,9 +746,6 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
       (a.planets || []).map(planetLine).join(', '),
       [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('South Node', a.southNode), angle('Chiron', a.chiron), angle('Lilith', a.lilith)].filter(Boolean).join(', '),
       a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(', ')}` : null,
-      // Sirius is deliberately excluded here (and everywhere else in the
-      // app) -- removed per direct instruction, not just hidden from
-      // the visible chart, so it can't surface in a generated reading either.
       `Major aspects: ${(a.aspects || []).filter(x => x.point1 !== 'Sirius' && x.point2 !== 'Sirius').map(x => `${x.point1} ${x.aspect} ${x.point2}`).join(', ') || 'none'}`
     ].filter(Boolean).join('\n  ');
 
@@ -1032,7 +1028,7 @@ const ZODIAC_SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','
 const CITATION_PATTERNS = [
   new RegExp(`\\b(Sun|Moon)\\s+in\\s+(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
   new RegExp(`\\b(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
-  /\b(Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto|Chiron|Ascendant|Midheaven|Lilith|Sirius)\b/i,
+  /\b(Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto|Chiron|Ascendant|Midheaven|Lilith)\b/i,
   /\b(North|South)\s+Node\b/i,
   /\bLife\s+Path\s+\d+/i, /\bExpression\s+\d+/i, /\bSoul\s+Urge\s+\d+/i, /\bPersonality\s+(number\s+)?\d+/i,
   /\bPersonal\s+(Year|Month|Day)\s+\d+/i, /\bPinnacle\s+\d+/i, /\bChallenge\s+(number\s+)?\d+/i,
