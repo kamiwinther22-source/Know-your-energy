@@ -1060,7 +1060,6 @@ const GLOSSARY={
   northnode:"The unfamiliar direction you're meant to grow toward in this life, even though it doesn't come naturally yet.",
   southnode:"The familiar habits and instincts you were already born comfortable with — useful, but easy to over-rely on instead of growing past.",
   lilith:"Black Moon Lilith — a calculated point, not a physical body. The raw, unfiltered part of you that got pushed into hiding for not fitting what others expected.",
-  sirius:"The brightest star in the night sky, historically called the Dog Star. It moves only about one degree every 72 years, so it sits in the same one or two signs for nearly everyone alive today — the sign itself carries no personal meaning. What matters is which planet or angle it sits close to in degree, read the same way as any other conjunction. Sirius sitting tightly on the Sun, Moon, or an angle like the Midheaven ties that point to renown and a life built around being publicly known. Sirius also aspecting Mars or Jupiter adds wealth or leadership gained specifically through visibility. The same tradition names the cost that comes with it: volatility or arrogance when that pull toward recognition has no constructive outlet.",
   aspectconjunction:"Two points sitting right on top of each other — their energies blend into one and are hard to tell apart.",
   aspectsextile:"Two points at an easy 60° angle — energies that cooperate with a little effort, an opportunity you still have to act on.",
   aspectsquare:"Two points at a tense 90° angle — friction that forces action; uncomfortable, but where real growth usually gets made.",
@@ -1097,7 +1096,7 @@ const GLOSSARY={
 const GLOSSARY_LABEL={
   sun:'Sun',moon:'Moon',mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',
   uranus:'Uranus',neptune:'Neptune',pluto:'Pluto',ascendant:'Rising Sign',midheaven:'Midheaven',house:'Houses',
-  chiron:'Chiron',northnode:'North Node',southnode:'South Node',lilith:'Lilith',sirius:'Sirius',
+  chiron:'Chiron',northnode:'North Node',southnode:'South Node',lilith:'Lilith',
   aspectconjunction:'Conjunction',aspectsextile:'Sextile',aspectsquare:'Square',aspecttrine:'Trine',aspectopposition:'Opposition',
   lifepath:'Life Path',expression:'Expression',soulurge:'Soul Urge',personality:'Personality',
   birthday:'Birthday',attitude:'Attitude',balance:'Balance',maturity:'Maturity',
@@ -1106,7 +1105,7 @@ const GLOSSARY_LABEL={
   hdtype:'Type',hdprofile:'Profile',hdauthority:'Authority',hdcross:'Incarnation Cross'
 };
 const GLOSSARY_LAYOUT=[
-  ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven','house','chiron','northnode','southnode','lilith','sirius']],
+  ['Astrology',['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','ascendant','midheaven','house','chiron','northnode','southnode','lilith']],
   ['Aspects',['aspectconjunction','aspectsextile','aspectsquare','aspecttrine','aspectopposition']],
   ['Numerology',['lifepath','expression','soulurge','personality','birthday','attitude','balance','maturity','personalyear','personalmonth','personalday','essence','pinnacle','challenge','periodcycle','karmiclessons','karmicdebt']],
   ['Human Design',['hdtype','hdprofile','hdauthority','hdcross']]
@@ -2065,8 +2064,7 @@ const PLANET_SVG={
   'North Node':'<path d="M6 9.3a6 6 0 0 1 12 0" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="10.8" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="10.8" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
   'South Node':'<path d="M6 14.7a6 6 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="13.2" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="13.2" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
   Chiron:'<circle cx="12" cy="16.3" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="12.3" x2="12" y2="3" stroke="currentColor" stroke-width="1.8"/><line x1="9" y1="6.3" x2="15" y2="6.3" stroke="currentColor" stroke-width="1.8"/>',
-  Lilith:'<circle cx="12.5" cy="9" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 5.3c-2.2-1.2-3.4 1.1-1.7 2.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12.5" y1="14" x2="12.5" y2="21" stroke="currentColor" stroke-width="1.8"/><line x1="9.3" y1="18" x2="15.7" y2="18" stroke="currentColor" stroke-width="1.8"/>',
-  Sirius:'<path d="M12 2.5c0.7 5 2 6.3 7 7c-5 0.7-6.3 2-7 7c-0.7-5-2-6.3-7-7c5-0.7 6.3-2 7-7Z" fill="currentColor"/>'
+  Lilith:'<circle cx="12.5" cy="9" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 5.3c-2.2-1.2-3.4 1.1-1.7 2.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12.5" y1="14" x2="12.5" y2="21" stroke="currentColor" stroke-width="1.8"/><line x1="9.3" y1="18" x2="15.7" y2="18" stroke="currentColor" stroke-width="1.8"/>'
 };
 // Sized in em so it scales with whatever text context it sits in
 // (results card vs. the larger expanded modal), vertically nudged to
@@ -2085,12 +2083,12 @@ function glyphIcon(name,color){
 // actual WCAG contrast-ratio math, not eyeballed. Same hue identity per
 // planet, just deep/saturated enough to hold up on the real background.
 const PLANET_COLOR={Sun:'#734a00',Moon:'#0a5a53',Mercury:'#8a3a08',Venus:'#9c1554',Mars:'#961f16',Jupiter:'#5a2a8a',Saturn:'#6b4413',Uranus:'#1a4a8a',Neptune:'#12592b',Pluto:'#4a2e22',
-  'North Node':'#1e4b7a','South Node':'#6b4a1e',Chiron:'#155a4c',Lilith:'#8a1140',Sirius:'#3a3a6b'};
+  'North Node':'#1e4b7a','South Node':'#6b4a1e',Chiron:'#155a4c',Lilith:'#8a1140'};
 // Points shown alongside Ascendant/Midheaven -- not planets, but they're
 // already computed (astro-engine.js) and already fed into the Reading's
 // aspect data, so they need a place on the visible card too, not just a
 // glyph/color to draw with.
-const POINT_KEY={'North Node':'northnode','South Node':'southnode',Chiron:'chiron',Lilith:'lilith',Sirius:'sirius'};
+const POINT_KEY={'North Node':'northnode','South Node':'southnode',Chiron:'chiron',Lilith:'lilith'};
 const SIGN_ORDER=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
 
 // Real astrology wheel: signs at their real fixed 30deg boundaries, planets
@@ -2493,56 +2491,6 @@ function hdWheelWrap(hd){
   }
 })();
 
-// One direct statement about this specific contact, not a rule
-// explained and then translated -- fixed-star technique's content
-// depends on WHICH point Sirius touches (personal-identity points --
-// Sun/Moon/an angle -- carry the renown theme directly; Mars/Jupiter
-// carry a wealth/leadership version of it; anything else still counts,
-// just about that part of the chart specifically) and on the aspect
-// type (Conjunction strongest, Square = tested/effortful, Trine/Sextile
-// = comes easily, Opposition = plays out through another person --
-// ordinary aspect convention, not specific to Sirius). Point/aspect
-// strings have to match astro-engine.js's actual output exactly
-// (confirmed by running it locally) -- "Ascendant"/"Midheaven", and
-// "Conjunction"/"Square"/"Trine"/"Sextile"/"Opposition".
-const SIRIUS_IDENTITY_POINTS=['Sun','Moon','Ascendant','Midheaven'];
-const SIRIUS_WEALTH_POINTS=['Mars','Jupiter'];
-const SIRIUS_VERB={Conjunction:'sits right on',Square:'squares',Trine:'trines',Sextile:'sextiles',Opposition:'opposes'};
-const SIRIUS_LINES={
-  identity:{
-    Conjunction:'renown and being publicly known aren’t separate from your core identity — they’re built into it directly.',
-    Square:'being known publicly is an ongoing tension for you, tested rather than comfortable, tied directly to your core identity.',
-    Trine:'being seen and recognized publicly comes naturally to you, woven into your core identity without a fight.',
-    Sextile:'being seen and recognized publicly comes naturally to you, woven into your core identity without a fight.',
-    Opposition:'recognition and how you’re seen publicly play out largely through whoever you’re directly facing, not as something internal.'
-  },
-  wealth:{
-    Conjunction:'wealth or leadership come to you directly through being visible, doing the thing where people can see it.',
-    Square:'wealth or leadership through visibility is a fight for you, not handed over easily.',
-    Trine:'wealth or leadership through visibility comes to you with genuine ease.',
-    Sextile:'wealth or leadership through visibility comes to you with genuine ease.',
-    Opposition:'wealth or leadership through visibility plays out largely through partnership for you, not solo effort.'
-  }
-};
-function siriusPersonalNote(hits){
-  if(!hits.length)return null;
-  const tightest=hits[0];
-  const point=tightest.point1==='Sirius'?tightest.point2:tightest.point1;
-  const category=SIRIUS_IDENTITY_POINTS.includes(point)?'identity':(SIRIUS_WEALTH_POINTS.includes(point)?'wealth':null);
-  const verb=SIRIUS_VERB[tightest.aspect]||'aspects';
-  const orbTxt=tightest.orb!=null?` (${tightest.orb}°)`:'';
-  const opener=`Sirius ${verb} your ${point}${orbTxt} — `;
-  if(category)return opener+SIRIUS_LINES[category][tightest.aspect];
-  const generic={
-    Conjunction:`${point} itself becomes something the wider world sees and recognizes in you.`,
-    Square:`${point} gets tested publicly, under ongoing friction.`,
-    Trine:`${point} gets noticed and recognized with ease.`,
-    Sextile:`${point} gets noticed and recognized with ease.`,
-    Opposition:`${point} gets recognized mainly through how other people reflect it back to you.`
-  };
-  return opener+(generic[tightest.aspect]||`this pulls ${point} toward visibility and recognition.`);
-}
-
 function ar(astro,errMsg){
   if(!astro||astro.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   const planets=astro.planets||[];
@@ -2578,31 +2526,19 @@ function ar(astro,errMsg){
     if(astro.ascendant?.sign)h+=arow('Rising Sign',astro.ascendant.sign,'ascendant',astro.ascendant.sign);
     if(astro.midheaven?.sign)h+=arow('Midheaven',astro.midheaven.sign,'midheaven',astro.midheaven.sign);
   }
-  // North/South Node, Chiron, Sirius, Lilith -- these already factor into
+  // North/South Node, Chiron, Lilith -- these already factor into
   // the Reading (aspects, house themes) but had no place on the visible
   // chart before; a real placement here, not just a mention in the prose.
-  // Sirius intentionally has no ASTRO_DEFS.sirius sign entries -- real fixed-
-  // star technique reads Sirius through conjunctions to natal points, not
-  // sign placement (its ecliptic position moves ~1 degree per 72 years, so
-  // it sits in essentially the same sign for everyone alive today, telling
-  // a reader nothing personal about them). Its row below shows its real
-  // aspects instead of a sign that would only look personalized.
-  const extraPoints=[astro.northNode,astro.southNode,astro.chiron,astro.sirius,astro.lilith].filter(p=>p?.sign);
+  // Sirius deliberately isn't shown here or anywhere else in the app --
+  // removed per direct instruction, not just hidden behind a flag.
+  const extraPoints=[astro.northNode,astro.southNode,astro.chiron,astro.lilith].filter(p=>p?.sign);
   if(extraPoints.length){
     h+=dpsec('Other Points');
     extraPoints.forEach(p=>{
       const name=p.name;
       const glyph=glyphIcon(name,PLANET_COLOR[name]);
       let signOut, defNum=p.sign, note=null;
-      if(name==='Sirius'){
-        const hits=(astro.aspects||[]).filter(a=>a.point1==='Sirius'||a.point2==='Sirius')
-          .sort((a,b)=>(a.orb??99)-(b.orb??99));
-        signOut=hits.length
-          ? hits.map(a=>`${a.aspect} ${a.point1==='Sirius'?a.point2:a.point1}${a.orb!=null?` (${a.orb}°)`:''}`).join(', ')
-          : 'No close aspects in this chart';
-        defNum=null;
-        note=siriusPersonalNote(hits);
-      }else if(p.signUncertain){
+      if(p.signUncertain){
         signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
       }else{
         signOut=p.sign;
