@@ -2493,38 +2493,54 @@ function hdWheelWrap(hd){
   }
 })();
 
-// Real fixed-star technique's own content depends on WHICH point Sirius
-// actually touches, not just that it touches something -- personal-
-// identity points (Sun/Moon/an angle) carry the core renown theme
-// directly; Mars/Jupiter add a wealth/leadership flavor; anything else
-// still counts, just more generally. How a contact plays out follows
-// ordinary aspect-type convention (not specific to Sirius): Conjunction
-// is the strongest, most direct form; Square is friction/a real test;
-// Trine and Sextile come more easily; Opposition plays out largely
-// through another person. Point/aspect strings here have to match
-// astro-engine.js's real output exactly (confirmed by running it
-// locally) -- "Ascendant"/"Midheaven", and "Conjunction"/"Square"/
-// "Trine"/"Sextile"/"Opposition".
+// One direct statement about this specific contact, not a rule
+// explained and then translated -- fixed-star technique's content
+// depends on WHICH point Sirius touches (personal-identity points --
+// Sun/Moon/an angle -- carry the renown theme directly; Mars/Jupiter
+// carry a wealth/leadership version of it; anything else still counts,
+// just about that part of the chart specifically) and on the aspect
+// type (Conjunction strongest, Square = tested/effortful, Trine/Sextile
+// = comes easily, Opposition = plays out through another person --
+// ordinary aspect convention, not specific to Sirius). Point/aspect
+// strings have to match astro-engine.js's actual output exactly
+// (confirmed by running it locally) -- "Ascendant"/"Midheaven", and
+// "Conjunction"/"Square"/"Trine"/"Sextile"/"Opposition".
 const SIRIUS_IDENTITY_POINTS=['Sun','Moon','Ascendant','Midheaven'];
 const SIRIUS_WEALTH_POINTS=['Mars','Jupiter'];
-function siriusPointTheme(point){
-  if(SIRIUS_IDENTITY_POINTS.includes(point))return 'renown and being publicly known, tied directly to a core part of who you are';
-  if(SIRIUS_WEALTH_POINTS.includes(point))return 'wealth or leadership gained specifically through visibility — being seen doing the thing, not just doing it';
-  return 'a pull toward visibility and recognition, running through this specific part of your chart rather than your core identity directly';
-}
-function siriusAspectFraming(aspect){
-  if(aspect==='Conjunction')return 'the strongest, most direct form real fixed-star technique recognizes';
-  if(aspect==='Square')return 'real friction — this theme gets tested rather than handed to you easily';
-  if(aspect==='Trine'||aspect==='Sextile')return 'this theme comes relatively easily';
-  if(aspect==='Opposition')return 'this theme plays out largely through other people, not internally';
-  return 'a real, if looser, version of this theme';
-}
+const SIRIUS_VERB={Conjunction:'sits right on',Square:'squares',Trine:'trines',Sextile:'sextiles',Opposition:'opposes'};
+const SIRIUS_LINES={
+  identity:{
+    Conjunction:'renown and being publicly known aren’t separate from your core identity — they’re built into it directly.',
+    Square:'being known publicly is an ongoing tension for you, tested rather than comfortable, tied directly to your core identity.',
+    Trine:'being seen and recognized publicly comes naturally to you, woven into your core identity without a fight.',
+    Sextile:'being seen and recognized publicly comes naturally to you, woven into your core identity without a fight.',
+    Opposition:'recognition and how you’re seen publicly play out largely through whoever you’re directly facing, not as something internal.'
+  },
+  wealth:{
+    Conjunction:'wealth or leadership come to you directly through being visible, doing the thing where people can see it.',
+    Square:'wealth or leadership through visibility is a fight for you, not handed over easily.',
+    Trine:'wealth or leadership through visibility comes to you with genuine ease.',
+    Sextile:'wealth or leadership through visibility comes to you with genuine ease.',
+    Opposition:'wealth or leadership through visibility plays out largely through partnership for you, not solo effort.'
+  }
+};
 function siriusPersonalNote(hits){
   if(!hits.length)return null;
   const tightest=hits[0];
   const point=tightest.point1==='Sirius'?tightest.point2:tightest.point1;
-  const article=/^[AEIOU]/.test(tightest.aspect)?'an':'a';
-  return `Your tightest contact is ${article} ${tightest.aspect} to your ${point}${tightest.orb!=null?` (${tightest.orb}°)`:''} — ${siriusAspectFraming(tightest.aspect)}. What that means concretely: ${siriusPointTheme(point)}.`;
+  const category=SIRIUS_IDENTITY_POINTS.includes(point)?'identity':(SIRIUS_WEALTH_POINTS.includes(point)?'wealth':null);
+  const verb=SIRIUS_VERB[tightest.aspect]||'aspects';
+  const orbTxt=tightest.orb!=null?` (${tightest.orb}°)`:'';
+  const opener=`Sirius ${verb} your ${point}${orbTxt} — `;
+  if(category)return opener+SIRIUS_LINES[category][tightest.aspect];
+  const generic={
+    Conjunction:`${point} itself becomes something the wider world sees and recognizes in you.`,
+    Square:`${point} gets tested publicly, under ongoing friction.`,
+    Trine:`${point} gets noticed and recognized with ease.`,
+    Sextile:`${point} gets noticed and recognized with ease.`,
+    Opposition:`${point} gets recognized mainly through how other people reflect it back to you.`
+  };
+  return opener+(generic[tightest.aspect]||`this pulls ${point} toward visibility and recognition.`);
 }
 
 function ar(astro,errMsg){
