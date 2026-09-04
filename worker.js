@@ -522,20 +522,56 @@ async function refreshPassSnapshot(env, email, p1, p2) {
 // total of tokens spent generating readings, not customer data.
 
 const USAGE_KV_KEY = "usage:totals";
+// Individual per-request entries are kept only this long (90 days) so KV
+// storage doesn't grow forever -- the lifetime totals above (and the
+// per-type totals nested in them) are the permanent record; these are
+// just for seeing recent activity, not historical accounting.
+const USAGE_LOG_TTL_SECONDS = 90 * 24 * 60 * 60;
 
-async function recordUsage(env, usage) {
+function bumpUsageBucket(bucket, usage) {
+  bucket.requests = (bucket.requests || 0) + 1;
+  bucket.inputTokens = (bucket.inputTokens || 0) + (usage.input_tokens || 0);
+  bucket.outputTokens = (bucket.outputTokens || 0) + (usage.output_tokens || 0);
+  bucket.cacheCreationTokens = (bucket.cacheCreationTokens || 0) + (usage.cache_creation_input_tokens || 0);
+  bucket.cacheReadTokens = (bucket.cacheReadTokens || 0) + (usage.cache_read_input_tokens || 0);
+}
+
+// type is 'individual' / 'two-person' / 'hd-only' (see generateReport) --
+// used to split the running totals by reading type, and tagged onto the
+// per-request log entry below, so /usage can show both a per-type
+// breakdown and a list of recent individual requests, not just one grand
+// total with no way to tell what it was actually spent on.
+async function recordUsage(env, usage, type) {
   if (!usage) return;
   const raw = await env.PASSES.get(USAGE_KV_KEY);
   const totals = raw ? JSON.parse(raw) : {
     requests: 0, inputTokens: 0, outputTokens: 0,
-    cacheCreationTokens: 0, cacheReadTokens: 0
+    cacheCreationTokens: 0, cacheReadTokens: 0, byType: {}
   };
-  totals.requests += 1;
-  totals.inputTokens += usage.input_tokens || 0;
-  totals.outputTokens += usage.output_tokens || 0;
-  totals.cacheCreationTokens += usage.cache_creation_input_tokens || 0;
-  totals.cacheReadTokens += usage.cache_read_input_tokens || 0;
+  if (!totals.byType) totals.byType = {};
+  bumpUsageBucket(totals, usage);
+  if (!totals.byType[type]) totals.byType[type] = {};
+  bumpUsageBucket(totals.byType[type], usage);
   await env.PASSES.put(USAGE_KV_KEY, JSON.stringify(totals));
+
+  // Reverse-timestamp key prefix so KV's only sort order (ascending,
+  // lexicographic) lists the most recent request first without having
+  // to fetch and sort every entry client-side. Stays a fixed 13 digits
+  // (safe until the year 2286) so lexicographic order matches numeric
+  // order. Value is unused -- everything needed lives in metadata, which
+  // list() returns directly, avoiding a second get() per entry.
+  const logKey = `usagelog:${String(9999999999999 - Date.now()).padStart(13, '0')}:${crypto.randomUUID().slice(0, 8)}`;
+  await env.PASSES.put(logKey, '1', {
+    expirationTtl: USAGE_LOG_TTL_SECONDS,
+    metadata: {
+      time: new Date().toISOString(),
+      type,
+      inputTokens: usage.input_tokens || 0,
+      outputTokens: usage.output_tokens || 0,
+      cacheCreationTokens: usage.cache_creation_input_tokens || 0,
+      cacheReadTokens: usage.cache_read_input_tokens || 0
+    }
+  });
 }
 
 // ─── CLAUDE REPORT GENERATION ────────────────────────────────────────────────
@@ -782,7 +818,7 @@ function extractJSON(text) {
   return trimmed;
 }
 
-async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTEM_PROMPT) {
+async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTEM_PROMPT, usageType = 'individual') {
   const messages = [{ role: 'user', content: userPrompt }];
 
   // Nothing here previously bounded how long a single attempt could take
@@ -896,7 +932,7 @@ async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTE
   }
 
   clearTimeout(stallTimer);
-  if (ctx) ctx.waitUntil(recordUsage(env, usage));
+  if (ctx) ctx.waitUntil(recordUsage(env, usage, usageType));
   if (stopReason === 'max_tokens') {
     throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
   }
@@ -1048,10 +1084,11 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
     ? buildHDOnlyRelationalPrompt(relLabel, p1, p2)
     : buildReportUserPrompt(rtype, relLabel, p1, p2);
   const systemPrompt = hdOnly ? HD_ONLY_RELATIONAL_SYSTEM_PROMPT : REPORT_SYSTEM_PROMPT;
+  const usageType = hdOnly ? 'hd-only' : (rtype === 'two-person' ? 'two-person' : 'individual');
 
   let text;
   try {
-    text = await callReportModel(env, userPrompt, ctx, systemPrompt);
+    text = await callReportModel(env, userPrompt, ctx, systemPrompt, usageType);
   } catch (error) {
     // A stalled connection or a Claude API error used to propagate
     // straight out of this function, skipping the guaranteed fallback
@@ -1106,7 +1143,8 @@ export default {
     // not customer data, just a lifetime total of Claude tokens/cost.
     if (url.pathname === "/usage") {
       const raw = await env.PASSES.get(USAGE_KV_KEY);
-      const t = raw ? JSON.parse(raw) : { requests: 0, inputTokens: 0, outputTokens: 0, cacheCreationTokens: 0, cacheReadTokens: 0 };
+      const t = raw ? JSON.parse(raw) : { requests: 0, inputTokens: 0, outputTokens: 0, cacheCreationTokens: 0, cacheReadTokens: 0, byType: {} };
+      if (!t.byType) t.byType = {};
       // Claude Sonnet 5 pricing: $2/$10 per million input/output tokens.
       // Originally introductory through 2026-08-31 with a planned increase
       // to $3/$15 on 2026-09-01 -- Anthropic made $2/$10 permanent instead
@@ -1116,13 +1154,31 @@ export default {
       const OUTPUT_RATE = 10 / 1_000_000;
       const CACHE_WRITE_RATE = INPUT_RATE * 1.25;
       const CACHE_READ_RATE = INPUT_RATE * 0.1;
-      const cost = t.inputTokens * INPUT_RATE + t.outputTokens * OUTPUT_RATE
-        + t.cacheCreationTokens * CACHE_WRITE_RATE + t.cacheReadTokens * CACHE_READ_RATE;
+      const costOf = (b) => (b.inputTokens || 0) * INPUT_RATE + (b.outputTokens || 0) * OUTPUT_RATE
+        + (b.cacheCreationTokens || 0) * CACHE_WRITE_RATE + (b.cacheReadTokens || 0) * CACHE_READ_RATE;
+      const cost = costOf(t);
       const perReading = t.requests ? cost / t.requests : 0;
       const row = (label, value) => `<tr><td>${label}</td><td>${value}</td></tr>`;
+
+      const typeLabel = { individual: 'Individual', 'two-person': 'Relational', 'hd-only': 'HD-only test' };
+      const typeRows = Object.entries(t.byType).map(([type, b]) => {
+        const c = costOf(b);
+        return row(typeLabel[type] || type, `${b.requests} readings · $${c.toFixed(2)} · $${(b.requests ? c / b.requests : 0).toFixed(4)}/reading`);
+      }).join('') || `<tr><td colspan="2">No readings recorded yet.</td></tr>`;
+
+      // Most-recent-first, up to 20 -- see recordUsage's reverse-timestamp
+      // key comment for why list() alone (no per-entry get()) is enough.
+      const recentList = await env.PASSES.list({ prefix: 'usagelog:', limit: 20 });
+      const recentRows = recentList.keys.map(k => {
+        const m = k.metadata || {};
+        const c = costOf(m);
+        return row(`${(m.time || '').replace('T', ' ').slice(0, 16)} · ${typeLabel[m.type] || m.type || 'unknown'}`,
+          `${(m.inputTokens || 0).toLocaleString()} in / ${(m.outputTokens || 0).toLocaleString()} out · $${c.toFixed(4)}`);
+      }).join('') || `<tr><td colspan="2">No recent requests logged.</td></tr>`;
+
       const html = `<!doctype html><html><head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow"><title>Usage</title>
 <style>body{font-family:-apple-system,sans-serif;background:#0a1530;color:#f0c94c;padding:2rem;max-width:600px;margin:0 auto;}
-h1{font-size:1.2rem;} table{width:100%;border-collapse:collapse;margin-top:1rem;}
+h1{font-size:1.2rem;} h2{font-size:1rem;margin-top:2rem;} table{width:100%;border-collapse:collapse;margin-top:1rem;}
 td{padding:0.4rem 0;border-bottom:1px solid rgba(240,201,76,0.2);} td:last-child{text-align:right;font-weight:700;}
 .note{font-size:0.75rem;opacity:0.7;margin-top:1.5rem;}</style></head><body>
 <h1>Claude API usage — running total</h1>
@@ -1135,7 +1191,11 @@ ${row('Cache read tokens', t.cacheReadTokens.toLocaleString())}
 ${row('Estimated total cost', '$' + cost.toFixed(2))}
 ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
 </table>
-<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees.</p>
+<h2>By reading type</h2>
+<table>${typeRows}</table>
+<h2>Recent requests (last 20, kept 90 days)</h2>
+<table>${recentRows}</table>
+<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees. Output tokens include thinking -- Claude's API doesn't report thinking and final text as separate numbers.</p>
 </body></html>`;
       return new Response(html, { headers: { "Content-Type": "text/html; charset=UTF-8", ...CORS_HEADERS } });
     }
