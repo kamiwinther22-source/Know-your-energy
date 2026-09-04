@@ -853,8 +853,13 @@ async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTE
       model: 'claude-sonnet-5',
       // Thinking disabled was tried and rejected: it produced noticeably
       // worse readings. Thinking enabled (adaptive) is the agreed setting.
-      // Effort is medium, not high -- high made a single attempt slow and
-      // expensive enough to risk the stall timeout below.
+      // Effort dropped medium -> low: real generation time was still too
+      // long. There is no retry loop or extra network call inflating this
+      // -- callReportModel is called exactly once per report -- so effort
+      // (Anthropic's own thoroughness/latency knob) is the only lever left
+      // that doesn't mean cutting how much the prompt asks the reading to
+      // cover. If low reads noticeably thinner, that's the real tradeoff
+      // to weigh against speed, not a bug to fix.
       // max_tokens raised 48000 -> 72000: a two-person reading hit the
       // fallback after a prompt addition (per-item recall, thematic
       // cross-system synthesis) made a relational reading -- combining two
@@ -868,7 +873,7 @@ async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTE
       // this is still well under the actual ceiling.
       max_tokens: 72000,
       thinking: { type: 'adaptive' },
-      output_config: { effort: 'medium' },
+      output_config: { effort: 'low' },
       // A non-streaming call with a thinking pass hit a Cloudflare 524 --
       // the generation genuinely took longer than the edge's timeout for
       // one long silent response. Streaming keeps the
