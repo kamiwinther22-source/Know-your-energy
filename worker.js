@@ -818,10 +818,17 @@ async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PRO
   // completes. This aborts a stalled attempt after real silence, not a
   // fixed ceiling on the whole call -- any actual data (a thinking delta
   // included, not just text) resets the clock, so a legitimately slow
-  // high-effort generation that's still actively streaming is never cut
-  // short; only a connection that's gone genuinely quiet is.
+  // generation that's still actively streaming is never cut short; only a
+  // connection that's gone genuinely quiet is.
+  // Raised 45s -> 90s: the effort:medium comment below already knew medium
+  // was chosen over high specifically because high risked this exact
+  // timeout -- reverting back to medium for quality reintroduced that same
+  // exposure. 90s stays well under Cloudflare's own edge timeout for a
+  // fully silent connection, but gives real thinking gaps during a full
+  // two-person combined reading enough room that a slow-but-active
+  // generation isn't mistaken for a hung one.
   const controller = new AbortController();
-  const STALL_MS = 45000;
+  const STALL_MS = 90000;
   let stallTimer;
   const armStallTimer = () => {
     clearTimeout(stallTimer);
@@ -1083,14 +1090,21 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
   return { parsed, usage };
 }
 
-// One shot only -- no repair pass. The old version retried up to 3
+// No repair pass on a content defect -- the old version retried up to 3
 // times, sending a failed response back to the model with a note on
 // what was wrong so it could fix it; that's gone. The prompt is what's
 // responsible for getting this right the first time, not a rewrite
 // cycle catching what it missed. findNamingDefect/findCitationLeak
 // below still run, but only to decide accept-or-discard -- a defect
-// no longer goes back to the model, it goes straight to the honest
-// "please try again" fallback instead.
+// no longer goes back to the model, it goes straight to the fallback.
+//
+// A transient failure (a stalled connection, a dropped stream, a
+// truncated or unparseable response) is a different category and does
+// get one retry, fresh, same prompt, no note about what went wrong --
+// exactly what a customer does themselves by tapping "Run Another
+// Reading," just done once automatically before ever showing them a
+// failure. A single stall shouldn't be a guaranteed customer-facing
+// failure when trying again costs a few more seconds and nothing else.
 //
 // hdOnly is a TEMPORARY, experimental flag -- see
 // HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and the
@@ -1100,31 +1114,50 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
 // calls (each person's individual profile plus a separate relational
 // pass) to cut generation time -- reverted on direct instruction: reading
 // quality is the accepted floor, not negotiable against speed, and the
-// split risked real overlap between an individual section and the
-// relational one that a single unified call doesn't have. Back to one
-// call for every reading type, same as it's always been.
+// split risked overlap between an individual section and the relational
+// one that a single unified call doesn't have. Back to one call for
+// every reading type, same as it's always been.
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   const usageType = hdOnly ? 'hd-only' : (rtype === 'two-person' ? 'two-person' : 'individual');
 
-  let result;
-  try {
-    if (hdOnly) {
-      result = await generateSingleCallReading(env, buildHDOnlyRelationalPrompt(relLabel, p1, p2), HD_ONLY_RELATIONAL_SYSTEM_PROMPT);
-    } else {
-      result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
+  let result, lastError;
+  // Usage from a failed first attempt is real spent tokens too -- tracked
+  // separately so a failed-then-succeeded retry still records both
+  // attempts' cost, not just the one that happened to land.
+  const failedUsages = [];
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      if (hdOnly) {
+        result = await generateSingleCallReading(env, buildHDOnlyRelationalPrompt(relLabel, p1, p2), HD_ONLY_RELATIONAL_SYSTEM_PROMPT);
+      } else {
+        result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
+      }
+      lastError = null;
+      break;
+    } catch (error) {
+      lastError = error;
+      if (error.usage) failedUsages.push(error.usage);
+      console.error(`Report generation attempt ${attempt + 1} failed: ${error.message}`);
     }
-  } catch (error) {
+  }
+  const combineUsage = (usages) => usages.reduce((total, u) => ({
+    input_tokens: (total.input_tokens || 0) + (u.input_tokens || 0),
+    output_tokens: (total.output_tokens || 0) + (u.output_tokens || 0),
+    cache_creation_input_tokens: (total.cache_creation_input_tokens || 0) + (u.cache_creation_input_tokens || 0),
+    cache_read_input_tokens: (total.cache_read_input_tokens || 0) + (u.cache_read_input_tokens || 0)
+  }), {});
+  if (lastError) {
     // A stalled connection or a Claude API error used to propagate
     // straight out of this function, skipping the guaranteed fallback
     // below -- a customer saw a raw API error string instead of ever
     // reaching the "this literally cannot fail" fallback the comment
     // below already promised. Treat it the same as any other failure.
-    console.error(`Report generation failed: ${error.message}`);
-    if (ctx && error.usage) ctx.waitUntil(recordUsage(env, error.usage, usageType));
+    if (ctx && failedUsages.length) ctx.waitUntil(recordUsage(env, combineUsage(failedUsages), usageType));
     return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
   }
 
-  if (ctx) ctx.waitUntil(recordUsage(env, result.usage, usageType));
+  const usage = failedUsages.length ? combineUsage([...failedUsages, result.usage]) : result.usage;
+  if (ctx) ctx.waitUntil(recordUsage(env, usage, usageType));
 
   const defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
   if (!defect) return { reading: result.parsed, usedFallback: false };
@@ -1132,7 +1165,7 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   // A customer still always gets a reading (this literally cannot fail
   // the way an AI generation can), but usedFallback travels with it so
   // the frontend can show a visible notice instead of a customer having
-  // to notice on their own that this wasn't the real, personalized one.
+  // to notice on their own that this wasn't the personalized one.
   return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
 }
 
