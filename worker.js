@@ -1153,7 +1153,12 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
     // reaching the "this literally cannot fail" fallback the comment
     // below already promised. Treat it the same as any other failure.
     if (ctx && failedUsages.length) ctx.waitUntil(recordUsage(env, combineUsage(failedUsages), usageType));
-    return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
+    // Threaded through to the frontend so a fallback isn't a dead end --
+    // she can't reach Cloudflare's own logs from a customer report, and
+    // the generic "please try again" banner alone gave no way to tell a
+    // real API failure from a content defect without them. Same fix
+    // pattern already applied to the astrology card's real error message.
+    return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: lastError.message };
   }
 
   const usage = failedUsages.length ? combineUsage([...failedUsages, result.usage]) : result.usage;
@@ -1166,7 +1171,7 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   // the way an AI generation can), but usedFallback travels with it so
   // the frontend can show a visible notice instead of a customer having
   // to notice on their own that this wasn't the personalized one.
-  return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
+  return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: defect };
 }
 
 export default {
@@ -1427,7 +1432,7 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
             ]);
         console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
 
-        let report = null, reportError = null, reportUsedFallback = false;
+        let report = null, reportError = null, reportUsedFallback = false, reportFallbackReason = null;
         // body.hdOnly is a TEMPORARY, experimental flag -- see
         // HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Only meaningful for a
         // real two-person reading where both people actually have a
@@ -1441,7 +1446,8 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
             const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx, body.hdOnly);
             report = result.reading;
             reportUsedFallback = result.usedFallback;
-            console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback} jobId=${jobId}`);
+            reportFallbackReason = result.fallbackReason || null;
+            console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback}${result.fallbackReason ? ` reason=${result.fallbackReason}` : ''} jobId=${jobId}`);
           } catch (error) {
             reportError = error.message;
             console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
@@ -1452,7 +1458,7 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
           ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
         }
 
-        const payload = { p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback };
+        const payload = { p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback, reportFallbackReason };
         streamBody = JSON.stringify(payload);
         kvRecord = { status: "done", ...payload };
       } catch (error) {

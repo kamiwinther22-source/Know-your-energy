@@ -534,6 +534,7 @@ body{
    with a hairline border in the existing accent color -- same card
    language already used elsewhere on this page, no new color introduced. */
 .report-fallback-note{margin:0.2rem 0.4rem 0.5rem;padding:0.5rem 0.6rem;border:1.5px solid var(--card-accent,#1C2CA9);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.46rem;line-height:1.55;font-weight:700;color:var(--card-text,#191510);}
+.report-fallback-reason{margin:-0.3rem 0.4rem 0.5rem;padding:0 0.6rem 0.5rem;font-family:'DM Sans',sans-serif;font-size:0.4rem;line-height:1.5;font-weight:400;color:var(--card-text,#191510);}
 .gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.18rem;padding:0.1rem 0.4rem 0.3rem;}
 /* Real depth (shadow) instead of flat, plus the same dotted-underline
    language .term already uses everywhere else in this app for "tap this" --
@@ -2765,7 +2766,7 @@ function quadItem(nm,sys,rows,preHtml,wheelSvg,rowNum){
   const wheelHtml=wheelSvg?`<div class="quad-wheel">${wheelSvg}</div>`:'';
   return `<div class="quad-item" style="grid-row:${rowNum};" data-card-idx="${idx}"><div class="quad-title">${escapeHtml(nm)} \u00b7 ${sys}</div>${wheelHtml}<div class="dplist">${rows}</div></div>`;
 }
-function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback,pending){
+function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback,pending,fallbackReason){
   // Raw (unescaped) title for cardRegistry -- the modal sets this via
   // .textContent (see cardExpandTitle further down), which is already
   // injection-safe on its own; pre-escaping here and THEN setting it as
@@ -2794,7 +2795,11 @@ function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback,pendi
   // retrying, which defeated the point of a backup entirely. This is
   // the one notice shown; buildFallbackReading returns empty sections
   // so nothing repeats it below in different words.
-  const fallbackNoticeHtml=usedFallback?`<div class="dprow"><p class="report-fallback-note">Your full reading couldn't be generated this time -- please try again.</p></div>`:'';
+  // The real reason (a defect the naming/citation check caught, or the
+  // actual API/generation error) is shown right under the notice instead
+  // of staying invisible in Cloudflare's own logs -- same fix already
+  // applied to the astrology card's real error message.
+  const fallbackNoticeHtml=usedFallback?`<div class="dprow"><p class="report-fallback-note">Your full reading couldn't be generated this time -- please try again.</p>${fallbackReason?`<p class="report-fallback-reason">${escapeHtml(fallbackReason)}</p>`:''}</div>`:'';
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
     return `${dpsec(head)}<div class="dprow"><p class="report-body">${escapeHtml(s.body)}</p></div>`;
@@ -2937,8 +2942,8 @@ function personRow(person,rowNum,personIdx){
 // rather than notice they could've just reloaded. Wrapped in try/catch:
 // a full or unavailable localStorage shouldn't ever break rendering.
 const SAVED_RESULT_KEY='kye_lastResult';
-function saveResult(p1,p2,r,reportErr,reportUsedFallback){
-  try{ localStorage.setItem(SAVED_RESULT_KEY, JSON.stringify({p1,p2,r,reportErr,reportUsedFallback})); }
+function saveResult(p1,p2,r,reportErr,reportUsedFallback,fallbackReason){
+  try{ localStorage.setItem(SAVED_RESULT_KEY, JSON.stringify({p1,p2,r,reportErr,reportUsedFallback,fallbackReason})); }
   catch(_){}
 }
 function clearSavedResult(){
@@ -2998,7 +3003,7 @@ DRAFT_FIELD_IDS.forEach(id=>{
 // call. fillReading() then swaps just that one slot in place once the
 // real reading (or an error) actually comes back, instead of this whole
 // function running again and rebuilding cards that haven't changed.
-function render(p1,p2,r,reportErr,reportUsedFallback,pending){
+function render(p1,p2,r,reportErr,reportUsedFallback,pending,fallbackReason){
   cardRegistry=[];
   // Kept globally (not just as render()'s local params) so the date
   // explorer's onchange handler -- which fires long after render()
@@ -3018,7 +3023,7 @@ function render(p1,p2,r,reportErr,reportUsedFallback,pending){
   // empty space.
   let h=personRow(p1,1,0)
     +topBtn('Run Another Reading','resetToForm()',BTN_ICON_REFRESH,'grid-column:1;grid-row:2;')
-    +reportSlot(namesForTitle,cardNames,r,reportErr,2,reportUsedFallback,pending)
+    +reportSlot(namesForTitle,cardNames,r,reportErr,2,reportUsedFallback,pending,fallbackReason)
     +topBtn('Save / Print Reading','window.print()',BTN_ICON_PRINT,'grid-column:3;grid-row:2;');
   if(p2)h+=personRow(p2,3,1);
   document.getElementById('mainGrid').innerHTML=h;
@@ -3033,7 +3038,7 @@ function render(p1,p2,r,reportErr,reportUsedFallback,pending){
     const slot=document.getElementById('readingSlot');
     if(slot)animateHourglass(slot);
   }
-  saveResult(p1,p2,r,reportErr,reportUsedFallback);
+  saveResult(p1,p2,r,reportErr,reportUsedFallback,fallbackReason);
 }
 
 function renderCharts(p1,p2){
@@ -3045,14 +3050,14 @@ function renderCharts(p1,p2){
 // so the astrology/numerology/HD cards already in it from renderCharts()
 // keep their existing tap-to-expand indices; reportSlot's success branch
 // just pushes one more entry for the reading itself.
-function fillReading(p1,p2,r,reportErr,reportUsedFallback){
+function fillReading(p1,p2,r,reportErr,reportUsedFallback,fallbackReason){
   const n1=p1.first+(p1.last?' '+p1.last:'');
   const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
   const cardNames=p2?(p1.first+' & '+p2.first):p1.first;
-  const html=reportSlot(namesForTitle,cardNames,r,reportErr,2,reportUsedFallback,false);
+  const html=reportSlot(namesForTitle,cardNames,r,reportErr,2,reportUsedFallback,false,fallbackReason);
   const slot=document.getElementById('readingSlot');
   if(slot)slot.outerHTML=html||`<div id="readingSlot" style="grid-column:2;grid-row:2;"></div>`;
-  saveResult(p1,p2,r,reportErr,reportUsedFallback);
+  saveResult(p1,p2,r,reportErr,reportUsedFallback,fallbackReason);
 }
 
 function resetToForm(){
@@ -3305,7 +3310,7 @@ async function generate(){
       if(pollResult.status==='pending')continue;
       // status is 'done' -- only the report fields matter now, the chart
       // data in this record is the same p1Data/p2Data already sent up.
-      result={report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback};
+      result={report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback,reportFallbackReason:pollResult.reportFallbackReason};
       break;
     }
   }
@@ -3315,7 +3320,7 @@ async function generate(){
   // doesn't force re-typing everything (the reading-failure message
   // tells the customer exactly that; this is what makes it true).
   if(!result.reportError)clearDraft();
-  fillReading(p1,p2,result.report,result.reportError,result.reportUsedFallback);
+  fillReading(p1,p2,result.report,result.reportError,result.reportUsedFallback,result.reportFallbackReason);
 }
 
 // ---------- tap-to-expand: cards, term definitions, gate chips ----------
@@ -3389,8 +3394,8 @@ document.addEventListener('click', e=>{
   try{
     const saved=localStorage.getItem(SAVED_RESULT_KEY);
     if(saved){
-      const {p1,p2,r,reportErr,reportUsedFallback}=JSON.parse(saved);
-      if(p1){ render(p1,p2,r,reportErr,reportUsedFallback); return; }
+      const {p1,p2,r,reportErr,reportUsedFallback,fallbackReason}=JSON.parse(saved);
+      if(p1){ render(p1,p2,r,reportErr,reportUsedFallback,false,fallbackReason); return; }
     }
   }catch(_){}
   // No finished result to restore -- fall back to restoring whatever was
