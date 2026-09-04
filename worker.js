@@ -564,6 +564,7 @@ Before writing, find the real connection points between the two charts -- not ev
 ### HOW TO WRITE
 - Describe the person, not the chart. Every sentence is "you" (or, in a two-person reading, their real first name).
 - A placement, number, aspect, or shared pattern can prove a claim true -- it is never the claim itself. State what the person does, wants, or feels; the data is the reason why.
+- Naming one placement or number and explaining it in the same sentence is correct. Never stack two or more of them back-to-back with nothing but punctuation between ("Sun in Scorpio, 6th house, square Mars in Leo, 9th house") -- each one belongs inside its own explained sentence.
 - Use the full depth of established tradition for every placement or number. Ask what it actually means for this person, then write that answer, not the first surface-level thing that comes to mind. Most carry several real, distinct traits -- naming only one is incomplete.
 - Depth includes chart position -- the same Karmic Debt means something different in a Life Path than in a Birthday number.
 - Include faith, spirituality, or a higher power when a placement's real, established tradition actually includes it. Accuracy, not political correctness, is the goal.
@@ -781,14 +782,8 @@ function extractJSON(text) {
   return trimmed;
 }
 
-async function callReportModel(env, userPrompt, ctx, repairNote, systemPrompt = REPORT_SYSTEM_PROMPT) {
-  const messages = repairNote
-    ? [
-        { role: 'user', content: userPrompt },
-        { role: 'assistant', content: repairNote.badText },
-        { role: 'user', content: repairNote.correction }
-      ]
-    : [{ role: 'user', content: userPrompt }];
+async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTEM_PROMPT) {
+  const messages = [{ role: 'user', content: userPrompt }];
 
   // Nothing here previously bounded how long a single attempt could take
   // if the connection to Anthropic stalled -- no timeout on the fetch, no
@@ -821,32 +816,26 @@ async function callReportModel(env, userPrompt, ctx, repairNote, systemPrompt = 
     body: JSON.stringify({
       model: 'claude-sonnet-5',
       // Thinking disabled was tried and rejected: it produced noticeably
-      // worse readings. Thinking enabled (adaptive) is the agreed setting
-      // for the real generation pass. Effort is medium, not high --
-      // high made a single attempt slow and expensive enough that a
-      // validation-triggered retry (below) could triple both. A repair
-      // attempt is a narrow, single-defect fix (wrong pronoun, bad JSON),
-      // not a job that needs a full reasoning pass, so it skips thinking
-      // entirely and gets a much smaller max_tokens -- output only, no
-      // thinking budget to share it with.
-      // max_tokens raised 48000 -> 72000: a real two-person reading hit
-      // the fallback after this session's prompt additions (per-item
-      // recall, thematic cross-system synthesis) made a relational
-      // reading -- combining two full charts, not one -- generate
-      // enough thinking + output to risk hitting the old ceiling
-      // mid-generation, which fails JSON validation, burns a retry, and
-      // can exhaust all 3 attempts into the deterministic fallback. This
-      // is headroom, not a quality knob: a generation that already fit
-      // under 48000 finishes exactly the same; only one that was being
-      // cut off actually changes. Sonnet 5 supports up to 128000 output
-      // tokens (confirmed via the claude-api skill), so this is still
-      // well under the real ceiling.
-      ...(repairNote
-        ? { max_tokens: 24000, thinking: { type: 'disabled' } }
-        : { max_tokens: 72000, thinking: { type: 'adaptive' }, output_config: { effort: 'medium' } }),
-      // A non-streaming call with a real thinking pass hit a real
-      // Cloudflare 524 -- the generation genuinely took longer than the
-      // edge's timeout for one long silent response. Streaming keeps the
+      // worse readings. Thinking enabled (adaptive) is the agreed setting.
+      // Effort is medium, not high -- high made a single attempt slow and
+      // expensive enough to risk the stall timeout below.
+      // max_tokens raised 48000 -> 72000: a two-person reading hit the
+      // fallback after a prompt addition (per-item recall, thematic
+      // cross-system synthesis) made a relational reading -- combining two
+      // full charts, not one -- generate enough thinking + output to risk
+      // hitting the old ceiling mid-generation, which fails JSON
+      // validation and (before MAX_REPORT_ATTEMPTS was cut to 1) burned a
+      // retry. This is headroom, not a quality knob: a generation that
+      // already fit under 48000 finishes exactly the same; only one that
+      // was being cut off actually changes. Sonnet 5 supports up to
+      // 128000 output tokens (confirmed via the claude-api skill), so
+      // this is still well under the actual ceiling.
+      max_tokens: 72000,
+      thinking: { type: 'adaptive' },
+      output_config: { effort: 'medium' },
+      // A non-streaming call with a thinking pass hit a Cloudflare 524 --
+      // the generation genuinely took longer than the edge's timeout for
+      // one long silent response. Streaming keeps the
       // connection actively receiving data the whole time instead of one
       // long wait, which is the documented fix for exactly this failure
       // mode on a large max_tokens request.
@@ -923,41 +912,42 @@ function countNameMentions(text, name) {
 }
 
 function flattenReadingText(reading) {
-  const parts = [reading.headline, reading.signature];
+  const parts = [reading.headline];
   (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
   return parts.filter(Boolean).join('\n');
 }
 
 // A response that parses as valid JSON can still violate the naming
-// rule (a real live case used "Partner A"/"Partner B" throughout,
-// never the actual first names, despite the system prompt). Don't just
-// trust the prompt held -- actually count how many times each real
-// first name shows up before this ever reaches a paying customer.
+// rule (a live case used "Partner A"/"Partner B" throughout, never the
+// person's first name, despite the system prompt). Don't just trust
+// the prompt held -- count how many times each first name shows up
+// before this ever reaches a paying customer. This no longer feeds a
+// repair pass (see generateReport) -- it only decides whether this
+// response gets accepted or discarded for the fallback, so what it
+// returns is a diagnostic description for the log, not an instruction
+// aimed at the model.
 function findNamingDefect(reading, rtype, p1, p2) {
   const text = flattenReadingText(reading);
-  // Real, repeated live case: a single reading used "she"/"her" throughout
-  // instead of "you", despite Rule 7 --
-  // and nothing ever checked for it, because this whole function used to
-  // return early for anything that wasn't a two-person reading. Only the
-  // two-person naming defect (below) was ever actually verified; a single
-  // reading's pronoun compliance shipped on trust alone. Flag it the same
-  // way: count third-person pronouns against actual "you"/name usage, and
-  // require a real, sustained pattern (not one incidental slip) before
-  // forcing a full rewrite.
+  // A separate, repeated live case: a single reading used "she"/"her"
+  // throughout instead of "you", and nothing ever caught it, because
+  // this whole function used to return early for anything that wasn't
+  // a two-person reading -- only the two-person defect below was ever
+  // actually checked. Flag it the same way: count third-person
+  // pronouns against actual "you"/name usage, and require a sustained
+  // pattern (not one incidental slip) before flagging it.
   if (rtype !== 'two-person') {
     const nameCount = countNameMentions(text, p1.first);
     const youCount = (text.match(/\byou(?:r|rs|self)?\b/gi) || []).length;
     const thirdPersonCount = (text.match(/\b(she|her|hers|he|him|his)\b/gi) || []).length;
     if (thirdPersonCount >= 3 && thirdPersonCount > (nameCount + youCount)) {
-      return `The reading refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you." A single reading must use "you" every time the person is referenced, never their name and never a third-person pronoun -- rewrite the full reading that way throughout.`;
+      return `Refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you" -- a single reading must use "you" every time, never a third-person pronoun.`;
     }
-    // Real live case: a reading used the person's name in sustained
-    // third-person narration -- "Jacob's sense of who Jacob is centers
-    // on..." -- instead of "you." A single reading never uses the
-    // person's name at all, only "you" -- so any real use of the name
-    // (not just a heavy majority of them) is a defect.
+    // A live case used the person's name in sustained third-person
+    // narration -- "Jacob's sense of who Jacob is centers on..." --
+    // instead of "you." A single reading never uses the person's name
+    // at all, so any use of it (not just a majority) is a defect.
     if (nameCount >= 1) {
-      return `The reading refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times). A single reading must always say "you" and never the person's name -- rewrite the full reading addressed directly as "you" throughout, with no use of the real name anywhere.`;
+      return `Refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times) -- a single reading must always say "you," never the person's name.`;
     }
     return null;
   }
@@ -965,7 +955,7 @@ function findNamingDefect(reading, rtype, p1, p2) {
   const p1Count = countNameMentions(text, p1.first);
   const p2Count = countNameMentions(text, p2.first);
   if (p1Count < minCount || p2Count < minCount) {
-    return `The reading barely used ${p1.first} and ${p2.first}'s real first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections). Every reference to either person must use their actual first name -- rewrite the full reading with the names used throughout, per the naming rule.`;
+    return `Barely used ${p1.first} and ${p2.first}'s first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections) -- every reference to either person must use their actual first name.`;
   }
   return null;
 }
@@ -1005,7 +995,7 @@ const CITATION_PATTERNS = [
 // in their own sentence.
 const CITATION_STACK_GAP = 12;
 function findCitationLeak(reading) {
-  const parts = [reading.headline, reading.signature];
+  const parts = [reading.headline];
   (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
   const text = parts.filter(Boolean).join('\n');
   const matches = [];
@@ -1035,69 +1025,55 @@ function findCitationLeak(reading) {
   for (let i = 1; i < spans.length; i++) {
     const gapText = text.slice(spans[i - 1].end, spans[i].start);
     if (gapText.length <= CITATION_STACK_GAP && /^[\s,;.\-–—]*(and|in|with|of)?[\s,;.\-–—]*$/i.test(gapText)) {
-      return `The reading stacks citations directly into the prose with no real sentence around them ("${spans[i - 1].text}${gapText}${spans[i].text}"), which real customers have gotten stuck on. Naming ONE placement or number and explaining it in the same sentence is fine and expected -- the defect is two or more stacked back-to-back with nothing connecting them. Rewrite the full reading so every citation sits inside its own real, explained sentence instead of a stacked list.`;
+      return `Stacks citations directly into the prose with no sentence around them ("${spans[i - 1].text}${gapText}${spans[i].text}") -- naming ONE placement or number and explaining it in the same sentence is fine, but two or more stacked back-to-back with nothing connecting them is not.`;
     }
   }
   return null;
 }
 
-// One attempt only, then straight to the deterministic fallback -- no
-// repair retries. If it fails, it fails fast instead of burning two
-// extra model calls first.
-const MAX_REPORT_ATTEMPTS = 1;
-
+// One shot only -- no repair pass. The old version retried up to 3
+// times, sending a failed response back to the model with a note on
+// what was wrong so it could fix it; that's gone. The prompt is what's
+// responsible for getting this right the first time, not a rewrite
+// cycle catching what it missed. findNamingDefect/findCitationLeak
+// below still run, but only to decide accept-or-discard -- a defect
+// no longer goes back to the model, it goes straight to the honest
+// "please try again" fallback instead.
+//
 // hdOnly is a TEMPORARY, experimental flag -- see
-// HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and this
-// branch once the test is done.
+// HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and the
+// branches below once the test is done.
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   const userPrompt = hdOnly
     ? buildHDOnlyRelationalPrompt(relLabel, p1, p2)
     : buildReportUserPrompt(rtype, relLabel, p1, p2);
   const systemPrompt = hdOnly ? HD_ONLY_RELATIONAL_SYSTEM_PROMPT : REPORT_SYSTEM_PROMPT;
-  const checkDefects = (reading) => findNamingDefect(reading, rtype, p1, p2) || findCitationLeak(reading);
 
-  let text = null, lastDetail = '';
-  for (let attempt = 1; attempt <= MAX_REPORT_ATTEMPTS; attempt++) {
-    // A repair note only makes sense when the previous attempt actually
-    // produced text to correct -- a network-level failure (a stalled
-    // connection, a Claude API error) has none, so that attempt starts
-    // fresh instead of building a repair conversation around nothing.
-    const repairNote = (attempt > 1 && text) ? { badText: text, correction: lastDetail } : undefined;
-    try {
-      text = await callReportModel(env, userPrompt, ctx, repairNote, systemPrompt);
-    } catch (error) {
-      // Previously any callReportModel failure (a stalled connection, a
-      // Claude API error) propagated straight out of this whole function,
-      // skipping both the remaining retries AND the guaranteed fallback
-      // below -- a real customer saw a raw API error string instead of
-      // ever reaching the "this literally cannot fail" fallback the
-      // comment below already promised. Treat it as just another failed
-      // attempt instead.
-      text = null;
-      lastDetail = error.message;
-      console.error(`Report generation attempt ${attempt}/${MAX_REPORT_ATTEMPTS} failed: ${lastDetail}`);
-      continue;
-    }
-    try {
-      const parsed = JSON.parse(extractJSON(text));
-      const defect = checkDefects(parsed);
-      if (!defect) return { reading: parsed, usedFallback: false };
-      lastDetail = defect;
-    } catch (e) {
-      lastDetail = 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.';
-    }
-    console.error(`Report generation attempt ${attempt}/${MAX_REPORT_ATTEMPTS} failed: ${lastDetail}`);
+  let text;
+  try {
+    text = await callReportModel(env, userPrompt, ctx, systemPrompt);
+  } catch (error) {
+    // A stalled connection or a Claude API error used to propagate
+    // straight out of this function, skipping the guaranteed fallback
+    // below -- a customer saw a raw API error string instead of ever
+    // reaching the "this literally cannot fail" fallback the comment
+    // below already promised. Treat it the same as any other failure.
+    console.error(`Report generation failed: ${error.message}`);
+    return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
   }
 
-  // Every real generation attempt failed -- log the real technical
-  // detail for debugging. A customer still always gets a reading (this
-  // literally cannot fail the way an AI generation can), but usedFallback
-  // now travels with it -- previously nothing distinguished this shorter,
-  // deterministic version from a real personalized one except a single
-  // buried sentence in its own signature line. A customer paying full
-  // price deserves a visible notice, not a sentence they have to notice
-  // themselves.
-  console.error(`All ${MAX_REPORT_ATTEMPTS} report generation attempts failed, using deterministic fallback. Last detail: ${lastDetail}`);
+  try {
+    const parsed = JSON.parse(extractJSON(text));
+    const defect = findNamingDefect(parsed, rtype, p1, p2) || findCitationLeak(parsed);
+    if (!defect) return { reading: parsed, usedFallback: false };
+    console.error(`Report generation defect, using deterministic fallback: ${defect}`);
+  } catch (e) {
+    console.error('Report generation returned invalid JSON, using deterministic fallback.');
+  }
+  // A customer still always gets a reading (this literally cannot fail
+  // the way an AI generation can), but usedFallback travels with it so
+  // the frontend can show a visible notice instead of a customer having
+  // to notice on their own that this wasn't the real, personalized one.
   return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
 }
 
