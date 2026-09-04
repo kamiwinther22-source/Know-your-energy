@@ -689,24 +689,13 @@ function buildHDOnlyRelationalPrompt(relLabel, p1, p2) {
 }
 
 // Guaranteed last resort -- no API call, so it cannot fail the way an
-// AI generation can. This used to rebuild a shorter reading straight
-// from Sun sign / Life Path / HD Type -- real content, but per direct
-// instruction that's gone now: it looked enough like a real reading
-// that people mistook it for one and stopped there instead of trying
-// again, which defeated the entire point of a "backup." There's no
-// honest shorter version of a real reading. This just says plainly
-// what happened and sends them back to actually get the real thing.
-function buildFallbackReading(rtype, p1, p2) {
-  const names = rtype === 'two-person' ? `${p1.first} and ${p2.first}'s` : `${p1.first}'s`;
-  return {
-    headline: 'Please Try Again',
-    sections: [{
-      eyebrow: 'Reading',
-      title: 'Please Try Again',
-      body: `${names} full chart data is above, but the reading itself didn't generate this time. There's no honest shorter version of a real reading -- please run it again for the real, full reading.`
-    }],
-    references: []
-  };
+// AI generation can. Empty sections on purpose: the frontend's own
+// fallback banner (index.html's fallbackNoticeHtml) already says
+// generation failed and to try again -- this used to repeat that same
+// point in a second, wordier paragraph directly below it, which read as
+// padding, not content. Nothing more to add here, so nothing more is said.
+function buildFallbackReading() {
+  return { headline: 'Please Try Again', sections: [], references: [] };
 }
 
 function buildReportUserPrompt(rtype, relLabel, p1, p2) {
