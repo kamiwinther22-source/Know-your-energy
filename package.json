@@ -3,9 +3,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "astronomia": "^4.2.0",
-    "circular-natal-horoscope-js": "^1.1.0",
-    "luxon": "^3.5.0",
-    "tz-lookup": "^6.1.25"
+    "circular-natal-horoscope-js": "^1.1.0"
   }
 }
