@@ -128,6 +128,7 @@ function normalizeCity(city, state, country) {
 function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
   const { year, month, day } = normalizeDOB(dob);
   const hasRealTime = !!(timeStr && timeStr.trim());
+  const hasRealCity = !!(city && city.trim());
   const { hour, minute } = normalizeTime(timeStr, ampm);
   const { cityName, countryCode } = normalizeCity(city, state, country);
   const result = computeAstrology({
@@ -138,32 +139,50 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
 
   // A "fallback-default" location means cities.js matched nothing at all
   // -- not even the built-in major-city list -- and silently substituted
-  // New York's coordinates. Ascendant, Midheaven, and every house cusp
-  // are latitude/longitude-sensitive, so silently computing them for the
-  // wrong place on Earth produces a confidently wrong chart with no sign
-  // anything went wrong. A customer paying for this deserves a clear
-  // "we couldn't find your city" over a wrong chart that looks correct.
-  if (result.location.source === "fallback-default") {
+  // New York's coordinates. When a city NAME was actually typed, that's a
+  // genuine typo/unrecognized-city case worth a clear error: Ascendant,
+  // Midheaven, and every house cusp are latitude/longitude-sensitive, so
+  // silently computing them for the wrong place on Earth produces a
+  // confidently wrong chart with no sign anything went wrong.
+  //
+  // But no city was ever typed is a different, expected case -- the form
+  // never requires one, the same way it never requires a birth time. This
+  // used to throw the exact same "couldn't find your city" error for a
+  // blank field as for a real typo, discarding the ENTIRE chart (not just
+  // Ascendant/houses) any time place was left out, which also meant the
+  // reading itself lost all astrology content, not just location-specific
+  // pieces. Fixed below: a blank city degrades the same permissive way a
+  // blank time already does, instead of throwing.
+  if (result.location.source === "fallback-default" && hasRealCity) {
     throw new Error(
       `Could not find "${city}" as a recognized city. Please check the spelling, or try the nearest larger city -- your chart depends on the exact birth location, so it can't be computed without a real match.`
     );
   }
+  const hasRealLocation = hasRealCity && result.location.source !== "fallback-default";
 
-  if (!hasRealTime) {
-    // Ascendant, Midheaven, and house placements all depend on the exact
-    // clock time of birth — without it they'd just be guesses computed from
-    // a defaulted noon, not the "omitted" behavior promised on the form.
-    // Sign-level positions don't depend on time-of-day, so those stay for
+  if (!hasRealTime || !hasRealLocation) {
+    // Ascendant, Midheaven, and house placements depend on the exact clock
+    // time AND the exact location of birth — missing either one, they'd
+    // just be guesses, not the "omitted" behavior promised on the form.
+    // Sign-level positions don't depend on either, so those stay for
     // every body/point, including the ones stored outside result.planets.
     //
-    // But a defaulted noon can still silently land on the wrong side of a
-    // sign boundary if a body changes sign sometime during the actual
-    // birth date -- rare (most bodies sit in one sign for weeks to years)
-    // but real. Check by computing sign-only charts (skipAspects: nothing
-    // else about them is needed) at the very start and very end of the
-    // same local day and diffing each body's sign between the two: equal
-    // means certain for the whole day; different means the exact birth
-    // time is what decides it, so that body is flagged rather than guessed.
+    // A defaulted noon (missing time) or a defaulted location (missing
+    // city -- the actual coordinates below still come from cityName/
+    // countryCode, which normalizeCity/findCity default to New York when
+    // blank) can each independently land a body on the wrong side of a
+    // sign boundary -- rare (most bodies sit in one sign for weeks to
+    // years) but real. Check by computing sign-only charts (skipAspects:
+    // nothing else about them is needed) at the very start and very end
+    // of the same local day and diffing each body's sign between the
+    // two: equal means certain for the whole day; different means the
+    // missing piece (time, location, or both) is what decides it, so
+    // that body is flagged rather than guessed. This is deliberately the
+    // same full-day check regardless of which piece is missing -- when
+    // time is known but location isn't, a real per-timezone check would
+    // be tighter, but the full-day range is a safe, conservative
+    // superset that never guesses wrong, just occasionally flags a body
+    // as uncertain that a timezone-aware check could have kept certain.
     const dayStart = computeAstrology({
       year, month, day, hour: 0, minute: 0,
       cityName, countryCode, state: state || "", skipAspects: true
@@ -200,7 +219,8 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
       a => a.point1 !== "Ascendant" && a.point2 !== "Ascendant" &&
            a.point1 !== "Midheaven" && a.point2 !== "Midheaven"
     );
-    result.timeUnknown = true;
+    result.timeUnknown = !hasRealTime;
+    result.locationUnknown = !hasRealLocation;
   }
 
   return result;
@@ -731,7 +751,9 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     const planetLine = (pl) => `${pl.name} in ${pl.sign} ${pl.degreesInSign}°${pl.house ? ` (house ${pl.house})` : ''}${pl.retrograde ? ' Rx' : ''}`;
     const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
     const astrologyLines = [
-      a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
+      (a.timeUnknown && a.locationUnknown) ? 'Birth time and birth location not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' :
+      a.timeUnknown ? 'Birth time not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' :
+      a.locationUnknown ? 'Birth location not provided — Ascendant, Midheaven, and house placements are unavailable. Do not guess or invent them; cover planets by sign only.' : null,
       (a.planets || []).map(planetLine).join(', '),
       [angle('Ascendant', a.ascendant), angle('Midheaven', a.midheaven), angle('North Node', a.northNode), angle('South Node', a.southNode), angle('Chiron', a.chiron), angle('Lilith', a.lilith)].filter(Boolean).join(', '),
       a.houses?.length ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(', ')}` : null,
