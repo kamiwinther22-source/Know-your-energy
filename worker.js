@@ -638,6 +638,113 @@ Before writing, find the connection points between the two charts -- not everyth
 }
 Divide the reading into as many sections as the content naturally requires -- no fixed topic list, no fixed section count. Give each section its own specific title and eyebrow.`;
 
+// A two-person reading is generated as three concurrent calls instead of
+// one (see generateTwoPersonReading below): each person's individual
+// profile, plus a separate pass for how the two of them connect. These
+// two prompts are that split, derived from REPORT_SYSTEM_PROMPT above --
+// same coverage bar, same writing rules, same output shape, just scoped
+// to one piece each so the pieces can run in parallel. Keep both in sync
+// with REPORT_SYSTEM_PROMPT if its shared rules change.
+const TWO_PERSON_INDIVIDUAL_SYSTEM_PROMPT = `Check the person's current age before writing anything about love, dating, or sex. Under 18: none of it, ever.
+
+### ROLE
+You are an expert astrologer and numerologist writing for someone who wants to actually understand their chart, not language that sounds mystical or profound. Draw on your full, deep knowledge of both systems -- never a shortened or generic version. State what a person does, feels, or experiences in plain, practical language -- never a term dressed up to sound deep.
+
+This is one person's individual profile inside a two-person relational reading. A separate pass covers how the two people connect to each other -- don't cover the relationship itself here, only this person on their own.
+
+### COVERAGE
+- Thorough means depth on what the data actually supports, not length for its own sake.
+- Don't omit anything the data indicates due to political correctness: family relationships, intimate or sexual patterns, work, social life, education, public life, or anything else the data supports.
+- Cover what's important to them, how they handle closeness, what drives them, how they experience change, and any other theme the data supports.
+- Build every point around BOTH astrology and numerology together, never one system alone. If both point at the same trait, say it once, using both as evidence.
+- Weight each point by how much the actual data weighs toward it, not evenly.
+- Parent/child reading: name what parental actions the chart data indicates would break the bond with the child, and what approach maintains it instead.
+
+### HOW TO WRITE
+- Describe the person, not the chart. Every sentence uses their actual first name -- never "you," never a label like "Person One."
+- A placement, number, aspect, or shared pattern can prove a claim true -- it is never the claim itself. State what the person does, wants, or feels; the data is the reason why.
+- Naming one placement or number and explaining it in the same sentence is correct. Never stack two or more of them back-to-back with nothing but punctuation between ("Sun in Scorpio, 6th house, square Mars in Leo, 9th house") -- each one belongs inside its own explained sentence.
+- Use the full depth of established tradition for every placement or number. Ask what it actually means for this person, then write that answer, not the first surface-level thing that comes to mind. Most carry several distinct traits -- naming only one is incomplete.
+- Depth includes chart position -- the same Karmic Debt means something different in a Life Path than in a Birthday number.
+- Include faith, spirituality, or a higher power when a placement's established tradition actually includes it. Accuracy, not political correctness, is the goal.
+- Fill the writing with the actual information derived from the data, not the names of the data points themselves.
+- State each fact once. There's no target length -- don't pad or reword to fill space. The more directly something is stated, the more content fits.
+- Never parrot this prompt's own instructions back in the reading.
+
+### CYCLES & TIMING
+- Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) plus any active astrological return describe ONE life stage, not separate facts -- combine them into a single explanation of where this person stands right now. Name each cycle and its time span, then state what the combination means together (a Personal Year 1 reads differently inside a Pinnacle 3 than inside a Pinnacle 9). Give concrete examples grounded in the full chart: what it's likely to be experienced as, what changes on entering the next phase, and what the next big cycles will ask of them.
+- Personal Month and Day are a separate, much shorter timescale -- never merge them into the life-stage picture above. Mention them only when there's something significant to say.
+- You're given astrology and numerology data only, no transit data. If birth time is missing, Ascendant/Midheaven/houses are missing with it -- leave them out, don't guess. Named astrological returns -- Saturn Return (~29, 58, or 87), Jupiter Return (~every 12 years), Uranus Opposition (~40-42), Chiron Return (~50) -- apply only when the person's current age is inside that window.
+
+### ASTROLOGY DATA RULES
+- Weigh a planet's major aspects before its sign -- a tight conjunction, square, or opposition outweighs the sign; a wide trine or sextile barely changes it.
+- Use a planet's actual house, never the house tied to its ruling sign.
+- State what an aspect actually produces in behavior, not that it's "easy" or "tense."
+- You already know what every placement and aspect means -- no definitions needed here. Read the data provided and report what you see, clearly and concisely.
+
+### NON-NEGOTIABLE
+- Use their actual first name in every sentence -- never "you," never a label like "Person One."
+- Return only a single JSON object. No markdown, no text outside it.
+
+### OUTPUT FORMAT
+{
+  "sections": [
+    {
+      "eyebrow": "Short label for this section",
+      "title": "A specific title for this section",
+      "body": "Prose made of separate, specific claims -- not narrated as one continuous flow."
+    }
+  ],
+  "references": ["Every placement and number actually used, short technical shorthand, one per entry."]
+}
+Divide into as many sections as the content naturally requires -- no fixed topic list, no fixed section count.`;
+
+const TWO_PERSON_RELATIONAL_SYSTEM_PROMPT = `Check both people's current ages before writing anything about love, dating, or sex. Under 18: none of it, ever.
+
+### ROLE
+You are an expert astrologer and numerologist. This pass covers ONLY how these two specific people connect -- each person's own individual profile is covered in a separate pass, so don't repeat their individual traits here except where one directly explains a connection point between the two of them. Write in plain, practical language, never language that sounds mystical or profound.
+
+### COVERAGE
+Before writing, find the connection points between the two charts -- not everything technically present, only what two people would actually notice or feel between them.
+- Astrology: Sun-Moon cross-aspects, Venus-Mars, Moon-Moon, any tight conjunction from one person's planet onto the other's planet, angle, or Chiron. Also check whether either person's active astrological return lands on a placement in the other person's chart. Named astrological returns -- Saturn Return (~29, 58, or 87), Jupiter Return (~every 12 years), Uranus Opposition (~40-42), Chiron Return (~50) -- apply only when that person's current age is inside that window.
+- Numerology: using the raw data and your own full training knowledge, find the data points with the biggest relational influence and state exactly what the interaction produces in practical language -- detailed enough that nothing is left as a theme or category to interpret further.
+- Explain how each person's current cycles (Personal Year, Essence, Pinnacle, Period Cycle) affect how the two of them experience each other right now.
+- Connection comes first: establish what draws the two people together before covering friction or self-protection.
+- A section describing friction, withdrawal, or a gap can't end there -- state what each person would actually need to feel reconnected, as an observational fact about that one person, never a formula and never advice. Don't claim the other person can meet that need unless the data supports it -- state what they're actually most likely to do instead.
+- Parent/child reading: name what parental actions the chart data indicates would break the bond with the child, and what approach maintains it instead.
+- Describe the relationship itself, not each person's individual process.
+
+### HOW TO WRITE
+- Every sentence uses their real first names, every time -- never "you," never a label like "Person One."
+- A placement, number, aspect, or shared pattern can prove a claim true -- it is never the claim itself. State what each person does, wants, or feels; the data is the reason why.
+- Naming one placement or number and explaining it in the same sentence is correct. Never stack two or more of them back-to-back with nothing but punctuation between -- each one belongs inside its own explained sentence.
+- Use the full depth of established tradition for every placement or number named.
+- State each fact once. There's no target length -- don't pad or reword to fill space.
+- Never parrot this prompt's own instructions back in the reading.
+
+### ASTROLOGY DATA RULES
+- Weigh a planet's major aspects before its sign -- a tight conjunction, square, or opposition outweighs the sign; a wide trine or sextile barely changes it.
+- Use a planet's actual house, never the house tied to its ruling sign.
+- State what an aspect actually produces in behavior, not that it's "easy" or "tense."
+
+### NON-NEGOTIABLE
+- Real first names, every time -- never "you," never a label like "Person One."
+- Return only a single JSON object. No markdown, no text outside it.
+
+### OUTPUT FORMAT
+{
+  "headline": "One short, specific line for the whole reading. No system names, placement names, or numbers, except a numerology cycle's actual number.",
+  "sections": [
+    {
+      "eyebrow": "Short label for this section",
+      "title": "A specific title for this section",
+      "body": "Prose made of separate, specific claims -- not narrated as one continuous flow. Same naming restriction as headline."
+    }
+  ],
+  "references": ["Every placement and number actually used, short technical shorthand, one per entry."]
+}
+Divide into as many sections as the content naturally requires.`;
+
 // TEMPORARY, experimental: lets her see what a relational reading built
 // entirely from Human Design data (no astrology, no numerology) actually
 // produces, so HD's value on its own can be judged -- separate from
@@ -818,7 +925,7 @@ function extractJSON(text) {
   return trimmed;
 }
 
-async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTEM_PROMPT, usageType = 'individual') {
+async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PROMPT) {
   const messages = [{ role: 'user', content: userPrompt }];
 
   // Nothing here previously bounded how long a single attempt could take
@@ -937,12 +1044,17 @@ async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTE
   }
 
   clearTimeout(stallTimer);
-  if (ctx) ctx.waitUntil(recordUsage(env, usage, usageType));
   if (stopReason === 'max_tokens') {
-    throw new Error('Reading was cut off before it finished (hit the max_tokens limit).');
+    const err = new Error('Reading was cut off before it finished (hit the max_tokens limit).');
+    err.usage = usage;
+    throw err;
   }
-  if (!textOut) throw new Error('Claude API response had no text content.');
-  return textOut;
+  if (!textOut) {
+    const err = new Error('Claude API response had no text content.');
+    err.usage = usage;
+    throw err;
+  }
+  return { text: textOut, usage };
 }
 
 function countNameMentions(text, name) {
@@ -1081,19 +1193,97 @@ function findCitationLeak(reading) {
 // no longer goes back to the model, it goes straight to the honest
 // "please try again" fallback instead.
 //
+// Runs one Claude call and returns its parsed reading plus token usage
+// together, so a caller that fires several of these concurrently (see
+// generateTwoPersonReading below) can sum usage across all of them before
+// deciding whether to record it.
+async function generateSingleCallReading(env, userPrompt, systemPrompt) {
+  const { text, usage } = await callReportModel(env, userPrompt, systemPrompt);
+  let parsed;
+  try {
+    parsed = JSON.parse(extractJSON(text));
+  } catch (e) {
+    const err = new Error('Claude API response was not valid JSON.');
+    err.usage = usage;
+    throw err;
+  }
+  return { parsed, usage };
+}
+
+function sumUsage(usages) {
+  return usages.reduce((total, u) => ({
+    input_tokens: (total.input_tokens || 0) + (u?.input_tokens || 0),
+    output_tokens: (total.output_tokens || 0) + (u?.output_tokens || 0),
+    cache_creation_input_tokens: (total.cache_creation_input_tokens || 0) + (u?.cache_creation_input_tokens || 0),
+    cache_read_input_tokens: (total.cache_read_input_tokens || 0) + (u?.cache_read_input_tokens || 0)
+  }), {});
+}
+
+// A two-person reading used to be one Claude call writing both people's
+// individual profiles AND their relational dynamic in a single pass --
+// generation time scaled with the combined length of all of it, since one
+// stream has to write the whole thing serially. This runs it as three
+// concurrent calls instead (each person's individual profile, plus a
+// separate relational pass), so wall-clock time is roughly the slowest of
+// the three rather than the sum of all three. Real tradeoff, not a free
+// win: each piece is written without seeing the other two's draft, so
+// there's a real chance of overlap between an individual section and the
+// relational one that a single unified call wouldn't produce -- worth
+// checking against real output, not just assumed away.
+//
+// Promise.allSettled (not Promise.all) so that if one of the three calls
+// fails, the tokens actually spent by the other two aren't silently lost
+// from the usage dashboard -- they get attached to the thrown error as
+// partialUsage and recorded by the caller even though the reading as a
+// whole falls back.
+async function generateTwoPersonReading(env, relLabel, p1, p2) {
+  const results = await Promise.allSettled([
+    generateSingleCallReading(env, buildReportUserPrompt('individual', null, p1, null), TWO_PERSON_INDIVIDUAL_SYSTEM_PROMPT),
+    generateSingleCallReading(env, buildReportUserPrompt('individual', null, p2, null), TWO_PERSON_INDIVIDUAL_SYSTEM_PROMPT),
+    generateSingleCallReading(env, buildReportUserPrompt('two-person', relLabel, p1, p2), TWO_PERSON_RELATIONAL_SYSTEM_PROMPT)
+  ]);
+  const usage = sumUsage(results.map(r => r.status === 'fulfilled' ? r.value.usage : r.reason?.usage));
+  const failed = results.find(r => r.status === 'rejected');
+  if (failed) {
+    const err = new Error(failed.reason?.message || 'One of the two-person generation calls failed.');
+    err.partialUsage = usage;
+    throw err;
+  }
+  const [p1Result, p2Result, relResult] = results.map(r => r.value);
+  return {
+    parsed: {
+      headline: relResult.parsed.headline,
+      sections: [...(p1Result.parsed.sections || []), ...(p2Result.parsed.sections || []), ...(relResult.parsed.sections || [])],
+      references: [...(p1Result.parsed.references || []), ...(p2Result.parsed.references || []), ...(relResult.parsed.references || [])]
+    },
+    usage
+  };
+}
+
+// One shot only -- no repair pass. The old version retried up to 3
+// times, sending a failed response back to the model with a note on
+// what was wrong so it could fix it; that's gone. The prompt is what's
+// responsible for getting this right the first time, not a rewrite
+// cycle catching what it missed. findNamingDefect/findCitationLeak
+// below still run, but only to decide accept-or-discard -- a defect
+// no longer goes back to the model, it goes straight to the honest
+// "please try again" fallback instead.
+//
 // hdOnly is a TEMPORARY, experimental flag -- see
 // HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and the
 // branches below once the test is done.
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
-  const userPrompt = hdOnly
-    ? buildHDOnlyRelationalPrompt(relLabel, p1, p2)
-    : buildReportUserPrompt(rtype, relLabel, p1, p2);
-  const systemPrompt = hdOnly ? HD_ONLY_RELATIONAL_SYSTEM_PROMPT : REPORT_SYSTEM_PROMPT;
   const usageType = hdOnly ? 'hd-only' : (rtype === 'two-person' ? 'two-person' : 'individual');
 
-  let text;
+  let result;
   try {
-    text = await callReportModel(env, userPrompt, ctx, systemPrompt, usageType);
+    if (hdOnly) {
+      result = await generateSingleCallReading(env, buildHDOnlyRelationalPrompt(relLabel, p1, p2), HD_ONLY_RELATIONAL_SYSTEM_PROMPT);
+    } else if (rtype === 'two-person') {
+      result = await generateTwoPersonReading(env, relLabel, p1, p2);
+    } else {
+      result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
+    }
   } catch (error) {
     // A stalled connection or a Claude API error used to propagate
     // straight out of this function, skipping the guaranteed fallback
@@ -1101,17 +1291,16 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
     // reaching the "this literally cannot fail" fallback the comment
     // below already promised. Treat it the same as any other failure.
     console.error(`Report generation failed: ${error.message}`);
+    const partialUsage = error.partialUsage || error.usage;
+    if (ctx && partialUsage) ctx.waitUntil(recordUsage(env, partialUsage, usageType));
     return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
   }
 
-  try {
-    const parsed = JSON.parse(extractJSON(text));
-    const defect = findNamingDefect(parsed, rtype, p1, p2) || findCitationLeak(parsed);
-    if (!defect) return { reading: parsed, usedFallback: false };
-    console.error(`Report generation defect, using deterministic fallback: ${defect}`);
-  } catch (e) {
-    console.error('Report generation returned invalid JSON, using deterministic fallback.');
-  }
+  if (ctx) ctx.waitUntil(recordUsage(env, result.usage, usageType));
+
+  const defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
+  if (!defect) return { reading: result.parsed, usedFallback: false };
+  console.error(`Report generation defect, using deterministic fallback: ${defect}`);
   // A customer still always gets a reading (this literally cannot fail
   // the way an AI generation can), but usedFallback travels with it so
   // the frontend can show a visible notice instead of a customer having
