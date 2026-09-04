@@ -203,12 +203,13 @@ single Cloudflare Worker file. No test suite, no linter, no bundler, no
 | `index.html` (~2,300 lines) | The entire front end — markup, CSS, and vanilla JS all in one file. No React/Vue/build tooling. Contains the entry/data-form page (title, pricing, birth-data fields, results grid, tap-to-expand modal) described below. Key in-file data objects: `ASTRO_DEFS`, `NUM_DEFS`, `HD_DEFS`, `GATES`, `CHANNELS` (glossary/definition content), and the `ar()` function (astrology placement list renderer). Deployed via **GitHub Pages**, not the Worker. |
 | `worker.js` (~890 lines) | Cloudflare Worker — the entire backend API. Single `export default { fetch(request, env, ctx) {...} }` handler with hand-rolled `if (url.pathname === ...)` routing (no router library). Deployed via `wrangler deploy`, triggered by the `Deploy Worker` GitHub Action. |
 | `astro-engine.js` | Local astrology calculation (`computeAstrology`) — wraps `circular-natal-horoscope-js` (Moshier ephemeris). No external API, no rate limit. Imported by `worker.js`. |
+| `human-design-engine.js` | Local Human Design calculation (`computeHumanDesign`) — Personality/Design planetary positions via `astronomia` (pure JS, VSOP87 tables imported per-planet by subpath, not the whole `astronomia/data` aggregator, which would drag in ~10MB of unused D-series/lunar tables), mapped through a vendored, verified copy of the 64-gate mandala and gate/channel/center reference data to Type/Authority/Profile/Gates. Vendored and trimmed from the MIT-licensed `free-human-design` npm package rather than depended on directly, because that package's optional Swiss Ephemeris backend does a literal `require('./swisseph')` (plus `fs`/`path`) that a bundler resolves eagerly at build time even though it's never actually reached — that broke bundling for Cloudflare Workers outright. No external API, no rate limit, no `HumanDesign_key` secret. Imported by `worker.js`. Uses `tz-lookup` (pure JS, no dependencies) to resolve the same lat/lng `findCity` already gives astrology into an IANA timezone name. |
 | `numerology-calculator.js` | Pure pythagorean-numerology calculations (`calculateFullChart` and its per-number helpers: life path, expression, soul urge, pinnacles, challenges, etc). Imported by `worker.js`. |
 | `cities.js` | Birth-city → lat/lng lookup (`findCity`). Two layers: the generated `cities-data.js` dataset, then a small built-in `MAJOR_CITIES` list, then a New York fallback. |
 | `cities-data.js` | **Generated file — do not hand-edit.** ~31,000 world cities from GeoNames. Starts empty in the repo; populated by `build-cities.mjs` during the deploy workflow. |
 | `build-cities.mjs` | Node script that downloads GeoNames' `cities15000.zip`, unzips it (hand-rolled zip parsing, no dependency), and writes `cities-data.js`. Runs automatically in CI before every Worker deploy; safe to fail (deploy continues with the built-in city list if the download hiccups). |
 | `wrangler.toml` | Worker config: name `know-your-energy`, entry `worker.js`, one KV binding (`PASSES`, used for pass records and the running usage/cost counter). |
-| `package.json` | One real dependency: `circular-natal-horoscope-js`. `"type": "module"` — everything is ES modules. |
+| `package.json` | Dependencies: `circular-natal-horoscope-js` (astrology), `astronomia` + `luxon` + `tz-lookup` (Human Design, all pure JS). `"type": "module"` — everything is ES modules. |
 | `CNAME` | GitHub Pages custom domain: `know-your-energy.com`. |
 
 ### Worker API surface (`worker.js`)
@@ -239,9 +240,12 @@ All routes live in the single `fetch` handler, gated by `CORS_HEADERS` (open,
 ### Required secrets / env (not in the repo)
 
 Set via `wrangler secret put <NAME>` (or the GitHub Actions secrets used by
-`Deploy Worker`): `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `HumanDesign_key`,
-plus `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` for the deploy action
-itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
+`Deploy Worker`): `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, plus
+`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` for the deploy action
+itself. `HumanDesign_key` is no longer needed -- Human Design moved to local
+computation (`human-design-engine.js`); the secret can be removed from
+Cloudflare once confirmed live. The `PASSES` KV namespace binding lives in
+`wrangler.toml`.
 
 ## Development workflow
 
@@ -407,6 +411,36 @@ resurrect the "two pages, entry form is done" framing.
 
 ## Technical gotchas already paid for once
 
+- **A dependency's optional/runtime-guarded `require()` of a native module
+  still breaks a Cloudflare Worker bundle, even if that code path never
+  actually runs.** Hit this integrating Human Design's local calculation:
+  `free-human-design`'s optional Swiss Ephemeris backend does a literal
+  `require('./swisseph')` (plus `fs`/`path`) inside a function only called
+  when an env var opts into it -- but esbuild (what `wrangler deploy` bundles
+  with) resolves file-literal `require()` calls at bundle time regardless of
+  the runtime guard around them, so the build fails outright with "Could not
+  resolve fs/path/swisseph" even though that code is dead weight for this
+  app. There's no config flag in `wrangler.toml` for per-module bundler
+  externals worth relying on for this. Fixed by vendoring only the actually-
+  used pure-JS computation (`human-design-engine.js`) directly into the repo
+  instead of depending on the npm package as-is, with the native-backend
+  branch removed at the source. Verify any new dependency actually bundles
+  clean before trusting it -- `npx esbuild <entry> --bundle --platform=node
+  --format=esm --outfile=/tmp/test.js` reproduces exactly what `wrangler
+  deploy` will hit, without needing a real Cloudflare deploy to find out.
+- **A dependency's default/aggregator import can silently pull in every
+  data file it ships, not just the ones actually used.** Also hit building
+  `human-design-engine.js`: importing `astronomia/data` (the convenience
+  aggregator) bundled all 8 VSOP87 D-series planet tables and two lunar
+  tables (~10MB) that nothing in the code path actually touches -- a single
+  object literal with everything pre-computed isn't tree-shakeable by
+  property access. Importing each needed VSOP87 B-series table by its own
+  subpath (`astronomia/data/vsop87Bmercury`, etc.) instead dropped the
+  bundle from 10MB to 3.3MB raw (~1MB gzipped) with byte-identical output.
+  When a dependency ships both a single "everything" entry point and
+  granular subpath exports, prefer the granular ones and verify with a real
+  bundle-size check, not an assumption that "only using one property" means
+  only that property's cost is paid.
 - **Never merge a long-lived feature branch to `main` wholesale without
   checking what else is in it, beyond the specific work you're trying to
   ship.** The `claude/vibrant-glossy-website-design-tgzzrd` branch had
