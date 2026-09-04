@@ -2493,6 +2493,40 @@ function hdWheelWrap(hd){
   }
 })();
 
+// Real fixed-star technique's own content depends on WHICH point Sirius
+// actually touches, not just that it touches something -- personal-
+// identity points (Sun/Moon/an angle) carry the core renown theme
+// directly; Mars/Jupiter add a wealth/leadership flavor; anything else
+// still counts, just more generally. How a contact plays out follows
+// ordinary aspect-type convention (not specific to Sirius): Conjunction
+// is the strongest, most direct form; Square is friction/a real test;
+// Trine and Sextile come more easily; Opposition plays out largely
+// through another person. Point/aspect strings here have to match
+// astro-engine.js's real output exactly (confirmed by running it
+// locally) -- "Ascendant"/"Midheaven", and "Conjunction"/"Square"/
+// "Trine"/"Sextile"/"Opposition".
+const SIRIUS_IDENTITY_POINTS=['Sun','Moon','Ascendant','Midheaven'];
+const SIRIUS_WEALTH_POINTS=['Mars','Jupiter'];
+function siriusPointTheme(point){
+  if(SIRIUS_IDENTITY_POINTS.includes(point))return 'renown and being publicly known, tied directly to a core part of who you are';
+  if(SIRIUS_WEALTH_POINTS.includes(point))return 'wealth or leadership gained specifically through visibility — being seen doing the thing, not just doing it';
+  return 'a pull toward visibility and recognition, running through this specific part of your chart rather than your core identity directly';
+}
+function siriusAspectFraming(aspect){
+  if(aspect==='Conjunction')return 'the strongest, most direct form real fixed-star technique recognizes';
+  if(aspect==='Square')return 'real friction — this theme gets tested rather than handed to you easily';
+  if(aspect==='Trine'||aspect==='Sextile')return 'this theme comes relatively easily';
+  if(aspect==='Opposition')return 'this theme plays out largely through other people, not internally';
+  return 'a real, if looser, version of this theme';
+}
+function siriusPersonalNote(hits){
+  if(!hits.length)return null;
+  const tightest=hits[0];
+  const point=tightest.point1==='Sirius'?tightest.point2:tightest.point1;
+  const article=/^[AEIOU]/.test(tightest.aspect)?'an':'a';
+  return `Your tightest contact is ${article} ${tightest.aspect} to your ${point}${tightest.orb!=null?` (${tightest.orb}°)`:''} — ${siriusAspectFraming(tightest.aspect)}. What that means concretely: ${siriusPointTheme(point)}.`;
+}
+
 function ar(astro,errMsg){
   if(!astro||astro.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   const planets=astro.planets||[];
@@ -2543,7 +2577,7 @@ function ar(astro,errMsg){
     extraPoints.forEach(p=>{
       const name=p.name;
       const glyph=glyphIcon(name,PLANET_COLOR[name]);
-      let signOut, defNum=p.sign;
+      let signOut, defNum=p.sign, note=null;
       if(name==='Sirius'){
         const hits=(astro.aspects||[]).filter(a=>a.point1==='Sirius'||a.point2==='Sirius')
           .sort((a,b)=>(a.orb??99)-(b.orb??99));
@@ -2551,13 +2585,14 @@ function ar(astro,errMsg){
           ? hits.map(a=>`${a.aspect} ${a.point1==='Sirius'?a.point2:a.point1}${a.orb!=null?` (${a.orb}°)`:''}`).join(', ')
           : 'No close aspects in this chart';
         defNum=null;
+        note=siriusPersonalNote(hits);
       }else if(p.signUncertain){
         signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
       }else{
         signOut=p.sign;
         if(p.house)signOut+=` · House ${p.house}`;
       }
-      h+=arow(glyph+name,signOut,POINT_KEY[name],defNum);
+      h+=arow(glyph+name,signOut,POINT_KEY[name],defNum,note);
     });
   }
   return h||apend('Unavailable');
