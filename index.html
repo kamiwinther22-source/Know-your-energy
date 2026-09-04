@@ -353,6 +353,13 @@ body{
 /* Differs from .loading-warn above it by weight/style, not by dimming
    the color -- full-strength black on both, per the never-fade-text rule. */
 .loading-note{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-style:italic;color:#000000;line-height:1.55;}
+/* Compact version of the same hourglass, for the Reading card's pending
+   state -- chart cards render as soon as their own data is ready and
+   don't wait on this; only the Reading panel shows it, while the AI
+   generation call runs in the background. */
+.report-pending{display:flex;flex-direction:column;align-items:center;text-align:center;padding:1.4rem 0.5rem;}
+.report-pending .hourglass{margin-bottom:0.7rem;}
+.report-pending-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;color:var(--card-text);}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
@@ -827,10 +834,18 @@ body{
   <div class="loading-note">This takes a little while because we'd rather it be thorough and accurate than fast. Thanks for your patience.</div>
 </div>
 <script>
-(function(){
-  const top=document.querySelector('.hg-sand-top'), bottom=document.querySelector('.hg-sand-bottom'), drop=document.querySelector('.hg-drop');
+// Pulled out of its original self-running IIFE so the same animation can
+// drive more than one hourglass instance -- the reading card's own
+// pending state (see reportSlot's pending branch / fillReading) uses a
+// second copy of this same SVG, scoped to its own root element instead
+// of the page-wide querySelector this used to do (which would only ever
+// have found the first hourglass in the DOM). Stops itself once its
+// root element is no longer in the document, instead of leaking an
+// infinite requestAnimationFrame loop after that element gets replaced.
+function animateHourglass(root){
+  const top=root.querySelector('.hg-sand-top'), bottom=root.querySelector('.hg-sand-bottom'), drop=root.querySelector('.hg-drop');
   if(!top||!bottom||!drop) return;
-  // Real funnel geometry from the outline path: top opening (8,4)-(52,4)
+  // Funnel geometry from the outline path: top opening (8,4)-(52,4)
   // tapering along the diagonals to the neck (28,40)-(32,40); bottom is
   // the same shape mirrored to (8,80)-(52,80). Sand points are computed
   // from these same lines every frame, so they stay flush against the
@@ -838,6 +853,7 @@ body{
   const NECK_L=28, NECK_R=32, NECK=30, TOP_Y=4, MID_Y=40, BOT_Y=80;
   const CYCLE=4200, PAUSE=300, DROP_CYCLE=650;
   function frame(now){
+    if(!top.isConnected)return;
     const t=now%CYCLE;
     const p=Math.min(Math.max(t-PAUSE,0)/(CYCLE-PAUSE*2),1);
     const y=TOP_Y+p*(MID_Y-TOP_Y);
@@ -857,7 +873,8 @@ body{
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
-})();
+}
+animateHourglass(document.getElementById('loading'));
 </script>
 
 <div class="results-wrap" id="resultsWrap">
@@ -2763,7 +2780,7 @@ function quadItem(nm,sys,rows,preHtml,wheelSvg,rowNum){
   const wheelHtml=wheelSvg?`<div class="quad-wheel">${wheelSvg}</div>`:'';
   return `<div class="quad-item" style="grid-row:${rowNum};" data-card-idx="${idx}"><div class="quad-title">${escapeHtml(nm)} \u00b7 ${sys}</div>${wheelHtml}<div class="dplist">${rows}</div></div>`;
 }
-function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback){
+function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback,pending){
   // Raw (unescaped) title for cardRegistry -- the modal sets this via
   // .textContent (see cardExpandTitle further down), which is already
   // injection-safe on its own; pre-escaping here and THEN setting it as
@@ -2772,8 +2789,18 @@ function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback){
   // embedded directly into an HTML string, not where it's stored raw.
   const titleRaw=`${names} \u00b7 Reading`;
   if(!report){
+    // Chart cards render as soon as their own data is ready and don't
+    // wait on the AI reading -- this is what fills the Reading slot
+    // while that generates separately in the background (see
+    // renderCharts/fillReading). id="readingSlot" is what lets
+    // fillReading find and replace this exact element once the real
+    // reading (or an error) comes back, no matter which of these three
+    // branches actually rendered it.
+    if(pending){
+      return `<div class="panel-auto" id="readingSlot" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">Reading</div><div class="dprow report-pending"><svg class="hourglass" aria-hidden="true" viewBox="0 0 60 84" width="34" height="47"><path class="hg-outline" d="M8,4 H52 M8,80 H52 M8,4 C8,20 20,30 29,40 C20,50 8,60 8,80 M52,4 C52,20 40,30 31,40 C40,50 52,60 52,80" fill="none" stroke="#8A96EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><polygon class="hg-sand-top" fill="#8A96EE"/><polygon class="hg-sand-bottom" fill="#8A96EE"/><circle class="hg-drop" cx="30" cy="41" r="1.6" fill="#8A96EE"/></svg><p class="report-pending-txt">Generating your reading&hellip;</p></div></div></div>`;
+    }
     if(!reportError)return '';
-    return `<div class="panel-error" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now: ${escapeHtml(reportError)}</p></div></div></div>`;
+    return `<div class="panel-error" id="readingSlot" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now: ${escapeHtml(reportError)}</p></div></div></div>`;
   }
   // usedFallback means the real personalized AI reading failed after
   // every attempt. There's no deterministic backup reading anymore --
@@ -2806,7 +2833,7 @@ function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback){
   // existed anywhere printable; only these two names did, no matter how
   // print/overflow CSS was tuned, because the modal draws its content
   // from cardRegistry (a JS array), not from anything in the page itself.
-  return `<div class="panel-auto" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(cardNames)}</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
+  return `<div class="panel-auto" id="readingSlot" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(cardNames)}</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
 }
 
 // ---------- numerology date explorer ----------
@@ -2980,7 +3007,14 @@ DRAFT_FIELD_IDS.forEach(id=>{
   if(el)el.addEventListener('input', saveDraft);
 });
 
-function render(p1,p2,r,reportErr,reportUsedFallback){
+// pending=true builds the grid with the Reading slot showing the
+// hourglass instead of an empty/error state -- used by renderCharts()
+// below so the chart cards can appear the moment their own (fast, no AI
+// call) data is ready, without waiting on the separate, slower /report
+// call. fillReading() then swaps just that one slot in place once the
+// real reading (or an error) actually comes back, instead of this whole
+// function running again and rebuilding cards that haven't changed.
+function render(p1,p2,r,reportErr,reportUsedFallback,pending){
   cardRegistry=[];
   // Kept globally (not just as render()'s local params) so the date
   // explorer's onchange handler -- which fires long after render()
@@ -3000,7 +3034,7 @@ function render(p1,p2,r,reportErr,reportUsedFallback){
   // empty space.
   let h=personRow(p1,1,0)
     +topBtn('Run Another Reading','resetToForm()',BTN_ICON_REFRESH,'grid-column:1;grid-row:2;')
-    +reportSlot(namesForTitle,cardNames,r,reportErr,2,reportUsedFallback)
+    +reportSlot(namesForTitle,cardNames,r,reportErr,2,reportUsedFallback,pending)
     +topBtn('Save / Print Reading','window.print()',BTN_ICON_PRINT,'grid-column:3;grid-row:2;');
   if(p2)h+=personRow(p2,3,1);
   document.getElementById('mainGrid').innerHTML=h;
@@ -3011,6 +3045,29 @@ function render(p1,p2,r,reportErr,reportUsedFallback){
   document.getElementById('loading').style.display='none';
   document.getElementById('resultsWrap').style.display='block';
   document.querySelector('.content').style.display='none';
+  if(pending){
+    const slot=document.getElementById('readingSlot');
+    if(slot)animateHourglass(slot);
+  }
+  saveResult(p1,p2,r,reportErr,reportUsedFallback);
+}
+
+function renderCharts(p1,p2){
+  render(p1,p2,null,null,false,true);
+}
+
+// Swaps just the Reading slot in place once /report actually resolves
+// (or fails) -- cardRegistry isn't reset here (only render() does that),
+// so the astrology/numerology/HD cards already in it from renderCharts()
+// keep their existing tap-to-expand indices; reportSlot's success branch
+// just pushes one more entry for the reading itself.
+function fillReading(p1,p2,r,reportErr,reportUsedFallback){
+  const n1=p1.first+(p1.last?' '+p1.last:'');
+  const namesForTitle=p2?(p1.first+' & '+p2.first):n1;
+  const cardNames=p2?(p1.first+' & '+p2.first):p1.first;
+  const html=reportSlot(namesForTitle,cardNames,r,reportErr,2,reportUsedFallback,false);
+  const slot=document.getElementById('readingSlot');
+  if(slot)slot.outerHTML=html||`<div id="readingSlot" style="grid-column:2;grid-row:2;"></div>`;
   saveResult(p1,p2,r,reportErr,reportUsedFallback);
 }
 
@@ -3144,22 +3201,67 @@ async function generate(){
     showErr(msg);
   };
 
-  // /report keeps its connection open with keep-alive bytes for the whole
-  // generation (this is what actually lets a multi-minute reading finish --
-  // Cloudflare only gives background work 30 more seconds once a client
-  // truly disconnects, no matter how the work is organized server-side, so
-  // there's no way to make it fully independent of this connection without
-  // new backend infrastructure). If this connection does drop mid-generation
-  // (a phone losing signal, the screen locking), the response's X-Job-Id
-  // header -- already received by the time fetch() resolves, since headers
-  // arrive before the streamed body finishes -- lets this fall back to
-  // polling /report-status instead of losing the reading outright.
+  const timeoutAfter=(ms)=>new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),ms));
+
+  // Phase 1: chart data only. Astrology/numerology are computed locally
+  // and Human Design is one quick network call per person -- none of
+  // that needs to wait on the AI reading, which is the genuinely slow
+  // part. This is what lets the chart cards actually appear as soon as
+  // they're ready instead of everyone staring at the full-page loading
+  // screen for the entire generation. Nothing's rendered yet if this
+  // fails, so a real failure here still bails out to the full-page error
+  // the same way the combined call used to.
+  let chartResult;
+  try{
+    const res=await Promise.race([
+      fetch(W_API+'/chart-data',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({p1,p2})
+      }),
+      timeoutAfter(45000)
+    ]);
+    chartResult=await Promise.race([res.json(), timeoutAfter(45000)]);
+    if(!res.ok||chartResult.error){ bail(chartResult.error||'Something went wrong. Please try again.'); return; }
+  }catch(e){
+    bail('Connection error: '+e.message);
+    return;
+  }
+
+  p1.numerology=chartResult.p1.numerology;
+  p1.astro=chartResult.p1.astrology;
+  p1.astroError=chartResult.p1.astrologyError;
+  p1.hd=chartResult.p1.humanDesign;
+  p1.hdError=chartResult.p1.humanDesignError;
+  if(p2&&chartResult.p2){
+    p2.numerology=chartResult.p2.numerology;
+    p2.astro=chartResult.p2.astrology;
+    p2.astroError=chartResult.p2.astrologyError;
+    p2.hd=chartResult.p2.humanDesign;
+    p2.hdError=chartResult.p2.humanDesignError;
+  }
+  genBtn.disabled=false;
+  renderCharts(p1,p2);
+
+  // Phase 2: the actual AI reading, now running with the charts already
+  // visible instead of blocking them. /report keeps its connection open
+  // with keep-alive bytes for the whole generation (this is what
+  // actually lets a multi-minute reading finish -- Cloudflare only gives
+  // background work 30 more seconds once a client truly disconnects, no
+  // matter how the work is organized server-side, so there's no way to
+  // make it fully independent of this connection without new backend
+  // infrastructure). If this connection does drop mid-generation (a
+  // phone losing signal, the screen locking), the response's X-Job-Id
+  // header -- already received by the time fetch() resolves, since
+  // headers arrive before the streamed body finishes -- lets this fall
+  // back to polling /report-status instead of losing the reading
+  // outright.
   //
   // That fallback only ever fires on a real rejection, though -- and a
   // stalled connection on the CLIENT side (a backgrounded tab, a network
   // handoff that never resolves either way) doesn't reject. It just never
-  // settles, so the loading screen sits there indefinitely with no error
-  // and no fallback ever triggers -- a real, reported case, not a
+  // settles, so this would otherwise wait indefinitely with no error and
+  // no fallback ever triggering -- a real, reported case, not a
   // hypothetical. These two race()s give both awaits a hard ceiling so a
   // genuine stall gets treated the same as a connection error instead of
   // hanging forever: short for headers (jobId comes back almost
@@ -3167,23 +3269,25 @@ async function generate(){
   // means something's actually wrong before generation begins), long for
   // the full body (a real relational generation can legitimately take
   // several minutes, so this must not fire on ordinary slow-but-working
-  // requests).
-  const timeoutAfter=(ms)=>new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),ms));
+  // requests). A failure here fills just the Reading slot with an error
+  // instead of bailing the whole page out -- the charts already
+  // rendered successfully and shouldn't disappear because the reading
+  // didn't.
   let jobId=null, result=null, primaryFailed=false;
   try{
     const res=await Promise.race([
       fetch(W_API+'/report',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
+        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,p1Data:chartResult.p1,p2Data:chartResult.p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
       }),
       timeoutAfter(60000)
     ]);
     jobId=res.headers.get('X-Job-Id');
     result=await Promise.race([res.json(), timeoutAfter(360000)]);
-    if(!res.ok||result.error){ bail(result.error||'Something went wrong. Please try again.'); return; }
+    if(!res.ok||result.error){ fillReading(p1,p2,null,result.error||'Something went wrong. Please try again.',false); return; }
   }catch(e){
-    if(!jobId){ bail('Connection error: '+e.message); return; }
+    if(!jobId){ fillReading(p1,p2,null,'Connection error: '+e.message,false); return; }
     primaryFailed=true;
   }
 
@@ -3192,7 +3296,7 @@ async function generate(){
     const pollStart=Date.now();
     while(true){
       if(Date.now()-pollStart>MAX_WAIT_MS){
-        bail('This is taking longer than expected. Please try again.');
+        fillReading(p1,p2,null,'This is taking longer than expected. Please try again.',false);
         return;
       }
       await new Promise(r=>setTimeout(r,POLL_MS));
@@ -3215,33 +3319,19 @@ async function generate(){
         continue;
       }
       if(pollResult.status==='pending')continue;
-      // status is 'done' -- reshape to match what the primary streamed
-      // response provides, since the rest of this function reads that shape.
-      result={p1:pollResult.p1,p2:pollResult.p2,report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback};
+      // status is 'done' -- only the report fields matter now, the chart
+      // data in this record is the same p1Data/p2Data already sent up.
+      result={report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback};
       break;
     }
   }
 
-  p1.numerology=result.p1.numerology;
-  p1.astro=result.p1.astrology;
-  p1.astroError=result.p1.astrologyError;
-  p1.hd=result.p1.humanDesign;
-  p1.hdError=result.p1.humanDesignError;
-  if(p2&&result.p2){
-    p2.numerology=result.p2.numerology;
-    p2.astro=result.p2.astrology;
-    p2.astroError=result.p2.astrologyError;
-    p2.hd=result.p2.humanDesign;
-    p2.hdError=result.p2.humanDesignError;
-  }
   // Only clear the draft once the reading actually succeeded -- if
   // generation failed, keep the entered data around so a retry
   // doesn't force re-typing everything (the reading-failure message
   // tells the customer exactly that; this is what makes it true).
   if(!result.reportError)clearDraft();
-  genBtn.disabled=false;
-  stopLoadingTimer();
-  render(p1,p2,result.report,result.reportError,result.reportUsedFallback);
+  fillReading(p1,p2,result.report,result.reportError,result.reportUsedFallback);
 }
 
 // ---------- tap-to-expand: cards, term definitions, gate chips ----------

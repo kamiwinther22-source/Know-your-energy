@@ -1252,6 +1252,25 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       }
     }
 
+    // Astrology/numerology are local and fast; Human Design is one quick
+    // network call per person. None of that needs to wait on the AI
+    // report call, which is the genuinely slow part -- this lets the
+    // frontend show the chart cards immediately and only show a loading
+    // state for the Reading panel while /report runs separately.
+    if (url.pathname === "/chart-data") {
+      let body;
+      try {
+        body = await request.json();
+      } catch (e) {
+        return jsonResponse({ error: "Invalid request body." }, 400);
+      }
+      const [p1Data, p2Data] = await Promise.all([
+        assemblePersonData(env, body.p1),
+        body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
+      ]);
+      return jsonResponse({ p1: p1Data, p2: p2Data });
+    }
+
     if (url.pathname === "/report-status") {
       let statusBody;
       try {
@@ -1334,15 +1353,23 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
     ctx.waitUntil((async () => {
       let streamBody, kvRecord;
       try {
-        // p1 and p2's chart data (each involving its own Human Design
-        // network lookup) is fetched concurrently, not one after the
-        // other -- they're independent, and assemblePersonData never
-        // throws (every step has its own try/catch, always returns an
-        // object with error fields on failure), so this is safe.
-        const [p1Data, p2Data] = await Promise.all([
-          assemblePersonData(env, body.p1),
-          body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
-        ]);
+        // The frontend calls /chart-data first now (see index.html's
+        // generate()) and sends that result back as p1Data/p2Data, so
+        // this doesn't recompute it -- a second Human Design network
+        // call per person for no reason. Falls back to computing it
+        // here from raw p1/p2 birth fields if p1Data wasn't sent, so
+        // this endpoint still works called on its own. p1 and p2 are
+        // fetched concurrently, not one after the other, when this
+        // fallback path does run -- they're independent, and
+        // assemblePersonData never throws (every step has its own
+        // try/catch, always returns an object with error fields on
+        // failure), so this is safe.
+        const [p1Data, p2Data] = body.p1Data
+          ? [body.p1Data, body.p2Data || null]
+          : await Promise.all([
+              assemblePersonData(env, body.p1),
+              body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
+            ]);
         console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
 
         let report = null, reportError = null, reportUsedFallback = false;
