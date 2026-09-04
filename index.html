@@ -2517,18 +2517,30 @@ function ar(astro,errMsg){
   // Sirius intentionally has no ASTRO_DEFS.sirius sign entries -- real fixed-
   // star technique reads Sirius through conjunctions to natal points, not
   // sign placement (its ecliptic position moves ~1 degree per 72 years, so
-  // it sits in essentially the same sign for everyone alive today); it falls
-  // back to the plain GLOSSARY line only, which is correct, not incomplete.
+  // it sits in essentially the same sign for everyone alive today, telling
+  // a reader nothing personal about them). Its row below shows its real
+  // aspects instead of a sign that would only look personalized.
   const extraPoints=[astro.northNode,astro.southNode,astro.chiron,astro.sirius,astro.lilith].filter(p=>p?.sign);
   if(extraPoints.length){
     h+=dpsec('Other Points');
     extraPoints.forEach(p=>{
       const name=p.name;
       const glyph=glyphIcon(name,PLANET_COLOR[name]);
-      let signOut=p.sign;
-      if(p.signUncertain)signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
-      else if(p.house)signOut+=` · House ${p.house}`;
-      h+=arow(glyph+name,signOut,POINT_KEY[name],p.sign);
+      let signOut, defNum=p.sign;
+      if(name==='Sirius'){
+        const hits=(astro.aspects||[]).filter(a=>a.point1==='Sirius'||a.point2==='Sirius')
+          .sort((a,b)=>(a.orb??99)-(b.orb??99));
+        signOut=hits.length
+          ? hits.map(a=>`${a.aspect} ${a.point1==='Sirius'?a.point2:a.point1}${a.orb!=null?` (${a.orb}°)`:''}`).join(', ')
+          : 'No close aspects in this chart';
+        defNum=null;
+      }else if(p.signUncertain){
+        signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
+      }else{
+        signOut=p.sign;
+        if(p.house)signOut+=` · House ${p.house}`;
+      }
+      h+=arow(glyph+name,signOut,POINT_KEY[name],defNum);
     });
   }
   return h||apend('Unavailable');
