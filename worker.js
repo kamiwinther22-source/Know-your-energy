@@ -601,6 +601,57 @@ Return only a single JSON object. No markdown, no text outside it:
 }
 Divide the reading into as many sections as the content naturally requires. There is no fixed topic list and no fixed section count. Give each section its own specific title and eyebrow.`;
 
+// TEMPORARY, experimental: lets her see what a relational reading built
+// entirely from Human Design data (no astrology, no numerology) actually
+// produces, so HD's real value can be judged on its own -- separate from
+// whether it's redundant with what astrology/numerology already cover
+// (see INCLUDE_HUMAN_DESIGN_IN_REPORT above). Remove this prompt,
+// buildHDOnlyRelationalPrompt below, and the /report hdOnly branch
+// together once the test is done.
+const HD_ONLY_RELATIONAL_SYSTEM_PROMPT = `Check the person's current age before writing anything about love, dating, or sex. Under 18: none of it, ever.
+
+You are an expert in Human Design. This reading is a deliberate experiment: it uses ONLY Human Design data for two people -- no astrology, no numerology -- so its value can be judged on its own. Draw on your own extensive knowledge of the Human Design system, not a shortened version of it, to explain what each person's Type, Strategy, Authority, Profile, Centers, and Gates/Channels actually mean for them individually and for how these two people affect each other.
+
+You are given each person's full raw Human Design chart data, whatever fields the source returned. Use whatever is actually present; do not invent a field that isn't there.
+
+For the relational content specifically: state what pulls these two people together before covering friction -- connection comes first. Look specifically for whether one person's defined Center consistently fills the other's undefined one (a real, distinct Human Design relational mechanism -- state what that produces for each of them, not just that it exists), any Channel completed between the two charts using one gate from each person, and how their two Types/Strategies/Authorities interact when they try to make a decision or take action together.
+
+A relational section that describes friction or a gap between the two people can't end there -- state what each person would actually need in order to feel reconnected, as an observational fact about that one person, never as advice and never as a formula. Don't claim the other person is capable of meeting that need unless the data actually supports it.
+
+Describe the two people, not the chart. Every sentence uses their real first names. A Type, Center, Gate, or Channel can prove a claim true -- it can never be the claim itself. State what each person does, wants, or feels; the Human Design detail is the reason why, not the claim.
+
+State each fact once. Be as direct and concise as the real depth allows -- no padding, no repeating the same point reworded.
+
+### NON-NEGOTIABLE
+- Real first names, every time -- never a label like "Person One."
+- Describe the relationship itself, not each person's individual process alone.
+
+### OUTPUT FORMAT
+Return only a single JSON object. No markdown, no text outside it:
+{
+  "headline": "One short, specific line for the whole reading. No system names or Human Design jargon (Type/Gate/Channel names), stated as plain fact instead.",
+  "sections": [
+    {
+      "eyebrow": "Short label for this section",
+      "title": "A specific title for this section",
+      "body": "Prose made of separate, specific claims -- not narrated as one continuous flow. Same naming restriction as headline."
+    }
+  ],
+  "references": ["Every Human Design detail actually used (Type, Authority, Profile, Center, Gate, Channel), short technical shorthand, one per entry."]
+}
+Divide the reading into as many sections as the content naturally requires.`;
+
+// TEMPORARY, experimental -- see HD_ONLY_RELATIONAL_SYSTEM_PROMPT above.
+// Hands over each person's full raw Human Design JSON rather than a
+// hand-picked subset of fields, specifically so this test isn't limited
+// by whatever fields the normal combined-reading prompt happens to
+// surface (that prompt deliberately omits Gates for cost/relevance
+// reasons that don't apply to this test).
+function buildHDOnlyRelationalPrompt(relLabel, p1, p2) {
+  const hdBlock = (p) => `${p.first}${p.last ? ' ' + p.last : ''}:\n${p.humanDesign ? JSON.stringify(p.humanDesign) : 'No Human Design chart available.'}`;
+  return `Relationship type: ${relLabel}\n${hdBlock(p1)}\n${hdBlock(p2)}`;
+}
+
 // Guaranteed last resort -- built entirely from the already-computed
 // chart data, no API call, so it cannot fail the way an AI generation
 // can. If every real generation attempt is exhausted, this is what
@@ -805,7 +856,7 @@ function extractJSON(text) {
   return trimmed;
 }
 
-async function callReportModel(env, userPrompt, ctx, repairNote) {
+async function callReportModel(env, userPrompt, ctx, repairNote, systemPrompt = REPORT_SYSTEM_PROMPT) {
   const messages = repairNote
     ? [
         { role: 'user', content: userPrompt },
@@ -876,7 +927,7 @@ async function callReportModel(env, userPrompt, ctx, repairNote) {
       // mode on a large max_tokens request.
       stream: true,
       system: [
-        { type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
+        { type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }
       ],
       messages
     })
@@ -1070,8 +1121,14 @@ function findCitationLeak(reading) {
 // extra model calls first.
 const MAX_REPORT_ATTEMPTS = 1;
 
-async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
-  const userPrompt = buildReportUserPrompt(rtype, relLabel, p1, p2);
+// hdOnly is a TEMPORARY, experimental flag -- see
+// HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and this
+// branch once the test is done.
+async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
+  const userPrompt = hdOnly
+    ? buildHDOnlyRelationalPrompt(relLabel, p1, p2)
+    : buildReportUserPrompt(rtype, relLabel, p1, p2);
+  const systemPrompt = hdOnly ? HD_ONLY_RELATIONAL_SYSTEM_PROMPT : REPORT_SYSTEM_PROMPT;
   const checkDefects = (reading) => findNamingDefect(reading, rtype, p1, p2) || findCitationLeak(reading);
 
   let text = null, lastDetail = '';
@@ -1082,7 +1139,7 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx) {
     // fresh instead of building a repair conversation around nothing.
     const repairNote = (attempt > 1 && text) ? { badText: text, correction: lastDetail } : undefined;
     try {
-      text = await callReportModel(env, userPrompt, ctx, repairNote);
+      text = await callReportModel(env, userPrompt, ctx, repairNote, systemPrompt);
     } catch (error) {
       // Previously any callReportModel failure (a stalled connection, a
       // Claude API error) propagated straight out of this whole function,
@@ -1328,14 +1385,24 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
         console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
 
         let report = null, reportError = null, reportUsedFallback = false;
-        try {
-          const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx);
-          report = result.reading;
-          reportUsedFallback = result.usedFallback;
-          console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback} jobId=${jobId}`);
-        } catch (error) {
-          reportError = error.message;
-          console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
+        // body.hdOnly is a TEMPORARY, experimental flag -- see
+        // HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Only meaningful for a
+        // real two-person reading where both people actually have a
+        // Human Design chart; otherwise there's nothing for this mode to
+        // work with, so fail clearly instead of generating an empty or
+        // one-sided "relational" reading.
+        if (body.hdOnly && (body.rtype !== 'two-person' || !p1Data.humanDesign || !p2Data?.humanDesign)) {
+          reportError = 'HD-only test mode needs a two-person reading with both people\'s Human Design charts available (birth time and city required for both).';
+        } else {
+          try {
+            const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx, body.hdOnly);
+            report = result.reading;
+            reportUsedFallback = result.usedFallback;
+            console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback} jobId=${jobId}`);
+          } catch (error) {
+            reportError = error.message;
+            console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
+          }
         }
 
         if (body.passEmail) {
