@@ -542,52 +542,53 @@ async function recordUsage(env, usage) {
 
 const REPORT_SYSTEM_PROMPT = `Check the person's current age before writing anything about love, dating, or sex. Under 18: none of it, ever.
 
-You are an expert astrologer and numerologist. The person reading this wants to understand themselves or their relationship -- not be impressed by language that sounds mystical or profound. Draw on your own extensive knowledge of both systems, not a shortened or generic version of it, to explain what each placement and number means. State it in practical, plain language: what a person does, feels, or experiences -- never a term dressed up to sound deep. Thorough means real depth on what the data actually supports. Do not leave out pieces due to political correctness or seemingly sensitive topics such as likely relations with family members, likely intimate relational patterns, sexual patterns, work, social, education, public, or anything else that the data indicates. 
-What is important to them, how they handle closeness, what drives them, how they experience change, and so on -- drawing on astrology and numerology together for each one. Build each section around both of those, never around one system's data alone. If astrology and numerology point at the same trait, say it once, using both as evidence, not as two separate mini-sections. Give weight according to where weight is distributed in the data.
+### ROLE
+You are an expert astrologer and numerologist writing for someone who wants real understanding, not language that sounds mystical or profound. Draw on your full, deep knowledge of both systems -- never a shortened or generic version. State what a person does, feels, or experiences in plain, practical language -- never a term dressed up to sound deep.
 
-For a two-person reading, before writing, compare both charts for connection points -- not everything technically present, only what two people would notice or feel between them:
-- Astrology: Sun-Moon aspects between the two charts, Venus-Mars aspects, Moon-Moon aspects, and any tight conjunction from one person's planet onto the other's planet, angle (Ascendant/Midheaven), or Chiron. Also check whether a named astrological return active for either person (see below) lands on a placement in the other person's chart.
-- Numerology: using the raw data provided and your extensive and deep knowledge from your training, look at the charts of each person and the data points that have the biggest influences on relationships and state what the actual interaction produces using practical language. you must be detailed and avoid leaving the statement as a theme or general category. break it down so there is no more room to ask what it means. 
+### COVERAGE
+- Thorough means real depth on what the data actually supports, not length for its own sake.
+- Don't omit anything the data indicates due to political correctness: family relationships, intimate or sexual patterns, work, social life, education, public life, or anything else the data supports.
+- Cover what's important to them, how they handle closeness, what drives them, how they experience change, and any other real theme the data supports.
+- Build every point around BOTH astrology and numerology together, never one system alone. If both point at the same trait, say it once, using both as evidence.
+- Weight each point by how much the actual data weighs toward it, not evenly.
+- Parent/child reading: name what parental actions the chart data indicates would break the bond with the child, and what approach maintains it instead.
 
-A relational reading must establish the draw between two people -- what pulls them together -- before it covers friction or self-protection. Connection comes first.
+### RELATIONAL READINGS (two-person)
+Before writing, find the real connection points between the two charts -- not everything technically present, only what two people would actually notice or feel between them.
+- Astrology: Sun-Moon cross-aspects, Venus-Mars, Moon-Moon, any tight conjunction from one person's planet onto the other's planet, angle, or Chiron. Also check whether either person's active astrological return (see Cycles & Timing below) lands on a placement in the other person's chart.
+- Numerology: using the raw data and your own full training knowledge, find the data points with the biggest real relational influence and state exactly what the interaction produces in practical language -- detailed enough that nothing is left as a theme or category to interpret further.
+- Connection comes first: establish what draws the two people together before covering friction or self-protection.
+- A section describing friction, withdrawal, or a gap can't end there -- state what each person would actually need to feel reconnected, as an observational fact about that one person, never a formula and never advice. Don't claim the other person can meet that need unless the data supports it -- state what they're actually most likely to do instead.
+- Describe the relationship itself, not each person's individual process.
 
-A relational section that describes friction, withdrawal, or a gap between two people can't end there -- state what each person would need in order to feel reconnected, as a separate, observational fact about that one person, never as a formula ("when this person does X, that produces connection") and never as advice. Don't claim the other person is capable of meeting that need unless the data actually supports it. state instead what they are most likely to do.
+### HOW TO WRITE
+- Describe the person, not the chart. Every sentence is "you" (or, in a two-person reading, their real first name).
+- A placement, number, aspect, or shared pattern can prove a claim true -- it is never the claim itself. State what the person does, wants, or feels; the data is the reason why.
+- Naming one placement or number and explaining it in the same sentence is correct. Never stack two or more of them back-to-back with nothing but punctuation between ("Sun in Scorpio, 6th house, square Mars in Leo, 9th house") -- each one belongs inside its own explained sentence.
+- Use the full depth of established tradition for every placement or number. Ask what it actually means for this person, then write that answer, not the first surface-level thing that comes to mind. Most carry several real, distinct traits -- naming only one is incomplete.
+- Depth includes chart position -- the same Karmic Debt means something different in a Life Path than in a Birthday number.
+- Include faith, spirituality, or a higher power when a placement's real, established tradition actually includes it. Accuracy, not political correctness, is the goal.
+- Fill the writing with the actual information derived from the data, not the names of the data points themselves.
+- State each fact once. There's no target length -- don't pad or reword to fill space. The more directly something is stated, the more real content fits.
+- Never parrot this prompt's own instructions back in the reading.
 
-Avoid parroting the directions of this prompt in the readings you write.
+### CYCLES & TIMING
+- Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) plus any active astrological return describe ONE life stage, not separate facts -- combine them into a single explanation of where this person stands right now. Name each cycle and its time span, then state what the combination means together (a Personal Year 1 reads differently inside a Pinnacle 3 than inside a Pinnacle 9). Give concrete examples grounded in the full chart(s): what it's likely to be experienced as, what changes on entering the next phase, and what the next big cycles will ask of them.
+- Personal Month and Day are a separate, much shorter timescale -- never merge them into the life-stage picture above. Mention them only when there's something significant to say.
+- Two-person: explain how each person's current cycles affect how the two of them experience each other right now.
+- You're given astrology and numerology data only, no transit data. If birth time is missing, Ascendant/Midheaven/houses are missing with it -- leave them out, don't guess. Named astrological returns -- Saturn Return (~29, 58, or 87), Jupiter Return (~every 12 years), Uranus Opposition (~40-42), Chiron Return (~50) -- apply only when the person's current age is inside that window.
 
-Describe the person, not the chart. Every sentence is about "you" (or, in a two-person reading, their real name). A placement, number, or aspect can prove a claim is true -- it can never be the claim itself. A pattern, theme, or energy shared between placements or people must be treated the same way: it can prove a claim true, but it can never be the claim itself. State what the person does, wants, or feels; the pattern is the reason why, not the claim.
-
-Use the full depth of established tradition for each placement or number used. For each one, ask yourself what it actually means for this person -- then write the answer to that question, not the first surface-level thing that comes to mind. Most have several real, distinct traits -- naming only one is incomplete. Depth also means the right chart position (the same Karmic Debt means something different in a Life Path than in a Birthday number).
-
-Some placements' real, established tradition includes faith, spirituality, or a higher power -say it if it does. the goal is not to be politically correct its to he thoroughly accurate.
-
-It is essential that the writing not be filled with the names of the data points and instead is filled with actual information that is derived from the data points.  
-
-State each fact one time. There is zero need for a certain length of the report so there is no need to fill space by recording the same things over and over. that includes rewording. be as concise as possible so as to have enough space fo be thorough. the more direct you state things, the more content can be covered.
-include what actions by a parent in parent/child reading will break the bond with the child based entirely on the data in the charts. and what approach the parent must use instead to maintain a bond.
-
-Big cycles (Personal Year, Essence, Pinnacle, Period Cycle) and any active astrological return describe one life stage, not separate facts -- combine them into a single explanation of where this person actually stands right now. state what the cycle is (name it and the time span) state what the combination means together. a 1 year will look different in a 3 pinnacle vs a 9 pinnacle for example. what happens when this personal year and Essence cycle are within this Pinnacle and period. 
-Instead of leaving it at broad themes, give concrete examples based on the entirety of the 2 charts, what it likely will be experienced as, what will have changed when entering the next phase and what will be asked of them in the next big cycles.
-
-Personal Month and Day are a separate, much shorter timescale -- never merge them into this life-stage picture; they belong elsewhere, and only when there's something significant to say.
-
-Explain how the 2 peoples sets of cycles would effect the way the individuals experience each other.
-
-You are given astrology and numerology data. If birth time is missing, the Ascendant, Midheaven, and house placements are missing with it -- leave them out rather than guessing. There is no astrological transit data, so timing comes from the numerology cycles above, plus a named astrological return -- Saturn Return (around 29, 58, or 87), Jupiter Return (about every 12 years), Uranus Opposition (around 40-42), or Chiron Return (around 50) -- only when the person's current age is inside that window.
-
-### DATA
-Weigh a planet's major aspects before its sign -- a tight conjunction, square, or opposition outweighs the sign; a wide trine or sextile barely changes it. Use the planet's actual house, never the house tied to its ruling sign.
-
-State what an aspect actually produces in real behavior -- not that it's easy or tension. 
-
-you know what the placements and aspects mean, so you do not need the definitions laid out here, look at all of the data provided to you and report what you see clearly and concisely. 
+### ASTROLOGY DATA RULES
+- Weigh a planet's major aspects before its sign -- a tight conjunction, square, or opposition outweighs the sign; a wide trine or sextile barely changes it.
+- Use a planet's actual house, never the house tied to its ruling sign.
+- State what an aspect actually produces in real behavior, not that it's "easy" or "tense."
+- You already know what every placement and aspect means -- no definitions needed here. Read the data provided and report what you see, clearly and concisely.
 
 ### NON-NEGOTIABLE
 - Single reading: "you" only, never a name or third-person pronoun. Two-person: real first names, every time.
-- Describe the relationship itself, not each person's process.
+- Return only a single JSON object. No markdown, no text outside it.
 
 ### OUTPUT FORMAT
-Return only a single JSON object. No markdown, no text outside it:
 {
   "headline": "One short, specific line for the whole reading. No system names, placement names, or numbers, except a numerology cycle's actual number.",
   "sections": [
@@ -599,7 +600,7 @@ Return only a single JSON object. No markdown, no text outside it:
   ],
   "references": ["Every placement and number actually used, short technical shorthand, one per entry."]
 }
-Divide the reading into as many sections as the content naturally requires. There is no fixed topic list and no fixed section count. Give each section its own specific title and eyebrow.`;
+Divide the reading into as many sections as the content naturally requires -- no fixed topic list, no fixed section count. Give each section its own specific title and eyebrow.`;
 
 // TEMPORARY, experimental: lets her see what a relational reading built
 // entirely from Human Design data (no astrology, no numerology) actually
@@ -652,99 +653,24 @@ function buildHDOnlyRelationalPrompt(relLabel, p1, p2) {
   return `Relationship type: ${relLabel}\n${hdBlock(p1)}\n${hdBlock(p2)}`;
 }
 
-// Guaranteed last resort -- built entirely from the already-computed
-// chart data, no API call, so it cannot fail the way an AI generation
-// can. If every real generation attempt is exhausted, this is what
-// runs instead of showing an error: shorter and simpler than a real
-// generated reading, but genuine, accurate content, never a blank
-// failure screen. Content matches the same real tradition already
-// verified for the tap-to-reveal glossary elsewhere in this app.
-const FALLBACK_SUN = {
-  Aries:'acts first and asks questions later, driven by a real need to be first and to test themselves against something real.',
-  Taurus:'moves at their own steady pace and builds things meant to last, valuing what’s tangible and reliable over what’s merely exciting.',
-  Gemini:'processes the world through conversation and constant new information, genuinely energized by variety and quick exchange.',
-  Cancer:'leads with emotional memory and protects what matters most, most themselves around people who’ve earned real closeness.',
-  Leo:'brings real warmth and generosity, and does their best work when it’s genuinely seen.',
-  Virgo:'notices what’s actually wrong and fixes it, finding real satisfaction in refining something until it’s right.',
-  Libra:'weighs every side of a situation and works to find real balance, especially in close relationships.',
-  Scorpio:'goes straight for what’s real underneath the surface, and keeps people at a distance until they’ve proven they belong closer.',
-  Sagittarius:'needs real room to explore, physically or intellectually, and says exactly what they think.',
-  Capricorn:'builds toward something real over the long term, and takes responsibility seriously -- sometimes more seriously than it needs to be taken.',
-  Aquarius:'thinks in terms of the group and the system, not just themselves, and doesn’t mind standing apart from convention to do it.',
-  Pisces:'absorbs the emotional undercurrent of a room and imagines what could be, sometimes as a way of getting distance from what actually is.'
-};
-const FALLBACK_LIFEPATH = {
-  1:'leadership and self-reliance -- learning to trust their own initiative and stand on their own.',
-  2:'partnership and diplomacy -- a natural sensitivity to others and a gift for bringing people together.',
-  3:'creative self-expression -- communicating, performing, or creating in a way that reaches other people.',
-  4:'building something solid -- discipline, structure, and the patience to do things right over time.',
-  5:'freedom and change -- a real need for variety, restless inside anything too fixed.',
-  6:'responsibility to others -- caretaking, community, and a real pull toward making things right for people they love.',
-  7:'inner search and analysis -- a need to understand the real mechanism behind things, often alone.',
-  8:'material mastery -- real capacity for power, authority, and building tangible success.',
-  9:'completion and compassion -- a wide, humanitarian view, and the work of letting go of what’s finished.',
-  11:'intuitive insight and inspiration -- a Master Number carrying the 2’s sensitivity at a higher, more charged pitch.',
-  22:'the Master Builder -- capable of turning a big vision into something real and lasting.',
-  33:'the Master Teacher -- channeling the 6’s care for others into a wider, more selfless service.'
-};
-const FALLBACK_HDTYPE = {
-  'Generator':'built for sustainable work through a gut-level yes -- energy that keeps refilling as long as what they’re doing has real pull behind it.',
-  'Manifesting Generator':'built like a Generator, with that same gut-level yes at the center, but with a fast, direct line to action -- moving quickly, working on more than one thing at once, and skipping steps that don’t change the outcome.',
-  'Projector':'built to see clearly how other people and systems actually work, most effective when that insight is actually invited rather than offered first.',
-  'Manifestor':'built to initiate on their own, without waiting for something outside them to respond to first.',
-  'Reflector':'built to reflect whatever’s actually happening around them, best served by taking real time -- close to a full lunar cycle -- before locking in a big decision.'
-};
-function fallbackPersonSections(p) {
-  const sun = (p.astrology?.planets || []).find(pl => pl.name === 'Sun');
-  const sunSign = sun?.sign;
-  const lifePath = p.numerology?.lifePath;
-  const hdType = p.humanDesign?.type;
-  const sections = [], refs = [];
-  if (sunSign && FALLBACK_SUN[sunSign]) {
-    sections.push({ eyebrow: 'Core Identity', title: `${p.first}'s Core Identity`, body: `${p.first} ${FALLBACK_SUN[sunSign]}` });
-    refs.push(`Sun in ${sunSign}`);
-  }
-  if (lifePath && FALLBACK_LIFEPATH[lifePath]) {
-    sections.push({ eyebrow: 'Life Path', title: `${p.first}'s Life Path`, body: `${p.first}'s numerology points toward ${FALLBACK_LIFEPATH[lifePath]}` });
-    refs.push(`Life Path ${lifePath}`);
-  }
-  if (hdType && FALLBACK_HDTYPE[hdType]) {
-    sections.push({ eyebrow: 'Design', title: `${p.first}'s Design`, body: `${p.first} is ${FALLBACK_HDTYPE[hdType]}` });
-    refs.push(hdType);
-  }
-  return { sections, refs };
-}
+// Guaranteed last resort -- no API call, so it cannot fail the way an
+// AI generation can. This used to rebuild a shorter reading straight
+// from Sun sign / Life Path / HD Type -- real content, but per direct
+// instruction that's gone now: it looked enough like a real reading
+// that people mistook it for one and stopped there instead of trying
+// again, which defeated the entire point of a "backup." There's no
+// honest shorter version of a real reading. This just says plainly
+// what happened and sends them back to actually get the real thing.
 function buildFallbackReading(rtype, p1, p2) {
-  const f1 = fallbackPersonSections(p1);
-  if (rtype !== 'two-person') {
-    return {
-      headline: `${p1.first}'s Reading`,
-      sections: f1.sections.length ? f1.sections : [{ eyebrow: 'Reading', title: 'Your Chart', body: `${p1.first}'s full chart data is above -- this shorter summary covers the core placements while the full reading is regenerated.` }],
-      signature: `This is a shorter, always-available summary -- the full reading can be regenerated for more depth.`,
-      references: f1.refs
-    };
-  }
-  const f2 = fallbackPersonSections(p2);
-  // Real fix, not a smaller version of the old bug: this used to just
-  // concatenate each person's individual fallback sections back to back
-  // (f1's sections, then f2's) under a shared headline -- which produces
-  // two individual mini-readings sitting next to each other, not
-  // anything about the relationship. Labeling that "relational" was
-  // false advertising, not a lighter version of a real one. There's no
-  // honest way to fake relational synthesis without either inventing
-  // interpretive content (not this function's call to make) or a second
-  // AI call (defeats the purpose of a fallback that must not depend on
-  // the thing that just failed) -- so this now says plainly what
-  // happened and directs a retry, instead of presenting a fake reading.
+  const names = rtype === 'two-person' ? `${p1.first} and ${p2.first}'s` : `${p1.first}'s`;
   return {
-    headline: `${p1.first} & ${p2.first}`,
+    headline: 'Please Try Again',
     sections: [{
       eyebrow: 'Reading',
       title: 'Please Try Again',
-      body: `${p1.first} and ${p2.first}'s full chart data is above, but a relational reading has to actually compare both charts together -- there's no honest shorter version of that. Please generate the reading again for the real, full relational reading.`
+      body: `${names} full chart data is above, but the reading itself didn't generate this time. There's no honest shorter version of a real reading -- please run it again for the real, full reading.`
     }],
-    signature: `This backup couldn't safely summarize a relational reading -- running it again is the real fix.`,
-    references: [...f1.refs, ...f2.refs]
+    references: []
   };
 }
 
@@ -856,14 +782,8 @@ function extractJSON(text) {
   return trimmed;
 }
 
-async function callReportModel(env, userPrompt, ctx, repairNote, systemPrompt = REPORT_SYSTEM_PROMPT) {
-  const messages = repairNote
-    ? [
-        { role: 'user', content: userPrompt },
-        { role: 'assistant', content: repairNote.badText },
-        { role: 'user', content: repairNote.correction }
-      ]
-    : [{ role: 'user', content: userPrompt }];
+async function callReportModel(env, userPrompt, ctx, systemPrompt = REPORT_SYSTEM_PROMPT) {
+  const messages = [{ role: 'user', content: userPrompt }];
 
   // Nothing here previously bounded how long a single attempt could take
   // if the connection to Anthropic stalled -- no timeout on the fetch, no
@@ -896,32 +816,26 @@ async function callReportModel(env, userPrompt, ctx, repairNote, systemPrompt = 
     body: JSON.stringify({
       model: 'claude-sonnet-5',
       // Thinking disabled was tried and rejected: it produced noticeably
-      // worse readings. Thinking enabled (adaptive) is the agreed setting
-      // for the real generation pass. Effort is medium, not high --
-      // high made a single attempt slow and expensive enough that a
-      // validation-triggered retry (below) could triple both. A repair
-      // attempt is a narrow, single-defect fix (wrong pronoun, bad JSON),
-      // not a job that needs a full reasoning pass, so it skips thinking
-      // entirely and gets a much smaller max_tokens -- output only, no
-      // thinking budget to share it with.
-      // max_tokens raised 48000 -> 72000: a real two-person reading hit
-      // the fallback after this session's prompt additions (per-item
-      // recall, thematic cross-system synthesis) made a relational
-      // reading -- combining two full charts, not one -- generate
-      // enough thinking + output to risk hitting the old ceiling
-      // mid-generation, which fails JSON validation, burns a retry, and
-      // can exhaust all 3 attempts into the deterministic fallback. This
-      // is headroom, not a quality knob: a generation that already fit
-      // under 48000 finishes exactly the same; only one that was being
-      // cut off actually changes. Sonnet 5 supports up to 128000 output
-      // tokens (confirmed via the claude-api skill), so this is still
-      // well under the real ceiling.
-      ...(repairNote
-        ? { max_tokens: 24000, thinking: { type: 'disabled' } }
-        : { max_tokens: 72000, thinking: { type: 'adaptive' }, output_config: { effort: 'medium' } }),
-      // A non-streaming call with a real thinking pass hit a real
-      // Cloudflare 524 -- the generation genuinely took longer than the
-      // edge's timeout for one long silent response. Streaming keeps the
+      // worse readings. Thinking enabled (adaptive) is the agreed setting.
+      // Effort is medium, not high -- high made a single attempt slow and
+      // expensive enough to risk the stall timeout below.
+      // max_tokens raised 48000 -> 72000: a two-person reading hit the
+      // fallback after a prompt addition (per-item recall, thematic
+      // cross-system synthesis) made a relational reading -- combining two
+      // full charts, not one -- generate enough thinking + output to risk
+      // hitting the old ceiling mid-generation, which fails JSON
+      // validation and (before MAX_REPORT_ATTEMPTS was cut to 1) burned a
+      // retry. This is headroom, not a quality knob: a generation that
+      // already fit under 48000 finishes exactly the same; only one that
+      // was being cut off actually changes. Sonnet 5 supports up to
+      // 128000 output tokens (confirmed via the claude-api skill), so
+      // this is still well under the actual ceiling.
+      max_tokens: 72000,
+      thinking: { type: 'adaptive' },
+      output_config: { effort: 'medium' },
+      // A non-streaming call with a thinking pass hit a Cloudflare 524 --
+      // the generation genuinely took longer than the edge's timeout for
+      // one long silent response. Streaming keeps the
       // connection actively receiving data the whole time instead of one
       // long wait, which is the documented fix for exactly this failure
       // mode on a large max_tokens request.
@@ -998,41 +912,42 @@ function countNameMentions(text, name) {
 }
 
 function flattenReadingText(reading) {
-  const parts = [reading.headline, reading.signature];
+  const parts = [reading.headline];
   (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
   return parts.filter(Boolean).join('\n');
 }
 
 // A response that parses as valid JSON can still violate the naming
-// rule (a real live case used "Partner A"/"Partner B" throughout,
-// never the actual first names, despite the system prompt). Don't just
-// trust the prompt held -- actually count how many times each real
-// first name shows up before this ever reaches a paying customer.
+// rule (a live case used "Partner A"/"Partner B" throughout, never the
+// person's first name, despite the system prompt). Don't just trust
+// the prompt held -- count how many times each first name shows up
+// before this ever reaches a paying customer. This no longer feeds a
+// repair pass (see generateReport) -- it only decides whether this
+// response gets accepted or discarded for the fallback, so what it
+// returns is a diagnostic description for the log, not an instruction
+// aimed at the model.
 function findNamingDefect(reading, rtype, p1, p2) {
   const text = flattenReadingText(reading);
-  // Real, repeated live case: a single reading used "she"/"her" throughout
-  // instead of "you", despite Rule 7 --
-  // and nothing ever checked for it, because this whole function used to
-  // return early for anything that wasn't a two-person reading. Only the
-  // two-person naming defect (below) was ever actually verified; a single
-  // reading's pronoun compliance shipped on trust alone. Flag it the same
-  // way: count third-person pronouns against actual "you"/name usage, and
-  // require a real, sustained pattern (not one incidental slip) before
-  // forcing a full rewrite.
+  // A separate, repeated live case: a single reading used "she"/"her"
+  // throughout instead of "you", and nothing ever caught it, because
+  // this whole function used to return early for anything that wasn't
+  // a two-person reading -- only the two-person defect below was ever
+  // actually checked. Flag it the same way: count third-person
+  // pronouns against actual "you"/name usage, and require a sustained
+  // pattern (not one incidental slip) before flagging it.
   if (rtype !== 'two-person') {
     const nameCount = countNameMentions(text, p1.first);
     const youCount = (text.match(/\byou(?:r|rs|self)?\b/gi) || []).length;
     const thirdPersonCount = (text.match(/\b(she|her|hers|he|him|his)\b/gi) || []).length;
     if (thirdPersonCount >= 3 && thirdPersonCount > (nameCount + youCount)) {
-      return `The reading refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you." A single reading must use "you" every time the person is referenced, never their name and never a third-person pronoun -- rewrite the full reading that way throughout.`;
+      return `Refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you" -- a single reading must use "you" every time, never a third-person pronoun.`;
     }
-    // Real live case: a reading used the person's name in sustained
-    // third-person narration -- "Jacob's sense of who Jacob is centers
-    // on..." -- instead of "you." A single reading never uses the
-    // person's name at all, only "you" -- so any real use of the name
-    // (not just a heavy majority of them) is a defect.
+    // A live case used the person's name in sustained third-person
+    // narration -- "Jacob's sense of who Jacob is centers on..." --
+    // instead of "you." A single reading never uses the person's name
+    // at all, so any use of it (not just a majority) is a defect.
     if (nameCount >= 1) {
-      return `The reading refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times). A single reading must always say "you" and never the person's name -- rewrite the full reading addressed directly as "you" throughout, with no use of the real name anywhere.`;
+      return `Refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times) -- a single reading must always say "you," never the person's name.`;
     }
     return null;
   }
@@ -1040,7 +955,7 @@ function findNamingDefect(reading, rtype, p1, p2) {
   const p1Count = countNameMentions(text, p1.first);
   const p2Count = countNameMentions(text, p2.first);
   if (p1Count < minCount || p2Count < minCount) {
-    return `The reading barely used ${p1.first} and ${p2.first}'s real first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections). Every reference to either person must use their actual first name -- rewrite the full reading with the names used throughout, per the naming rule.`;
+    return `Barely used ${p1.first} and ${p2.first}'s first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections) -- every reference to either person must use their actual first name.`;
   }
   return null;
 }
@@ -1080,7 +995,7 @@ const CITATION_PATTERNS = [
 // in their own sentence.
 const CITATION_STACK_GAP = 12;
 function findCitationLeak(reading) {
-  const parts = [reading.headline, reading.signature];
+  const parts = [reading.headline];
   (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
   const text = parts.filter(Boolean).join('\n');
   const matches = [];
@@ -1110,69 +1025,55 @@ function findCitationLeak(reading) {
   for (let i = 1; i < spans.length; i++) {
     const gapText = text.slice(spans[i - 1].end, spans[i].start);
     if (gapText.length <= CITATION_STACK_GAP && /^[\s,;.\-–—]*(and|in|with|of)?[\s,;.\-–—]*$/i.test(gapText)) {
-      return `The reading stacks citations directly into the prose with no real sentence around them ("${spans[i - 1].text}${gapText}${spans[i].text}"), which real customers have gotten stuck on. Naming ONE placement or number and explaining it in the same sentence is fine and expected -- the defect is two or more stacked back-to-back with nothing connecting them. Rewrite the full reading so every citation sits inside its own real, explained sentence instead of a stacked list.`;
+      return `Stacks citations directly into the prose with no sentence around them ("${spans[i - 1].text}${gapText}${spans[i].text}") -- naming ONE placement or number and explaining it in the same sentence is fine, but two or more stacked back-to-back with nothing connecting them is not.`;
     }
   }
   return null;
 }
 
-// One attempt only, then straight to the deterministic fallback -- no
-// repair retries. If it fails, it fails fast instead of burning two
-// extra model calls first.
-const MAX_REPORT_ATTEMPTS = 1;
-
+// One shot only -- no repair pass. The old version retried up to 3
+// times, sending a failed response back to the model with a note on
+// what was wrong so it could fix it; that's gone. The prompt is what's
+// responsible for getting this right the first time, not a rewrite
+// cycle catching what it missed. findNamingDefect/findCitationLeak
+// below still run, but only to decide accept-or-discard -- a defect
+// no longer goes back to the model, it goes straight to the honest
+// "please try again" fallback instead.
+//
 // hdOnly is a TEMPORARY, experimental flag -- see
-// HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and this
-// branch once the test is done.
+// HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and the
+// branches below once the test is done.
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   const userPrompt = hdOnly
     ? buildHDOnlyRelationalPrompt(relLabel, p1, p2)
     : buildReportUserPrompt(rtype, relLabel, p1, p2);
   const systemPrompt = hdOnly ? HD_ONLY_RELATIONAL_SYSTEM_PROMPT : REPORT_SYSTEM_PROMPT;
-  const checkDefects = (reading) => findNamingDefect(reading, rtype, p1, p2) || findCitationLeak(reading);
 
-  let text = null, lastDetail = '';
-  for (let attempt = 1; attempt <= MAX_REPORT_ATTEMPTS; attempt++) {
-    // A repair note only makes sense when the previous attempt actually
-    // produced text to correct -- a network-level failure (a stalled
-    // connection, a Claude API error) has none, so that attempt starts
-    // fresh instead of building a repair conversation around nothing.
-    const repairNote = (attempt > 1 && text) ? { badText: text, correction: lastDetail } : undefined;
-    try {
-      text = await callReportModel(env, userPrompt, ctx, repairNote, systemPrompt);
-    } catch (error) {
-      // Previously any callReportModel failure (a stalled connection, a
-      // Claude API error) propagated straight out of this whole function,
-      // skipping both the remaining retries AND the guaranteed fallback
-      // below -- a real customer saw a raw API error string instead of
-      // ever reaching the "this literally cannot fail" fallback the
-      // comment below already promised. Treat it as just another failed
-      // attempt instead.
-      text = null;
-      lastDetail = error.message;
-      console.error(`Report generation attempt ${attempt}/${MAX_REPORT_ATTEMPTS} failed: ${lastDetail}`);
-      continue;
-    }
-    try {
-      const parsed = JSON.parse(extractJSON(text));
-      const defect = checkDefects(parsed);
-      if (!defect) return { reading: parsed, usedFallback: false };
-      lastDetail = defect;
-    } catch (e) {
-      lastDetail = 'That response was not valid JSON. Reply again with ONLY the JSON object described in OUTPUT FORMAT — no explanation, no apology, nothing else.';
-    }
-    console.error(`Report generation attempt ${attempt}/${MAX_REPORT_ATTEMPTS} failed: ${lastDetail}`);
+  let text;
+  try {
+    text = await callReportModel(env, userPrompt, ctx, systemPrompt);
+  } catch (error) {
+    // A stalled connection or a Claude API error used to propagate
+    // straight out of this function, skipping the guaranteed fallback
+    // below -- a customer saw a raw API error string instead of ever
+    // reaching the "this literally cannot fail" fallback the comment
+    // below already promised. Treat it the same as any other failure.
+    console.error(`Report generation failed: ${error.message}`);
+    return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
   }
 
-  // Every real generation attempt failed -- log the real technical
-  // detail for debugging. A customer still always gets a reading (this
-  // literally cannot fail the way an AI generation can), but usedFallback
-  // now travels with it -- previously nothing distinguished this shorter,
-  // deterministic version from a real personalized one except a single
-  // buried sentence in its own signature line. A customer paying full
-  // price deserves a visible notice, not a sentence they have to notice
-  // themselves.
-  console.error(`All ${MAX_REPORT_ATTEMPTS} report generation attempts failed, using deterministic fallback. Last detail: ${lastDetail}`);
+  try {
+    const parsed = JSON.parse(extractJSON(text));
+    const defect = findNamingDefect(parsed, rtype, p1, p2) || findCitationLeak(parsed);
+    if (!defect) return { reading: parsed, usedFallback: false };
+    console.error(`Report generation defect, using deterministic fallback: ${defect}`);
+  } catch (e) {
+    console.error('Report generation returned invalid JSON, using deterministic fallback.');
+  }
+  // A customer still always gets a reading (this literally cannot fail
+  // the way an AI generation can), but usedFallback travels with it so
+  // the frontend can show a visible notice instead of a customer having
+  // to notice on their own that this wasn't the real, personalized one.
   return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true };
 }
 

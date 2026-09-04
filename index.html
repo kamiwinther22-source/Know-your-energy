@@ -2776,12 +2776,14 @@ function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback){
     return `<div class="panel-error" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now: ${escapeHtml(reportError)}</p></div></div></div>`;
   }
   // usedFallback means the real personalized AI reading failed after
-  // every retry and this is the shorter, deterministic backup built
-  // straight from chart data -- previously the only sign of that was a
-  // single sentence buried in the signature line at the very bottom,
-  // easy to read as stylistic flourish rather than an actual status.
-  // This puts a real, visible notice at the top instead.
-  const fallbackNoticeHtml=usedFallback?`<div class="dprow"><p class="report-fallback-note">This is a shorter backup reading -- your full personalized reading couldn't be generated this time. Try running it again.</p></div>`:'';
+  // every attempt. There's no deterministic backup reading anymore --
+  // per direct instruction, a chart-derived shorter version looked
+  // enough like a real reading that people mistook it for one and
+  // stopped there instead of retrying, which defeated the point of a
+  // backup entirely. This puts a real, visible notice at the top
+  // instead of letting the report's own "Please Try Again" section be
+  // the only sign anything went wrong.
+  const fallbackNoticeHtml=usedFallback?`<div class="dprow"><p class="report-fallback-note">Your full reading couldn't be generated this time -- please try again.</p></div>`:'';
   const sectionsHtml=(report.sections||[]).map(s=>{
     const head=s.eyebrow?`${escapeHtml(s.eyebrow)} \u2014 ${escapeHtml(s.title)}`:escapeHtml(s.title);
     return `${dpsec(head)}<div class="dprow"><p class="report-body">${escapeHtml(s.body)}</p></div>`;
