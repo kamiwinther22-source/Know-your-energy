@@ -2528,9 +2528,7 @@ function ar(astro,errMsg){
   }
   // North/South Node, Chiron, Lilith -- these already factor into
   // the Reading (aspects, house themes) but had no place on the visible
-  // chart before; a real placement here, not just a mention in the prose.
-  // Sirius deliberately isn't shown here or anywhere else in the app --
-  // removed per direct instruction, not just hidden behind a flag.
+  // chart before; an actual placement here, not just a mention in the prose.
   const extraPoints=[astro.northNode,astro.southNode,astro.chiron,astro.lilith].filter(p=>p?.sign);
   if(extraPoints.length){
     h+=dpsec('Other Points');
