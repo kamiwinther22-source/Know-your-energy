@@ -619,7 +619,7 @@ Before writing, find the connection points between the two charts -- not everyth
 ### HOW TO WRITE
 - Describe the person, not the chart. Every sentence is "you" (or, in a two-person reading, their first name).
 - A placement, number, aspect, or shared pattern can prove a claim true -- it is never the claim itself. State what the person does, wants, or feels; the data is the reason why.
-- Every placement or number name must sit inside a sentence that explains it. Never let two names -- of any kind, from a bare pair ("Mercury, Uranus") to a full combo ("Sun in Scorpio, 6th house, square Mars in Leo, 9th house") -- appear next to each other separated only by punctuation ("and", a comma, "with"); each gets its own explained sentence. Reread before finishing to catch any pair that slipped through.
+- Every placement or number name must sit inside a sentence that explains it. Never let any two of them -- however many or few -- appear next to each other separated only by a comma, "and", or "with"; each one gets its own explained sentence. Reread before finishing to catch any pair that slipped through.
 - Use the full depth of established tradition for every placement or number. Ask what it actually means for this person, then write that answer, not the first surface-level thing that comes to mind. Most carry several distinct traits -- naming only one is incomplete.
 - Depth includes chart position -- the same Karmic Debt means something different in a Life Path than in a Birthday number.
 - Include faith, spirituality, or a higher power when a placement's established tradition actually includes it. Accuracy, not political correctness, is the goal.
