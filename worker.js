@@ -1,5 +1,7 @@
 import { calculateFullChart } from './numerology-calculator.js';
 import { computeAstrology } from './astro-engine.js';
+import { computeHumanDesign } from './human-design-engine.js';
+import { findCity } from './cities.js';
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -206,129 +208,24 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
   return result;
 }
 
-// ─── HUMAN DESIGN API ────────────────────────────────────────────────────────
-// v2 API — single ISO datetime with timezone offset.
-// Step 1: search city for IANA timezone
-// Step 2: resolve local time to offset datetime
-// Step 3: call chart endpoint
+// ─── HUMAN DESIGN — now 100% local ───────────────────────────────────────────
+// No fetch, no API key, no rate limit. See human-design-engine.js. Uses the
+// same city -> lat/lng resolution as astrology (findCity) so both systems
+// agree on the birth location for a given city name.
 
-// A "1 request" report generation was actually burning 3 calls against
-// this API's shared 5-per-minute limit (timezone search, datetime
-// resolve, then the bodygraph fetch itself, plus its own retry) --
-// easily exceeded by one relational (2-person) report alone, or by
-// testing the same person twice inside a minute. The timezone for a
-// given city and the resolved datetime for a given date/time/timezone
-// are both deterministic -- they never change -- so they're exactly
-// the kind of thing that should be cached, not re-fetched every single
-// generation. Cached in the existing PASSES KV namespace (no expiry:
-// this data is permanent, not a session-scoped cache) under a distinct
-// key prefix so it can't collide with pass records or the usage counter.
-async function getHDTimezone(env, cityName) {
-  const cacheKey = `hdtz:${cityName.toLowerCase().trim()}`;
-  const cached = await env.PASSES.get(cacheKey);
-  if (cached !== null) return cached === '' ? null : cached;
-  try {
-    const res = await fetch(
-      `https://api.humandesignhub.app/v2/locations/search?query=${encodeURIComponent(cityName)}`,
-      { headers: { "X-API-KEY": env.HumanDesign_key } }
-    );
-    if (!res.ok) return null;
-    const data = await res.json();
-    const results = Array.isArray(data) ? data : (data.results || data.data || []);
-    const tz = results.length ? (results[0].timezone || results[0].iana_timezone || results[0].tz) : null;
-    // Cache the real result, including a genuine "not found" -- worth
-    // remembering so a bad/unknown city name doesn't keep re-querying.
-    // A network/API failure (caught below) is NOT cached, since that's
-    // transient and deserves a real retry next time.
-    await env.PASSES.put(cacheKey, tz || '');
-    return tz || null;
-  } catch (_) { return null; }
-}
-
-async function resolveHDDatetime(env, dateStr, timeStr, timezone) {
-  const cacheKey = `hddt:${dateStr}|${timeStr}|${timezone}`;
-  const cached = await env.PASSES.get(cacheKey);
-  if (cached !== null) return cached === '' ? null : cached;
-  try {
-    const res = await fetch("https://api.humandesignhub.app/v2/timezone/resolve", {
-      method: "POST",
-      headers: {
-        "X-API-KEY": env.HumanDesign_key,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ date: dateStr, time: timeStr, timezone })
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const datetime = data.datetime || data.resolved_datetime || null;
-    await env.PASSES.put(cacheKey, datetime || '');
-    return datetime;
-  } catch (_) { return null; }
-}
-
-async function getHumanDesign(env, dob, timeStr, ampm, city, state) {
+function getHumanDesignLocal(dob, timeStr, ampm, city, state, country) {
   const { year, month, day } = normalizeDOB(dob);
   const { hour, minute } = normalizeTime(timeStr, ampm);
-  const { cityName } = normalizeCity(city, state, null);
+  const { cityName, countryCode } = normalizeCity(city, state, country);
 
-  const dateStr = `${year}-${pad(month)}-${pad(day)}`;
-  const timeFormatted = `${pad(hour)}:${pad(minute)}`;
-
-  let datetime = null;
-
-  const timezone = await getHDTimezone(env, cityName);
-  if (timezone) {
-    datetime = await resolveHDDatetime(env, dateStr, timeFormatted, timezone);
-  }
-
-  // No silent fallback here anymore: an un-zoned datetime string used to
-  // get sent to the bodygraph API as-is, letting it assume some default
-  // offset for the local time we actually gave it in a real timezone --
-  // a wrong UTC moment computed with total confidence, which can flip
-  // gates, Type, even Authority, with no sign anything went wrong. A
-  // customer paying for this deserves a clear "couldn't resolve your
-  // timezone" over a wrong chart that looks correct.
-  if (!datetime) {
+  const loc = findCity(cityName, countryCode, state);
+  if (!loc || loc.source === "fallback-default") {
     throw new Error(
-      `Could not resolve a timezone for "${cityName}". Human Design needs the exact UTC moment of birth, so the chart can't be safely computed without it.`
+      `Could not find "${city}" as a recognized city. Please check the spelling, or try the nearest larger city -- your Human Design chart depends on the exact birth location, so it can't be computed without a real match.`
     );
   }
 
-  // The bodygraph result for a given resolved datetime is also
-  // deterministic -- cache it too, so re-testing the exact same person
-  // (the normal shape of iterating on this app) costs zero further
-  // calls to this API after the first real one.
-  const chartCacheKey = `hdchart:${datetime}`;
-  const cachedChart = await env.PASSES.get(chartCacheKey);
-  if (cachedChart !== null) return JSON.parse(cachedChart);
-
-  // Retry on a transient/rate-limit response (429, or a 5xx) -- a two-
-  // person relational report makes this exact call twice, back-to-back,
-  // for the same API key within milliseconds of each other, which is
-  // exactly the shape of request a rate limit is designed to catch. One
-  // short retry covers that case without masking a genuine, persistent
-  // failure (a real 4xx other than 429 still throws immediately).
-  let lastErr;
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const res = await fetch("https://api.humandesignhub.app/v2/simple-bodygraph", {
-      method: "POST",
-      headers: {
-        "X-API-KEY": env.HumanDesign_key,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ datetime })
-    });
-    if (res.ok) {
-      const json = await res.json();
-      await env.PASSES.put(chartCacheKey, JSON.stringify(json));
-      return json;
-    }
-    const errText = await res.text();
-    lastErr = new Error(`Human Design API ${res.status}: ${errText}`);
-    if (res.status !== 429 && !(res.status >= 500 && res.status < 600)) throw lastErr;
-    if (attempt === 0) await new Promise(r => setTimeout(r, 600));
-  }
-  throw lastErr;
+  return computeHumanDesign({ year, month, day, hour, minute, lat: loc.lat, lng: loc.lng });
 }
 
 function todayAsMMDDYYYY() {
@@ -336,7 +233,7 @@ function todayAsMMDDYYYY() {
   return `${pad(now.getMonth() + 1)}/${pad(now.getDate())}/${now.getFullYear()}`;
 }
 
-async function assemblePersonData(env, person) {
+async function assemblePersonData(person) {
   const { first, mid, last, dob, time, ampm, city, state, country } = person;
 
   let numerology = null, numerologyError = null;
@@ -358,7 +255,7 @@ async function assemblePersonData(env, person) {
   const hasCity = city && city.trim().length > 0;
   if (hasTime && hasCity) {
     try {
-      humanDesign = await getHumanDesign(env, dob, time, ampm, city, state);
+      humanDesign = getHumanDesignLocal(dob, time, ampm, city, state, country);
     } catch (e) { humanDesignError = e.message; }
   } else {
     humanDesignError = "Birth time and city are required for Human Design. Chart omitted.";
@@ -1320,8 +1217,8 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
         return jsonResponse({ error: "Invalid request body." }, 400);
       }
       const [p1Data, p2Data] = await Promise.all([
-        assemblePersonData(env, body.p1),
-        body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
+        assemblePersonData(body.p1),
+        body.p2 ? assemblePersonData(body.p2) : Promise.resolve(null)
       ]);
       return jsonResponse({ p1: p1Data, p2: p2Data });
     }
@@ -1422,8 +1319,8 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
         const [p1Data, p2Data] = body.p1Data
           ? [body.p1Data, body.p2Data || null]
           : await Promise.all([
-              assemblePersonData(env, body.p1),
-              body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
+              assemblePersonData(body.p1),
+              body.p2 ? assemblePersonData(body.p2) : Promise.resolve(null)
             ]);
         console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
 
