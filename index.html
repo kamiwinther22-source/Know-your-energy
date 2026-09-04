@@ -365,26 +365,24 @@ body{
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
   text-align:center;margin-bottom:1.4rem;}
 
-/* ---------- panel content: light text on the transparent black card,
-   brand blue for accents. These --card-* values used to assume a light
-   "brushed-metal" panel background (a design that was tried and
-   explicitly rejected -- see the results-page rules) -- .quad-item/
-   .panel-auto/.panel-error are all background:transparent now, showing
-   the black page straight through, but --card-text/--card-dim/--card-mid
-   were never updated off their old near-black values. That made most
-   card text (dprl/dprv/report-body/gate-def, every place that reads
-   these variables) genuinely invisible -- black text on a transparent
-   card over a black page -- something only some browsers' automatic
-   dark-mode text correction was quietly papering over, which is why it
-   read as "mostly fine" on some devices and genuinely blank on others
-   (confirmed directly: headless Chromium with no such correction
-   renders it as literal black-on-black). Also removes .dph's translucent
-   white background, which read as a grey bar -- no grey anywhere on the
-   results page, full stop. */
-.dp{--card-text:#ffffff;--card-dim:#cfd8f5;--card-mid:#b9c4e8;--card-accent:#1C2CA9;
-  --card-a1:rgba(10,21,48,0.28);--card-a2:rgba(28,44,169,0.35);--card-a3:transparent;--card-a4:rgba(28,44,169,0.12);
-  --card-stripe-odd:rgba(255,255,255,0.06);--card-stripe-even:transparent;
-  color:var(--card-text);height:100%;display:flex;flex-direction:column;}
+/* .dp is the Reading panel's own inner wrapper (used only inside
+   .panel-auto/.panel-error, never on its own -- see reportSlot()). It
+   used to redeclare --card-text/--card-dim/etc itself, a leftover from
+   an old transparent-on-black card design (that whole look was tried
+   and explicitly rejected -- see the results-page rules): once the
+   card fill moved to the current cream/bone-white, .quad-item/
+   .panel-auto were updated to a dark --card-text set (below), but .dp's
+   own white values were never touched, and since a custom property
+   declared directly on an element always wins over one inherited from
+   an ancestor, .dp kept silently overriding its parent's dark text back
+   to white for every Reading-panel state -- confirmed by rendering it
+   headless and reading the actual computed color: white text on the
+   cream fill, genuinely unreadable, not just low-contrast. .dp no
+   longer declares these at all, so it now inherits the real dark set
+   from .panel-auto/.panel-error like every other card already does.
+   Also removes .dph's translucent white background, which read as a
+   grey bar -- no grey anywhere on the results page, full stop. */
+.dp{color:var(--card-text);height:100%;display:flex;flex-direction:column;}
 .dph{padding:0.3rem 0.4rem;font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--card-accent);border-bottom:1px solid var(--card-a2);background:var(--card-a3);flex-shrink:0;font-weight:800;}
 .dplist{flex:1;overflow:hidden;}
 .dpr{display:flex;flex-direction:column;gap:0.02rem;padding:0.1rem 0.4rem;font-size:0.5rem;}
@@ -473,8 +471,11 @@ body{
    --card-accent/--card-a1/--card-a4/--card-stripe-*, which .dp defines as
    a WHITE-text set for the old transparent-on-black look; redefining them
    here to a dark set is what actually makes existing content legible on
-   the new light fill, not just the card's own background/border. */
-.quad-item,.panel-auto{
+   the new light fill, not just the card's own background/border.
+   .panel-error included too -- it never declared --card-text at all,
+   so its .dp content was falling through to .dp's own (now removed)
+   white default with nothing to inherit instead. */
+.quad-item,.panel-auto,.panel-error{
   --card-text:#191510;--card-dim:#4a4238;--card-mid:#3a332a;--card-accent:#1C2CA9;
   --card-a1:rgba(28,44,169,0.3);--card-a2:rgba(28,44,169,0.4);--card-a3:transparent;--card-a4:rgba(28,44,169,0.08);
   --card-stripe-odd:rgba(28,44,169,0.045);--card-stripe-even:transparent;
