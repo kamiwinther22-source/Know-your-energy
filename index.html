@@ -1043,7 +1043,7 @@ const GLOSSARY={
   northnode:"The unfamiliar direction you're meant to grow toward in this life, even though it doesn't come naturally yet.",
   southnode:"The familiar habits and instincts you were already born comfortable with — useful, but easy to over-rely on instead of growing past.",
   lilith:"Black Moon Lilith — a calculated point, not a physical body. The raw, unfiltered part of you that got pushed into hiding for not fitting what others expected.",
-  sirius:"The fixed star tied to ambition and the drive to stand out. A planet connected to it gets extra intensity in that area — powerful when channeled, prone to burnout or arrogance when it isn't.",
+  sirius:"The brightest star in the sky, historically called the Dog Star. Real fixed-star technique reads it through conjunction, not sign — it moves only about one degree every 72 years, so nearly everyone alive today has it in the same one or two signs; the sign itself carries no personal meaning. What matters is which planet or angle it sits close to in degree. Tightly conjunct the Sun, Moon, or an angle like the Midheaven, the established tradition ties it to renown and a life built around being publicly known; aspecting Mars or Jupiter as well adds a real drive toward wealth or leadership through it. The same tradition names a real cost alongside that: volatility or arrogance when the pull toward recognition isn't given a real, constructive outlet.",
   aspectconjunction:"Two points sitting right on top of each other — their energies blend into one and are hard to tell apart.",
   aspectsextile:"Two points at an easy 60° angle — energies that cooperate with a little effort, an opportunity you still have to act on.",
   aspectsquare:"Two points at a tense 90° angle — friction that forces action; uncomfortable, but where real growth usually gets made.",
@@ -2517,18 +2517,30 @@ function ar(astro,errMsg){
   // Sirius intentionally has no ASTRO_DEFS.sirius sign entries -- real fixed-
   // star technique reads Sirius through conjunctions to natal points, not
   // sign placement (its ecliptic position moves ~1 degree per 72 years, so
-  // it sits in essentially the same sign for everyone alive today); it falls
-  // back to the plain GLOSSARY line only, which is correct, not incomplete.
+  // it sits in essentially the same sign for everyone alive today, telling
+  // a reader nothing personal about them). Its row below shows its real
+  // aspects instead of a sign that would only look personalized.
   const extraPoints=[astro.northNode,astro.southNode,astro.chiron,astro.sirius,astro.lilith].filter(p=>p?.sign);
   if(extraPoints.length){
     h+=dpsec('Other Points');
     extraPoints.forEach(p=>{
       const name=p.name;
       const glyph=glyphIcon(name,PLANET_COLOR[name]);
-      let signOut=p.sign;
-      if(p.signUncertain)signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
-      else if(p.house)signOut+=` · House ${p.house}`;
-      h+=arow(glyph+name,signOut,POINT_KEY[name],p.sign);
+      let signOut, defNum=p.sign;
+      if(name==='Sirius'){
+        const hits=(astro.aspects||[]).filter(a=>a.point1==='Sirius'||a.point2==='Sirius')
+          .sort((a,b)=>(a.orb??99)-(b.orb??99));
+        signOut=hits.length
+          ? hits.map(a=>`${a.aspect} ${a.point1==='Sirius'?a.point2:a.point1}${a.orb!=null?` (${a.orb}°)`:''}`).join(', ')
+          : 'No close aspects in this chart';
+        defNum=null;
+      }else if(p.signUncertain){
+        signOut=`${p.sign} or ${p.signAlt} — changes sign this day, exact birth time needed`;
+      }else{
+        signOut=p.sign;
+        if(p.house)signOut+=` · House ${p.house}`;
+      }
+      h+=arow(glyph+name,signOut,POINT_KEY[name],defNum);
     });
   }
   return h||apend('Unavailable');
