@@ -1191,9 +1191,18 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
 // times, sending a failed response back to the model with a note on
 // what was wrong so it could fix it; that's gone. The prompt is what's
 // responsible for getting this right the first time, not a rewrite
-// cycle catching what it missed. findNamingDefect/findCitationLeak
-// below still run, but only to decide accept-or-discard -- a defect
-// no longer goes back to the model, it goes straight to the fallback.
+// cycle catching what it missed.
+//
+// A content defect (findNamingDefect/findCitationLeak) DOES still get
+// one retry, though -- fresh, same prompt, no note about what was wrong,
+// the exact same "try again" a transient technical failure already gets
+// below. A real citation-stacking violation was reaching this point,
+// discarding a complete, fully-paid-for generation into an empty "please
+// try again" with zero chance of a usable reading -- the customer had
+// already paid the real Anthropic cost for that attempt either way, so
+// giving it one more fresh attempt before accepting defeat costs nothing
+// beyond what a technical failure already costs, and usually turns a
+// dead end into an actual delivered reading.
 //
 // A transient failure (a stalled connection, a dropped stream, a
 // truncated or unparseable response) is a different category and does
@@ -1217,7 +1226,7 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   const usageType = hdOnly ? 'hd-only' : (rtype === 'two-person' ? 'two-person' : 'individual');
 
-  let result, lastError;
+  let result, lastError, defect;
   // Usage from a failed first attempt is real spent tokens too -- tracked
   // separately so a failed-then-succeeded retry still records both
   // attempts' cost, not just the one that happened to land.
@@ -1229,10 +1238,14 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
       } else {
         result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
       }
-      lastError = null;
-      break;
+      defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
+      if (!defect) { lastError = null; break; }
+      failedUsages.push(result.usage);
+      console.error(`Report generation attempt ${attempt + 1} had a content defect, retrying once: ${defect}`);
+      lastError = new Error(defect);
     } catch (error) {
       lastError = error;
+      defect = null;
       if (error.usage) failedUsages.push(error.usage);
       console.error(`Report generation attempt ${attempt + 1} failed: ${error.message}`);
     }
@@ -1258,17 +1271,12 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
     return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: lastError.message };
   }
 
+  // Reaching here means the loop above already found this exact result
+  // defect-free (that's the only way it breaks with lastError still
+  // null) -- nothing left to check.
   const usage = failedUsages.length ? combineUsage([...failedUsages, result.usage]) : result.usage;
   if (ctx) ctx.waitUntil(recordUsage(env, usage, usageType));
-
-  const defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
-  if (!defect) return { reading: result.parsed, usedFallback: false };
-  console.error(`Report generation defect, using deterministic fallback: ${defect}`);
-  // A customer still always gets a reading (this literally cannot fail
-  // the way an AI generation can), but usedFallback travels with it so
-  // the frontend can show a visible notice instead of a customer having
-  // to notice on their own that this wasn't the personalized one.
-  return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: defect };
+  return { reading: result.parsed, usedFallback: false };
 }
 
 export default {
