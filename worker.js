@@ -903,8 +903,18 @@ function extractJSON(text) {
   return trimmed;
 }
 
-async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PROMPT) {
+async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PROMPT, modelOpts = {}) {
   const messages = [{ role: 'user', content: userPrompt }];
+  // Defaults are the full-reading settings (unchanged from before this
+  // param existed). correctCitationDefect (below) overrides these for a
+  // small, narrow, single-paragraph fix -- a genuinely different, much
+  // simpler task than composing a full reading, not a quality cut on the
+  // reading itself.
+  const {
+    max_tokens = 72000,
+    thinking = { type: 'adaptive' },
+    effort = 'medium'
+  } = modelOpts;
 
   // Nothing here previously bounded how long a single attempt could take
   // if the connection to Anthropic stalled -- no timeout on the fetch, no
@@ -964,9 +974,9 @@ async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PRO
       // was being cut off actually changes. Sonnet 5 supports up to
       // 128000 output tokens (confirmed via the claude-api skill), so
       // this is still well under the actual ceiling.
-      max_tokens: 72000,
-      thinking: { type: 'adaptive' },
-      output_config: { effort: 'medium' },
+      max_tokens,
+      thinking,
+      output_config: { effort },
       // A non-streaming call with a thinking pass hit a Cloudflare 524 --
       // the generation genuinely took longer than the edge's timeout for
       // one long silent response. Streaming keeps the
@@ -1060,11 +1070,14 @@ function flattenReadingText(reading) {
 // rule (a live case used "Partner A"/"Partner B" throughout, never the
 // person's first name, despite the system prompt). Don't just trust
 // the prompt held -- count how many times each first name shows up
-// before this ever reaches a paying customer. This no longer feeds a
+// before this ever reaches a paying customer. This doesn't feed a
 // repair pass (see generateReport) -- it only decides whether this
-// response gets accepted or discarded for the fallback, so what it
-// returns is a diagnostic description for the log, not an instruction
-// aimed at the model.
+// response gets accepted or discarded for the fallback. Returns
+// {message} (a diagnostic description for the log, not an instruction
+// aimed at the model) with no location info -- unlike a citation-leak
+// defect, this pattern is spread across the whole reading's word
+// choice, not one fixable span, so there's nothing here for a targeted
+// correction to target.
 function findNamingDefect(reading, rtype, p1, p2) {
   const text = flattenReadingText(reading);
   // A separate, repeated live case: a single reading used "she"/"her"
@@ -1079,14 +1092,14 @@ function findNamingDefect(reading, rtype, p1, p2) {
     const youCount = (text.match(/\byou(?:r|rs|self)?\b/gi) || []).length;
     const thirdPersonCount = (text.match(/\b(she|her|hers|he|him|his)\b/gi) || []).length;
     if (thirdPersonCount >= 3 && thirdPersonCount > (nameCount + youCount)) {
-      return `Refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you" -- a single reading must use "you" every time, never a third-person pronoun.`;
+      return { message: `Refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you" -- a single reading must use "you" every time, never a third-person pronoun.` };
     }
     // A live case used the person's name in sustained third-person
     // narration -- "Jacob's sense of who Jacob is centers on..." --
     // instead of "you." A single reading never uses the person's name
     // at all, so any use of it (not just a majority) is a defect.
     if (nameCount >= 1) {
-      return `Refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times) -- a single reading must always say "you," never the person's name.`;
+      return { message: `Refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times) -- a single reading must always say "you," never the person's name.` };
     }
     return null;
   }
@@ -1094,7 +1107,7 @@ function findNamingDefect(reading, rtype, p1, p2) {
   const p1Count = countNameMentions(text, p1.first);
   const p2Count = countNameMentions(text, p2.first);
   if (p1Count < minCount || p2Count < minCount) {
-    return `Barely used ${p1.first} and ${p2.first}'s first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections) -- every reference to either person must use their actual first name.`;
+    return { message: `Barely used ${p1.first} and ${p2.first}'s first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections) -- every reference to either person must use their actual first name.` };
   }
   return null;
 }
@@ -1133,10 +1146,13 @@ const CITATION_PATTERNS = [
 // -- a real stacked-citation dump, not two named things each explained
 // in their own sentence.
 const CITATION_STACK_GAP = 12;
-function findCitationLeak(reading) {
-  const parts = [reading.headline];
-  (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
-  const text = parts.filter(Boolean).join('\n');
+// Scans one text field in isolation and returns the violating snippet, or
+// null. Split out from findCitationLeak (below) so the defect can be
+// localized to the one field it's actually in -- a citation-stacking
+// violation is always confined to a single headline/eyebrow/title/body
+// string, never spread across the reading the way a naming-pattern defect
+// is, so there's no need to concatenate every field into one string first.
+function findStackedCitationSpan(text) {
   const matches = [];
   for (const re of CITATION_PATTERNS) {
     const global = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
@@ -1164,7 +1180,34 @@ function findCitationLeak(reading) {
   for (let i = 1; i < spans.length; i++) {
     const gapText = text.slice(spans[i - 1].end, spans[i].start);
     if (gapText.length <= CITATION_STACK_GAP && /^[\s,;.\-–—]*(and|in|with|of)?[\s,;.\-–—]*$/i.test(gapText)) {
-      return `Stacks citations directly into the prose with no sentence around them ("${spans[i - 1].text}${gapText}${spans[i].text}") -- naming ONE placement or number and explaining it in the same sentence is fine, but two or more stacked back-to-back with nothing connecting them is not.`;
+      return `${spans[i - 1].text}${gapText}${spans[i].text}`;
+    }
+  }
+  return null;
+}
+// Returns {message, sectionIndex, key, text} on a hit -- sectionIndex -1
+// means reading.headline itself, otherwise reading.sections[sectionIndex]
+// [key]. The location is what lets generateReport ask for a small,
+// targeted rewrite of just that one field instead of the whole reading --
+// per direct instruction, a full regeneration has never been the wanted
+// fix for one bad paragraph.
+function findCitationLeak(reading) {
+  const fields = [{ sectionIndex: -1, key: 'headline', text: reading.headline }];
+  (reading.sections || []).forEach((s, i) => {
+    fields.push({ sectionIndex: i, key: 'eyebrow', text: s.eyebrow });
+    fields.push({ sectionIndex: i, key: 'title', text: s.title });
+    fields.push({ sectionIndex: i, key: 'body', text: s.body });
+  });
+  for (const f of fields) {
+    if (!f.text) continue;
+    const snippet = findStackedCitationSpan(f.text);
+    if (snippet) {
+      return {
+        message: `Stacks citations directly into the prose with no sentence around them ("${snippet}") -- naming ONE placement or number and explaining it in the same sentence is fine, but two or more stacked back-to-back with nothing connecting them is not.`,
+        sectionIndex: f.sectionIndex,
+        key: f.key,
+        text: f.text
+      };
     }
   }
   return null;
@@ -1187,30 +1230,61 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
   return { parsed, usage };
 }
 
-// No repair pass on a content defect -- the old version retried up to 3
-// times, sending a failed response back to the model with a note on
-// what was wrong so it could fix it; that's gone. The prompt is what's
-// responsible for getting this right the first time, not a rewrite
-// cycle catching what it missed.
+// A citation-stacking defect is fully localized to one field -- fixing it
+// means rewriting one paragraph, not the whole reading. Per direct
+// instruction, a full regeneration has never been the wanted correction
+// mechanism; this is the actual targeted fix instead. Deliberately plain
+// (no thinking, low effort, small max_tokens): rewriting one already-
+// written paragraph to remove a specific mechanical defect is a genuinely
+// simpler task than composing the reading was, not the same task done
+// cheaply -- the "quality is the floor" rule was about the reading itself,
+// which this never touches except for the one flagged field.
+const CITATION_FIX_SYSTEM_PROMPT = `You're fixing one specific, mechanical problem in one short piece of text from an already-written astrology/numerology reading. You'll be given the text and a description of what's wrong with it.
+
+Rewrite it so the problem is gone. Keep every fact, keep the exact same voice ("you", or a first name, whichever the text already uses), keep roughly the same length. Change only what the described problem requires -- leave everything else as close to the original wording as it can stay.
+
+Return ONLY the corrected text. No JSON, no quotation marks around it, no preamble, no explanation.`;
+async function correctCitationDefect(env, fieldText, defectMessage) {
+  const userPrompt = `Problem: ${defectMessage}\n\nText:\n${fieldText}`;
+  // Adaptive thinking, not disabled -- disabling it has two documented
+  // failure modes (stray <thinking> tag leakage into the visible text is
+  // the one that matters here, since this call has no tools to misfire
+  // into). Low effort keeps it fast for a task this narrow without that
+  // risk; adaptive thinking on a one-paragraph mechanical rewrite should
+  // do little to no actual thinking anyway.
+  const { text, usage } = await callReportModel(env, userPrompt, CITATION_FIX_SYSTEM_PROMPT, {
+    max_tokens: 2000,
+    thinking: { type: 'adaptive' },
+    effort: 'low'
+  });
+  return { text: text.trim(), usage };
+}
+
+// No repair pass on a content defect that regenerates the whole reading --
+// per direct instruction, a full rewrite has never been the wanted fix for
+// one bad paragraph, so this never happens: not the old multi-retry repair
+// loop, and not a fresh full-regeneration retry either. Two different
+// things happen instead, matched to what's actually broken:
 //
-// A content defect (findNamingDefect/findCitationLeak) DOES still get
-// one retry, though -- fresh, same prompt, no note about what was wrong,
-// the exact same "try again" a transient technical failure already gets
-// below. A real citation-stacking violation was reaching this point,
-// discarding a complete, fully-paid-for generation into an empty "please
-// try again" with zero chance of a usable reading -- the customer had
-// already paid the real Anthropic cost for that attempt either way, so
-// giving it one more fresh attempt before accepting defeat costs nothing
-// beyond what a technical failure already costs, and usually turns a
-// dead end into an actual delivered reading.
+// A content defect (findNamingDefect/findCitationLeak) is either localized
+// to one field or it isn't. findCitationLeak's defect always is -- the
+// violation sits inside one specific headline/eyebrow/title/body string --
+// so it gets ONE small, targeted correctCitationDefect() call that rewrites
+// just that field, not the reading. findNamingDefect's defect is a pattern
+// spread across the whole reading's word choice, not one fixable span, so
+// there's nothing to target -- it goes straight to the fallback below, same
+// as a citation fix that still fails after being attempted.
 //
 // A transient failure (a stalled connection, a dropped stream, a
-// truncated or unparseable response) is a different category and does
-// get one retry, fresh, same prompt, no note about what went wrong --
-// exactly what a customer does themselves by tapping "Run Another
-// Reading," just done once automatically before ever showing them a
-// failure. A single stall shouldn't be a guaranteed customer-facing
-// failure when trying again costs a few more seconds and nothing else.
+// truncated or unparseable response) is a different category, with
+// nothing to correct -- no valid reading was ever produced to begin with.
+// That still gets one retry, fresh, same prompt, no note about what went
+// wrong -- exactly what a customer does themselves by tapping "Run
+// Another Reading," just done once automatically before ever showing
+// them a failure. A single stall shouldn't be a guaranteed customer-
+// facing failure when trying again costs a few more seconds and nothing
+// else. This is not the "no rewrites" rule being broken -- there's no
+// reading yet to rewrite, only a call that never completed.
 //
 // hdOnly is a TEMPORARY, experimental flag -- see
 // HD_ONLY_RELATIONAL_SYSTEM_PROMPT above. Remove the parameter and the
@@ -1226,10 +1300,11 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   const usageType = hdOnly ? 'hd-only' : (rtype === 'two-person' ? 'two-person' : 'individual');
 
-  let result, lastError, defect;
-  // Usage from a failed first attempt is real spent tokens too -- tracked
-  // separately so a failed-then-succeeded retry still records both
-  // attempts' cost, not just the one that happened to land.
+  let result, lastError;
+  // Usage from every attempt (a failed technical retry, or a citation-
+  // fix call) is real spent tokens too -- tracked separately so the
+  // final recorded usage always reflects everything actually billed,
+  // not just whichever call happened to produce the delivered reading.
   const failedUsages = [];
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
@@ -1238,14 +1313,10 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
       } else {
         result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
       }
-      defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
-      if (!defect) { lastError = null; break; }
-      failedUsages.push(result.usage);
-      console.error(`Report generation attempt ${attempt + 1} had a content defect, retrying once: ${defect}`);
-      lastError = new Error(defect);
+      lastError = null;
+      break;
     } catch (error) {
       lastError = error;
-      defect = null;
       if (error.usage) failedUsages.push(error.usage);
       console.error(`Report generation attempt ${attempt + 1} failed: ${error.message}`);
     }
@@ -1271,12 +1342,31 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
     return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: lastError.message };
   }
 
-  // Reaching here means the loop above already found this exact result
-  // defect-free (that's the only way it breaks with lastError still
-  // null) -- nothing left to check.
+  let defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
+  if (defect && defect.sectionIndex !== undefined) {
+    try {
+      const fix = await correctCitationDefect(env, defect.text, defect.message);
+      failedUsages.push(fix.usage);
+      if (defect.sectionIndex === -1) result.parsed.headline = fix.text;
+      else result.parsed.sections[defect.sectionIndex][defect.key] = fix.text;
+      // Re-check the patched reading -- the fix itself could rarely still
+      // leave a stack, or (much less likely, but checked anyway) drift
+      // into a naming defect in that one field.
+      defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
+    } catch (fixError) {
+      console.error(`Citation-defect fix attempt failed: ${fixError.message}`);
+      if (fixError.usage) failedUsages.push(fixError.usage);
+      // defect is still set from before the fix attempt -- falls through
+      // to the fallback below, same as if the fix had run and failed.
+    }
+  }
+
   const usage = failedUsages.length ? combineUsage([...failedUsages, result.usage]) : result.usage;
   if (ctx) ctx.waitUntil(recordUsage(env, usage, usageType));
-  return { reading: result.parsed, usedFallback: false };
+
+  if (!defect) return { reading: result.parsed, usedFallback: false };
+  console.error(`Report generation defect, using deterministic fallback: ${defect.message}`);
+  return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: defect.message };
 }
 
 export default {
