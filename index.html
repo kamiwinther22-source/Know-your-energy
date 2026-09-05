@@ -442,12 +442,29 @@ body{
    "cursive" keyword) is a safety net for the rare case it isn't. */
 .report-preview{padding:0 0.6rem;font-family:'Alex Brush','Segoe Script','Brush Script MT','Lucida Handwriting',cursive;font-size:clamp(1.6rem,7vw,2.1rem);line-height:1.25;font-weight:400;letter-spacing:0.01em;text-transform:none;font-style:normal;text-align:center;
   color:#000000;filter:drop-shadow(0 0 12px rgba(90,110,230,0.55));}
-.report-tray-preview{height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:0;}
+.report-tray-preview{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:0;}
 .report-tray-preview::before{
   content:'';position:absolute;left:50%;top:50%;width:140%;height:140%;
   transform:translate(-50%,-50%);
   background:radial-gradient(ellipse at center, rgba(70,85,214,0.28) 0%, rgba(70,85,214,0.1) 45%, transparent 72%);
   pointer-events:none;z-index:-1;
+}
+/* The collapsed Reading card used to show only the two names in cursive --
+   elegant, but cursor:pointer is invisible on a touch device (no hover
+   state exists there at all), so someone could easily not realize this
+   box is tappable. Reuses the exact chevron construction .dprl.term
+   already uses everywhere else in the app for "tap this" -- same visual
+   language, not a new one -- plus report-tap-hint so it hides in print
+   the same way the gates hint already does (nothing's tappable there). */
+.reading-tap-hint{
+  color:var(--card-accent);font-family:'DM Sans',sans-serif;font-size:0.5rem;font-weight:700;
+  letter-spacing:0.03em;text-transform:uppercase;text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:0.3em;margin-top:0.2rem;
+}
+.reading-tap-hint::after{
+  content:'';flex-shrink:0;width:0.4em;height:0.4em;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg);
 }
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
 
@@ -2873,7 +2890,7 @@ function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback,pendi
   // existed anywhere printable; only these two names did, no matter how
   // print/overflow CSS was tuned, because the modal draws its content
   // from cardRegistry (a JS array), not from anything in the page itself.
-  return `<div class="panel-auto" id="readingSlot" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(cardNames)}</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
+  return `<div class="panel-auto" id="readingSlot" style="grid-column:2;grid-row:${rowNum};" data-card-idx="${idx}"><div class="dp"><div class="dph">Reading</div><div class="dplist"><div class="dprow report-tray-preview"><p class="report-preview">${escapeHtml(cardNames)}</p><p class="reading-tap-hint report-tap-hint">Tap to read</p></div><div class="report-print-full">${fullRows}</div></div></div></div>`;
 }
 
 // ---------- numerology date explorer ----------
