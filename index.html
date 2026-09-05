@@ -585,6 +585,11 @@ body{
    scrolling back up through a long card -- she asked for this after
    finding the only Listen control was at the very bottom of the page. */
 .card-expand-listen{position:sticky;top:0.3rem;float:left;z-index:1;}
+/* .side-btn sets display:inline-flex directly, same specificity as the
+   browser's own [hidden]{display:none} rule and later in the cascade --
+   without this, setting the .hidden property from JS would silently do
+   nothing and the button would stay visible on every card. */
+#cardExpandListenBtn[hidden]{display:none!important;}
 .card-expand-title{max-width:760px;margin:0 auto 0.9rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;clear:both;}
 .card-expand-body{max-width:600px;margin:0 auto;font-size:1.25rem;}
 .card-expand-body .dplist{overflow:visible;}
@@ -963,6 +968,7 @@ function openNumberDef(item){
   stopListening();
   document.getElementById('cardExpandTitle').textContent=`Number ${item.n} — ${item.lbl}`;
   document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${NUM_DEFS.core[item.n]||''}</p></div>`;
+  document.getElementById('cardExpandListenBtn').hidden=true;
   document.getElementById('cardExpand').classList.add('open');
 }
 
@@ -1163,6 +1169,7 @@ function openGlossary(){
   stopListening();
   document.getElementById('cardExpandTitle').textContent='Glossary';
   document.getElementById('cardExpandBody').innerHTML=buildGlossaryHTML();
+  document.getElementById('cardExpandListenBtn').hidden=true;
   document.getElementById('cardExpand').classList.add('open');
 }
 
@@ -2661,13 +2668,22 @@ let speechQueue=[];
 // speechSynthesis session, since a device only has one voice speaking at
 // a time regardless of which button started it.
 let activeListenBtnId=null;
+// Real, sourced Chrome bug (chromium issue 679437): a non-local voice
+// (anything piped through Chrome's remote TTS service, which most
+// installed voices are) silently stops speaking after ~15 seconds unless
+// something calls resume() first. Sentence-chunking below already helps
+// (most sentences finish under 15s), but a single long sentence can still
+// exceed it -- this interval is the documented workaround, independent of
+// sentence length.
+let listenKeepAlive=null;
 function stripHtmlToText(html){
   const d=document.createElement('div');
   d.innerHTML=html;
   return d.textContent.replace(/\s+/g,' ').trim();
 }
+// Only the Reading (narrative) is ever read aloud -- see startListening.
 function getReadableSegments(){
-  return cardRegistry.map(entry=>{
+  return cardRegistry.filter(entry=>entry.isReading).map(entry=>{
     const body=stripHtmlToText((entry.preHtml||'')+entry.rows);
     return body?`${entry.title}. ${body}`:'';
   }).filter(Boolean);
@@ -2678,16 +2694,42 @@ function updateListenBtn(active){
   const label=btn&&btn.querySelector('span');
   if(label)label.textContent=active?'Stop':'Listen';
 }
+// No two devices ship the same voice list, so there's no single "best"
+// voice -- but the unnamed default Chrome falls back to is reliably the
+// worst-sounding one available. Preferring a voice whose name signals
+// higher quality (an OS "Natural" voice, or Google's online voices) over
+// picking whatever's first is a real, sourced improvement, not a fix for
+// every device: a device with only one low-quality voice installed still
+// only has that one voice to offer.
+let bestVoice=null;
+function pickBestVoice(){
+  if(!window.speechSynthesis)return null;
+  const voices=speechSynthesis.getVoices();
+  if(!voices.length)return null;
+  const english=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith('en'));
+  const pool=english.length?english:voices;
+  const byName=re=>pool.find(v=>re.test(v.name));
+  return byName(/natural/i)||byName(/online|google/i)||pool[0];
+}
+if(window.speechSynthesis){
+  bestVoice=pickBestVoice();
+  speechSynthesis.onvoiceschanged=()=>{ bestVoice=pickBestVoice(); };
+}
 function speakNext(){
-  if(!speechQueue.length){ updateListenBtn(false); activeListenBtnId=null; return; }
+  if(!speechQueue.length){ stopListenKeepAlive(); updateListenBtn(false); activeListenBtnId=null; return; }
   const utter=new SpeechSynthesisUtterance(speechQueue.shift());
+  if(bestVoice)utter.voice=bestVoice;
   utter.onend=speakNext;
   utter.onerror=speakNext;
   speechSynthesis.speak(utter);
 }
+function stopListenKeepAlive(){
+  if(listenKeepAlive){ clearInterval(listenKeepAlive); listenKeepAlive=null; }
+}
 function stopListening(){
   speechQueue=[];
   if(window.speechSynthesis)speechSynthesis.cancel();
+  stopListenKeepAlive();
   updateListenBtn(false);
   activeListenBtnId=null;
 }
@@ -2698,8 +2740,15 @@ function startListening(segments,btnId){
   activeListenBtnId=btnId;
   speechQueue=segments.flatMap(seg=>seg.match(/[^.!?]+[.!?]*/g)||[seg]);
   updateListenBtn(true);
+  stopListenKeepAlive();
+  listenKeepAlive=setInterval(()=>{ if(window.speechSynthesis&&speechSynthesis.speaking)speechSynthesis.resume(); },10000);
   speakNext();
 }
+// Only the narrative reading gets a Listen button -- browser TTS on chart
+// cards and glossary definitions kept failing to work reliably, and
+// reading a full chart's worth of jargon aloud is a worse experience than
+// reading the reading itself. See toggleModalListen/openGlossary/
+// openNumberDef for where the modal's own Listen button is hidden to match.
 function toggleListen(){
   if(!window.speechSynthesis){
     alert("Your browser doesn't support reading text aloud.");
@@ -2713,9 +2762,10 @@ function toggleListen(){
   if(!segments.length)return;
   startListening(segments,'listenBtn');
 }
-// Reads whatever's currently shown in the tap-to-expand modal -- works
-// for a full person/reading card and for a small glossary definition
-// alike, since both draw from the same #cardExpandTitle/#cardExpandBody.
+// Reads whatever's currently shown in the tap-to-expand modal. Only ever
+// reachable for the Reading card -- the button itself is hidden for every
+// other card and for glossary/number definitions (see the data-card-idx
+// click handler, openNumberDef, and openGlossary below).
 function toggleModalListen(){
   if(!window.speechSynthesis){
     alert("Your browser doesn't support reading text aloud.");
@@ -2812,7 +2862,7 @@ function reportSlot(names,cardNames,report,reportError,rowNum,usedFallback,pendi
   const refsHtml=(report.references&&report.references.length)?
     dpsec('References')+`<div class="dprow"><p class="report-body" style="color:var(--card-mid);font-style:italic;">${report.references.map(escapeHtml).join(' &middot; ')}</p></div>`:'';
   const fullRows=fallbackNoticeHtml+sectionsHtml+sigHtml+refsHtml;
-  const idx=cardRegistry.push({title:titleRaw,rows:fullRows})-1;
+  const idx=cardRegistry.push({title:titleRaw,rows:fullRows,isReading:true})-1;
   // Title-page treatment: just the first name(s), centered, joined by
   // "&" for a two-person reading -- not the headline, not a repeated
   // full name (that's redundant with each person's own astrology/
@@ -3380,6 +3430,7 @@ document.addEventListener('click', e=>{
       stopListening();
       document.getElementById('cardExpandTitle').textContent=entry.title;
       document.getElementById('cardExpandBody').innerHTML=(entry.preHtml||'')+entry.rows;
+      document.getElementById('cardExpandListenBtn').hidden=!entry.isReading;
       document.getElementById('cardExpand').classList.add('open');
     }
   }
