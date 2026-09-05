@@ -429,7 +429,13 @@ body{
 .dpdef p:last-child{margin-bottom:0;}
 .dpdef p:first-child{font-weight:700;font-style:normal;}
 .wheel-wrap{display:none;}
-.card-expand-body .wheel-wrap{display:flex;justify-content:center;width:calc(100% + 2.6rem);max-width:600px;margin:0 -1.3rem 0.8rem;}
+/* The wheel SVG's sign labels and Ascendant/Midheaven lines use
+   fill/stroke="currentColor" so they can flip for print -- .quad-item
+   .quad-wheel (the small card) sets color:#1C2CA9 for this, but this
+   modal wrapper never did, so it silently inherited .card-expand's own
+   color:#000000 instead. Same blue, same reasoning, just the other
+   place this SVG renders. */
+.card-expand-body .wheel-wrap{display:flex;justify-content:center;width:calc(100% + 2.6rem);max-width:600px;margin:0 -1.3rem 0.8rem;color:#1C2CA9;}
 .dpdef[hidden]{display:none;}
 .report-print-full{display:none;}
 /* Title-page treatment: just the first name(s) in the same cursive used
