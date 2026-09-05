@@ -612,6 +612,7 @@ You are an expert astrologer and numerologist. Draw on your full depth of knowle
 Before writing, find the connection points between the two charts -- not everything technically present, only what two people would actually notice or feel between them.
 - Astrology: Sun-Moon cross-aspects, Venus-Mars, Moon-Moon, any tight conjunction from one person's planet onto the other's planet, angle, or Chiron. Also check whether either person's active astrological return (see Cycles & Timing below) lands on a placement in the other person's chart.
 - Numerology: using the raw data and your own full training knowledge, find the data points with the biggest relational influence and state exactly what the interaction produces in practical language -- detailed enough that nothing is left as a theme or category to interpret further.
+- Human Design: only when a "Human Design connection" line is given. Cover exactly what it describes -- energy the two people generate together that neither has alone, or one person's steady definition reaching a center the other doesn't have on their own. Never bring in either person's Type, Strategy, or Authority (how they make decisions) here -- that content is out of scope for this reading and already implied by the rest of the chart.
 - Connection comes first: establish what draws the two people together before covering friction or self-protection.
 - A section describing friction, withdrawal, or a gap can't end there -- state what each person would actually need to feel reconnected, as an observational fact about that one person, never a formula and never advice. Don't claim the other person can meet that need unless the data supports it -- state what they're actually most likely to do instead.
 - Describe the relationship itself, not each person's individual process.
@@ -718,6 +719,79 @@ function buildFallbackReading() {
   return { headline: 'Please Try Again', sections: [], references: [] };
 }
 
+// Real Human Design structural data (center/gate membership, the 36
+// channels) -- same real data and cross-check as index.html's own copy
+// (github.com/dturkuler/humandesign_api, src/humandesign/hd_constants.py).
+// Duplicated here rather than shared because index.html loads as a plain
+// script, not a module, and this is fixed real-world classification that
+// won't drift -- if it's ever corrected, update both copies.
+const HD_CENTER_GATES = {
+  Head: [64, 61, 63], Ajna: [47, 24, 4, 11, 43, 17],
+  Throat: [62, 23, 56, 16, 20, 31, 8, 33, 35, 12, 45],
+  G: [1, 13, 7, 2, 15, 10, 25, 46], Heart: [21, 40, 26, 51],
+  Sacral: [34, 5, 14, 29, 59, 9, 3, 42, 27],
+  Spleen: [48, 57, 44, 50, 32, 28, 18],
+  SolarPlexus: [37, 6, 49, 22, 55, 36, 30],
+  Root: [58, 38, 54, 53, 60, 52, 19, 39, 41]
+};
+const HD_GATE_CENTER = {};
+Object.entries(HD_CENTER_GATES).forEach(([c, gates]) => gates.forEach(g => HD_GATE_CENTER[g] = c));
+const HD_CHANNELS = [
+  [64, 47], [61, 24], [63, 4], [17, 62], [43, 23], [11, 56], [16, 48], [20, 57], [20, 34], [32, 54],
+  [28, 38], [18, 58], [20, 10], [31, 7], [8, 1], [33, 13], [10, 34], [15, 5], [2, 14], [46, 29],
+  [10, 57], [57, 34], [50, 27], [45, 21], [59, 6], [42, 53], [3, 60], [9, 52], [26, 44], [25, 51],
+  [40, 37], [35, 36], [12, 22], [49, 19], [55, 39], [30, 41]
+];
+function hdCenterLabel(c) { return c === 'SolarPlexus' ? 'Solar Plexus' : c; }
+
+// The ONLY Human Design content in a two-person reading, by direct
+// instruction: the two-chart dynamic itself -- gates the two people
+// complete together that neither has alone (an Electromagnetic
+// connection), and a channel one person fully defines that's fully
+// undefined in the other (their energy only reaches that center through
+// this connection, a Dominance dynamic). Deliberately excludes each
+// person's own Type/Strategy/Authority -- tested separately, that content
+// reads as repetitive on its own (the same decision-making point restated
+// many ways) and is already implied by the rest of the chart. Real,
+// sourced HD relational mechanics, not invented: see jovianarchive.com's
+// partnership-analysis material and gethumandesign.com's electromagnetic-
+// channel writeup.
+function buildHDConnectionLine(hd1, hd2, name1, name2) {
+  const toGateSet = (hd) => {
+    const gates = (hd?.gates || []).map(g => parseInt(g, 10)).filter(g => !isNaN(g));
+    return gates.length ? new Set(gates) : null;
+  };
+  const set1 = toGateSet(hd1), set2 = toGateSet(hd2);
+  if (!set1 || !set2) return null;
+
+  const electromagnetic = [];
+  const dominance = [];
+  for (const [a, b] of HD_CHANNELS) {
+    const centers = `${hdCenterLabel(HD_GATE_CENTER[a])}-${hdCenterLabel(HD_GATE_CENTER[b])}`;
+    if ((set1.has(a) && set1.has(b)) || (set2.has(a) && set2.has(b))) {
+      const [empty, fullName, emptyName] =
+        (set1.has(a) && set1.has(b)) ? [set2, name1, name2] : [set1, name2, name1];
+      // Only counts as Dominance if the other person has NEITHER gate --
+      // one gate present there would make it Compromise instead, a
+      // different (and not asked-for) dynamic.
+      if (!empty.has(a) && !empty.has(b)) {
+        dominance.push(`${fullName}'s ${centers} channel (Gates ${a}-${b}, fully defined) is fully undefined in ${emptyName}`);
+      }
+      continue;
+    }
+    if ((set1.has(a) && set2.has(b) && !set1.has(b) && !set2.has(a)) ||
+        (set1.has(b) && set2.has(a) && !set1.has(a) && !set2.has(b))) {
+      electromagnetic.push(`Gates ${a}-${b} (${centers}), split between ${name1} and ${name2}`);
+    }
+  }
+  if (!electromagnetic.length && !dominance.length) return null;
+
+  const lines = ["Human Design connection (only this two-chart dynamic -- not either person's Type, Strategy, or Authority):"];
+  if (electromagnetic.length) lines.push(`  Completed together, neither has alone: ${electromagnetic.join('; ')}`);
+  if (dominance.length) lines.push(`  One person's defined channel, fully undefined in the other: ${dominance.join('; ')}`);
+  return lines.join('\n');
+}
+
 function buildReportUserPrompt(rtype, relLabel, p1, p2) {
   const personBlock = (p) => {
     const n = p.numerology || {};
@@ -810,7 +884,8 @@ Human Design:
   };
 
   if (rtype === 'two-person') {
-    return `Relationship type: ${relLabel}\n${personBlock(p1)}\n${personBlock(p2)}`;
+    const hdConnection = buildHDConnectionLine(p1.humanDesign, p2.humanDesign, p1.first, p2.first);
+    return `Relationship type: ${relLabel}\n${personBlock(p1)}\n${personBlock(p2)}${hdConnection ? `\n${hdConnection}` : ''}`;
   }
   return personBlock(p1);
 }
