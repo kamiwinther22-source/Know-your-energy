@@ -3000,6 +3000,57 @@ function saveResult(p1,p2,r,reportErr,reportUsedFallback,fallbackReason){
 function clearSavedResult(){
   try{ localStorage.removeItem(SAVED_RESULT_KEY); }catch(_){}
 }
+// Patches the job ID onto whatever's already saved under SAVED_RESULT_KEY
+// (the pending-state snapshot renderCharts() saves before /report is even
+// called) instead of a separate key -- so a page reload mid-generation
+// has something to recover the in-flight reading with. Without this, a
+// completed generation nobody ever collects (because the page reloaded
+// and the job ID only ever lived in a local JS variable) is a real,
+// already-paid-for Claude API call wasted for no reason a customer would
+// ever choose. The next real saveResult() call (reading actually
+// finishes or definitively fails) naturally drops this again, since it
+// writes a fresh object with no jobId field.
+function saveJobId(jobId){
+  try{
+    const raw=localStorage.getItem(SAVED_RESULT_KEY);
+    if(!raw)return;
+    const obj=JSON.parse(raw);
+    obj.jobId=jobId;
+    localStorage.setItem(SAVED_RESULT_KEY, JSON.stringify(obj));
+  }catch(_){}
+}
+// Shared by generate()'s connection-drop recovery and the page-reload
+// recovery path further down -- same mechanism, same reason: a job ID
+// represents a real, already-paid-for generation that may well finish on
+// its own, worth a bounded wait before accepting it as lost.
+async function pollReportStatus(jobId){
+  const POLL_MS=4000, MAX_WAIT_MS=8*60*1000;
+  const pollStart=Date.now();
+  while(true){
+    if(Date.now()-pollStart>MAX_WAIT_MS)return {timedOut:true};
+    await new Promise(r=>setTimeout(r,POLL_MS));
+    let pollResult;
+    try{
+      const res=await fetch(W_API+'/report-status',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({jobId})
+      });
+      pollResult=await res.json();
+      if(!res.ok||pollResult.error){
+        // A job-not-found/expired error is real and terminal; a transient
+        // network hiccup on this one poll is not -- but both come back as
+        // pollResult.error here, so a single failed poll just tries again
+        // on the next tick rather than aborting the whole wait immediately.
+        continue;
+      }
+    }catch(e){
+      continue;
+    }
+    if(pollResult.status==='pending')continue;
+    return pollResult;
+  }
+}
 
 // Same reasoning as SAVED_RESULT_KEY above, but for the un-submitted form
 // itself: a refresh (accidental, or while waiting -- see the loading-state
@@ -3324,6 +3375,7 @@ async function generate(){
       timeoutAfter(60000)
     ]);
     jobId=res.headers.get('X-Job-Id');
+    if(jobId)saveJobId(jobId);
     result=await Promise.race([res.json(), timeoutAfter(360000)]);
     if(!res.ok||result.error){ fillReading(p1,p2,null,result.error||'Something went wrong. Please try again.',false); return; }
   }catch(e){
@@ -3332,38 +3384,14 @@ async function generate(){
   }
 
   if(primaryFailed){
-    const POLL_MS=4000, MAX_WAIT_MS=8*60*1000;
-    const pollStart=Date.now();
-    while(true){
-      if(Date.now()-pollStart>MAX_WAIT_MS){
-        fillReading(p1,p2,null,'This is taking longer than expected. Please try again.',false);
-        return;
-      }
-      await new Promise(r=>setTimeout(r,POLL_MS));
-      let pollResult;
-      try{
-        const res=await fetch(W_API+'/report-status',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({jobId})
-        });
-        pollResult=await res.json();
-        if(!res.ok||pollResult.error){
-          // A job-not-found/expired error is real and terminal; a transient
-          // network hiccup on this one poll is not -- but both come back as
-          // pollResult.error here, so a single failed poll just tries again
-          // on the next tick rather than aborting the whole wait immediately.
-          continue;
-        }
-      }catch(e){
-        continue;
-      }
-      if(pollResult.status==='pending')continue;
-      // status is 'done' -- only the report fields matter now, the chart
-      // data in this record is the same p1Data/p2Data already sent up.
-      result={report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback,reportFallbackReason:pollResult.reportFallbackReason};
-      break;
+    const pollResult=await pollReportStatus(jobId);
+    if(pollResult.timedOut){
+      fillReading(p1,p2,null,'This is taking longer than expected. Please try again.',false);
+      return;
     }
+    // status is 'done' -- only the report fields matter now, the chart
+    // data in this record is the same p1Data/p2Data already sent up.
+    result={report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback,reportFallbackReason:pollResult.reportFallbackReason};
   }
 
   // Only clear the draft once the reading actually succeeded -- if
@@ -3446,18 +3474,37 @@ document.addEventListener('click', e=>{
   try{
     const saved=localStorage.getItem(SAVED_RESULT_KEY);
     if(saved){
-      const {p1,p2,r,reportErr,reportUsedFallback,fallbackReason}=JSON.parse(saved);
+      const {p1,p2,r,reportErr,reportUsedFallback,fallbackReason,jobId}=JSON.parse(saved);
       if(p1){
         // r and reportErr are both saved null while a reading is actively
         // generating (render() saves state unconditionally, including the
         // pending state -- see renderCharts()) -- a real, normal moment to
-        // reload from. But this restore path always passes pending:false,
-        // and there's no jobId saved to resume polling with, so the
-        // request that was in flight is simply gone. Passing both through
-        // as null here made reportSlot() return '' -- no card, no error,
-        // not even an empty placeholder -- which is what actually read as
-        // "that entire area just disappeared." A real message instead of
-        // silence, since there's genuinely nothing left to wait for.
+        // reload from. saveJobId() (called from generate() once /report's
+        // headers arrive) means there's now usually a real job ID to
+        // recover with -- the generation is a real, already-paid-for
+        // Claude API call that may well finish in the background
+        // regardless of this page reloading, so it's worth a bounded
+        // poll before ever telling a customer to pay for a second one.
+        if(!r&&!reportErr&&jobId){
+          render(p1,p2,null,null,reportUsedFallback,true,fallbackReason);
+          (async()=>{
+            const pollResult=await pollReportStatus(jobId);
+            if(pollResult.timedOut){
+              fillReading(p1,p2,null,'Your reading was still generating when this page reloaded. Tap "Run Another Reading" to try again.',false);
+              return;
+            }
+            if(!pollResult.reportError)clearDraft();
+            fillReading(p1,p2,pollResult.report,pollResult.reportError,pollResult.reportUsedFallback,pollResult.reportFallbackReason);
+          })();
+          return;
+        }
+        // No job ID saved (an older saved snapshot from before this
+        // existed, or the request never got far enough to receive one) --
+        // genuinely nothing left to recover. Passing both r/reportErr
+        // through as null here used to make reportSlot() return '' -- no
+        // card, no error, not even an empty placeholder -- which is what
+        // actually read as "that entire area just disappeared." A real
+        // message instead of silence, since there's nothing left to wait for.
         const reportErrToShow=(!r&&!reportErr)?'Your reading was still generating when this page reloaded. Tap "Run Another Reading" to try again.':reportErr;
         render(p1,p2,r,reportErrToShow,reportUsedFallback,false,fallbackReason);
         return;
