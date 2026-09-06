@@ -1342,8 +1342,18 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
     return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: lastError.message };
   }
 
+  // A content defect no longer withholds the reading -- per direct
+  // instruction, once real content exists it has to reach the customer.
+  // A reading with one imperfect sentence is strictly better than no
+  // reading at all for money already spent. This still tries to make it
+  // better first (a localized citation-stacking defect gets up to 2
+  // small, targeted fix attempts -- never a full regeneration, each
+  // attempt costs a few hundred tokens, not a full reading's worth), and
+  // still logs every defect that reaches this point either way, so a
+  // real, persistent pattern is still visible without needing to hide
+  // the reading from the customer to surface it.
   let defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
-  if (defect && defect.sectionIndex !== undefined) {
+  for (let fixAttempt = 0; defect && defect.sectionIndex !== undefined && fixAttempt < 2; fixAttempt++) {
     try {
       const fix = await correctCitationDefect(env, defect.text, defect.message);
       failedUsages.push(fix.usage);
@@ -1354,19 +1364,20 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
       // into a naming defect in that one field.
       defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
     } catch (fixError) {
-      console.error(`Citation-defect fix attempt failed: ${fixError.message}`);
+      console.error(`Citation-defect fix attempt ${fixAttempt + 1} failed: ${fixError.message}`);
       if (fixError.usage) failedUsages.push(fixError.usage);
-      // defect is still set from before the fix attempt -- falls through
-      // to the fallback below, same as if the fix had run and failed.
+      // defect is untouched by a thrown error, so the loop condition
+      // re-evaluates against the same still-set defect -- a thrown call
+      // gets retried against the same field, not abandoned after one
+      // network hiccup.
     }
   }
 
   const usage = failedUsages.length ? combineUsage([...failedUsages, result.usage]) : result.usage;
   if (ctx) ctx.waitUntil(recordUsage(env, usage, usageType));
 
-  if (!defect) return { reading: result.parsed, usedFallback: false };
-  console.error(`Report generation defect, using deterministic fallback: ${defect.message}`);
-  return { reading: buildFallbackReading(rtype, p1, p2), usedFallback: true, fallbackReason: defect.message };
+  if (defect) console.error(`Report generation defect, delivering anyway: ${defect.message}`);
+  return { reading: result.parsed, usedFallback: false };
 }
 
 export default {
