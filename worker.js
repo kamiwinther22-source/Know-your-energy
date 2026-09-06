@@ -639,6 +639,7 @@ Before writing, find the connection points between the two charts -- not everyth
 - Weigh a planet's major aspects before its sign -- a tight conjunction, square, or opposition outweighs the sign; a wide trine or sextile barely changes it.
 - Use a planet's actual house, never the house tied to its ruling sign.
 - State what an aspect actually produces in behavior, not that it's "easy" or "tense."
+- Name placements freely, but never their exact degree -- degrees belong only in references, not the prose.
 - You already know what every placement and aspect means -- no definitions needed here. Read the data provided and report what you see, clearly and concisely.
 
 ### NON-NEGOTIABLE
@@ -655,7 +656,7 @@ Before writing, find the connection points between the two charts -- not everyth
       "body": "Prose made of separate, specific claims -- not narrated as one continuous flow. Same naming restriction as headline."
     }
   ],
-  "references": ["Every placement and number actually used, short technical shorthand, one per entry."]
+  "references": ["Every placement and number actually used, short technical shorthand (include the exact degree for astrology placements here, not in the prose), one per entry."]
 }
 Divide the reading into as many sections as the content naturally requires -- no fixed topic list, no fixed section count. Give each section its own specific title and eyebrow.
 
