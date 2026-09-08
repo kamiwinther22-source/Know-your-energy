@@ -40,12 +40,15 @@
    makes it pop: contrast of saturation, not more background color. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Not pure white -- flat #fff read as sterile/clinical. Not cream/ivory
-     either -- a warm off-white reads as yellowed, which she specifically
-     doesn't want. This is a faint cool tint (a whisper of the same blue
-     used everywhere else on the page), close enough to white that text
-     stays full-strength and legible, just not stark. */
-  background-color:#f6f7fb;
+  /* Her direct instruction: "I want the background to basically be
+     white but to have a slight green tint to it that you can barely
+     even notice. But I want it to be there." Was a faint blue tint
+     (#f6f7fb) -- switched to green at the same barely-there magnitude
+     (green channel a few points above red/blue, not a mint/pastel
+     block). Not pure white -- flat #fff read as sterile/clinical. Not
+     cream/ivory either -- a warm off-white reads as yellowed, which
+     she specifically doesn't want. */
+  background-color:#f6faf6;
   background-image:none;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
