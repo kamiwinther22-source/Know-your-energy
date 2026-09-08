@@ -1079,8 +1079,13 @@ function openNumberDef(item){
 // (a crisp hotspot, a fresnel edge, layered gradients -- the same actual
 // technique already proven on the CTA button, just under-applied here the
 // first time), a ribbon built as real filled, cross-shaded bands instead
-// of thin strokes, and the numerology beads as small satellites along the
-// orbit rings. The sun IS the CTA button (her direct call: "the middle of
+// of thin strokes, and small plain satellite dots along the orbit rings
+// -- no longer numbered. They started as numerology's 1-9, but with the
+// astrology-wheel/HD icons gone from this page, numbering only one of
+// three systems didn't make sense on its own: "there's no need to be
+// numbering the circles... there's no longer anything referencing human
+// design... to number the circles doesn't make any sense whatsoever."
+// The sun IS the CTA button (her direct call: "the middle of
 // the Solar System could be the button that gets pushed... I don't know
 // why it wouldn't be") -- this function only draws the decorative SVG;
 // the actual clickable/keyboard-focusable button is a separate real
@@ -1162,9 +1167,7 @@ function openNumberDef(item){
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" opacity="0.8" transform="translate(190,182) scale(0.34)"/>`;
   BEADS.forEach((b,i)=>{
     const fill = BEAD_TONES[i%BEAD_TONES.length];
-    const textFill = fill===COBALT ? '#ffffff' : '#0b2668';
     svg += `<circle cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${fill}" stroke="rgba(11,38,104,0.3)" stroke-width="1.2"/>`;
-    svg += `<text x="${b.cx}" y="${b.cy+b.r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${b.r*1.05}" fill="${textFill}" style="pointer-events:none;">${b.n}</text>`;
   });
   svg += '</svg>';
   host.innerHTML = svg;
