@@ -3950,8 +3950,13 @@ function renderPassActiveBanner(result){
   return `<div class="state-banner pass-active"><div class="state-banner-ttl">Pass Active</div><div class="state-banner-sub">${escapeHtml(planLabel)} Pass${expiresText?' · active through '+escapeHtml(expiresText):''}</div></div>`;
 }
 
+// "pick a pass above" -- her direct catch: pricing used to render after
+// this banner, but it's the first thing in the card now (moved there
+// so a fresh email never opens on a pricing pitch -- see #pricingPanel's
+// own note), so the tiers actually sit ABOVE this message, not below
+// it. The copy hadn't been updated to match.
 function renderUsedBanner(){
-  return `<div class="state-banner"><div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">pick a pass below, or use a different email</div></div>`;
+  return `<div class="state-banner"><div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">pick a pass above, or use a different email</div></div>`;
 }
 
 // Runs automatically once an email is typed in (on blur) -- updates the
