@@ -166,14 +166,32 @@ body{
    other and instead let the actual hook (the question) be the largest
    thing here, full stop. Everything else on this screen (the title, the
    icons, the button) is sized to support this line, not compete with it.
-   Breaks out of the tagline-frame's own narrower box the same way the
-   old version did, since a headline this size needs the full viewport
-   width to wrap at 2-3 lines instead of running much taller. */
+   Breaks out of the tagline-frame's own narrower/padded box to use the
+   full viewport width, since a headline this size needs it to wrap at
+   2-3 lines instead of running much taller.
+   This is NOT the same technique as the old (smaller) version -- that
+   used position:relative;left:50%;transform:translateX(-50%), which on
+   a real phone actually rendered the block almost flush against the
+   right edge with all the slack pushed to the left (confirmed by her
+   screenshot and by measuring the rendered box: left gap ~19.5px, right
+   gap ~0.5px, not the intended even 10/10) -- position:relative's
+   percentage offsets are computed against the *padding box* of the
+   containing block (the tagline-frame, which itself has 30px of
+   horizontal padding), not the viewport, so "left:50%" and a
+   viewport-width transform don't actually cancel out evenly. The
+   fix below uses the standard, viewport-only full-bleed formula
+   (width:100vw combined with margin-left/right:calc(50% - 50vw)) --
+   both terms are computed the same way regardless of the parent's own
+   padding, so it centers correctly no matter what box it's inside.
+   Verified after the fix by measuring the actual rendered box against
+   the viewport, not just checking for overflow. */
 .tagline-top{
   font-size:clamp(2rem,10.5vw,3.05rem);
   line-height:1.08;letter-spacing:-0.01em;
-  position:relative;left:50%;transform:translateX(-50%);
-  width:calc(100vw - 20px);margin-bottom:0.55rem;
+  width:calc(100vw - 20px);
+  margin-left:calc(50% - 50vw + 10px);
+  margin-right:calc(50% - 50vw + 10px);
+  margin-bottom:0.55rem;
 }
 /* One phrase carried in the accent color instead of the whole line in
    flat black -- real editorial pull-quote technique (a single emphasized
