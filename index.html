@@ -258,6 +258,7 @@ body{
 }
 .key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:1.05rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-hl{background:none;color:inherit;font-weight:800;}
+.key-hl-big{display:block;font-size:1.75em;line-height:1.05;margin:0.05em 0;}
 .key-item:hover{transform:translateY(-2px);box-shadow:
     0 14px 22px -8px rgba(20,20,25,0.4),
     inset 0 2px 4px rgba(255,255,255,1),
@@ -1162,7 +1163,7 @@ function openNumberDef(item){
 // ---------- the hook screen's real CTA: a white/silver metal button
 // sitting on a soft blue glow, made a real <button> so it's keyboard-
 // reachable, with a plain label under it so it reads as pressable. ----------
-const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
+const KEY_TEXT = '1 <mark class="key-hl key-hl-big">free</mark> reading';
 document.getElementById('keysCol').innerHTML =
   `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(88px,28vw,118px);height:clamp(88px,28vw,118px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
 
