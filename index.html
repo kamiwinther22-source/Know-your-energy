@@ -239,6 +239,10 @@ body{
 }
 .key-hl{background:none;color:inherit;font-weight:800;}
 .key-hl-big{display:block;font-size:1.4em;line-height:1;margin:0.04em 0;}
+.sun-cta-tap{
+  display:block;font-size:0.5em;font-weight:700;letter-spacing:0.06em;
+  text-transform:uppercase;margin-top:0.35em;
+}
 
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
@@ -809,7 +813,6 @@ body{
     <div id="heroIllustration"></div>
     <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
   </div>
-  <div class="tap-hint">Tap the sun to begin</div>
 
   <div class="privacy-note hook-differentiator">Your unique design, described by three separate systems — astrology, numerology, and Human Design.</div>
 
@@ -1179,10 +1182,11 @@ function openNumberDef(item){
   host.innerHTML = svg;
 })();
 
-// ---------- the hook screen's real CTA: a white/silver metal button
-// sitting on a soft blue glow, made a real <button> so it's keyboard-
-// reachable, with a plain label under it so it reads as pressable. ----------
-document.getElementById('sunCtaLabel').innerHTML = '1 <mark class="key-hl key-hl-big">free</mark> reading';
+// ---------- the hook screen's real CTA -- the sun itself, a real
+// <button> so it's keyboard-reachable. The tap instruction lives on the
+// button's own label now, not a separate caption underneath -- and
+// doesn't name it "the sun" in the visible copy (her direct correction). ----------
+document.getElementById('sunCtaLabel').innerHTML = '1 <mark class="key-hl key-hl-big">free</mark> reading<span class="sun-cta-tap">Tap to Begin</span>';
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
