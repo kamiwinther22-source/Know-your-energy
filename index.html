@@ -58,6 +58,47 @@ body{
    sections together on a real device. This is the real fix; the
    font-size floor below is the other half of it. */
 .content{width:100%;max-width:420px;min-width:0;position:relative;z-index:1;}
+/* ---------- the data-entry screen (#formStep) as a real card, not text
+   spanning the raw page ---------- her direct, forceful correction:
+   "I do not like that there is no space around the data entry. ALLLLLL
+   the way around it. I do not want it spanning from right to left
+   edges. I want space around it... I would like some color or design
+   on the page. it makes me crazy that you are incapable of just doing
+   things to improve the look without me telling you every single
+   move." Two real, separate problems, fixed together: (1) margin here
+   pulls the whole screen in from the viewport edge on every side, on
+   top of body's own padding, so there's real visible page around the
+   card, not just a card that happens to equal the viewport width minus
+   a sliver; (2) the card itself -- white surface, soft lift shadow, a
+   thin gradient accent bar at the top in the site's one established
+   accent blue -- is the actual "color/design" she asked for without
+   being asked again, using techniques already proven elsewhere on this
+   page (the line-fields' carved-inset shadow, the same #1C2CA9 accent)
+   rather than inventing something new and risking another wrong guess. */
+#formStep{
+  position:relative;background:#ffffff;border-radius:20px;
+  margin:0.5rem 0.5rem 0.9rem;padding:1.5rem 1.15rem 1.3rem;
+  box-shadow:
+    0 1px 2px rgba(20,30,70,0.05),
+    0 14px 32px -18px rgba(20,30,70,0.28),
+    0 0 0 1px rgba(28,44,169,0.07);
+}
+#formStep::before{
+  content:'';position:absolute;top:0;left:14%;right:14%;height:4px;
+  border-radius:0 0 3px 3px;
+  background:linear-gradient(90deg,rgba(28,44,169,0) 0%,#1C2CA9 50%,rgba(28,44,169,0) 100%);
+}
+/* Real divider between each of the 3 stacked sections (email / pricing /
+   the person-data form), instead of ad hoc margins alone -- gives the
+   single card real internal structure. Targeted directly by id/class
+   rather than an adjacent-sibling chain -- the state-banner div sits
+   between the email panel and the pricing panel in the DOM (even when
+   empty/hidden), which breaks a "+" combinator's direct-adjacency
+   requirement. */
+#formStep .pricing-panel,
+#formStep #formFields{
+  margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(28,44,169,0.12);
+}
 /* Centers the whole hook screen as one group in the middle of the
    screen, top to bottom, instead of it sitting pinned to the top with
    empty space left below. Only applies here -- the form and results
@@ -278,12 +319,16 @@ body{
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
-.rel-picker{margin:1.4rem 0 1.6rem;}
+.rel-picker{margin:1rem 0 0.3rem;}
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
 .rel-chip{font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:700;padding:0.38rem 0.85rem;border-radius:20px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
 .rel-chip:hover{background:#243acc;}
-.rel-chip.active{background:#ffffff;color:#0d1550;border-color:#ffffff;box-shadow:0 2px 10px -1px rgba(255,255,255,0.45);}
-.rel-chip.active:hover{background:#e8eaf6;}
+/* Was white fill/white border/white glow -- invisible now that this
+   sits on the new white card instead of the page's own off-white
+   background. Outlined instead: white fill, blue border/text/shadow,
+   so the active chip stays visibly a chip against any white surface. */
+.rel-chip.active{background:#ffffff;color:#1C2CA9;border-color:#1C2CA9;box-shadow:0 2px 8px -2px rgba(28,44,169,0.35);}
+.rel-chip.active:hover{background:#eef0fb;}
 
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
@@ -360,14 +405,19 @@ body{
 .state-banner-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;text-align:left;}
 .state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#000000;text-align:left;margin-top:0.15rem;}
 /* Each tier is its own tappable row -- the price and the action are the
-   same tap target, not text plus a separate small button glued on. Real
-   inset on both sides so the list doesn't run into the screen edges the
-   way a plain full-width list does. */
-.pricing-list{margin-top:0.6rem;display:flex;flex-direction:column;}
+   same tap target, not text plus a separate small button glued on.
+   Used to bleed out beyond its own container on a negative margin/
+   calc-width trick "so the list doesn't run into the screen edges" --
+   her direct correction: "I dont think the pricing needs to span the
+   width of the page." That reasoning was backwards in practice: it
+   pulled the row wider than the card around it instead of narrower.
+   Now it just sits inside the card's own padding like everything
+   else. */
+.pricing-list{margin-top:0.5rem;display:flex;flex-direction:column;}
 .price-row{
   display:flex;align-items:center;gap:0.7rem;
-  padding:0.7rem 0.9rem;margin:0 -0.9rem;border-radius:10px;
-  background:none;border:none;cursor:pointer;width:calc(100% + 1.8rem);
+  padding:0.55rem 0.5rem;border-radius:10px;
+  background:none;border:none;cursor:pointer;width:100%;
   font-family:inherit;text-align:left;transition:background 0.15s ease;
 }
 .price-row:hover,.price-row:focus-visible{background:rgba(28,44,169,0.07);}
@@ -383,17 +433,17 @@ body{
 .form-panel{
   position:relative;padding:0.3rem 0 0;
 }
-.form-panel .f{margin-bottom:0.9rem;}
+.form-panel .f{margin-bottom:0.65rem;}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
-.person-tag{font-family:'Alex Brush',cursive;font-size:1.7rem;color:#1C2CA9;line-height:1;margin-bottom:0.15rem;}
+.person-tag{font-family:'Alex Brush',cursive;font-size:1.4rem;color:#1C2CA9;line-height:1;margin-bottom:0.15rem;}
 .section-lbl{font-size:0.75rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
 /* Person's whole entry compressed into 2 rows instead of 4: identity
    (First/Mid/Last/DOB) on one row, birth specifics (Time/AM-PM/Location)
    on the next. DOB moved onto the birth-details row with Time/AM-PM/
    Location; Location gets the most width since "City, State, Country"
    is the longest placeholder by far. */
-.row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.55rem;}
+.row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.4rem;}
 .row-birth{display:grid;grid-template-columns:1.2fr 0.65fr 0.55fr 1.6fr;gap:0.3rem;align-items:end;}
 
 /* Carved into the page, not a line underneath the text -- no border, no
@@ -442,7 +492,7 @@ body{
 /* ---------- submit button: blue fill, 3D lift built from nothing but
    white / light silver / translucent layers -- slow-spinning silver ring
    still wraps it, same verified technique as the live entry form's button ---------- */
-.submit-wrap{margin-top:1.2rem;display:flex;justify-content:center;}
+.submit-wrap{margin-top:0.8rem;display:flex;justify-content:center;}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
 .glow-ring::before{content:'';position:absolute;inset:-100%;
   background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
