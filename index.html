@@ -309,37 +309,46 @@ body{
   display:flex;align-items:center;justify-content:center;padding:0;
 }
 .sun-cta:focus-visible{outline:2.5px solid #ffffff;outline-offset:3px;}
-/* Her direct correction: "I'm not really sure why you would be using
-   like white text for the one free reading it needs to be popping off
-   the page in their face that it is a free reading. It's a big deal...
-   If you're thinking of using that dark blue and that faded white, I
-   would rethink it. The white needs to be significantly sharper." The
-   old shadow (rgba(11,38,104,...), a dark navy) muddied the white
-   instead of sharpening it -- a dark-tinted shadow under a "silver,
-   not blue" illustration read as exactly the murky look she was
-   rejecting. Replaced with a real two-part treatment: a tight, true-
-   black shadow (not blue) right at the letterform edge for crisp
-   legibility against the light chrome sphere, plus an actual bright
-   white outer glow -- the "glowing/shiny" quality she asked for
-   instead of "dead" -- rather than a shadow doing double duty as both
-   contrast and mood and satisfying neither. */
+/* Her direct correction, round 2: "The one free reading I don't want
+   that to be white text. I want that to stand out and look like it's
+   important." White (even with the glow treatment from the round
+   before) still just reads as "the button's label," the same
+   color/weight as any other UI text -- not as an actual offer. Given a
+   real color instead: the one accent blue already established and
+   accepted sitewide (#1C2CA9 -- the title, the headline's own accent
+   phrase, links), not a new invented color, so "1 free reading" reads
+   the same way the headline's highlighted phrase does -- the important
+   part, set apart on purpose -- with a bright white halo behind it so
+   it stays legible over both the light and shadowed sides of the
+   chrome sphere. "TAP TO BEGIN" stays white/small underneath it, a
+   quieter instruction, not competing with the actual offer above it. */
 .sun-cta span{
-  position:relative;display:block;text-align:center;color:#ffffff;
+  position:relative;display:block;text-align:center;color:#1C2CA9;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.66rem;
   text-shadow:
-    0 1px 2px rgba(0,0,0,0.6),
-    0 0 3px rgba(0,0,0,0.4),
-    0 0 16px rgba(255,255,255,0.95),
-    0 0 28px rgba(255,255,255,0.55);
+    0 0 2px rgba(255,255,255,0.95),
+    0 1px 3px rgba(255,255,255,0.9),
+    0 0 9px rgba(255,255,255,0.9),
+    0 0 18px rgba(255,255,255,0.6);
 }
 .key-hl{background:none;color:inherit;font-weight:800;}
 /* "It's a big deal. It needs to look like it's a big deal" -- the
    actual free-reading offer is now noticeably bigger again, a real
    jump from the size that was reading as an ordinary label. */
 .key-hl-big{display:block;font-size:1.65em;line-height:1;margin:0.05em 0;}
-.sun-cta-tap{
+/* Higher-specificity selector (".sun-cta span .sun-cta-tap", not just
+   ".sun-cta-tap") is deliberate -- ".sun-cta span"'s own color rule
+   above otherwise wins on specificity regardless of source order and
+   this caption silently inherited the blue meant only for the offer
+   text above it. */
+.sun-cta span .sun-cta-tap{
   display:block;font-size:0.5em;font-weight:700;letter-spacing:0.06em;
   text-transform:uppercase;margin-top:0.4em;
+  color:#ffffff;
+  text-shadow:
+    0 1px 2px rgba(0,0,0,0.6),
+    0 0 3px rgba(0,0,0,0.4),
+    0 0 12px rgba(255,255,255,0.8);
 }
 
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
