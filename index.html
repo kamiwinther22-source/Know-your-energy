@@ -1389,8 +1389,6 @@ function openNumberDef(item){
   // sphere/ring/bead material color.
   const CHROME_LIGHT='#f5f6f8', CHROME_MID='#c9ccd4', CHROME_DEEP='#8f929c';
   const ACCENT='#7B99EE';
-  const BEAD_TONES=[CHROME_LIGHT, CHROME_MID, '#ffffff'];
-  const RING_STROKE='#9a9ca3';
   const RING_ROTATION_DEG = -8;
   const RING_RX = [64, 86, 108, 130, 152, 175];
   // Beads computed to sit exactly ON a ring's actual curve -- real
@@ -1441,14 +1439,27 @@ function openNumberDef(item){
   // passes behind a sphere tilted toward the viewer -- the BACK half);
   // sweep-flag=0 sweeps through the LOCAL BOTTOM (the near side, the
   // FRONT half).
+  // Real dimensional stroke instead of one flat grey -- her direct
+  // correction: "instead of having the solar system be gray, can you
+  // do something to give it some shine, something to make it look more
+  // like 3D... it's like the grey that comes up when something is not
+  // active, it's like the opposite of life." A single flat stroke color
+  // on every ring, with no highlight or shadow anywhere on them, is
+  // exactly what reads as an inert/disabled UI element rather than a
+  // polished metal ring catching real light. "url(#ringGrad)" below
+  // (objectBoundingBox by default, so it maps across each ring's own
+  // bounding box regardless of size) gives every ring a genuine bright
+  // catch-light corner and a darker shadowed corner, the same real
+  // technique already proven on the sun sphere itself, just applied to
+  // a stroke instead of a fill.
   function ringArcs(rx){
     const ry = Math.round(rx*0.26);
     const back = `M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0`;
     const front = `M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`;
     const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
     return {
-      back: `<path d="${back}" fill="none" stroke="${RING_STROKE}" stroke-width="1.3" opacity="1" transform="${xf}"/>`,
-      front: `<path d="${front}" fill="none" stroke="${RING_STROKE}" stroke-width="1.3" opacity="1" transform="${xf}"/>`,
+      back: `<path d="${back}" fill="none" stroke="url(#ringGrad)" stroke-width="1.6" opacity="1" transform="${xf}"/>`,
+      front: `<path d="${front}" fill="none" stroke="url(#ringGrad)" stroke-width="1.6" opacity="1" transform="${xf}"/>`,
     };
   }
   const RING_ARCS = RING_RX.map(ringArcs);
@@ -1512,6 +1523,40 @@ function openNumberDef(item){
         <stop offset="58%" stop-color="${ACCENT}" stop-opacity="0.14"/>
         <stop offset="100%" stop-color="${ACCENT}" stop-opacity="0"/>
       </radialGradient>
+      <!-- One shared gradient, reused across every ring's stroke --
+           objectBoundingBox (SVG's default gradientUnits) maps it to
+           each ring's own bounding box automatically, so this one
+           definition gives every ring, at whatever size, the same real
+           catch-light-to-shadow arc a curved metal band actually has. -->
+      <linearGradient id="ringGrad" x1="15%" y1="8%" x2="85%" y2="92%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="30%" stop-color="${CHROME_MID}"/>
+        <stop offset="65%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="100%" stop-color="#5c5f68"/>
+      </linearGradient>
+      <!-- Real per-bead sphere shading (bright highlight, dark shadow
+           edge) instead of a flat fill -- same reasoning as ringGrad
+           above. Three variants so the satellites keep real tonal
+           range, each still a genuine small sphere rather than a flat
+           disc. -->
+      <radialGradient id="beadGrad1" cx="32%" cy="28%" r="75%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="40%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="75%" stop-color="${CHROME_MID}"/>
+        <stop offset="100%" stop-color="${CHROME_DEEP}"/>
+      </radialGradient>
+      <radialGradient id="beadGrad2" cx="32%" cy="28%" r="75%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="35%" stop-color="#e4e6eb"/>
+        <stop offset="70%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="100%" stop-color="#5c5f68"/>
+      </radialGradient>
+      <radialGradient id="beadGrad3" cx="32%" cy="28%" r="75%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="50%" stop-color="#ffffff"/>
+        <stop offset="80%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="100%" stop-color="${CHROME_MID}"/>
+      </radialGradient>
     </defs>
     <circle cx="${cx}" cy="${cy}" r="66" fill="url(#corona)"/>
     <!-- Back halves of every ring, drawn BEFORE the sun so they're
@@ -1538,9 +1583,10 @@ function openNumberDef(item){
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" transform="translate(322,10) scale(0.6)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="${CHROME_LIGHT}" transform="translate(30,150) scale(0.42)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" transform="translate(190,182) scale(0.34)"/>`;
+  const BEAD_GRADS=['beadGrad1','beadGrad2','beadGrad3'];
   BEADS.forEach((b,i)=>{
-    const fill = BEAD_TONES[i%BEAD_TONES.length];
-    svg += `<circle cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${fill}" stroke="rgba(70,72,80,0.35)" stroke-width="1.2"/>`;
+    const grad = BEAD_GRADS[i%BEAD_GRADS.length];
+    svg += `<circle cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${grad})" stroke="rgba(70,72,80,0.35)" stroke-width="1.2"/>`;
   });
   svg += '</svg>';
   host.innerHTML = svg;
