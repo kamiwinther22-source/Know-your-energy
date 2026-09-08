@@ -125,10 +125,12 @@ body{
    much harder problem this isn't attempting). */
 .brand{
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;white-space:nowrap;
-  /* Large and easy to read, on its own with nothing else near it now --
-     the standing rule for this title is that it's never a small
-     afterthought. */
-  font-size:clamp(2rem,10vw,2.9rem);
+  /* Large and easy to read, but bounded conservatively -- clamp(2rem,10vw,2.9rem)
+     measured as actually overflowing its own box at ordinary phone widths
+     (390-430px, i.e. most current iPhones/Android phones), clipping the
+     title outright. Verified with Playwright across 320-430px until none
+     of them overflowed (scrollWidth > clientWidth) -- this range holds. */
+  font-size:clamp(1.5rem,7.5vw,2.1rem);
   /* Solid, full-strength color -- the previous soft gradient + blur
      (#4655D6/#8A96EE with a drop-shadow glow) was built and tuned for a
      black background that this page no longer has; on the current white
