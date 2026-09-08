@@ -87,6 +87,20 @@ body{
 .accent-item{position:relative;flex:0 0 auto;height:78px;}
 .accent-item svg{display:block;width:auto;height:100%;}
 .accent-num{height:104px;}
+/* Framed like a real medallion -- a white disc behind each chart icon
+   with its own border and drop shadow, not a flat SVG floating loose on
+   the page. Bigger too (was 78px, easy to miss). Scoped to just the
+   astrology/Human Design icons -- the numbered-bead cluster (.accent-num)
+   is a different, scattered shape and isn't meant to sit inside a circle. */
+.accent-astro,.accent-hd{
+  height:118px;width:118px;
+  border-radius:50%;background:#ffffff;
+  border:1.5px solid #d5d8de;
+  box-shadow:0 8px 16px -8px rgba(20,20,30,0.35),inset 0 1px 2px rgba(255,255,255,0.9);
+  display:flex;align-items:center;justify-content:center;
+  padding:10px;
+}
+.accent-astro svg,.accent-hd svg{width:100%;height:100%;}
 .hero-accent-caption{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;
@@ -168,56 +182,49 @@ body{
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
 
-/* The round glass bubble -- her own explicit direction, and the one she
-   finds more compelling to tap than a plain rectangle. Real glass-sphere
-   shape language: a darker cool-tinted rim, a bright highlight where
-   light would catch it, a dimmer secondary highlight, a crisp edge, a
-   real drop shadow. Now the real tap target (a <button>, not a div), with
-   a ring around it and a plain "Tap to Begin" label under it so it still
-   reads as pressable, not purely decorative. */
-.keys-col{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;}
-.key-item-ring{position:relative;}
-.key-item-ring::before{
-  content:'';position:absolute;inset:-9px;border-radius:50%;
-  border:2px solid #1C2CA9;pointer-events:none;
-  animation:tapring 2.6s ease-out infinite;
+/* The round button -- white/silver chrome material, sitting on top of a
+   soft blue glow that lives behind it and fades out into the page (her
+   reference image: a metallic sphere, not blue itself, with a soft blue
+   halo behind it that fades -- not a hard-edged ring). ---------- */
+.keys-col{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;position:relative;}
+/* The glow -- a big soft blurred blob sitting behind the button, sized
+   well beyond it so the fade is gradual, not a hard edge anywhere. */
+.key-item-glow{
+  position:absolute;top:50%;left:50%;
+  width:190%;height:190%;transform:translate(-50%,-50%);
+  border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle,
+    rgba(90,70,220,0.55) 0%,
+    rgba(100,85,225,0.4) 18%,
+    rgba(115,100,230,0.24) 34%,
+    rgba(130,120,235,0.12) 50%,
+    rgba(140,135,240,0.04) 68%,
+    rgba(140,135,240,0) 82%);
+  filter:blur(6px);
 }
-@keyframes tapring{
-  0%{transform:scale(0.94);opacity:0.85;}
-  75%{transform:scale(1.22);opacity:0;}
-  100%{transform:scale(1.22);opacity:0;}
-}
-@media(prefers-reduced-motion:reduce){.key-item-ring::before{animation:none;opacity:0.5;transform:none;}}
 .tap-hint{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:0.78rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
-  margin-top:0.55rem;
+  margin-top:0.55rem;position:relative;z-index:1;
 }
-/* Real glass, not a soft white circle -- the actual technique a flat
-   white-on-white gradient was missing: (1) the edge of a glass sphere is
-   always darker and more saturated than its middle (light travels
-   through more glass at a grazing angle there), not just "less white" --
-   without that rim darkening a sphere reads as a flat disc no matter how
-   much shading is layered on; (2) a real specular highlight is small and
-   bright with a defined edge, not a broad soft glow covering half the
-   shape; (3) actual transparency (blurring whatever sits behind it)
-   reads as material in a way that opaque white gradients never do, even
-   subtle ones. */
+/* Real chrome, not tinted glass -- a metal sphere reads through grey-
+   scale value contrast and a distinct reflection band partway down (the
+   thing a chrome ball photo always shows), not color. Silver/white only,
+   no blue in the material itself -- the blue lives in the glow behind it. */
 .key-item{
-  position:relative;overflow:hidden;cursor:pointer;
-  border:1.5px solid rgba(70,100,150,0.55);font-family:inherit;
+  position:relative;overflow:hidden;cursor:pointer;z-index:1;
+  border:2px solid #9a9ca3;font-family:inherit;
   transition:transform 0.15s ease,box-shadow 0.15s ease;
   border-radius:50%;padding:0.3rem;flex-shrink:0;
   background:
-    radial-gradient(circle at 30% 24%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.85) 7%, rgba(255,255,255,0) 22%),
-    radial-gradient(circle at 74% 78%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 16%),
-    radial-gradient(circle at 50% 46%, rgba(238,244,252,0.85) 0%, rgba(206,222,244,0.8) 46%, rgba(140,168,210,0.85) 78%, rgba(70,100,155,0.92) 100%);
-  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 6%, rgba(255,255,255,0) 20%),
+    linear-gradient(180deg, rgba(255,255,255,0) 52%, rgba(255,255,255,0.65) 58%, rgba(255,255,255,0.15) 66%, rgba(255,255,255,0) 74%),
+    radial-gradient(circle at 50% 42%, #f7f7f8 0%, #e2e3e6 32%, #b9bbc1 58%, #86888f 82%, #5a5c62 100%);
   box-shadow:
-    0 10px 18px -8px rgba(20,30,50,0.4),
+    0 10px 18px -8px rgba(20,20,25,0.4),
     inset 0 2px 3px rgba(255,255,255,0.95),
-    inset 0 -9px 14px -6px rgba(50,75,120,0.55),
-    inset 5px -5px 9px -5px rgba(90,120,165,0.4);
+    inset 0 -9px 14px -6px rgba(50,50,55,0.55),
+    inset 5px -5px 9px -5px rgba(100,102,108,0.4);
   line-height:1.15;font-weight:600;
   display:flex;align-items:center;justify-content:center;text-align:center;
 }
@@ -238,10 +245,10 @@ body{
 .key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:1.05rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-hl{background:none;color:inherit;font-weight:800;}
 .key-item:hover{transform:translateY(-2px);box-shadow:
-    0 14px 22px -8px rgba(20,30,50,0.4),
+    0 14px 22px -8px rgba(20,20,25,0.4),
     inset 0 2px 4px rgba(255,255,255,1),
-    inset 0 -10px 16px -6px rgba(90,115,145,0.5),
-    inset 6px -6px 10px -5px rgba(140,165,195,0.35);}
+    inset 0 -10px 16px -6px rgba(55,55,60,0.5),
+    inset 6px -6px 10px -5px rgba(110,112,118,0.35);}
 .key-item:active{transform:translateY(0);}
 .key-item:focus-visible{outline:2.5px solid #1C2CA9;outline-offset:3px;}
 
@@ -1100,12 +1107,12 @@ function openNumberDef(item){
   });
 })();
 
-// ---------- the hook screen's real CTA: the round glass bubble, made a
-// real <button> so it's keyboard-reachable, with a ring + plain label
-// so it reads as pressable. ----------
+// ---------- the hook screen's real CTA: a white/silver metal button
+// sitting on a soft blue glow, made a real <button> so it's keyboard-
+// reachable, with a plain label under it so it reads as pressable. ----------
 const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
 document.getElementById('keysCol').innerHTML =
-  `<span class="key-item-ring"><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button></span><span class="tap-hint">Tap to Begin</span>`;
+  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
