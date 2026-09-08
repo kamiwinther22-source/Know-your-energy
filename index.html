@@ -133,6 +133,14 @@ body{
 .hero-illustration{position:relative;width:100%;max-width:380px;margin:0.05rem auto 0.05rem;}
 .hero-illustration svg{display:block;width:100%;height:auto;}
 
+/* Narrower than the full content column and centered -- a full-width
+   input here would read as a corporate form field cutting across the
+   illustration-led hero. Kept small and deliberate, close under the
+   sun so "type your email, tap the sun" reads as one motion, not two
+   unrelated asks stacked on the page. */
+.hero-email-wrap{max-width:260px;margin:0.5rem auto 0.7rem;}
+.hero-email-wrap .err{text-align:center;}
+
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
    different things making two different points (the sun/rings =
@@ -1000,6 +1008,26 @@ body{
   <div class="hero-illustration">
     <div id="heroIllustration"></div>
     <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
+  </div>
+
+  <!-- Email is the real gate now, right here on the landing page -- her
+       direct logic: "when they click free reading it's going to take
+       them to where they enter the data. But if they've already done
+       that, then that means they need to buy a pass... probably the
+       email should be the call to action on the first page." Typing an
+       email and tapping the sun now runs the same real status check
+       that used to only happen later, on blur, deep in the form --
+       moved up front so the very first screen of the form step is
+       already correct (straight to data entry, or straight to pricing)
+       instead of opening on a guess. Styled with the same carved-inset
+       line-field already proven elsewhere on this page, not a plain
+       browser input dropped onto the illustration -- her explicit
+       requirement: "it needs to be placed in a way that the first page
+       looks nice and professional polished classy, not like you
+       tripped and fell and it dropped on there somewhere." -->
+  <div class="hero-email-wrap">
+    <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
+    <div class="err" id="heroEmailErr" style="display:none;"></div>
   </div>
 
   <div class="privacy-note hook-differentiator">Your unique traits and patterns given to you at the precise moment of your birth that help you navigate the cycles throughout your life path are revealed in astrology, numerology and human design. See not only your own but also how your energy interacts with others in your life.</div>
@@ -3664,17 +3692,55 @@ function stopLoadingTimer(){
 const W_API='https://know-your-energy.kwdoanchor.workers.dev';
 
 // ---------- Step 1 -> Step 2 ----------
-function revealForm(){
+// Email is the real gate now (her direct call: "probably the email
+// should be the call to action on the first page") -- tapping the sun
+// runs the same real checkPassStatus() check that used to only fire
+// later, on blur, deep in the form, and waits for it before revealing
+// anything. That's the actual fix for "if they've already used their
+// free reading, pricing needs to be there, but it should not be the
+// first thing a first-time person sees" -- the form step is already in
+// the correct state (straight to data entry, or straight to pricing)
+// on its very first rendered frame, not a guess that gets corrected a
+// moment later.
+async function revealForm(){
+  const emailInput=document.getElementById('heroEmail');
+  const email=(emailInput.value||'').trim();
+  const errEl=document.getElementById('heroEmailErr');
+  if(!email){
+    errEl.textContent='Enter your email to begin.';
+    errEl.style.display='block';
+    emailInput.focus();
+    return;
+  }
+  errEl.style.display='none';
+  document.getElementById('pEmail').value=email;
+
+  const cta=document.getElementById('freeReadingCta');
+  const labelEl=document.getElementById('sunCtaLabel');
+  const originalLabel=labelEl.innerHTML;
+  cta.disabled=true;
+  labelEl.innerHTML='<span class="sun-cta-tap">Checking&hellip;</span>';
+
+  await checkEmailStatus();
+
+  cta.disabled=false;
+  labelEl.innerHTML=originalLabel;
+
   document.getElementById('hookStep').style.display='none';
   const formStep=document.getElementById('formStep');
   formStep.style.display='block';
   formStep.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// Returning visitor convenience -- prefills the hero's own email field
+// (not the form's) since that's the one that actually gates entry now.
+(function(){
   const remembered=getRememberedPassEmail();
   if(remembered){
-    document.getElementById('pEmail').value=remembered;
-    checkEmailStatus();
+    const heroEmail=document.getElementById('heroEmail');
+    if(heroEmail)heroEmail.value=remembered;
   }
-}
+})();
 
 // ---------- free-reading / pass state ----------
 // The email is the real record, not the device -- worker.js tracks "has
