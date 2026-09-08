@@ -88,14 +88,12 @@ body{
   border-radius:0 0 3px 3px;
   background:linear-gradient(90deg,rgba(28,44,169,0) 0%,#1C2CA9 50%,rgba(28,44,169,0) 100%);
 }
-/* Real divider between each of the 3 stacked sections (email / pricing /
-   the person-data form), instead of ad hoc margins alone -- gives the
-   single card real internal structure. Targeted directly by id/class
-   rather than an adjacent-sibling chain -- the state-banner div sits
-   between the email panel and the pricing panel in the DOM (even when
-   empty/hidden), which breaks a "+" combinator's direct-adjacency
-   requirement. */
-#formStep .pricing-panel,
+/* Real divider between the pricing block and the email+person-data
+   block below it -- gives the single card real internal structure.
+   Pricing is the first thing in the card now (email moved down to sit
+   above the birth-data fields instead), so it no longer needs a
+   divider of its own above it -- only #formFields, which follows it,
+   does. */
 #formStep #formFields{
   margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(28,44,169,0.12);
 }
@@ -404,27 +402,29 @@ body{
 .state-banner{margin:0 0 1.3rem;padding:0 0 0 0.85rem;border-left:3px solid #1C2CA9;}
 .state-banner-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;text-align:left;}
 .state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#000000;text-align:left;margin-top:0.15rem;}
-/* Each tier is its own tappable row -- the price and the action are the
-   same tap target, not text plus a separate small button glued on.
-   Used to bleed out beyond its own container on a negative margin/
-   calc-width trick "so the list doesn't run into the screen edges" --
-   her direct correction: "I dont think the pricing needs to span the
-   width of the page." That reasoning was backwards in practice: it
-   pulled the row wider than the card around it instead of narrower.
-   Now it just sits inside the card's own padding like everything
-   else. */
-.pricing-list{margin-top:0.5rem;display:flex;flex-direction:column;}
+/* Compact chips, wrapping, sized to their own content -- NOT a
+   full-width settings-style list. A prior fix already removed the
+   negative-margin/calc-width trick that made rows bleed past their
+   container, but the rows themselves were still full-width flex bars
+   with edge-to-edge divider lines -- exactly the generic "Settings app
+   list row" pattern (label far left, value+chevron far right, hairline
+   dividers) this whole redesign exists to get away from. Her direct,
+   forceful correction: "the pricing doesn't need to span the width of
+   the page. stop the bullshit standard design." Reuses the same
+   pill-chip pattern already established and approved elsewhere on this
+   same screen (.rel-chip) instead of inventing a new element. */
+.pricing-list{margin-top:0.6rem;display:flex;flex-wrap:wrap;gap:0.5rem;}
 .price-row{
-  display:flex;align-items:center;gap:0.7rem;
-  padding:0.55rem 0.5rem;border-radius:10px;
-  background:none;border:none;cursor:pointer;width:100%;
-  font-family:inherit;text-align:left;transition:background 0.15s ease;
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.5rem 0.9rem;border-radius:20px;
+  background:#1C2CA9;border:1.3px solid #1C2CA9;
+  cursor:pointer;font-family:inherit;text-align:left;
+  transition:background 0.15s ease;
+  box-shadow:0 2px 8px -2px rgba(0,0,0,0.35);
 }
-.price-row:hover,.price-row:focus-visible{background:rgba(28,44,169,0.07);}
-.price-row+.price-row{border-top:1px solid rgba(28,44,169,0.12);}
-.price-label{flex:1;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;color:#000000;}
-.price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:#1C2CA9;}
-.price-chevron{flex-shrink:0;width:0.5em;height:0.5em;border-right:2px solid #1C2CA9;border-bottom:2px solid #1C2CA9;transform:rotate(-45deg);}
+.price-row:hover,.price-row:focus-visible{background:#243acc;}
+.price-label{font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;color:#ffffff;}
+.price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.92rem;color:#ffffff;}
 .pass-check-row{font-family:'DM Sans',sans-serif;font-size:0.78rem;font-style:italic;color:#000000;text-align:left;margin-top:0.6rem;}
 .form-col{position:relative;}
 /* Unboxed: the data-entry form sits directly on the page background, no
@@ -982,18 +982,16 @@ body{
        click. The email is the real key (checked against the server by
        email, not the device -- see checkEmailStatus()), and it updates
        the status line and prices in place as soon as it's typed, but
-       nothing on this page waits for that or gets hidden because of it. -->
-  <div class="form-panel">
-    <div class="privacy-note">email is just a key/no soliciting</div>
-    <div class="f">
-      <label for="pEmail">Email Address</label>
-      <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
-    </div>
-    <div class="err" id="gateErr"></div>
-  </div>
-
-  <div class="state-banner" id="stateBanner" style="display:none;"></div>
-
+       nothing on this page waits for that or gets hidden because of it.
+       Email moved down to sit right above the birth-data fields -- her
+       direct correction: "how does it know when they are done entering
+       their email? it doesn't need to be up there bc email doesnt take
+       them to appear different page. put the email above the birth
+       data space." This isn't a gated multi-step wizard (typing an
+       email doesn't advance to a new screen), so there was no real
+       reason for it to sit elevated at the very top like a completed
+       first step -- it belongs right next to the data it's submitted
+       together with. -->
   <div class="form-panel pricing-panel" id="pricingPanel">
     <div class="state-banner-ttl" style="margin-bottom:0.4rem;">Time-Limited Passes</div>
     <div class="state-banner-sub" style="margin-bottom:0.3rem;">used your one free reading already? pick a pass below</div>
@@ -1003,6 +1001,15 @@ body{
   <div class="bottom-grid" id="formFields">
     <div class="form-col">
       <div class="form-panel">
+        <div class="privacy-note">email is just a key/no soliciting</div>
+        <div class="f">
+          <label for="pEmail">Email Address</label>
+          <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
+        </div>
+        <div class="err" id="gateErr"></div>
+
+        <div class="state-banner" id="stateBanner" style="display:none;"></div>
+
         <div class="privacy-note">Data never saved</div>
         <div class="f">
           <div class="person-tag">Person 1</div>
@@ -3621,7 +3628,7 @@ async function checkPassStatus(email){
 // it's needed -- rendered once, straight into the static panel that's
 // already in the markup.
 document.getElementById('pricingList').innerHTML=PRICING_TIERS
-  .map(t=>`<button type="button" class="price-row" onclick="buyPass('${t.plan}')" aria-label="Get the ${t.label} pass for ${t.price}"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span><span class="price-chevron"></span></button>`)
+  .map(t=>`<button type="button" class="price-row" onclick="buyPass('${t.plan}')" aria-label="Get the ${t.label} pass for ${t.price}"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span></button>`)
   .join('');
 
 function renderPassActiveBanner(result){
