@@ -23,7 +23,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23000'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%234655D6'%3EK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Bodoni+Moda:ital,wght@0,500;1,500;1,600;1,700&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -81,24 +81,8 @@ body{
    them. Width matches the content column; height is driven by its own
    viewBox aspect ratio, not fixed, so it scales cleanly across phone
    widths without ever needing a bounding-box clip. */
-.hero-illustration{width:100%;max-width:380px;margin:0.05rem auto 0.05rem;}
+.hero-illustration{position:relative;width:100%;max-width:380px;margin:0.05rem auto 0.05rem;}
 .hero-illustration svg{display:block;width:100%;height:auto;}
-
-/* ---------- hero accent cluster: numbered beads on top, the title in
-   its own clear space below them, astrology + Human Design icons below
-   that -- each on its own row now, nothing overlapping anything else.
-   (Previously the title sat deliberately on top of the bubble below it;
-   direct correction reversed that -- it read as messy, not intentional,
-   once that bubble became an actual button.) Tapping a planet dot / HD
-   center / number bead still opens the same tap-to-reveal definition
-   modal used everywhere else. */
-.icon-triangle{position:relative;margin:0.05rem auto 0.05rem;display:flex;flex-direction:column;align-items:center;gap:0.1rem;}
-.tri-base{display:flex;align-items:center;justify-content:center;gap:0.25rem;}
-.hero-accent-caption{
-  text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;
-  margin-bottom:0.9rem;
-}
 
 /* ---------- title ---------- */
 .brand-row{position:relative;text-align:center;margin-bottom:0.2rem;padding:0 1.6rem;}
@@ -142,7 +126,14 @@ body{
 .tagline-frame{position:relative;max-width:380px;margin:0 auto 8px;padding:0 30px;}
 .tagline-slide{
   width:100%;margin:0;
-  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(0.85rem,3.6vw,1.02rem);line-height:1.3;font-weight:400;letter-spacing:0.005em;
+  /* Replaced the typewriter font -- her direct call: "it just looks
+     clunky." An italic serif with real stroke-weight contrast is the
+     same register as the reference image's own headline treatment
+     (what she called "polished and classy"), and pairs with the Alex
+     Brush cursive title as two different but complementary script/serif
+     voices instead of one quirky typewriter font fighting a cursive
+     wordmark. */
+  text-align:center;font-family:'Bodoni Moda',serif;font-style:italic;font-size:clamp(0.85rem,3.6vw,1.02rem);line-height:1.28;font-weight:500;letter-spacing:0.005em;
 }
 .tagline-slide.c-gold{color:#000000;}
 /* This is the one thing on the page meant to dominate -- her direct
@@ -176,8 +167,9 @@ body{
      on the page" pass: bigger didn't mean "as many lines as it takes,"
      it meant one strong 2-line statement. Held at 2 lines from a 300px
      width up. */
-  font-size:clamp(1.15rem,5vw,1.7rem);
-  line-height:1.15;letter-spacing:-0.005em;
+  font-weight:600;
+  font-size:clamp(1.4rem,6.2vw,2.05rem);
+  line-height:1.2;letter-spacing:-0.005em;
   width:calc(100vw - 20px);
   margin-left:calc(50% - 50vw + 10px);
   margin-right:calc(50% - 50vw + 10px);
@@ -207,103 +199,33 @@ body{
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
 
-/* The round button -- white/silver chrome material, sitting on top of a
-   soft blue glow that lives behind it and fades out into the page (her
-   reference image: a metallic sphere, not blue itself, with a soft blue
-   halo behind it that fades -- not a hard-edged ring). ---------- */
-.keys-col{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;position:relative;}
-/* The glow -- a big soft blurred blob sitting behind the button, sized
-   well beyond it so the fade is gradual, not a hard edge anywhere. */
-.key-item-glow{
-  position:absolute;top:50%;left:50%;
-  width:190%;height:190%;transform:translate(-50%,-50%);
-  border-radius:50%;pointer-events:none;z-index:0;
-  background:radial-gradient(circle,
-    rgba(90,70,220,0.55) 0%,
-    rgba(100,85,225,0.4) 18%,
-    rgba(115,100,230,0.24) 34%,
-    rgba(130,120,235,0.12) 50%,
-    rgba(140,135,240,0.04) 68%,
-    rgba(140,135,240,0) 82%);
-  filter:blur(6px);
-}
 .tap-hint{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
   margin-top:0.15rem;position:relative;z-index:1;
 }
-/* Real chrome, not tinted glass -- a metal sphere reads through grey-
-   scale value contrast and a soft top-left highlight, not color. Silver/
-   white only, no blue in the material itself -- the blue lives in the
-   glow behind it. No horizontal reflection band across the middle -- an
-   earlier version had one and it read as a stray white line, not chrome.
-   A single radial gradient reads as a flat circle with shading painted
-   on, not an actual sphere -- what was missing is a fresnel edge: on a
-   real reflective ball, the rim catches the environment at a grazing
-   angle and comes back bright right at the silhouette, with a darker
-   band just inside it, before the material's own base tone takes over.
-   The extra radial-gradient layer below reproduces that (transparent
-   center -> bright ring -> dark ring -> bright rim), stacked on top of
-   the base sphere shading instead of replacing it -- that's the actual
-   technique a flat gradient-and-highlight sphere is missing.
-   The first version of this fresnel ring used dark bands heavy enough
-   (55%/40% opacity near-black) that they read as the sphere just being
-   grey/dull rather than shiny -- real polished silver has a much
-   brighter overall value range than what was here. Lightened both the
-   fresnel dark bands and the base sphere gradient's darkest stop so the
-   ball reads as bright, lustrous silver again, not pewter -- still
-   silver/white only, no blue added to the material itself, since that's
-   a separate, settled rule (the blue stays in the glow behind it). */
-.key-item{
-  position:relative;overflow:hidden;cursor:pointer;z-index:1;
-  border:2px solid #b4b6bc;font-family:inherit;
-  transition:transform 0.15s ease,box-shadow 0.15s ease;
-  border-radius:50%;padding:0.3rem;flex-shrink:0;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 72%, rgba(255,255,255,0.75) 83%, rgba(120,123,132,0.4) 90%, rgba(70,72,80,0.3) 95%, rgba(255,255,255,0.8) 100%),
-    radial-gradient(circle at 30% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 8%, rgba(255,255,255,0) 24%),
-    radial-gradient(circle at 50% 42%, #ffffff 0%, #f5f6f8 28%, #e4e6eb 52%, #c9ccd4 75%, #a7abb5 100%);
-  /* The colored, larger-spread shadow is a contact/ambient shadow tinted
-     from the same violet-blue as the glow behind the button -- a chrome
-     ball sitting inside a blue-lit halo would bounce a little of that
-     color onto the surface it's grounded against; a plain grey/black
-     shadow reads as if the glow and the object aren't actually lit by
-     the same light. Layered underneath the tighter true contact shadow,
-     not replacing it. */
-  box-shadow:
-    0 18px 30px -12px rgba(90,70,220,0.4),
-    0 10px 18px -8px rgba(20,20,25,0.4),
-    inset 0 2px 3px rgba(255,255,255,0.95),
-    inset 0 -9px 14px -6px rgba(50,50,55,0.55),
-    inset 5px -5px 9px -5px rgba(100,102,108,0.4);
-  line-height:1.15;font-weight:600;
-  display:flex;align-items:center;justify-content:center;text-align:center;
+/* The sun itself IS the CTA now -- her direct call: "I think probably
+   the middle of the Solar System could be the button that gets pushed.
+   I don't know why it wouldn't be." All the actual visual rendering
+   (the sphere shading, fresnel edge, corona) happens in the SVG drawn by
+   the heroIllustration script above; this is a real, invisible <button>
+   sized and positioned with plain percentages to land exactly on the
+   sun circle in that SVG's viewBox (cx=180,cy=100,r=70 of a 360x205
+   box), so it's a true circular hit target and keyboard-focusable,
+   without duplicating the sphere rendering in CSS too. */
+.sun-cta{
+  position:absolute;left:30.56%;top:14.63%;width:38.89%;height:68.29%;
+  border-radius:50%;border:none;background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;padding:0;
 }
-/* A second, tighter highlight sitting on top of the gradient one -- real
-   glass/chrome highlights are crisp near their center and fall off fast,
-   which a single soft radial-gradient stop can't quite produce. */
-.key-item::before{
-  content:'';position:absolute;width:26%;height:16%;top:16%;left:24%;
-  border-radius:50%;background:rgba(255,255,255,0.95);
-  filter:blur(2px);transform:rotate(-18deg);
+.sun-cta:focus-visible{outline:2.5px solid #ffffff;outline-offset:3px;}
+.sun-cta span{
+  position:relative;display:block;text-align:center;color:#ffffff;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.95rem;
+  text-shadow:0 1px 3px rgba(11,38,104,0.9),0 0 10px rgba(11,38,104,0.7);
 }
-.key-item::after{
-  content:'';position:absolute;width:16%;height:16%;top:64%;right:16%;
-  background:radial-gradient(circle,#ffffff 0%,#e8eef6 40%,rgba(232,238,246,0) 75%);
-  clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
-  filter:drop-shadow(0 0 3px rgba(255,255,255,0.9));
-}
-.key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:0.63rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-hl{background:none;color:inherit;font-weight:800;}
 .key-hl-big{display:block;font-size:1.4em;line-height:1;margin:0.04em 0;}
-.key-item:hover{transform:translateY(-2px);box-shadow:
-    0 22px 36px -12px rgba(90,70,220,0.48),
-    0 14px 22px -8px rgba(20,20,25,0.4),
-    inset 0 2px 4px rgba(255,255,255,1),
-    inset 0 -10px 16px -6px rgba(55,55,60,0.5),
-    inset 6px -6px 10px -5px rgba(110,112,118,0.35);}
-.key-item:active{transform:translateY(0);}
-.key-item:focus-visible{outline:2.5px solid #1C2CA9;outline-offset:3px;}
 
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
@@ -870,13 +792,11 @@ body{
     </div>
   </div>
 
-  <div class="hero-illustration" id="heroIllustration"></div>
-
-  <div class="icon-triangle" id="heroAccentRow">
-    <div class="tri-base">
-      <div class="keys-col" id="keysCol"></div>
-    </div>
+  <div class="hero-illustration">
+    <div id="heroIllustration"></div>
+    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
   </div>
+  <div class="tap-hint">Tap the sun to begin</div>
 
   <div class="privacy-note hook-differentiator">Your unique design, described by three separate systems — astrology, numerology, and Human Design.</div>
 
@@ -1124,19 +1044,24 @@ function openNumberDef(item){
 }
 
 // ---------- hero centerpiece: a real illustration, not another small
-// icon -- a moon with true sphere shading (warm gold light side to deep
-// navy shadow side, not flat grey), two orbit rings around it, a ribbon
-// of light grounded along the bottom, and the numerology beads moved
-// off their own separate row and placed as small satellites along the
-// rings instead -- ties the numerology content directly into the
-// illustration rather than repeating it as a second decorative element.
-// Purely decorative now, not tappable -- her direct correction: the old
-// tap-a-bead-to-open-its-definition pattern is from a much earlier
-// version of this page and doesn't belong on this one ("that isn't
-// something I was still trying to do... get rid of them"). Sized as an
-// actual centerpiece (the SVG's own viewBox controls its proportions;
-// CSS scales the whole thing to the content column width) instead of
-// being bounded to match the small astrology/HD icon size below it. ----------
+// icon -- a sun (things orbit it, so it reads as the central star, not a
+// moon -- a real inconsistency in the first draft, corrected directly:
+// "obviously if something is having other objects orbit around it, it
+// would be the sun, not the moon"), with real dimensional sphere shading
+// (a crisp hotspot, a fresnel edge, layered gradients -- the same actual
+// technique already proven on the CTA button, just under-applied here the
+// first time), a ribbon built as real filled, cross-shaded bands instead
+// of thin strokes, and the numerology beads as small satellites along the
+// orbit rings. The sun IS the CTA button (her direct call: "the middle of
+// the Solar System could be the button that gets pushed... I don't know
+// why it wouldn't be") -- this function only draws the decorative SVG;
+// the actual clickable/keyboard-focusable button is a separate real
+// <button> element positioned on top of it via CSS percentages matching
+// this viewBox, set up right after this function runs. Explicitly NOT
+// yellow -- "just because it's the Sun does not mean I want it to be
+// yellow" -- and NOT gold or the numerology rainbow (see the palette
+// correction in CLAUDE.md); ice blue / cobalt / genuinely bright silver
+// throughout, same as the CTA glow already established. ----------
 (function(){
   const host = document.getElementById('heroIllustration');
   if(!host) return;
@@ -1145,35 +1070,43 @@ function openNumberDef(item){
   // numbers, since a bead floating off its ring is exactly the "not even
   // placed somewhere that makes sense" failure she's flagged before.
   const BEADS = [
-    {n:1, cx:26,  cy:99,  r:12},
-    {n:3, cx:104, cy:46,  r:11},
-    {n:9, cx:266, cy:50,  r:11},
-    {n:5, cx:333, cy:107, r:13},
-    {n:6, cx:249, cy:156, r:10},
-    {n:7, cx:88,  cy:158, r:11},
+    {n:1, cx:24,  cy:97,  r:11},
+    {n:3, cx:102, cy:42,  r:10},
+    {n:9, cx:268, cy:46,  r:10},
+    {n:5, cx:336, cy:105, r:12},
+    {n:6, cx:251, cy:154, r:9},
+    {n:7, cx:86,  cy:156, r:10},
   ];
-  const cx=180, cy=102;
-  // Palette is ice blue / cobalt / genuinely shiny silver -- explicitly
-  // NOT gold (tried once this session, rejected: "nowhere have I said I
-  // want a navy gold palette... it is absolutely not the way to go") and
-  // NOT the numerology rainbow (that coloring exists elsewhere in the app
-  // only to match the real chart-wheel images -- her words: "if those
-  // [icons] are going to be gone, then there's no reason for those colors
-  // to be on the page"). The moon reuses the same bright-silver technique
-  // already proven on the CTA button (full white highlight down through
-  // silver, never flattening into a dull mid-grey -- "shining silver, not
-  // grey," said twice), with the color mood carried by ice-blue/cobalt in
-  // the rings, ribbon and glow around it instead of in the sphere itself.
-  const SILVER_HI='#ffffff', ICE='#cfeaf9', COBALT='#1E4FDB', COBALT_DEEP='#0b2668';
+  const cx=180, cy=100, r=70;
+  const ICE='#cfeaf9', COBALT='#1E4FDB', COBALT_DEEP='#0b2668';
   const BEAD_TONES=[ICE, COBALT, '#eaf3fb'];
   let svg = `<svg viewBox="0 0 360 205" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="moonGrad" cx="34%" cy="30%" r="75%">
-        <stop offset="0%" stop-color="${SILVER_HI}"/>
-        <stop offset="26%" stop-color="${ICE}"/>
-        <stop offset="52%" stop-color="#79b8ee"/>
-        <stop offset="76%" stop-color="${COBALT}"/>
+      <radialGradient id="sunGrad" cx="32%" cy="27%" r="78%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="16%" stop-color="${ICE}"/>
+        <stop offset="38%" stop-color="#8fc3f2"/>
+        <stop offset="60%" stop-color="${COBALT}"/>
+        <stop offset="84%" stop-color="#123a9e"/>
         <stop offset="100%" stop-color="${COBALT_DEEP}"/>
+      </radialGradient>
+      <radialGradient id="sunFresnel" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="70%" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="81%" stop-color="#ffffff" stop-opacity="0.7"/>
+        <stop offset="89%" stop-color="${COBALT_DEEP}" stop-opacity="0.4"/>
+        <stop offset="96%" stop-color="${COBALT}" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0.55"/>
+      </radialGradient>
+      <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+        <stop offset="45%" stop-color="#ffffff" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="corona" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="${ICE}" stop-opacity="0.5"/>
+        <stop offset="55%" stop-color="${COBALT}" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="${COBALT}" stop-opacity="0"/>
       </radialGradient>
       <linearGradient id="ringGradA" x1="0%" y1="50%" x2="100%" y2="50%">
         <stop offset="0%" stop-color="${ICE}" stop-opacity="0.9"/>
@@ -1184,35 +1117,35 @@ function openNumberDef(item){
         <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
         <stop offset="100%" stop-color="${COBALT}" stop-opacity="0.7"/>
       </linearGradient>
-      <linearGradient id="ribbonGradBack" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="${COBALT}" stop-opacity="0"/>
-        <stop offset="25%" stop-color="${COBALT}" stop-opacity="0.55"/>
-        <stop offset="75%" stop-color="${COBALT}" stop-opacity="0.55"/>
-        <stop offset="100%" stop-color="${COBALT}" stop-opacity="0"/>
+      <!-- Ribbon: real filled bands with a gradient ACROSS their width
+           (top edge bright, bottom edge dark), not a stroked line with
+           opacity fading only at its two ends -- a stroke can only ever
+           fade in/out, it can't show a fold. A gradient across the
+           width is what actually reads as a lit, rounded/twisting
+           surface, the same top-lit/bottom-shadowed logic as the sphere
+           shading above, just applied to a ribbon instead of a ball. -->
+      <linearGradient id="bandGrad1" gradientUnits="userSpaceOnUse" x1="0" y1="140" x2="0" y2="188">
+        <stop offset="0%" stop-color="${ICE}" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="${COBALT_DEEP}" stop-opacity="0.45"/>
       </linearGradient>
-      <linearGradient id="ribbonGradMid" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="${ICE}" stop-opacity="0"/>
-        <stop offset="25%" stop-color="${ICE}" stop-opacity="0.8"/>
-        <stop offset="75%" stop-color="${ICE}" stop-opacity="0.8"/>
-        <stop offset="100%" stop-color="${ICE}" stop-opacity="0"/>
+      <linearGradient id="bandGrad2" gradientUnits="userSpaceOnUse" x1="0" y1="108" x2="0" y2="168">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="${COBALT}" stop-opacity="0.6"/>
       </linearGradient>
-      <linearGradient id="ribbonGradFront" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-        <stop offset="25%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="75%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      <linearGradient id="bandGrad3" gradientUnits="userSpaceOnUse" x1="0" y1="108" x2="0" y2="150">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="${ICE}" stop-opacity="0.7"/>
       </linearGradient>
     </defs>
-    <path d="M 4 190 C 95 155, 145 205, 235 172 C 292 150, 325 178, 356 158" fill="none" stroke="url(#ribbonGradBack)" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
-    <path d="M 4 178 C 90 152, 155 190, 230 162 C 288 142, 328 168, 356 144" fill="none" stroke="url(#ribbonGradMid)" stroke-width="3.2" stroke-linecap="round" opacity="0.85"/>
-    <path d="M 4 168 C 85 150, 160 176, 226 154 C 284 136, 330 158, 356 134" fill="none" stroke="url(#ribbonGradFront)" stroke-width="1.6" stroke-linecap="round" opacity="0.95"/>
+    <circle cx="${cx}" cy="${cy}" r="132" fill="url(#corona)"/>
+    <path d="M 0 168 C 80 145, 140 178, 220 156 C 280 138, 320 158, 360 142 L 360 160 C 320 176, 280 156, 220 174 C 140 196, 80 163, 0 186 Z" fill="url(#bandGrad1)"/>
+    <path d="M 0 150 C 75 130, 145 162, 215 138 C 275 120, 318 140, 360 122 L 360 138 C 318 156, 275 136, 215 156 C 145 180, 75 148, 0 168 Z" fill="url(#bandGrad2)"/>
+    <path d="M 0 136 C 70 120, 148 146, 210 126 C 268 110, 312 126, 360 110 L 360 120 C 312 136, 268 120, 210 140 C 148 160, 70 134, 0 150 Z" fill="url(#bandGrad3)"/>
     <ellipse cx="${cx}" cy="${cy}" rx="165" ry="40" fill="none" stroke="url(#ringGradA)" stroke-width="1.6" transform="rotate(-7 ${cx} ${cy})"/>
     <ellipse cx="${cx}" cy="${cy}" rx="128" ry="78" fill="none" stroke="url(#ringGradB)" stroke-width="1.4" stroke-dasharray="1 5" stroke-linecap="round" transform="rotate(10 ${cx} ${cy})"/>
-    <circle cx="${cx}" cy="${cy}" r="68" fill="url(#moonGrad)"/>
-    <circle cx="${cx}" cy="${cy}" r="68" fill="none" stroke="#eaf6ff" stroke-width="1" opacity="0.6"/>
-    <ellipse cx="157" cy="80" rx="12" ry="8" fill="${COBALT_DEEP}" opacity="0.14" transform="rotate(-20 157 80)"/>
-    <ellipse cx="202" cy="124" rx="16" ry="9" fill="${COBALT_DEEP}" opacity="0.12" transform="rotate(12 202 124)"/>
-    <ellipse cx="166" cy="137" rx="8" ry="5" fill="${COBALT_DEEP}" opacity="0.11"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunGrad)"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunFresnel)"/>
+    <ellipse cx="153" cy="70" rx="22" ry="14" fill="url(#sunHotspot)" transform="rotate(-18 153 70)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" opacity="0.9" transform="translate(322,10) scale(0.6)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="${ICE}" opacity="0.9" transform="translate(30,150) scale(0.42)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" opacity="0.8" transform="translate(190,182) scale(0.34)"/>`;
@@ -1229,9 +1162,7 @@ function openNumberDef(item){
 // ---------- the hook screen's real CTA: a white/silver metal button
 // sitting on a soft blue glow, made a real <button> so it's keyboard-
 // reachable, with a plain label under it so it reads as pressable. ----------
-const KEY_TEXT = '1 <mark class="key-hl key-hl-big">free</mark> reading';
-document.getElementById('keysCol').innerHTML =
-  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(60px,18vw,76px);height:clamp(60px,18vw,76px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
+document.getElementById('sunCtaLabel').innerHTML = '1 <mark class="key-hl key-hl-big">free</mark> reading';
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
