@@ -1069,42 +1069,76 @@ body{
     <div class="energy-ribbon"><svg viewBox="0 0 820 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
       <defs>
         <linearGradient id="ribbonGrad" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
-          <stop offset="0%" stop-color="#b8bdc9"/>
-          <stop offset="13%" stop-color="#ffffff"/>
+          <stop offset="0%" stop-color="#b0b6c4"/>
+          <stop offset="10%" stop-color="#d8dbe4"/>
+          <stop offset="24%" stop-color="#ffffff"/>
           <stop offset="50%" stop-color="#ffffff"/>
-          <stop offset="87%" stop-color="#ffffff"/>
-          <stop offset="100%" stop-color="#b8bdc9"/>
+          <stop offset="76%" stop-color="#ffffff"/>
+          <stop offset="90%" stop-color="#d8dbe4"/>
+          <stop offset="100%" stop-color="#b0b6c4"/>
         </linearGradient>
         <linearGradient id="ribbonGlow" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
-          <stop offset="0%" stop-color="#b8bdc9" stop-opacity="0"/>
-          <stop offset="20%" stop-color="#ffffff" stop-opacity="0.5"/>
-          <stop offset="50%" stop-color="#ffffff" stop-opacity="0.7"/>
-          <stop offset="80%" stop-color="#ffffff" stop-opacity="0.5"/>
-          <stop offset="100%" stop-color="#b8bdc9" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#b0b6c4" stop-opacity="0"/>
+          <stop offset="25%" stop-color="#ffffff" stop-opacity="0.3"/>
+          <stop offset="50%" stop-color="#ffffff" stop-opacity="0.55"/>
+          <stop offset="75%" stop-color="#ffffff" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#b0b6c4" stop-opacity="0"/>
         </linearGradient>
+        <radialGradient id="hotspot" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+          <stop offset="45%" stop-color="#ffffff" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        </radialGradient>
       </defs>
+      <ellipse cx="470" cy="148" rx="90" ry="46" fill="url(#hotspot)"/>
       <g fill="none" stroke-linecap="round">
-        <path d="M15,238 C130,228 210,196 300,180 C400,163 435,155 485,145 C565,126 615,92 700,58 C752,37 780,26 806,17" stroke="url(#ribbonGlow)" stroke-width="14" opacity="0.55"/>
-        <path d="M15,232 C125,220 205,188 298,172 C398,155 432,146 482,136 C562,117 612,84 698,50 C750,29 778,19 806,10" stroke="url(#ribbonGrad)" stroke-width="1.4"/>
-        <path d="M17,242 C132,233 212,202 302,186 C402,169 437,160 487,150 C567,131 617,98 702,64 C754,43 782,32 807,23" stroke="url(#ribbonGrad)" stroke-width="1.1"/>
-        <path d="M12,228 C122,214 202,182 296,166 C396,149 430,141 480,131 C560,112 610,78 696,45 C748,24 776,14 804,6" stroke="url(#ribbonGrad)" stroke-width="0.9"/>
-        <path d="M20,248 C138,240 218,212 306,196 C406,180 441,171 491,161 C571,142 621,109 705,74 C757,53 785,42 809,32" stroke="url(#ribbonGrad)" stroke-width="1.6"/>
-        <path d="M25,256 C145,250 224,224 312,209 C412,193 448,184 497,174 C576,155 625,122 708,88 C759,66 787,55 810,45" stroke="url(#ribbonGrad)" stroke-width="0.7" opacity="0.85"/>
-        <path d="M18,220 C128,204 206,174 300,157 C398,140 432,131 482,120 C560,101 608,68 692,38 C744,19 774,10 802,3" stroke="url(#ribbonGrad)" stroke-width="0.6" opacity="0.7"/>
+        <path d="M15,238 C130,228 210,196 300,180 C400,163 435,155 485,145 C565,126 615,92 700,58 C752,37 780,26 806,17" stroke="url(#ribbonGlow)" stroke-width="30" opacity="0.6"/>
+        <!-- Crossing pair 1: swap order around x=470 -->
+        <path d="M15,245 C160,236 320,196 470,150 C610,107 700,68 806,20" stroke="url(#ribbonGrad)" stroke-width="2.8"/>
+        <path d="M15,215 C170,222 340,176 470,150 C600,125 700,50 806,58" stroke="url(#ribbonGrad)" stroke-width="2.4"/>
+        <!-- Crossing pair 2: swap order around x=420, offset from pair 1 -->
+        <path d="M20,258 C150,252 300,214 420,178 C540,142 640,86 720,50 C760,32 786,22 808,11" stroke="url(#ribbonGrad)" stroke-width="2.1"/>
+        <path d="M20,222 C155,206 300,192 420,178 C560,163 630,104 712,66 C752,47 782,35 808,44" stroke="url(#ribbonGrad)" stroke-width="1.8"/>
+        <!-- Crossing pair 3, tighter, near the dense middle cluster -->
+        <path d="M280,192 C360,178 400,168 450,152 C500,136 530,128 570,116" stroke="url(#ribbonGrad)" stroke-width="1.6"/>
+        <path d="M280,168 C355,182 405,158 450,152 C495,146 535,110 570,116" stroke="url(#ribbonGrad)" stroke-width="1.4"/>
+        <!-- Accent strands for texture, thin, varied opacity -->
+        <path d="M25,266 C145,260 224,232 312,217 C412,201 448,192 497,182 C576,163 625,130 708,96 C759,74 787,63 810,53" stroke="url(#ribbonGrad)" stroke-width="1.1" opacity="0.75"/>
+        <path d="M10,206 C120,190 200,160 294,144 C394,127 428,118 478,108 C556,89 604,56 688,27 C740,9 770,0 798,-6" stroke="url(#ribbonGrad)" stroke-width="0.9" opacity="0.6"/>
+        <path d="M35,196 C155,188 255,174 355,166 C435,160 455,164 495,174 C595,198 645,156 725,96" stroke="url(#ribbonGrad)" stroke-width="1.2" opacity="0.65"/>
       </g>
       <g fill="#ffffff">
-        <path d="M486,144 L488.4,150.4 L495,152.8 L488.4,155.2 L486,161.8 L483.6,155.2 L477,152.8 L483.6,150.4 Z" transform="translate(0,0) scale(0.9)" opacity="0.95"/>
-        <path d="M300,178 L302.4,184.4 L309,186.8 L302.4,189.2 L300,195.8 L297.6,189.2 L291,186.8 L297.6,184.4 Z" transform="scale(0.7)" opacity="0.9"/>
-        <path d="M700,56 L702.4,62.4 L709,64.8 L702.4,67.2 L700,73.8 L697.6,67.2 L691,64.8 L697.6,62.4 Z" transform="scale(1.0)" opacity="1"/>
-        <path d="M612,90 L614.4,96.4 L621,98.8 L614.4,101.2 L612,107.8 L609.6,101.2 L603,98.8 L609.6,96.4 Z" transform="scale(0.55)" opacity="0.85"/>
+        <path d="M486,144 L490,157 L503,161 L490,165 L486,178 L482,165 L469,161 L482,157 Z" opacity="1"/>
+        <path d="M300,178 L302.8,187.6 L312,190 L302.8,192.4 L300,202 L297.2,192.4 L288,190 L297.2,187.6 Z" opacity="0.95"/>
+        <path d="M700,56 L703.2,66.4 L713,69.6 L703.2,72.8 L700,83.2 L696.8,72.8 L687,69.6 L696.8,66.4 Z" opacity="1"/>
+        <path d="M612,90 L614.4,98 L622,100.4 L614.4,102.8 L612,110.8 L609.6,102.8 L602,100.4 L609.6,98 Z" opacity="0.9"/>
+        <path d="M545,120 L547,126.4 L553,128.4 L547,130.4 L545,136.8 L543,130.4 L537,128.4 L543,126.4 Z" opacity="0.85"/>
+        <path d="M415,163 L417,169.4 L423,171.4 L417,173.4 L415,179.8 L413,173.4 L407,171.4 L413,169.4 Z" opacity="0.85"/>
+        <path d="M760,40 L761.7,45.2 L766.8,46.9 L761.7,48.6 L760,53.8 L758.3,48.6 L753.2,46.9 L758.3,45.2 Z" opacity="0.95"/>
+        <path d="M120,232 L121.7,237.2 L126.8,238.9 L121.7,240.6 L120,245.8 L118.3,240.6 L113.2,238.9 L118.3,237.2 Z" opacity="0.85"/>
+        <path d="M55,252 L56.4,256.4 L60.8,257.8 L56.4,259.2 L55,263.6 L53.6,259.2 L49.2,257.8 L53.6,256.4 Z" opacity="0.8"/>
+        <path d="M85,244 L86.4,248.4 L90.8,249.8 L86.4,251.2 L85,255.6 L83.6,251.2 L79.2,249.8 L83.6,248.4 Z" opacity="0.75"/>
+        <path d="M775,25 L776.4,29.4 L780.8,30.8 L776.4,32.2 L775,36.6 L773.6,32.2 L769.2,30.8 L773.6,29.4 Z" opacity="0.85"/>
       </g>
-      <g fill="#e4e6eb" stroke="#ffffff" stroke-width="0.6">
-        <circle cx="620" cy="88" r="3.2"/>
-        <circle cx="648" cy="76" r="2.4"/>
-        <circle cx="672" cy="68" r="2.8"/>
-        <circle cx="735" cy="40" r="2.2"/>
-        <circle cx="150" cy="222" r="2.4"/>
-        <circle cx="180" cy="210" r="1.9"/>
+      <g fill="#eef0f5" stroke="#ffffff" stroke-width="1">
+        <circle cx="600" cy="98" r="5"/>
+        <circle cx="622" cy="88" r="4.4"/>
+        <circle cx="644" cy="78" r="5.2"/>
+        <circle cx="666" cy="69" r="4"/>
+        <circle cx="688" cy="60" r="4.6"/>
+        <circle cx="712" cy="49" r="3.6"/>
+        <circle cx="735" cy="40" r="4.2"/>
+        <circle cx="757" cy="31" r="3.4"/>
+        <circle cx="150" cy="222" r="4.2"/>
+        <circle cx="178" cy="210" r="3.6"/>
+        <circle cx="565" cy="105" r="3.6"/>
+        <circle cx="222" cy="196" r="3.2"/>
+      </g>
+      <g fill="#ffffff" opacity="0.9">
+        <circle cx="622" cy="88" r="1.6"/>
+        <circle cx="666" cy="69" r="1.4"/>
+        <circle cx="735" cy="40" r="1.5"/>
+        <circle cx="178" cy="210" r="1.1"/>
       </g>
     </svg></div>
     <div class="tagline-slide c-gold">Do you want to know how you effect others? or how they effect you?</div>
