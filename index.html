@@ -222,9 +222,10 @@ body{
   margin-top:0.55rem;position:relative;z-index:1;
 }
 /* Real chrome, not tinted glass -- a metal sphere reads through grey-
-   scale value contrast and a distinct reflection band partway down (the
-   thing a chrome ball photo always shows), not color. Silver/white only,
-   no blue in the material itself -- the blue lives in the glow behind it. */
+   scale value contrast and a soft top-left highlight, not color. Silver/
+   white only, no blue in the material itself -- the blue lives in the
+   glow behind it. No horizontal reflection band across the middle -- an
+   earlier version had one and it read as a stray white line, not chrome. */
 .key-item{
   position:relative;overflow:hidden;cursor:pointer;z-index:1;
   border:2px solid #9a9ca3;font-family:inherit;
@@ -232,7 +233,6 @@ body{
   border-radius:50%;padding:0.3rem;flex-shrink:0;
   background:
     radial-gradient(circle at 30% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 6%, rgba(255,255,255,0) 20%),
-    linear-gradient(180deg, rgba(255,255,255,0) 52%, rgba(255,255,255,0.65) 58%, rgba(255,255,255,0.15) 66%, rgba(255,255,255,0) 74%),
     radial-gradient(circle at 50% 42%, #f7f7f8 0%, #e2e3e6 32%, #b9bbc1 58%, #86888f 82%, #5a5c62 100%);
   box-shadow:
     0 10px 18px -8px rgba(20,20,25,0.4),
