@@ -73,33 +73,17 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- hero accent cluster: numerology at the top, astrology and HD
-   flanking the key bubble below it -- flipped from HD-at-top per her
-   direct instruction ("flip flop it with numerology"). The three
-   graphics and the bubble still read as a triangle with the bubble at
-   its center. Tapping a planet dot / HD center / number bead still opens
-   the same tap-to-reveal definition modal used everywhere else. */
-.icon-triangle{position:relative;margin:0.5rem auto 0.3rem;}
-/* Overlapping the top of the bubble, not sitting in its own row above it
-   -- her direct correction: "I want it over the circle like I have it...
-   put it exactly where I placed it." Positioned relative to the whole
-   triangle (not pushing tri-base down), sized wider than the shrunk
-   title was (close to the bubble's own width) to match "the same size,
-   taking up the exact same amount of space" she drew it at. Lowered a
-   further 8px per her follow-up so the text sits closer to the bubble,
-   with its own bottom edge measured to land ~4px above the real top
-   edge of the astro/HD circles (215.66px in a 400px-wide test render) --
-   her explicit constraint: the text must never go lower than that, or
-   overlap either chart. */
-.icon-triangle .brand-row{
-  position:absolute;left:50%;top:calc(112px + 0.15rem);
-  transform:translate(-50%,-50%);
-  width:max-content;max-width:92%;margin:0;padding:0;
-  pointer-events:none;z-index:2;
-}
-.icon-triangle .brand{font-size:clamp(1.5rem,8vw,2.2rem);}
+/* ---------- hero accent cluster: numbered beads on top, the title in
+   its own clear space below them, astrology + Human Design icons below
+   that -- each on its own row now, nothing overlapping anything else.
+   (Previously the title sat deliberately on top of the bubble below it;
+   direct correction reversed that -- it read as messy, not intentional,
+   once that bubble became an actual button.) Tapping a planet dot / HD
+   center / number bead still opens the same tap-to-reveal definition
+   modal used everywhere else. */
+.icon-triangle{position:relative;margin:0.5rem auto 0.3rem;display:flex;flex-direction:column;align-items:center;gap:0.7rem;}
 .tri-top{display:flex;justify-content:center;}
-.tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.3rem;margin-top:0.15rem;}
+.tri-base{display:flex;align-items:center;justify-content:center;gap:1.6rem;}
 .accent-item{position:relative;flex:0 0 auto;height:78px;}
 .accent-item svg{display:block;width:auto;height:100%;}
 .accent-num{height:104px;}
@@ -126,21 +110,18 @@ body{
    this file was the latter, on a full-page background -- a different,
    much harder problem this isn't attempting). */
 .brand{
-  font-family:'Alex Brush',cursive;font-weight:400;line-height:1;
-  /* No longer sized to be the page's focal point -- her call directly:
-     "I don't believe there's any reason to have the title as a focal
-     point at all." Sized instead to sit clearly smaller than
-     .tagline-top (see that rule for the real per-width numbers this was
-     measured against). Still one line, still Alex Brush, never omitted --
-     that part of the rule didn't change, only its size. */
-  font-size:clamp(0.95rem,4vw,1.3rem);white-space:nowrap;
-  /* Brightened for a black background -- the previous gradient's dark
-     anchor stops (#0F1758/#121C6C) were built for contrast against a
-     light page and would nearly vanish on black. Same blue family,
-     shifted bright enough to actually read. */
-  background:linear-gradient(100deg,#4655D6 0%,#8A96EE 35%,#5364D6 50%,#8A96EE 65%,#4655D6 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-  filter:drop-shadow(0 0 18px rgba(90,110,230,0.55));
+  font-family:'Alex Brush',cursive;font-weight:400;line-height:1;white-space:nowrap;
+  /* Large and easy to read, on its own with nothing else near it now --
+     the standing rule for this title is that it's never a small
+     afterthought. */
+  font-size:clamp(2rem,10vw,2.9rem);
+  /* Solid, full-strength color -- the previous soft gradient + blur
+     (#4655D6/#8A96EE with a drop-shadow glow) was built and tuned for a
+     black background that this page no longer has; on the current white
+     background that same light, blurred treatment read as faded, not
+     glowing. Same blue already used everywhere else on this page
+     (buttons, borders, links), solid, no blur. */
+  color:#1C2CA9;
 }
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
@@ -168,7 +149,7 @@ body{
   position:relative;left:50%;transform:translateX(-50%);
   width:calc(100vw - 32px);margin-bottom:0.3rem;
 }
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
@@ -179,7 +160,7 @@ body{
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-picker{margin:1.4rem 0 1.6rem;}
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:700;padding:0.38rem 0.85rem;border-radius:20px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
 .rel-chip:hover{background:#243acc;}
 .rel-chip.active{background:#ffffff;color:#0d1550;border-color:#ffffff;box-shadow:0 2px 10px -1px rgba(255,255,255,0.45);}
 .rel-chip.active:hover{background:#e8eaf6;}
@@ -187,104 +168,13 @@ body{
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
 
-/* The one bubble, sitting in the middle of the astro/numerology icons
-   flanking it, one flex item among the three in .tri-base. Now also the
-   real tap target, so it needs to visibly read as pressable, not just as
-   a decorative glass sphere -- a slow pulsing ring around it, same as a
-   real notification/call-to-action affordance, plus a plain "tap to
-   begin" label right under it (see .tap-hint below). */
-.keys-col{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;}
-/* .key-item itself clips to a circle (overflow:hidden, for the glass
-   shading inside it), so the pulsing ring can't live on it directly --
-   this wrapper sits around the button instead, purely to host the ring
-   without clipping it. */
-.key-item-ring{position:relative;}
-.key-item-ring::before{
-  content:'';position:absolute;inset:-9px;border-radius:50%;
-  border:2px solid #1C2CA9;pointer-events:none;
-  animation:tapring 2.6s ease-out infinite;
-}
-@keyframes tapring{
-  0%{transform:scale(0.94);opacity:0.85;}
-  75%{transform:scale(1.22);opacity:0;}
-  100%{transform:scale(1.22);opacity:0;}
-}
-@media(prefers-reduced-motion:reduce){.key-item-ring::before{animation:none;opacity:0.5;transform:none;}}
-.tap-hint{
-  text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
-  margin-top:0.5rem;
-}
-/* Glass sphere, not a flat translucent circle: on a plain white page
-   there's nothing behind the bubble to blur, so transparency alone reads
-   as "faint grey circle," not glass. What actually sells glass here is
-   the shape language real glass spheres show in photos -- a darker,
-   cool-tinted rim where the glass is thickest (refraction), a sharp
-   bright highlight up top where a light source would catch it, a dimmer
-   secondary highlight opposite it, a crisp edge to hold the silhouette,
-   and a real drop shadow so it reads as a 3D object sitting above the
-   page rather than a flat decal. */
-/* Now the actual tap target that advances to the form (see revealForm())
-   -- reusing this already-settled glass sphere as the real CTA instead of
-   inventing a new button/glow-orb element. A real <button> now (was a
-   plain div), so it's keyboard-reachable and has a native pressed state;
-   cursor/hover/active added below without touching the glass shading
-   itself. */
-.key-item{
-  position:relative;overflow:hidden;cursor:pointer;
-  border:1.5px solid rgba(110,132,158,0.45);font-family:inherit;
-  transition:transform 0.15s ease,box-shadow 0.15s ease;
-  border-radius:50%;padding:0.3rem;flex-shrink:0;
-  background:
-    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.6) 11%, rgba(255,255,255,0.12) 26%, rgba(255,255,255,0.02) 46%, rgba(210,222,235,0.22) 68%, rgba(165,185,210,0.5) 100%),
-    radial-gradient(circle at 70% 76%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 22%);
-  box-shadow:
-    0 10px 18px -8px rgba(20,30,50,0.35),
-    inset 0 2px 4px rgba(255,255,255,1),
-    inset 0 -10px 16px -6px rgba(90,115,145,0.5),
-    inset 6px -6px 10px -5px rgba(140,165,195,0.35);
-  line-height:1.15;font-weight:600;
-}
-.key-item::after{
-  content:'';position:absolute;width:20%;height:20%;top:66%;right:18%;
-  background:radial-gradient(circle,#ffffff 0%,#e8eef6 40%,rgba(232,238,246,0) 75%);
-  clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
-  filter:drop-shadow(0 0 3px rgba(255,255,255,0.9));
-}
-.key-item span{position:relative;z-index:1;}
-/* The single inner span (not the circle itself) is the flex item doing
-   the centering -- putting display:flex directly on .key-item turned
-   every <mark> inside it into its own separate flex item, which
-   silently collapsed the plain spaces between words ("1freeFULLreading").
-   Centering a single wrapper span instead keeps the mark tags as normal
-   inline content, so spacing and wrapping behave like ordinary text. */
-.key-item{display:flex;align-items:center;justify-content:center;text-align:center;}
-/* Dark text with a light halo, not white with a dark outline -- the
-   glass is translucent now (was a near-black opaque gradient before),
-   so white text has nothing dark left under it to read against. */
-.key-item span{display:block;color:#12161e;font-size:0.92rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
-/* No highlighter box -- that was 3 emphasis signals stacked at once
-   (background block + bold + a near-black tint reading as its own
-   color), which is the actual reason it read as a highlighter mark
-   instead of considered typography. Down to 2 signals -- color + the
-   existing bold weight -- still findable at a skim, without the block. */
-/* <mark> has a browser-default yellow background in every browser --
-   omitting a background rule here does NOT mean "no background," it means
-   "fall back to that yellow default." Has to be set explicitly to none. */
-.key-hl{background:none;color:inherit;font-weight:800;}
-.key-item:hover{transform:translateY(-2px);box-shadow:
-    0 14px 22px -8px rgba(20,30,50,0.4),
-    inset 0 2px 4px rgba(255,255,255,1),
-    inset 0 -10px 16px -6px rgba(90,115,145,0.5),
-    inset 6px -6px 10px -5px rgba(140,165,195,0.35);}
-.key-item:active{transform:translateY(0);}
-.key-item:focus-visible{outline:2.5px solid #1C2CA9;outline-offset:3px;}
-
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
-.privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
-.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.4;margin-top:0.9rem;margin-bottom:1.1rem;}
+.privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
+.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.4;margin-top:0.9rem;margin-bottom:1.1rem;font-size:0.82rem;}
+.hook-cta-wrap{margin-top:1.5rem;margin-bottom:0.4rem;}
+.hook-cta-btn{font-size:1rem;padding:0.85rem 2.1rem;min-width:220px;}
 
 /* ---------- Step-2 state banner: shows nothing for a new visitor, a soft
    paywall nudge once the device's one free reading is used, or a "pass
@@ -293,17 +183,17 @@ body{
    underneath in either state: there's no server-side enforcement yet
    (Stripe isn't wired up), so this nudges rather than hard-blocks. ---------- */
 .state-banner{margin-bottom:1.1rem;padding:0.8rem 0.9rem;border-radius:10px;border:1.5px solid #1C2CA9;background:rgba(28,44,169,0.06);}
-.state-banner-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;text-align:center;}
-.state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:#000000;text-align:center;margin-top:0.15rem;}
+.state-banner-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;text-align:center;}
+.state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#000000;text-align:center;margin-top:0.15rem;}
 .state-banner.pass-active{background:rgba(28,44,169,0.1);}
 .pricing-list{margin-top:0.7rem;}
-.price-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;border-bottom:1px solid rgba(28,44,169,0.15);}
+.price-row{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(28,44,169,0.15);}
 .price-row:last-child{border-bottom:none;}
-.price-label{flex:1;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;color:#000000;}
-.price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.8rem;color:#1C2CA9;}
-.price-btn{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:0.3rem 0.65rem;border-radius:14px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;}
+.price-label{flex:1;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;color:#000000;}
+.price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.95rem;color:#1C2CA9;}
+.price-btn{font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:0.4rem 0.8rem;border-radius:14px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;}
 .price-btn:hover{background:#243acc;}
-.pass-check-row{font-family:'DM Sans',sans-serif;font-size:0.66rem;font-style:italic;color:#000000;text-align:center;margin-top:0.6rem;}
+.pass-check-row{font-family:'DM Sans',sans-serif;font-size:0.78rem;font-style:italic;color:#000000;text-align:center;margin-top:0.6rem;}
 .form-col{position:relative;}
 /* Unboxed: the data-entry form sits directly on the page background, no
    card/blur/border around it -- the key bubbles above it aren't boxed
@@ -313,8 +203,8 @@ body{
 }
 .form-panel .f{margin-bottom:0.9rem;}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
-.section-lbl{font-size:0.6rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
+.form-panel label{display:block;font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
+.section-lbl{font-size:0.75rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
 /* Person's whole entry compressed into 2 rows instead of 4: identity
    (First/Mid/Last/DOB) on one row, birth specifics (Time/AM-PM/Location)
    on the next. DOB moved onto the birth-details row with Time/AM-PM/
@@ -380,7 +270,7 @@ body{
 .gen-btn{position:relative;overflow:hidden;min-width:150px;padding:0.6rem 1.7rem;
   background:linear-gradient(160deg,#707AC9 0%,#1C2CA9 45%,#15217E 100%);
   border:1px solid rgba(255,255,255,0.55);border-radius:6px;
-  color:#ffffff;font-size:0.74rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  color:#ffffff;font-size:0.85rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
   transition:transform 0.18s ease,box-shadow 0.18s ease;
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,0.65),
@@ -826,29 +716,35 @@ body{
   <div class="tagline-frame">
     <div class="tagline-slide tagline-top c-gold">Do you know your personal cycles currently in motion?</div>
 
-    <div class="icon-triangle" id="heroAccentRow">
-      <div class="tri-top">
-        <div class="accent-item accent-num" id="numAccent"></div>
+    <div class="brand-row">
+      <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
       </div>
+      <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
+      </div>
+      <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
+      </div>
+      <div class="brand">Know Your Energy</div>
+    </div>
+  </div>
 
-      <div class="brand-row">
-        <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
-          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
-        </div>
-        <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
-          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
-        </div>
-        <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
-          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
-        </div>
-        <div class="brand">Know Your Energy</div>
-      </div>
+  <!-- The real call to action, right under the title -- its own plain
+       button, well clear of everything else, not a decorative shape
+       standing in for one. Placed here (not below the icons further
+       down) so it lands at or above the middle of the screen. -->
+  <div class="submit-wrap hook-cta-wrap">
+    <span class="glow-ring"><button type="button" class="gen-btn hook-cta-btn" id="freeReadingCta" onclick="revealForm()">Get My Free Full Reading</button></span>
+  </div>
 
-      <div class="tri-base">
-        <div class="accent-item accent-astro" id="solarIcon"></div>
-        <div class="keys-col" id="keysCol"></div>
-        <div class="accent-item accent-hd" id="hdIcon"></div>
-      </div>
+  <div class="icon-triangle" id="heroAccentRow">
+    <div class="tri-top">
+      <div class="accent-item accent-num" id="numAccent"></div>
+    </div>
+    <div class="tri-base">
+      <div class="accent-item accent-astro" id="solarIcon"></div>
+      <div class="accent-item accent-hd" id="hdIcon"></div>
     </div>
   </div>
 
@@ -1139,13 +1035,6 @@ function openNumberDef(item){
     el.addEventListener('click',()=>openNumberDef(NUMS[+el.dataset.idx]));
   });
 })();
-
-// ---------- key selling point + the hook screen's real CTA: this bubble
-// is now the one tap target that reveals the form (see revealForm()) --
-// a real <button>, not a decorative div, so it's keyboard-reachable. ----------
-const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
-document.getElementById('keysCol').innerHTML =
-  `<span class="key-item-ring"><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button></span><span class="tap-hint">Tap to Begin</span>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
