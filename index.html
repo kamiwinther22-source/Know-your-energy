@@ -77,7 +77,7 @@ body{
    rather than inventing something new and risking another wrong guess. */
 #formStep{
   position:relative;background:#ffffff;border-radius:20px;
-  margin:0.5rem 0.5rem 0.9rem;padding:3.6rem 1.15rem 1.3rem;
+  margin:0.5rem 0.5rem 0.9rem;padding:1.7rem 1.15rem 1.3rem;
   box-shadow:
     0 1px 2px rgba(20,30,70,0.05),
     0 14px 32px -18px rgba(20,30,70,0.28),
@@ -88,6 +88,13 @@ body{
   border-radius:0 0 3px 3px;
   background:linear-gradient(90deg,rgba(28,44,169,0) 0%,#1C2CA9 50%,rgba(28,44,169,0) 100%);
 }
+/* The card's own real header illustration -- see the markup comment
+   right above where this renders for the full reasoning. Sits in
+   normal flow (not an absolutely-positioned accent) so it takes up
+   real space as actual content, the way the hero screen's own
+   illustration does. */
+.card-orbit{width:100%;margin:0 0 0.3rem;}
+.card-orbit svg{display:block;width:100%;height:auto;}
 /* Real divider between the pricing block and the email+person-data
    block below it -- gives the single card real internal structure.
    Lives on pricing's own bottom edge (not formFields' top edge) on
@@ -1024,34 +1031,38 @@ body{
        reason for it to sit elevated at the very top like a completed
        first step -- it belongs right next to the data it's submitted
        together with. -->
-  <!-- Her direct correction: "I didn't say to remove the sparkles that
-       are not even noticeable to begin with" -- the ask was never to
-       delete them, it was that 2 tiny corner accents at 9-14px and
-       0.4-0.55 opacity were too timid to register at all. Same glyph,
-       same reused/approved pattern -- not a new invented effect -- just
-       actually built at a scale and count that reads as a real
-       cluster instead of something you have to look for.
-       A second, separate correction landed right after: "Do you know
-       that there are more than one color of blue? There's all kinds of
-       different shades of blue plus black can be used to make
-       something have an accent... you are making everything so basic
-       and plain." Flat single-hex blue on every one of these (and
-       elsewhere) was exactly that -- one tone repeated instead of a
-       real palette. These four now pull from an actual tonal family
-       built off the established #1C2CA9 (a deeper indigo for depth, a
-       brighter true blue for lift) plus black for real contrast,
-       instead of the same flat hex four times. -->
-  <div class="title-glint" style="width:34px;height:34px;top:0.4rem;right:5%;">
-    <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#1C2CA9"/></svg>
-  </div>
-  <div class="title-glint" style="width:20px;height:20px;top:3.6rem;right:16%;">
-    <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#101a63"/></svg>
-  </div>
-  <div class="title-glint" style="width:15px;height:15px;top:0.6rem;left:6%;">
-    <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#3d51e8"/></svg>
-  </div>
-  <div class="title-glint" style="width:11px;height:11px;top:3.4rem;left:2.5%;">
-    <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#000000"/></svg>
+  <!-- Real drawn illustration, not scattered icon accents -- her
+       standing complaint, stated as directly as it gets: "you for some
+       reason just don't want to put in the work of actually giving the
+       page some character... pull something out of your ass and make
+       it look fucking fantastic." Tried twice with generic sparkle
+       glyphs (subtle, then bigger, then "varied" colors that turned out
+       to be imperceptibly different blues on inspection) and both were
+       still just icons scattered on a form -- decoration, not design.
+       The actual finding from real research into working sites in this
+       category (Co-Star, The Pattern, CHANI): none of them win by
+       intensifying decoration -- CHANI's the one with real visual
+       character, and it comes from carrying one illustrated identity
+       everywhere, not from icon accents bolted onto a UI shell. This
+       card header is that: the exact orbit-ring geometry from the hero
+       illustration (same ellipse math, same -8deg tilt), redrawn small
+       as a real header illustration instead of a filled sphere, with
+       satellite dots sized distinctly (10/7/5/4px) since the earlier
+       sparkles proved hue alone doesn't read as variety at this scale --
+       size does. This is the same visual system as the hero screen
+       arriving on this one, not a new invented decoration. -->
+  <div class="card-orbit">
+    <svg viewBox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="275" cy="45" rx="50" ry="12" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
+      <ellipse cx="275" cy="45" rx="70" ry="16.8" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
+      <ellipse cx="275" cy="45" rx="90" ry="21.6" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
+      <ellipse cx="275" cy="45" rx="110" ry="26.4" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
+      <ellipse cx="275" cy="45" rx="130" ry="31.2" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
+      <circle cx="379.3" cy="23.4" r="10" fill="#000000"/>
+      <circle cx="340.9" cy="41.5" r="7" fill="#1C2CA9"/>
+      <circle cx="227.9" cy="47.5" r="5" fill="#000000"/>
+      <circle cx="192.3" cy="64.1" r="4" fill="#1C2CA9"/>
+    </svg>
   </div>
 
   <!-- Hidden until we actually know this email needs it -- her direct
