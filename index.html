@@ -299,42 +299,35 @@ body{
    (the sphere shading, fresnel edge, corona) happens in the SVG drawn by
    the heroIllustration script above; this is a real, invisible <button>
    sized and positioned with plain percentages to land exactly on the
-   sun circle in that SVG's viewBox (cx=180,cy=100,r=46 of a 360x205
-   box), so it's a true circular hit target and keyboard-focusable,
-   without duplicating the sphere rendering in CSS too. Percentages
-   updated when the sun itself was shrunk relative to its rings (see the
-   heroIllustration script's own note on that). */
+   sun circle in that SVG's viewBox (cx=180,cy=100,r=46 in user-space;
+   the viewBox itself is "0 20 360 185" after being cropped tighter to
+   its content -- see that script's own note on why), so it's a true
+   circular hit target and keyboard-focusable, without duplicating the
+   sphere rendering in CSS too. Percentages recalculated for the cropped
+   viewBox: left/width are unchanged (the crop only removed vertical
+   space), top = (100-46-20)/185 = 18.38%, height = 92/185 = 49.73%. */
 .sun-cta{
-  position:absolute;left:37.22%;top:26.34%;width:25.56%;height:44.88%;
+  position:absolute;left:37.22%;top:18.38%;width:25.56%;height:49.73%;
   border-radius:50%;border:none;background:transparent;cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0;
 }
 .sun-cta:focus-visible{outline:2.5px solid #ffffff;outline-offset:3px;}
-/* Her direct correction, round 3: after the round-2 attempt (colored
-   text with a white halo, no solid fill) -- "It does not stand out
-   anymore with what you've done. I don't understand why you are
-   insisting on it being white." A text-color-only treatment is never
-   guaranteed contrast -- it reads differently depending on exactly
-   which part of the sphere's own gradient sits behind it, which is
-   exactly why round 2 still read as washed-out/white to her even
-   though the text itself was blue. Real fix: a solid-fill badge, not
-   colored text over a variable background -- "1 free reading" now
-   sits on its own real card with a solid blue fill and a white ring
-   around it, so it has guaranteed, unambiguous contrast no matter what
-   part of the sphere it's positioned over. */
+/* The solid badge (round 3) is REJECTED -- her direct, forceful
+   correction: "get the box off of it... I'm not sure how you can
+   possibly look at that and think that that blue square is OK at all."
+   Back to plain colored text, no fill/box -- her own words: "It was
+   much better when the words were blue." This is round 2's treatment
+   (accent-blue text with a white halo for legibility against the
+   sphere), settled as the actual answer -- do not reintroduce a
+   badge/pill/box around this text again. */
 .sun-cta span{
-  position:relative;display:flex;flex-direction:column;align-items:center;
-  gap:0.45em;text-align:center;font-family:'DM Sans',sans-serif;font-size:0.66rem;
-}
-.cta-badge{
-  display:inline-flex;flex-direction:column;align-items:center;
-  background:linear-gradient(155deg,#2b3fd6 0%,#1C2CA9 100%);
-  color:#ffffff;font-weight:700;line-height:1.05;
-  padding:0.5em 1.15em 0.55em;border-radius:16px;
-  box-shadow:
-    0 7px 18px -6px rgba(11,38,104,0.65),
-    0 0 0 2.5px rgba(255,255,255,0.95),
-    inset 0 1px 1px rgba(255,255,255,0.4);
+  position:relative;display:block;text-align:center;color:#1C2CA9;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.66rem;
+  text-shadow:
+    0 0 2px rgba(255,255,255,0.95),
+    0 1px 3px rgba(255,255,255,0.9),
+    0 0 9px rgba(255,255,255,0.9),
+    0 0 18px rgba(255,255,255,0.6);
 }
 .key-hl{background:none;color:inherit;font-weight:800;}
 /* "It's a big deal. It needs to look like it's a big deal" -- the
@@ -343,7 +336,7 @@ body{
 .key-hl-big{display:block;font-size:1.65em;line-height:1;margin:0.05em 0;}
 .sun-cta span .sun-cta-tap{
   display:block;font-size:0.5em;font-weight:700;letter-spacing:0.06em;
-  text-transform:uppercase;color:#ffffff;
+  text-transform:uppercase;margin-top:0.4em;color:#ffffff;
   text-shadow:
     0 1px 2px rgba(0,0,0,0.6),
     0 0 3px rgba(0,0,0,0.4),
@@ -1277,7 +1270,18 @@ function openNumberDef(item){
   const RING_ARCS = RING_RX.map(ringArcs);
   const BACK_ARCS_SVG = RING_ARCS.map(a => a.back).join('');
   const FRONT_ARCS_SVG = RING_ARCS.map(a => a.front).join('');
-  let svg = `<svg viewBox="0 0 360 205" xmlns="http://www.w3.org/2000/svg">
+  // Cropped 20 units off the top of the viewBox (was "0 0 360 205", now
+  // "0 20 360 185") -- her direct correction: "move the title down to
+  // where it is almost touching the solar system." The illustration's
+  // own empty top margin (dead space above the sparkle/corona/rings --
+  // nothing actually draws above roughly y=25 in the old 205-tall box)
+  // meant the title still read as visually far from the rings even
+  // after the container-margin gap between them was made small, since
+  // that gap doesn't account for the graphic's own blank space. Trimming
+  // the viewBox itself (not just adding a bigger negative margin on top
+  // of it) removes that dead space at the source -- the .sun-cta
+  // button's percentages below are recalculated for this new box.
+  let svg = `<svg viewBox="0 20 360 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="sunGrad" cx="32%" cy="27%" r="78%">
         <stop offset="0%" stop-color="#ffffff"/>
@@ -1353,16 +1357,12 @@ function openNumberDef(item){
 // <button> so it's keyboard-reachable. The tap instruction lives on the
 // button's own label now, not a separate caption underneath -- and
 // doesn't name it "the sun" in the visible copy (her direct correction).
-// "1 free reading" is now a real solid badge, not colored text over the
-// sphere's own gradient -- her direct pushback on the text-color-only
-// attempt: "It does not stand out anymore with what you've done. I
-// don't understand why you are insisting on it being white." Text-
-// color/glow tricks depend on exactly what part of the sphere's
-// gradient sit behind them, which is exactly why it kept reading as
-// washed out no matter which color/shadow combination was tried -- a
-// solid-fill badge has guaranteed contrast regardless of what's under
-// it, and reads unambiguously as "an actual offer," not page text. ----------
-document.getElementById('sunCtaLabel').innerHTML = '<span class="cta-badge">1 <mark class="key-hl key-hl-big">free</mark> reading</span><span class="sun-cta-tap">Tap to Begin</span>';
+// Plain colored text, no badge/box -- a solid-fill badge was tried and
+// rejected: "get the box off of it... I'm not sure how you can possibly
+// look at that and think that that blue square is OK at all." Her own
+// words on what actually worked: "It was much better when the words
+// were blue." ----------
+document.getElementById('sunCtaLabel').innerHTML = '1 <mark class="key-hl key-hl-big">free</mark> reading<span class="sun-cta-tap">Tap to Begin</span>';
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
