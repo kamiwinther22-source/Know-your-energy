@@ -258,7 +258,7 @@ body{
 }
 .key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:1.05rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-hl{background:none;color:inherit;font-weight:800;}
-.key-hl-big{display:block;font-size:1.75em;line-height:1.05;margin:0.05em 0;}
+.key-hl-big{display:block;font-size:1.4em;line-height:1;margin:0.04em 0;}
 .key-item:hover{transform:translateY(-2px);box-shadow:
     0 14px 22px -8px rgba(20,20,25,0.4),
     inset 0 2px 4px rgba(255,255,255,1),
@@ -874,7 +874,7 @@ body{
 
   <div class="state-banner" id="stateBanner" style="display:none;"></div>
 
-  <div class="form-panel pricing-panel">
+  <div class="form-panel pricing-panel" id="pricingPanel">
     <div class="state-banner-ttl" style="margin-bottom:0.4rem;">Time-Limited Passes</div>
     <div class="state-banner-sub" style="margin-bottom:0.3rem;">used your one free reading already? pick a pass below</div>
     <div class="pricing-list" id="pricingList"></div>
@@ -888,14 +888,14 @@ body{
           <div class="person-tag">Person 1</div>
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
           <div class="row-id">
-            <div><label for="p1f">First</label><div class="line-field"><input id="p1f" placeholder="First" autocomplete="given-name"></div></div>
-            <div><label for="p1m">Mid</label><div class="line-field"><input id="p1m" placeholder="Mid" autocomplete="additional-name"></div></div>
-            <div><label for="p1l">Last</label><div class="line-field"><input id="p1l" placeholder="Last" autocomplete="family-name"></div></div>
+            <div class="line-field"><input id="p1f" placeholder="First" aria-label="First name" autocomplete="given-name"></div>
+            <div class="line-field"><input id="p1m" placeholder="Mid" aria-label="Middle name" autocomplete="additional-name"></div>
+            <div class="line-field"><input id="p1l" placeholder="Last" aria-label="Last name" autocomplete="family-name"></div>
           </div>
           <div class="row-birth">
             <div><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
             <div><label for="p1t">Time</label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
-            <div><label for="p1ap">AM/PM</label><div class="line-field"><select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div></div>
+            <div class="line-field ampm-field"><select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
             <div><label for="p1loc">Location</label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
           </div>
         </div>
@@ -905,14 +905,14 @@ body{
             <div class="person-tag">Person 2</div>
             <label class="section-lbl">Full Name at Birth</label>
             <div class="row-id">
-              <div><label for="p2f">First</label><div class="line-field"><input id="p2f" placeholder="First"></div></div>
-              <div><label for="p2m">Mid</label><div class="line-field"><input id="p2m" placeholder="Mid"></div></div>
-              <div><label for="p2l">Last</label><div class="line-field"><input id="p2l" placeholder="Last"></div></div>
+              <div class="line-field"><input id="p2f" placeholder="First" aria-label="First name"></div>
+              <div class="line-field"><input id="p2m" placeholder="Mid" aria-label="Middle name"></div>
+              <div class="line-field"><input id="p2l" placeholder="Last" aria-label="Last name"></div>
             </div>
             <div class="row-birth">
               <div><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
               <div><label for="p2t">Time</label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
-              <div><label for="p2ap">AM/PM</label><div class="line-field"><select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div></div>
+              <div class="line-field ampm-field"><select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
               <div><label for="p2loc">Location</label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
             </div>
           </div>
@@ -1091,15 +1091,19 @@ const NUMS = [
     let ticks='';
     for(let i=0;i<12;i++){
       const a=i*30*Math.PI/180;
-      const x1=cx+Math.sin(a)*(r-14), y1=cy-Math.cos(a)*(r-14);
+      const x1=cx+Math.sin(a)*(r-16), y1=cy-Math.cos(a)*(r-16);
       const x2=cx+Math.sin(a)*r, y2=cy-Math.cos(a)*r;
-      ticks+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1C2CA9" stroke-width="1.5" opacity="${tickOpacity}"/>`;
+      ticks+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1C2CA9" stroke-width="2" opacity="${tickOpacity}"/>`;
     }
-    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="1.5" opacity="${strokeOpacity}"/>${ticks}`;
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1C2CA9" stroke-width="2" opacity="${strokeOpacity}"/>${ticks}`;
   };
+  // Bumped notably brighter than the first pass -- 0.04-0.07 opacity was
+  // functionally invisible on a real screen, not "subtle." This is meant
+  // to actually be seen, just not compete with foreground text.
   host.innerHTML=`<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" style="position:absolute;top:0;left:0;width:100%;height:100%;">
-    ${ring(-40,90,190,0.07,0.05)}
-    ${ring(430,720,220,0.06,0.04)}
+    ${ring(-30,80,190,0.22,0.16)}
+    ${ring(420,520,240,0.18,0.13)}
+    ${ring(60,900,150,0.16,0.11)}
   </svg>`;
 })();
 // item.lbl is this cell's real Pythagorean Square meaning (Character,
@@ -1165,7 +1169,7 @@ function openNumberDef(item){
 // reachable, with a plain label under it so it reads as pressable. ----------
 const KEY_TEXT = '1 <mark class="key-hl key-hl-big">free</mark> reading';
 document.getElementById('keysCol').innerHTML =
-  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(88px,28vw,118px);height:clamp(88px,28vw,118px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
+  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(94px,29vw,126px);height:clamp(94px,29vw,126px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
@@ -3478,19 +3482,26 @@ function renderUsedBanner(){
 async function checkEmailStatus(){
   const email=g('pEmail');
   const banner=document.getElementById('stateBanner');
-  if(!email){ banner.style.display='none'; banner.innerHTML=''; return; }
+  const pricingPanel=document.getElementById('pricingPanel');
+  if(!email){ banner.style.display='none'; banner.innerHTML=''; pricingPanel.style.display='block'; return; }
   const result=await checkPassStatus(email);
   if(result.active){
+    // Pricing is pointless to show once we know this email already has
+    // access -- the only case where hiding something here actually makes
+    // sense, unlike gating the form itself behind email status.
     rememberPassEmail(email);
     banner.innerHTML=renderPassActiveBanner(result);
     banner.style.display='block';
+    pricingPanel.style.display='none';
   }else if(result.freeReadingUsed){
     banner.innerHTML=renderUsedBanner();
     banner.style.display='block';
+    pricingPanel.style.display='block';
   }else{
     rememberPassEmail(email);
     banner.style.display='none';
     banner.innerHTML='';
+    pricingPanel.style.display='block';
   }
 }
 document.getElementById('pEmail').addEventListener('blur',checkEmailStatus);
