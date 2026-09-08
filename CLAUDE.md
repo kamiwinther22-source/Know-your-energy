@@ -278,20 +278,41 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   get rid of it." The actual rule is narrower than this file previously
   claimed: the *background itself* being a dark night-sky/starfield (a black
   or near-black page background reading as "space") is what's rejected — a
-  navy+gold+silver *illustrated element* (a moon, orbit rings, small
-  planets, a ribbon/light-wisp accent) sitting on the site's normal light
-  background is something she's actively asked for repeatedly and still
-  wants. What's actually sunk every past attempt, by her own account, is
-  execution — a ribbon "ends up just being like a line that is not even
-  placed somewhere that makes sense," and wrong color (she specifically
-  rejected a pale grey-blue version as too grey/dull, wanting something
-  richer). So: real illustrated celestial content is wanted; the bar is
-  actually placing it deliberately and coloring it in the site's real
-  palette (rich navy/gold/silver, not a washed pale tone), not conceptually
-  avoiding it. Don't reject a celestial/ribbon element on sight because an
-  older version of this file said "forcefully rejected every time" — that
-  applied to the page's *background mood* (starfields, nebula shaders as
-  the whole page's theme), which is still correctly off-limits.
+  real illustrated element (a moon, orbit rings, small planets, a
+  ribbon/light-wisp accent) sitting on the site's normal light background is
+  something she's actively asked for repeatedly and still wants. What's
+  actually sunk every past attempt, by her own account, is execution — a
+  ribbon "ends up just being like a line that is not even placed somewhere
+  that makes sense," and wrong color (she rejected a pale grey-blue version
+  as too grey/dull). Don't reject a celestial/ribbon element on sight
+  because an older version of this file said "forcefully rejected every
+  time" — that applied to the page's *background mood* (starfields, nebula
+  shaders as the whole page's theme), which is still correctly off-limits.
+  **Do NOT assume "navy+gold" is what to color it with — see the palette
+  correction immediately below. That specific mistake was made live in this
+  same session and rejected immediately.**
+- **There is no settled "navy + gold + silver" palette. Do not assert one.**
+  An earlier version of this file claimed the entry page's palette was
+  "navy + gold + silver, chosen for a classy, premium feeling" as a
+  non-negotiable rule. She rejected this directly and forcefully: "Nowhere
+  ever have I said, I want a navy gold palette at all. I do not want that
+  at all." Gold in particular is already separately documented as rejected
+  on the results page ("gold is not the answer... in the never again
+  pile") and navy itself is noted elsewhere in this file as "fully rejected
+  sitewide" — so a future session reaching for navy+gold as the site's
+  "premium" palette is reproducing a mistake that's been rejected at least
+  twice now, not following an actual settled preference. This is also a
+  textbook case of the very first rule in this file (reaching for the
+  statistically common "classy" palette because it's overrepresented in
+  template design, not because she chose it) — it was written into this
+  file as a warning and then violated anyway in the same session. The one
+  color that does appear to be currently accepted, unchallenged throughout
+  many rounds of screenshots this session, is the specific blue already in
+  use on the entry page (#1C2CA9 -- the title, the headline accent phrase,
+  the button's glow, body text links). Don't extrapolate a full "palette"
+  from that one accepted color on your own initiative — if a design needs
+  a second/accent color beyond it, ask her directly rather than reaching
+  for gold, or any other "premium/classy" default.
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same

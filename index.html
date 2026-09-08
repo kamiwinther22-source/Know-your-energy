@@ -40,7 +40,12 @@
    makes it pop: contrast of saturation, not more background color. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#ffffff;
+  /* Not pure white -- flat #fff read as sterile/clinical. Not cream/ivory
+     either -- a warm off-white reads as yellowed, which she specifically
+     doesn't want. This is a faint cool tint (a whisper of the same blue
+     used everywhere else on the page), close enough to white that text
+     stays full-strength and legible, just not stark. */
+  background-color:#f6f7fb;
   background-image:none;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
@@ -69,6 +74,15 @@ body{
    centering off by that same 40px. Zeroing it on the last block only
    fixes that without touching spacing anywhere else this class is used. */
 #hookStep>.tagline-frame:last-child{margin-bottom:0;}
+
+/* The real centerpiece -- her direct instruction was that if there's a
+   centerpiece visual, it needs real presence, significantly bigger than
+   the small astrology/Human Design icons below it, not sized to match
+   them. Width matches the content column; height is driven by its own
+   viewBox aspect ratio, not fixed, so it scales cleanly across phone
+   widths without ever needing a bounding-box clip. */
+.hero-illustration{width:100%;max-width:380px;margin:0.1rem auto 0.15rem;}
+.hero-illustration svg{display:block;width:100%;height:auto;}
 
 /* ---------- hero accent cluster: numbered beads on top, the title in
    its own clear space below them, astrology + Human Design icons below
@@ -186,8 +200,14 @@ body{
    Verified after the fix by measuring the actual rendered box against
    the viewport, not just checking for overflow. */
 .tagline-top{
-  font-size:clamp(1.65rem,8vw,2.35rem);
-  line-height:1.1;letter-spacing:-0.01em;
+  /* Sized (and verified by actually counting rendered lines, not just
+     eyeballing) to wrap this sentence into 2 lines, not a tall vertical
+     stack of short ones -- her direct correction to the "biggest thing
+     on the page" pass: bigger didn't mean "as many lines as it takes,"
+     it meant one strong 2-line statement. Held at 2 lines from a 300px
+     width up. */
+  font-size:clamp(1.15rem,5vw,1.7rem);
+  line-height:1.15;letter-spacing:-0.005em;
   width:calc(100vw - 20px);
   margin-left:calc(50% - 50vw + 10px);
   margin-right:calc(50% - 50vw + 10px);
@@ -303,7 +323,7 @@ body{
   clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
   filter:drop-shadow(0 0 3px rgba(255,255,255,0.9));
 }
-.key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:0.86rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
+.key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:0.72rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-hl{background:none;color:inherit;font-weight:800;}
 .key-hl-big{display:block;font-size:1.4em;line-height:1;margin:0.04em 0;}
 .key-item:hover{transform:translateY(-2px);box-shadow:
@@ -880,10 +900,9 @@ body{
     </div>
   </div>
 
+  <div class="hero-illustration" id="heroIllustration"></div>
+
   <div class="icon-triangle" id="heroAccentRow">
-    <div class="tri-top">
-      <div class="accent-item accent-num" id="numAccent"></div>
-    </div>
     <div class="tri-base">
       <div class="accent-item accent-astro" id="solarIcon"></div>
       <div class="keys-col" id="keysCol"></div>
@@ -1136,48 +1155,81 @@ function openNumberDef(item){
   document.getElementById('cardExpand').classList.add('open');
 }
 
-// ---------- numerology accent: small scattered bead cluster, flat-filled
-// in her own literal per-number colors (see NUMS above) instead of the
-// old pale metal-tone gradients -- deliberately NOT a grid, an organic
-// scatter to match. Only 1-9 shown (not the master numbers) -- this is a
-// decorative preview, not a claim to be exhaustive; the full set is
-// still real content inside the actual report. No word labels, same
-// reasoning as the other two accents: tapping a bead still opens the
-// real definition via openNumberDef. ----------
+// ---------- hero centerpiece: a real illustration, not another small
+// icon -- a moon with true sphere shading (warm gold light side to deep
+// navy shadow side, not flat grey), two orbit rings around it, a ribbon
+// of light grounded along the bottom, and the numerology beads moved
+// off their own separate row and placed as small satellites along the
+// rings instead -- ties the numerology content directly into the
+// illustration rather than repeating it as a second decorative element.
+// Beads keep their real per-number colors from NUMS and still open the
+// real definition via openNumberDef when tapped. Sized as an actual
+// centerpiece (the SVG's own viewBox controls its proportions; CSS
+// scales the whole thing to the content column width) instead of being
+// bounded to match the small astrology/HD icon size below it. ----------
 (function(){
-  const numWrap = document.getElementById('numAccent');
-  if(!numWrap) return;
-  // Hand-placed, not grid-computed -- an organic scatter that keeps a
-  // real minimum gap between every pair of beads (checked, not eyeballed).
-  const POS = [
-    {cx:30,  cy:35,  r:15},
-    {cx:70,  cy:20,  r:13},
-    {cx:108, cy:38,  r:16},
-    {cx:24,  cy:78,  r:14},
-    {cx:62,  cy:65,  r:18},
-    {cx:100, cy:82,  r:13},
-    {cx:40,  cy:112, r:15},
-    {cx:80,  cy:118, r:14},
-    {cx:115, cy:105, r:12},
-  ];
-  // Per-bead text color chosen by real contrast math against its own
-  // fill (WCAG ratio, not eyeballed) -- black text reads fine on the
-  // light beads (yellow/white/green/orange) but is close to invisible on
-  // the dark ones (purple/blue/red/black/fuchsia), which get white text
-  // instead. White (2) also gets a real dark border so it doesn't
-  // disappear against the page's own white background.
+  const host = document.getElementById('heroIllustration');
+  if(!host) return;
   const TEXT_COLOR = {1:'#000000',2:'#000000',3:'#ffffff',4:'#ffffff',5:'#000000',6:'#ffffff',7:'#000000',8:'#ffffff',9:'#ffffff'};
-  let svg = `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">`;
-  NUMS.slice(0,9).forEach((item,i)=>{
-    const {cx,cy,r} = POS[i];
-    const border = item.n===2 ? 'rgba(20,25,35,0.35)' : 'rgba(0,0,0,0.15)';
-    svg += `<circle class="n-bead" data-idx="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="${item.color}" stroke="${border}" stroke-width="1.2" style="cursor:pointer;"/>`;
-    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="${TEXT_COLOR[item.n]}" style="pointer-events:none;">${item.n}</text>`;
+  // Hand-placed along where the two rotated orbit rings actually pass --
+  // checked against the rendered result, not just plausible-looking
+  // numbers, since a bead floating off its ring is exactly the "not even
+  // placed somewhere that makes sense" failure she's flagged before.
+  const BEADS = [
+    {n:1, cx:26,  cy:99,  r:12},
+    {n:3, cx:104, cy:46,  r:11},
+    {n:9, cx:266, cy:50,  r:11},
+    {n:5, cx:333, cy:107, r:13},
+    {n:6, cx:249, cy:156, r:10},
+    {n:7, cx:88,  cy:158, r:11},
+  ];
+  const cx=180, cy=102;
+  let svg = `<svg viewBox="0 0 360 205" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="moonGrad" cx="34%" cy="30%" r="75%">
+        <stop offset="0%" stop-color="#fffaf0"/>
+        <stop offset="30%" stop-color="#f0cf8f"/>
+        <stop offset="58%" stop-color="#6f6fb0"/>
+        <stop offset="100%" stop-color="#161b46"/>
+      </radialGradient>
+      <linearGradient id="ringGradA" x1="0%" y1="50%" x2="100%" y2="50%">
+        <stop offset="0%" stop-color="#c9a24a" stop-opacity="0.85"/>
+        <stop offset="50%" stop-color="#1C2CA9" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#c9a24a" stop-opacity="0.85"/>
+      </linearGradient>
+      <linearGradient id="ringGradB" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1C2CA9" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#c9a24a" stop-opacity="0.7"/>
+      </linearGradient>
+      <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#c9a24a" stop-opacity="0"/>
+        <stop offset="20%" stop-color="#e9cf8f" stop-opacity="0.85"/>
+        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.95"/>
+        <stop offset="80%" stop-color="#3548c4" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#1C2CA9" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="M 4 182 C 90 150, 150 196, 230 168 C 290 148, 330 172, 356 150" fill="none" stroke="url(#ribbonGrad)" stroke-width="3.2" stroke-linecap="round" opacity="0.9"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="165" ry="40" fill="none" stroke="url(#ringGradA)" stroke-width="1.6" transform="rotate(-7 ${cx} ${cy})"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="128" ry="78" fill="none" stroke="url(#ringGradB)" stroke-width="1.4" stroke-dasharray="1 5" stroke-linecap="round" transform="rotate(10 ${cx} ${cy})"/>
+    <circle cx="${cx}" cy="${cy}" r="68" fill="url(#moonGrad)"/>
+    <circle cx="${cx}" cy="${cy}" r="68" fill="none" stroke="#f0cf8f" stroke-width="1" opacity="0.55"/>
+    <ellipse cx="157" cy="80" rx="12" ry="8" fill="#101838" opacity="0.16" transform="rotate(-20 157 80)"/>
+    <ellipse cx="202" cy="124" rx="16" ry="9" fill="#101838" opacity="0.14" transform="rotate(12 202 124)"/>
+    <ellipse cx="166" cy="137" rx="8" ry="5" fill="#101838" opacity="0.13"/>
+    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#e9cf8f" opacity="0.9" transform="translate(322,10) scale(0.6)"/>
+    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" opacity="0.85" transform="translate(30,150) scale(0.42)"/>
+    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#c9a24a" opacity="0.8" transform="translate(190,182) scale(0.34)"/>`;
+  BEADS.forEach((b,i)=>{
+    const item = NUMS[b.n-1];
+    const border = b.n===2 ? 'rgba(20,25,35,0.35)' : 'rgba(0,0,0,0.18)';
+    svg += `<circle class="n-bead" data-n="${b.n}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${item.color}" stroke="${border}" stroke-width="1.2" style="cursor:pointer;"/>`;
+    svg += `<text x="${b.cx}" y="${b.cy+b.r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${b.r*1.05}" fill="${TEXT_COLOR[b.n]}" style="pointer-events:none;">${b.n}</text>`;
   });
   svg += '</svg>';
-  numWrap.innerHTML = svg;
-  numWrap.querySelectorAll('.n-bead').forEach(el=>{
-    el.addEventListener('click',()=>openNumberDef(NUMS[+el.dataset.idx]));
+  host.innerHTML = svg;
+  host.querySelectorAll('.n-bead').forEach(el=>{
+    el.addEventListener('click',()=>openNumberDef(NUMS[+el.dataset.n-1]));
   });
 })();
 
