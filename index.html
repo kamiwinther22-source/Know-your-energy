@@ -258,11 +258,11 @@ body{
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
 .hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.4;margin-top:0.9rem;margin-bottom:1.1rem;font-size:0.82rem;}
 
-/* ---------- Step-2 state banner: shows nothing for a fresh email, a real
-   paywall (form stays hidden) once that email's free reading is already
-   used, or a "pass active" confirmation once /check-pass confirms one --
-   see checkEmailGate(). This is a real gate now, checked against the
-   server by email, not a device-based nudge. ---------- */
+/* ---------- Step-2 status line: shows nothing for a fresh email, a note
+   to pick a pass once that email's free reading is already used, or a
+   "pass active" confirmation -- see checkEmailStatus(). Purely
+   informational; the form and the pricing list are both already on the
+   page regardless of what this says, nothing here hides either one. ---------- */
 .state-banner{margin-bottom:1.1rem;padding:0.8rem 0.9rem;border-radius:10px;border:1.5px solid #1C2CA9;background:rgba(28,44,169,0.06);}
 .state-banner-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;text-align:center;}
 .state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#000000;text-align:center;margin-top:0.15rem;}
@@ -831,26 +831,30 @@ body{
      only wrapped separately so it can be shown as its own step, with a
      state banner slot on top for the free-reading/pass status. ---------- -->
 <div class="content" id="formStep" style="display:none;">
-  <!-- The email is the real key -- it's what decides whether this is a
-       free reading, an already-spent free reading, or an active pass,
-       independent of which device or browser it's asked from. Checked
-       for real against the server (see checkEmailGate()) before any of
-       the actual data-entry form is shown. -->
-  <div class="form-panel" id="emailGate">
+  <!-- Everything on this page at once -- email, pricing, and the full
+       data-entry form, all visible together, nothing hidden behind a
+       click. The email is the real key (checked against the server by
+       email, not the device -- see checkEmailStatus()), and it updates
+       the status line and prices in place as soon as it's typed, but
+       nothing on this page waits for that or gets hidden because of it. -->
+  <div class="form-panel">
     <div class="privacy-note">email is just a key/no soliciting</div>
     <div class="f">
       <label for="pEmail">Email Address</label>
       <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
     </div>
     <div class="err" id="gateErr"></div>
-    <div class="submit-wrap">
-      <span class="glow-ring"><button type="button" class="gen-btn" id="gateBtn" onclick="checkEmailGate()">Continue</button></span>
-    </div>
   </div>
 
   <div class="state-banner" id="stateBanner" style="display:none;"></div>
 
-  <div class="bottom-grid" id="formFields" style="display:none;">
+  <div class="form-panel pricing-panel">
+    <div class="state-banner-ttl" style="margin-bottom:0.4rem;">Time-Limited Passes</div>
+    <div class="state-banner-sub" style="margin-bottom:0.3rem;">used your one free reading already? pick a pass below</div>
+    <div class="pricing-list" id="pricingList"></div>
+  </div>
+
+  <div class="bottom-grid" id="formFields">
     <div class="form-col">
       <div class="form-panel">
         <div class="privacy-note">Data never saved</div>
@@ -3281,13 +3285,11 @@ function resetToForm(){
   document.getElementById('resultsWrap').style.display='none';
   document.getElementById('formStep').style.display='block';
   document.getElementById('loading').style.display='none';
-  // Back to the email gate, not straight to the form -- whoever just
-  // finished a reading may have just spent their free one, so their
-  // status needs a fresh check, not an assumption it's still the same.
-  document.getElementById('formFields').style.display='none';
-  document.getElementById('stateBanner').style.display='none';
+  // Whoever just finished a reading may have just spent their free one --
+  // re-check their status rather than assuming it's still the same.
   const remembered=getRememberedPassEmail();
   if(remembered)document.getElementById('pEmail').value=remembered;
+  checkEmailStatus();
 }
 
 // ---------- form helpers ----------
@@ -3377,7 +3379,10 @@ function revealForm(){
   formStep.style.display='block';
   formStep.scrollIntoView({behavior:'smooth',block:'start'});
   const remembered=getRememberedPassEmail();
-  if(remembered)document.getElementById('pEmail').value=remembered;
+  if(remembered){
+    document.getElementById('pEmail').value=remembered;
+    checkEmailStatus();
+  }
 }
 
 // ---------- free-reading / pass state ----------
@@ -3412,6 +3417,13 @@ async function checkPassStatus(email){
   }catch(e){ return {active:false,freeReadingUsed:false,error:e.message}; }
 }
 
+// Pricing is always on the page, not something that only appears once
+// it's needed -- rendered once, straight into the static panel that's
+// already in the markup.
+document.getElementById('pricingList').innerHTML=PRICING_TIERS
+  .map(t=>`<div class="price-row"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span><button type="button" class="price-btn" onclick="buyPass('${t.plan}')">Buy</button></div>`)
+  .join('');
+
 function renderPassActiveBanner(result){
   const tier=PRICING_TIERS.find(t=>t.plan===result.plan);
   const planLabel = tier ? tier.label : titleCaseWords(result.plan||'');
@@ -3419,53 +3431,32 @@ function renderPassActiveBanner(result){
   return `<div class="state-banner pass-active"><div class="state-banner-ttl">Pass Active</div><div class="state-banner-sub">${escapeHtml(planLabel)} Pass${expiresText?' · active through '+escapeHtml(expiresText):''}</div></div>`;
 }
 
-function renderPaywallBanner(){
-  const rows=PRICING_TIERS.map(t=>`<div class="price-row"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span><button type="button" class="price-btn" onclick="buyPass('${t.plan}')">Buy</button></div>`).join('');
-  return `<div class="state-banner"><div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">choose a pass below, or go back and use a different email</div><div class="pricing-list">${rows}</div></div>`;
+function renderUsedBanner(){
+  return `<div class="state-banner"><div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">pick a pass below, or use a different email</div></div>`;
 }
 
-// The real gate -- runs when Continue is tapped on the email step. One
-// live check against the server decides which of three things happens:
-// a fresh email gets the blank form, an already-spent email is blocked
-// and shown pricing instead, an email with an active pass gets waved
-// through with that confirmed.
-async function checkEmailGate(){
-  const gateBtn=document.getElementById('gateBtn');
-  if(gateBtn.disabled)return;
-  document.getElementById('gateErr').style.display='none';
+// Runs automatically once an email is typed in (on blur) -- updates the
+// status line in place. Nothing on the page is hidden or revealed by
+// this; the form and the pricing are already both there regardless.
+async function checkEmailStatus(){
   const email=g('pEmail');
-  if(!email||!email.includes('@')){
-    document.getElementById('gateErr').textContent='Enter a real email address to continue.';
-    document.getElementById('gateErr').style.display='block';
-    return;
-  }
-  gateBtn.disabled=true;
-  gateBtn.textContent='Checking…';
-  const result=await checkPassStatus(email);
-  gateBtn.disabled=false;
-  gateBtn.textContent='Continue';
-
   const banner=document.getElementById('stateBanner');
-  const formFields=document.getElementById('formFields');
-
+  if(!email){ banner.style.display='none'; banner.innerHTML=''; return; }
+  const result=await checkPassStatus(email);
   if(result.active){
     rememberPassEmail(email);
     banner.innerHTML=renderPassActiveBanner(result);
     banner.style.display='block';
-    formFields.style.display='block';
-    return;
-  }
-  if(result.freeReadingUsed){
-    banner.innerHTML=renderPaywallBanner();
+  }else if(result.freeReadingUsed){
+    banner.innerHTML=renderUsedBanner();
     banner.style.display='block';
-    formFields.style.display='none';
-    return;
+  }else{
+    rememberPassEmail(email);
+    banner.style.display='none';
+    banner.innerHTML='';
   }
-  rememberPassEmail(email);
-  banner.style.display='none';
-  banner.innerHTML='';
-  formFields.style.display='block';
 }
+document.getElementById('pEmail').addEventListener('blur',checkEmailStatus);
 
 async function buyPass(plan){
   const email=g('pEmail');
