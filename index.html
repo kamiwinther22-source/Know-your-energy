@@ -1005,11 +1005,6 @@ body{
     </div>
   </div>
 
-  <div class="hero-illustration">
-    <div id="heroIllustration"></div>
-    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
-  </div>
-
   <!-- Email is the real gate now, right here on the landing page -- her
        direct logic: "when they click free reading it's going to take
        them to where they enter the data. But if they've already done
@@ -1019,15 +1014,35 @@ body{
        that used to only happen later, on blur, deep in the form --
        moved up front so the very first screen of the form step is
        already correct (straight to data entry, or straight to pricing)
-       instead of opening on a guess. Styled with the same carved-inset
-       line-field already proven elsewhere on this page, not a plain
-       browser input dropped onto the illustration -- her explicit
-       requirement: "it needs to be placed in a way that the first page
-       looks nice and professional polished classy, not like you
-       tripped and fell and it dropped on there somewhere." -->
+       instead of opening on a guess.
+       Placed ABOVE the sun now, not below it -- her direct correction
+       on the first attempt: "it says to tap the middle circle, which
+       is before the email, and there's nothing that says to enter the
+       email... it doesn't say anything about your email just being a
+       key and that you're not going to be receiving emails from me."
+       The sun's own label says "Tap to Begin," and with the email
+       field sitting after it, someone reading top to bottom would hit
+       that instruction before ever seeing the email was required --
+       wrong order for what actually has to happen first. Now the
+       reading order matches the real order: email (with the same
+       "just a key/no soliciting" reassurance the form page already
+       uses, so this is the first place someone sees it, not a second
+       copy buried further down), then the sun as the actual "tap to
+       begin" action. Styled with the same carved-inset line-field
+       already proven elsewhere on this page, not a plain browser input
+       dropped onto the illustration -- her explicit requirement: "it
+       needs to be placed in a way that the first page looks nice and
+       professional polished classy, not like you tripped and fell and
+       it dropped on there somewhere." -->
   <div class="hero-email-wrap">
+    <div class="privacy-note" style="margin-bottom:0.3rem;">Enter your email to begin &mdash; it's just a key, no soliciting</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
+  </div>
+
+  <div class="hero-illustration">
+    <div id="heroIllustration"></div>
+    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
   </div>
 
   <div class="privacy-note hook-differentiator">Your unique traits and patterns given to you at the precise moment of your birth that help you navigate the cycles throughout your life path are revealed in astrology, numerology and human design. See not only your own but also how your energy interacts with others in your life.</div>
