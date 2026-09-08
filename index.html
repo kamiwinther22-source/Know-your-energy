@@ -158,22 +158,28 @@ body{
 .tagline-frame{position:relative;max-width:380px;margin:0 auto 18px;padding:0 30px;}
 .tagline-slide{
   width:100%;margin:0;
-  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(1.05rem,5.2vw,1.55rem);line-height:1.32;font-weight:400;letter-spacing:0.005em;
+  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(0.85rem,3.6vw,1.02rem);line-height:1.3;font-weight:400;letter-spacing:0.005em;
 }
 .tagline-slide.c-gold{color:#000000;}
-/* Once the title dropped its own "focal point" size (see .brand), this
-   became solvable: bigger than the title AND 2 lines. Measured against
-   this exact sentence at real phone widths (360-430px), a 2-line wrap
-   needs the effective width close to the full viewport, not just the
-   tagline-frame's own (narrower, max-width:380px) content box -- so this
-   breaks out of that frame's width/padding entirely (position + left 50%
-   + negative transform) rather than trying to claw back a few px of
-   padding, which wasn't enough room on its own. */
+/* This is the one thing on the page meant to dominate -- her direct
+   instruction was to stop sizing everything to sit politely near each
+   other and instead let the actual hook (the question) be the largest
+   thing here, full stop. Everything else on this screen (the title, the
+   icons, the button) is sized to support this line, not compete with it.
+   Breaks out of the tagline-frame's own narrower box the same way the
+   old version did, since a headline this size needs the full viewport
+   width to wrap at 2-3 lines instead of running much taller. */
 .tagline-top{
-  font-size:clamp(1.15rem,5.2vw,1.4rem);
+  font-size:clamp(2rem,10.5vw,3.05rem);
+  line-height:1.08;letter-spacing:-0.01em;
   position:relative;left:50%;transform:translateX(-50%);
-  width:calc(100vw - 32px);margin-bottom:0.3rem;
+  width:calc(100vw - 20px);margin-bottom:0.55rem;
 }
+/* One phrase carried in the accent color instead of the whole line in
+   flat black -- real editorial pull-quote technique (a single emphasized
+   phrase inside a large headline), not a new decorative element. Same
+   blue already used everywhere else on the page. */
+.tagline-top .hl-accent{color:#1C2CA9;}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
@@ -222,16 +228,34 @@ body{
    scale value contrast and a soft top-left highlight, not color. Silver/
    white only, no blue in the material itself -- the blue lives in the
    glow behind it. No horizontal reflection band across the middle -- an
-   earlier version had one and it read as a stray white line, not chrome. */
+   earlier version had one and it read as a stray white line, not chrome.
+   A single radial gradient reads as a flat circle with shading painted
+   on, not an actual sphere -- what was missing is a fresnel edge: on a
+   real reflective ball, the rim catches the environment at a grazing
+   angle and comes back bright right at the silhouette, with a darker
+   band just inside it, before the material's own base tone takes over.
+   The extra radial-gradient layer below reproduces that (transparent
+   center -> bright ring -> dark ring -> bright rim), stacked on top of
+   the base sphere shading instead of replacing it -- that's the actual
+   technique a flat gradient-and-highlight sphere is missing. */
 .key-item{
   position:relative;overflow:hidden;cursor:pointer;z-index:1;
   border:2px solid #9a9ca3;font-family:inherit;
   transition:transform 0.15s ease,box-shadow 0.15s ease;
   border-radius:50%;padding:0.3rem;flex-shrink:0;
   background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 72%, rgba(255,255,255,0.55) 83%, rgba(70,72,80,0.55) 90%, rgba(18,19,22,0.4) 95%, rgba(255,255,255,0.6) 100%),
     radial-gradient(circle at 30% 20%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 6%, rgba(255,255,255,0) 20%),
     radial-gradient(circle at 50% 42%, #f7f7f8 0%, #e2e3e6 32%, #b9bbc1 58%, #86888f 82%, #5a5c62 100%);
+  /* The colored, larger-spread shadow is a contact/ambient shadow tinted
+     from the same violet-blue as the glow behind the button -- a chrome
+     ball sitting inside a blue-lit halo would bounce a little of that
+     color onto the surface it's grounded against; a plain grey/black
+     shadow reads as if the glow and the object aren't actually lit by
+     the same light. Layered underneath the tighter true contact shadow,
+     not replacing it. */
   box-shadow:
+    0 18px 30px -12px rgba(90,70,220,0.4),
     0 10px 18px -8px rgba(20,20,25,0.4),
     inset 0 2px 3px rgba(255,255,255,0.95),
     inset 0 -9px 14px -6px rgba(50,50,55,0.55),
@@ -257,6 +281,7 @@ body{
 .key-hl{background:none;color:inherit;font-weight:800;}
 .key-hl-big{display:block;font-size:1.4em;line-height:1;margin:0.04em 0;}
 .key-item:hover{transform:translateY(-2px);box-shadow:
+    0 22px 36px -12px rgba(90,70,220,0.48),
     0 14px 22px -8px rgba(20,20,25,0.4),
     inset 0 2px 4px rgba(255,255,255,1),
     inset 0 -10px 16px -6px rgba(55,55,60,0.5),
@@ -813,7 +838,7 @@ body{
      instead of purely decorative. ---------- -->
 <div class="content" id="hookStep">
   <div class="tagline-frame">
-    <div class="tagline-slide tagline-top c-gold">Do you know your personal cycles currently in motion?</div>
+    <div class="tagline-slide tagline-top c-gold">Do you know your <span class="hl-accent">personal cycles</span> currently in motion?</div>
 
     <div class="brand-row">
       <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
