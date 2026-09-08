@@ -313,6 +313,28 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   from that one accepted color on your own initiative — if a design needs
   a second/accent color beyond it, ask her directly rather than reaching
   for gold, or any other "premium/classy" default.
+  **Update, same session: this is exactly what happened next with the
+  hero illustration (the sun/rings/beads), and she caught it just as
+  directly.** The illustration's sphere, rings, and satellite dots were
+  built in shades of this same #1C2CA9-family blue (ICE/COBALT/
+  COBALT_DEEP) — reached for because it was already "the site's color"
+  from the text/title, not because she asked for it there. Her
+  correction: "Where is silver? I have said that I want it to be like a
+  silver metallic look to the site and you're just using blue and I
+  don't understand that at no point did I say blue is the color of my
+  site?" Fixed by replacing the illustration's material color with the
+  genuine chrome/silver gradient from the earlier 3-swatch comparison
+  (white → #f5f6f8 → #e4e6eb → #c9ccd4 → #a7abb5, grey ring-stroke
+  #9a9ca3) — the accepted blue now appears ONLY as a small, tightly
+  contained accent glow (the corona behind the sun, the glow behind the
+  ribbon), never as a dominant material/fill color. **Standing lesson,
+  stated twice now in the same session:** the accepted #1C2CA9 text/
+  link/button-glow blue is not a license to color anything else on the
+  page blue by default — a sphere, an icon, a background, a fill — check
+  or ask before extending it to a new element, especially one she's
+  given an explicit different material instruction for (here: silver/
+  metallic, stated directly, more than once, before the blue version was
+  even built).
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same
