@@ -183,13 +183,20 @@ body{
    secondary highlight opposite it, a crisp edge to hold the silhouette,
    and a real drop shadow so it reads as a 3D object sitting above the
    page rather than a flat decal. */
+/* Now the actual tap target that advances to the form (see revealForm())
+   -- reusing this already-settled glass sphere as the real CTA instead of
+   inventing a new button/glow-orb element. A real <button> now (was a
+   plain div), so it's keyboard-reachable and has a native pressed state;
+   cursor/hover/active added below without touching the glass shading
+   itself. */
 .key-item{
-  position:relative;overflow:hidden;
+  position:relative;overflow:hidden;cursor:pointer;
+  border:1.5px solid rgba(110,132,158,0.45);font-family:inherit;
+  transition:transform 0.15s ease,box-shadow 0.15s ease;
   border-radius:50%;padding:0.3rem;flex-shrink:0;
   background:
     radial-gradient(circle at 32% 24%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.6) 11%, rgba(255,255,255,0.12) 26%, rgba(255,255,255,0.02) 46%, rgba(210,222,235,0.22) 68%, rgba(165,185,210,0.5) 100%),
     radial-gradient(circle at 70% 76%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 22%);
-  border:1.5px solid rgba(110,132,158,0.45);
   box-shadow:
     0 10px 18px -8px rgba(20,30,50,0.35),
     inset 0 2px 4px rgba(255,255,255,1),
@@ -224,11 +231,38 @@ body{
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:inherit;font-weight:800;}
+.key-item:hover{transform:translateY(-2px);box-shadow:
+    0 14px 22px -8px rgba(20,30,50,0.4),
+    inset 0 2px 4px rgba(255,255,255,1),
+    inset 0 -10px 16px -6px rgba(90,115,145,0.5),
+    inset 6px -6px 10px -5px rgba(140,165,195,0.35);}
+.key-item:active{transform:translateY(0);}
+.key-item:focus-visible{outline:2.5px solid #1C2CA9;outline-offset:3px;}
 
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
+.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.4;margin-top:0.9rem;margin-bottom:1.1rem;}
+
+/* ---------- Step-2 state banner: shows nothing for a new visitor, a soft
+   paywall nudge once the device's one free reading is used, or a "pass
+   active" confirmation once /check-pass confirms one -- see
+   refreshAccessState(). Deliberately does not remove/hide the form
+   underneath in either state: there's no server-side enforcement yet
+   (Stripe isn't wired up), so this nudges rather than hard-blocks. ---------- */
+.state-banner{margin-bottom:1.1rem;padding:0.8rem 0.9rem;border-radius:10px;border:1.5px solid #1C2CA9;background:rgba(28,44,169,0.06);}
+.state-banner-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;text-align:center;}
+.state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:#000000;text-align:center;margin-top:0.15rem;}
+.state-banner.pass-active{background:rgba(28,44,169,0.1);}
+.pricing-list{margin-top:0.7rem;}
+.price-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;border-bottom:1px solid rgba(28,44,169,0.15);}
+.price-row:last-child{border-bottom:none;}
+.price-label{flex:1;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;color:#000000;}
+.price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.8rem;color:#1C2CA9;}
+.price-btn{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:0.3rem 0.65rem;border-radius:14px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;}
+.price-btn:hover{background:#243acc;}
+.pass-check-row{font-family:'DM Sans',sans-serif;font-size:0.66rem;font-style:italic;color:#000000;text-align:center;margin-top:0.6rem;}
 .form-col{position:relative;}
 /* Unboxed: the data-entry form sits directly on the page background, no
    card/blur/border around it -- the key bubbles above it aren't boxed
@@ -734,7 +768,20 @@ body{
 </head>
 <body>
 <div class="bg-glints" id="bgGlints"></div>
-<div class="content">
+
+<!-- ---------- Step 1: the hook screen. Zero-context first impression --
+     per the standing correction in this file, this IS the cold-open page,
+     not a second page for "people who already came looking for this."
+     Its only job is to get the one tap that reveals the form, so the real
+     CTA is the existing, already-settled glass key-bubble itself (made a
+     real <button> below) rather than a new invented button -- one clear
+     tap target, not two competing ones. Everything below the bubble
+     (differentiator line, second tagline) is supporting detail, ordered
+     AFTER the bubble on purpose so the actual offer lands at/above the
+     viewport's vertical center, not the eye having to travel down and
+     back up to find it (measured with Playwright at a real 393x852
+     mobile viewport, not eyeballed -- see commit notes). ---------- -->
+<div class="content" id="hookStep">
   <div class="tagline-frame">
     <div class="tagline-slide tagline-top c-gold">Do you know your personal cycles currently in motion?</div>
 
@@ -762,10 +809,22 @@ body{
         <div class="accent-item accent-hd" id="hdIcon"></div>
       </div>
     </div>
-
-    <div class="tagline-slide c-gold">Do you want to know how you effect others? or how they effect you?</div>
   </div>
 
+  <div class="privacy-note hook-differentiator">Your unique design, described by three separate systems — astrology, numerology, and Human Design.</div>
+
+  <div class="tagline-frame">
+    <div class="tagline-slide c-gold">Do you want to know how you effect others? or how they effect you?</div>
+  </div>
+</div>
+
+<!-- ---------- Step 2: the actual data-entry form, hidden until the hook
+     bubble is tapped (see revealForm()). Structurally unchanged from the
+     single-page version -- same field IDs, same generate()/validation --
+     only wrapped separately so it can be shown as its own step, with a
+     state banner slot on top for the free-reading/pass status. ---------- -->
+<div class="content" id="formStep" style="display:none;">
+  <div class="state-banner" id="stateBanner" style="display:none;"></div>
   <div class="bottom-grid">
     <div class="form-col">
       <div class="form-panel">
@@ -1040,10 +1099,12 @@ function openNumberDef(item){
   });
 })();
 
-// ---------- key selling point: single bubble centered between the two taglines ----------
+// ---------- key selling point + the hook screen's real CTA: this bubble
+// is now the one tap target that reveals the form (see revealForm()) --
+// a real <button>, not a decorative div, so it's keyboard-reachable. ----------
 const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
 document.getElementById('keysCol').innerHTML =
-  `<div class="key-item" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);"><span>${KEY_TEXT}</span></div>`;
+  `<button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
@@ -3158,7 +3219,14 @@ function render(p1,p2,r,reportErr,reportUsedFallback,pending,fallbackReason){
   stopLoadingTimer();
   document.getElementById('loading').style.display='none';
   document.getElementById('resultsWrap').style.display='block';
-  document.querySelector('.content').style.display='none';
+  // Covers every path into render() -- a fresh generation (already past
+  // the hook screen by definition) and a page-reload restore of a saved
+  // result (which never went through revealForm() this time around, so
+  // hookStep is still sitting at its default visible state unless this
+  // hides it too). Without this, reloading with a saved result stacked
+  // the hook screen on top of the results grid.
+  document.getElementById('hookStep').style.display='none';
+  document.getElementById('formStep').style.display='none';
   if(pending){
     const slot=document.getElementById('readingSlot');
     if(slot)animateHourglass(slot);
@@ -3191,8 +3259,9 @@ function resetToForm(){
   clearSavedResult();
   clearDraft();
   document.getElementById('resultsWrap').style.display='none';
-  document.querySelector('.content').style.display='block';
+  document.getElementById('formStep').style.display='block';
   document.getElementById('loading').style.display='none';
+  refreshAccessState();
 }
 
 // ---------- form helpers ----------
@@ -3275,6 +3344,105 @@ function stopLoadingTimer(){
 
 const W_API='https://know-your-energy.kwdoanchor.workers.dev';
 
+// ---------- Step 1 -> Step 2 ----------
+function revealForm(){
+  document.getElementById('hookStep').style.display='none';
+  const formStep=document.getElementById('formStep');
+  formStep.style.display='block';
+  formStep.scrollIntoView({behavior:'smooth',block:'start'});
+  refreshAccessState();
+}
+
+// ---------- free-reading / pass state ----------
+// No server-side enforcement of "one free reading" exists yet (there's no
+// Stripe key configured, per direct instruction not to wire that up until
+// the site is worth paying for) -- this is a real, working client-side
+// nudge, not a placeholder, but it's honestly a nudge: it tracks "used on
+// this device" via localStorage, exactly what the banner copy says, not a
+// server-verified entitlement. An active pass IS verified for real, since
+// /check-pass already exists and works independent of Stripe checkout.
+const FREE_READING_KEY='kye_freeReadingUsed';
+const REMEMBERED_EMAIL_KEY='kye_passEmail';
+function markFreeReadingUsed(){ try{localStorage.setItem(FREE_READING_KEY,'1');}catch(e){} }
+function hasUsedFreeReading(){ try{return localStorage.getItem(FREE_READING_KEY)==='1';}catch(e){return false;} }
+function rememberPassEmail(email){ try{localStorage.setItem(REMEMBERED_EMAIL_KEY,email);}catch(e){} }
+function getRememberedPassEmail(){ try{return localStorage.getItem(REMEMBERED_EMAIL_KEY)||'';}catch(e){return '';} }
+
+// Five tiers as designed -- note only 'single' and 'monthly'/'annual'
+// (at different amounts) currently exist in worker.js's PLAN_CONFIG.
+// 'week' and 'sixmonth' will 400 until the backend is updated to match --
+// expected right now, not a bug to silently paper over, per direct
+// instruction that the backend (not this pricing display) is what still
+// needs to change, deferred until Stripe is actually turned on.
+const PRICING_TIERS=[
+  {plan:'single',   label:'1 Day',    price:'$5'},
+  {plan:'week',     label:'1 Week',   price:'$11'},
+  {plan:'monthly',  label:'1 Month',  price:'$22'},
+  {plan:'sixmonth', label:'6 Months', price:'$33'},
+  {plan:'annual',   label:'12 Months',price:'$77'}
+];
+
+async function checkPassStatus(email){
+  if(!email)return {active:false};
+  try{
+    const res=await fetch(W_API+'/check-pass',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    return await res.json();
+  }catch(e){ return {active:false}; }
+}
+
+function renderPassActiveBanner(result){
+  const planLabel = result.plan==='annual' ? '12 Month' : (result.plan==='monthly' ? '1 Month' : titleCaseWords(result.plan||''));
+  const expiresText = result.expiresAt ? new Date(result.expiresAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) : '';
+  return `<div class="state-banner pass-active"><div class="state-banner-ttl">Pass Active</div><div class="state-banner-sub">${escapeHtml(planLabel)} Pass${expiresText?' · active through '+escapeHtml(expiresText):''}</div></div>`;
+}
+
+function renderPaywallBanner(){
+  const rows=PRICING_TIERS.map(t=>`<div class="price-row"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span><button type="button" class="price-btn" onclick="buyPass('${t.plan}')">Buy</button></div>`).join('');
+  return `<div class="state-banner"><div class="state-banner-ttl">Your Free Reading Is Used</div><div class="state-banner-sub">on this device — individual or relational, try any tier below</div><div class="pricing-list">${rows}</div><div class="pass-check-row">Already have a pass? Enter your email below and we'll check.</div></div>`;
+}
+
+// Re-derives which state the banner should show: an active pass wins over
+// the "already used" nudge, a brand-new visitor gets no banner at all.
+async function refreshAccessState(){
+  const banner=document.getElementById('stateBanner');
+  if(!banner)return;
+  const remembered=getRememberedPassEmail();
+  if(remembered){
+    const result=await checkPassStatus(remembered);
+    if(result.active){
+      banner.innerHTML=renderPassActiveBanner(result);
+      banner.style.display='block';
+      return;
+    }
+  }
+  if(hasUsedFreeReading()){
+    banner.innerHTML=renderPaywallBanner();
+    banner.style.display='block';
+  }else{
+    banner.style.display='none';
+    banner.innerHTML='';
+  }
+}
+
+async function buyPass(plan){
+  const email=g('pEmail');
+  if(!email){ showErr('Enter your email above first so we know who the pass belongs to.'); return; }
+  try{
+    const res=await fetch(W_API+'/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan,email})});
+    const data=await res.json();
+    if(data.url){ window.location.href=data.url; }
+    else{ showErr(data.error||'Could not start checkout.'); }
+  }catch(e){ showErr('Connection error: '+e.message); }
+}
+
+document.getElementById('pEmail').addEventListener('blur', async ()=>{
+  const email=g('pEmail');
+  if(!email)return;
+  const result=await checkPassStatus(email);
+  if(result.active)rememberPassEmail(email);
+  refreshAccessState();
+});
+
 async function generate(){
   const genBtn=document.getElementById('genBtn');
   if(genBtn.disabled)return;
@@ -3302,8 +3470,16 @@ async function generate(){
       location: g('p2loc')
     };
   }
+  // Real check against the entered email, not just the remembered one --
+  // someone can type a pass email in without it having been checked on
+  // blur yet (e.g. paste + immediate submit). Determines whether this
+  // generation should count against the device's one free reading.
+  const activePassResult=await checkPassStatus(g('pEmail'));
+  const hasActivePass=!!activePassResult.active;
+  if(hasActivePass)rememberPassEmail(g('pEmail'));
+
   genBtn.disabled=true;
-  document.querySelector('.content').style.display='none';
+  document.getElementById('formStep').style.display='none';
   document.getElementById('loading').style.display='block';
   startLoadingTimer();
 
@@ -3311,7 +3487,7 @@ async function generate(){
     genBtn.disabled=false;
     stopLoadingTimer();
     document.getElementById('loading').style.display='none';
-    document.querySelector('.content').style.display='block';
+    document.getElementById('formStep').style.display='block';
     showErr(msg);
   };
 
@@ -3355,6 +3531,7 @@ async function generate(){
     p2.hdError=chartResult.p2.humanDesignError;
   }
   genBtn.disabled=false;
+  if(!hasActivePass)markFreeReadingUsed();
   renderCharts(p1,p2);
 
   // Phase 2: the actual AI reading, now running with the charts already
