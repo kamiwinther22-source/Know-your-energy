@@ -53,6 +53,22 @@ body{
    sections together on a real device. This is the real fix; the
    font-size floor below is the other half of it. */
 .content{width:100%;max-width:420px;min-width:0;position:relative;z-index:1;}
+/* Centers the whole hook screen as one group in the middle of the
+   screen, top to bottom, instead of it sitting pinned to the top with
+   empty space left below. Only applies here -- the form and results
+   screens stay normal top-down scrolling. */
+#hookStep{
+  min-height:calc(100vh - 2.45rem);
+  min-height:calc(100dvh - 2.45rem);
+  display:flex;flex-direction:column;justify-content:center;
+}
+/* .tagline-frame carries a 40px bottom margin (spacing when it's not the
+   last thing on the page elsewhere) but no matching top margin -- used as
+   both the first and last block here, that turned into extra empty space
+   below the content that isn't below the first block too, throwing the
+   centering off by that same 40px. Zeroing it on the last block only
+   fixes that without touching spacing anywhere else this class is used. */
+#hookStep>.tagline-frame:last-child{margin-bottom:0;}
 .bg-glints{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
@@ -172,8 +188,33 @@ body{
 .bottom-grid{display:block;}
 
 /* The one bubble, sitting in the middle of the astro/numerology icons
-   flanking it, one flex item among the three in .tri-base. */
-.keys-col{flex:0 0 auto;}
+   flanking it, one flex item among the three in .tri-base. Now also the
+   real tap target, so it needs to visibly read as pressable, not just as
+   a decorative glass sphere -- a slow pulsing ring around it, same as a
+   real notification/call-to-action affordance, plus a plain "tap to
+   begin" label right under it (see .tap-hint below). */
+.keys-col{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;}
+/* .key-item itself clips to a circle (overflow:hidden, for the glass
+   shading inside it), so the pulsing ring can't live on it directly --
+   this wrapper sits around the button instead, purely to host the ring
+   without clipping it. */
+.key-item-ring{position:relative;}
+.key-item-ring::before{
+  content:'';position:absolute;inset:-9px;border-radius:50%;
+  border:2px solid #1C2CA9;pointer-events:none;
+  animation:tapring 2.6s ease-out infinite;
+}
+@keyframes tapring{
+  0%{transform:scale(0.94);opacity:0.85;}
+  75%{transform:scale(1.22);opacity:0;}
+  100%{transform:scale(1.22);opacity:0;}
+}
+@media(prefers-reduced-motion:reduce){.key-item-ring::before{animation:none;opacity:0.5;transform:none;}}
+.tap-hint{
+  text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
+  margin-top:0.5rem;
+}
 /* Glass sphere, not a flat translucent circle: on a plain white page
    there's nothing behind the bubble to blur, so transparency alone reads
    as "faint grey circle," not glass. What actually sells glass here is
@@ -1104,7 +1145,7 @@ function openNumberDef(item){
 // a real <button>, not a decorative div, so it's keyboard-reachable. ----------
 const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
 document.getElementById('keysCol').innerHTML =
-  `<button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button>`;
+  `<span class="key-item-ring"><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button></span><span class="tap-hint">Tap to Begin</span>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
