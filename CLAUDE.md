@@ -270,11 +270,28 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   (Alex Brush).** Never split across lines, never a different font, never
   omitted from a landing/entry page. This is a staple; versions without it
   are an instant rejection.
-- **No dark/night-sky/cosmic/celestial theme, anywhere.** The navy + gold +
-  silver palette was chosen for a *classy, premium* feeling — explicitly NOT
-  a space/stars/constellation/night-sky mood. This has been misread multiple
-  times (starfields, nebula shaders, orrery animations) and rejected
-  forcefully every time.
+- **No dark/night-sky BACKGROUND — but she has NOT banned celestial
+  illustration or ribbon/light effects, and an earlier version of this rule
+  said she had. She corrected this directly:** "I have not banned the Solar
+  System and the ribbons. [They] are actually something that I have asked
+  for many times over, but they are done so incredibly poorly that I always
+  get rid of it." The actual rule is narrower than this file previously
+  claimed: the *background itself* being a dark night-sky/starfield (a black
+  or near-black page background reading as "space") is what's rejected — a
+  navy+gold+silver *illustrated element* (a moon, orbit rings, small
+  planets, a ribbon/light-wisp accent) sitting on the site's normal light
+  background is something she's actively asked for repeatedly and still
+  wants. What's actually sunk every past attempt, by her own account, is
+  execution — a ribbon "ends up just being like a line that is not even
+  placed somewhere that makes sense," and wrong color (she specifically
+  rejected a pale grey-blue version as too grey/dull, wanting something
+  richer). So: real illustrated celestial content is wanted; the bar is
+  actually placing it deliberately and coloring it in the site's real
+  palette (rich navy/gold/silver, not a washed pale tone), not conceptually
+  avoiding it. Don't reject a celestial/ribbon element on sight because an
+  older version of this file said "forcefully rejected every time" — that
+  applied to the page's *background mood* (starfields, nebula shaders as
+  the whole page's theme), which is still correctly off-limits.
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same

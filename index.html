@@ -78,12 +78,12 @@ body{
    once that bubble became an actual button.) Tapping a planet dot / HD
    center / number bead still opens the same tap-to-reveal definition
    modal used everywhere else. */
-.icon-triangle{position:relative;margin:0.15rem auto 0.1rem;display:flex;flex-direction:column;align-items:center;gap:0.25rem;}
+.icon-triangle{position:relative;margin:0.1rem auto 0.05rem;display:flex;flex-direction:column;align-items:center;gap:0.15rem;}
 .tri-top{display:flex;justify-content:center;}
-.tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.3rem;}
-.accent-item{position:relative;flex:0 0 auto;height:62px;}
+.tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.25rem;}
+.accent-item{position:relative;flex:0 0 auto;height:48px;}
 .accent-item svg{display:block;width:auto;height:100%;}
-.accent-num{height:78px;}
+.accent-num{height:56px;}
 /* Framed like a real medallion -- a white disc behind each chart icon
    with its own border and drop shadow, not a flat SVG floating loose on
    the page. Bigger too (was 78px, easy to miss). Scoped to just the
@@ -95,7 +95,7 @@ body{
    a thin blue-tinted ring instead of grey, so the icon, the button, and
    the icon on the other side read as one composed trio, not "one fancy
    thing and two plain stickers." */
-.accent-astro,.accent-hd{position:relative;height:76px;width:76px;display:flex;align-items:center;justify-content:center;}
+.accent-astro,.accent-hd{position:relative;height:60px;width:60px;display:flex;align-items:center;justify-content:center;}
 .accent-astro::before,.accent-hd::before{
   content:'';position:absolute;inset:-16%;border-radius:50%;
   background:radial-gradient(circle,rgba(90,70,220,0.28) 0%,rgba(110,95,228,0.14) 45%,rgba(120,110,232,0) 78%);
@@ -117,7 +117,7 @@ body{
 }
 
 /* ---------- title ---------- */
-.brand-row{position:relative;text-align:center;margin-bottom:0.35rem;padding:0 1.6rem;}
+.brand-row{position:relative;text-align:center;margin-bottom:0.2rem;padding:0 1.6rem;}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
    photo of the actual pigment (mean of the well-lit, fully-saturated pixels
    across the pile, excluding shadow crevices and blown highlight) rather
@@ -155,7 +155,7 @@ body{
 /* ---------- tagline / toggle ---------- */
 /* Both tagline lines shown at once, stacked, with the single remaining
    key bubble centered in the gap between them -- per her sketch. */
-.tagline-frame{position:relative;max-width:380px;margin:0 auto 12px;padding:0 30px;}
+.tagline-frame{position:relative;max-width:380px;margin:0 auto 8px;padding:0 30px;}
 .tagline-slide{
   width:100%;margin:0;
   text-align:center;font-family:'Special Elite',monospace;font-size:clamp(0.85rem,3.6vw,1.02rem);line-height:1.3;font-weight:400;letter-spacing:0.005em;
@@ -186,12 +186,12 @@ body{
    Verified after the fix by measuring the actual rendered box against
    the viewport, not just checking for overflow. */
 .tagline-top{
-  font-size:clamp(2rem,10.5vw,3.05rem);
-  line-height:1.08;letter-spacing:-0.01em;
+  font-size:clamp(1.65rem,8vw,2.35rem);
+  line-height:1.1;letter-spacing:-0.01em;
   width:calc(100vw - 20px);
   margin-left:calc(50% - 50vw + 10px);
   margin-right:calc(50% - 50vw + 10px);
-  margin-bottom:0.35rem;
+  margin-bottom:0.25rem;
 }
 /* One phrase carried in the accent color instead of the whole line in
    flat black -- real editorial pull-quote technique (a single emphasized
@@ -239,8 +239,8 @@ body{
 }
 .tap-hint{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:0.78rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
-  margin-top:0.55rem;position:relative;z-index:1;
+  font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
+  margin-top:0.3rem;position:relative;z-index:1;
 }
 /* Real chrome, not tinted glass -- a metal sphere reads through grey-
    scale value contrast and a soft top-left highlight, not color. Silver/
@@ -303,7 +303,7 @@ body{
   clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
   filter:drop-shadow(0 0 3px rgba(255,255,255,0.9));
 }
-.key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:1.05rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
+.key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:0.86rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-hl{background:none;color:inherit;font-weight:800;}
 .key-hl-big{display:block;font-size:1.4em;line-height:1;margin:0.04em 0;}
 .key-item:hover{transform:translateY(-2px);box-shadow:
@@ -319,7 +319,7 @@ body{
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
-.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.35;margin-top:0.3rem;margin-bottom:0.3rem;font-size:0.78rem;}
+.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.3;margin-top:0.15rem;margin-bottom:0.15rem;font-size:0.74rem;}
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
    to pick a pass once that email's free reading is already used, or a
@@ -1186,7 +1186,7 @@ function openNumberDef(item){
 // reachable, with a plain label under it so it reads as pressable. ----------
 const KEY_TEXT = '1 <mark class="key-hl key-hl-big">free</mark> reading';
 document.getElementById('keysCol').innerHTML =
-  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(82px,25vw,104px);height:clamp(82px,25vw,104px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
+  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(68px,21vw,86px);height:clamp(68px,21vw,86px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
