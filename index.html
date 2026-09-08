@@ -27,29 +27,32 @@
 <style>
 :root{color-scheme:dark;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: deliberately quiet now, not more gradient variety. Every
-   prior pass (champagne, steel, graphite) kept adding scattered light/
-   dark patches, which makes the background itself visually busy and
-   competes with the actual UI for attention -- the opposite of "pop."
-   For the cards/tiles to read as the one interesting thing on the page,
-   the background needs to recede: one neutral mid-tone (not warm, not
-   cool, so it doesn't fight either the warm gold/cream tiles or the
-   cool silver ones equally), a single soft top-to-bottom falloff, and
-   fine grain for texture -- no scattered highlight blobs. Blue is then
-   the only saturated color anywhere on the page, which is what actually
-   makes it pop: contrast of saturation, not more background color. */
+/* Background: quiet, not more gradient variety in the sense of scattered
+   light/dark patches -- every prior pass that tried that (champagne,
+   steel, graphite) made the background itself visually busy and
+   competed with the actual UI for attention. But quiet doesn't mean
+   flat: the comment that used to sit here described "a single soft
+   top-to-bottom falloff, and fine grain for texture" as the actual
+   design, then the code right below it never did either one
+   (background-image:none) -- a real gap between what this said and
+   what it did. Her direct correction, twice: the flat fill was reading
+   as too saturated a green ("needs to be closer to white than green"),
+   and asked directly why real shading wasn't being used. Fixed for
+   real this time: a real top-to-bottom gradient (white at the top,
+   easing down toward the same green-tinted white as before, but only
+   reached near the bottom -- most of what's actually on screen at once
+   reads close to white) plus a genuine fine-grain noise texture (an
+   SVG feTurbulence filter, the standard real technique for this, blended
+   in at low opacity) instead of a dead flat color. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct instruction: "I want the background to basically be
-     white but to have a slight green tint to it that you can barely
-     even notice. But I want it to be there." Was a faint blue tint
-     (#f6f7fb) -- switched to green at the same barely-there magnitude
-     (green channel a few points above red/blue, not a mint/pastel
-     block). Not pure white -- flat #fff read as sterile/clinical. Not
-     cream/ivory either -- a warm off-white reads as yellowed, which
-     she specifically doesn't want. */
-  background-color:#f6faf6;
-  background-image:none;
+  background-color:#fbfdfb;
+  background-image:
+    linear-gradient(180deg,#ffffff 0%,#fbfdfb 40%,#f3f8f3 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat,repeat;
+  background-size:100% 100%,140px 140px;
+  background-blend-mode:normal,overlay;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
@@ -61,35 +64,26 @@ body{
    sections together on a real device. This is the real fix; the
    font-size floor below is the other half of it. */
 .content{width:100%;max-width:420px;min-width:0;position:relative;z-index:1;}
-/* ---------- the data-entry screen (#formStep) as a real card, not text
-   spanning the raw page ---------- her direct, forceful correction:
-   "I do not like that there is no space around the data entry. ALLLLLL
-   the way around it. I do not want it spanning from right to left
-   edges. I want space around it... I would like some color or design
-   on the page. it makes me crazy that you are incapable of just doing
-   things to improve the look without me telling you every single
-   move." Two real, separate problems, fixed together: (1) margin here
-   pulls the whole screen in from the viewport edge on every side, on
-   top of body's own padding, so there's real visible page around the
-   card, not just a card that happens to equal the viewport width minus
-   a sliver; (2) the card itself -- white surface, soft lift shadow, a
-   thin gradient accent bar at the top in the site's one established
-   accent blue -- is the actual "color/design" she asked for without
-   being asked again, using techniques already proven elsewhere on this
-   page (the line-fields' carved-inset shadow, the same #1C2CA9 accent)
-   rather than inventing something new and risking another wrong guess. */
+/* ---------- the data-entry screen (#formStep): unboxed, same as the
+   hero screen above it ---------- an earlier pass here put this whole
+   screen in a solid white card (fill + drop shadow + border-radius) to
+   answer her real, separate complaint that it had no breathing room
+   from the viewport edge. That solved the margin problem but created a
+   new one: a filled white box is exactly the boxed/settings-app look
+   this app's own design rules already reject elsewhere (see the
+   results-page rule: "transparent card, hairline border, no fill" --
+   and .form-panel's own comment below already said this screen should
+   be unboxed, which the card directly contradicted). Her direct
+   correction: "get box off of the 2nd page. you should know better
+   than that." Fix: keep the real margin (still pulls the screen in
+   from the edge, still real space around it) but drop the fill/shadow/
+   border-radius entirely -- the form now sits straight on the page's
+   own background, exactly like the hero screen, so both screens read
+   as one continuous surface instead of a page + a card floating on a
+   different page. */
 #formStep{
-  position:relative;background:#ffffff;border-radius:20px;
-  margin:0.5rem 0.5rem 0.9rem;padding:1.7rem 1.15rem 1.3rem;
-  box-shadow:
-    0 1px 2px rgba(20,30,70,0.05),
-    0 14px 32px -18px rgba(20,30,70,0.28),
-    0 0 0 1px rgba(28,44,169,0.07);
-}
-#formStep::before{
-  content:'';position:absolute;top:0;left:14%;right:14%;height:4px;
-  border-radius:0 0 3px 3px;
-  background:linear-gradient(90deg,rgba(28,44,169,0) 0%,#1C2CA9 50%,rgba(28,44,169,0) 100%);
+  position:relative;
+  margin:0.5rem 0.5rem 0.9rem;padding:0.3rem 0 0;
 }
 /* The card's own real header illustration -- see the markup comment
    right above where this renders for the full reasoning. Sits in
@@ -367,9 +361,19 @@ body{
    is reserved for one meaning only: "this one is selected." */
 .rel-picker{margin:1rem 0 0.3rem;}
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
+/* Not a pill. Her direct correction: "I do not like the pills. It's
+   standard, why can you not do something that is different." A full
+   stadium-radius capsule is the single most default shape for a tag/
+   filter button on the web -- asymmetric corners instead (two opposite
+   corners cut sharp, the other two rounded) reads as a real, deliberate
+   tag/label shape instead of the generic default, using plain
+   border-radius rather than clip-path so the existing border/box-shadow
+   still render correctly on every edge (clip-path would cut the drawn
+   border off along the clipped diagonal, a real rendering gap, not just
+   a style preference). */
 .rel-chip{
   font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:700;
-  padding:0.38rem 0.85rem;border-radius:20px;
+  padding:0.38rem 0.9rem;border-radius:3px 15px 3px 15px;
   border:1.5px solid #000000;
   background:#ffffff;
   color:#000000;cursor:pointer;
@@ -449,9 +453,17 @@ body{
    "pass active" confirmation -- see checkEmailStatus(). Purely
    informational; the form and the pricing list are both already on the
    page regardless of what this says, nothing here hides either one.
-   No box -- a short accent rule on the left instead of a bordered
-   rectangle, same idea as a pull-quote, not a form-UI alert. */
-.state-banner{margin:0 0 1.3rem;padding:0 0 0 0.85rem;border-left:3px solid #1C2CA9;}
+   No accent rule, no box -- an earlier pass here put a border-left bar
+   next to it (reasoned at the time as "not a box, just a rule"), but
+   her direct correction was broader than that distinction: "get the
+   arbitrary vertical line off the page... you're making it standard
+   fucking design." A left accent bar next to a title is its own
+   generic, over-used device (the "resume/CV section divider" look),
+   not something this line actually needed -- the italic serif title
+   below already carries real typographic weight on its own, the same
+   way "Data never saved" or "email is just a key" do elsewhere on this
+   screen with no line or box of any kind. */
+.state-banner{margin:0 0 1.3rem;}
 /* Real editorial voice instead of another bold-uppercase-sans label --
    the same italic serif already carrying the hero screen's headline,
    brought onto this screen so the two don't read as two different
@@ -468,8 +480,8 @@ body{
    dividers) this whole redesign exists to get away from. Her direct,
    forceful correction: "the pricing doesn't need to span the width of
    the page. stop the bullshit standard design." Reuses the same
-   pill-chip pattern already established and approved elsewhere on this
-   same screen (.rel-chip) instead of inventing a new element. */
+   cut-corner tag pattern already established elsewhere on this same
+   screen (.rel-chip) instead of inventing a new element. */
 /* Plain white/black by default, same reasoning and same fix as the
    rel-chips above -- a flat pale gradient read as grey, not chrome, and
    she rejected that outright: "stop using grey." None of these five
@@ -480,7 +492,7 @@ body{
 .pricing-list{margin-top:0.6rem;display:flex;flex-wrap:wrap;gap:0.5rem;}
 .price-row{
   display:inline-flex;align-items:center;gap:0.5rem;
-  padding:0.5rem 0.9rem;border-radius:20px;
+  padding:0.5rem 0.9rem;border-radius:3px 15px 3px 15px;
   background:#ffffff;
   border:1.5px solid #000000;
   cursor:pointer;font-family:inherit;text-align:left;
@@ -608,11 +620,17 @@ body{
 /* Full-strength black, same as everything else on this page -- no fading. */
 .loading-timer{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:700;color:#000000;letter-spacing:0.03em;margin-bottom:0.9rem;}
 /* This has to actually be seen -- she reported repeatedly getting
-   distracted mid-wait, refreshing, and losing everything because the old
-   version was one small dim line of text. Big, high-contrast, boxed. */
-.loading-warn{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#000000;
-  background:rgba(28,44,169,0.25);border:1.5px solid rgba(138,150,238,0.6);border-radius:8px;
-  padding:0.9rem 1.1rem;margin:0 0 0.9rem;line-height:1.45;}
+   distracted mid-wait, refreshing, and losing everything because an
+   even older version was one small dim line of text. That was fixed by
+   putting it in a filled, bordered box -- real prominence, but achieved
+   the same "standard design" way she's since rejected everywhere else
+   on this app ("don't box things... you're making it standard...
+   design"). Same real problem, fixed the same way the rest of this
+   screen already solves it: prominence from real typographic weight
+   (bigger, bolder, the site's one accent blue, centered with everything
+   else on this screen) instead of an enclosure. */
+.loading-warn{font-family:'DM Sans',sans-serif;font-size:1.05rem;font-weight:800;color:#1C2CA9;
+  text-align:center;margin:0 0 0.9rem;line-height:1.4;}
 /* Differs from .loading-warn above it by weight/style, not by dimming
    the color -- full-strength black on both, per the never-fade-text rule. */
 .loading-note{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-style:italic;color:#000000;line-height:1.55;}
@@ -1366,6 +1384,13 @@ animateHourglass(document.getElementById('loading'));
 
 <div class="results-wrap" id="resultsWrap">
   <div class="ttl">Know Your Energy</div>
+  <!-- Same .loading-warn class as the loading screen's warning -- real
+       prominence from typographic weight, no box. This is the results
+       page's own version of that same warning: a saved reading only
+       lives in this browser's local storage, not on a server tied to
+       the reader, so closing out without printing/screenshotting it
+       first can lose it for good. -->
+  <div class="loading-warn">Save or print this reading before you close this page. Tap "Save / Print Reading" below — it isn't stored anywhere else, and a free reading can't be regenerated once it's gone.</div>
   <div class="main-grid" id="mainGrid"></div>
   <div class="bottom-btns" id="bottomBtns"></div>
 </div>
@@ -3943,11 +3968,19 @@ document.getElementById('pricingList').innerHTML=PRICING_TIERS
   .map(t=>`<button type="button" class="price-row" onclick="buyPass('${t.plan}')" aria-label="Get the ${t.label} pass for ${t.price}"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span></button>`)
   .join('');
 
+// Both render*Banner() functions below return only the INNER content
+// (title + sub line), not another wrapping .state-banner div -- #stateBanner
+// itself already carries the .state-banner class (and its border-left
+// accent) in the static markup. Wrapping the injected HTML in a second
+// .state-banner div nested it inside the first, doubling the border-left
+// into two parallel vertical lines -- her direct catch: "remove the
+// arbitrary 2 vertical lines." Real bug, not a style choice: the two
+// bars were the same border rendered twice, not an intentional accent.
 function renderPassActiveBanner(result){
   const tier=PRICING_TIERS.find(t=>t.plan===result.plan);
   const planLabel = tier ? tier.label : titleCaseWords(result.plan||'');
   const expiresText = result.expiresAt ? new Date(result.expiresAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) : '';
-  return `<div class="state-banner pass-active"><div class="state-banner-ttl">Pass Active</div><div class="state-banner-sub">${escapeHtml(planLabel)} Pass${expiresText?' · active through '+escapeHtml(expiresText):''}</div></div>`;
+  return `<div class="state-banner-ttl">Pass Active</div><div class="state-banner-sub">${escapeHtml(planLabel)} Pass${expiresText?' · active through '+escapeHtml(expiresText):''}</div>`;
 }
 
 // "pick a pass above" -- her direct catch: pricing used to render after
@@ -3956,7 +3989,7 @@ function renderPassActiveBanner(result){
 // own note), so the tiers actually sit ABOVE this message, not below
 // it. The copy hadn't been updated to match.
 function renderUsedBanner(){
-  return `<div class="state-banner"><div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">pick a pass above</div></div>`;
+  return `<div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">pick a pass above</div>`;
 }
 
 // Runs automatically once an email is typed in (on blur) -- updates the
@@ -4117,34 +4150,65 @@ async function generate(){
   // instead of bailing the whole page out -- the charts already
   // rendered successfully and shouldn't disappear because the reading
   // didn't.
-  let jobId=null, result=null, primaryFailed=false;
-  try{
-    const res=await Promise.race([
-      fetch(W_API+'/report',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,p1Data:chartResult.p1,p2Data:chartResult.p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
-      }),
-      timeoutAfter(60000)
-    ]);
-    jobId=res.headers.get('X-Job-Id');
-    if(jobId)saveJobId(jobId);
-    result=await Promise.race([res.json(), timeoutAfter(360000)]);
-    if(!res.ok||result.error){ fillReading(p1,p2,null,result.error||'Something went wrong. Please try again.',false); return; }
-  }catch(e){
-    if(!jobId){ fillReading(p1,p2,null,'Connection error: '+e.message,false); return; }
-    primaryFailed=true;
+  // A free reading is a limited, one-time resource -- a transient error
+  // here (a dropped connection, a slow API response, a single failed
+  // generation) used to just show an error and stop, burning the
+  // attempt even though nothing about the person's data was actually
+  // wrong. Her direct instruction: "automatic retry until a reading is
+  // generated bc a free reading cannot get lost on an error." This now
+  // retries the whole /report attempt (and its poll-status fallback)
+  // automatically, with a real backoff between tries, before ever
+  // surfacing a failure -- the person only ever sees an error after
+  // several real attempts have all failed, not after one.
+  let jobId=null, result=null;
+  const MAX_ATTEMPTS=6;
+  const RETRY_DELAYS_MS=[0,3000,6000,12000,20000,30000];
+  let lastErrorMsg='Something went wrong. Please try again.';
+  for(let attempt=1;attempt<=MAX_ATTEMPTS;attempt++){
+    if(attempt>1){
+      await new Promise(res=>setTimeout(res,RETRY_DELAYS_MS[attempt-1]));
+      const pendingTxt=document.querySelector('#readingSlot .report-pending-txt');
+      if(pendingTxt)pendingTxt.textContent=`Still working on it — retrying (attempt ${attempt} of ${MAX_ATTEMPTS})…`;
+    }
+    jobId=null;
+    let primaryFailed=false;
+    try{
+      const res=await Promise.race([
+        fetch(W_API+'/report',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,p1Data:chartResult.p1,p2Data:chartResult.p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
+        }),
+        timeoutAfter(60000)
+      ]);
+      jobId=res.headers.get('X-Job-Id');
+      if(jobId)saveJobId(jobId);
+      result=await Promise.race([res.json(), timeoutAfter(360000)]);
+      if(!res.ok||result.error){ lastErrorMsg=result.error||'Something went wrong. Please try again.'; result=null; continue; }
+    }catch(e){
+      if(!jobId){ lastErrorMsg='Connection error: '+e.message; result=null; continue; }
+      primaryFailed=true;
+    }
+
+    if(primaryFailed){
+      const pollResult=await pollReportStatus(jobId);
+      if(pollResult.timedOut){ lastErrorMsg='This is taking longer than expected.'; result=null; continue; }
+      // status is 'done' -- only the report fields matter now, the chart
+      // data in this record is the same p1Data/p2Data already sent up.
+      result={report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback,reportFallbackReason:pollResult.reportFallbackReason};
+    }
+
+    // Real content came back (even a fallback reading with its own notice
+    // attached) -- that's a generated reading, stop retrying. Only a
+    // totally empty result (nothing at all to show) is worth trying again.
+    if(result&&result.report)break;
+    if(result&&result.reportError)lastErrorMsg=result.reportError;
+    result=null;
   }
 
-  if(primaryFailed){
-    const pollResult=await pollReportStatus(jobId);
-    if(pollResult.timedOut){
-      fillReading(p1,p2,null,'This is taking longer than expected. Please try again.',false);
-      return;
-    }
-    // status is 'done' -- only the report fields matter now, the chart
-    // data in this record is the same p1Data/p2Data already sent up.
-    result={report:pollResult.report,reportError:pollResult.reportError,reportUsedFallback:pollResult.reportUsedFallback,reportFallbackReason:pollResult.reportFallbackReason};
+  if(!result){
+    fillReading(p1,p2,null,`We couldn't generate your reading after several attempts: ${lastErrorMsg} Your information is still saved here — tap "Calculate" to try again.`,false);
+    return;
   }
 
   // Only clear the draft once the reading actually succeeded -- if
