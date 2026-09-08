@@ -81,7 +81,7 @@ body{
    once that bubble became an actual button.) Tapping a planet dot / HD
    center / number bead still opens the same tap-to-reveal definition
    modal used everywhere else. */
-.icon-triangle{position:relative;margin:0.5rem auto 0.3rem;display:flex;flex-direction:column;align-items:center;gap:0.7rem;}
+.icon-triangle{position:relative;margin:0.3rem auto 0.2rem;display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
 .tri-top{display:flex;justify-content:center;}
 .tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.3rem;}
 .accent-item{position:relative;flex:0 0 auto;height:78px;}
@@ -93,7 +93,7 @@ body{
    astrology/Human Design icons -- the numbered-bead cluster (.accent-num)
    is a different, scattered shape and isn't meant to sit inside a circle. */
 .accent-astro,.accent-hd{
-  height:118px;width:118px;
+  height:96px;width:96px;
   border-radius:50%;background:#ffffff;
   border:1.5px solid #d5d8de;
   box-shadow:0 8px 16px -8px rgba(20,20,30,0.35),inset 0 1px 2px rgba(255,255,255,0.9);
@@ -146,7 +146,7 @@ body{
 /* ---------- tagline / toggle ---------- */
 /* Both tagline lines shown at once, stacked, with the single remaining
    key bubble centered in the gap between them -- per her sketch. */
-.tagline-frame{position:relative;max-width:380px;margin:0 auto 40px;padding:0 30px;}
+.tagline-frame{position:relative;max-width:380px;margin:0 auto 18px;padding:0 30px;}
 .tagline-slide{
   width:100%;margin:0;
   text-align:center;font-family:'Special Elite',monospace;font-size:clamp(1.05rem,5.2vw,1.55rem);line-height:1.32;font-weight:400;letter-spacing:0.005em;
@@ -258,7 +258,7 @@ body{
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
-.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.4;margin-top:0.9rem;margin-bottom:1.1rem;font-size:0.82rem;}
+.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.35;margin-top:0.5rem;margin-bottom:0.5rem;font-size:0.8rem;}
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
    to pick a pass once that email's free reading is already used, or a
@@ -1130,7 +1130,7 @@ function openNumberDef(item){
 // reachable, with a plain label under it so it reads as pressable. ----------
 const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
 document.getElementById('keysCol').innerHTML =
-  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
+  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(88px,28vw,118px);height:clamp(88px,28vw,118px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
