@@ -84,6 +84,19 @@ body{
 .hero-illustration{position:relative;width:100%;max-width:380px;margin:0.05rem auto 0.05rem;}
 .hero-illustration svg{display:block;width:100%;height:auto;}
 
+/* A separate element, deliberately away from the sun -- her direct
+   correction: in her reference image the ribbon and the solar-system
+   illustration are two different things making two different points
+   (the sun/rings = cycles, the ribbon = energy), not one blended
+   cluster. This sits down by the second question ("how you effect
+   others... or they effect you"), which is literally the energy/
+   interaction question, not the cycles one above. Thin, saturated
+   strokes at real opacity -- the previous attempt used semi-transparent
+   overlapping fills, which is exactly what read as grey; solid,
+   confident color reads as color, not a wash. */
+.energy-ribbon{width:100%;max-width:380px;margin:0.1rem auto;}
+.energy-ribbon svg{display:block;width:100%;height:auto;}
+
 /* ---------- title ---------- */
 .brand-row{position:relative;text-align:center;margin-bottom:0.2rem;padding:0 1.6rem;}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
@@ -800,6 +813,8 @@ body{
 
   <div class="privacy-note hook-differentiator">Your unique design, described by three separate systems — astrology, numerology, and Human Design.</div>
 
+  <div class="energy-ribbon" id="energyRibbon"></div>
+
   <div class="tagline-frame">
     <div class="tagline-slide c-gold">Do you want to know how you effect others? or how they effect you?</div>
   </div>
@@ -1117,30 +1132,8 @@ function openNumberDef(item){
         <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
         <stop offset="100%" stop-color="${COBALT}" stop-opacity="0.7"/>
       </linearGradient>
-      <!-- Ribbon: real filled bands with a gradient ACROSS their width
-           (top edge bright, bottom edge dark), not a stroked line with
-           opacity fading only at its two ends -- a stroke can only ever
-           fade in/out, it can't show a fold. A gradient across the
-           width is what actually reads as a lit, rounded/twisting
-           surface, the same top-lit/bottom-shadowed logic as the sphere
-           shading above, just applied to a ribbon instead of a ball. -->
-      <linearGradient id="bandGrad1" gradientUnits="userSpaceOnUse" x1="0" y1="140" x2="0" y2="188">
-        <stop offset="0%" stop-color="${ICE}" stop-opacity="0.6"/>
-        <stop offset="100%" stop-color="${COBALT_DEEP}" stop-opacity="0.45"/>
-      </linearGradient>
-      <linearGradient id="bandGrad2" gradientUnits="userSpaceOnUse" x1="0" y1="108" x2="0" y2="168">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
-        <stop offset="100%" stop-color="${COBALT}" stop-opacity="0.6"/>
-      </linearGradient>
-      <linearGradient id="bandGrad3" gradientUnits="userSpaceOnUse" x1="0" y1="108" x2="0" y2="150">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="100%" stop-color="${ICE}" stop-opacity="0.7"/>
-      </linearGradient>
     </defs>
     <circle cx="${cx}" cy="${cy}" r="132" fill="url(#corona)"/>
-    <path d="M 0 168 C 80 145, 140 178, 220 156 C 280 138, 320 158, 360 142 L 360 160 C 320 176, 280 156, 220 174 C 140 196, 80 163, 0 186 Z" fill="url(#bandGrad1)"/>
-    <path d="M 0 150 C 75 130, 145 162, 215 138 C 275 120, 318 140, 360 122 L 360 138 C 318 156, 275 136, 215 156 C 145 180, 75 148, 0 168 Z" fill="url(#bandGrad2)"/>
-    <path d="M 0 136 C 70 120, 148 146, 210 126 C 268 110, 312 126, 360 110 L 360 120 C 312 136, 268 120, 210 140 C 148 160, 70 134, 0 150 Z" fill="url(#bandGrad3)"/>
     <ellipse cx="${cx}" cy="${cy}" rx="165" ry="40" fill="none" stroke="url(#ringGradA)" stroke-width="1.6" transform="rotate(-7 ${cx} ${cy})"/>
     <ellipse cx="${cx}" cy="${cy}" rx="128" ry="78" fill="none" stroke="url(#ringGradB)" stroke-width="1.4" stroke-dasharray="1 5" stroke-linecap="round" transform="rotate(10 ${cx} ${cy})"/>
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunGrad)"/>
@@ -1154,6 +1147,33 @@ function openNumberDef(item){
     const textFill = fill===COBALT ? '#ffffff' : '#0b2668';
     svg += `<circle cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${fill}" stroke="rgba(11,38,104,0.3)" stroke-width="1.2"/>`;
     svg += `<text x="${b.cx}" y="${b.cy+b.r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${b.r*1.05}" fill="${textFill}" style="pointer-events:none;">${b.n}</text>`;
+  });
+  svg += '</svg>';
+  host.innerHTML = svg;
+})();
+
+// ---------- the energy ribbon: a separate element from the sun/cycles
+// illustration above -- her direct correction: "the ribbons are
+// representing an energy. And then the solar system is representing
+// cycles. 2 different points are being made." Sits by the second
+// question (the actual energy/interaction one -- "how you effect
+// others... or they effect you"), not blended into the first. Thin,
+// fully-saturated strokes, no transparency stacking -- the previous
+// version's semi-transparent overlapping fills were exactly what read
+// as grey; solid color at real opacity reads as color. ----------
+(function(){
+  const host = document.getElementById('energyRibbon');
+  if(!host) return;
+  const COBALT='#1E4FDB', COBALT_LT='#4d74ea', ICE='#6ec3f2';
+  const strands = [
+    {d:'M 0 30 C 60 10, 100 50, 160 28 C 220 8, 260 46, 320 26 C 340 20, 350 24, 360 22', color:COBALT, w:2.6},
+    {d:'M 0 22 C 55 42, 105 6, 165 34 C 225 50, 265 14, 325 38 C 345 44, 352 40, 360 36', color:ICE, w:2},
+    {d:'M 0 36 C 50 20, 110 44, 170 20 C 230 4, 270 40, 330 18 C 348 12, 354 16, 360 14', color:'#ffffff', w:2},
+    {d:'M 0 14 C 65 34, 115 4, 175 30 C 235 44, 275 10, 335 32 C 350 38, 355 34, 360 30', color:COBALT_LT, w:1.6},
+  ];
+  let svg = `<svg viewBox="0 0 360 58" xmlns="http://www.w3.org/2000/svg">`;
+  strands.forEach(s=>{
+    svg += `<path d="${s.d}" fill="none" stroke="${s.color}" stroke-width="${s.w}" stroke-linecap="round" opacity="0.92"/>`;
   });
   svg += '</svg>';
   host.innerHTML = svg;
