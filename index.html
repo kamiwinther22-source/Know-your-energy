@@ -80,17 +80,23 @@ body{
    border-radius entirely -- the form now sits straight on the page's
    own background, exactly like the hero screen, so both screens read
    as one continuous surface instead of a page + a card floating on a
-   different page. */
+   different page.
+   Padding update: dropping the card also dropped its real top padding
+   (1.7rem) down to a near-zero 0.3rem along with the fill/shadow --
+   conflating "no box" with "no breathing room," which they aren't the
+   same thing. Her direct reaction to the result: "scrunched up." A
+   little real space above the header illustration is restored here,
+   with no fill/border/shadow attached to it -- open space isn't a box. */
 #formStep{
   position:relative;
-  margin:0.5rem 0.5rem 0.9rem;padding:0.3rem 0 0;
+  margin:0.5rem 0.5rem 0.9rem;padding:0.9rem 0 0;
 }
 /* The card's own real header illustration -- see the markup comment
    right above where this renders for the full reasoning. Sits in
    normal flow (not an absolutely-positioned accent) so it takes up
    real space as actual content, the way the hero screen's own
    illustration does. */
-.card-orbit{width:100%;margin:0 0 0.3rem;}
+.card-orbit{width:100%;margin:0 0 0.6rem;}
 .card-orbit svg{display:block;width:100%;height:auto;}
 /* Real divider between the pricing block and the email+person-data
    block below it -- gives the single card real internal structure.
@@ -1202,19 +1208,32 @@ body{
        as a real header illustration instead of a filled sphere, with
        satellite dots sized distinctly (10/7/5/4px) since the earlier
        sparkles proved hue alone doesn't read as variety at this scale --
-       size does. This is the same visual system as the hero screen
-       arriving on this one, not a new invented decoration. -->
+       size does.
+       Recentered and redistributed since: the original build centered
+       the whole ring cluster at cx=275 in a 400-wide viewBox (69% across,
+       not the middle) with all four satellite dots bunched inside one
+       narrow arc at the top -- her direct catch, from a real screenshot:
+       "that Solar System crammed up in the top right corner for no
+       reason." Real bug, not just an opinion: the ellipse math was never
+       actually centered in its own box, and the dots' parametric angles
+       all fell within about 90 degrees of each other. Recomputed with
+       the rings centered on the viewBox's true middle (cx=200 of 400)
+       and the four dots spread across clearly different angles on
+       different rings (verified against the rotated ellipses' real
+       bounding boxes -- nothing sits outside the viewBox now, nothing
+       clusters in one corner). Same visual system as the hero screen,
+       same sizes, just actually balanced this time. -->
   <div class="card-orbit">
-    <svg viewBox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="275" cy="45" rx="50" ry="12" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
-      <ellipse cx="275" cy="45" rx="70" ry="16.8" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
-      <ellipse cx="275" cy="45" rx="90" ry="21.6" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
-      <ellipse cx="275" cy="45" rx="110" ry="26.4" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
-      <ellipse cx="275" cy="45" rx="130" ry="31.2" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 275 45)"/>
-      <circle cx="379.3" cy="23.4" r="10" fill="#000000"/>
-      <circle cx="340.9" cy="41.5" r="7" fill="#1C2CA9"/>
-      <circle cx="227.9" cy="47.5" r="5" fill="#000000"/>
-      <circle cx="192.3" cy="64.1" r="4" fill="#1C2CA9"/>
+    <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="200" cy="50" rx="50" ry="12" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="70" ry="16.8" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="90" ry="21.6" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="110" ry="26.4" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="130" ry="31.2" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
+      <circle cx="303.0" cy="17.5" r="10" fill="#000000"/>
+      <circle cx="141.1" cy="66.8" r="7" fill="#1C2CA9"/>
+      <circle cx="285.8" cy="55.1" r="5" fill="#000000"/>
+      <circle cx="115.2" cy="54.5" r="4" fill="#1C2CA9"/>
     </svg>
   </div>
 
