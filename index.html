@@ -258,12 +258,11 @@ body{
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
 .hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.4;margin-top:0.9rem;margin-bottom:1.1rem;font-size:0.82rem;}
 
-/* ---------- Step-2 state banner: shows nothing for a new visitor, a soft
-   paywall nudge once the device's one free reading is used, or a "pass
-   active" confirmation once /check-pass confirms one -- see
-   refreshAccessState(). Deliberately does not remove/hide the form
-   underneath in either state: there's no server-side enforcement yet
-   (Stripe isn't wired up), so this nudges rather than hard-blocks. ---------- */
+/* ---------- Step-2 state banner: shows nothing for a fresh email, a real
+   paywall (form stays hidden) once that email's free reading is already
+   used, or a "pass active" confirmation once /check-pass confirms one --
+   see checkEmailGate(). This is a real gate now, checked against the
+   server by email, not a device-based nudge. ---------- */
 .state-banner{margin-bottom:1.1rem;padding:0.8rem 0.9rem;border-radius:10px;border:1.5px solid #1C2CA9;background:rgba(28,44,169,0.06);}
 .state-banner-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.02em;text-transform:uppercase;color:#1C2CA9;text-align:center;}
 .state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#000000;text-align:center;margin-top:0.15rem;}
@@ -832,8 +831,26 @@ body{
      only wrapped separately so it can be shown as its own step, with a
      state banner slot on top for the free-reading/pass status. ---------- -->
 <div class="content" id="formStep" style="display:none;">
+  <!-- The email is the real key -- it's what decides whether this is a
+       free reading, an already-spent free reading, or an active pass,
+       independent of which device or browser it's asked from. Checked
+       for real against the server (see checkEmailGate()) before any of
+       the actual data-entry form is shown. -->
+  <div class="form-panel" id="emailGate">
+    <div class="privacy-note">email is just a key/no soliciting</div>
+    <div class="f">
+      <label for="pEmail">Email Address</label>
+      <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
+    </div>
+    <div class="err" id="gateErr"></div>
+    <div class="submit-wrap">
+      <span class="glow-ring"><button type="button" class="gen-btn" id="gateBtn" onclick="checkEmailGate()">Continue</button></span>
+    </div>
+  </div>
+
   <div class="state-banner" id="stateBanner" style="display:none;"></div>
-  <div class="bottom-grid">
+
+  <div class="bottom-grid" id="formFields" style="display:none;">
     <div class="form-col">
       <div class="form-panel">
         <div class="privacy-note">Data never saved</div>
@@ -893,11 +910,6 @@ body{
           </label>
         </div>
 
-        <div class="f">
-          <div class="privacy-note">email is just a key/no soliciting</div>
-          <label for="pEmail">Email Address</label>
-          <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
-        </div>
       </div>
 
       <div class="err" id="err"></div>
@@ -3269,7 +3281,13 @@ function resetToForm(){
   document.getElementById('resultsWrap').style.display='none';
   document.getElementById('formStep').style.display='block';
   document.getElementById('loading').style.display='none';
-  refreshAccessState();
+  // Back to the email gate, not straight to the form -- whoever just
+  // finished a reading may have just spent their free one, so their
+  // status needs a fresh check, not an assumption it's still the same.
+  document.getElementById('formFields').style.display='none';
+  document.getElementById('stateBanner').style.display='none';
+  const remembered=getRememberedPassEmail();
+  if(remembered)document.getElementById('pEmail').value=remembered;
 }
 
 // ---------- form helpers ----------
@@ -3358,21 +3376,19 @@ function revealForm(){
   const formStep=document.getElementById('formStep');
   formStep.style.display='block';
   formStep.scrollIntoView({behavior:'smooth',block:'start'});
-  refreshAccessState();
+  const remembered=getRememberedPassEmail();
+  if(remembered)document.getElementById('pEmail').value=remembered;
 }
 
 // ---------- free-reading / pass state ----------
-// No server-side enforcement of "one free reading" exists yet (there's no
-// Stripe key configured, per direct instruction not to wire that up until
-// the site is worth paying for) -- this is a real, working client-side
-// nudge, not a placeholder, but it's honestly a nudge: it tracks "used on
-// this device" via localStorage, exactly what the banner copy says, not a
-// server-verified entitlement. An active pass IS verified for real, since
-// /check-pass already exists and works independent of Stripe checkout.
-const FREE_READING_KEY='kye_freeReadingUsed';
+// The email is the real record, not the device -- worker.js tracks "has
+// this email already used its free reading" and "does this email have an
+// active pass" server-side (see checkFreeReadingUsed/checkPassRecord),
+// so this holds no matter which phone or browser someone comes back on.
+// The only thing kept locally is a convenience prefill of the last email
+// typed here, purely so a returning visitor doesn't have to retype it --
+// the actual decision always comes from a live check against the server.
 const REMEMBERED_EMAIL_KEY='kye_passEmail';
-function markFreeReadingUsed(){ try{localStorage.setItem(FREE_READING_KEY,'1');}catch(e){} }
-function hasUsedFreeReading(){ try{return localStorage.getItem(FREE_READING_KEY)==='1';}catch(e){return false;} }
 function rememberPassEmail(email){ try{localStorage.setItem(REMEMBERED_EMAIL_KEY,email);}catch(e){} }
 function getRememberedPassEmail(){ try{return localStorage.getItem(REMEMBERED_EMAIL_KEY)||'';}catch(e){return '';} }
 
@@ -3389,11 +3405,11 @@ const PRICING_TIERS=[
 ];
 
 async function checkPassStatus(email){
-  if(!email)return {active:false};
+  if(!email)return {active:false,freeReadingUsed:false};
   try{
     const res=await fetch(W_API+'/check-pass',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
     return await res.json();
-  }catch(e){ return {active:false}; }
+  }catch(e){ return {active:false,freeReadingUsed:false,error:e.message}; }
 }
 
 function renderPassActiveBanner(result){
@@ -3405,50 +3421,62 @@ function renderPassActiveBanner(result){
 
 function renderPaywallBanner(){
   const rows=PRICING_TIERS.map(t=>`<div class="price-row"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span><button type="button" class="price-btn" onclick="buyPass('${t.plan}')">Buy</button></div>`).join('');
-  return `<div class="state-banner"><div class="state-banner-ttl">Your Free Reading Is Used</div><div class="state-banner-sub">on this device — individual or relational, try any tier below</div><div class="pricing-list">${rows}</div><div class="pass-check-row">Already have a pass? Enter your email below and we'll check.</div></div>`;
+  return `<div class="state-banner"><div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">choose a pass below, or go back and use a different email</div><div class="pricing-list">${rows}</div></div>`;
 }
 
-// Re-derives which state the banner should show: an active pass wins over
-// the "already used" nudge, a brand-new visitor gets no banner at all.
-async function refreshAccessState(){
-  const banner=document.getElementById('stateBanner');
-  if(!banner)return;
-  const remembered=getRememberedPassEmail();
-  if(remembered){
-    const result=await checkPassStatus(remembered);
-    if(result.active){
-      banner.innerHTML=renderPassActiveBanner(result);
-      banner.style.display='block';
-      return;
-    }
+// The real gate -- runs when Continue is tapped on the email step. One
+// live check against the server decides which of three things happens:
+// a fresh email gets the blank form, an already-spent email is blocked
+// and shown pricing instead, an email with an active pass gets waved
+// through with that confirmed.
+async function checkEmailGate(){
+  const gateBtn=document.getElementById('gateBtn');
+  if(gateBtn.disabled)return;
+  document.getElementById('gateErr').style.display='none';
+  const email=g('pEmail');
+  if(!email||!email.includes('@')){
+    document.getElementById('gateErr').textContent='Enter a real email address to continue.';
+    document.getElementById('gateErr').style.display='block';
+    return;
   }
-  if(hasUsedFreeReading()){
+  gateBtn.disabled=true;
+  gateBtn.textContent='Checking…';
+  const result=await checkPassStatus(email);
+  gateBtn.disabled=false;
+  gateBtn.textContent='Continue';
+
+  const banner=document.getElementById('stateBanner');
+  const formFields=document.getElementById('formFields');
+
+  if(result.active){
+    rememberPassEmail(email);
+    banner.innerHTML=renderPassActiveBanner(result);
+    banner.style.display='block';
+    formFields.style.display='block';
+    return;
+  }
+  if(result.freeReadingUsed){
     banner.innerHTML=renderPaywallBanner();
     banner.style.display='block';
-  }else{
-    banner.style.display='none';
-    banner.innerHTML='';
+    formFields.style.display='none';
+    return;
   }
+  rememberPassEmail(email);
+  banner.style.display='none';
+  banner.innerHTML='';
+  formFields.style.display='block';
 }
 
 async function buyPass(plan){
   const email=g('pEmail');
-  if(!email){ showErr('Enter your email above first so we know who the pass belongs to.'); return; }
+  if(!email){ document.getElementById('gateErr').textContent='Enter your email above first so we know who the pass belongs to.'; document.getElementById('gateErr').style.display='block'; return; }
   try{
     const res=await fetch(W_API+'/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan,email})});
     const data=await res.json();
     if(data.url){ window.location.href=data.url; }
-    else{ showErr(data.error||'Could not start checkout.'); }
-  }catch(e){ showErr('Connection error: '+e.message); }
+    else{ document.getElementById('gateErr').textContent=data.error||'Could not start checkout.'; document.getElementById('gateErr').style.display='block'; }
+  }catch(e){ document.getElementById('gateErr').textContent='Connection error: '+e.message; document.getElementById('gateErr').style.display='block'; }
 }
-
-document.getElementById('pEmail').addEventListener('blur', async ()=>{
-  const email=g('pEmail');
-  if(!email)return;
-  const result=await checkPassStatus(email);
-  if(result.active)rememberPassEmail(email);
-  refreshAccessState();
-});
 
 async function generate(){
   const genBtn=document.getElementById('genBtn');
@@ -3477,14 +3505,6 @@ async function generate(){
       location: g('p2loc')
     };
   }
-  // Real check against the entered email, not just the remembered one --
-  // someone can type a pass email in without it having been checked on
-  // blur yet (e.g. paste + immediate submit). Determines whether this
-  // generation should count against the device's one free reading.
-  const activePassResult=await checkPassStatus(g('pEmail'));
-  const hasActivePass=!!activePassResult.active;
-  if(hasActivePass)rememberPassEmail(g('pEmail'));
-
   genBtn.disabled=true;
   document.getElementById('formStep').style.display='none';
   document.getElementById('loading').style.display='block';
@@ -3538,7 +3558,6 @@ async function generate(){
     p2.hdError=chartResult.p2.humanDesignError;
   }
   genBtn.disabled=false;
-  if(!hasActivePass)markFreeReadingUsed();
   renderCharts(p1,p2);
 
   // Phase 2: the actual AI reading, now running with the charts already

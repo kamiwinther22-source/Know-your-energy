@@ -463,6 +463,28 @@ function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
 }
 
+// The free reading is tracked per email, not per device/browser -- an
+// earlier version tracked it client-side only (localStorage), which broke
+// the moment someone switched phones or cleared their browser. The email
+// itself is now the real record: one free reading per email, checked and
+// recorded here, independent of whatever device it's requested from.
+function freeReadingKey(email) {
+  return `freeused:${email.trim().toLowerCase()}`;
+}
+
+async function checkFreeReadingUsed(env, email) {
+  if (!email) return false;
+  const raw = await env.PASSES.get(freeReadingKey(email));
+  return raw !== null;
+}
+
+// No expiration -- a free reading is a one-time thing for a given email,
+// not something that should reset after any particular amount of time.
+async function markFreeReadingUsed(env, email) {
+  if (!email) return;
+  await env.PASSES.put(freeReadingKey(email), String(Date.now()));
+}
+
 function jobKey(jobId) {
   return `job:${jobId}`;
 }
@@ -510,17 +532,18 @@ async function recordPass(env, sessionId, p1, p2) {
 }
 
 async function checkPassRecord(env, email) {
-  if (!email) return { active: false };
+  if (!email) return { active: false, freeReadingUsed: false };
+  const freeReadingUsed = await checkFreeReadingUsed(env, email);
   if (UNLIMITED_EMAILS.includes(email.trim().toLowerCase())) {
     const raw = await env.PASSES.get(passKey(email));
     const record = raw ? JSON.parse(raw) : {};
-    return { active: true, plan: "annual", expiresAt: Date.now() + PASS_DURATION_MS.annual, p1: record.p1 || null, p2: record.p2 || null };
+    return { active: true, plan: "annual", expiresAt: Date.now() + PASS_DURATION_MS.annual, p1: record.p1 || null, p2: record.p2 || null, freeReadingUsed };
   }
   const raw = await env.PASSES.get(passKey(email));
-  if (!raw) return { active: false };
+  if (!raw) return { active: false, freeReadingUsed };
   const record = JSON.parse(raw);
-  if (record.expiresAt < Date.now()) return { active: false };
-  return { active: true, plan: record.plan, expiresAt: record.expiresAt, p1: record.p1 || null, p2: record.p2 || null };
+  if (record.expiresAt < Date.now()) return { active: false, freeReadingUsed };
+  return { active: true, plan: record.plan, expiresAt: record.expiresAt, p1: record.p1 || null, p2: record.p2 || null, freeReadingUsed };
 }
 
 // Refreshes the stored person snapshot for an active pass, so the most
@@ -1673,6 +1696,19 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
 
         if (body.passEmail) {
           ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
+          // A real reading was just generated for this email and it isn't
+          // an active pass holder -- that's their one free reading, spent
+          // for good. Recorded against the email itself (see
+          // freeReadingKey), not the device, so it holds no matter what
+          // browser or phone they come back on. Only counts on an actual
+          // success -- a failed generation shouldn't cost them their free
+          // reading.
+          if (!reportError) {
+            ctx.waitUntil((async () => {
+              const passResult = await checkPassRecord(env, body.passEmail);
+              if (!passResult.active) await markFreeReadingUsed(env, body.passEmail);
+            })());
+          }
         }
 
         const payload = { p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback, reportFallbackReason };
