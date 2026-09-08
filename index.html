@@ -1238,11 +1238,15 @@ body{
   <div class="bottom-grid" id="formFields">
     <div class="form-col">
       <div class="form-panel">
-        <div class="privacy-note">email is just a key/no soliciting</div>
-        <div class="f">
-          <label for="pEmail">Email Address</label>
-          <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
-        </div>
+        <!-- Her direct instruction: "the email doesn't need to be
+             anywhere except for the first page." It's already collected
+             and checked (checkEmailStatus(), see revealForm()) on the
+             hero screen before this page ever reveals -- there's no
+             reason to ask for it again here. #pEmail stays in the DOM,
+             just not visible: everything downstream (buyPass(),
+             generate(), the draft autosave) still reads its value the
+             same way, revealForm() still populates it from #heroEmail. -->
+        <input type="email" id="pEmail" style="display:none;" aria-hidden="true" tabindex="-1">
         <div class="err" id="gateErr"></div>
 
         <div class="state-banner" id="stateBanner" style="display:none;"></div>
@@ -4025,11 +4029,9 @@ async function checkEmailStatus(){
     pricingPanel.style.display='none';
   }
 }
-document.getElementById('pEmail').addEventListener('blur',checkEmailStatus);
-
 async function buyPass(plan){
   const email=g('pEmail');
-  if(!email){ document.getElementById('gateErr').textContent='Enter your email above first so we know who the pass belongs to.'; document.getElementById('gateErr').style.display='block'; return; }
+  if(!email){ document.getElementById('gateErr').textContent='Missing email — please go back to the first page and enter it there.'; document.getElementById('gateErr').style.display='block'; return; }
   try{
     const res=await fetch(W_API+'/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan,email})});
     const data=await res.json();
