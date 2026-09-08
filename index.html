@@ -377,14 +377,14 @@ body{
    the heroIllustration script above; this is a real, invisible <button>
    sized and positioned with plain percentages to land exactly on the
    sun circle in that SVG's viewBox (cx=180,cy=100,r=46 in user-space;
-   the viewBox itself is "0 20 360 185" after being cropped tighter to
-   its content -- see that script's own note on why), so it's a true
-   circular hit target and keyboard-focusable, without duplicating the
-   sphere rendering in CSS too. Percentages recalculated for the cropped
-   viewBox: left/width are unchanged (the crop only removed vertical
-   space), top = (100-46-20)/185 = 18.38%, height = 92/185 = 49.73%. */
+   the viewBox itself is "-8 20 376 185" after being cropped tighter to
+   its content vertically, then widened again horizontally to stop
+   clipping the outermost bead -- see that script's own notes on both).
+   Recalculated for that box: left = (180-46-(-8))/376 = 37.77%,
+   width = 92/376 = 24.47%, top = (100-46-20)/185 = 18.38%,
+   height = 92/185 = 49.73%. */
 .sun-cta{
-  position:absolute;left:37.22%;top:18.38%;width:25.56%;height:49.73%;
+  position:absolute;left:37.77%;top:18.38%;width:24.47%;height:49.73%;
   border-radius:50%;border:none;background:transparent;cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0;
 }
@@ -1465,7 +1465,16 @@ function openNumberDef(item){
   // the viewBox itself (not just adding a bigger negative margin on top
   // of it) removes that dead space at the source -- the .sun-cta
   // button's percentages below are recalculated for this new box.
-  let svg = `<svg viewBox="0 20 360 185" xmlns="http://www.w3.org/2000/svg">
+  // Widened 8 units on each side (was "0 20 360 185", now
+  // "-8 20 376 185") -- her direct catch, confirmed by actually
+  // computing the geometry rather than eyeballing it: the outermost
+  // left satellite bead (ring 5, angle 190) has its center at x=8 with
+  // a 12-unit radius, so it extended to x=-4 -- past this viewBox's own
+  // left edge at x=0, genuinely clipped, not a screen-edge illusion.
+  // Widening symmetrically (cx=180 stays exactly centered) gives every
+  // bead real clearance instead of moving just this one and risking the
+  // same clipping the next time a bead's position changes.
+  let svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="sunGrad" cx="32%" cy="27%" r="78%">
         <stop offset="0%" stop-color="#ffffff"/>
