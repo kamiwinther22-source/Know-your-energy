@@ -81,7 +81,7 @@ body{
    them. Width matches the content column; height is driven by its own
    viewBox aspect ratio, not fixed, so it scales cleanly across phone
    widths without ever needing a bounding-box clip. */
-.hero-illustration{width:100%;max-width:380px;margin:0.1rem auto 0.15rem;}
+.hero-illustration{width:100%;max-width:380px;margin:0.05rem auto 0.05rem;}
 .hero-illustration svg{display:block;width:100%;height:auto;}
 
 /* ---------- hero accent cluster: numbered beads on top, the title in
@@ -92,38 +92,8 @@ body{
    once that bubble became an actual button.) Tapping a planet dot / HD
    center / number bead still opens the same tap-to-reveal definition
    modal used everywhere else. */
-.icon-triangle{position:relative;margin:0.1rem auto 0.05rem;display:flex;flex-direction:column;align-items:center;gap:0.15rem;}
-.tri-top{display:flex;justify-content:center;}
-.tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.25rem;}
-.accent-item{position:relative;flex:0 0 auto;height:48px;}
-.accent-item svg{display:block;width:auto;height:100%;}
-.accent-num{height:56px;}
-/* Framed like a real medallion -- a white disc behind each chart icon
-   with its own border and drop shadow, not a flat SVG floating loose on
-   the page. Bigger too (was 78px, easy to miss). Scoped to just the
-   astrology/Human Design icons -- the numbered-bead cluster (.accent-num)
-   is a different, scattered shape and isn't meant to sit inside a circle. */
-/* Not a plain white circle with a grey border -- that read as a flat
-   stock badge sitting next to the chrome button, not part of the same
-   object. Same soft blue glow the button sits on (smaller, quieter) plus
-   a thin blue-tinted ring instead of grey, so the icon, the button, and
-   the icon on the other side read as one composed trio, not "one fancy
-   thing and two plain stickers." */
-.accent-astro,.accent-hd{position:relative;height:60px;width:60px;display:flex;align-items:center;justify-content:center;}
-.accent-astro::before,.accent-hd::before{
-  content:'';position:absolute;inset:-16%;border-radius:50%;
-  background:radial-gradient(circle,rgba(90,70,220,0.28) 0%,rgba(110,95,228,0.14) 45%,rgba(120,110,232,0) 78%);
-  filter:blur(3px);z-index:0;
-}
-.accent-astro span,.accent-hd span{
-  position:relative;z-index:1;
-  height:100%;width:100%;border-radius:50%;
-  background:radial-gradient(circle at 34% 28%,#ffffff 0%,#f2f4fb 40%,#dfe4f4 78%,#c7cfe8 100%);
-  border:1.5px solid rgba(28,44,169,0.35);
-  box-shadow:0 8px 16px -8px rgba(20,20,45,0.4),inset 0 1.5px 2px rgba(255,255,255,0.95);
-  display:flex;align-items:center;justify-content:center;padding:10px;
-}
-.accent-astro svg,.accent-hd svg{width:100%;height:100%;position:relative;z-index:1;}
+.icon-triangle{position:relative;margin:0.05rem auto 0.05rem;display:flex;flex-direction:column;align-items:center;gap:0.1rem;}
+.tri-base{display:flex;align-items:center;justify-content:center;gap:0.25rem;}
 .hero-accent-caption{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;
@@ -259,8 +229,8 @@ body{
 }
 .tap-hint{
   text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
-  margin-top:0.3rem;position:relative;z-index:1;
+  font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
+  margin-top:0.15rem;position:relative;z-index:1;
 }
 /* Real chrome, not tinted glass -- a metal sphere reads through grey-
    scale value contrast and a soft top-left highlight, not color. Silver/
@@ -323,7 +293,7 @@ body{
   clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
   filter:drop-shadow(0 0 3px rgba(255,255,255,0.9));
 }
-.key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:0.72rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
+.key-item span{position:relative;z-index:1;display:block;color:#12161e;font-size:0.63rem;text-shadow:0 1px 1px rgba(255,255,255,0.9),0 -1px 1px rgba(255,255,255,0.9),1px 0 1px rgba(255,255,255,0.9),-1px 0 1px rgba(255,255,255,0.9),0 0 6px rgba(255,255,255,0.75);}
 .key-hl{background:none;color:inherit;font-weight:800;}
 .key-hl-big{display:block;font-size:1.4em;line-height:1;margin:0.04em 0;}
 .key-item:hover{transform:translateY(-2px);box-shadow:
@@ -339,7 +309,7 @@ body{
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
-.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.3;margin-top:0.15rem;margin-bottom:0.15rem;font-size:0.74rem;}
+.hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.22;margin-top:0.08rem;margin-bottom:0.08rem;font-size:0.7rem;}
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
    to pick a pass once that email's free reading is already used, or a
@@ -904,9 +874,7 @@ body{
 
   <div class="icon-triangle" id="heroAccentRow">
     <div class="tri-base">
-      <div class="accent-item accent-astro" id="solarIcon"></div>
       <div class="keys-col" id="keysCol"></div>
-      <div class="accent-item accent-hd" id="hdIcon"></div>
     </div>
   </div>
 
@@ -1162,15 +1130,16 @@ function openNumberDef(item){
 // off their own separate row and placed as small satellites along the
 // rings instead -- ties the numerology content directly into the
 // illustration rather than repeating it as a second decorative element.
-// Beads keep their real per-number colors from NUMS and still open the
-// real definition via openNumberDef when tapped. Sized as an actual
-// centerpiece (the SVG's own viewBox controls its proportions; CSS
-// scales the whole thing to the content column width) instead of being
-// bounded to match the small astrology/HD icon size below it. ----------
+// Purely decorative now, not tappable -- her direct correction: the old
+// tap-a-bead-to-open-its-definition pattern is from a much earlier
+// version of this page and doesn't belong on this one ("that isn't
+// something I was still trying to do... get rid of them"). Sized as an
+// actual centerpiece (the SVG's own viewBox controls its proportions;
+// CSS scales the whole thing to the content column width) instead of
+// being bounded to match the small astrology/HD icon size below it. ----------
 (function(){
   const host = document.getElementById('heroIllustration');
   if(!host) return;
-  const TEXT_COLOR = {1:'#000000',2:'#000000',3:'#ffffff',4:'#ffffff',5:'#000000',6:'#ffffff',7:'#000000',8:'#ffffff',9:'#ffffff'};
   // Hand-placed along where the two rotated orbit rings actually pass --
   // checked against the rendered result, not just plausible-looking
   // numbers, since a bead floating off its ring is exactly the "not even
@@ -1184,53 +1153,77 @@ function openNumberDef(item){
     {n:7, cx:88,  cy:158, r:11},
   ];
   const cx=180, cy=102;
+  // Palette is ice blue / cobalt / genuinely shiny silver -- explicitly
+  // NOT gold (tried once this session, rejected: "nowhere have I said I
+  // want a navy gold palette... it is absolutely not the way to go") and
+  // NOT the numerology rainbow (that coloring exists elsewhere in the app
+  // only to match the real chart-wheel images -- her words: "if those
+  // [icons] are going to be gone, then there's no reason for those colors
+  // to be on the page"). The moon reuses the same bright-silver technique
+  // already proven on the CTA button (full white highlight down through
+  // silver, never flattening into a dull mid-grey -- "shining silver, not
+  // grey," said twice), with the color mood carried by ice-blue/cobalt in
+  // the rings, ribbon and glow around it instead of in the sphere itself.
+  const SILVER_HI='#ffffff', ICE='#cfeaf9', COBALT='#1E4FDB', COBALT_DEEP='#0b2668';
+  const BEAD_TONES=[ICE, COBALT, '#eaf3fb'];
   let svg = `<svg viewBox="0 0 360 205" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="moonGrad" cx="34%" cy="30%" r="75%">
-        <stop offset="0%" stop-color="#fffaf0"/>
-        <stop offset="30%" stop-color="#f0cf8f"/>
-        <stop offset="58%" stop-color="#6f6fb0"/>
-        <stop offset="100%" stop-color="#161b46"/>
+        <stop offset="0%" stop-color="${SILVER_HI}"/>
+        <stop offset="26%" stop-color="${ICE}"/>
+        <stop offset="52%" stop-color="#79b8ee"/>
+        <stop offset="76%" stop-color="${COBALT}"/>
+        <stop offset="100%" stop-color="${COBALT_DEEP}"/>
       </radialGradient>
       <linearGradient id="ringGradA" x1="0%" y1="50%" x2="100%" y2="50%">
-        <stop offset="0%" stop-color="#c9a24a" stop-opacity="0.85"/>
-        <stop offset="50%" stop-color="#1C2CA9" stop-opacity="0.55"/>
-        <stop offset="100%" stop-color="#c9a24a" stop-opacity="0.85"/>
+        <stop offset="0%" stop-color="${ICE}" stop-opacity="0.9"/>
+        <stop offset="50%" stop-color="${COBALT}" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="${ICE}" stop-opacity="0.9"/>
       </linearGradient>
       <linearGradient id="ringGradB" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#1C2CA9" stop-opacity="0.7"/>
-        <stop offset="100%" stop-color="#c9a24a" stop-opacity="0.7"/>
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="${COBALT}" stop-opacity="0.7"/>
       </linearGradient>
-      <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#c9a24a" stop-opacity="0"/>
-        <stop offset="20%" stop-color="#e9cf8f" stop-opacity="0.85"/>
-        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="80%" stop-color="#3548c4" stop-opacity="0.8"/>
-        <stop offset="100%" stop-color="#1C2CA9" stop-opacity="0"/>
+      <linearGradient id="ribbonGradBack" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="${COBALT}" stop-opacity="0"/>
+        <stop offset="25%" stop-color="${COBALT}" stop-opacity="0.55"/>
+        <stop offset="75%" stop-color="${COBALT}" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="${COBALT}" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="ribbonGradMid" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="${ICE}" stop-opacity="0"/>
+        <stop offset="25%" stop-color="${ICE}" stop-opacity="0.8"/>
+        <stop offset="75%" stop-color="${ICE}" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="${ICE}" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="ribbonGradFront" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="25%" stop-color="#ffffff" stop-opacity="0.95"/>
+        <stop offset="75%" stop-color="#ffffff" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
       </linearGradient>
     </defs>
-    <path d="M 4 182 C 90 150, 150 196, 230 168 C 290 148, 330 172, 356 150" fill="none" stroke="url(#ribbonGrad)" stroke-width="3.2" stroke-linecap="round" opacity="0.9"/>
+    <path d="M 4 190 C 95 155, 145 205, 235 172 C 292 150, 325 178, 356 158" fill="none" stroke="url(#ribbonGradBack)" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+    <path d="M 4 178 C 90 152, 155 190, 230 162 C 288 142, 328 168, 356 144" fill="none" stroke="url(#ribbonGradMid)" stroke-width="3.2" stroke-linecap="round" opacity="0.85"/>
+    <path d="M 4 168 C 85 150, 160 176, 226 154 C 284 136, 330 158, 356 134" fill="none" stroke="url(#ribbonGradFront)" stroke-width="1.6" stroke-linecap="round" opacity="0.95"/>
     <ellipse cx="${cx}" cy="${cy}" rx="165" ry="40" fill="none" stroke="url(#ringGradA)" stroke-width="1.6" transform="rotate(-7 ${cx} ${cy})"/>
     <ellipse cx="${cx}" cy="${cy}" rx="128" ry="78" fill="none" stroke="url(#ringGradB)" stroke-width="1.4" stroke-dasharray="1 5" stroke-linecap="round" transform="rotate(10 ${cx} ${cy})"/>
     <circle cx="${cx}" cy="${cy}" r="68" fill="url(#moonGrad)"/>
-    <circle cx="${cx}" cy="${cy}" r="68" fill="none" stroke="#f0cf8f" stroke-width="1" opacity="0.55"/>
-    <ellipse cx="157" cy="80" rx="12" ry="8" fill="#101838" opacity="0.16" transform="rotate(-20 157 80)"/>
-    <ellipse cx="202" cy="124" rx="16" ry="9" fill="#101838" opacity="0.14" transform="rotate(12 202 124)"/>
-    <ellipse cx="166" cy="137" rx="8" ry="5" fill="#101838" opacity="0.13"/>
-    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#e9cf8f" opacity="0.9" transform="translate(322,10) scale(0.6)"/>
-    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" opacity="0.85" transform="translate(30,150) scale(0.42)"/>
-    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#c9a24a" opacity="0.8" transform="translate(190,182) scale(0.34)"/>`;
+    <circle cx="${cx}" cy="${cy}" r="68" fill="none" stroke="#eaf6ff" stroke-width="1" opacity="0.6"/>
+    <ellipse cx="157" cy="80" rx="12" ry="8" fill="${COBALT_DEEP}" opacity="0.14" transform="rotate(-20 157 80)"/>
+    <ellipse cx="202" cy="124" rx="16" ry="9" fill="${COBALT_DEEP}" opacity="0.12" transform="rotate(12 202 124)"/>
+    <ellipse cx="166" cy="137" rx="8" ry="5" fill="${COBALT_DEEP}" opacity="0.11"/>
+    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" opacity="0.9" transform="translate(322,10) scale(0.6)"/>
+    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="${ICE}" opacity="0.9" transform="translate(30,150) scale(0.42)"/>
+    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" opacity="0.8" transform="translate(190,182) scale(0.34)"/>`;
   BEADS.forEach((b,i)=>{
-    const item = NUMS[b.n-1];
-    const border = b.n===2 ? 'rgba(20,25,35,0.35)' : 'rgba(0,0,0,0.18)';
-    svg += `<circle class="n-bead" data-n="${b.n}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${item.color}" stroke="${border}" stroke-width="1.2" style="cursor:pointer;"/>`;
-    svg += `<text x="${b.cx}" y="${b.cy+b.r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${b.r*1.05}" fill="${TEXT_COLOR[b.n]}" style="pointer-events:none;">${b.n}</text>`;
+    const fill = BEAD_TONES[i%BEAD_TONES.length];
+    const textFill = fill===COBALT ? '#ffffff' : '#0b2668';
+    svg += `<circle cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${fill}" stroke="rgba(11,38,104,0.3)" stroke-width="1.2"/>`;
+    svg += `<text x="${b.cx}" y="${b.cy+b.r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${b.r*1.05}" fill="${textFill}" style="pointer-events:none;">${b.n}</text>`;
   });
   svg += '</svg>';
   host.innerHTML = svg;
-  host.querySelectorAll('.n-bead').forEach(el=>{
-    el.addEventListener('click',()=>openNumberDef(NUMS[+el.dataset.n-1]));
-  });
 })();
 
 // ---------- the hook screen's real CTA: a white/silver metal button
@@ -1238,7 +1231,7 @@ function openNumberDef(item){
 // reachable, with a plain label under it so it reads as pressable. ----------
 const KEY_TEXT = '1 <mark class="key-hl key-hl-big">free</mark> reading';
 document.getElementById('keysCol').innerHTML =
-  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(68px,21vw,86px);height:clamp(68px,21vw,86px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
+  `<span class="key-item-glow"></span><button type="button" class="key-item" id="freeReadingCta" aria-label="Start your free full reading" style="width:clamp(60px,18vw,76px);height:clamp(60px,18vw,76px);" onclick="revealForm()"><span>${KEY_TEXT}</span></button><span class="tap-hint">Tap to Begin</span>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
@@ -2633,90 +2626,6 @@ function hdWheelWrap(hd){
   if(!svg)return '';
   return `<div class="wheel-wrap">${svg}</div>`;
 }
-
-// ---------- astro + HD entry-page accents: the REAL results-page chart
-// functions (astroWheelSVG / hdBodygraphSVG), fed illustrative example
-// data and shrunk down -- not a simplified redraw. Her direct instruction
-// after seeing the simplified version: "is there a reason you cannot use
-// the chart that I attached? it doesn't have to be legible... I want the
-// actual chart just shrink it." Has to run down here, after everything
-// these two functions depend on (SIGN_ORDER, PLANET_SVG/PLANET_COLOR,
-// CENTER_SHAPES, CENTER_GATES, GATE_CENTER, CHANNELS, GATE_WHEEL_ORDER)
-// is actually defined -- calling them any earlier hits a temporal-dead-
-// zone error. No real per-visitor data exists yet at this point in the
-// page, so this is a fixed illustrative example chart, not tied to any
-// real person. Both real functions draw a fixed-aspect (1:1) square SVG
-// with an inline width/height:100%, so the accent-item gets an explicit
-// equal width+height here instead of the height-only/auto-width sizing
-// the other (non-square) accent icons use. ----------
-(function(){
-  const astroWrap = document.getElementById('solarIcon');
-  const hdWrap = document.getElementById('hdIcon');
-  if(!astroWrap && !hdWrap) return;
-  // A real CSS clamp() string, not a fixed px number -- astro + bubble +
-  // HD (plus gaps) genuinely overflowed narrow phones (~360px and under)
-  // at a fixed 96px each. Verified this range doesn't overflow down to a
-  // 320px viewport, and still reaches the full 96px on wider phones.
-  const SIDE = 'clamp(64px,20vw,96px)';
-
-  // Both real chart functions size their strokes/text for the FULL-size
-  // results-page display (viewBox ~460-500 units, shown near 1:1). Squeezed
-  // into a 96px icon, a "2-unit" stroke renders under a physical pixel --
-  // that's the actual mechanism behind both her complaints: astro reads as
-  // thin/absent (it's almost entirely strokes, no fill area, so it has the
-  // least to fall back on), and HD reads as blurred (its 60+ tiny gate-
-  // number text labels anti-alias into visual noise at this size, and text
-  // isn't something a stroke fix touches at all). vector-effect:non-
-  // scaling-stroke keeps every line/ring/border a real, constant CSS pixel
-  // width regardless of the viewBox-to-96px scale ratio; removing the text
-  // elements (gate numbers, sign abbreviations) drops the actual source of
-  // the noise, not just blurs over it -- she's already said legibility
-  // doesn't matter here, so nothing legible is being lost. Scoped to these
-  // two injected copies only, via direct DOM styling after injection --
-  // the real astroWheelSVG/hdBodygraphSVG functions themselves, and the
-  // real full-size results-page charts, are untouched.
-  function sharpenForIcon(wrap){
-    wrap.querySelectorAll('text').forEach(el=>el.remove());
-    wrap.querySelectorAll('circle,line,path,polygon').forEach(el=>{
-      el.style.vectorEffect='non-scaling-stroke';
-    });
-  }
-
-  if(astroWrap){
-    const DEMO_ASTRO = {
-      planets: [
-        {name:'Sun',     absoluteDegrees:215},
-        {name:'Moon',    absoluteDegrees:280},
-        {name:'Mercury', absoluteDegrees:200},
-        {name:'Venus',   absoluteDegrees:190},
-        {name:'Mars',    absoluteDegrees:325},
-        {name:'Jupiter', absoluteDegrees:45},
-        {name:'Saturn',  absoluteDegrees:100},
-        {name:'Uranus',  absoluteDegrees:355},
-        {name:'Neptune', absoluteDegrees:340},
-        {name:'Pluto',   absoluteDegrees:260},
-      ],
-      houses: Array.from({length:12},(_,i)=>({house:i+1, absoluteDegrees:(215+i*30)%360})),
-      ascendant: {absoluteDegrees:215},
-      midheaven: {absoluteDegrees:125},
-    };
-    astroWrap.style.width = SIDE;
-    astroWrap.style.height = SIDE;
-    astroWrap.innerHTML = '<span>'+astroWheelSVG(DEMO_ASTRO)+'</span>';
-    sharpenForIcon(astroWrap);
-  }
-
-  if(hdWrap){
-    // A fixed illustrative gate list -- 5 complete channels (both gates
-    // active) across 8 of the 9 centers, plus real per-channel colored
-    // connections, the same as a real chart would show.
-    const DEMO_HD = { gates: [64,47,57,34,43,23,9,52,1,6,45,21] };
-    hdWrap.style.width = SIDE;
-    hdWrap.style.height = SIDE;
-    hdWrap.innerHTML = '<span>'+hdBodygraphSVG(DEMO_HD)+'</span>';
-    sharpenForIcon(hdWrap);
-  }
-})();
 
 function ar(astro,errMsg){
   if(!astro||astro.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
