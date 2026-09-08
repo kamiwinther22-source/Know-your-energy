@@ -399,12 +399,15 @@ async function assemblePersonData(env, person) {
 
 // ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
 
-// All three plans are one-time charges. Nobody is ever auto-billed again —
-// "month"/"year" describe how long the pass lasts, not a recurring charge.
+// All five plans are one-time charges. Nobody is ever auto-billed again —
+// "week"/"month"/"year" describe how long the pass lasts, not a recurring
+// charge. Matches the 5 tiers shown on the pricing screen.
 const PLAN_CONFIG = {
-  single: { mode: "payment", amount: 500, name: "Single Reading" },
-  monthly: { mode: "payment", amount: 1000, name: "One Month Pass" },
-  annual: { mode: "payment", amount: 2500, name: "One Year Pass" }
+  day: { mode: "payment", amount: 500, name: "1 Day Pass" },
+  week: { mode: "payment", amount: 1100, name: "1 Week Pass" },
+  monthly: { mode: "payment", amount: 2200, name: "1 Month Pass" },
+  sixmonth: { mode: "payment", amount: 3300, name: "6 Month Pass" },
+  annual: { mode: "payment", amount: 7700, name: "12 Month Pass" }
 };
 
 async function createCheckoutSession(env, plan, origin, email) {
@@ -438,10 +441,13 @@ async function createCheckoutSession(env, plan, origin, email) {
   return await res.json();
 }
 
-// ─── PASSES (monthly/annual, verified against Stripe, stored in KV) ──────────
+// ─── PASSES (verified against Stripe, stored in KV) ──────────────────────────
 
 const PASS_DURATION_MS = {
+  day: 1 * 24 * 60 * 60 * 1000,
+  week: 7 * 24 * 60 * 60 * 1000,
   monthly: 31 * 24 * 60 * 60 * 1000,
+  sixmonth: 183 * 24 * 60 * 60 * 1000,
   annual: 366 * 24 * 60 * 60 * 1000
 };
 
@@ -484,7 +490,8 @@ async function recordPass(env, sessionId, p1, p2) {
   const plan = session.metadata && session.metadata.plan;
   const durationMs = PASS_DURATION_MS[plan];
   if (!durationMs) {
-    // Single-reading purchases don't create a pass — nothing to store.
+    // Every current plan has a real duration — this only fires for an
+    // unrecognized/stale plan key, not a normal purchase path.
     return { ok: true, plan: plan || null };
   }
 

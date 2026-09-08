@@ -3368,14 +3368,12 @@ function hasUsedFreeReading(){ try{return localStorage.getItem(FREE_READING_KEY)
 function rememberPassEmail(email){ try{localStorage.setItem(REMEMBERED_EMAIL_KEY,email);}catch(e){} }
 function getRememberedPassEmail(){ try{return localStorage.getItem(REMEMBERED_EMAIL_KEY)||'';}catch(e){return '';} }
 
-// Five tiers as designed -- note only 'single' and 'monthly'/'annual'
-// (at different amounts) currently exist in worker.js's PLAN_CONFIG.
-// 'week' and 'sixmonth' will 400 until the backend is updated to match --
-// expected right now, not a bug to silently paper over, per direct
-// instruction that the backend (not this pricing display) is what still
-// needs to change, deferred until Stripe is actually turned on.
+// Matches worker.js's PLAN_CONFIG/PASS_DURATION_MS exactly (day/week/
+// monthly/sixmonth/annual) -- checkout still won't actually complete
+// until Stripe itself is turned on, but the plan names/amounts now agree
+// end to end.
 const PRICING_TIERS=[
-  {plan:'single',   label:'1 Day',    price:'$5'},
+  {plan:'day',      label:'1 Day',    price:'$5'},
   {plan:'week',     label:'1 Week',   price:'$11'},
   {plan:'monthly',  label:'1 Month',  price:'$22'},
   {plan:'sixmonth', label:'6 Months', price:'$33'},
@@ -3391,7 +3389,8 @@ async function checkPassStatus(email){
 }
 
 function renderPassActiveBanner(result){
-  const planLabel = result.plan==='annual' ? '12 Month' : (result.plan==='monthly' ? '1 Month' : titleCaseWords(result.plan||''));
+  const tier=PRICING_TIERS.find(t=>t.plan===result.plan);
+  const planLabel = tier ? tier.label : titleCaseWords(result.plan||'');
   const expiresText = result.expiresAt ? new Date(result.expiresAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) : '';
   return `<div class="state-banner pass-active"><div class="state-banner-ttl">Pass Active</div><div class="state-banner-sub">${escapeHtml(planLabel)} Pass${expiresText?' · active through '+escapeHtml(expiresText):''}</div></div>`;
 }
