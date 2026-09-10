@@ -224,6 +224,11 @@ body{
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:inherit;font-weight:800;}
+/* Her direct instruction: remove "FULL" from the bubble, make "free" the
+   largest word in it. Sized relative to the bubble's own base font-size
+   (0.92rem) rather than a fixed px value, so it still scales with the
+   bubble's own clamp()-based responsive size. */
+.key-hl-big{font-size:1.7em;line-height:1;}
 
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
@@ -1041,7 +1046,7 @@ function openNumberDef(item){
 })();
 
 // ---------- key selling point: single bubble centered between the two taglines ----------
-const KEY_TEXT = '1 <mark class="key-hl">free</mark> <mark class="key-hl">FULL</mark> reading';
+const KEY_TEXT = '1 <mark class="key-hl key-hl-big">free</mark> reading';
 document.getElementById('keysCol').innerHTML =
   `<div class="key-item" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);"><span>${KEY_TEXT}</span></div>`;
 
