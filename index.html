@@ -173,7 +173,17 @@ body{
    reserved height the frame stayed only as tall as the text and the
    ribbon just bled into whatever sat above/below it on the page. This
    min-height is that reserved space. */
-.ribbon-frame{position:relative;display:flex;align-items:center;justify-content:center;min-height:150px;}
+/* width:100% is load-bearing, not decorative -- once .tagline-slide
+   (below) became position:absolute, .energy-ribbon (already absolute)
+   left this flex container with zero in-flow children. A flex
+   container with nothing in-flow to size itself against collapses its
+   own auto width toward min-content -- measured at exactly 60px, which
+   is .tagline-frame's own 30px+30px side padding with nothing between
+   them. That collapse was the real cause of the energy ribbon graphic
+   effectively disappearing (its own width:115% was 115% of this now-
+   tiny 60px box). Explicit width:100% keeps this frame filling its
+   parent regardless of how many in-flow children it has. */
+.ribbon-frame{position:relative;display:flex;align-items:center;justify-content:center;min-height:150px;width:100%;}
 /* Pulled in tight around the ribbon itself, not the whole section -- her
    direct correction: "you have made the entire background have like
    sort of this purpleish glow and I don't want that. I want it to be
@@ -238,7 +248,33 @@ body{
    smaller than the first headline (which stays the single largest
    thing on the page, the settled hierarchy from earlier), but a real
    second jump up from the prior size. */
-.ribbon-frame .tagline-slide{position:relative;z-index:1;font-size:clamp(1.35rem,5.6vw,1.85rem);line-height:1.22;}
+/* Widened to break out of .tagline-frame's own 30px side padding --
+   her direct instruction: "I want the headline to fit on 2 lines." At
+   the padded width this was wrapping to 3 lines at every checked
+   viewport (320-430px, verified by measuring rendered height against
+   line-height, not eyeballing) -- shrinking the font back down would
+   undo two earlier rounds of her asking for this text bigger, so the
+   fix is more width, not less size.
+   First attempt reused .tagline-top's own full-bleed formula (explicit
+   width + negative margins on a normal in-flow element) -- wrong here
+   specifically because .ribbon-frame is display:flex (.tagline-top's
+   parent isn't). A flex item's used width interacting with large
+   negative margins made the flex container itself collapse to ~60px
+   wide, which is what made the energy ribbon graphic underneath
+   effectively vanish (verified by measuring -- .ribbon-frame's own
+   rendered width really did shrink to 60px). Fixed by taking this
+   element out of the flex flow entirely instead, with the exact same
+   position:absolute + left:50% + translate(-50%) centering .energy-
+   ribbon right below already uses to break out of this same frame --
+   proven technique, not a new one, and it can't disturb the flex
+   container's own sizing since an absolutely positioned element never
+   contributes to it. */
+.ribbon-frame .tagline-slide{
+  position:absolute;left:50%;top:50%;z-index:1;
+  transform:translate(-50%,-50%);
+  font-size:clamp(1.18rem,5.6vw,1.85rem);line-height:1.22;
+  width:calc(100vw - 8px);
+}
 
 /* ---------- title ---------- */
 /* Superseded her own earlier ask (centering the title in the gap
