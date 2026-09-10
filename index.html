@@ -1222,14 +1222,19 @@ body{
        different rings (verified against the rotated ellipses' real
        bounding boxes -- nothing sits outside the viewBox now, nothing
        clusters in one corner). Same visual system as the hero screen,
-       same sizes, just actually balanced this time. -->
+       same sizes, just actually balanced this time.
+       Stroke thickened 1.1 -> 1.7 along with the hero sun's own rings --
+       her blunt reaction to the whole flow, "The whole thing is just
+       bland," and a thin stroke reads as a faint diagram rather than a
+       real object; same fix, same reasoning, applied consistently to
+       the matching illustration on this screen too. -->
   <div class="card-orbit">
     <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="200" cy="50" rx="50" ry="12" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="70" ry="16.8" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="90" ry="21.6" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="110" ry="26.4" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="130" ry="31.2" fill="none" stroke="#1C2CA9" stroke-width="1.1" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="50" ry="12" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="70" ry="16.8" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="90" ry="21.6" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="110" ry="26.4" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
+      <ellipse cx="200" cy="50" rx="130" ry="31.2" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
       <circle cx="303.0" cy="17.5" r="10" fill="#000000"/>
       <circle cx="141.1" cy="66.8" r="7" fill="#1C2CA9"/>
       <circle cx="285.8" cy="55.1" r="5" fill="#000000"/>
@@ -1592,14 +1597,20 @@ function openNumberDef(item){
   // catch-light corner and a darker shadowed corner, the same real
   // technique already proven on the sun sphere itself, just applied to
   // a stroke instead of a fill.
+  // Thickened 1.6 -> 2.3: her blunt, whole-flow reaction -- "The whole
+  // thing is just bland" -- and a real look at the actual rendered page
+  // backs it up. At 1.6 the rings read as thin, quiet pencil lines
+  // against a near-white page; genuine visual weight, not just correct
+  // gradient math, is part of what makes something read as a real
+  // object instead of a faint diagram.
   function ringArcs(rx){
     const ry = Math.round(rx*0.26);
     const back = `M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0`;
     const front = `M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`;
     const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
     return {
-      back: `<path d="${back}" fill="none" stroke="url(#ringGrad)" stroke-width="1.6" opacity="1" transform="${xf}"/>`,
-      front: `<path d="${front}" fill="none" stroke="url(#ringGrad)" stroke-width="1.6" opacity="1" transform="${xf}"/>`,
+      back: `<path d="${back}" fill="none" stroke="url(#ringGrad)" stroke-width="2.3" opacity="1" transform="${xf}"/>`,
+      front: `<path d="${front}" fill="none" stroke="url(#ringGrad)" stroke-width="2.3" opacity="1" transform="${xf}"/>`,
     };
   }
   const RING_ARCS = RING_RX.map(ringArcs);
