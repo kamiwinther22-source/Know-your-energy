@@ -224,11 +224,34 @@ body{
    omitting a background rule here does NOT mean "no background," it means
    "fall back to that yellow default." Has to be set explicitly to none. */
 .key-hl{background:none;color:inherit;font-weight:800;}
-/* Her direct instruction: remove "FULL" from the bubble, make "free" the
-   largest word in it. Sized relative to the bubble's own base font-size
-   (0.92rem) rather than a fixed px value, so it still scales with the
-   bubble's own clamp()-based responsive size. */
-.key-hl-big{font-size:1.7em;line-height:1;}
+/* Her follow-up correction: sizing "free" up relative to "1"/"reading"
+   wasn't enough -- "the entire 1 free reading needs to be bigger. make
+   that vertical in the bubble." Stacked top-to-bottom instead of run
+   inline (1 / FREE / reading), which is what actually lets everything
+   get bigger: a circle's widest chord is at its own vertical center, so
+   one word per line (each centered) can use much more of the circle's
+   real width than three words crammed onto one horizontal line ever
+   could. FREE sits in the true middle line, where the chord is widest,
+   and gets the largest size of the three, per her original instruction;
+   "1" and "reading" stack above/below it at the narrower off-center
+   chord. All three sized up substantially from the old single-line
+   0.92rem baseline.
+   Also actually capitalized as "FREE" now -- her direct catch: "why
+   aren't you capitalizing the word FREE like i continue to show you."
+   It had stayed lowercase "free" through both the original single-line
+   fix and the first vertical-stack draft; sizing it up isn't the same
+   as capitalizing it, and capitalizing it widens the rendered word
+   enough that .key-hl-big's size came down from 3rem to 2.5rem to keep
+   it inside the bubble at the smallest checked width (320px) without
+   clipping past the circle's edge. */
+/* .key-item span{display:block} (below) has higher specificity than a
+   bare .key-stack{} would (class+element beats class alone) -- qualified
+   as .key-item span.key-stack here so display:flex actually wins instead
+   of silently losing to that block rule. */
+.key-item span.key-stack{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:0.92;}
+.key-stack .key-one{font-size:1.15rem;font-weight:700;}
+.key-stack .key-reading{font-size:1.4rem;font-weight:700;margin-top:0.05em;}
+.key-hl-big{font-size:2.5rem;line-height:0.85;}
 
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
@@ -1046,9 +1069,13 @@ function openNumberDef(item){
 })();
 
 // ---------- key selling point: single bubble centered between the two taglines ----------
-const KEY_TEXT = '1 <mark class="key-hl key-hl-big">free</mark> reading';
+// Stacked vertically now, one word per line -- see .key-stack's own
+// comment for why. The wrapping <span> stays (still what .key-item's
+// flex centering targets), it's just a flex column itself now instead
+// of a line of inline text.
+const KEY_TEXT = '<span class="key-one">1</span><mark class="key-hl key-hl-big">FREE</mark><span class="key-reading">reading</span>';
 document.getElementById('keysCol').innerHTML =
-  `<div class="key-item" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);"><span>${KEY_TEXT}</span></div>`;
+  `<div class="key-item" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);"><span class="key-stack">${KEY_TEXT}</span></div>`;
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
