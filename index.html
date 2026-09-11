@@ -525,8 +525,20 @@ body{
    the new light fill, not just the card's own background/border.
    .panel-error included too -- it never declared --card-text at all,
    so its .dp content was falling through to .dp's own (now removed)
-   white default with nothing to inherit instead. */
-.quad-item,.panel-auto,.panel-error{
+   white default with nothing to inherit instead.
+   .card-expand included too -- the tap-to-expand modal's body
+   (#cardExpandBody) is a separate top-level element, not a DOM
+   descendant of .quad-item/.panel-auto, so it never inherited these
+   custom properties at all: every var(--card-*) inside it silently
+   fell through to unset, which for a *color* property resolves to the
+   inherited black text color -- confirmed by rendering both headless
+   and reading actual computed colors: .dpsec/.dprl/.dprv all sampled
+   as rgb(0,0,0) inside the modal versus their real navy/dim/near-black
+   trio outside it. That's why every label (.dprl), section heading
+   (.dpsec), and glyph inside the expanded chart view rendered as flat
+   black instead of the same distinct navy/dim treatment the small card
+   preview already had -- not a missing color rule, a missing scope. */
+.quad-item,.panel-auto,.panel-error,.card-expand{
   --card-text:#191510;--card-dim:#4a4238;--card-mid:#3a332a;--card-accent:#1C2CA9;
   --card-a1:rgba(28,44,169,0.3);--card-a2:rgba(28,44,169,0.4);--card-a3:transparent;--card-a4:rgba(28,44,169,0.08);
   --card-stripe-odd:rgba(28,44,169,0.045);--card-stripe-even:transparent;
@@ -1782,7 +1794,7 @@ const NUM_DEFS={
     6:`A 6 Pinnacle centers your years on home, family, and the people who depend on you — this is a chapter where love, caretaking, and duty to others move to the front of your life, sometimes bringing marriage, children, or becoming the one others lean on. The opportunity is deep stability and connection, and the risk is responsibility for others tipping into self-sacrifice without real boundaries in place.`,
     7:`A 7 Pinnacle is a quieter, more inward chapter — years suited to study, specialization, or spiritual development rather than outward achievement. It can feel isolating at times, but the opportunity here is real: sharpened expertise and inner clarity, with the risk that solitude hardens into distance or distrust if connection with others thins out too much.`,
     8:`An 8 Pinnacle is a chapter of ambition realized — career growth, financial gain, and increased authority tend to concentrate in these years, often putting you in a leadership or business-building role. The real opportunity is mastering power and money with integrity, and this chapter also genuinely tests whether success hardens you or whether fairness holds up while you climb.`,
-    9:`A 9 Pinnacle completes the chapter that began at Pinnacle 1, usually through teaching, healing, or leading from what's already been lived — this stage of the cycle is built to give forward, not accumulate.`,
+    9:`A 9 Pinnacle centers your years on release and a wider view — closing out roles, relationships, or commitments that have run their course, and extending compassion or generosity past your own immediate circle rather than building something new for yourself. The opportunity is real: the freedom that comes from letting go of what's actually finished, and the perspective to give from what you've already gained. The risk is holding on past the point something has ended, or spreading yourself thin trying to meet everyone else's needs at once.`,
     11:`An 11 Pinnacle (a master number, kept unreduced) intensifies whatever chapter it touches with heightened intuition and idealism — you may find yourself unusually perceptive, sensitive to others, and pulled toward something larger than ordinary ambition, especially in your closest relationships. It's a demanding energy to carry well, bringing both real perceptiveness and real overwhelm depending on how much of that heightened input actually gets processed rather than just absorbed.`,
     22:`A 22 Pinnacle is genuinely demanding and potentially highly rewarding — this chapter hands you both a big vision and the practical means to build it into something real and lasting, often pushing you toward entrepreneurship or large-scale projects. The opportunity is legacy-level achievement, and the pressure that comes with it is proportionally heavy: this chapter tends to separate people who can execute at that scale from those who get overwhelmed by it.`,
     33:`A 33 Pinnacle is the rarest of the master chapters — it centers your years on caring for others at scale, often through teaching, healing, or some form of large-scale nurturing that goes beyond your own household. The opportunity is real: a genuine capacity to lift people up without expecting anything back. The test is proportional to the gift, since a chapter built around giving this freely can quietly drain you without real limits on what gets taken on, and for whom.`
@@ -2612,10 +2624,10 @@ function ar(astro,errMsg){
   return h||apend('Unavailable');
 }
 
-function pcCol(label,value,defKey,defNum,specKey){
+function pcCol(label,value,defKey,defNum,specKey,showGeneral){
   const lookupKey=specKey||defKey;
   let specific=lookupKey&&defNum!=null&&NUM_DEFS[lookupKey]&&NUM_DEFS[lookupKey][defNum];
-  const general=defKey&&GLOSSARY[defKey]?GLOSSARY[defKey]:null;
+  const general=showGeneral!==false&&defKey&&GLOSSARY[defKey]?GLOSSARY[defKey]:null;
   let def=null;
   if(general&&specific)def=`<p>${general}</p><p>${specific}</p>`;
   else if(specific)def=`<p>${specific}</p>`;
@@ -2633,7 +2645,11 @@ function pinnacleChallengeRow(n,pinnacle,challengeVal){
 }
 
 function periodCycleRow(n,period){
-  return `<div class="dprow"><div class="stage-range">${escapeHtml(period.ageRange)}</div><div class="stage-pair">${pcCol('Period '+n,period.value,'periodcycle',period.value)}</div></div>`;
+  // The "what is a Period Cycle" explanation (GLOSSARY.periodcycle) only
+  // needs to be read once -- showing it under Period 1, 2, and 3 alike
+  // meant tapping any of the three later rows repeated the same intro
+  // paragraph before finally getting to that period's actual meaning.
+  return `<div class="dprow"><div class="stage-range">${escapeHtml(period.ageRange)}</div><div class="stage-pair">${pcCol('Period '+n,period.value,'periodcycle',period.value,null,n===1)}</div></div>`;
 }
 
 function nr(num){
