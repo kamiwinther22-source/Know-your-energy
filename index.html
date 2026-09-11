@@ -396,15 +396,38 @@ body{
    leave the blue") applies here too, and she separately said "there's
    way too much blue going on" this same round. No reason to carry a
    blue accent span into a rose-gold line on purpose.
-   First attempt at the gradient (even split, light-to-dark top-to-
-   bottom) read as pale dusty pink, not rose gold -- the light tone
-   dominated too much of each glyph's visual weight for thin italic
-   serif strokes. Rebalanced so the darker, more saturated tone (#B76E79)
-   covers nearly the whole letterform and the lighter tone (#CBA3B2)
-   only catches the very top edge, the way a real highlight sits on
-   metal rather than an even wash top-to-bottom. */
+   First attempt (even split, light-to-dark top-to-bottom) read as pale
+   dusty pink; second attempt (dark-dominant, light only at the top
+   edge) was closer but still just a two-tone fade, not real metal.
+   Her direct, blunt correction: "there's a clear difference between
+   something that looks metallic and something that does not... that's
+   not even close to like a rose gold... it's not the right texture at
+   all." She's right, and there's a real, documented reason: a genuine
+   metallic CSS text effect is a SYMMETRIC multi-band gradient --
+   dark, mid, light, a near-white highlight at the true center, back
+   through light, mid, dark -- which reads as a curved surface
+   reflecting a light source, the same way a real chrome/gold bar does.
+   A gradient that only goes from one tone to another in one direction,
+   however the stops are weighted, is still just a two-color fade, not
+   a reflection -- that's the actual textural difference she's
+   pointing at. Real sourced anchor points for the rose-gold family
+   (#CBA3B2 "Metallic Rose Gold," #B76E79 canonical "Rose Gold"), with
+   a genuinely dark rose-brown shadow and a genuinely near-white pink
+   highlight added at the two ends of the value range -- the real
+   technique specifically needs true near-black and near-white anchors
+   to read as reflective; every prior attempt stayed in a narrow light-
+   to-medium range, which is the other reason it never looked like
+   metal no matter how the two tones were weighted.
+   background-size/repeat-y added proactively, same fix as the
+   .hook-differentiator paragraph right below needed after its own
+   middle line nearly vanished -- this headline only got lucky (its 2
+   equal-height lines happen to put the bright band's edge right at the
+   line break rather than mid-line), not actually safe by design until
+   this. */
 .tagline-slide.tagline-top.c-gold{
-  background:linear-gradient(180deg,#CBA3B2 0%,#B76E79 22%,#B76E79 100%);
+  background:linear-gradient(180deg,#4A1F26 0%,#B76E79 22%,#CBA3B2 45%,#F5E6E3 50%,#CBA3B2 55%,#B76E79 78%,#4A1F26 100%);
+  background-size:100% 1.2em;
+  background-repeat:repeat-y;
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
 }
@@ -533,13 +556,42 @@ body{
    on the sun's corona) only catching the top edge as a real highlight,
    and a mathematically darker shade of the same #1C2CA9 (#111A65, a
    proportional darkening of the same hue, not an invented new color)
-   for shadow depth at the bottom. Same light-highlight/dark-dominant
-   structure that fixed the rose-gold headline's own fade problem right
-   above this rule. Specificity note: .privacy-note.hook-differentiator
+   for shadow depth. That fixed the legibility problem but not the
+   actual texture -- her next, blunt correction: "there's a clear
+   difference between something that looks metallic and something that
+   does not... it's not the right texture at all," made against the
+   matching rose-gold headline but true of this gradient too, since it
+   was built the same (wrong) way. Real, documented metallic CSS text
+   is a SYMMETRIC multi-band gradient -- dark, mid, light, a near-white
+   highlight at dead center, back down through light, mid, dark --
+   which reads as a curved reflective surface, not a two-tone fade in
+   one direction (see the headline rule's own fuller explanation of
+   this same fix). Rebuilt with that real structure: #111A65 and
+   #1C2CA9 as the dark/mid anchors (both already established on this
+   page), #7B99EE as the light tone, and a genuinely near-white
+   blue-tinted highlight (#EAF0FF) at true center -- the missing near-
+   white anchor point is a real, necessary part of the technique, not
+   decoration. Specificity note: .privacy-note.hook-differentiator
    (2 classes) beats plain .privacy-note (1 class) regardless of source
-   order, so this can't silently lose to the shared blue rule. */
+   order, so this can't silently lose to the shared blue rule.
+   Real bug caught by actually looking at the rendered screenshot, not
+   just trusting the CSS: this paragraph is 5 lines, and stretching one
+   continuous gradient across the whole block put the bright near-white
+   highlight band (the ~45-55% zone) squarely on top of an entire
+   middle line, making that whole line nearly invisible against the
+   white page -- the exact "faded" failure she's already flagged twice,
+   just relocated instead of fixed. The headline didn't show this
+   because it's only 2 lines of much larger text, so the same
+   percentage-based band stayed thin relative to each line. Fixed by
+   sizing the gradient to one line's own height (background-size,
+   tied to line-height in em so it scales with the text) and repeating
+   it vertically (background-repeat), so every line gets its own
+   independent dark-mid-light-highlight-light-mid-dark cycle instead of
+   one pattern smeared across five lines unevenly. */
 .privacy-note.hook-differentiator{
-  background:linear-gradient(180deg,#7B99EE 0%,#1C2CA9 22%,#1C2CA9 80%,#111A65 100%);
+  background:linear-gradient(180deg,#111A65 0%,#1C2CA9 22%,#7B99EE 45%,#EAF0FF 50%,#7B99EE 55%,#1C2CA9 78%,#111A65 100%);
+  background-size:100% 1.22em;
+  background-repeat:repeat-y;
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
 }
