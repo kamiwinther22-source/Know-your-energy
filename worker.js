@@ -1057,65 +1057,6 @@ async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PRO
   return { text: textOut, usage };
 }
 
-function countNameMentions(text, name) {
-  if (!name) return 0;
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp(`\\b${escaped}\\b`, 'gi');
-  return (text.match(re) || []).length;
-}
-
-function flattenReadingText(reading) {
-  const parts = [reading.headline];
-  (reading.sections || []).forEach(s => parts.push(s.eyebrow, s.title, s.body));
-  return parts.filter(Boolean).join('\n');
-}
-
-// A response that parses as valid JSON can still violate the naming
-// rule (a live case used "Partner A"/"Partner B" throughout, never the
-// person's first name, despite the system prompt). Don't just trust
-// the prompt held -- count how many times each first name shows up
-// before this ever reaches a paying customer. This doesn't feed a
-// repair pass (see generateReport) -- it only decides whether this
-// response gets accepted or discarded for the fallback. Returns
-// {message} (a diagnostic description for the log, not an instruction
-// aimed at the model) with no location info -- unlike a citation-leak
-// defect, this pattern is spread across the whole reading's word
-// choice, not one fixable span, so there's nothing here for a targeted
-// correction to target.
-function findNamingDefect(reading, rtype, p1, p2) {
-  const text = flattenReadingText(reading);
-  // A separate, repeated live case: a single reading used "she"/"her"
-  // throughout instead of "you", and nothing ever caught it, because
-  // this whole function used to return early for anything that wasn't
-  // a two-person reading -- only the two-person defect below was ever
-  // actually checked. Flag it the same way: count third-person
-  // pronouns against actual "you"/name usage, and require a sustained
-  // pattern (not one incidental slip) before flagging it.
-  if (rtype !== 'two-person') {
-    const nameCount = countNameMentions(text, p1.first);
-    const youCount = (text.match(/\byou(?:r|rs|self)?\b/gi) || []).length;
-    const thirdPersonCount = (text.match(/\b(she|her|hers|he|him|his)\b/gi) || []).length;
-    if (thirdPersonCount >= 3 && thirdPersonCount > (nameCount + youCount)) {
-      return { message: `Refers to ${p1.first} with third-person pronouns (she/her/he/him, found ${thirdPersonCount} times) instead of "you" -- a single reading must use "you" every time, never a third-person pronoun.` };
-    }
-    // A live case used the person's name in sustained third-person
-    // narration -- "Jacob's sense of who Jacob is centers on..." --
-    // instead of "you." A single reading never uses the person's name
-    // at all, so any use of it (not just a majority) is a defect.
-    if (nameCount >= 1) {
-      return { message: `Refers to ${p1.first} by name (found ${nameCount} times) instead of "you" (found ${youCount} times) -- a single reading must always say "you," never the person's name.` };
-    }
-    return null;
-  }
-  const minCount = Math.max(2, (reading.sections || []).length);
-  const p1Count = countNameMentions(text, p1.first);
-  const p2Count = countNameMentions(text, p2.first);
-  if (p1Count < minCount || p2Count < minCount) {
-    return { message: `Barely used ${p1.first} and ${p2.first}'s first names (found ${p1Count} and ${p2Count} mentions across ${(reading.sections||[]).length} sections) -- every reference to either person must use their actual first name.` };
-  }
-  return null;
-}
-
 // A real customer reading had citations (e.g. "Sun in Scorpio, 6th
 // house, square Mars in Leo, 9th house") stacked directly into the
 // prose with no real sentence around them, breaking readability enough
@@ -1266,18 +1207,10 @@ async function correctCitationDefect(env, fieldText, defectMessage) {
 
 // No repair pass on a content defect that regenerates the whole reading --
 // per direct instruction, a full rewrite has never been the wanted fix for
-// one bad paragraph, so this never happens: not the old multi-retry repair
-// loop, and not a fresh full-regeneration retry either. Two different
-// things happen instead, matched to what's actually broken:
-//
-// A content defect (findNamingDefect/findCitationLeak) is either localized
-// to one field or it isn't. findCitationLeak's defect always is -- the
-// violation sits inside one specific headline/eyebrow/title/body string --
-// so it gets ONE small, targeted correctCitationDefect() call that rewrites
-// just that field, not the reading. findNamingDefect's defect is a pattern
-// spread across the whole reading's word choice, not one fixable span, so
-// there's nothing to target -- it goes straight to the fallback below, same
-// as a citation fix that still fails after being attempted.
+// one bad paragraph. A citation-stacking defect (findCitationLeak) is always
+// localized to one field -- headline/eyebrow/title/body -- so it gets ONE
+// small, targeted correctCitationDefect() call that rewrites just that
+// field, not the reading.
 //
 // A transient failure (a stalled connection, a dropped stream, a
 // truncated or unparseable response) is a different category, with
@@ -1348,25 +1281,17 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
 
   // A content defect no longer withholds the reading -- per direct
   // instruction, once real content exists it has to reach the customer.
-  // A reading with one imperfect sentence is strictly better than no
-  // reading at all for money already spent. This still tries to make it
-  // better first (a localized citation-stacking defect gets up to 2
-  // small, targeted fix attempts -- never a full regeneration, each
-  // attempt costs a few hundred tokens, not a full reading's worth), and
-  // still logs every defect that reaches this point either way, so a
-  // real, persistent pattern is still visible without needing to hide
-  // the reading from the customer to surface it.
-  let defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
-  for (let fixAttempt = 0; defect && defect.sectionIndex !== undefined && fixAttempt < 2; fixAttempt++) {
+  // This still tries to make it better first: up to 2 small, targeted fix
+  // attempts, never a full regeneration.
+  let defect = findCitationLeak(result.parsed);
+  for (let fixAttempt = 0; defect && fixAttempt < 2; fixAttempt++) {
     try {
       const fix = await correctCitationDefect(env, defect.text, defect.message);
       failedUsages.push(fix.usage);
       if (defect.sectionIndex === -1) result.parsed.headline = fix.text;
       else result.parsed.sections[defect.sectionIndex][defect.key] = fix.text;
-      // Re-check the patched reading -- the fix itself could rarely still
-      // leave a stack, or (much less likely, but checked anyway) drift
-      // into a naming defect in that one field.
-      defect = findNamingDefect(result.parsed, rtype, p1, p2) || findCitationLeak(result.parsed);
+      // Re-check the patched field -- the fix itself could rarely still leave a stack.
+      defect = findCitationLeak(result.parsed);
     } catch (fixError) {
       console.error(`Citation-defect fix attempt ${fixAttempt + 1} failed: ${fixError.message}`);
       if (fixError.usage) failedUsages.push(fixError.usage);
