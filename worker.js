@@ -600,10 +600,9 @@ const REPORT_SYSTEM_PROMPT = `Check the person's current age before writing anyt
 ### ABSOLUTE RULES (zero exceptions)
 1. Single reading: address the person as "you" in every sentence. Never their name, never "she/he/her/him/they."
 2. Two-person reading: use each person's first name in every sentence about them. Never a label like "Partner A."
-3. Every time you name a placement or a number, explain what it means in that same sentence. Never write two placement or number names next to each other separated only by a comma, "and", or "with" -- explain the first one fully before naming the next.
-4. Never state an exact degree in the prose. Degrees belong only in "references."
-5. Never argue that a claim is significant or true before stating it (words like "real," "genuine," "true," "deep," "significant," "major" attached to a feeling or trait -- "real tension," "genuine need," "deep restlessness"). State the claim as settled fact and let the specific mechanism behind it carry the weight. A sentence that has to insist on its own importance reads as less certain, not more -- the fix is never a different intensifying word, it's removing the intensifying move entirely.
-6. Return one JSON object only -- no markdown, no text before or after it.
+3. Never name a placement, aspect, cycle, return, number, or degree in the prose. State what it produces. Cite it once, in references.
+4. Never intensify a claim before stating it plainly ("real tension," "genuine need," "deep restlessness," and any synonym doing the same job). State it as settled fact.
+5. Return one JSON object only -- no markdown, no text before or after it.
 
 ### ROLE
 You are an expert astrologer and numerologist. Draw on your full depth of knowledge in both systems, never a shortened or generic version. Write in plain, practical language -- what the person does, feels, or experiences -- never mystical or dressed-up phrasing that sounds profound but says little.
@@ -627,16 +626,15 @@ Before writing, find the connection points between the two charts -- not everyth
 
 ### HOW TO WRITE
 - Describe the person, not the chart.
-- A placement, number, aspect, or shared pattern can prove a claim true -- it is never the claim itself. State what the person does, wants, or feels; the data is the reason why.
+- State what the person does, wants, or feels -- never the mechanism producing it.
 - Use the full depth of established tradition for every placement or number. Ask what it actually means for this person, then write that answer, not the first surface-level thing that comes to mind. Most carry several distinct traits -- naming only one is incomplete.
 - Depth includes chart position -- the same Karmic Debt means something different in a Life Path than in a Birthday number.
 - Include faith, spirituality, or a higher power when a placement's established tradition actually includes it. Accuracy, not political correctness, is the goal.
-- Fill the writing with the actual information derived from the data, not the names of the data points themselves.
 - State each fact once. There's no target length -- don't pad or reword to fill space. The more directly something is stated, the more content fits.
 - Never parrot this prompt's own instructions back in the reading.
 
 ### CYCLES & TIMING
-- Big cycles (Personal Year, Essence, Pinnacle, Period Cycle, Challenge) plus any active astrological return describe ONE life stage, not separate facts -- combine them into a single explanation of where this person stands right now. Name each cycle and its time span, then state what the combination means together (a Personal Year 1 reads differently inside a Pinnacle 3 than inside a Pinnacle 9). Give concrete examples grounded in the full chart(s): what it's likely to be felt and noticed as, which choices or mindset during this stretch actually produce the outcomes it supports, what changes on entering the next phase, and how to prepare for what the next big cycles will ask of them.
+- Big cycles (Personal Year, Essence, Pinnacle, Period Cycle, Challenge) plus any active astrological return describe ONE life stage, not separate facts -- combine them into a single explanation of where this person stands right now. State what the combination means (a Personal Year 1 inside a Pinnacle 3 reads differently than inside a Pinnacle 9) without naming any cycle. Give concrete examples grounded in the full chart(s): what it's likely to be felt and noticed as, which choices or mindset during this stretch actually produce the outcomes it supports, what changes on entering the next phase, and how to prepare for what the next big cycles will ask of them.
 - Personal Month and Day are a separate, much shorter timescale -- never merge them into the life-stage picture above. Mention them only when there's something significant to say.
 - Two-person: explain how each person's current cycles affect how the two of them experience each other right now.
 - You're given astrology and numerology data only, no transit data. If birth time is missing, Ascendant/Midheaven/houses are missing with it -- leave them out, don't guess. Named astrological returns -- Saturn Return (~29, 58, or 87), Jupiter Return (~every 12 years), Uranus Opposition (~40-42), Chiron Return (~50) -- apply only when the person's current age is inside that window.
@@ -649,15 +647,15 @@ Before writing, find the connection points between the two charts -- not everyth
 
 ### OUTPUT FORMAT
 {
-  "headline": "One short, specific line for the whole reading. No system names, placement names, or numbers, except a numerology cycle's actual number.",
+  "headline": "One short, specific line for the whole reading. Follows ABSOLUTE RULE 3.",
   "sections": [
     {
       "eyebrow": "Short label for this section",
       "title": "A specific title for this section",
-      "body": "Prose made of separate, specific claims -- not narrated as one continuous flow. Same naming restriction as headline."
+      "body": "Prose made of separate, specific claims -- not narrated as one continuous flow. Follows ABSOLUTE RULE 3."
     }
   ],
-  "references": ["Every placement and number actually used, short technical shorthand (include the exact degree for astrology placements here, not in the prose), one per entry."]
+  "references": ["Every placement, aspect, cycle, and number the reading draws on, short technical shorthand, degrees included, one per entry."]
 }
 Divide the reading into as many sections as the content naturally requires -- no fixed topic list, no fixed section count. Give each section its own specific title and eyebrow.
 
@@ -1058,24 +1056,11 @@ async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PRO
   return { text: textOut, usage };
 }
 
-// A real customer reading had citations (e.g. "Sun in Scorpio, 6th
-// house, square Mars in Leo, 9th house") stacked directly into the
-// prose with no real sentence around them, breaking readability enough
-// that they couldn't get through it. The system prompt now tells the
-// model to name a placement directly AND explain it in the same
-// sentence (see REPORT_SYSTEM_PROMPT) -- a single named placement
-// inside a real, explained sentence is exactly what's wanted, not a
-// defect. This used to flag ANY single occurrence of a sign/planet/
-// number name anywhere in the prose and force a full rewrite stripping
-// it out entirely, which directly fought that instruction: it made
-// naming-and-explaining impossible, forcing the model into a repair
-// pass that reached for vague, unnamed paraphrases instead (this is
-// the confirmed mechanism behind Karmic Lesson 7 repeatedly coming
-// back as bare "introspection" -- the model wasn't allowed to just say
-// "Karmic Lesson 7" and explain it). What actually needs catching is
-// the original problem specifically: two or more citation-style terms
-// sitting back-to-back with nothing but punctuation between them --
-// never a single term inside real, connected prose.
+// ABSOLUTE RULE 3 bans naming any placement/aspect/cycle/number/degree in the
+// prose at all, not just stacked ones. A prompt/code mismatch here once
+// forced the model into vague, unnamed paraphrases instead (Karmic Lesson 7
+// repeatedly came back as bare "introspection") -- the code must ban exactly
+// what the prompt bans, nothing narrower.
 const ZODIAC_SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
 const CITATION_PATTERNS = [
   new RegExp(`\\b(Sun|Moon)\\s+in\\s+(${ZODIAC_SIGNS.join('|')})\\b`, 'i'),
@@ -1086,57 +1071,21 @@ const CITATION_PATTERNS = [
   /\bPersonal\s+(Year|Month|Day)\s+\d+/i, /\bPinnacle\s+\d+/i, /\bChallenge\s+(number\s+)?\d+/i,
   /\bKarmic\s+(Debt|Lesson)/i, /\bEssence\s+(cycle|number)/i,
   /\b\d+(st|nd|rd|th)\s+house\b/i,
+  /\d+(\.\d+)?°/, /\b\d{1,2}\s+degrees?\b/i,
 ];
-// A gap this short between two citation-style matches means only
-// punctuation/connectors fit in between (", ", " and ", " in ", " -- ")
-// -- a real stacked-citation dump, not two named things each explained
-// in their own sentence.
-const CITATION_STACK_GAP = 12;
-// Scans one text field in isolation and returns the violating snippet, or
-// null. Split out from findCitationLeak (below) so the defect can be
-// localized to the one field it's actually in -- a citation-stacking
-// violation is always confined to a single headline/eyebrow/title/body
-// string, never spread across the reading the way a naming-pattern defect
-// is, so there's no need to concatenate every field into one string first.
-function findStackedCitationSpan(text) {
-  const matches = [];
+function findCitationSpan(text) {
   for (const re of CITATION_PATTERNS) {
-    const global = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
-    let m;
-    while ((m = global.exec(text)) !== null) {
-      matches.push({ start: m.index, end: m.index + m[0].length, text: m[0] });
-    }
-  }
-  // Multiple patterns can match the same span -- "Sun in Scorpio" (the
-  // Sun-in-Sign pattern) fully contains "Scorpio" (the bare-sign
-  // pattern). Sorting by start ascending, longest-first as a tiebreak,
-  // then dropping any match that starts before the last KEPT match's
-  // end collapses that overlap into one citation instead of two --
-  // without this, "Sun in Scorpio" alone produced a zero-width gap
-  // between its own overlapping matches and false-positived as a
-  // "stack" on literally the most common sentence shape in a reading,
-  // which is what was silently failing every real attempt and forcing
-  // the guaranteed fallback to run instead.
-  matches.sort((a, b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
-  const spans = [];
-  for (const m of matches) {
-    const last = spans[spans.length - 1];
-    if (!last || m.start >= last.end) spans.push(m);
-  }
-  for (let i = 1; i < spans.length; i++) {
-    const gapText = text.slice(spans[i - 1].end, spans[i].start);
-    if (gapText.length <= CITATION_STACK_GAP && /^[\s,;.\-–—]*(and|in|with|of)?[\s,;.\-–—]*$/i.test(gapText)) {
-      return `${spans[i - 1].text}${gapText}${spans[i].text}`;
-    }
+    const m = text.match(re);
+    if (m) return m[0];
   }
   return null;
 }
 // Returns {message, sectionIndex, key, text} on a hit -- sectionIndex -1
 // means reading.headline itself, otherwise reading.sections[sectionIndex]
 // [key]. The location is what lets generateReport ask for a small,
-// targeted rewrite of just that one field instead of the whole reading --
-// per direct instruction, a full regeneration has never been the wanted
-// fix for one bad paragraph.
+// targeted rewrite of just that one field instead of the whole reading.
+// message is self-contained -- correctCitationDefect's fix model never
+// sees REPORT_SYSTEM_PROMPT, only this string.
 function findCitationLeak(reading) {
   const fields = [{ sectionIndex: -1, key: 'headline', text: reading.headline }];
   (reading.sections || []).forEach((s, i) => {
@@ -1146,10 +1095,10 @@ function findCitationLeak(reading) {
   });
   for (const f of fields) {
     if (!f.text) continue;
-    const snippet = findStackedCitationSpan(f.text);
+    const snippet = findCitationSpan(f.text);
     if (snippet) {
       return {
-        message: `Stacks citations directly into the prose with no sentence around them ("${snippet}") -- naming ONE placement or number and explaining it in the same sentence is fine, but two or more stacked back-to-back with nothing connecting them is not.`,
+        message: `Names a placement, aspect, cycle, or number directly in the text ("${snippet}") instead of stating what it produces -- rewrite with no technical astrology or numerology term anywhere in it, only what it means for the person.`,
         sectionIndex: f.sectionIndex,
         key: f.key,
         text: f.text
