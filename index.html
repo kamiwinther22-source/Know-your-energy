@@ -229,7 +229,7 @@ body{
    unrelated asks stacked on the page. */
 .hero-email-wrap{max-width:300px;margin:0.6rem auto 0.9rem;}
 .hero-email-wrap .err{text-align:center;}
-.hero-key{display:block;width:68px;height:auto;margin:0.3rem auto 0;}
+.hero-key{display:block;width:62px;height:auto;margin:0.15rem auto 0;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -1239,29 +1239,33 @@ body{
     <div class="privacy-note" style="margin-bottom:0.3rem;">Enter Your Email That Acts As Your Key</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <!-- Her correction: "I have a problem with the shape. It's not okay.
-         I want like an antique looking nice looking key. I'm not asking
-         you to shade it or anything like that. It can be royal blue,
-         but just draw it so it looks elegant." The shaded/modern-house-
-         key shape (round bow, straight tooth-cut bit) is gone -- flat
-         fill only, no gradient. Redrawn as an actual antique/skeleton-
-         key silhouette: a ring bow with an inscribed cross (the classic
-         ornamental filigree on real Victorian skeleton keys), a thin
-         shaft with a small collar, and two perpendicular cross-bars at
-         the tip (the "wards" -- the real distinguishing feature of an
-         antique key's bit, vs. a modern flat key's stepped notches).
-         Checked at the actual small render size (~68px wide), not just
-         a large preview -- the cross and wards both still read clearly
-         that small. -->
-    <svg class="hero-key" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- Her follow-up: a real reference photo (a genuine antique silver
+         skeleton key, "Rockford Collection / Hercules Silver P...") and
+         "I am asking for 1 thing to add a touch of class." Built from
+         that actual reference instead of inventing another version --
+         its bow is a symmetric double-scroll/volute shape (two curled
+         "C" hooks meeting at a center bead, with small terminal beads
+         on each curl), not a plain ring; the shaft has a distinct
+         collar ridge partway down, matching the reference's faceted
+         bead detail; the bit is the same stepped/crenellated notch
+         shape the reference photo actually shows. Flat #4169E1 only, no
+         gradient, still per her "not asking you to shade it." Checked
+         at the real ~68px render size before shipping -- the scrollwork
+         and the stepped bit both still read clearly that small. -->
+    <svg class="hero-key" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#4169E1" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke-width="4.5" d="M18,8 C10,4 3,9 4,17 C5,24 12,26 17,21"/>
+        <path stroke-width="4.5" d="M18,8 C26,4 33,9 32,17 C31,24 24,26 19,21"/>
+        <circle cx="18" cy="8" r="2.6" fill="#4169E1" stroke="none"/>
+        <circle cx="4.5" cy="17.5" r="2.1" fill="#4169E1" stroke="none"/>
+        <circle cx="31.5" cy="17.5" r="2.1" fill="#4169E1" stroke="none"/>
+      </g>
       <g fill="#4169E1">
-        <path fill-rule="evenodd" d="M17,10 A15,15 0 1 1 16.99,10 Z M17,17.5 A7.5,7.5 0 1 0 17.01,17.5 Z"/>
-        <rect x="15.9" y="18.3" width="2.2" height="13.4"/>
-        <rect x="10.3" y="23.9" width="13.4" height="2.2"/>
-        <rect x="30" y="22" width="4" height="6" rx="0.8"/>
-        <rect x="32" y="23" width="60" height="4"/>
-        <rect x="70" y="14" width="6" height="22"/>
-        <rect x="84" y="18" width="5" height="14"/>
+        <circle cx="18" cy="26" r="3.4"/>
+        <rect x="24" y="23.5" width="46" height="5"/>
+        <rect x="16.3" y="23.5" width="3.4" height="5"/>
+        <rect x="34" y="21.5" width="2.6" height="9" rx="1"/>
+        <path d="M70,17.5 H90 V33.5 H84 V28.5 H78 V33.5 H70 Z"/>
       </g>
     </svg>
   </div>
