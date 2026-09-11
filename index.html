@@ -385,12 +385,17 @@ body{
      title outright. Verified with Playwright across 320-430px until none
      of them overflowed (scrollWidth > clientWidth) -- this range holds. */
   font-size:clamp(1.5rem,7.5vw,2.1rem);
-  /* Solid, full-strength color, no blur -- same reasoning as always here,
-     just recolored. Her direct instruction: "get rid of the blue on the
-     title is what I meant" -- the one place blue survived every other
-     round of "change all blue to green" this session. Same EMERALD used
-     everywhere else the old COBALT accent was. */
-  color:#0f7a4c;
+  /* Two-toned silver-to-green, per her direct ask: "I would think a 2
+     toned silver and green would be better" than the flat green. A real
+     gradient fill on the text (background-clip:text), not a wash -- kept
+     deliberately dark enough throughout (no stop lighter than #9a9ea8)
+     that this can't repeat the earlier gradient-text failures this
+     session where a pale mid-band read as faded against the white page.
+     "Know" reads mostly silver, "Energy" mostly the established EMERALD
+     green, "Your" is the transition -- a real two-tone split, not a
+     single-hue fade. */
+  background-image:linear-gradient(90deg,#6b6f79 0%,#9a9ea8 38%,#4fae82 58%,#0f7a4c 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
 }
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
@@ -762,7 +767,9 @@ body{
 .report-pending-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;color:var(--card-text);}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
-.results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#0f7a4c;
+.results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;
+  background-image:linear-gradient(90deg,#6b6f79 0%,#9a9ea8 38%,#4fae82 58%,#0f7a4c 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
   text-align:center;margin-bottom:1.4rem;}
 
 /* .dp is the Reading panel's own inner wrapper (used only inside
