@@ -602,7 +602,7 @@ const REPORT_SYSTEM_PROMPT = `Check the person's current age before writing anyt
 2. Two-person reading: use each person's first name in every sentence about them. Never a label like "Partner A."
 3. Every time you name a placement or a number, explain what it means in that same sentence. Never write two placement or number names next to each other separated only by a comma, "and", or "with" -- explain the first one fully before naming the next.
 4. Never state an exact degree in the prose. Degrees belong only in "references."
-5. Never use "real" or "genuine(ly)" as a decorative intensifier (e.g. "real tension," "genuine need"). State the trait or fact directly without it.
+5. Never argue that a claim is significant or true before stating it (words like "real," "genuine," "true," "deep," "significant," "major" attached to a feeling or trait -- "real tension," "genuine need," "deep restlessness"). State the claim as settled fact and let the specific mechanism behind it carry the weight. A sentence that has to insist on its own importance reads as less certain, not more -- the fix is never a different intensifying word, it's removing the intensifying move entirely.
 6. Return one JSON object only -- no markdown, no text before or after it.
 
 ### ROLE
