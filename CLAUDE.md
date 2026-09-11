@@ -283,14 +283,11 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   marked placeholder text. Her wording will always be better than anything
   generated, and seeing generated copy actively distracts her from writing
   her own.
-- **Don't put the main point at the bottom of a page** in a way that forces
-  the eye back up. There should be a natural downward flow. **Precise,
-  testable version of this rule:** the main point (the actual offer/CTA,
-  not just a headline) must sit at or above vertical center of the page —
-  never lower. This is a physical reaction for her, not a stylistic
-  preference — eyes traveling down then back up registers as genuinely
-  upsetting, not just suboptimal. Measure it (element's vertical position
-  vs. page height / 2), don't eyeball it.
+- **Retired: the vertical-center CTA/offer-placement rule.** An earlier
+  version of this file required the main point/CTA to sit at or above
+  vertical center of the page, measured precisely. She revoked this
+  directly — don't measure or enforce it, and don't resurrect it as a
+  constraint on future design work.
 - **If she shares a real reference image, actually use it** — don't
   substitute a generic/invented version, and don't crop it down to something
   smaller/safer than what she asked for.
