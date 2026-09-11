@@ -381,75 +381,13 @@ body{
   margin-right:calc(50% - 50vw + 10px);
   margin-bottom:0.25rem;
 }
-/* Her correction: "I was mistaken when I said antique gold and what I
-   was actually thinking about was rose gold." Real, sourced rose-gold
-   tones (not invented -- #CBA3B2 is the commonly-cited "Metallic Rose
-   Gold" hex, #B76E79 the canonical "Rose Gold" hex cited across
-   multiple independent sources), same real gradient-fill technique as
-   before via background-clip:text, just the correct color family now.
-   .tagline-slide.tagline-top.c-gold (all 3 classes actually on this
-   element) is used instead of plain .c-gold so it outranks the shared
-   .tagline-slide.c-gold{color:#000000} rule on specificity, not source
-   order.
-   The old .hl-accent blue phrase is gone -- her direct correction to
-   the same mistake made on the OTHER headline earlier ("I didn't say
-   leave the blue") applies here too, and she separately said "there's
-   way too much blue going on" this same round. No reason to carry a
-   blue accent span into a rose-gold line on purpose.
-   First attempt (even split, light-to-dark top-to-bottom) read as pale
-   dusty pink; second attempt (dark-dominant, light only at the top
-   edge) was closer but still just a two-tone fade, not real metal.
-   Her direct, blunt correction: "there's a clear difference between
-   something that looks metallic and something that does not... that's
-   not even close to like a rose gold... it's not the right texture at
-   all." She's right, and there's a real, documented reason: a genuine
-   metallic CSS text effect is a SYMMETRIC multi-band gradient --
-   dark, mid, light, a near-white highlight at the true center, back
-   through light, mid, dark -- which reads as a curved surface
-   reflecting a light source, the same way a real chrome/gold bar does.
-   A gradient that only goes from one tone to another in one direction,
-   however the stops are weighted, is still just a two-color fade, not
-   a reflection -- that's the actual textural difference she's
-   pointing at. Real sourced anchor points for the rose-gold family
-   (#CBA3B2 "Metallic Rose Gold," #B76E79 canonical "Rose Gold"), with
-   a genuinely dark rose-brown shadow and a genuinely near-white pink
-   highlight added at the two ends of the value range -- the real
-   technique specifically needs true near-black and near-white anchors
-   to read as reflective; every prior attempt stayed in a narrow light-
-   to-medium range, which is the other reason it never looked like
-   metal no matter how the two tones were weighted.
-   background-size/repeat-y added proactively, same fix as the
-   .hook-differentiator paragraph right below needed after its own
-   middle line nearly vanished -- this headline only got lucky (its 2
-   equal-height lines happen to put the bright band's edge right at the
-   line break rather than mid-line), not actually safe by design until
-   this. */
-/* Real reference images this time ("rose gold font" search results:
-   embossed jewelry-style lettering, a beveled 3D "Metal" logotype with
-   a bright raised edge and a dark recessed edge, a "GOLD" wordmark with
-   a defined outline). Her point, confirmed by looking at these: a flat
-   gradient fill -- no matter how many color stops -- reads as PAINTED
-   color, not RAISED metal, because it has no edge lighting. Real metal/
-   emboss effects work because the edges of each letter catch a
-   highlight on one side and fall into shadow on the other, the same
-   way a real bevel does. Added that as a second, separate layer on top
-   of the gradient fill: filter:drop-shadow(), which (unlike
-   text-shadow) operates on the rendered glyph shape itself, so it
-   works correctly with background-clip:text -- a light-colored shadow
-   offset up-left simulates the raised edge catching light, a darker
-   one offset down-right simulates the recessed edge falling into
-   shadow. This is the real, standard CSS bevel/emboss technique, not
-   an invented effect. */
-.tagline-slide.tagline-top.c-gold{
-  background:linear-gradient(180deg,#4A1F26 0%,#B76E79 22%,#CBA3B2 45%,#F5E6E3 50%,#CBA3B2 55%,#B76E79 78%,#4A1F26 100%);
-  background-size:100% 1.2em;
-  background-repeat:repeat-y;
-  -webkit-background-clip:text;background-clip:text;
-  color:transparent;-webkit-text-fill-color:transparent;
-  filter:
-    drop-shadow(-1.4px -1.4px 0.4px rgba(255,255,255,0.9))
-    drop-shadow(1.6px 1.6px 1.2px rgba(58,20,26,0.7));
-}
+/* Her direct instruction after several real, documented metallic-text
+   attempts (multi-band gradient, edge bevel via drop-shadow, SVG
+   feSpecularLighting) all fell short of what she was actually
+   picturing: "just make the print black like i've said three times
+   now." Plain black -- no gradient, no filter, no second-guessing this
+   again. */
+.tagline-slide.tagline-top.c-gold{color:#000000;}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
@@ -559,79 +497,16 @@ body{
    already used for the toggle pill, rel-chip, and focus border. */
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
 .hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.22;margin-top:0.08rem;margin-bottom:0.08rem;font-size:0.7rem;}
-/* Her direct correction, twice over: "What goes over the white energy
-   ribbon needs to be black... I was talking about that paragraph," then
-   "no I was thinking about metallic blue. nothing faded will ever
-   change." Two real mistakes fixed here: (1) the silver/chrome gradient
-   was the wrong hue entirely -- she wanted metallic BLUE, not silver;
-   (2) the first metallic attempt on this same paragraph (still visible
-   in git history) used pale chrome tones as roughly half the gradient,
-   which read as nearly invisible on the white background -- exactly
-   the "faded" result the never-fade-text rule forbids, regardless of
-   intent. Fixed on both counts: built from the site's own established
-   accent blue (#1C2CA9, already proven fully legible everywhere else on
-   this page) as the dominant tone across nearly the whole letterform,
-   with the lighter established glow-tint blue (#7B99EE, same one used
-   on the sun's corona) only catching the top edge as a real highlight,
-   and a mathematically darker shade of the same #1C2CA9 (#111A65, a
-   proportional darkening of the same hue, not an invented new color)
-   for shadow depth. That fixed the legibility problem but not the
-   actual texture -- her next, blunt correction: "there's a clear
-   difference between something that looks metallic and something that
-   does not... it's not the right texture at all," made against the
-   matching rose-gold headline but true of this gradient too, since it
-   was built the same (wrong) way. Real, documented metallic CSS text
-   is a SYMMETRIC multi-band gradient -- dark, mid, light, a near-white
-   highlight at dead center, back down through light, mid, dark --
-   which reads as a curved reflective surface, not a two-tone fade in
-   one direction (see the headline rule's own fuller explanation of
-   this same fix). Rebuilt with that real structure: #111A65 and
-   #1C2CA9 as the dark/mid anchors (both already established on this
-   page), #7B99EE as the light tone, and a genuinely near-white
-   blue-tinted highlight (#EAF0FF) at true center -- the missing near-
-   white anchor point is a real, necessary part of the technique, not
-   decoration. Specificity note: .privacy-note.hook-differentiator
-   (2 classes) beats plain .privacy-note (1 class) regardless of source
-   order, so this can't silently lose to the shared blue rule.
-   First fix for the "whole middle line vanishes" bug (see git history)
-   sized the gradient to one line's height and repeated it down the
-   block -- that fixed legibility but created a new, real problem: her
-   next reaction, "that looks like a typewriter that needs its ribbons
-   changed." An identical light/dark cycle stamped out fresh on every
-   single line reads as a mechanical, patchy repeat -- streaky, uneven
-   ink density -- not as one coherent surface. A genuine reflective
-   material has ONE light source, not one per text line.
-   First attempt at a fix used a diagonal (125deg) single sweep instead
-   of the per-line repeat -- better, but it introduced a different real
-   violation of the same absolute rule: the near-white peak of the
-   sweep landed on top of several actual words mid-sentence ("patterns
-   given," "help," "path are," "design," "interacts" -- confirmed by
-   looking at the render, not assumed), washing each one out against
-   the white page. A bright fill color crossing body text will always
-   risk this, at any angle, because there's no guarantee of where words
-   fall relative to the sweep.
-   Fixed at the actual root cause: the fill gradient no longer goes
-   anywhere near white at all -- it stays inside #111A65/#1C2CA9, both
-   already proven at full-strength legibility as this page's own body/
-   label text elsewhere, so no word can ever land on a washed-out
-   patch regardless of layout. All of the real "shine" that used to
-   come from the bright fill peak now comes entirely from the edge
-   bevel (filter:drop-shadow, same technique as the headline -- see
-   that rule's fuller explanation) instead: a light offset catching the
-   raised edge, a dark offset in the recessed edge. Edge lighting reads
-   as real metallic texture on its own -- her actual reference images
-   ("Metal," "GOLD") show this clearly -- and unlike a bright fill
-   color, a thin shadow offset can never make the text itself
-   unreadable, which is what makes this the safe way to get real shine
-   without ever risking "faded" again. */
-.privacy-note.hook-differentiator{
-  background:linear-gradient(125deg,#111A65 0%,#1C2CA9 35%,#1C2CA9 65%,#111A65 100%);
-  -webkit-background-clip:text;background-clip:text;
-  color:transparent;-webkit-text-fill-color:transparent;
-  filter:
-    drop-shadow(-0.5px -0.5px 0.2px rgba(255,255,255,0.7))
-    drop-shadow(0.6px 0.6px 0.4px rgba(17,26,101,0.5));
-}
+/* Several real, documented metallic-text attempts here (multi-band
+   gradient, per-line repeat, diagonal sweep, edge bevel) all ran into
+   real problems -- a vanished middle line, a "typewriter ribbon" streak,
+   washed-out words mid-sentence -- and none of them actually got close
+   to what she was picturing. Her direct instruction: "just make the
+   print black like i've said three times now." Plain black, overriding
+   .privacy-note's shared blue the same way as before (2-class
+   specificity beats the 1-class shared rule regardless of source
+   order) -- no gradient, no filter. */
+.privacy-note.hook-differentiator{color:#000000;}
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
    to pick a pass once that email's free reading is already used, or a
