@@ -205,7 +205,7 @@ body{
    above and the email field below. Verified with Playwright that this
    doesn't collide with either at 320-430px. */
 .hero-illustration{
-  position:relative;width:100%;max-width:380px;margin:1.4rem auto 1.6rem;
+  position:relative;width:100%;max-width:380px;margin:0.9rem auto 1rem;
   transform:rotate(22deg) scale(1.25);transform-origin:50% 50%;
 }
 .hero-illustration svg{display:block;width:100%;height:auto;}
@@ -573,6 +573,14 @@ body{
 .sun-cta span{
   position:relative;display:block;text-align:center;color:#000000;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.66rem;
+  /* Counter-rotate against .hero-illustration's own +22deg tilt -- her
+     direct instruction: "make the ONE FREE READING upright." The sun
+     graphic and this button both rotate together (it's a child of the
+     tilted container, correctly following the sun's position), but the
+     text inside it shouldn't tilt with it -- this cancels exactly that
+     much rotation on the text alone, so the sphere reads diagonal while
+     its label stays level. */
+  transform:rotate(-22deg);
   text-shadow:
     0 0 2px rgba(255,255,255,0.95),
     0 1px 3px rgba(255,255,255,0.9),
@@ -1301,15 +1309,15 @@ body{
        needs to be placed in a way that the first page looks nice and
        professional polished classy, not like you tripped and fell and
        it dropped on there somewhere." -->
-  <div class="hero-illustration">
-    <div id="heroIllustration"></div>
-    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
-  </div>
-
   <div class="hero-email-wrap">
     <div class="privacy-note" style="margin-bottom:0.3rem;">Enter your email to begin &mdash; it's just a key, no soliciting</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
+  </div>
+
+  <div class="hero-illustration">
+    <div id="heroIllustration"></div>
+    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
   </div>
 
   <div class="tagline-frame ribbon-frame">
