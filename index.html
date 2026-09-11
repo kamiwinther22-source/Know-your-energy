@@ -204,9 +204,21 @@ body{
    margin the enlarged, rotated illustration would overlap the title
    above and the email field below. Verified with Playwright that this
    doesn't collide with either at 320-430px. */
+/* Rebalanced -- her direct correction: "it doesn't look like clever
+   design. It looks like an accident if there is more space on the left
+   than there is on the right. I don't want it bumping all the way up to
+   the edge of the right of the screen." The sun's own center measured
+   as almost exactly centered (off by ~5px), but the rotated ellipse's
+   asymmetrically-placed satellite beads and ring arcs still read
+   visually heavier on the right within that symmetric bounding box --
+   perceived balance isn't just the geometric center. Dialed scale back
+   slightly (1.25 -> 1.15, still genuinely "stretched out" vs. the
+   original 1.0) and added a small leftward nudge (translateX -18px) to
+   rebalance where the visible ink actually sits, verified against a
+   real screenshot rather than computed blind. */
 .hero-illustration{
   position:relative;width:100%;max-width:380px;margin:0.9rem auto 1rem;
-  transform:rotate(22deg) scale(1.25);transform-origin:50% 50%;
+  transform:translateX(-18px) rotate(22deg) scale(1.15);transform-origin:50% 50%;
 }
 .hero-illustration svg{display:block;width:100%;height:auto;}
 
@@ -1981,7 +1993,18 @@ function openNumberDef(item){
     <ellipse cx="162" cy="80" rx="17" ry="11" fill="url(#sunHotspot)" transform="rotate(-18 162 80)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" transform="translate(322,10) scale(0.6)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="${CHROME_LIGHT}" transform="translate(30,150) scale(0.42)"/>
-    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" transform="translate(190,182) scale(0.34)"/>`;
+    <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" transform="translate(190,182) scale(0.34)"/>
+    <!-- "the tap to begin[,]... make it go in a semi circle around the
+         Sun on the outside of it" -- moved out of the flat HTML button
+         label and into a real curved text-on-path here, hugging the
+         sphere's own outer edge (radius 58, vs. the sphere's own
+         radius 46) along its bottom arc. The button's aria-label still
+         carries the real instruction for accessibility/screen readers;
+         this is the visual echo of it. */ -->
+    <path id="tapArc" d="M ${cx-58} ${cy} A 58 58 0 0 1 ${cx+58} ${cy}" fill="none"/>
+    <text font-family="'Barlow Condensed',sans-serif" font-size="7.8" font-weight="700" letter-spacing="1.8" fill="#5c636c">
+      <textPath href="#tapArc" startOffset="50%" text-anchor="middle">TAP TO BEGIN</textPath>
+    </text>`;
   const BEAD_GRADS=['beadGrad1','beadGrad2','beadGrad3'];
   BEADS.forEach((b,i)=>{
     const grad = BEAD_GRADS[i%BEAD_GRADS.length];
@@ -2000,7 +2023,7 @@ function openNumberDef(item){
 // look at that and think that that blue square is OK at all." Her own
 // words on what actually worked: "It was much better when the words
 // were blue." ----------
-document.getElementById('sunCtaLabel').innerHTML = '1 <mark class="key-hl key-hl-big">free</mark> reading<span class="sun-cta-tap">Tap to Begin</span>';
+document.getElementById('sunCtaLabel').innerHTML = '1 <mark class="key-hl key-hl-big">free</mark> reading';
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
