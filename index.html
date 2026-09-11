@@ -190,7 +190,24 @@ body{
    them. Width matches the content column; height is driven by its own
    viewBox aspect ratio, not fixed, so it scales cleanly across phone
    widths without ever needing a bounding-box clip. */
-.hero-illustration{position:relative;width:100%;max-width:380px;margin:0.05rem auto 0.05rem;}
+/* Tilted and enlarged -- her direct ask: "the whole Solar System should
+   be stretched out... turn it diagonal kind of at a slant... do
+   something interesting with it." Rotated +22deg (not the ring's own
+   internal -8deg direction, and not a further negative tilt either) so
+   it slants the OPPOSITE way from the ribbon graphic at the bottom of
+   the page (which climbs left-to-right) -- her specific correction to a
+   first attempt that tilted the same direction as the ribbon: "tilt it
+   the other way so its different from the bottom angle." scale(1.25)
+   is the "stretched out" part. Real margin added top/bottom (was
+   0.05rem, functionally none) since a CSS transform grows the element
+   visually without affecting layout/pushing siblings -- without this
+   margin the enlarged, rotated illustration would overlap the title
+   above and the email field below. Verified with Playwright that this
+   doesn't collide with either at 320-430px. */
+.hero-illustration{
+  position:relative;width:100%;max-width:380px;margin:1.4rem auto 1.6rem;
+  transform:rotate(22deg) scale(1.25);transform-origin:50% 50%;
+}
 .hero-illustration svg{display:block;width:100%;height:auto;}
 
 /* Narrower than the full content column and centered -- a full-width
@@ -385,21 +402,29 @@ body{
      title outright. Verified with Playwright across 320-430px until none
      of them overflowed (scrollWidth > clientWidth) -- this range holds. */
   font-size:clamp(1.5rem,7.5vw,2.1rem);
-  /* Corrected -- her first reaction to a single sweep across the whole
-     word ("Know" silver, "Energy" green) was "that looks cheap crappy...
-     I meant every letter having silver and green on it. Not part of the
-     word gray and part of it green." A small background-size tied to
-     em (so it scales with the responsive font-size) plus repeat-x makes
-     the same silver-to-green-to-silver cycle repeat roughly once per
-     letter instead of once across the whole string -- every glyph gets
-     both tones. Kept the same dark-enough floor (#6b6f79) as before so
-     this can't read as faded. */
-  background-image:linear-gradient(100deg,#6b6f79 0%,#eef0f2 24%,#4fae82 52%,#2f6b4a 78%,#6b6f79 100%);
-  background-size:1.1em 100%;background-repeat:repeat-x;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
+  /* SUPERSEDED: several rounds of a gradient fill here (whole-word split,
+     then per-letter repeat, then per-letter repeat with a real bright
+     stop added) -- her final word on all of them: "the title needs to
+     not be fading." A gradient cycling through a dark stop on live,
+     small cursive strokes reads as parts of the letters intermittently
+     losing contrast, which is functionally the same problem the
+     never-fade rule exists to prevent, whatever the literal opacity
+     value is. Solid, fully-opaque EMERALD -- guaranteed never to read as
+     faded, no matter how thin a stroke it's covering. The "silver and
+     shiny" half of her ask now comes from the glints below (a technique
+     that's never had this problem, since it's solid opaque shapes, not
+     a gradient), not from the text fill itself. */
+  color:#0f7a4c;
 }
 .title-glint{position:absolute;pointer-events:none;}
-.title-glint svg{display:block;width:100%;height:100%;}
+/* Same real insight already proven on the ribbon lower on this page --
+   "since you probably can't make white any whiter than it is, you
+   probably have to make what's behind it darker" -- white-on-near-white
+   has no contrast to be visible with no matter how opaque it is. A
+   small drop-shadow gives each glint a real dark edge to read against,
+   fixing her direct complaint: "the glints need to accentuate not
+   hide." */
+.title-glint svg{display:block;width:100%;height:100%;filter:drop-shadow(0 0 2px rgba(20,40,30,0.45));}
 
 
 /* ---------- tagline / toggle ---------- */
@@ -769,9 +794,7 @@ body{
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;
-  background-image:linear-gradient(100deg,#6b6f79 0%,#eef0f2 24%,#4fae82 52%,#2f6b4a 78%,#6b6f79 100%);
-  background-size:1.1em 100%;background-repeat:repeat-x;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
+  color:#0f7a4c;
   text-align:center;margin-bottom:1.4rem;}
 
 /* .dp is the Reading panel's own inner wrapper (used only inside
@@ -1218,17 +1241,32 @@ body{
         <path d="M 15 62 A 150 34 0 0 1 285 62" fill="none" stroke="url(#titleArcGrad)" stroke-width="1.4" opacity="0.55"/>
         <path d="M 30 78 A 135 40 0 0 1 270 78" fill="none" stroke="url(#titleArcGrad)" stroke-width="1" opacity="0.35"/>
       </svg>
+      <!-- Recolored gold/champagne -> silver/white, and two more added
+           positioned closer to the letters themselves (not just the
+           brand-row's far corners) -- her correction: "the glints need
+           to accentuate not hide" (the leftover gold tones were fighting
+           the new silver/green palette rather than reading as shine on
+           it), plus she'd already flagged this general pattern (a proven
+           glint technique working near the button but not being reused
+           elsewhere). Positions tuned against a real screenshot, not
+           guessed. -->
       <div class="title-glint" style="width:28px;height:28px;top:-9px;left:1%;">
         <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="1"/></svg>
       </div>
       <div class="title-glint" style="width:18px;height:18px;top:1px;right:3%;">
-        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="1"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#f0f3f5" opacity="1"/></svg>
       </div>
       <div class="title-glint" style="width:14px;height:14px;bottom:-4px;left:14%;">
-        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.95"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c9ccd4" opacity="0.95"/></svg>
       </div>
       <div class="title-glint" style="width:9px;height:9px;top:10px;right:16%;">
         <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
+      </div>
+      <div class="title-glint" style="width:12px;height:12px;top:38%;left:22%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.95"/></svg>
+      </div>
+      <div class="title-glint" style="width:11px;height:11px;bottom:20%;right:24%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#f0f3f5" opacity="0.9"/></svg>
       </div>
       <div class="brand">Know Your Energy</div>
     </div>
