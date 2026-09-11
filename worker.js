@@ -489,6 +489,34 @@ function jobKey(jobId) {
   return `job:${jobId}`;
 }
 
+function rateLimitKey(ip) {
+  return `ratelimit:${ip}`;
+}
+
+// Real gap this closes: /report had no server-side check at all before
+// calling generateReport() -- any request with valid-looking person data
+// generated a real, Claude-billed reading, whether or not the caller had
+// a pass, an unused free reading, or even a passEmail in the request at
+// all. Her direct instruction after being told what was missing wasn't
+// enough: "I need you to do is figure out how to fix it." This is a
+// coarse, KV-based per-IP counter -- not a hard security boundary (KV's
+// get-then-put isn't atomic, so a tight burst of concurrent requests
+// from the same IP could each read the same starting count before any
+// write lands), but a real, working deterrent against the actual threat
+// here: a simple script looping /report. A determined, sophisticated
+// attacker distributing requests across many IPs isn't stopped by this
+// alone -- see the real fix below (checkPassRecord gate) for the part
+// that actually removes the financial exposure regardless of IP.
+async function checkRateLimit(env, request, limit, windowSeconds) {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const key = rateLimitKey(ip);
+  const raw = await env.PASSES.get(key);
+  const count = raw ? parseInt(raw, 10) : 0;
+  if (count >= limit) return false;
+  await env.PASSES.put(key, String(count + 1), { expirationTtl: windowSeconds });
+  return true;
+}
+
 // Only the plain birth-data fields needed to refill the form — never the
 // computed numerology/astrology/Human Design output, which is regenerated
 // fresh from these each time.
@@ -1558,6 +1586,16 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
     // frontend show the chart cards immediately and only show a loading
     // state for the Reading panel while /report runs separately.
     if (url.pathname === "/chart-data") {
+      // Shares /report's own per-IP counter (not a separate budget) --
+      // this endpoint calls out to the paid Human Design API, so it's a
+      // real cost surface on its own, not just a helper for /report. A
+      // normal reading uses one call here plus one to /report; sharing
+      // the bucket means the limit reflects total real usage, not just
+      // whichever endpoint happens to be hit directly.
+      const withinRateLimit = await checkRateLimit(env, request, 8, 3600);
+      if (!withinRateLimit) {
+        return jsonResponse({ error: "Too many requests from this connection. Please try again later." }, 429);
+      }
       let body;
       try {
         body = await request.json();
@@ -1598,6 +1636,39 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       body = await request.json();
     } catch (e) {
       return jsonResponse({ error: "Invalid request body." }, 400);
+    }
+
+    // Real gate that used to not exist at all -- "What is the protection
+    // against bots" / "I need you to figure out how to fix it." Every
+    // check below runs and can reject BEFORE any Claude/astrology/HD work
+    // starts, so a rejected request costs nothing. Order matters: cheapest
+    // check first.
+    //
+    // 1) A per-IP rate limit, coarse but real (see checkRateLimit's own
+    // comment on what it does and doesn't protect against) -- blunts a
+    // simple script looping this endpoint regardless of what email it
+    // sends. 8/hour is generous for a real person (per this file's own
+    // realistic-usage estimate elsewhere: a couple of individual readings
+    // plus a few relational ones in one sitting) but well below what a
+    // tight loop would rack up in the same window.
+    const withinRateLimit = await checkRateLimit(env, request, 8, 3600);
+    if (!withinRateLimit) {
+      return jsonResponse({ error: "Too many requests from this connection. Please try again later." }, 429);
+    }
+    // 2) The actual financial-exposure fix: require a real email and
+    // verify server-side that it's entitled to a reading (an active pass,
+    // or an unused free reading) BEFORE generating anything. Previously
+    // this check only ran AFTER a successful generation, and only to mark
+    // the free reading as spent for bookkeeping -- it never gated
+    // generation itself, and was skipped entirely when passEmail was
+    // absent from the request.
+    const passEmail = typeof body.passEmail === 'string' ? body.passEmail.trim() : '';
+    if (!passEmail) {
+      return jsonResponse({ error: "A valid email is required to generate a reading." }, 400);
+    }
+    const passStatus = await checkPassRecord(env, passEmail);
+    if (!passStatus.active && passStatus.freeReadingUsed) {
+      return jsonResponse({ error: "This email's free reading has already been used. Please choose a pass to continue." }, 402);
     }
 
     // Real, confirmed root cause of live "Failed to fetch" reports (per

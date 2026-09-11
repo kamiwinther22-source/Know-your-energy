@@ -4448,6 +4448,17 @@ async function generate(){
       jobId=res.headers.get('X-Job-Id');
       if(jobId)saveJobId(jobId);
       result=await Promise.race([res.json(), timeoutAfter(360000)]);
+      // 400/402/429 are the worker's own real, deliberate rejections (bad
+      // request, free reading already used, rate limited) -- not
+      // transient failures. Retrying changes nothing about any of them,
+      // so looping through the retry-with-backoff UI here would just
+      // show "still working on it, retrying..." for up to a minute
+      // before landing on the same outcome. Stop immediately instead,
+      // with the real message the worker sent.
+      if(res.status===400||res.status===402||res.status===429){
+        fillReading(p1,p2,null,result.error||'Something went wrong. Please try again.',false);
+        return;
+      }
       if(!res.ok||result.error){ lastErrorMsg=result.error||'Something went wrong. Please try again.'; result=null; continue; }
     }catch(e){
       if(!jobId){ lastErrorMsg='Connection error: '+e.message; result=null; continue; }
