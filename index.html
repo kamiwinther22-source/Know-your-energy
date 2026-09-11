@@ -218,7 +218,7 @@ body{
    real screenshot rather than computed blind. */
 .hero-illustration{
   position:relative;width:100%;max-width:380px;margin:0.9rem auto 1rem;
-  transform:translateX(-18px) rotate(22deg) scale(1.15);transform-origin:50% 50%;
+  transform:translateX(-20px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
 }
 .hero-illustration svg{display:block;width:100%;height:auto;}
 
@@ -227,7 +227,7 @@ body{
    illustration-led hero. Kept small and deliberate, close under the
    sun so "type your email, tap the sun" reads as one motion, not two
    unrelated asks stacked on the page. */
-.hero-email-wrap{max-width:260px;margin:0.5rem auto 0.7rem;}
+.hero-email-wrap{max-width:300px;margin:0.6rem auto 0.9rem;}
 .hero-email-wrap .err{text-align:center;}
 
 /* Deliberately away from the sun -- her direct correction: in her
@@ -328,7 +328,7 @@ body{
      (390-430px, i.e. most current iPhones/Android phones), clipping the
      title outright. Verified with Playwright across 320-430px until none
      of them overflowed (scrollWidth > clientWidth) -- this range holds. */
-  font-size:clamp(1.5rem,7.5vw,2.1rem);
+  font-size:clamp(1.7rem,8.6vw,2.4rem);
   /* SUPERSEDED: several rounds of a gradient fill here (whole-word split,
      then per-letter repeat, then per-letter repeat with a real bright
      stop added) -- her final word on all of them: "the title needs to
@@ -402,7 +402,7 @@ body{
      it meant one strong 2-line statement. Held at 2 lines from a 300px
      width up. */
   font-weight:600;
-  font-size:clamp(1.4rem,6.2vw,2.05rem);
+  font-size:clamp(1.45rem,7.6vw,2.35rem);
   line-height:1.2;letter-spacing:-0.005em;
   width:calc(100vw - 20px);
   margin-left:calc(50% - 50vw + 10px);
@@ -531,7 +531,7 @@ body{
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
-.privacy-note{color:#000000;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
+.privacy-note{color:#000000;font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
    to pick a pass once that email's free reading is already used, or a
@@ -631,7 +631,7 @@ body{
     inset -1px -1px 1.5px rgba(255,255,255,0.9);
 }
 .line-field input,.line-field select{
-  width:100%;background:transparent;border:none;color:#000000;font-size:clamp(0.83rem, 0.23rem + 2.7vw, 0.88rem);font-weight:500;
+  width:100%;background:transparent;border:none;color:#000000;font-size:clamp(0.95rem, 0.3rem + 2.9vw, 1.02rem);font-weight:500;
   font-style:italic;font-family:'DM Sans',sans-serif;padding:0;outline:none;
   -webkit-appearance:none;appearance:none;
 }
