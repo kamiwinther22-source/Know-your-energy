@@ -23,7 +23,21 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23000'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%234655D6'%3EK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Bodoni+Moda:ital,wght@0,500;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
+<!-- Bodoni Moda (the old headline serif) swapped for Fraunces -- her
+     direct instruction: "I didn't pick the font to begin with. That's
+     you're doing so, if there's something that works better than just
+     fucking do it." Bodoni/Didot-style Didone serifs are one of the most
+     reached-for "editorial/luxury" defaults on the web right now (the
+     same "statistically safe" trap this file's first standing rule warns
+     against, just in typography instead of color) -- Fraunces is a real,
+     well-regarded alternative built specifically to read as characterful
+     and a little unusual rather than generic-premium, while staying
+     legible and elegant in italic. Same 2 places Bodoni Moda was used
+     (the hero headline, .state-banner-ttl) -- not a sitewide type
+     overhaul, since DM Sans/Barlow Condensed for body/label text were
+     never the complaint. -->
+
 <style>
 :root{color-scheme:dark;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -68,17 +82,20 @@ body{
    is a fixed, full-viewport, pointer-events:none layer sitting behind
    .content (z-index 0 vs. .content's z-index 1), so it never intercepts
    taps and never affects the page's real scrollable height. It echoes
-   the same orbital motif already established in the hero sun
-   illustration rather than inventing a new, disconnected one: same
-   genuine chrome/silver material (white -> #f5f6f8 -> #e4e6eb ->
-   #c9ccd4 -> #a7abb5, ring-stroke #9a9ca3) -- no grey/dull flat tone,
-   no gold, no navy -- with the one accepted accent blue (#1C2CA9) used
-   only as a single small, tightly contained glow, never as a dominant
-   fill. Kept faint (opacity 0.10-0.22 throughout) so it never competes
-   with real content's full-strength black text. A slow, near-
-   imperceptible rotation (300s) plus a gentle stagger-twinkle on the
-   small dots is the actual "life" -- both respect
-   prefers-reduced-motion. */
+   the same orbital motif and material established in the hero sun
+   illustration rather than inventing a new, disconnected one.
+   Recolored, same session: her direct correction that the flat grey
+   chrome material wasn't her actual palette at all -- "I said I wanted
+   ice blue cobalt blue sparkly, shiny silver, a metallic look, possibly
+   like pearl or different shades of white or cream. It is a very
+   intentional color theme." See the matching comment above the
+   heroIllustration script's own CHROME/ICE/PEARL/COBALT constants for
+   the real palette now shared by both. Kept faint (opacity 0.10-0.22
+   throughout) so it never competes with real content's full-strength
+   black text. The 300s rotation/7s twinkle below is still the original,
+   near-imperceptible motion -- her direct feedback: "A twinkle isn't
+   movement, it's not ever noticed." Not yet rebuilt with real, visibly
+   different orbital speeds; that's still open. */
 .ambient-bg{
   position:fixed;inset:0;z-index:0;overflow:hidden;
   pointer-events:none;
@@ -379,7 +396,7 @@ body{
      Brush cursive title as two different but complementary script/serif
      voices instead of one quirky typewriter font fighting a cursive
      wordmark. */
-  text-align:center;font-family:'Bodoni Moda',serif;font-style:italic;font-size:clamp(0.85rem,3.6vw,1.02rem);line-height:1.28;font-weight:500;letter-spacing:0.005em;
+  text-align:center;font-family:'Fraunces',serif;font-style:italic;font-size:clamp(0.85rem,3.6vw,1.02rem);line-height:1.28;font-weight:500;letter-spacing:0.005em;
 }
 .tagline-slide.c-gold{color:#000000;}
 /* This is the one thing on the page meant to dominate -- her direct
@@ -558,7 +575,7 @@ body{
    brought onto this screen so the two don't read as two different
    apps stitched together. Her direct call to actually invest real
    technique here instead of another flat utility label. */
-.state-banner-ttl{font-family:'Bodoni Moda',serif;font-style:italic;font-weight:600;font-size:1.35rem;color:#000000;text-align:left;line-height:1.15;}
+.state-banner-ttl{font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:1.35rem;color:#000000;text-align:left;line-height:1.15;}
 .state-banner-sub{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#000000;text-align:left;margin-top:0.2rem;}
 /* Compact chips, wrapping, sized to their own content -- NOT a
    full-width settings-style list. A prior fix already removed the
@@ -1108,10 +1125,11 @@ body{
   <defs>
     <linearGradient id="ambChrome" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="35%" stop-color="#f5f6f8"/>
-      <stop offset="65%" stop-color="#e4e6eb"/>
-      <stop offset="85%" stop-color="#c9ccd4"/>
-      <stop offset="100%" stop-color="#a7abb5"/>
+      <stop offset="20%" stop-color="#dce9fb"/>
+      <stop offset="40%" stop-color="#f6eee0"/>
+      <stop offset="60%" stop-color="#a9c9f5"/>
+      <stop offset="82%" stop-color="#1C2CA9"/>
+      <stop offset="100%" stop-color="#151d6e"/>
     </linearGradient>
     <radialGradient id="ambGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#1C2CA9" stop-opacity="0.16"/>
@@ -1121,10 +1139,10 @@ body{
   <!-- one small, tightly contained accent glow -- not a background fill -->
   <ellipse cx="300" cy="130" rx="120" ry="95" fill="url(#ambGlow)"/>
   <g class="amb-rings">
-    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="#9a9ca3" stroke-width="1" opacity="0.16" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="#9a9ca3" stroke-width="1" opacity="0.14" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="#9a9ca3" stroke-width="1" opacity="0.12" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="#9a9ca3" stroke-width="1" opacity="0.10" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="#7f96c9" stroke-width="1" opacity="0.18" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="#7f96c9" stroke-width="1" opacity="0.16" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="#7f96c9" stroke-width="1" opacity="0.13" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="#7f96c9" stroke-width="1" opacity="0.11" transform="rotate(-8 300 130)"/>
     <circle class="amb-dot" cx="128" cy="150" r="4" fill="url(#ambChrome)" opacity="0.4"/>
     <circle class="amb-dot" cx="472" cy="108" r="3" fill="url(#ambChrome)" opacity="0.4"/>
     <circle class="amb-dot" cx="405" cy="176" r="2.5" fill="url(#ambChrome)" opacity="0.35"/>
@@ -1645,17 +1663,25 @@ function openNumberDef(item){
   // small center with grand sweeping rings reads more like a real
   // diagram/instrument.
   const cx=180, cy=100, r=46;
-  // Genuine silver/chrome, not blue -- her direct, forceful correction:
-  // "Where is silver? I have said that I want it to be like a silver
-  // metallic look to the site and you're just using blue... at no point
-  // did I say blue is the color of my site." This reuses the exact
-  // "Bright Chrome" gradient stops already shown to and accepted in the
-  // 3-swatch comparison (white -> #f5f6f8 -> #e4e6eb -> #c9ccd4 ->
-  // #a7abb5) instead of inventing a new metal tone. Blue is kept ONLY as
-  // a small, contained accent glow (the corona, see below) -- not as the
-  // sphere/ring/bead material color.
+  // SUPERSEDED, kept for history: an earlier round this session had this
+  // material as plain silver/chrome with blue confined only to the corona
+  // glow, after she'd corrected an even earlier all-blue version. Both of
+  // those were still wrong -- neither was ever her actual described
+  // palette, just two different wrong guesses at what "not blue" meant.
+  // Her literal, explicit palette, stated directly after being told (wrongly)
+  // that the site's near-monochrome palette wasn't really a decision: "I said
+  // I wanted ice blue cobalt blue sparkly, shiny silver, a metallic look,
+  // possibly like pearl or different shades of white or cream. It is a very
+  // intentional color theme." A real pearl/opal surface shifts THROUGH
+  // several related hues as it catches light, not just light-to-dark of one
+  // hue -- so every gradient below cycles white -> ice blue -> silver ->
+  // pearl/cream -> ice blue again -> cobalt -> deep cobalt, instead of the
+  // old single-hue grey chrome. COBALT is the one already-accepted site
+  // accent (#1C2CA9), reused here rather than inventing a new blue.
   const CHROME_LIGHT='#f5f6f8', CHROME_MID='#c9ccd4', CHROME_DEEP='#8f929c';
-  const ACCENT='#7B99EE';
+  const ICE='#dce9fb', ICE_MID='#a9c9f5', PEARL='#f6eee0';
+  const COBALT='#1C2CA9', COBALT_DEEP='#151d6e';
+  const ACCENT=COBALT;
   const RING_ROTATION_DEG = -8;
   const RING_RX = [64, 86, 108, 130, 152, 175];
   // Beads computed to sit exactly ON a ring's actual curve -- real
@@ -1762,11 +1788,12 @@ function openNumberDef(item){
     <defs>
       <radialGradient id="sunGrad" cx="32%" cy="27%" r="78%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="16%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="38%" stop-color="#e4e6eb"/>
-        <stop offset="60%" stop-color="${CHROME_MID}"/>
-        <stop offset="84%" stop-color="#a7abb5"/>
-        <stop offset="100%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="14%" stop-color="${ICE}"/>
+        <stop offset="30%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="46%" stop-color="${PEARL}"/>
+        <stop offset="64%" stop-color="${ICE_MID}"/>
+        <stop offset="82%" stop-color="${COBALT}"/>
+        <stop offset="100%" stop-color="${COBALT_DEEP}"/>
       </radialGradient>
       <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
@@ -1811,9 +1838,11 @@ function openNumberDef(item){
            catch-light-to-shadow arc a curved metal band actually has. -->
       <linearGradient id="ringGrad" x1="15%" y1="8%" x2="85%" y2="92%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="30%" stop-color="${CHROME_MID}"/>
-        <stop offset="65%" stop-color="${CHROME_DEEP}"/>
-        <stop offset="100%" stop-color="#5c5f68"/>
+        <stop offset="22%" stop-color="${ICE}"/>
+        <stop offset="42%" stop-color="${PEARL}"/>
+        <stop offset="65%" stop-color="${ICE_MID}"/>
+        <stop offset="85%" stop-color="${COBALT}"/>
+        <stop offset="100%" stop-color="${COBALT_DEEP}"/>
       </linearGradient>
       <!-- Real per-bead sphere shading (bright highlight, dark shadow
            edge) instead of a flat fill -- same reasoning as ringGrad
@@ -1822,21 +1851,21 @@ function openNumberDef(item){
            disc. -->
       <radialGradient id="beadGrad1" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="40%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="75%" stop-color="${CHROME_MID}"/>
-        <stop offset="100%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="35%" stop-color="${ICE}"/>
+        <stop offset="70%" stop-color="${ICE_MID}"/>
+        <stop offset="100%" stop-color="${COBALT}"/>
       </radialGradient>
       <radialGradient id="beadGrad2" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="35%" stop-color="#e4e6eb"/>
-        <stop offset="70%" stop-color="${CHROME_DEEP}"/>
-        <stop offset="100%" stop-color="#5c5f68"/>
+        <stop offset="30%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="65%" stop-color="${COBALT}"/>
+        <stop offset="100%" stop-color="${COBALT_DEEP}"/>
       </radialGradient>
       <radialGradient id="beadGrad3" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="50%" stop-color="#ffffff"/>
-        <stop offset="80%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="100%" stop-color="${CHROME_MID}"/>
+        <stop offset="45%" stop-color="${PEARL}"/>
+        <stop offset="80%" stop-color="${CHROME_MID}"/>
+        <stop offset="100%" stop-color="${ICE_MID}"/>
       </radialGradient>
     </defs>
     <circle cx="${cx}" cy="${cy}" r="78" fill="url(#corona)"/>
