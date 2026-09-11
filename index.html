@@ -275,6 +275,12 @@ body{
   font-size:clamp(1.18rem,5.6vw,1.85rem);line-height:1.22;
   width:calc(100vw - 8px);
 }
+/* Her direct correction after I misread which element she meant: "What
+   goes over the white energy ribbon needs to be black. That's not what
+   I was talking about. I was talking about that paragraph." This text
+   stays black (the shared .tagline-slide.c-gold{color:#000000} rule
+   already does that) -- the metallic ask was for .hook-differentiator
+   instead, see that rule's own comment. */
 
 /* ---------- title ---------- */
 /* Superseded her own earlier ask (centering the title in the gap
@@ -375,38 +381,33 @@ body{
   margin-right:calc(50% - 50vw + 10px);
   margin-bottom:0.25rem;
 }
-/* Her direct instruction, corrected after an initial wrong guess at
-   which line she meant: "no... I said the tag line... maybe it's head
-   line." This is that one -- the actual headline, the single largest
-   thing on the page (see this class's own comment above), not the
-   smaller ribbon question underneath it. Two real, sourced antique-
-   gold tones (not invented -- #CFA94A is the commonly-cited "Antique
-   Gold Metallic" hex, #B0903D the commonly-cited "Antique Gold" hex),
-   applied as a real gradient fill via background-clip:text rather than
-   a single flat color -- flat gold fill is the exact thing already
-   rejected elsewhere on this app ("gold is not the answer... never
-   again pile," on the results page); a genuine two-tone gradient is a
-   materially different, dimensional technique, the same real-shading
-   idea already proven on the sun/ribbon's own silver gradients, just
-   in gold instead of chrome.
+/* Her correction: "I was mistaken when I said antique gold and what I
+   was actually thinking about was rose gold." Real, sourced rose-gold
+   tones (not invented -- #CBA3B2 is the commonly-cited "Metallic Rose
+   Gold" hex, #B76E79 the canonical "Rose Gold" hex cited across
+   multiple independent sources), same real gradient-fill technique as
+   before via background-clip:text, just the correct color family now.
    .tagline-slide.tagline-top.c-gold (all 3 classes actually on this
    element) is used instead of plain .c-gold so it outranks the shared
    .tagline-slide.c-gold{color:#000000} rule on specificity, not source
-   order. The nested .hl-accent span ("personal cycles") keeps its own
-   explicit blue -- background-clip:text on the parent doesn't apply to
-   a child unless that child sets its own background too, so the two
-   coexist cleanly: gold headline, one blue accent phrase inside it,
-   same structure as before. */
+   order.
+   The old .hl-accent blue phrase is gone -- her direct correction to
+   the same mistake made on the OTHER headline earlier ("I didn't say
+   leave the blue") applies here too, and she separately said "there's
+   way too much blue going on" this same round. No reason to carry a
+   blue accent span into a rose-gold line on purpose.
+   First attempt at the gradient (even split, light-to-dark top-to-
+   bottom) read as pale dusty pink, not rose gold -- the light tone
+   dominated too much of each glyph's visual weight for thin italic
+   serif strokes. Rebalanced so the darker, more saturated tone (#B76E79)
+   covers nearly the whole letterform and the lighter tone (#CBA3B2)
+   only catches the very top edge, the way a real highlight sits on
+   metal rather than an even wash top-to-bottom. */
 .tagline-slide.tagline-top.c-gold{
-  background:linear-gradient(180deg,#CFA94A 0%,#B0903D 100%);
+  background:linear-gradient(180deg,#CBA3B2 0%,#B76E79 22%,#B76E79 100%);
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
 }
-/* One phrase carried in the accent color instead of the whole line in
-   flat black -- real editorial pull-quote technique (a single emphasized
-   phrase inside a large headline), not a new decorative element. Same
-   blue already used everywhere else on the page. */
-.tagline-top .hl-accent{color:#1C2CA9;}
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
@@ -516,6 +517,32 @@ body{
    already used for the toggle pill, rel-chip, and focus border. */
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
 .hook-differentiator{max-width:340px;margin-left:auto;margin-right:auto;line-height:1.22;margin-top:0.08rem;margin-bottom:0.08rem;font-size:0.7rem;}
+/* Her direct correction, twice over: "What goes over the white energy
+   ribbon needs to be black... I was talking about that paragraph," then
+   "no I was thinking about metallic blue. nothing faded will ever
+   change." Two real mistakes fixed here: (1) the silver/chrome gradient
+   was the wrong hue entirely -- she wanted metallic BLUE, not silver;
+   (2) the first metallic attempt on this same paragraph (still visible
+   in git history) used pale chrome tones as roughly half the gradient,
+   which read as nearly invisible on the white background -- exactly
+   the "faded" result the never-fade-text rule forbids, regardless of
+   intent. Fixed on both counts: built from the site's own established
+   accent blue (#1C2CA9, already proven fully legible everywhere else on
+   this page) as the dominant tone across nearly the whole letterform,
+   with the lighter established glow-tint blue (#7B99EE, same one used
+   on the sun's corona) only catching the top edge as a real highlight,
+   and a mathematically darker shade of the same #1C2CA9 (#111A65, a
+   proportional darkening of the same hue, not an invented new color)
+   for shadow depth at the bottom. Same light-highlight/dark-dominant
+   structure that fixed the rose-gold headline's own fade problem right
+   above this rule. Specificity note: .privacy-note.hook-differentiator
+   (2 classes) beats plain .privacy-note (1 class) regardless of source
+   order, so this can't silently lose to the shared blue rule. */
+.privacy-note.hook-differentiator{
+  background:linear-gradient(180deg,#7B99EE 0%,#1C2CA9 22%,#1C2CA9 80%,#111A65 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+}
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
    to pick a pass once that email's free reading is already used, or a
@@ -1094,7 +1121,7 @@ body{
      instead of purely decorative. ---------- -->
 <div class="content" id="hookStep">
   <div class="tagline-frame">
-    <div class="tagline-slide tagline-top c-gold">Do you know your <span class="hl-accent">personal cycles</span> currently in motion?</div>
+    <div class="tagline-slide tagline-top c-gold">Reveal what was set into motion the day you were born</div>
 
     <div class="brand-row">
       <!-- Sized up and one more added -- part of an honest pass at
@@ -1236,7 +1263,7 @@ body{
         <circle cx="178" cy="210" r="1.1"/>
       </g>
     </svg></div>
-    <div class="tagline-slide c-gold">Do you want to know how you effect others? or how they effect you?</div>
+    <div class="tagline-slide c-gold">See the dynamics you haven't been able to name between you and them.</div>
   </div>
 </div>
 
