@@ -517,6 +517,50 @@ async function checkRateLimit(env, request, limit, windowSeconds) {
   return true;
 }
 
+// The actual "is this a real browser, not a script" check -- the
+// rate-limit and pass-email checks above only ever slowed down or
+// bookkept a script, never proved a human was on the other end. A script
+// can trivially defeat both by rotating IPs and generating fresh emails;
+// it cannot pass Turnstile, since the token comes from a real challenge
+// Cloudflare's own widget runs in a real browser. index.html requests a
+// fresh token immediately before every /chart-data call and every
+// /report attempt (tokens are single-use and expire after 300 seconds,
+// confirmed against Cloudflare's own docs -- caching or reusing one
+// across requests would just fail as a duplicate) and sends it as
+// body.turnstileToken.
+//
+// Fails CLOSED once actually configured: a missing token, a bad token, or
+// even a failure to reach Cloudflare's own siteverify endpoint all come
+// back false. The alternative (failing open on a siteverify outage) would
+// mean the one real check standing between this endpoint and an unmetered
+// bot loop quietly disappears exactly when Cloudflare's own
+// infrastructure is having a bad moment -- a rare outage briefly blocking
+// real customers is a smaller, safer failure than that.
+//
+// The ONE exception: no TURNSTILE_SECRET_KEY secret set at all. That's
+// not "a request failed verification," it's "this feature hasn't been
+// turned on yet" -- treated as pass-through so merging this code doesn't
+// itself brick every reading on the live site the moment it ships, before
+// the Cloudflare-dashboard setup (a Turnstile widget + this secret) is
+// actually done. Once the secret is set, this exception stops applying
+// and every request needs a real, valid token from here on.
+async function verifyTurnstile(env, token, request) {
+  if (!env.TURNSTILE_SECRET_KEY) return true;
+  if (!token || typeof token !== 'string') return false;
+  try {
+    const ip = request.headers.get('CF-Connecting-IP') || '';
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ secret: env.TURNSTILE_SECRET_KEY, response: token, remoteip: ip })
+    });
+    const data = await res.json();
+    return data.success === true;
+  } catch (e) {
+    return false;
+  }
+}
+
 // Only the plain birth-data fields needed to refill the form — never the
 // computed numerology/astrology/Human Design output, which is regenerated
 // fresh from these each time.
@@ -1602,6 +1646,13 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       } catch (e) {
         return jsonResponse({ error: "Invalid request body." }, 400);
       }
+      // Same Turnstile check as /report -- see verifyTurnstile's own
+      // comment. This endpoint calls the paid Human Design API on its
+      // own, so it needs the same real-browser proof, not just /report.
+      const isHuman = await verifyTurnstile(env, body.turnstileToken, request);
+      if (!isHuman) {
+        return jsonResponse({ error: "Verification failed. Please refresh the page and try again." }, 403);
+      }
       const [p1Data, p2Data] = await Promise.all([
         assemblePersonData(env, body.p1),
         body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null)
@@ -1655,7 +1706,14 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
     if (!withinRateLimit) {
       return jsonResponse({ error: "Too many requests from this connection. Please try again later." }, 429);
     }
-    // 2) The actual financial-exposure fix: require a real email and
+    // 2) Turnstile: proves a real browser (not a script) sent this
+    // specific request. Unlike the rate limit and pass-email checks,
+    // this can't be defeated by rotating IPs or generating fresh emails.
+    const isHuman = await verifyTurnstile(env, body.turnstileToken, request);
+    if (!isHuman) {
+      return jsonResponse({ error: "Verification failed. Please refresh the page and try again." }, 403);
+    }
+    // 3) The actual financial-exposure fix: require a real email and
     // verify server-side that it's entitled to a reading (an active pass,
     // or an unused free reading) BEFORE generating anything. Previously
     // this check only ran AFTER a successful generation, and only to mark

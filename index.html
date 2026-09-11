@@ -1100,8 +1100,22 @@ body{
   .gate-chip{cursor:default!important;}
 }
 </style>
+<!-- Cloudflare Turnstile -- must be fetched from this exact URL per
+     Cloudflare's own docs (proxying/caching it breaks future updates).
+     onload=onTurnstileLoad fires once the real `turnstile` global exists,
+     defined further down in the main script alongside getTurnstileToken().
+     render=explicit means it does NOT auto-render any widget from markup
+     -- onTurnstileLoad renders the one widget explicitly instead. -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit" defer></script>
 </head>
 <body>
+<!-- No display:none here on purpose -- appearance:'interaction-only'
+     (set where this widget is rendered, in onTurnstileLoad) already keeps
+     this invisible unless Cloudflare's own risk signals decide a real
+     visitor needs to click something. Forcing display:none in CSS would
+     hide that checkbox too, on the rare real person who actually needs
+     it, leaving them stuck failing verification with nothing to click. -->
+<div id="turnstileWidget"></div>
 
 <div class="ambient-bg" aria-hidden="true"><svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -4204,6 +4218,80 @@ function stopLoadingTimer(){
 
 const W_API='https://know-your-energy.kwdoanchor.workers.dev';
 
+// ---------- bot protection: Cloudflare Turnstile ----------
+// PLACEHOLDER -- this is not a real site key. Get the real one from the
+// Cloudflare dashboard (Turnstile -> Add a site, add know-your-energy.com
+// as the domain) and replace this string with it. Until that's done, the
+// widget below will fail to render (an invalid sitekey is rejected
+// client-side) and getTurnstileToken() will always reject -- see the
+// worker.js side of this, which is written to fail OPEN (not block real
+// customers) as long as its own TURNSTILE_SECRET_KEY secret is unset, so
+// an unfinished setup on either side doesn't brick real readings. Both
+// sides need to be done together: this site key here, and
+// `wrangler secret put TURNSTILE_SECRET_KEY` with that same widget's
+// secret key on the worker.js side.
+const TURNSTILE_SITE_KEY='REPLACE_WITH_REAL_TURNSTILE_SITE_KEY';
+let turnstileWidgetId=null;
+// Single pending {resolve,reject} pair -- safe because getTurnstileToken()
+// is only ever awaited one call at a time (generate()'s /chart-data call,
+// then each /report retry-loop attempt in turn), never in parallel, so
+// there's never more than one real challenge in flight to route a
+// callback to.
+let turnstilePending=null;
+// Fired by the ?onload= param on the Turnstile <script> tag in <head> --
+// confirms the real Turnstile API is loaded before this code touches the
+// `turnstile` global, instead of racing the script tag's own load.
+// execution:'execute' means the challenge does NOT run automatically at
+// render time -- it only runs when getTurnstileToken() below explicitly
+// calls turnstile.execute(), so this render() call itself never shows
+// anything or costs a real person any wait. appearance:'interaction-only'
+// keeps the widget completely invisible unless Cloudflare's own risk
+// signals decide a real click is actually needed (rare, per Cloudflare's
+// own docs on managed/interaction-only widgets).
+function onTurnstileLoad(){
+  turnstileWidgetId=turnstile.render('#turnstileWidget',{
+    sitekey:TURNSTILE_SITE_KEY,
+    execution:'execute',
+    appearance:'interaction-only',
+    callback:function(token){
+      if(turnstilePending){ turnstilePending.resolve(token); turnstilePending=null; }
+    },
+    'error-callback':function(){
+      if(turnstilePending){ turnstilePending.reject(new Error('Verification failed. Please refresh the page and try again.')); turnstilePending=null; }
+    },
+    'expired-callback':function(){
+      if(turnstilePending){ turnstilePending.reject(new Error('Verification expired. Please try again.')); turnstilePending=null; }
+    },
+    'timeout-callback':function(){
+      if(turnstilePending){ turnstilePending.reject(new Error('Verification timed out. Please try again.')); turnstilePending=null; }
+    }
+  });
+}
+// Requests one fresh token. Tokens are single-use and expire after 300
+// seconds (Cloudflare's own documented limit) -- reusing one across
+// multiple requests just fails server-side as a duplicate, so this is
+// called again immediately before every /chart-data call and every
+// /report retry-loop attempt, never cached. reset() before execute()
+// clears any still-pending challenge state from a previous call so this
+// always starts a genuinely fresh one rather than replaying whatever the
+// widget was last doing.
+function getTurnstileToken(){
+  return new Promise((resolve,reject)=>{
+    if(typeof turnstile==='undefined'||turnstileWidgetId===null){
+      reject(new Error('Verification is still loading. Please wait a moment and try again.'));
+      return;
+    }
+    turnstilePending={resolve,reject};
+    try{
+      turnstile.reset(turnstileWidgetId);
+      turnstile.execute(turnstileWidgetId);
+    }catch(e){
+      turnstilePending=null;
+      reject(e);
+    }
+  });
+}
+
 // ---------- Step 1 -> Step 2 ----------
 // Email is the real gate now (her direct call: "probably the email
 // should be the call to action on the first page") -- tapping the sun
@@ -4428,13 +4516,27 @@ async function generate(){
   // screen for the entire generation. Nothing's rendered yet if this
   // fails, so a real failure here still bails out to the full-page error
   // the same way the combined call used to.
+  // A fresh Turnstile token, requested right before this call -- see
+  // getTurnstileToken()'s own comment on why this can't be cached or
+  // reused (single-use, 300-second expiry). Kept as its own try/catch so
+  // a verification problem (widget still loading, a real rejection)
+  // shows its own real message instead of being folded into "Connection
+  // error," which it isn't.
+  let turnstileToken;
+  try{
+    turnstileToken=await getTurnstileToken();
+  }catch(e){
+    bail(e.message||'Verification failed. Please refresh the page and try again.');
+    return;
+  }
+
   let chartResult;
   try{
     const res=await Promise.race([
       fetch(W_API+'/chart-data',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({p1,p2})
+        body:JSON.stringify({p1,p2,turnstileToken})
       }),
       timeoutAfter(45000)
     ]);
@@ -4512,12 +4614,28 @@ async function generate(){
     }
     jobId=null;
     let primaryFailed=false;
+    // A fresh token per attempt, not just per generate() call -- unlike
+    // the 400/402/429 rejections below, a 403 (Turnstile) failure isn't
+    // necessarily the same outcome on retry, since this attempt gets its
+    // own brand-new challenge each time. Kept in its own try/catch so a
+    // token failure gets its own real message instead of being folded
+    // into "Connection error," which it isn't -- but still just sets
+    // lastErrorMsg and continues to the next retry like every other
+    // failure mode here, rather than an immediate bail.
+    let turnstileToken;
+    try{
+      turnstileToken=await getTurnstileToken();
+    }catch(e){
+      lastErrorMsg=e.message||'Verification failed. Please refresh the page and try again.';
+      result=null;
+      continue;
+    }
     try{
       const res=await Promise.race([
         fetch(W_API+'/report',{
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,p1Data:chartResult.p1,p2Data:chartResult.p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
+          body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,p1Data:chartResult.p1,p2Data:chartResult.p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked,turnstileToken}) // hdOnly is TEMPORARY, see markup note above
         }),
         timeoutAfter(60000)
       ]);
@@ -4530,7 +4648,8 @@ async function generate(){
       // so looping through the retry-with-backoff UI here would just
       // show "still working on it, retrying..." for up to a minute
       // before landing on the same outcome. Stop immediately instead,
-      // with the real message the worker sent.
+      // with the real message the worker sent. 403 (Turnstile) is
+      // deliberately NOT in this list -- see the comment above.
       if(res.status===400||res.status===402||res.status===429){
         fillReading(p1,p2,null,result.error||'Something went wrong. Please try again.',false);
         return;
