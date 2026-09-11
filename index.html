@@ -275,6 +275,30 @@ body{
   font-size:clamp(1.18rem,5.6vw,1.85rem);line-height:1.22;
   width:calc(100vw - 8px);
 }
+/* Her direct instruction: "make the headline text 2 toned antique
+   gold." Two real, sourced antique-gold tones (not invented -- #CFA94A
+   is the commonly-cited "Antique Gold Metallic" hex, #B0903D the
+   commonly-cited "Antique Gold" hex), applied as a real gradient fill
+   via background-clip:text rather than a single flat color -- flat
+   gold fill is the exact thing already rejected elsewhere on this app
+   ("gold is not the answer... never again pile," on the results page);
+   a genuine two-tone gradient is a materially different, dimensional
+   technique, the same real-shading idea already proven on the sun/
+   ribbon's own silver gradients, just in gold instead of chrome.
+   .ribbon-frame .tagline-slide.c-gold (3 classes) is used instead of
+   plain .c-gold specifically so it outranks the shared
+   .tagline-slide.c-gold{color:#000000} rule on specificity, not
+   source order -- letting color:transparent actually stick instead of
+   silently losing the tie to whichever rule happens to be later in
+   the file. Left the OTHER headline (.tagline-top, "Do you know your
+   personal cycles...") on its existing black -- she said "the
+   headline," singular, immediately after a whole exchange about this
+   one specific line; not touching the one she didn't mention. */
+.ribbon-frame .tagline-slide.c-gold{
+  background:linear-gradient(180deg,#CFA94A 0%,#B0903D 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+}
 
 /* ---------- title ---------- */
 /* Superseded her own earlier ask (centering the title in the gap
