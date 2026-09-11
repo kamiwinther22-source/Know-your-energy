@@ -3899,6 +3899,66 @@ function saveJobId(jobId){
     localStorage.setItem(SAVED_RESULT_KEY, JSON.stringify(obj));
   }catch(_){}
 }
+
+// Keyed, multi-entry cache of *completed* readings -- distinct from
+// SAVED_RESULT_KEY above, which only ever remembers the single
+// most-recent reading, for reload recovery. This one is keyed by the
+// actual birth data submitted, so resubmitting the exact same person
+// (a double-tap on Calculate, retrying after a connection hiccup,
+// testing the same person twice) shows the already-generated reading
+// straight from local storage -- no network call, no Claude API spend,
+// and it doesn't count against the per-IP rate limit, since the
+// request to /report and /chart-data never happens at all.
+//
+// Capped at a short TTL, not just an entry-count cap, because the
+// reading text itself includes that day's real Personal Year/Month/Day
+// numerology cycle (see REPORT_SYSTEM_PROMPT's "Current cycle" line in
+// worker.js) -- a reading cached indefinitely would eventually start
+// showing yesterday's (or last month's) Personal Day/Month as if it
+// were current, which is a real factual staleness, not a cosmetic one.
+// 24 hours covers the immediate-resubmission case this exists for
+// without ever handing back numerology that's actually wrong for the
+// day someone's reading it -- past that, a fresh generation runs
+// again, which naturally refreshes the date-relative content too.
+const READING_CACHE_KEY='kye_readingCache';
+const READING_CACHE_TTL_MS=24*60*60*1000;
+const READING_CACHE_MAX_ENTRIES=15;
+function normField(v){ return (v||'').toString().trim().toLowerCase(); }
+function readingCacheKeyFor(rtype,relType,p1,p2){
+  const personKey=p=>[normField(p.first),normField(p.mid),normField(p.last),normField(p.dob),normField(p.time),normField(p.city),normField(p.state),normField(p.country)].join('|');
+  return [rtype, rtype==='two-person'?normField(relType):'', personKey(p1), p2?personKey(p2):''].join('::');
+}
+function readReadingCacheMap(){
+  try{
+    const raw=localStorage.getItem(READING_CACHE_KEY);
+    return raw?JSON.parse(raw):{};
+  }catch(_){ return {}; }
+}
+function writeReadingCacheMap(map){
+  try{ localStorage.setItem(READING_CACHE_KEY, JSON.stringify(map)); }catch(_){}
+}
+function getCachedReading(key){
+  const map=readReadingCacheMap();
+  const entry=map[key];
+  if(!entry)return null;
+  if(!entry.savedAt||Date.now()-entry.savedAt>READING_CACHE_TTL_MS){
+    delete map[key];
+    writeReadingCacheMap(map);
+    return null;
+  }
+  return entry;
+}
+function saveCachedReading(key,p1,p2,r,reportUsedFallback,fallbackReason){
+  const map=readReadingCacheMap();
+  map[key]={p1,p2,r,reportUsedFallback,fallbackReason,savedAt:Date.now()};
+  const keys=Object.keys(map);
+  if(keys.length>READING_CACHE_MAX_ENTRIES){
+    keys.sort((a,b)=>map[a].savedAt-map[b].savedAt);
+    for(let i=0;i<keys.length-READING_CACHE_MAX_ENTRIES;i++)delete map[keys[i]];
+  }
+  writeReadingCacheMap(map);
+}
+
 // Shared by generate()'s connection-drop recovery and the page-reload
 // recovery path further down -- same mechanism, same reason: a job ID
 // represents a real, already-paid-for generation that may well finish on
@@ -4329,6 +4389,22 @@ async function generate(){
       location: g('p2loc')
     };
   }
+
+  // Cache check happens before anything else touches the network or the
+  // UI -- an exact-duplicate resubmission (double-tap, retry after a
+  // hiccup, re-testing the same person) shows the already-generated
+  // reading instantly with no /chart-data or /report call at all, so it
+  // costs nothing in Claude spend and doesn't count against the rate
+  // limit, since no request is ever made.
+  const rtypeForCache=isRelational?'two-person':'individual';
+  const cacheKey=readingCacheKeyFor(rtypeForCache,relType,p1,p2);
+  const cachedReading=getCachedReading(cacheKey);
+  if(cachedReading){
+    clearDraft();
+    render(cachedReading.p1,cachedReading.p2,cachedReading.r,null,cachedReading.reportUsedFallback,false,cachedReading.fallbackReason);
+    return;
+  }
+
   genBtn.disabled=true;
   document.getElementById('formStep').style.display='none';
   document.getElementById('loading').style.display='block';
@@ -4490,7 +4566,13 @@ async function generate(){
   // generation failed, keep the entered data around so a retry
   // doesn't force re-typing everything (the reading-failure message
   // tells the customer exactly that; this is what makes it true).
-  if(!result.reportError)clearDraft();
+  // Same condition gates the cache write -- an error result is never
+  // worth caching, it's not the "already-run reading" this exists to
+  // protect.
+  if(!result.reportError){
+    clearDraft();
+    saveCachedReading(cacheKey,p1,p2,result.report,result.reportUsedFallback,result.reportFallbackReason);
+  }
   fillReading(p1,p2,result.report,result.reportError,result.reportUsedFallback,result.reportFallbackReason);
 }
 
