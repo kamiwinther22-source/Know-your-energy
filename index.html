@@ -1239,14 +1239,30 @@ body{
     <div class="privacy-note" style="margin-bottom:0.3rem;">Enter Your Email That Acts As Your Key</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <!-- "create a simply elegant looking white key and place it directly
-         under the email box... actually make the key a royal blue" --
-         a simple, real key silhouette (round bow, shaft, two teeth),
-         not a stock icon-font glyph. Royal blue is the standard, real
-         named value (#4169E1), not a guess. -->
-    <svg class="hero-key" viewBox="0 0 64 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="14" cy="14" r="10.5" fill="none" stroke="#4169E1" stroke-width="3.2"/>
-      <path d="M23.5 14 H56 M56 14 V22 M48 14 V20" fill="none" stroke="#4169E1" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Her correction: "I have a problem with the shape. It's not okay.
+         I want like an antique looking nice looking key. I'm not asking
+         you to shade it or anything like that. It can be royal blue,
+         but just draw it so it looks elegant." The shaded/modern-house-
+         key shape (round bow, straight tooth-cut bit) is gone -- flat
+         fill only, no gradient. Redrawn as an actual antique/skeleton-
+         key silhouette: a ring bow with an inscribed cross (the classic
+         ornamental filigree on real Victorian skeleton keys), a thin
+         shaft with a small collar, and two perpendicular cross-bars at
+         the tip (the "wards" -- the real distinguishing feature of an
+         antique key's bit, vs. a modern flat key's stepped notches).
+         Checked at the actual small render size (~68px wide), not just
+         a large preview -- the cross and wards both still read clearly
+         that small. -->
+    <svg class="hero-key" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="#4169E1">
+        <path fill-rule="evenodd" d="M17,10 A15,15 0 1 1 16.99,10 Z M17,17.5 A7.5,7.5 0 1 0 17.01,17.5 Z"/>
+        <rect x="15.9" y="18.3" width="2.2" height="13.4"/>
+        <rect x="10.3" y="23.9" width="13.4" height="2.2"/>
+        <rect x="30" y="22" width="4" height="6" rx="0.8"/>
+        <rect x="32" y="23" width="60" height="4"/>
+        <rect x="70" y="14" width="6" height="22"/>
+        <rect x="84" y="18" width="5" height="14"/>
+      </g>
     </svg>
   </div>
 
