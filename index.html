@@ -377,6 +377,7 @@ body{
    this file was the latter, on a full-page background -- a different,
    much harder problem this isn't attempting). */
 .brand{
+  position:relative;z-index:1;
   font-family:'Alex Brush',cursive;font-weight:400;line-height:1;white-space:nowrap;
   /* Large and easy to read, but bounded conservatively -- clamp(2rem,10vw,2.9rem)
      measured as actually overflowing its own box at ordinary phone widths
@@ -384,13 +385,12 @@ body{
      title outright. Verified with Playwright across 320-430px until none
      of them overflowed (scrollWidth > clientWidth) -- this range holds. */
   font-size:clamp(1.5rem,7.5vw,2.1rem);
-  /* Solid, full-strength color -- the previous soft gradient + blur
-     (#4655D6/#8A96EE with a drop-shadow glow) was built and tuned for a
-     black background that this page no longer has; on the current white
-     background that same light, blurred treatment read as faded, not
-     glowing. Same blue already used everywhere else on this page
-     (buttons, borders, links), solid, no blur. */
-  color:#1C2CA9;
+  /* Solid, full-strength color, no blur -- same reasoning as always here,
+     just recolored. Her direct instruction: "get rid of the blue on the
+     title is what I meant" -- the one place blue survived every other
+     round of "change all blue to green" this session. Same EMERALD used
+     everywhere else the old COBALT accent was. */
+  color:#0f7a4c;
 }
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
@@ -762,7 +762,7 @@ body{
 .report-pending-txt{font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;color:var(--card-text);}
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
-.results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#1C2CA9;
+.results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;color:#0f7a4c;
   text-align:center;margin-bottom:1.4rem;}
 
 /* .dp is the Reading panel's own inner wrapper (used only inside
@@ -1185,11 +1185,30 @@ body{
     <div class="tagline-slide tagline-top c-gold">Reveal what was set into motion the day you were born</div>
 
     <div class="brand-row">
-      <!-- Sized up and one more added -- part of an honest pass at
-           actually building "glowing, shiny, sparkly" instead of
-           staying at the smallest version that technically qualifies
-           as sparkle. Same established gold/champagne tones, not a new
-           color decision -- just more of what's already there. -->
+      <!-- Her suggestion: "It probably would make sense to have the energy
+           imagery around the words know your energy... but it doesn't make
+           sense to just copy what's at the bottom." Not the ribbon's shape
+           (an elongated multi-strand thread) -- a thin partial orbit arc
+           instead, the same ring-gradient technique already established on
+           the sun below it (silver catching light, with the same green
+           accent now used everywhere blue used to be), so the title reads
+           as sitting inside the same solar-system system as the
+           illustration beneath it rather than getting a copy-pasted
+           effect. First pass -- meant to be shown before going further,
+           not a finished treatment. -->
+      <svg class="title-orbit" viewBox="0 0 300 90" preserveAspectRatio="none" style="position:absolute;left:50%;top:50%;width:135%;height:230%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;">
+        <defs>
+          <linearGradient id="titleArcGrad" x1="10%" y1="20%" x2="90%" y2="80%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset="20%" stop-color="#f5f6f8"/>
+            <stop offset="45%" stop-color="#d9f5e6"/>
+            <stop offset="70%" stop-color="#4fae82"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M 15 62 A 150 34 0 0 1 285 62" fill="none" stroke="url(#titleArcGrad)" stroke-width="1.4" opacity="0.55"/>
+        <path d="M 30 78 A 135 40 0 0 1 270 78" fill="none" stroke="url(#titleArcGrad)" stroke-width="1" opacity="0.35"/>
+      </svg>
       <div class="title-glint" style="width:28px;height:28px;top:-9px;left:1%;">
         <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="1"/></svg>
       </div>
