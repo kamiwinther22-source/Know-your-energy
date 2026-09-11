@@ -217,7 +217,7 @@ body{
    rebalance where the visible ink actually sits, verified against a
    real screenshot rather than computed blind. */
 .hero-illustration{
-  position:relative;width:100%;max-width:380px;margin:0.9rem auto 1rem;
+  position:relative;width:100%;max-width:380px;margin:0.4rem auto 0.8rem;
   transform:translateX(-20px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
 }
 .hero-illustration svg{display:block;width:100%;height:auto;}
@@ -229,6 +229,7 @@ body{
    unrelated asks stacked on the page. */
 .hero-email-wrap{max-width:300px;margin:0.6rem auto 0.9rem;}
 .hero-email-wrap .err{text-align:center;}
+.hero-key{display:block;width:68px;height:auto;margin:0.3rem auto 0;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -1235,9 +1236,18 @@ body{
        professional polished classy, not like you tripped and fell and
        it dropped on there somewhere." -->
   <div class="hero-email-wrap">
-    <div class="privacy-note" style="margin-bottom:0.3rem;">Enter your email to begin</div>
+    <div class="privacy-note" style="margin-bottom:0.3rem;">Enter Your Email That Acts As Your Key</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
+    <!-- "create a simply elegant looking white key and place it directly
+         under the email box... actually make the key a royal blue" --
+         a simple, real key silhouette (round bow, shaft, two teeth),
+         not a stock icon-font glyph. Royal blue is the standard, real
+         named value (#4169E1), not a guess. -->
+    <svg class="hero-key" viewBox="0 0 64 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="14" cy="14" r="10.5" fill="none" stroke="#4169E1" stroke-width="3.2"/>
+      <path d="M23.5 14 H56 M56 14 V22 M48 14 V20" fill="none" stroke="#4169E1" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </div>
 
   <div class="hero-illustration">
