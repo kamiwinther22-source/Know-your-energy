@@ -438,7 +438,8 @@ body{
    literal "black text on white background" this whole site already
    commits to elsewhere, not grey and not a second blue element. Blue
    is reserved for one meaning only: "this one is selected." */
-.rel-picker{margin:1rem 0 0.3rem;}
+.rel-picker{margin:0.2rem 0 1rem;}
+.mode-intro{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:0.95rem;line-height:1.35;text-align:center;color:#000000;margin:0.2rem 0 0.8rem;}
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
 /* Not a pill. Her direct correction: "I do not like the pills. It's
    standard, why can you not do something that is different." A full
@@ -1467,6 +1468,42 @@ body{
         <div class="state-banner" id="stateBanner" style="display:none;"></div>
 
         <div class="privacy-note">Data never saved</div>
+
+        <!-- Her direct instruction: "there needs to be an intro of some
+             sort that lets them know that they can either do one person
+             or relational dynamics." The Individual/Relational toggle
+             already existed, but it used to sit AFTER Person 1's fields
+             -- someone could fill in a full birth chart before ever
+             discovering the relational option, backwards from how the
+             choice should actually work. Moved to the top, before any
+             fields, with a short intro line above it. Copy is a
+             placeholder -- her wording, not mine, per this file's own
+             standing rule never to write her copy for her. -->
+        <div class="mode-intro">[PLACEHOLDER COPY — explain the choice: your own reading alone, or the dynamic between you and someone else]</div>
+        <div class="rel-picker">
+          <div class="toggle-row">
+            <span class="tog-lbl active" id="lblInd">Individual</span>
+            <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
+            <span class="tog-lbl" id="lblRel">Relational</span>
+          </div>
+
+          <div class="rel-row" id="relWrap" style="display:none;">
+            <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
+            <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
+            <button type="button" class="rel-chip" data-rel="friends">Friends</button>
+            <button type="button" class="rel-chip" data-rel="other">Other</button>
+          </div>
+
+          <!-- TEMPORARY test control: generates a relational reading built
+               entirely from Human Design data (no astrology/numerology),
+               to compare against the normal combined reading. Remove this
+               block, #hdOnlyTest's use in generate(), and the matching
+               worker.js hdOnly branch once the test is done. -->
+          <label id="hdOnlyTestWrap" style="display:none;font-size:0.8rem;opacity:0.85;">
+            <input type="checkbox" id="hdOnlyTest"> TEST: Human Design–only reading
+          </label>
+        </div>
+
         <div class="f">
           <div class="person-tag">Person 1</div>
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
@@ -1499,30 +1536,6 @@ body{
               <div><label for="p2loc">Location</label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
             </div>
           </div>
-        </div>
-
-        <div class="rel-picker">
-          <div class="toggle-row">
-            <span class="tog-lbl active" id="lblInd">Individual</span>
-            <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
-            <span class="tog-lbl" id="lblRel">Relational</span>
-          </div>
-
-          <div class="rel-row" id="relWrap" style="display:none;">
-            <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
-            <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
-            <button type="button" class="rel-chip" data-rel="friends">Friends</button>
-            <button type="button" class="rel-chip" data-rel="other">Other</button>
-          </div>
-
-          <!-- TEMPORARY test control: generates a relational reading built
-               entirely from Human Design data (no astrology/numerology),
-               to compare against the normal combined reading. Remove this
-               block, #hdOnlyTest's use in generate(), and the matching
-               worker.js hdOnly branch once the test is done. -->
-          <label id="hdOnlyTestWrap" style="display:none;font-size:0.8rem;opacity:0.85;">
-            <input type="checkbox" id="hdOnlyTest"> TEST: Human Design–only reading
-          </label>
         </div>
 
       </div>
