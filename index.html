@@ -424,12 +424,31 @@ body{
    equal-height lines happen to put the bright band's edge right at the
    line break rather than mid-line), not actually safe by design until
    this. */
+/* Real reference images this time ("rose gold font" search results:
+   embossed jewelry-style lettering, a beveled 3D "Metal" logotype with
+   a bright raised edge and a dark recessed edge, a "GOLD" wordmark with
+   a defined outline). Her point, confirmed by looking at these: a flat
+   gradient fill -- no matter how many color stops -- reads as PAINTED
+   color, not RAISED metal, because it has no edge lighting. Real metal/
+   emboss effects work because the edges of each letter catch a
+   highlight on one side and fall into shadow on the other, the same
+   way a real bevel does. Added that as a second, separate layer on top
+   of the gradient fill: filter:drop-shadow(), which (unlike
+   text-shadow) operates on the rendered glyph shape itself, so it
+   works correctly with background-clip:text -- a light-colored shadow
+   offset up-left simulates the raised edge catching light, a darker
+   one offset down-right simulates the recessed edge falling into
+   shadow. This is the real, standard CSS bevel/emboss technique, not
+   an invented effect. */
 .tagline-slide.tagline-top.c-gold{
   background:linear-gradient(180deg,#4A1F26 0%,#B76E79 22%,#CBA3B2 45%,#F5E6E3 50%,#CBA3B2 55%,#B76E79 78%,#4A1F26 100%);
   background-size:100% 1.2em;
   background-repeat:repeat-y;
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
+  filter:
+    drop-shadow(-1.4px -1.4px 0.4px rgba(255,255,255,0.9))
+    drop-shadow(1.6px 1.6px 1.2px rgba(58,20,26,0.7));
 }
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
@@ -574,26 +593,44 @@ body{
    decoration. Specificity note: .privacy-note.hook-differentiator
    (2 classes) beats plain .privacy-note (1 class) regardless of source
    order, so this can't silently lose to the shared blue rule.
-   Real bug caught by actually looking at the rendered screenshot, not
-   just trusting the CSS: this paragraph is 5 lines, and stretching one
-   continuous gradient across the whole block put the bright near-white
-   highlight band (the ~45-55% zone) squarely on top of an entire
-   middle line, making that whole line nearly invisible against the
-   white page -- the exact "faded" failure she's already flagged twice,
-   just relocated instead of fixed. The headline didn't show this
-   because it's only 2 lines of much larger text, so the same
-   percentage-based band stayed thin relative to each line. Fixed by
-   sizing the gradient to one line's own height (background-size,
-   tied to line-height in em so it scales with the text) and repeating
-   it vertically (background-repeat), so every line gets its own
-   independent dark-mid-light-highlight-light-mid-dark cycle instead of
-   one pattern smeared across five lines unevenly. */
+   First fix for the "whole middle line vanishes" bug (see git history)
+   sized the gradient to one line's height and repeated it down the
+   block -- that fixed legibility but created a new, real problem: her
+   next reaction, "that looks like a typewriter that needs its ribbons
+   changed." An identical light/dark cycle stamped out fresh on every
+   single line reads as a mechanical, patchy repeat -- streaky, uneven
+   ink density -- not as one coherent surface. A genuine reflective
+   material has ONE light source, not one per text line.
+   First attempt at a fix used a diagonal (125deg) single sweep instead
+   of the per-line repeat -- better, but it introduced a different real
+   violation of the same absolute rule: the near-white peak of the
+   sweep landed on top of several actual words mid-sentence ("patterns
+   given," "help," "path are," "design," "interacts" -- confirmed by
+   looking at the render, not assumed), washing each one out against
+   the white page. A bright fill color crossing body text will always
+   risk this, at any angle, because there's no guarantee of where words
+   fall relative to the sweep.
+   Fixed at the actual root cause: the fill gradient no longer goes
+   anywhere near white at all -- it stays inside #111A65/#1C2CA9, both
+   already proven at full-strength legibility as this page's own body/
+   label text elsewhere, so no word can ever land on a washed-out
+   patch regardless of layout. All of the real "shine" that used to
+   come from the bright fill peak now comes entirely from the edge
+   bevel (filter:drop-shadow, same technique as the headline -- see
+   that rule's fuller explanation) instead: a light offset catching the
+   raised edge, a dark offset in the recessed edge. Edge lighting reads
+   as real metallic texture on its own -- her actual reference images
+   ("Metal," "GOLD") show this clearly -- and unlike a bright fill
+   color, a thin shadow offset can never make the text itself
+   unreadable, which is what makes this the safe way to get real shine
+   without ever risking "faded" again. */
 .privacy-note.hook-differentiator{
-  background:linear-gradient(180deg,#111A65 0%,#1C2CA9 22%,#7B99EE 45%,#EAF0FF 50%,#7B99EE 55%,#1C2CA9 78%,#111A65 100%);
-  background-size:100% 1.22em;
-  background-repeat:repeat-y;
+  background:linear-gradient(125deg,#111A65 0%,#1C2CA9 35%,#1C2CA9 65%,#111A65 100%);
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
+  filter:
+    drop-shadow(-0.5px -0.5px 0.2px rgba(255,255,255,0.7))
+    drop-shadow(0.6px 0.6px 0.4px rgba(17,26,101,0.5));
 }
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
