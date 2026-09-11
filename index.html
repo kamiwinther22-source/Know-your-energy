@@ -1097,14 +1097,22 @@ body{
     <div class="tagline-slide tagline-top c-gold">Do you know your <span class="hl-accent">personal cycles</span> currently in motion?</div>
 
     <div class="brand-row">
-      <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
+      <!-- Sized up and one more added -- part of an honest pass at
+           actually building "glowing, shiny, sparkly" instead of
+           staying at the smallest version that technically qualifies
+           as sparkle. Same established gold/champagne tones, not a new
+           color decision -- just more of what's already there. -->
+      <div class="title-glint" style="width:28px;height:28px;top:-9px;left:1%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="1"/></svg>
+      </div>
+      <div class="title-glint" style="width:18px;height:18px;top:1px;right:3%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="1"/></svg>
+      </div>
+      <div class="title-glint" style="width:14px;height:14px;bottom:-4px;left:14%;">
+        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.95"/></svg>
+      </div>
+      <div class="title-glint" style="width:9px;height:9px;top:10px;right:16%;">
         <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
-      </div>
-      <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
-        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
-      </div>
-      <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
-        <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
       </div>
       <div class="brand">Know Your Energy</div>
     </div>
@@ -1710,31 +1718,39 @@ function openNumberDef(item){
         <stop offset="100%" stop-color="${CHROME_DEEP}"/>
       </radialGradient>
       <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="45%" stop-color="#ffffff" stop-opacity="0.4"/>
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+        <stop offset="40%" stop-color="#ffffff" stop-opacity="0.55"/>
         <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
       </radialGradient>
-      <!-- Small, tightly-contained glow only -- her direct correction:
-           "you have made the entire background have like sort of this
-           purpleish glow and I don't want that. I want it to be
-           primarily white." Radius pulled in from 112 (more than double
-           the sun's own radius) to 66 (barely past it), and the falloff
-           steepened so color doesn't wash the page -- it stays a small
-           halo right behind the sphere, same idea as the ribbon's own
-           contained glow below it.
-           A second, later correction on the same shrunk glow: "I feel
-           like you're not hearing me on the overall background being
-           too dark... I want glowing, I want shiny, I want sparkly.
-           This is like just a dead feeling." A flat mid-saturation blue
-           disc at partial opacity reads as a colored stain, not light --
-           a real glow is bright/white at its source and only tints
-           toward a color at the fading edge. Rebuilt with a genuine
-           white-hot core that fades through the accent color rather
-           than starting from it. -->
+      <!-- Contained glow, real history of correction both directions --
+           first pulled way in (radius 112 down to 66) after "you have
+           made the entire background have like sort of this purpleish
+           glow and I don't want that," then pushed toward more presence
+           after "I feel like you're not hearing me on the overall
+           background being too dark... I want glowing, I want shiny, I
+           want sparkly. This is like just a dead feeling." Both real
+           reactions to real built versions, not contradictory -- what
+           she rejected was a flat mid-saturation blue DISC (a colored
+           stain covering a wide area at even opacity), not genuine
+           brightness. A true light source is bright at its source and
+           fades out; the fix both times was steepening a fast falloff,
+           not just shrinking the radius.
+           Widened again here (66 -> 78, stops pushed brighter -- capped
+           at 78 rather than going bigger still because this viewBox's
+           own top edge sits only 80 units above the sun's center, and
+           anything larger clips against it) as part
+           of an honest, decisive pass at what she's been describing all
+           session and hadn't actually seen fully built: "I have not
+           seen what it would be like if the direction I have been
+           pushing was actually created. it has remained almost as
+           bland as it can possibly get." Still falls to 0 opacity
+           within its own radius, well short of the page background --
+           verify with a real screenshot that it reads as a genuine
+           glow, not a wash, before treating this as settled. -->
       <radialGradient id="corona" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
-        <stop offset="28%" stop-color="#ffffff" stop-opacity="0.24"/>
-        <stop offset="58%" stop-color="${ACCENT}" stop-opacity="0.14"/>
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+        <stop offset="24%" stop-color="#ffffff" stop-opacity="0.45"/>
+        <stop offset="55%" stop-color="${ACCENT}" stop-opacity="0.22"/>
         <stop offset="100%" stop-color="${ACCENT}" stop-opacity="0"/>
       </radialGradient>
       <!-- One shared gradient, reused across every ring's stroke --
@@ -1772,7 +1788,7 @@ function openNumberDef(item){
         <stop offset="100%" stop-color="${CHROME_MID}"/>
       </radialGradient>
     </defs>
-    <circle cx="${cx}" cy="${cy}" r="66" fill="url(#corona)"/>
+    <circle cx="${cx}" cy="${cy}" r="78" fill="url(#corona)"/>
     <!-- Back halves of every ring, drawn BEFORE the sun so they're
          genuinely hidden behind its silhouette where they cross it --
          her direct correction to the prior "all rings on top" version:
@@ -1793,7 +1809,7 @@ function openNumberDef(item){
          light on the side facing the light source, not evenly all the
          way around. -->
     <path d="M 134.7 92 A ${r} ${r} 0 0 1 172 54.7" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
-    <ellipse cx="162" cy="80" rx="14.5" ry="9.2" fill="url(#sunHotspot)" transform="rotate(-18 162 80)"/>
+    <ellipse cx="162" cy="80" rx="17" ry="11" fill="url(#sunHotspot)" transform="rotate(-18 162 80)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" transform="translate(322,10) scale(0.6)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="${CHROME_LIGHT}" transform="translate(30,150) scale(0.42)"/>
     <path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#ffffff" transform="translate(190,182) scale(0.34)"/>`;
