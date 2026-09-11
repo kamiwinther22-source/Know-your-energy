@@ -239,147 +239,12 @@ body{
    But NOT stacked above that question as its own separate block either
    -- her direct correction to that attempt: "why aren't you using the
    white ribbon to go through the second question like it is in the
-   example... why would you put it above it." In her reference the
-   ribbon runs behind the question text, one composed layer, not two
-   stacked blocks. .ribbon-frame is the shared positioning container;
-   the ribbon image sits absolutely behind the question text within it.
-   This is a real cropped piece of the reference image she shared, not
-   a hand-drawn approximation -- her direct instruction: "the example I
-   showed you... you said that you could use it so use it." Kept its
-   real white/silver color, not recolored -- "make the ribbon white
-   like in the picture... put some color on the page" -- with a soft
-   blurred glow behind it instead (the ::before below) so the white
-   threads have contrast, deliberately not a flat rectangle: "you don't
-   have to have a background that is just a flat one color but also
-   don't block it, do not do a straight line block of color." Same
-   soft-edged radial-gradient technique already used behind the sun. */
-/* The ribbon's own rendered box (~134px tall) is much taller than the
-   2-line question text alone (~36px) -- it's meant to be a wide graphic
-   with the text sitting on top of it, same as the reference. Without a
-   reserved height the frame stayed only as tall as the text and the
-   ribbon just bled into whatever sat above/below it on the page. This
-   min-height is that reserved space. */
-/* width:100% is load-bearing, not decorative -- once .tagline-slide
-   (below) became position:absolute, .energy-ribbon (already absolute)
-   left this flex container with zero in-flow children. A flex
-   container with nothing in-flow to size itself against collapses its
-   own auto width toward min-content -- measured at exactly 60px, which
-   is .tagline-frame's own 30px+30px side padding with nothing between
-   them. That collapse was the real cause of the energy ribbon graphic
-   effectively disappearing (its own width:115% was 115% of this now-
-   tiny 60px box). Explicit width:100% keeps this frame filling its
-   parent regardless of how many in-flow children it has. */
-.ribbon-frame{position:relative;display:flex;align-items:center;justify-content:center;min-height:150px;width:100%;}
-/* Pulled in tight around the ribbon itself, not the whole section -- her
-   direct correction: "you have made the entire background have like
-   sort of this purpleish glow and I don't want that. I want it to be
-   primarily white. You can have the darker spaces like behind the...
-   white energy ribbon and still have primarily a white background."
-   Was 130% wide x 280px tall (wider and taller than the ribbon graphic
-   itself) with a shallow falloff that read as a page-wide tint; now
-   sized close to the ribbon's own footprint (78% x 150px) with a
-   steeper falloff so the color stays a contained halo directly behind
-   the white threads, same idea as the sun's own tightened corona. */
-/* Inverted from a white-hot center to a dark center -- her own direct
-   logic: "since you probably can't make white any whiter than it is,
-   you probably have to make what's behind it darker." White threads
-   sitting on a backdrop that was ALSO nearly white at its center had
-   no real contrast to be visible with, no matter how opaque the
-   threads themselves were. This is still the same contained-halo idea
-   already settled earlier ("you can have the darker spaces like behind
-   the white energy ribbon and still have primarily a white
-   background") -- genuinely dark and saturated at the center where the
-   ribbon actually sits, fading out to fully transparent well before
-   the edge of this frame, so the page around it stays that near-white
-   background. */
-/* Reduced peak opacity (0.62/0.42/0.18 -> 0.4/0.24/0.09) -- her repeated
-   complaint, "I have said over and over and over the text at the bottom
-   of the page looks faded." The tagline text itself is #000000, unaffected
-   by this element's own blur (it's a sibling, not a filter applied to the
-   text), so nothing here reduces the text's literal opacity -- but this
-   glow sits directly behind it (both centered at the same 50%/50% point
-   in .ribbon-frame) at real strength, and black text sitting on a
-   saturated colored field reads as less vivid/crisp than black on plain
-   white by simultaneous-contrast, a real perceptual effect, not a false
-   complaint. Kept present (not removed) since it's still doing real work
-   making the white ribbon threads visible -- just toned down enough that
-   the text sitting on top of it doesn't compete with a strongly
-   saturated backdrop for visual presence. */
-.ribbon-frame::before{
-  content:'';position:absolute;left:50%;top:50%;
-  width:78%;height:150px;transform:translate(-50%,-50%);
-  background:radial-gradient(ellipse,
-    rgba(15,122,76,0.4) 0%,
-    rgba(15,122,76,0.24) 35%,
-    rgba(15,122,76,0.09) 62%,
-    rgba(15,122,76,0) 82%);
-  filter:blur(4px);z-index:0;
-}
-.energy-ribbon{
-  position:absolute;left:50%;top:50%;width:115%;
-  transform:translate(-50%,-50%);z-index:0;pointer-events:none;
-}
-/* Rebuilt entirely as real vector strokes instead of an extracted photo
-   -- her direct, final word on the photo-extraction approach after
-   seven rounds of tuning it: "Look at the example I gave you for the
-   one 100th time... it looks significantly better than what you are
-   doing. There are reasons why and it's not because of an image
-   generator." She's right, and looking at the reference at real
-   resolution makes the actual reason obvious: it's crisp, clean vector
-   linework with a real light source at the center fading to silver at
-   both true ends -- a quality a JPEG photo extraction (soft edges,
-   compression noise, inpainting residue) can't reach no matter how the
-   thresholding is tuned, which is exactly why round after round of
-   adjusting the SAME extraction kept landing on "splatter" or
-   "invisible" instead of clean shading. This uses the same real
-   technique already proven and approved on the sun/rings (gradient
-   strokes, not a raster asset) -- a shared linearGradient (silver at
-   both ends, white through the center, matching the reference's own
-   light distribution) applied to several offset bezier paths for a
-   real multi-strand look, plus small sparkle/bead accents. The
-   reference is still what this is built from -- its actual curve shape
-   and light placement, traced and matched -- just built the way the
-   rest of this illustration already is, instead of extracted pixels. */
-.energy-ribbon svg{display:block;width:100%;height:auto;}
-/* Made noticeably larger -- her direct call: "I would probably make
-   the question quite a bit larger," then again in the follow-up round
-   ("make the text larger") after the first bump wasn't enough. Still
-   smaller than the first headline (which stays the single largest
-   thing on the page, the settled hierarchy from earlier), but a real
-   second jump up from the prior size. */
-/* Widened to break out of .tagline-frame's own 30px side padding --
-   her direct instruction: "I want the headline to fit on 2 lines." At
-   the padded width this was wrapping to 3 lines at every checked
-   viewport (320-430px, verified by measuring rendered height against
-   line-height, not eyeballing) -- shrinking the font back down would
-   undo two earlier rounds of her asking for this text bigger, so the
-   fix is more width, not less size.
-   First attempt reused .tagline-top's own full-bleed formula (explicit
-   width + negative margins on a normal in-flow element) -- wrong here
-   specifically because .ribbon-frame is display:flex (.tagline-top's
-   parent isn't). A flex item's used width interacting with large
-   negative margins made the flex container itself collapse to ~60px
-   wide, which is what made the energy ribbon graphic underneath
-   effectively vanish (verified by measuring -- .ribbon-frame's own
-   rendered width really did shrink to 60px). Fixed by taking this
-   element out of the flex flow entirely instead, with the exact same
-   position:absolute + left:50% + translate(-50%) centering .energy-
-   ribbon right below already uses to break out of this same frame --
-   proven technique, not a new one, and it can't disturb the flex
-   container's own sizing since an absolutely positioned element never
-   contributes to it. */
-.ribbon-frame .tagline-slide{
-  position:absolute;left:50%;top:50%;z-index:1;
-  transform:translate(-50%,-50%);
-  font-size:clamp(1.18rem,5.6vw,1.85rem);line-height:1.22;
-  width:calc(100vw - 8px);
-}
-/* Her direct correction after I misread which element she meant: "What
-   goes over the white energy ribbon needs to be black. That's not what
-   I was talking about. I was talking about that paragraph." This text
-   stays black (the shared .tagline-slide.c-gold{color:#000000} rule
-   already does that) -- the metallic ask was for .hook-differentiator
-   instead, see that rule's own comment. */
+   example... why would you put it above it." SUPERSEDED: the ribbon
+   graphic and its tagline were removed entirely per her later direct
+   instruction, "delete the bottom tagline, get rid of it, please" --
+   .ribbon-frame, .energy-ribbon and their supporting rules are gone.
+   This comment block is kept only as a pointer for anyone searching
+   this file's history for that element. */
 
 /* ---------- title ---------- */
 /* Superseded her own earlier ask (centering the title in the gap
@@ -1214,13 +1079,10 @@ body{
     <circle class="amb-dot" cx="405" cy="176" r="2.5" fill="url(#ambChrome)" opacity="0.35"/>
   </g>
   <circle class="amb-dot" cx="55" cy="420" r="3" fill="url(#ambChrome)" opacity="0.32"/>
-  <!-- Deliberately stops well above the ribbon/tagline zone at the
-       bottom of the page (roughly y=580+ in this viewBox) -- that zone
-       already has its own approved glow behind it (.ribbon-frame::before
-       in the CSS above). A second glow/wisp layered underneath it from
-       here was very likely what she meant by "the text at the bottom of
-       the page looks faded" -- two blurred blue glows compounding reduces
-       effective contrast even though the text itself is pure black. -->
+  <!-- Kept short -- the bottom-of-page ribbon/tagline zone this used to
+       stay clear of no longer exists (removed per her instruction to
+       delete the bottom tagline entirely), but there's no real reason
+       to extend this wisp further now that it's gone either. -->
   <path d="M -20 340 Q 180 300 380 380" fill="none" stroke="url(#ambChrome)" stroke-width="14" stroke-linecap="round" opacity="0.13"/>
 </svg></div>
 
@@ -1332,84 +1194,7 @@ body{
     <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
   </div>
 
-  <div class="tagline-frame ribbon-frame">
-    <div class="energy-ribbon"><svg viewBox="0 0 820 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="ribbonGrad" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
-          <stop offset="0%" stop-color="#b0b6c4"/>
-          <stop offset="10%" stop-color="#d8dbe4"/>
-          <stop offset="24%" stop-color="#ffffff"/>
-          <stop offset="50%" stop-color="#ffffff"/>
-          <stop offset="76%" stop-color="#ffffff"/>
-          <stop offset="90%" stop-color="#d8dbe4"/>
-          <stop offset="100%" stop-color="#b0b6c4"/>
-        </linearGradient>
-        <linearGradient id="ribbonGlow" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
-          <stop offset="0%" stop-color="#b0b6c4" stop-opacity="0"/>
-          <stop offset="25%" stop-color="#ffffff" stop-opacity="0.3"/>
-          <stop offset="50%" stop-color="#ffffff" stop-opacity="0.55"/>
-          <stop offset="75%" stop-color="#ffffff" stop-opacity="0.3"/>
-          <stop offset="100%" stop-color="#b0b6c4" stop-opacity="0"/>
-        </linearGradient>
-        <radialGradient id="hotspot" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
-          <stop offset="45%" stop-color="#ffffff" stop-opacity="0.5"/>
-          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <ellipse cx="470" cy="148" rx="90" ry="46" fill="url(#hotspot)"/>
-      <g fill="none" stroke-linecap="round">
-        <path d="M15,238 C130,228 210,196 300,180 C400,163 435,155 485,145 C565,126 615,92 700,58 C752,37 780,26 806,17" stroke="url(#ribbonGlow)" stroke-width="30" opacity="0.6"/>
-        <!-- Crossing pair 1: swap order around x=470 -->
-        <path d="M15,245 C160,236 320,196 470,150 C610,107 700,68 806,20" stroke="url(#ribbonGrad)" stroke-width="2.8"/>
-        <path d="M15,215 C170,222 340,176 470,150 C600,125 700,50 806,58" stroke="url(#ribbonGrad)" stroke-width="2.4"/>
-        <!-- Crossing pair 2: swap order around x=420, offset from pair 1 -->
-        <path d="M20,258 C150,252 300,214 420,178 C540,142 640,86 720,50 C760,32 786,22 808,11" stroke="url(#ribbonGrad)" stroke-width="2.1"/>
-        <path d="M20,222 C155,206 300,192 420,178 C560,163 630,104 712,66 C752,47 782,35 808,44" stroke="url(#ribbonGrad)" stroke-width="1.8"/>
-        <!-- Crossing pair 3, tighter, near the dense middle cluster -->
-        <path d="M280,192 C360,178 400,168 450,152 C500,136 530,128 570,116" stroke="url(#ribbonGrad)" stroke-width="1.6"/>
-        <path d="M280,168 C355,182 405,158 450,152 C495,146 535,110 570,116" stroke="url(#ribbonGrad)" stroke-width="1.4"/>
-        <!-- Accent strands for texture, thin, varied opacity -->
-        <path d="M25,266 C145,260 224,232 312,217 C412,201 448,192 497,182 C576,163 625,130 708,96 C759,74 787,63 810,53" stroke="url(#ribbonGrad)" stroke-width="1.1" opacity="0.75"/>
-        <path d="M10,206 C120,190 200,160 294,144 C394,127 428,118 478,108 C556,89 604,56 688,27 C740,9 770,0 798,-6" stroke="url(#ribbonGrad)" stroke-width="0.9" opacity="0.6"/>
-        <path d="M35,196 C155,188 255,174 355,166 C435,160 455,164 495,174 C595,198 645,156 725,96" stroke="url(#ribbonGrad)" stroke-width="1.2" opacity="0.65"/>
-      </g>
-      <g fill="#ffffff">
-        <path d="M486,144 L490,157 L503,161 L490,165 L486,178 L482,165 L469,161 L482,157 Z" opacity="1"/>
-        <path d="M300,178 L302.8,187.6 L312,190 L302.8,192.4 L300,202 L297.2,192.4 L288,190 L297.2,187.6 Z" opacity="0.95"/>
-        <path d="M700,56 L703.2,66.4 L713,69.6 L703.2,72.8 L700,83.2 L696.8,72.8 L687,69.6 L696.8,66.4 Z" opacity="1"/>
-        <path d="M612,90 L614.4,98 L622,100.4 L614.4,102.8 L612,110.8 L609.6,102.8 L602,100.4 L609.6,98 Z" opacity="0.9"/>
-        <path d="M545,120 L547,126.4 L553,128.4 L547,130.4 L545,136.8 L543,130.4 L537,128.4 L543,126.4 Z" opacity="0.85"/>
-        <path d="M415,163 L417,169.4 L423,171.4 L417,173.4 L415,179.8 L413,173.4 L407,171.4 L413,169.4 Z" opacity="0.85"/>
-        <path d="M760,40 L761.7,45.2 L766.8,46.9 L761.7,48.6 L760,53.8 L758.3,48.6 L753.2,46.9 L758.3,45.2 Z" opacity="0.95"/>
-        <path d="M120,232 L121.7,237.2 L126.8,238.9 L121.7,240.6 L120,245.8 L118.3,240.6 L113.2,238.9 L118.3,237.2 Z" opacity="0.85"/>
-        <path d="M55,252 L56.4,256.4 L60.8,257.8 L56.4,259.2 L55,263.6 L53.6,259.2 L49.2,257.8 L53.6,256.4 Z" opacity="0.8"/>
-        <path d="M85,244 L86.4,248.4 L90.8,249.8 L86.4,251.2 L85,255.6 L83.6,251.2 L79.2,249.8 L83.6,248.4 Z" opacity="0.75"/>
-        <path d="M775,25 L776.4,29.4 L780.8,30.8 L776.4,32.2 L775,36.6 L773.6,32.2 L769.2,30.8 L773.6,29.4 Z" opacity="0.85"/>
-      </g>
-      <g fill="#eef0f5" stroke="#ffffff" stroke-width="1">
-        <circle cx="600" cy="98" r="5"/>
-        <circle cx="622" cy="88" r="4.4"/>
-        <circle cx="644" cy="78" r="5.2"/>
-        <circle cx="666" cy="69" r="4"/>
-        <circle cx="688" cy="60" r="4.6"/>
-        <circle cx="712" cy="49" r="3.6"/>
-        <circle cx="735" cy="40" r="4.2"/>
-        <circle cx="757" cy="31" r="3.4"/>
-        <circle cx="150" cy="222" r="4.2"/>
-        <circle cx="178" cy="210" r="3.6"/>
-        <circle cx="565" cy="105" r="3.6"/>
-        <circle cx="222" cy="196" r="3.2"/>
-      </g>
-      <g fill="#ffffff" opacity="0.9">
-        <circle cx="622" cy="88" r="1.6"/>
-        <circle cx="666" cy="69" r="1.4"/>
-        <circle cx="735" cy="40" r="1.5"/>
-        <circle cx="178" cy="210" r="1.1"/>
-      </g>
-    </svg></div>
-    <div class="tagline-slide c-gold">See the dynamics you haven't been able to name between you and them.</div>
-  </div>
+
 </div>
 
 <!-- ---------- Step 2: the actual data-entry form, hidden until the hook
