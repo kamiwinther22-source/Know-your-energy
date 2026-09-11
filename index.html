@@ -263,13 +263,26 @@ body{
    ribbon actually sits, fading out to fully transparent well before
    the edge of this frame, so the page around it stays that near-white
    background. */
+/* Reduced peak opacity (0.62/0.42/0.18 -> 0.4/0.24/0.09) -- her repeated
+   complaint, "I have said over and over and over the text at the bottom
+   of the page looks faded." The tagline text itself is #000000, unaffected
+   by this element's own blur (it's a sibling, not a filter applied to the
+   text), so nothing here reduces the text's literal opacity -- but this
+   glow sits directly behind it (both centered at the same 50%/50% point
+   in .ribbon-frame) at real strength, and black text sitting on a
+   saturated colored field reads as less vivid/crisp than black on plain
+   white by simultaneous-contrast, a real perceptual effect, not a false
+   complaint. Kept present (not removed) since it's still doing real work
+   making the white ribbon threads visible -- just toned down enough that
+   the text sitting on top of it doesn't compete with a strongly
+   saturated backdrop for visual presence. */
 .ribbon-frame::before{
   content:'';position:absolute;left:50%;top:50%;
   width:78%;height:150px;transform:translate(-50%,-50%);
   background:radial-gradient(ellipse,
-    rgba(28,44,169,0.62) 0%,
-    rgba(28,44,169,0.42) 35%,
-    rgba(28,44,169,0.18) 62%,
+    rgba(28,44,169,0.4) 0%,
+    rgba(28,44,169,0.24) 35%,
+    rgba(28,44,169,0.09) 62%,
     rgba(28,44,169,0) 82%);
   filter:blur(4px);z-index:0;
 }
@@ -1125,11 +1138,12 @@ body{
   <defs>
     <linearGradient id="ambChrome" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="20%" stop-color="#dce9fb"/>
-      <stop offset="40%" stop-color="#f6eee0"/>
-      <stop offset="60%" stop-color="#a9c9f5"/>
-      <stop offset="82%" stop-color="#1C2CA9"/>
-      <stop offset="100%" stop-color="#151d6e"/>
+      <stop offset="16%" stop-color="#dce9fb"/>
+      <stop offset="34%" stop-color="#f5f6f8"/>
+      <stop offset="50%" stop-color="#f6eee0"/>
+      <stop offset="68%" stop-color="#c9ccd4"/>
+      <stop offset="86%" stop-color="#a9c9f5"/>
+      <stop offset="100%" stop-color="#1C2CA9"/>
     </linearGradient>
     <radialGradient id="ambGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#1C2CA9" stop-opacity="0.16"/>
@@ -1148,11 +1162,14 @@ body{
     <circle class="amb-dot" cx="405" cy="176" r="2.5" fill="url(#ambChrome)" opacity="0.35"/>
   </g>
   <circle class="amb-dot" cx="55" cy="420" r="3" fill="url(#ambChrome)" opacity="0.32"/>
-  <circle class="amb-dot" cx="345" cy="560" r="4" fill="url(#ambChrome)" opacity="0.32"/>
-  <!-- a single light-wisp ribbon, following the page's own downward flow
-       (upper-left toward lower-right) so it reads as placed on purpose,
-       not a stray line dropped with no relationship to the content -->
-  <path d="M -20 340 Q 180 300 400 480" fill="none" stroke="url(#ambChrome)" stroke-width="14" stroke-linecap="round" opacity="0.13"/>
+  <!-- Deliberately stops well above the ribbon/tagline zone at the
+       bottom of the page (roughly y=580+ in this viewBox) -- that zone
+       already has its own approved glow behind it (.ribbon-frame::before
+       in the CSS above). A second glow/wisp layered underneath it from
+       here was very likely what she meant by "the text at the bottom of
+       the page looks faded" -- two blurred blue glows compounding reduces
+       effective contrast even though the text itself is pure black. -->
+  <path d="M -20 340 Q 180 300 380 380" fill="none" stroke="url(#ambChrome)" stroke-width="14" stroke-linecap="round" opacity="0.13"/>
 </svg></div>
 
 <!-- ---------- Step 1: the hook screen. Zero-context first impression --
@@ -1788,11 +1805,12 @@ function openNumberDef(item){
     <defs>
       <radialGradient id="sunGrad" cx="32%" cy="27%" r="78%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="14%" stop-color="${ICE}"/>
-        <stop offset="30%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="46%" stop-color="${PEARL}"/>
-        <stop offset="64%" stop-color="${ICE_MID}"/>
-        <stop offset="82%" stop-color="${COBALT}"/>
+        <stop offset="12%" stop-color="${ICE}"/>
+        <stop offset="26%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="40%" stop-color="${PEARL}"/>
+        <stop offset="54%" stop-color="${CHROME_MID}"/>
+        <stop offset="70%" stop-color="${ICE_MID}"/>
+        <stop offset="86%" stop-color="${CHROME_DEEP}"/>
         <stop offset="100%" stop-color="${COBALT_DEEP}"/>
       </radialGradient>
       <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
@@ -1838,11 +1856,12 @@ function openNumberDef(item){
            catch-light-to-shadow arc a curved metal band actually has. -->
       <linearGradient id="ringGrad" x1="15%" y1="8%" x2="85%" y2="92%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="22%" stop-color="${ICE}"/>
-        <stop offset="42%" stop-color="${PEARL}"/>
-        <stop offset="65%" stop-color="${ICE_MID}"/>
-        <stop offset="85%" stop-color="${COBALT}"/>
-        <stop offset="100%" stop-color="${COBALT_DEEP}"/>
+        <stop offset="18%" stop-color="${ICE}"/>
+        <stop offset="34%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="50%" stop-color="${PEARL}"/>
+        <stop offset="68%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="88%" stop-color="${ICE_MID}"/>
+        <stop offset="100%" stop-color="${COBALT}"/>
       </linearGradient>
       <!-- Real per-bead sphere shading (bright highlight, dark shadow
            edge) instead of a flat fill -- same reasoning as ringGrad
@@ -1851,20 +1870,21 @@ function openNumberDef(item){
            disc. -->
       <radialGradient id="beadGrad1" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="35%" stop-color="${ICE}"/>
-        <stop offset="70%" stop-color="${ICE_MID}"/>
-        <stop offset="100%" stop-color="${COBALT}"/>
+        <stop offset="30%" stop-color="${ICE}"/>
+        <stop offset="65%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="100%" stop-color="${CHROME_MID}"/>
       </radialGradient>
       <radialGradient id="beadGrad2" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="30%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="65%" stop-color="${COBALT}"/>
-        <stop offset="100%" stop-color="${COBALT_DEEP}"/>
+        <stop offset="25%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="55%" stop-color="${PEARL}"/>
+        <stop offset="80%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="100%" stop-color="${COBALT}"/>
       </radialGradient>
       <radialGradient id="beadGrad3" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="45%" stop-color="${PEARL}"/>
-        <stop offset="80%" stop-color="${CHROME_MID}"/>
+        <stop offset="40%" stop-color="${PEARL}"/>
+        <stop offset="75%" stop-color="${CHROME_LIGHT}"/>
         <stop offset="100%" stop-color="${ICE_MID}"/>
       </radialGradient>
     </defs>
