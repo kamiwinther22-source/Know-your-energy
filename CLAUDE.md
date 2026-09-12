@@ -285,11 +285,22 @@ pass system despite the namespace's name).
   (Alex Brush).** Never split across lines, never a different font, never
   omitted from a landing/entry page. This is a staple; versions without it
   are an instant rejection.
-- **No dark/night-sky/cosmic/celestial theme, anywhere.** The navy + gold +
-  silver palette was chosen for a *classy, premium* feeling — explicitly NOT
-  a space/stars/constellation/night-sky mood. This has been misread multiple
-  times (starfields, nebula shaders, orrery animations) and rejected
-  forcefully every time.
+- **No dark/night-sky/cosmic/celestial theme, anywhere.** This has been
+  misread multiple times (starfields, nebula shaders, orrery animations)
+  and rejected forcefully every time.
+- **Her actual intended palette: ice blue with a cobalt accent, primarily
+  shades of white, with a metallic look.** An earlier version of this file
+  described the palette as "navy + gold + silver, chosen for a classy,
+  premium feeling" — she corrected this directly: that was never her
+  specification. It reads like exactly the pattern the Design-process
+  rules above already warn about — a session inventing its own color
+  choice (or two: emerald, then plum, then crimson were each independently
+  proposed and each rejected in one later session) and writing a
+  justification for it after the fact, rather than ever having asked her.
+  Disregard "navy + gold + silver" anywhere it still appears below this
+  point in the file as a stale, incorrect record — it does not reflect
+  what she wants. No gold, no navy, no crimson, no emerald, no plum. Ice
+  blue, cobalt, white, metallic — nothing else, until she says otherwise.
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same
