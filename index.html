@@ -118,13 +118,15 @@ body{
      measured against). Still one line, still Alex Brush, never omitted --
      that part of the rule didn't change, only its size. */
   font-size:clamp(0.95rem,4vw,1.3rem);white-space:nowrap;
-  /* Brightened for a black background -- the previous gradient's dark
-     anchor stops (#0F1758/#121C6C) were built for contrast against a
-     light page and would nearly vanish on black. Same blue family,
-     shifted bright enough to actually read. */
-  background:linear-gradient(100deg,#4655D6 0%,#8A96EE 35%,#5364D6 50%,#8A96EE 65%,#4655D6 100%);
+  /* Fixed real bug: this gradient's anchor stops (#4655D6/#8A96EE) were
+     tuned "brightened for a black background" per the prior version of
+     this comment, but body{background-color:#ffffff} -- the page has
+     been white this whole time, so the title was rendering at low
+     contrast against the one background it actually sits on. Deep cobalt
+     anchors restore real contrast on white; still one hue family
+     (cobalt), not introducing a new color. */
+  background:linear-gradient(100deg,#0d1f4a 0%,#1c3f8a 35%,#12295c 50%,#1c3f8a 65%,#0d1f4a 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-  filter:drop-shadow(0 0 18px rgba(90,110,230,0.55));
 }
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
@@ -2501,11 +2503,13 @@ function hdWheelWrap(hd){
   const astroWrap = document.getElementById('solarIcon');
   const hdWrap = document.getElementById('hdIcon');
   if(!astroWrap && !hdWrap) return;
-  // A real CSS clamp() string, not a fixed px number -- astro + bubble +
-  // HD (plus gaps) genuinely overflowed narrow phones (~360px and under)
-  // at a fixed 96px each. Verified this range doesn't overflow down to a
-  // 320px viewport, and still reaches the full 96px on wider phones.
-  const SIDE = 'clamp(64px,20vw,96px)';
+  // Enlarged from the old clamp(64px,20vw,96px) -- at icon size, none of
+  // the real detail in these two charts (sign wedges, gate colors) was
+  // visible; this is a deliberate size increase, not a tweak, verified
+  // against 320/360/390/430px widths (see the render-check note this
+  // change shipped with) to confirm astro + bubble + HD still fit one
+  // row without overflow at the narrowest real phone width.
+  const SIDE = 'clamp(78px,23vw,104px)';
 
   // Both real chart functions size their strokes/text for the FULL-size
   // results-page display (viewBox ~460-500 units, shown near 1:1). Squeezed
