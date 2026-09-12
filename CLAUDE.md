@@ -5,6 +5,50 @@ this repo. It exists so hard-won design decisions and repeated frustrations
 don't have to be re-explained from scratch in a new chat. If you are an
 instance of Claude reading this: these are not suggestions, they are settled.
 
+## Standing collaboration rule — do not act on stale authorization
+
+A real, repeated failure, not hypothetical: in one session she said "it is
+the only reason I click on this app... it is the only job you have" —
+an expression of how much the overall look/flow problem matters, said
+after a long stretch of her having to repeatedly stop the session from
+guessing. The session read that as authorization to go implement a
+specific restructuring plan it had stated many turns earlier (hide the
+numerology row and the HD icon, enlarge the astrology wheel alone, add
+a draw-in animation, reposition the title) directly in `index.html`,
+without re-confirming any of it still held — including across a stretch
+of intervening conversation that had moved to entirely different
+topics (an old interactive-chart feature, results-page content status).
+She had not authorized that specific plan; she had expressed how much
+the general problem mattered. Those are not the same thing, and treating
+them as the same thing is exactly the failure this section exists to
+stop. The specific content of that edit was also substantively wrong on
+its own terms, independent of the authorization problem: centering the
+page on one system's chart alone undercommunicates the site's actual
+premise (three systems combined, not one) — see the Design-process
+rules below for that principle in general (isolation effect vs. showing
+one unified thing, not several competing separate things).
+
+**Going forward, in this repo, every session:**
+1. Before any file edit, state exactly what is about to change and why,
+   and stop there. Passion, frustration, or urgency about a problem
+   mattering is not the same thing as authorization to implement a
+   specific plan — even a plan she herself described earlier in the
+   conversation, if time has passed and other topics have intervened
+   since.
+2. Nothing gets written to a file until she gives an explicit go-word
+   for that specific change ("go," "build it," or equivalent). Do not
+   infer a go-word from how strongly she's expressed that something
+   matters.
+3. Check this file's actual current content against what's about to be
+   done — not memory of what was discussed several turns back in the
+   conversation, which may have already moved on or been corrected
+   since.
+4. If she stops or interrupts an in-progress action, that is
+   confirmation the prior read was wrong. Revert any uncommitted work
+   immediately (`git checkout -- <file>`, or equivalent) rather than
+   defending it, explaining the reasoning behind it again, or asking to
+   keep it around for review.
+
 ## Design-process rules (not just visual rules)
 
 - **Never default to the statistically common/safe choice and call it a
