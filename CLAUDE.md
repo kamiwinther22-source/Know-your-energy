@@ -281,10 +281,6 @@ pass system despite the namespace's name).
 
 ## Non-negotiable design rules
 
-- **The "Know Your Energy" title is always one line, in large loopy cursive
-  (Alex Brush).** Never split across lines, never a different font, never
-  omitted from a landing/entry page. This is a staple; versions without it
-  are an instant rejection.
 - **No dark/night-sky/cosmic/celestial theme, anywhere.** This has been
   misread multiple times (starfields, nebula shaders, orrery animations)
   and rejected forcefully every time.
