@@ -440,7 +440,13 @@ body{
    is reserved for one meaning only: "this one is selected." */
 .rel-picker{margin:0.2rem 0 1rem;}
 .mode-intro{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:0.95rem;line-height:1.35;text-align:center;color:#000000;margin:0.2rem 0 0.8rem;}
-.rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
+/* nowrap, not wrap -- her direct instruction: "I want the relational
+   choices on 1 line." Fitting all 4 (including the longest, "Parent ·
+   Child") on one line at the narrowest supported width (320px) needed
+   smaller chips, not just removing the wrap -- see .rel-chip's own
+   updated sizing below, sized down and verified by real measurement to
+   actually fit in one row, not just told not to wrap. */
+.rel-row{display:flex;flex-wrap:nowrap;gap:0.22rem;justify-content:center;margin-bottom:0;}
 /* Not a pill. Her direct correction: "I do not like the pills. It's
    standard, why can you not do something that is different." A full
    stadium-radius capsule is the single most default shape for a tag/
@@ -452,11 +458,12 @@ body{
    border off along the clipped diagonal, a real rendering gap, not just
    a style preference). */
 .rel-chip{
-  font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:700;
-  padding:0.38rem 0.9rem;border-radius:3px 15px 3px 15px;
+  font-family:'DM Sans',sans-serif;font-size:0.66rem;font-weight:700;
+  padding:0.34rem 0.5rem;border-radius:3px 12px 3px 12px;
   border:1.5px solid #000000;
   background:#ffffff;
   color:#000000;cursor:pointer;
+  white-space:nowrap;
   transition:background 0.15s,color 0.15s,box-shadow 0.15s,border-color 0.15s;
   box-shadow:0 2px 6px -2px rgba(0,0,0,0.3);
 }
