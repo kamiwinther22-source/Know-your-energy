@@ -153,8 +153,29 @@ body{
    normal flow (not an absolutely-positioned accent) so it takes up
    real space as actual content, the way the hero screen's own
    illustration does. */
-.card-orbit{width:100%;margin:0 0 1.3rem;}
-.card-orbit svg{display:block;width:100%;height:auto;}
+/* Real presence behind the key, not a flat icon sitting alone on white
+   -- her blunt, direct call after the last pass: "you have made the
+   entire site something that is so indistinct that I don't even want
+   to bother to see what it's about." Same contained-glow technique
+   already proven and approved twice elsewhere on this app (the hero
+   sun's own corona, the energy-ribbon's glow behind it) -- not a new
+   invention, the established pattern: a radial halo sized to the
+   illustration's own footprint, blurred, falling all the way to 0
+   opacity well inside its own box, tinted with the key's own blue
+   (#4169E1) the same way the ribbon's glow uses the site's green and
+   the sun's corona uses its own accent. */
+.card-orbit{position:relative;width:100%;margin:0 0 1.3rem;}
+.card-orbit::before{
+  content:'';position:absolute;left:50%;top:50%;
+  width:70%;height:180px;transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,
+    rgba(65,105,225,0.28) 0%,
+    rgba(65,105,225,0.16) 40%,
+    rgba(65,105,225,0.06) 65%,
+    rgba(65,105,225,0) 85%);
+  filter:blur(6px);z-index:0;
+}
+.card-orbit svg{position:relative;z-index:1;display:block;width:100%;height:auto;}
 /* Real divider between the pricing block and the email+person-data
    block below it -- gives the single card real internal structure.
    Lives on pricing's own bottom edge (not formFields' top edge) on
