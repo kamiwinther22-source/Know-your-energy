@@ -146,37 +146,7 @@ body{
    with no fill/border/shadow attached to it -- open space isn't a box. */
 #formStep{
   position:relative;
-  /* Horizontal margin is 32px, not 0.5rem -- combined with body's own
-     1rem (16px) side padding, that's a fixed 48px (0.5in at CSS's
-     96px/in) of real clearance between the true screen edge and every
-     piece of content on this screen (banners, inputs, buttons), on
-     every side, verified by measuring rendered elements' own
-     getBoundingClientRect(), not eyeballed. Her direct, exact words:
-     "PUT SPACE BETWEEN THE SCREEN EDGES AND THE DATA ENTRY. AT LEAST .5
-     INCH ON BOTH SIDES" -- the previous 0.5rem (8px) here, on top of
-     body's 1rem, only ever totaled 24px (0.25in), half of what was
-     asked. Fixed in px, not rem, so this can't drift if a root font-size
-     override is ever added elsewhere.
-
-     width is calc(100% - 64px), not the inherited .content{width:100%}
-     -- a real, measured Chromium quirk, not a guess: this element is a
-     flex item in body's column flex layout (align-items:center), and a
-     flex item with an explicit percentage width plus explicit margins
-     does NOT subtract those margins from the resolved width the way a
-     plain block box would -- confirmed by checking getBoundingClientRect()
-     directly: with width:100% the box rendered at its parent's full
-     inner width with the margin computed but visually ignored entirely
-     (verified via getComputedStyle showing marginLeft:32px alongside a
-     rect.left of 16px, exactly body's own padding with the margin
-     contributing nothing). Subtracting the margin explicitly in the
-     width itself sidesteps that quirk and makes the margin actually
-     render -- confirmed this way instead, rect.left/rect.right now
-     land exactly where the math says they should at every width
-     tested (320-430px). max-width:420px still comes from .content
-     unchanged, so this has no effect once that cap takes over on wider
-     screens. */
-  width:calc(100% - 64px);
-  margin:0.5rem 32px 0.9rem;padding:0.9rem 0 0;
+  margin:0.5rem 0.5rem 0.9rem;padding:0.9rem 0 0;
 }
 /* The card's own real header illustration -- see the markup comment
    right above where this renders for the full reasoning. Sits in
@@ -627,7 +597,36 @@ body{
 .form-panel{
   position:relative;padding:0.3rem 0 0;
 }
-.form-panel .f{margin-bottom:0.65rem;}
+/* Her direct correction after an earlier pass wrongly pushed in every
+   piece of content on this screen (banner, pricing, mode-intro,
+   toggle, chips) to hit her 0.5in-clearance ask: "don't move all of
+   the margins in... I didn't say all margins." Her actual words were
+   about "the data entry" specifically -- scoped here to just .f (the
+   two birth-data blocks, Person 1 and Person 2), not #formStep as a
+   whole (left untouched, so the banner/pricing/toggle/chips above sit
+   exactly where they always have).
+
+   Ambient clearance from the true screen edge is only body's own 1rem
+   (16px) -- NOT 24px like a glance at #formStep's own 0.5rem margin
+   would suggest, because that margin has never actually rendered:
+   #formStep is a flex item in body's column layout, and (confirmed by
+   checking getComputedStyle vs. getBoundingClientRect directly) a
+   percentage-width flex item's own margin doesn't get honored the way
+   a plain block's would -- the same quirk this file's earlier pass
+   found and worked around for #formStep specifically, still present
+   here since #formStep was reverted back to its original, always-
+   broken margin rather than fixed. .f itself has no explicit width, so
+   it isn't subject to that quirk -- a plain margin here works exactly
+   as CSS says it should.
+
+   32px here, plus the 16px ambient, plus .line-field's own pre-existing
+   4.8px inner padding (real, measured, unrelated to this fix) lands the
+   actual visible input box at 52.8px from the screen edge -- comfortably
+   past the 48px (0.5in) minimum she asked for, not just barely over it.
+   Verified by getBoundingClientRect() on the real <input> elements
+   themselves, not eyeballed and not measured against an invisible
+   container edge. */
+.form-panel .f{margin:0 32px 0.65rem;}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
 .person-tag{font-family:'Alex Brush',cursive;font-size:1.4rem;color:#000000;line-height:1;margin-bottom:0.15rem;}
