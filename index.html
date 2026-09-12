@@ -180,7 +180,15 @@ body{
    invisible illustration with no error anywhere. Put long prose
    explanations in a CSS comment like this one instead of inside the
    <svg> itself. */
-.card-orbit{width:100%;margin:0 0 1.3rem;}
+/* Stopped stretching this to fill the page width -- her direct
+   correction, twice now, that bigger wasn't making it look better and
+   a first "make it smaller" pass still wasn't small enough: "no it
+   isn't [smaller]. stop fucking around." This is a fixed, honest small
+   size (149px, matching the SVG's own tightly-cropped viewBox around
+   the key's real bounding box) instead of a 100%-width banner box the
+   key gets scaled up to fill -- there's no leftover banner space left
+   for "bigger isn't doing anything" to recur. */
+.card-orbit{width:149px;margin:0 auto 1.1rem;}
 .card-orbit svg{display:block;width:100%;height:auto;}
 /* Real divider between the pricing block and the email+person-data
    block below it -- gives the single card real internal structure.
@@ -1593,19 +1601,8 @@ body{
        real object; same fix, same reasoning, applied consistently to
        the matching illustration on this screen too. -->
   <div class="card-orbit">
-    <!-- Her direct instruction: "create a key that is elegantly designed
-         to replace the solar system- same size as solar system." Same
-         exact key artwork as the hero screen's .hero-key (same paths,
-         same flat #4169E1 -- a real antique-skeleton-key reference,
-         already built and approved there, not a new invented design),
-         scaled and translated into this element's own 400x100 viewBox
-         so it occupies the same footprint the orbit rings used to,
-         instead of inheriting the key's native 100x60 viewBox (which
-         would have rendered nearly 2.5x taller at this width, not
-         "same size"). Verified by screenshot at the real rendered
-         width, not just computed by hand. -->
-    <svg viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(91.5,-0.8) scale(1.5)">
+    <svg viewBox="0 0 149 43" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(3.4,4.5)">
         <g fill="none" stroke="#4169E1" stroke-linecap="round" stroke-linejoin="round">
           <path stroke-width="3.8" d="M18,8 C10,4 3,9 4,17 C5,24 12,26 17,21"/>
           <path stroke-width="3.8" d="M18,8 C26,4 33,9 32,17 C31,24 24,26 19,21"/>
