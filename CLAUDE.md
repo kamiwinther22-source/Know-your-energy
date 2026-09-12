@@ -369,6 +369,66 @@ pass system despite the namespace's name).
   terms, a separate fact from whether gold-in-general is usable. Don't
   assume that door is automatically reopened; if gold comes up for the
   results page again, treat it as a fresh decision, not a settled yes.
+- **No natural/organic theme — nature imagery, plants, leaves, water,
+  organic shapes.** A core, standing rejection, confirmed directly: "I
+  don't want a neutral organic theme at all. I don't know how I could
+  possibly make myself blend in more than to go that way." This is the
+  most generic, blend-in visual direction available for this category of
+  site (astrology/spiritual/self-care) — nature/organic is to this
+  category what navy+gold or terracotta is to generic "premium" sites.
+- **No photos of real humans on the site, anywhere.** Her direct
+  reasoning: "nobody wants to see a photo of a human on the site.
+  Immediately, the people who don't look like that human, they don't
+  relate to it... I don't want to look at other humans on a site that is
+  supposed to be personal to me." **Exception — she likes and would use
+  shadow-figure silhouette art**: a human form with zero visible detail,
+  just a dark silhouette shape, no face, no identifiable features. The
+  distinction is identity, not "no humans at all" — a silhouette has none
+  to reject; a photo of a specific person does.
+- **Real 3D depth via actual light-and-shadow modeling is wanted, done
+  with real skill — not a gradient.** Two ends of the same real
+  technique, both of interest: text/imagery carved deep enough it reads
+  like a genuine drop/cliff (recessed), or elements popping off the page
+  toward the viewer with real movement on load (raised/embossed). Also
+  named: a "carved paper" / layered cut-paper look. This is the same
+  underlying technique family already researched this session
+  (feDiffuseLighting/feSpecularLighting SVG lighting filters; the real
+  emboss/deboss box-shadow recipe — light inset highlight + dark inset
+  shadow, direction reversed for recessed vs. raised) — the prior
+  in-session attempts at this failed on execution/subtlety, not because
+  the technique itself is wrong. A flat gradient standing in for this is
+  explicitly rejected — "the gradient light wording is just don't waste
+  your time."
+- **The original "solar system"/orbit-rings reference image was never
+  meant as an astrology chart or literal decoration.** Her direct
+  explanation: "the solar system is a representation of cycles that are
+  happening, whether we're aware of them or not" — the actual shared
+  thread under astrology, numerology, and Human Design alike, not one
+  system's icon. Its job was touch-triggered movement purely for
+  attention, explicitly "not educational." Treat any future orbital/
+  cycle-motif idea as carrying this real conceptual grounding, not as an
+  arbitrary shape — but also don't treat it as obligatory; it's one
+  legitimate option, not the only one.
+- **Touch/interaction-triggered movement is wanted.** Confirmed
+  independently of the solar-system point above — she likes the concept
+  of something that visibly responds when touched, for attention, not
+  instruction.
+- **The current centered layout is a practical fallback, not a confirmed
+  aesthetic preference.** She once tried a real asymmetric composition —
+  content flowing from upper-left to lower-right — and abandoned it
+  specifically because the execution required her to manually walk
+  someone through quarter-inch adjustments one at a time ("move it up a
+  little, move it up, move it a quarter of an inch in this direction").
+  That is a process failure (no access to real measurement/verification
+  tooling on her end at the time), not a rejection of the asymmetric
+  concept itself. A session that can measure and verify placement
+  directly (Playwright screenshots, computed grid math) rather than
+  requiring her to eyeball and hand-correct it should treat asymmetric,
+  non-centered composition as a real, open option — not something
+  already tried and rejected. Separately, the *reason* centered was
+  settled on: avoiding a multi-scroll, stacked-content page before
+  reaching the form, which she has separately and firmly rejected — any
+  future layout, symmetric or not, still has to avoid that.
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same
