@@ -399,14 +399,14 @@ async function assemblePersonData(env, person) {
 
 // ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
 
-// All five plans are one-time charges. Nobody is ever auto-billed again —
-// "week"/"month"/"year" describe how long the pass lasts, not a recurring
-// charge. Matches the 5 tiers shown on the pricing screen.
+// All three plans are one-time charges. Nobody is ever auto-billed again —
+// "day"/"month"/"year" describe how long the pass lasts, not a recurring
+// charge. Matches the 3 tiers shown on the pricing screen -- narrowed
+// from 5 per her direct instruction (see index.html's PRICING_TIERS for
+// the full reasoning on which two got cut and why).
 const PLAN_CONFIG = {
   day: { mode: "payment", amount: 500, name: "1 Day Pass" },
-  week: { mode: "payment", amount: 1100, name: "1 Week Pass" },
   monthly: { mode: "payment", amount: 2200, name: "1 Month Pass" },
-  sixmonth: { mode: "payment", amount: 3300, name: "6 Month Pass" },
   annual: { mode: "payment", amount: 7700, name: "12 Month Pass" }
 };
 
@@ -445,9 +445,7 @@ async function createCheckoutSession(env, plan, origin, email) {
 
 const PASS_DURATION_MS = {
   day: 1 * 24 * 60 * 60 * 1000,
-  week: 7 * 24 * 60 * 60 * 1000,
   monthly: 31 * 24 * 60 * 60 * 1000,
-  sixmonth: 183 * 24 * 60 * 60 * 1000,
   annual: 366 * 24 * 60 * 60 * 1000
 };
 

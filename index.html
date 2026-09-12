@@ -4391,15 +4391,23 @@ const REMEMBERED_EMAIL_KEY='kye_passEmail';
 function rememberPassEmail(email){ try{localStorage.setItem(REMEMBERED_EMAIL_KEY,email);}catch(e){} }
 function getRememberedPassEmail(){ try{return localStorage.getItem(REMEMBERED_EMAIL_KEY)||'';}catch(e){return '';} }
 
-// Matches worker.js's PLAN_CONFIG/PASS_DURATION_MS exactly (day/week/
-// monthly/sixmonth/annual) -- checkout still won't actually complete
-// until Stripe itself is turned on, but the plan names/amounts now agree
-// end to end.
+// Matches worker.js's PLAN_CONFIG/PASS_DURATION_MS exactly (day/monthly/
+// annual) -- checkout still won't actually complete until Stripe itself
+// is turned on, but the plan names/amounts now agree end to end.
+// Narrowed from 5 tiers to 3 per her direct instruction, tying back to
+// the choice-overload research already covered this session (3-or-fewer
+// pricing tiers convert meaningfully better than 4-5). Kept Day/Month/
+// Annual, dropped Week and 6-Month -- Week ($11) sat too close to both
+// Day ($5) and Month ($22) to read as a distinct choice, and 6-Month
+// ($33) was a real pricing anomaly worth flagging, not just cutting
+// quietly: at $0.18/day it was actually CHEAPER per day than the $77
+// Annual tier ($0.21/day), which undercut Annual's own "best value"
+// positioning. Kept prices exactly as they were on the 3 tiers that
+// stayed -- narrowing the count, not repricing, since that's what was
+// asked for today.
 const PRICING_TIERS=[
   {plan:'day',      label:'1 Day',    price:'$5'},
-  {plan:'week',     label:'1 Week',   price:'$11'},
   {plan:'monthly',  label:'1 Month',  price:'$22'},
-  {plan:'sixmonth', label:'6 Months', price:'$33'},
   {plan:'annual',   label:'12 Months',price:'$77'}
 ];
 
