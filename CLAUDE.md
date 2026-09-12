@@ -350,12 +350,16 @@ for no real reason reads as sloppy, not as a redesign — the bar is
 - **No grey and no gold anywhere on the results page** — both were tried
   (a brushed-metal grey card look, then a gold-accent replacement) and both
   were explicitly rejected ("gold is not the answer... in the never again
-  pile"). Cards were transparent with a thin navy hairline border, solid
-  navy buttons — note navy itself is now fully rejected sitewide (see
-  Design-process rules above), so this specific color needs updating to
-  whatever the current real accent is; the "transparent card, hairline
-  border, no fill" *structure* is what was actually being protected, not
-  the navy value itself.
+  pile"). Cards are transparent with a thin hairline border, no fill — that
+  *structure* is what's being protected, independent of color. The border/
+  button color has been `#1C2CA9` (a blue-violet, `--card-accent` in
+  `index.html`), which itself does not match her stated palette (ice blue,
+  cobalt, white, metallic) — this needs updating to that palette, not left
+  as-is just because it isn't navy or gold. This entry previously said
+  "navy hairline border, solid navy buttons" — that was stale wording left
+  in place for months after navy was already rejected; if you find another
+  line in this file still describing something as navy or gold, don't
+  assume it's current just because it's written down — check the code.
 - **No decorative connecting lines/glow paths between cards.** An "energy
   convergence" treatment (soft SVG light-paths flowing from each chart into
   the Reading) was built and explicitly rejected as unattractive/gimmicky/
@@ -384,8 +388,13 @@ for no real reason reads as sloppy, not as a redesign — the bar is
 - **Nav buttons should look pressable and inviting, not blend into the
   page.** A white-on-white stretched pill was rejected as boring/blending
   in; a spinning conic-gradient ring with sparkle glints was rejected as
-  "game show"/circus. Current settled look: solid navy pill, sized to its
-  own content (not stretched full-width), small icon, real lift shadow. She
+  "game show"/circus. Current settled *structure*: pill sized to its own
+  content (not stretched full-width), small icon, real lift shadow — this
+  entry used to say "solid navy pill," which was wrong (`.side-btn` in
+  `index.html` is a blue-violet gradient, `#707AC9` to `#15217E`, never
+  navy); still needs updating off that blue-violet gradient to her stated
+  palette (ice blue, cobalt, white, metallic), same as the results-page
+  border/button color above. She
   does want genuine sparkle/glitter eventually, but **only** if it can be
   built to match specific glitter reference images she shared earlier in
   conversation — never invent a sparkle effect from scratch.
