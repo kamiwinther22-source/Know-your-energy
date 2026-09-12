@@ -422,7 +422,7 @@ body{
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
-.toggle-pill.on{background:#1C2CA9;}
+.toggle-pill.on{background:#000000;}
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
@@ -467,9 +467,9 @@ body{
   transition:background 0.15s,color 0.15s,box-shadow 0.15s,border-color 0.15s;
   box-shadow:0 2px 6px -2px rgba(0,0,0,0.3);
 }
-.rel-chip:hover{background:rgba(28,44,169,0.06);}
-.rel-chip.active{background:#1C2CA9;color:#ffffff;border-color:#1C2CA9;box-shadow:0 2px 10px -2px rgba(28,44,169,0.55);}
-.rel-chip.active:hover{background:#243acc;}
+.rel-chip:hover{background:rgba(0,0,0,0.06);}
+.rel-chip.active{background:#000000;color:#ffffff;border-color:#000000;box-shadow:0 2px 10px -2px rgba(0,0,0,0.55);}
+.rel-chip.active:hover{background:#222222;}
 
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
@@ -638,18 +638,39 @@ body{
    Verified by getBoundingClientRect() on the real <input> elements
    themselves, not eyeballed and not measured against an invisible
    container edge. */
-.form-panel .f{margin:0 32px 0.65rem;}
+/* Bottom margin widened from 0.65rem to 1.7rem per her direct screenshot
+   correction: "put some space between the 2 entry fields [Person 1 and
+   Person 2]. I want them to look minimal. but leave space for the
+   actual typing of answers." Real, visible separation between the two
+   person blocks without adding a divider/box (still "minimal" -- just
+   whitespace, no new visual element). The "leave space for actual
+   typing" half of that instruction is about field WIDTH, not this
+   margin -- verified separately by measuring real typed values (not
+   just placeholder text) in the row-birth/row-id grids at the
+   narrowest supported width, per her request to use "measuring and
+   some logic" rather than eyeballing it. */
+.form-panel .f{margin:0 32px 1.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
+/* Marks Time/Location as genuinely optional (per her screenshot
+   correction) -- distinguished from the main label by weight and case,
+   not by fading color/opacity, which the never-fade-text rule already
+   rules out. Full-strength black, same as everything else. */
+.opt-lbl{text-transform:none;font-weight:500;letter-spacing:0;}
 .person-tag{font-family:'Alex Brush',cursive;font-size:1.4rem;color:#000000;line-height:1;margin-bottom:0.15rem;}
 .section-lbl{font-size:0.75rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
-/* Person's whole entry compressed into 2 rows instead of 4: identity
-   (First/Mid/Last/DOB) on one row, birth specifics (Time/AM-PM/Location)
-   on the next. DOB moved onto the birth-details row with Time/AM-PM/
-   Location; Location gets the most width since "City, State, Country"
-   is the longest placeholder by far. */
+/* Person's whole entry in 3 rows: identity (First/Mid/Last) on one row,
+   DOB/Time/AM-PM on the next, Location on its own full-width row below
+   that. Location used to share row 2 as a 4th column, but real typed
+   content (not just its placeholder) measured there and badly failed:
+   a real "City, State, Country" value needs ~260-280px and only had
+   ~53-93px to work with at the narrowed field widths -- exactly what
+   her direct correction flagged: "leave space for the actual typing of
+   answers... use measuring." Giving Location its own row instead of a
+   fraction of a 4-column one gives it nearly the full block width. */
 .row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.4rem;}
-.row-birth{display:grid;grid-template-columns:1.2fr 0.65fr 0.55fr 1.6fr;gap:0.3rem;align-items:end;}
+.row-birth{display:grid;grid-template-columns:1.2fr 0.65fr 0.55fr;gap:0.3rem;align-items:end;}
+.row-birth>.loc-field{grid-column:1 / -1;margin-top:0.4rem;}
 
 /* Carved into the page, not a line underneath the text -- no border, no
    fill color, no grey panel behind it. The recessed look is built purely
@@ -1491,16 +1512,34 @@ body{
        real object; same fix, same reasoning, applied consistently to
        the matching illustration on this screen too. -->
   <div class="card-orbit">
+    <!-- Her direct instruction: "create a key that is elegantly designed
+         to replace the solar system- same size as solar system." Same
+         exact key artwork as the hero screen's .hero-key (same paths,
+         same flat #4169E1 -- a real antique-skeleton-key reference,
+         already built and approved there, not a new invented design),
+         scaled and translated into this element's own 400x100 viewBox
+         so it occupies the same footprint the orbit rings used to,
+         instead of inheriting the key's native 100x60 viewBox (which
+         would have rendered nearly 2.5x taller at this width, not
+         "same size"). Verified by screenshot at the real rendered
+         width, not just computed by hand. -->
     <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="200" cy="50" rx="50" ry="12" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="70" ry="16.8" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="90" ry="21.6" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="110" ry="26.4" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
-      <ellipse cx="200" cy="50" rx="130" ry="31.2" fill="none" stroke="#1C2CA9" stroke-width="1.7" transform="rotate(-8 200 50)"/>
-      <circle cx="303.0" cy="17.5" r="10" fill="#000000"/>
-      <circle cx="141.1" cy="66.8" r="7" fill="#1C2CA9"/>
-      <circle cx="285.8" cy="55.1" r="5" fill="#000000"/>
-      <circle cx="115.2" cy="54.5" r="4" fill="#1C2CA9"/>
+      <g transform="translate(61,-6) scale(3)">
+        <g fill="none" stroke="#4169E1" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke-width="4.5" d="M18,8 C10,4 3,9 4,17 C5,24 12,26 17,21"/>
+          <path stroke-width="4.5" d="M18,8 C26,4 33,9 32,17 C31,24 24,26 19,21"/>
+          <circle cx="18" cy="8" r="2.6" fill="#4169E1" stroke="none"/>
+          <circle cx="4.5" cy="17.5" r="2.1" fill="#4169E1" stroke="none"/>
+          <circle cx="31.5" cy="17.5" r="2.1" fill="#4169E1" stroke="none"/>
+        </g>
+        <g fill="#4169E1">
+          <circle cx="18" cy="26" r="3.4"/>
+          <rect x="24" y="23.5" width="46" height="5"/>
+          <rect x="16.3" y="23.5" width="3.4" height="5"/>
+          <rect x="34" y="21.5" width="2.6" height="9" rx="1"/>
+          <path d="M70,17.5 H90 V33.5 H84 V28.5 H78 V33.5 H70 Z"/>
+        </g>
+      </g>
     </svg>
   </div>
 
@@ -1517,7 +1556,6 @@ body{
        pricing pitch in the way. -->
   <div class="form-panel pricing-panel" id="pricingPanel" style="display:none;">
     <div class="state-banner-ttl" style="margin-bottom:0.4rem;">Time-Limited Passes</div>
-    <div class="state-banner-sub" style="margin-bottom:0.3rem;">used your one free reading already? pick a pass below</div>
     <div class="pricing-list" id="pricingList"></div>
   </div>
 
@@ -1537,19 +1575,10 @@ body{
 
         <div class="state-banner" id="stateBanner" style="display:none;"></div>
 
-        <div class="privacy-note">Data never saved</div>
-
-        <!-- Her direct instruction: "there needs to be an intro of some
-             sort that lets them know that they can either do one person
-             or relational dynamics." The Individual/Relational toggle
-             already existed, but it used to sit AFTER Person 1's fields
-             -- someone could fill in a full birth chart before ever
-             discovering the relational option, backwards from how the
-             choice should actually work. Moved to the top, before any
-             fields, with a short intro line above it. Copy is a
-             placeholder -- her wording, not mine, per this file's own
-             standing rule never to write her copy for her. -->
-        <div class="mode-intro">[PLACEHOLDER COPY — explain the choice: your own reading alone, or the dynamic between you and someone else]</div>
+        <!-- Both "Data never saved" and the mode-intro placeholder line
+             removed here per her direct screenshot correction (both
+             circled together) -- the Individual/Relational toggle
+             immediately below is self-explanatory on its own. -->
         <div class="rel-picker">
           <div class="toggle-row">
             <span class="tog-lbl active" id="lblInd">Individual</span>
@@ -1584,9 +1613,9 @@ body{
           </div>
           <div class="row-birth">
             <div><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
-            <div><label for="p1t">Time</label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
+            <div><label for="p1t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
             <div class="line-field ampm-field"><select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
-            <div><label for="p1loc">Location</label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
+            <div class="loc-field"><label for="p1loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
           </div>
         </div>
 
@@ -1601,9 +1630,9 @@ body{
             </div>
             <div class="row-birth">
               <div><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
-              <div><label for="p2t">Time</label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
+              <div><label for="p2t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
               <div class="line-field ampm-field"><select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
-              <div><label for="p2loc">Location</label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
+              <div class="loc-field"><label for="p2loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
             </div>
           </div>
         </div>
@@ -4461,15 +4490,6 @@ function renderPassActiveBanner(result){
   return `<div class="state-banner-ttl">Pass Active</div><div class="state-banner-sub">${escapeHtml(planLabel)} Pass${expiresText?' · active through '+escapeHtml(expiresText):''}</div>`;
 }
 
-// "pick a pass above" -- her direct catch: pricing used to render after
-// this banner, but it's the first thing in the card now (moved there
-// so a fresh email never opens on a pricing pitch -- see #pricingPanel's
-// own note), so the tiers actually sit ABOVE this message, not below
-// it. The copy hadn't been updated to match.
-function renderUsedBanner(){
-  return `<div class="state-banner-ttl">This Email's Free Reading Is Used</div><div class="state-banner-sub">pick a pass above</div>`;
-}
-
 // Runs automatically once an email is typed in (on blur) -- updates the
 // status line in place, and now also whether pricing shows at all. Her
 // direct correction: pricing used to be visible unconditionally, before
@@ -4491,8 +4511,13 @@ async function checkEmailStatus(){
     banner.style.display='block';
     pricingPanel.style.display='none';
   }else if(result.freeReadingUsed){
-    banner.innerHTML=renderUsedBanner();
-    banner.style.display='block';
+    // No banner text here on purpose -- her direct correction, both the
+    // "This Email's Free Reading Is Used" banner and the pricing panel's
+    // own "used your one free reading already?" sub-line were struck
+    // out. The pricing tiers appearing at all already say everything
+    // that needs saying for this state.
+    banner.style.display='none';
+    banner.innerHTML='';
     pricingPanel.style.display='block';
   }else{
     // Fresh email, free reading still available -- straight to the
