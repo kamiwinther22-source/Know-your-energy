@@ -417,12 +417,19 @@ body{
    now." Plain black -- no gradient, no filter, no second-guessing this
    again. */
 .tagline-slide.tagline-top.c-gold{color:#000000;}
-.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
+/* Left-aligned, not centered -- her direct correction: "either center
+   or start from left. pick one." Person 1/2's labels, the pricing
+   heading, and every field on this page are left-aligned (how a form
+   naturally reads); the toggle and chips were the only centered
+   elements, an inconsistency, not a deliberate contrast. */
+.toggle-row{display:flex;align-items:center;justify-content:flex-start;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
-.toggle-pill.on{background:#000000;}
+/* Same silver/chrome as everywhere else selected/pushed reads now --
+   her instruction applies here too, not just the bigger buttons. */
+.toggle-pill.on{background:linear-gradient(160deg,#f5f6f8 0%,#c9ccd4 45%,#8f929c 100%);}
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
@@ -451,7 +458,7 @@ body{
    smaller chips, not just removing the wrap -- see .rel-chip's own
    updated sizing below, sized down and verified by real measurement to
    actually fit in one row, not just told not to wrap. */
-.rel-row{display:flex;flex-wrap:nowrap;gap:0.22rem;justify-content:center;margin-bottom:0;}
+.rel-row{display:flex;flex-wrap:nowrap;gap:0.22rem;justify-content:flex-start;margin-bottom:0;}
 /* Not a pill. Her direct correction: "I do not like the pills. It's
    standard, why can you not do something that is different." A full
    stadium-radius capsule is the single most default shape for a tag/
@@ -463,6 +470,7 @@ body{
    border off along the clipped diagonal, a real rendering gap, not just
    a style preference). */
 .rel-chip{
+  position:relative;overflow:hidden;
   font-family:'DM Sans',sans-serif;font-size:0.66rem;font-weight:700;
   padding:0.34rem 0.5rem;border-radius:3px 15px 3px 15px;
   border:1.5px solid #000000;
@@ -473,8 +481,21 @@ body{
   box-shadow:0 2px 6px -2px rgba(0,0,0,0.3);
 }
 .rel-chip:hover{background:rgba(0,0,0,0.06);}
-.rel-chip.active{background:#000000;color:#ffffff;border-color:#000000;box-shadow:0 2px 10px -2px rgba(0,0,0,0.55);}
-.rel-chip.active:hover{background:#222222;}
+/* Selected = the same real silver/chrome as Calculate and the pricing
+   buttons, not flat black -- her instruction: "silver and shining if
+   it's to be pushed." Selecting a chip IS pushing it. Same layered
+   gradient+gloss construction as .price-row, scaled to this smaller
+   chip. */
+.rel-chip.active{
+  background:linear-gradient(160deg,#f5f6f8 0%,#c9ccd4 45%,#8f929c 100%);
+  color:#0f0f10;border-color:rgba(0,0,0,0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    inset 0 -3px 5px rgba(60,62,68,0.3),
+    0 4px 10px -4px rgba(40,42,48,0.5);
+}
+.rel-chip.active::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:3px 15px 0 0/3px 15px 0 0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.05) 100%);pointer-events:none;}
 
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
@@ -593,17 +614,33 @@ body{
    down to the narrowest supported width (320px), verified by measuring
    real rendered widths, not just removing wrap and hoping. */
 .pricing-list{margin-top:0.9rem;display:flex;flex-wrap:nowrap;gap:0.4rem;}
+/* Real silver/chrome, not a flat grey swap -- her direct instruction:
+   "silver and shining if it's to be pushed." These ARE pushed (they
+   trigger checkout), so they get the same real material as Calculate:
+   the same 3-stop gradient, the same gloss overlay on the top half,
+   the same dark-neutral shadow tones -- not just a solid grey
+   background, which this file's own prior history already documented
+   as a failure ("a flat two-stop pale gradient has none of [a
+   highlight/rim-light]... so it just read as plain grey"). Layered
+   the same way as .gen-btn so it reads as metal at this smaller size
+   too, not a repeat of that mistake. */
 .price-row{
+  position:relative;overflow:hidden;
   display:inline-flex;align-items:center;gap:0.35rem;
   padding:0.5rem 0.7rem;border-radius:3px 15px 3px 15px;
-  background:#ffffff;
-  border:1.5px solid #000000;
+  background:linear-gradient(160deg,#f5f6f8 0%,#c9ccd4 45%,#8f929c 100%);
+  border:1px solid rgba(0,0,0,0.35);
   cursor:pointer;font-family:inherit;text-align:left;
   white-space:nowrap;
-  transition:background 0.15s ease,box-shadow 0.15s ease;
-  box-shadow:0 2px 6px -2px rgba(0,0,0,0.3);
+  transition:transform 0.15s ease,box-shadow 0.15s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    inset 0 -3px 5px rgba(60,62,68,0.3),
+    0 4px 10px -4px rgba(40,42,48,0.5);
 }
-.price-row:hover,.price-row:focus-visible{background:rgba(0,0,0,0.05);}
+.price-row::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;border-radius:3px 15px 0 0/3px 15px 0 0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.05) 100%);pointer-events:none;}
+.price-row:hover,.price-row:focus-visible{transform:translateY(-1px);}
 .price-label{font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;color:#000000;}
 .price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;color:#000000;}
 .pass-check-row{font-family:'DM Sans',sans-serif;font-size:0.78rem;font-style:italic;color:#000000;text-align:left;margin-top:0.6rem;}
