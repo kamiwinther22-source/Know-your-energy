@@ -148,48 +148,11 @@ body{
   position:relative;
   margin:0.5rem 0.5rem 0.9rem;padding:0.9rem 0 0;
 }
-/* The card's own real header illustration -- see the markup comment
-   right above where this renders for the full reasoning. Sits in
-   normal flow (not an absolutely-positioned accent) so it takes up
-   real space as actual content, the way the hero screen's own
-   illustration does. */
-/* Glow behind the key tried and rejected -- her direct verdict: "the
-   'glow' behind the key ruins any chance it has of looking nice."
-   Removed entirely; the key sits plain again, same as before that
-   attempt. Do not reintroduce a glow/halo behind this illustration.
-
-   Key artwork itself redesigned after that -- her actual point:
-   "you see that it doesn't look good. so make it look good instead of
-   trying to mask that it doesn't." The glow was masking, not fixing.
-   What was really wrong with the shape: the shaft was short and thick
-   relative to the bow (only ~1.6x the bow's own diameter -- real
-   skeleton keys read as elegant partly because the shaft is long and
-   slender), and the bit was one blocky double-notch rectangle. Bow and
-   collar kept as-is (not the problem); shaft roughly doubled in length
-   and thinned further, a second decorative ridge added partway down it
-   (real antique keys often carry more than one), and the bit rebuilt
-   as three slender teeth on a taller, narrower blade instead of two
-   thick ones. See the <svg> markup below for the actual path data.
-   NOTE: no "--" inside the inline SVG's own markup/comments below --
-   a real bug hit once already: Chromium's foreign-content (SVG/MathML)
-   parsing is stricter than normal HTML body parsing and does not
-   tolerate a stray double-hyphen inside a comment the way ordinary
-   HTML comments elsewhere in this file safely do -- it silently
-   truncated the whole <g> tree after the first "--", which is why an
-   earlier version of this redesign rendered as a totally empty,
-   invisible illustration with no error anywhere. Put long prose
-   explanations in a CSS comment like this one instead of inside the
-   <svg> itself. */
-/* Stopped stretching this to fill the page width -- her direct
-   correction, twice now, that bigger wasn't making it look better and
-   a first "make it smaller" pass still wasn't small enough: "no it
-   isn't [smaller]. stop fucking around." This is a fixed, honest small
-   size (149px, matching the SVG's own tightly-cropped viewBox around
-   the key's real bounding box) instead of a 100%-width banner box the
-   key gets scaled up to fill -- there's no leftover banner space left
-   for "bigger isn't doing anything" to recur. */
-.card-orbit{width:149px;margin:0 auto 1.1rem;}
-.card-orbit svg{display:block;width:100%;height:auto;}
+/* No header illustration on this screen -- removed entirely after
+   repeated attempts (orbit rings, then a key, with and without a glow,
+   at several sizes) all failed. Her direct call: "Just get it off the
+   page. I'm not gonna fucking do this. This is ridiculous." Do not
+   reintroduce one without her asking for it. */
 /* Real divider between the pricing block and the email+person-data
    block below it -- gives the single card real internal structure.
    Lives on pricing's own bottom edge (not formFields' top edge) on
@@ -1562,65 +1525,11 @@ body{
        reason for it to sit elevated at the very top like a completed
        first step -- it belongs right next to the data it's submitted
        together with. -->
-  <!-- Real drawn illustration, not scattered icon accents -- her
-       standing complaint, stated as directly as it gets: "you for some
-       reason just don't want to put in the work of actually giving the
-       page some character... pull something out of your ass and make
-       it look fucking fantastic." Tried twice with generic sparkle
-       glyphs (subtle, then bigger, then "varied" colors that turned out
-       to be imperceptibly different blues on inspection) and both were
-       still just icons scattered on a form -- decoration, not design.
-       The actual finding from real research into working sites in this
-       category (Co-Star, The Pattern, CHANI): none of them win by
-       intensifying decoration -- CHANI's the one with real visual
-       character, and it comes from carrying one illustrated identity
-       everywhere, not from icon accents bolted onto a UI shell. This
-       card header is that: the exact orbit-ring geometry from the hero
-       illustration (same ellipse math, same -8deg tilt), redrawn small
-       as a real header illustration instead of a filled sphere, with
-       satellite dots sized distinctly (10/7/5/4px) since the earlier
-       sparkles proved hue alone doesn't read as variety at this scale --
-       size does.
-       Recentered and redistributed since: the original build centered
-       the whole ring cluster at cx=275 in a 400-wide viewBox (69% across,
-       not the middle) with all four satellite dots bunched inside one
-       narrow arc at the top -- her direct catch, from a real screenshot:
-       "that Solar System crammed up in the top right corner for no
-       reason." Real bug, not just an opinion: the ellipse math was never
-       actually centered in its own box, and the dots' parametric angles
-       all fell within about 90 degrees of each other. Recomputed with
-       the rings centered on the viewBox's true middle (cx=200 of 400)
-       and the four dots spread across clearly different angles on
-       different rings (verified against the rotated ellipses' real
-       bounding boxes -- nothing sits outside the viewBox now, nothing
-       clusters in one corner). Same visual system as the hero screen,
-       same sizes, just actually balanced this time.
-       Stroke thickened 1.1 -> 1.7 along with the hero sun's own rings --
-       her blunt reaction to the whole flow, "The whole thing is just
-       bland," and a thin stroke reads as a faint diagram rather than a
-       real object; same fix, same reasoning, applied consistently to
-       the matching illustration on this screen too. -->
-  <div class="card-orbit">
-    <svg viewBox="0 0 149 43" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(3.4,4.5)">
-        <g fill="none" stroke="#4169E1" stroke-linecap="round" stroke-linejoin="round">
-          <path stroke-width="3.8" d="M18,8 C10,4 3,9 4,17 C5,24 12,26 17,21"/>
-          <path stroke-width="3.8" d="M18,8 C26,4 33,9 32,17 C31,24 24,26 19,21"/>
-          <circle cx="18" cy="8" r="2.4" fill="#4169E1" stroke="none"/>
-          <circle cx="4.5" cy="17.5" r="1.9" fill="#4169E1" stroke="none"/>
-          <circle cx="31.5" cy="17.5" r="1.9" fill="#4169E1" stroke="none"/>
-        </g>
-        <g fill="#4169E1">
-          <circle cx="18" cy="26" r="3.2"/>
-          <rect x="24" y="23.9" width="90" height="4.2" rx="2.1"/>
-          <rect x="16.3" y="23.9" width="3.4" height="4.2" rx="1.4"/>
-          <rect x="34" y="21.9" width="2.6" height="8.2" rx="1.3"/>
-          <rect x="76" y="22.3" width="2.4" height="7.4" rx="1.2"/>
-          <path d="M114,16.5 H142 V35.5 H136.5 V29 H130.5 V35.5 H124.5 V29 H118.5 V35.5 H114 Z"/>
-        </g>
-      </g>
-    </svg>
-  </div>
+  <!-- The header illustration (orbit rings, then a key) was removed
+       entirely -- her direct call after repeated attempts at it:
+       "Just get it off the page. I'm not gonna fucking do this. This
+       is ridiculous." Do not reintroduce a header illustration on this
+       screen without her asking for one. -->
 
   <!-- Hidden until we actually know this email needs it -- her direct
        correction: "It does not make sense to open that with the
