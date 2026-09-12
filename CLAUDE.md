@@ -448,6 +448,63 @@ pass system despite the namespace's name).
 - **If she shares a real reference image, actually use it** — don't
   substitute a generic/invented version, and don't crop it down to something
   smaller/safer than what she asked for.
+- **The 8 reference images shared in the session that produced this note —
+  her precise, per-image corrections, confirmed accurate by her ("Yes")
+  before being recorded here. These are reference material only, not an
+  approved plan to build anything — recording them is not a go-word.**
+  1. Rose-gold used sparingly as an accent/style element on a font, not a
+     base color — shown as one example of several different ways to treat
+     a title font, distinct from "just the basic that I have gotten."
+  2. A liquid-metal swirl image — she likes the richness/complexity of it.
+     Explicit standing instruction: reducing this kind of reference down to
+     "something that is 1 or 2 lines in the same sort of shape" is
+     "absolutely unacceptable." The real reference has real visual density;
+     a thin literal 1-2 line stand-in for it is not an interpretation of it.
+  3. A dark-monolith/black-panel image with a chrome sphere — she is
+     pointing at the metallic look of the sphere/planet material only.
+     "In no way about the black stripe up the middle of it" — the panel
+     itself is not the reference point and shouldn't be treated as one.
+  4. Another richness reference, described as "an energetic swirl from
+     energy coming from two separate places" — converging energy, not a
+     simple joining shape. Named, specific standing failure to never
+     repeat: what she has actually been given before for this concept was
+     "two lines converging or a circle" — that reduction is explicitly
+     called out as not acceptable and "a waste of time to do."
+  5. A circular mandala-style image combining three systems in one
+     composition — **the cosmic/starfield background in that image is not
+     what she's pointing at and is not being requested** (the no-dark/
+     cosmic-theme rule above still fully applies); only the compositional
+     idea — three systems represented together in one unified image,
+     circular arrangement — is the actual reference point.
+  6. A metallic instrument-panel-style image — this is her own AI-generated
+     draft (she doesn't know which tool produced it — possibly Wix, ChatGPT,
+     or Lumo), kept only as a reference for the general look/concept. It
+     has real, visible errors she was never able to get corrected, so it
+     is reference only, not usable as-is or something to reproduce
+     literally.
+  7. A silver/chrome "solar system on white" style image — she genuinely
+     likes this one, and confirmed a version of it was *actually nearly
+     achieved once* in a past session before something (she doesn't recall
+     exactly what — possibly a tag or placement issue) caused it to stall:
+     "moving forward and making progress was no longer happening, and
+     things were only getting worse with every correction," and it was
+     abandoned at that point. This is a real precedent that this direction
+     is achievable, not just aspirational — but also a real warning that
+     iterative "fixes" degraded it rather than improving it last time, so
+     any future attempt needs real care about what each change actually
+     does before applying it.
+  8. An image showing carved/sculpted light-and-shadow depth (bas-relief —
+     see the "real 3D depth" rule above) — confirmed as the literal
+     technique she wants applied to give the site real layers and depth,
+     explicitly **not** a flat gradient. She was direct and honest that she
+     does not know precise technical vocabulary ("I don't even know if
+     gradient is the right [word]... I don't know what that word even
+     means") — treat that as a real signal, not a gap to talk around: her
+     actual authority here is recognizing on sight whether a result has
+     genuine dimensional depth or is a disappointing flat effect, not
+     naming techniques correctly. Don't take an absence of correct
+     terminology from her as license to substitute an easier, flatter
+     effect and call it close enough.
 - **Prefer real, verified techniques over fabricated ones.** Research things
   for real (WebSearch, actual docs) and verify designs by actual measurement
   (Playwright screenshots, pixel sampling, bounding-box checks) — never
