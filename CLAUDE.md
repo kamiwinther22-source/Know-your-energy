@@ -294,6 +294,9 @@ pass system despite the namespace's name).
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same
   tone.**
+- **Never a block layout.** No angled/diagonal solid-color panels cutting
+  across the page, no asymmetric color-block composition. Ruled out
+  outright, not a matter of execution quality.
 - **Never write her copy.** Build visuals and layout only; leave clearly
   marked placeholder text. Her wording will always be better than anything
   generated, and seeing generated copy actively distracts her from writing
