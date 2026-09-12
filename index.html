@@ -789,6 +789,18 @@ body{
 .glow-ring .gen-btn{position:relative;z-index:1;margin:0;border-radius:7px;}
 @keyframes silverspin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.glow-ring::before{animation:none;display:none;}}
+/* Same real, already-built spinning shine -- her direct correction:
+   "YOU MADE THE BUTTON THAT HAD SHINE GOING AROUND IT" -- extended
+   here to the other real buttons (pricing tiers, relational chips),
+   not just Calculate. Same conic-gradient/animation, wrapper reshaped
+   to match these buttons' own asymmetric tag-corner radius (3px 15px)
+   instead of gen-btn's plain rounded rect. */
+.glow-ring-sm{position:relative;display:inline-block;border-radius:4px 16px 4px 16px;padding:2px;overflow:hidden;}
+.glow-ring-sm::before{content:'';position:absolute;inset:-100%;
+  background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
+  animation:silverspin 3s linear infinite;}
+.glow-ring-sm .price-row,.glow-ring-sm .rel-chip{position:relative;z-index:1;margin:0;}
+@media(prefers-reduced-motion:reduce){.glow-ring-sm::before{animation:none;display:none;}}
 /* No blue -- her direct, repeated instruction, stated forcefully after
    two earlier passes both still left the fill itself in the blue
    family (#707AC9/#1C2CA9/#15217E), even after the second pass only
@@ -1658,10 +1670,10 @@ body{
           </div>
 
           <div class="rel-row" id="relWrap" style="display:none;">
-            <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
-            <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
-            <button type="button" class="rel-chip" data-rel="friends">Friends</button>
-            <button type="button" class="rel-chip" data-rel="other">Other</button>
+            <span class="glow-ring-sm"><button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button></span>
+            <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="romantic">Romantic</button></span>
+            <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="friends">Friends</button></span>
+            <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="other">Other</button></span>
           </div>
 
           <!-- TEMPORARY test control: generates a relational reading built
@@ -4542,7 +4554,7 @@ async function checkPassStatus(email){
 // it's needed -- rendered once, straight into the static panel that's
 // already in the markup.
 document.getElementById('pricingList').innerHTML=PRICING_TIERS
-  .map(t=>`<button type="button" class="price-row" onclick="buyPass('${t.plan}')" aria-label="Get the ${t.label} pass for ${t.price}"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span></button>`)
+  .map(t=>`<span class="glow-ring-sm"><button type="button" class="price-row" onclick="buyPass('${t.plan}')" aria-label="Get the ${t.label} pass for ${t.price}"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span></button></span>`)
   .join('');
 
 // Both render*Banner() functions below return only the INNER content
