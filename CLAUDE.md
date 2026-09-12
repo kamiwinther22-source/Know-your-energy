@@ -339,8 +339,20 @@ pass system despite the namespace's name).
   justification for it after the fact, rather than ever having asked her.
   Disregard "navy + gold + silver" anywhere it still appears below this
   point in the file as a stale, incorrect record — it does not reflect
-  what she wants. No gold, no navy, no crimson, no emerald, no plum. Ice
-  blue, cobalt, white, metallic — nothing else, until she says otherwise.
+  what she wants. No navy, no crimson, no emerald, no plum — those are
+  real, held convictions (she's said directly they read as "complete and
+  utter shit" on this site), not just a record of a stuck pattern. Ice
+  blue, cobalt, white, metallic are the base palette.
+  **Gold — corrected, she does want it, conditionally:** "I really like
+  gold when it is used sparingly. And when it's not yellow." Two real
+  conditions, both required: sparing use (an accent, not a base color or
+  a wide fill), and a gold that reads as gold, not one that tips yellow.
+  This does NOT retroactively bless the specific gold-accent results-page
+  treatment she already rejected once (see the results-page section
+  below) — that was a specific execution judged and rejected on its own
+  terms, a separate fact from whether gold-in-general is usable. Don't
+  assume that door is automatically reopened; if gold comes up for the
+  results page again, treat it as a fresh decision, not a settled yes.
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same
