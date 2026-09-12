@@ -225,23 +225,38 @@ All routes live in the single `fetch` handler, gated by `CORS_HEADERS` (open,
   lifetime token/cost counter out of the `PASSES` KV namespace. Not
   customer data, intentionally public.
 - Everything else requires `POST`:
-  - `/create-checkout-session` — creates a Stripe Checkout session for one
-    of `PLAN_CONFIG` (`single` $5, `monthly` $10, `annual` $25 — all
-    one-time `payment` mode, never `subscription`).
-  - `/record-pass` / `/check-pass` — verify a Stripe session and read/write
-    a pass record in KV (`PASSES`), including the `UNLIMITED_EMAILS`
-    bypass for the three family addresses.
   - `/report` — the main endpoint: takes person(s) astrology + numerology +
     Human Design data, calls the Claude API (`generateReport`,
     `model: 'claude-sonnet-5'`, `thinking: { type: 'disabled' }`), returns
-    the generated reading JSON.
+    the generated reading JSON. Not gated behind any payment or pass check
+    — anyone who submits the form gets a reading.
+
+**Removed (as of the session that stripped it): Stripe checkout and the
+pass/paywall system.** There was never a real Stripe account connected to
+this app — `/create-checkout-session`, `/record-pass`, `/check-pass`,
+`PLAN_CONFIG`, the `UNLIMITED_EMAILS` family bypass, and the pass-record
+KV read/writes (`passKey`, `recordPass`, `checkPassRecord`,
+`refreshPassSnapshot`, `personSnapshot`) are all gone from `worker.js`.
+This was a safe, no-op removal, not a behavior change: `/report` never
+actually checked for an active pass before generating a reading — the
+pass system only existed to save/restore birth-data snapshots for
+whoever *had* paid. Every user was already getting free reports before
+this removal, and every user still does after it. The front end's email
+field (`#pEmail` in `index.html`) is now visually present but functionally
+inert — it used to be sent to the backend as `passEmail` to key the pass
+snapshot, and no longer is. Nobody has decided yet whether to remove that
+field from the form, replace it with a different payment processor later,
+or leave the reading permanently free — that's still open.
 
 ### Required secrets / env (not in the repo)
 
 Set via `wrangler secret put <NAME>` (or the GitHub Actions secrets used by
-`Deploy Worker`): `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `HumanDesign_key`,
-plus `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` for the deploy action
-itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
+`Deploy Worker`): `ANTHROPIC_API_KEY`, `HumanDesign_key`, plus
+`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` for the deploy action
+itself. `STRIPE_SECRET_KEY` is no longer used — Stripe was removed. The
+`PASSES` KV namespace binding lives in `wrangler.toml` (still used for the
+usage/cost counter and per-report job records, unrelated to the removed
+pass system despite the namespace's name).
 
 ## Development workflow
 
@@ -384,10 +399,13 @@ resurrect the "two pages, entry form is done" framing.
 - Astrology is computed **locally** (`astro-engine.js`) — no paid external
   API, no rate limit. `worker.js` strips house/Ascendant/Midheaven data when
   birth time is unknown rather than guessing from a defaulted time.
-- Stripe Checkout is wired for one-time charges only (single/month/year
-  passes) — never a subscription/auto-billing.
-- Three family emails have unlimited free access (see `UNLIMITED_EMAILS` in
-  `worker.js`) — don't remove this without being asked.
+- **Stripe is gone.** There was never a real Stripe account behind it, so
+  it was removed entirely rather than debugged — see the "Removed" note
+  under the Worker API surface section above for exactly what left and
+  why it was a safe no-op. The site currently has no payment gate at all;
+  every reading is free for every visitor, family emails included (the
+  old `UNLIMITED_EMAILS` special-case is gone along with it, since it's
+  now redundant — everyone already gets what it used to grant).
 - Real Claude report generation is wired into `/report` in `worker.js`
   (`model: 'claude-sonnet-5'`, thinking explicitly disabled — enabling it
   previously caused truncation).
@@ -470,7 +488,7 @@ resurrect the "two pages, entry form is done" framing.
   uneven-height content next to a partially-placed item — don't rely on
   auto-flow.
 - **The "Deploy Worker" GitHub Action only redeploys `worker.js`** (the API
-  backend: `/report`, `/create-checkout-session`, etc). It does **not**
+  backend: `/report`, `/chart-data`, etc). It does **not**
   deploy `index.html`. **`index.html` is deployed by GitHub Pages**, not
   Cloudflare Pages — confirmed via the repo's `CNAME` file
   (`know-your-energy.com`) and a separate "pages build and deployment"

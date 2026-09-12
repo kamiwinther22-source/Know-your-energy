@@ -397,143 +397,8 @@ async function assemblePersonData(env, person) {
   return { first, mid, last, numerology, numerologyError, astrology, astrologyError, humanDesign, humanDesignError };
 }
 
-// ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
-
-// All three plans are one-time charges. Nobody is ever auto-billed again —
-// "month"/"year" describe how long the pass lasts, not a recurring charge.
-const PLAN_CONFIG = {
-  single: { mode: "payment", amount: 500, name: "Single Reading" },
-  monthly: { mode: "payment", amount: 1000, name: "One Month Pass" },
-  annual: { mode: "payment", amount: 2500, name: "One Year Pass" }
-};
-
-async function createCheckoutSession(env, plan, origin, email) {
-  const config = PLAN_CONFIG[plan];
-  if (!config) throw new Error(`Unknown plan: "${plan}".`);
-
-  const params = new URLSearchParams();
-  params.set("mode", config.mode);
-  params.set("success_url", `${origin}/?checkout=success&plan=${plan}&session_id={CHECKOUT_SESSION_ID}`);
-  params.set("cancel_url", `${origin}/?checkout=cancel`);
-  params.set("line_items[0][quantity]", "1");
-  params.set("line_items[0][price_data][currency]", "usd");
-  params.set("line_items[0][price_data][unit_amount]", String(config.amount));
-  params.set("line_items[0][price_data][product_data][name]", config.name);
-  params.set("metadata[plan]", plan);
-  if (email) params.set("customer_email", email);
-
-  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: params.toString()
-  });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Stripe API error: ${errText}`);
-  }
-  return await res.json();
-}
-
-// ─── PASSES (monthly/annual, verified against Stripe, stored in KV) ──────────
-
-const PASS_DURATION_MS = {
-  monthly: 31 * 24 * 60 * 60 * 1000,
-  annual: 366 * 24 * 60 * 60 * 1000
-};
-
-// Family emails with unlimited free access — never go through Stripe,
-// never expire. Checked before any real KV pass lookup.
-const UNLIMITED_EMAILS = [
-  "kamiwinther22@gmail.com",
-  "maddiewinther@gmail.com",
-  "halliewinther@gmail.com"
-];
-
-function passKey(email) {
-  return `pass:${email.trim().toLowerCase()}`;
-}
-
 function jobKey(jobId) {
   return `job:${jobId}`;
-}
-
-// Only the plain birth-data fields needed to refill the form — never the
-// computed numerology/astrology/Human Design output, which is regenerated
-// fresh from these each time.
-function personSnapshot(p) {
-  if (!p) return null;
-  const { first, mid, last, dob, time, city, state, country } = p;
-  return { first, mid, last, dob, time, city, state, country };
-}
-
-async function recordPass(env, sessionId, p1, p2) {
-  const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
-    headers: { "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}` }
-  });
-  if (!res.ok) throw new Error("Could not verify checkout session with Stripe.");
-  const session = await res.json();
-
-  if (session.payment_status !== "paid") {
-    return { ok: false, reason: "Payment not completed." };
-  }
-
-  const plan = session.metadata && session.metadata.plan;
-  const durationMs = PASS_DURATION_MS[plan];
-  if (!durationMs) {
-    // Single-reading purchases don't create a pass — nothing to store.
-    return { ok: true, plan: plan || null };
-  }
-
-  const email = session.customer_details && session.customer_details.email;
-  if (!email) return { ok: false, reason: "No email on checkout session." };
-
-  const purchasedAt = Date.now();
-  const expiresAt = purchasedAt + durationMs;
-  await env.PASSES.put(
-    passKey(email),
-    JSON.stringify({ plan, purchasedAt, expiresAt, p1: personSnapshot(p1), p2: personSnapshot(p2) }),
-    { expirationTtl: Math.ceil(durationMs / 1000) }
-  );
-
-  return { ok: true, plan, expiresAt };
-}
-
-async function checkPassRecord(env, email) {
-  if (!email) return { active: false };
-  if (UNLIMITED_EMAILS.includes(email.trim().toLowerCase())) {
-    const raw = await env.PASSES.get(passKey(email));
-    const record = raw ? JSON.parse(raw) : {};
-    return { active: true, plan: "annual", expiresAt: Date.now() + PASS_DURATION_MS.annual, p1: record.p1 || null, p2: record.p2 || null };
-  }
-  const raw = await env.PASSES.get(passKey(email));
-  if (!raw) return { active: false };
-  const record = JSON.parse(raw);
-  if (record.expiresAt < Date.now()) return { active: false };
-  return { active: true, plan: record.plan, expiresAt: record.expiresAt, p1: record.p1 || null, p2: record.p2 || null };
-}
-
-// Refreshes the stored person snapshot for an active pass, so the most
-// recently used birth data is what autofills next time — called whenever a
-// pass holder generates a reading, not just at purchase time.
-async function refreshPassSnapshot(env, email, p1, p2) {
-  if (!email) return;
-  const key = passKey(email);
-  const raw = await env.PASSES.get(key);
-  const isUnlimited = UNLIMITED_EMAILS.includes(email.trim().toLowerCase());
-  if (!raw && !isUnlimited) return;
-  const record = raw ? JSON.parse(raw) : { plan: "annual", purchasedAt: Date.now() };
-  if (!isUnlimited && record.expiresAt < Date.now()) return;
-  const expiresAt = isUnlimited ? Date.now() + PASS_DURATION_MS.annual : record.expiresAt;
-  const remainingTtl = Math.ceil((expiresAt - Date.now()) / 1000);
-  if (remainingTtl <= 0) return;
-  record.expiresAt = expiresAt;
-  record.p1 = personSnapshot(p1);
-  record.p2 = personSnapshot(p2);
-  await env.PASSES.put(key, JSON.stringify(record), { expirationTtl: remainingTtl });
 }
 
 // ─── USAGE TRACKING (running total, for cost monitoring) ─────────────────────
@@ -1338,61 +1203,13 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
 <table>${typeRows}</table>
 <h2>Recent requests (last 20, kept 90 days)</h2>
 <table>${recentRows}</table>
-<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees. Output tokens include thinking -- Claude's API doesn't report thinking and final text as separate numbers.</p>
+<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Output tokens include thinking -- Claude's API doesn't report thinking and final text as separate numbers.</p>
 </body></html>`;
       return new Response(html, { headers: { "Content-Type": "text/html; charset=UTF-8", ...CORS_HEADERS } });
     }
 
     if (request.method !== "POST") {
       return new Response("Method Not Allowed", { status: 405, headers: { ...CORS_HEADERS, ...PRIVACY_HEADERS } });
-    }
-
-    if (url.pathname === "/create-checkout-session") {
-      let body;
-      try {
-        body = await request.json();
-      } catch (e) {
-        return jsonResponse({ error: "Invalid request body." }, 400);
-      }
-      try {
-        const origin = url.origin === "https://know-your-energy.kwdoanchor.workers.dev"
-          ? "https://know-your-energy.com"
-          : url.origin;
-        const session = await createCheckoutSession(env, body.plan, origin, body.email);
-        return jsonResponse({ url: session.url });
-      } catch (error) {
-        return jsonResponse({ error: error.message }, 500);
-      }
-    }
-
-    if (url.pathname === "/record-pass") {
-      let body;
-      try {
-        body = await request.json();
-      } catch (e) {
-        return jsonResponse({ error: "Invalid request body." }, 400);
-      }
-      try {
-        const result = await recordPass(env, body.session_id, body.p1, body.p2);
-        return jsonResponse(result);
-      } catch (error) {
-        return jsonResponse({ error: error.message }, 500);
-      }
-    }
-
-    if (url.pathname === "/check-pass") {
-      let body;
-      try {
-        body = await request.json();
-      } catch (e) {
-        return jsonResponse({ error: "Invalid request body." }, 400);
-      }
-      try {
-        const result = await checkPassRecord(env, body.email);
-        return jsonResponse(result);
-      } catch (error) {
-        return jsonResponse({ error: error.message }, 500);
-      }
     }
 
     // Astrology/numerology are local and fast; Human Design is one quick
@@ -1535,10 +1352,6 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
             reportError = error.message;
             console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
           }
-        }
-
-        if (body.passEmail) {
-          ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
         }
 
         const payload = { p1: p1Data, p2: p2Data, report, reportError, reportUsedFallback, reportFallbackReason };

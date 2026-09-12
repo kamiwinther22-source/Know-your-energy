@@ -3441,7 +3441,7 @@ async function generate(){
       fetch(W_API+'/report',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,p1Data:chartResult.p1,p2Data:chartResult.p2,passEmail:g('pEmail')||undefined,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
+        body:JSON.stringify({rtype:isRelational?'two-person':'individual',relLabel:relType,p1,p2,p1Data:chartResult.p1,p2Data:chartResult.p2,hdOnly:isRelational&&document.getElementById('hdOnlyTest').checked}) // hdOnly is TEMPORARY, see markup note above
       }),
       timeoutAfter(60000)
     ]);
