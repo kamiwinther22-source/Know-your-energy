@@ -5,6 +5,22 @@ this repo. It exists so hard-won design decisions and repeated frustrations
 don't have to be re-explained from scratch in a new chat. If you are an
 instance of Claude reading this: these are not suggestions, they are settled.
 
+## The one rule above all the others
+
+**Never default to the fast, statistically-likely-correct-enough answer
+— it is reliably wrong for this project and costs more than doing it
+right the first time.** The training pull toward whatever's fastest and
+most probable to satisfy an average request is the actual root cause
+behind nearly every failure logged in this file — the block layout, the
+crimson, the gradient streaks, the opacity-as-"lighter" habit, the color
+choices invented and justified after the fact. Every one of those was
+the fast, plausible-sounding answer, not a considered one. She has
+explicitly said this costs her real time and real usage, and that she
+would rather work slower and get something correct than get something
+fast that has to be undone. Take the extra time. Research the real
+technique instead of assuming one. Verify instead of eyeballing. Treat
+"this is probably close enough" as a warning sign, not a stopping point.
+
 ## Standing collaboration rule — do not act on stale authorization
 
 A real, repeated failure, not hypothetical: in one session she said "it is
