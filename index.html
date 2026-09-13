@@ -469,6 +469,13 @@ body{
    event no matter how big it got. */
 .tl-emph{font-style:normal;font-weight:800;}
 .tl-light{font-style:italic;font-weight:400;}
+/* Color thread from headline to title -- nothing on the page tied the
+   hook text to the illustration/brand below it. Reusing the exact
+   green already established on the title (#0f7a4c) on just this one
+   word, not inventing a new color, gives the eye a deliberate path
+   down the page instead of every element existing in its own
+   unrelated color. */
+.tl-accent{color:#0f7a4c;}
 /* Her direct instruction after several real, documented metallic-text
    attempts (multi-band gradient, edge bevel via drop-shadow, SVG
    feSpecularLighting) all fell short of what she was actually
@@ -1344,7 +1351,7 @@ body{
      instead of purely decorative. ---------- -->
 <div class="content" id="hookStep">
   <div class="tagline-frame">
-    <div class="tagline-slide tagline-top c-gold"><span class="tl-emph">Reveal</span> <span class="tl-light">what was set into motion</span> <span class="tl-emph">the day you were born</span></div>
+    <div class="tagline-slide tagline-top c-gold"><span class="tl-emph tl-accent">Reveal</span> <span class="tl-light">what was set into motion</span> <span class="tl-emph">the day you were born</span></div>
 
     <div class="brand-row">
       <!-- Her suggestion: "It probably would make sense to have the energy
@@ -1432,13 +1439,11 @@ body{
        professional polished classy, not like you tripped and fell and
        it dropped on there somewhere." -->
   <div class="hero-email-wrap">
-    <!-- De-emphasized -- it was competing at nearly the same weight as
-         "TAP TO BEGIN" below it, two separate instructional moments
-         fighting for the same attention. This is a caption/reassurance
-         line, not the action; quieter (smaller, dark grey not black)
-         so the actual call-to-action stays the one thing that reads as
-         "do this." Still full-strength, legible color -- not faded. -->
-    <div class="privacy-note" style="margin-bottom:0.3rem;font-size:0.62rem;font-weight:600;color:#4a4a4a;">Enter Your Email That Acts As Your Key</div>
+    <!-- Pulled tight against the input (margin cut from 0.3rem to 0.1rem)
+         so label + field read as one unit instead of a floating caption
+         line sitting above an unrelated box -- fewer distinct text
+         treatments for the eye to sort through before the actual ask. -->
+    <div class="privacy-note" style="margin-bottom:0.1rem;font-size:0.62rem;font-weight:600;color:#4a4a4a;">Enter Your Email That Acts As Your Key</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
