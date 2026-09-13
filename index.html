@@ -298,7 +298,16 @@ body{
   position:relative;width:100%;max-width:380px;margin:0.5rem auto 1rem;
   transform:translateX(-20px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
 }
-.hero-illustration svg{display:block;width:100%;height:auto;overflow:visible;}
+.hero-illustration svg{display:block;width:100%;height:auto;overflow:visible;
+  /* Her broader catch: "the whole thing is so subtle... it all just
+     meshes into nothing." Not just a color problem -- the illustration
+     had no real shadow, so a pale chrome graphic sat at almost the same
+     tonal weight as the page behind it with nothing separating the two.
+     A real grounding shadow (not a fade, not a color change -- genuine
+     depth) gives it actual object-presence instead of floating flush
+     with the background. */
+  filter:drop-shadow(0 10px 22px rgba(20,30,40,0.22));
+}
 /* Real ambient motion, not a static graphic -- the six satellite beads
    each travel along their own ring's fixed curve (see the illustration
    script's own comment for the full reasoning, including why each bead
@@ -1450,8 +1459,12 @@ body{
     <!-- Pulled tight against the input (margin cut from 0.3rem to 0.1rem)
          so label + field read as one unit instead of a floating caption
          line sitting above an unrelated box -- fewer distinct text
-         treatments for the eye to sort through before the actual ask. -->
-    <div class="privacy-note" style="margin-bottom:0.1rem;font-size:0.62rem;font-weight:600;color:#4a4a4a;">Enter Your Email That Acts As Your Key</div>
+         treatments for the eye to sort through before the actual ask.
+         The color/size drop that used to be here (#4a4a4a, 0.62rem) was
+         a real, literal instance of the thing she's said many times not
+         to do -- faded text. Reverted to the class's own real
+         black/0.92rem/700 -- only the spacing stays tightened. -->
+    <div class="privacy-note" style="margin-bottom:0.1rem;">Enter Your Email That Acts As Your Key</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
