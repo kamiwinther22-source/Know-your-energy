@@ -574,6 +574,22 @@ async function refreshPassSnapshot(env, email, p1, p2) {
   await env.PASSES.put(key, JSON.stringify(record), { expirationTtl: remainingTtl });
 }
 
+// ─── CLICK TRACKING (how many real visitors reach the Calculate button) ──────
+// Her direct ask: "I would like to see how many people click on the
+// calculate button besides me." Own clicks are excluded client-side (see
+// index.html's owner-flag localStorage check before this ever fires) --
+// this just counts whatever pings actually arrive. Approximate under
+// concurrent load (KV get-then-put isn't atomic, same known tradeoff as
+// the rate limiter above) -- fine for "roughly how many," not built for
+// exact accounting.
+const CLICK_KV_KEY = "clicks:calculate";
+
+async function bumpCalculateClicks(env) {
+  const raw = await env.PASSES.get(CLICK_KV_KEY);
+  const count = raw ? parseInt(raw, 10) : 0;
+  await env.PASSES.put(CLICK_KV_KEY, String(count + 1));
+}
+
 // ─── USAGE TRACKING (running total, for cost monitoring) ─────────────────────
 // No auth on the read side (see the /usage route) — this is a lifetime running
 // total of tokens spent generating readings, not customer data.
@@ -1450,6 +1466,8 @@ export default {
     // Running cost dashboard: open /usage in any browser. No auth by design —
     // not customer data, just a lifetime total of Claude tokens/cost.
     if (url.pathname === "/usage") {
+      const clickRaw = await env.PASSES.get(CLICK_KV_KEY);
+      const calcClicks = clickRaw ? parseInt(clickRaw, 10) : 0;
       const raw = await env.PASSES.get(USAGE_KV_KEY);
       const t = raw ? JSON.parse(raw) : { requests: 0, inputTokens: 0, outputTokens: 0, cacheCreationTokens: 0, cacheReadTokens: 0, byType: {} };
       if (!t.byType) t.byType = {};
@@ -1491,6 +1509,7 @@ td{padding:0.4rem 0;border-bottom:1px solid rgba(240,201,76,0.2);} td:last-child
 .note{font-size:0.75rem;opacity:0.7;margin-top:1.5rem;}</style></head><body>
 <h1>Claude API usage — running total</h1>
 <table>
+${row('Calculate button clicks (excluding your own)', calcClicks)}
 ${row('Readings generated', t.requests)}
 ${row('Input tokens', t.inputTokens.toLocaleString())}
 ${row('Output tokens', t.outputTokens.toLocaleString())}
@@ -1525,6 +1544,18 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
       } catch (error) {
         return jsonResponse({ error: error.message }, 500);
       }
+    }
+
+    // Fire-and-forget from index.html's generate() -- see the
+    // bumpCalculateClicks comment above for the full reasoning. Always
+    // returns ok even if the KV write races/fails; this is a rough
+    // counter, not something a dropped ping should ever surface as an
+    // error to a real visitor.
+    if (url.pathname === "/track-click") {
+      try {
+        await bumpCalculateClicks(env);
+      } catch (e) {}
+      return jsonResponse({ ok: true });
     }
 
     // Astrology/numerology are local and fast; Human Design is one quick

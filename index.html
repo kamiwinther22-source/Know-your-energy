@@ -4479,6 +4479,30 @@ function stopLoadingTimer(){
 
 const W_API='https://know-your-energy.kwdoanchor.workers.dev';
 
+// ---------- owner-exclusion flag for Calculate-click tracking ----------
+// Her direct ask: "how many people click on the calculate button besides
+// me." Visiting the site once with ?owner=1 in the URL (on each of her
+// own devices/browsers she tests from) sets a permanent localStorage flag;
+// trackCalculateClick() below checks it and skips sending the ping for her
+// own clicks, so the count on /usage reflects other people only. The URL
+// param is stripped right after so it never lingers in a shared/bookmarked
+// link.
+(function(){
+  try{
+    if(new URLSearchParams(location.search).get('owner')==='1'){
+      localStorage.setItem('kye_owner','1');
+      const url=new URL(location.href);
+      url.searchParams.delete('owner');
+      history.replaceState({}, '', url.toString());
+    }
+  }catch(e){}
+})();
+function isOwnerDevice(){ try{ return localStorage.getItem('kye_owner')==='1'; }catch(e){ return false; } }
+function trackCalculateClick(){
+  if(isOwnerDevice())return;
+  try{ fetch(W_API+'/track-click',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'calculate'})}).catch(()=>{}); }catch(e){}
+}
+
 // ---------- bot protection: Cloudflare Turnstile ----------
 // PLACEHOLDER -- this is not a real site key. Get the real one from the
 // Cloudflare dashboard (Turnstile -> Add a site, add know-your-energy.com
@@ -4717,6 +4741,7 @@ async function buyPass(plan){
 async function generate(){
   const genBtn=document.getElementById('genBtn');
   if(genBtn.disabled)return;
+  trackCalculateClick();
   document.getElementById('err').style.display='none';
   const p1f=g('p1f'),p1l=g('p1l'),d1=g('p1d');
   if(!p1f||!p1l||!vd(d1)){showErr('Please enter first and last name, and date of birth (MM/DD/YYYY).');return;}
