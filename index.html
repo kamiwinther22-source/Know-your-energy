@@ -253,7 +253,7 @@ body{
    rebalance where the visible ink actually sits, verified against a
    real screenshot rather than computed blind. */
 .hero-illustration{
-  position:relative;width:100%;max-width:380px;margin:0.4rem auto 0.8rem;
+  position:relative;width:100%;max-width:380px;margin:0.5rem auto 1rem;
   transform:translateX(-20px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
 }
 .hero-illustration svg{display:block;width:100%;height:auto;}
@@ -263,9 +263,9 @@ body{
    illustration-led hero. Kept small and deliberate, close under the
    sun so "type your email, tap the sun" reads as one motion, not two
    unrelated asks stacked on the page. */
-.hero-email-wrap{max-width:300px;margin:0.6rem auto 0.9rem;}
+.hero-email-wrap{max-width:300px;margin:0.5rem auto 1rem;}
 .hero-email-wrap .err{text-align:center;}
-.hero-key{display:block;width:62px;height:auto;margin:0.15rem 0 0 4px;}
+.hero-key{display:block;width:62px;height:auto;margin:0.25rem 0 0 4px;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -342,7 +342,7 @@ body{
    (away from the headline), almost none left below it, so the title
    sits directly against the illustration instead of centered between
    the two. */
-.brand-row{position:relative;text-align:center;margin-top:2.4rem;margin-bottom:0.05rem;padding:0 1.6rem;}
+.brand-row{position:relative;text-align:center;margin-top:2.5rem;margin-bottom:0;padding:0 1.6rem;}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
    photo of the actual pigment (mean of the well-lit, fully-saturated pixels
    across the pile, excluding shadow crevices and blown highlight) rather
@@ -394,6 +394,12 @@ body{
 /* ---------- tagline / toggle ---------- */
 /* Both tagline lines shown at once, stacked, with the single remaining
    key bubble centered in the gap between them -- per her sketch. */
+/* Hero-section spacing snapped to a real 8px scale (4/8/16/24/32/40px)
+   instead of accumulated decimal rem values from many separate edits
+   over time (2.4rem, 0.6rem, 0.15rem, 0.05rem, etc, each picked in
+   isolation) -- gaps that follow one consistent unit read as a real
+   rhythm rather than incidental. Kept each value at its nearest clean
+   number rather than changing the overall proportions of the page. */
 .tagline-frame{position:relative;max-width:380px;margin:0 auto 8px;padding:0 30px;}
 .tagline-slide{
   width:100%;margin:0;
