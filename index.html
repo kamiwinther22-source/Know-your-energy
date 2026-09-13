@@ -249,7 +249,7 @@ body{
    unrelated asks stacked on the page. */
 .hero-email-wrap{max-width:300px;margin:0.6rem auto 0.9rem;}
 .hero-email-wrap .err{text-align:center;}
-.hero-key{display:block;width:44px;height:auto;margin:0.15rem auto 0;overflow:visible;}
+.hero-key{display:block;width:52px;height:auto;margin:0.15rem auto 0;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -1396,16 +1396,16 @@ body{
     <div class="privacy-note" style="margin-bottom:0.3rem;font-size:0.68rem;font-weight:600;">Enter Your Email That Acts As Your Key</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <!-- Replaced the earlier flat reference-photo key with the coin-
-         medallion design she approved: a solid jeweled medallion bow
-         (mass reads as value at small size, unlike a thin ring), a
-         reeded coin edge, and a stepped ward-cut bit, in the site's
-         blue -- her direct correction on the prior chrome/grey version:
-         "I don't want Gray... make the whole thing blue." Same artwork
-         she reviewed, just scaled down to sit here per "That key can
-         replace the key that is underneath the email. If it is shrunk
-         down to that size, I am ok with it." -->
-    <svg class="hero-key" viewBox="0 0 140 270" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- Coin-medallion key design she approved (jeweled medallion bow,
+         reeded coin edge, stepped ward-cut bit, all in the site's blue
+         -- "I don't want Gray... make the whole thing blue"), laid on
+         its side and shrunk to sit here -- her direct correction after
+         it first went in standing upright: "Lay it down like the other
+         one was and shrink it." The artwork itself is authored upright
+         (viewBox 0 0 140 270); the outer transform below is the actual
+         lay-flat rotation, computed (not eyeballed) so the rotated
+         bounding box lands exactly on this viewBox with no clipping. -->
+    <svg class="hero-key" viewBox="-2 -2 236.5 103" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="heroKeyMetal" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#e8ecff"/>
@@ -1431,7 +1431,7 @@ body{
           <stop offset="100%" stop-color="#2c3bc2"/>
         </linearGradient>
       </defs>
-      <g transform="translate(0,4) rotate(-10 70 135)">
+      <g transform="translate(46,-72.5) rotate(90 70 122)">
         <circle cx="70" cy="55" r="49.5" fill="url(#heroKeyMetalRim)"/>
         <circle cx="70" cy="55" r="45" fill="url(#heroKeyMetal)" stroke="#0a0d47" stroke-width="0.7"/>
         <g stroke="#0a0d47" stroke-width="1.3" opacity="0.6">
