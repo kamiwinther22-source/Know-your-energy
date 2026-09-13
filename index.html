@@ -215,16 +215,21 @@ body{
      combination was never what she asked to remove. It only existed in
      a scratch preview before now; this is its first time actually on
      the live site. */
-  /* Structurally different from every earlier attempt -- her exact
-     description: green prominent, white still showing, blue "filling
-     in in some places," not one shape the illustration sits on top of.
-     Green is now a broad, real presence (not confined to the bottom
-     ribbon glow); blue is two smaller, off-center accent patches placed
-     away from the sphere's own position, not a centered blob. */
+  /* Two corrections after the first live version of this: (1) the green
+     layer here was a real overreach on my part -- she pointed out she
+     never asked for more green than what already existed (the ribbon's
+     own glow, .ribbon-frame::before below, is the site's real green
+     presence). Cut way down, just a faint lift near the bottom instead
+     of a broad wash over the whole section. (2) the two blue patches
+     were floating in the middle of the composition with no anchor --
+     one sat directly behind the tagline text. Moved both into the
+     actual corners (top-left; right edge, level with the illustration)
+     so they read as background filling the page's empty corners, not
+     objects placed on top of the content. */
   background-image:
-    radial-gradient(circle 150px at 15% 26%, rgba(77,126,232,0.42) 0%, rgba(77,126,232,0) 72%),
-    radial-gradient(circle 170px at 88% 68%, rgba(77,126,232,0.38) 0%, rgba(77,126,232,0) 72%),
-    radial-gradient(ellipse 130% 65% at 50% 68%, rgba(15,122,76,0.2) 0%, rgba(15,122,76,0) 78%);
+    radial-gradient(circle 210px at 2% 6%, rgba(77,126,232,0.36) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(circle 230px at 98% 60%, rgba(77,126,232,0.32) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(ellipse 110% 40% at 50% 90%, rgba(15,122,76,0.08) 0%, rgba(15,122,76,0) 80%);
 }
 /* .tagline-frame carries a 40px bottom margin (spacing when it's not the
    last thing on the page elsewhere) but no matching top margin -- used as
