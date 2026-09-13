@@ -350,6 +350,23 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   even built).
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
+  Not just a general impression -- caught as a literal, checkable case
+  once already: an email label had its color quietly overridden from
+  real black down to `#4a4a4a` gray (and shrunk) during an earlier
+  spacing pass. Check actual color/opacity values, don't just eyeball.
+- **No straight lines anywhere on the page.** Her direct words: "If you
+  put any straight line anywhere on the page, you are fucking up."
+  Decorative elements (background accents, illustration details, any
+  future addition) should be curved/organic -- circles, arcs, ellipses --
+  never a literal straight line.
+- **Once she says she likes something, leave it alone.** Her direct
+  words: "when I say that I like something you leave it the fuck alone."
+  Don't re-touch a color, size, or placement she's already confirmed is
+  right while fixing a different, specific complaint about the same
+  element -- e.g. the blue/green hue values themselves were confirmed
+  correct early on; every later round should have only touched
+  placement/distribution, never gone back and re-litigated the color
+  itself along the way.
 - **A title's text color and its outline/frame color must never be the same
   tone.**
 - **Never write her copy.** Build visuals and layout only; leave clearly

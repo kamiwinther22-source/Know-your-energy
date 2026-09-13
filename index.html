@@ -211,29 +211,28 @@ body{
   min-height:calc(100vh - 2.45rem);
   min-height:calc(100dvh - 2.45rem);
   display:flex;flex-direction:column;justify-content:center;
-  /* Real history on this background, condensed: blue-and-green restored
-     per her correction that this combo (not flat gray) was what she
-     actually liked; green was cut back after "I don't believe I said I
-     wanted more green"; both colors were then raised back up after
-     "the color is looking very faded" (low opacity doesn't shrink a
-     color, it desaturates it into a wash); a patch was moved off the
-     illustration after it visibly tinted the rings.
-     Her next, final catch on all of it: mirrored top corners + a bottom
-     band is a tidy, symmetric, template arrangement she never asked
-     for -- "stop trying to make it average." This version breaks that
-     symmetry on purpose: one real green pool anchored low and to the
-     left (not centered, not a thin strip -- genuinely prominent, per
-     her original "green was prominent... white showing... blue filled
-     in in some places"), and two blue accents that are neither mirrored
-     nor the same size -- one top-left, one in the opposite corner
-     (bottom-right), asymmetric by real intent. Checked against the
-     illustration's actual measured position (.hero-illustration spans
-     roughly y 279-660 in this layout) and against a real screenshot, not
-     just the numbers below, so nothing sits on the rings or the text. */
+  /* Real history, condensed: blue-and-green restored per her correction
+     that this combo (not flat gray) was what she actually liked; two
+     mirrored corners + a bottom band was then rejected as a tidy,
+     average, template arrangement she never asked for.
+     Her most recent, most specific correction: blue should "fill in
+     some spaces randomly over the screen," never overlapping green, and
+     is NOT the dominant color by any means -- her original memory was
+     always "green prominent... blue filled in in some places," not two
+     bold blue shapes competing with it. Rebuilt on that literally: four
+     small, scattered blue accents (not two large corner shapes) at
+     varied, non-mirrored sizes, kept out of the illustration's real
+     footprint and away from the green pool entirely so the two colors
+     never touch; one real green presence, still the more prominent of
+     the two but not covering most of the page either. The colors
+     themselves (this blue, this green) are already confirmed right --
+     only placement/distribution changed here, nothing recolored. */
   background-image:
-    radial-gradient(circle 210px at 3% 5%, rgba(77,126,232,0.5) 0%, rgba(77,126,232,0) 72%),
-    radial-gradient(circle 175px at 95% 90%, rgba(77,126,232,0.42) 0%, rgba(77,126,232,0) 70%),
-    radial-gradient(ellipse 100% 55% at 16% 102%, rgba(15,122,76,0.24) 0%, rgba(15,122,76,0) 78%);
+    radial-gradient(circle 130px at 4% 5%, rgba(77,126,232,0.38) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(circle 95px at 90% 11%, rgba(77,126,232,0.3) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(circle 85px at 93% 80%, rgba(77,126,232,0.28) 0%, rgba(77,126,232,0) 70%),
+    radial-gradient(circle 110px at 97% 97%, rgba(77,126,232,0.32) 0%, rgba(77,126,232,0) 70%),
+    radial-gradient(ellipse 82% 42% at 14% 100%, rgba(15,122,76,0.22) 0%, rgba(15,122,76,0) 78%);
 }
 /* .tagline-frame carries a 40px bottom margin (spacing when it's not the
    last thing on the page elsewhere) but no matching top margin -- used as
