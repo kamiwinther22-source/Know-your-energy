@@ -173,9 +173,16 @@ body{
    same thing. Her direct reaction to the result: "scrunched up." A
    little real space above the header illustration is restored here,
    with no fill/border/shadow attached to it -- open space isn't a box. */
+/* Her direct correction, after seeing this page: the toggle/Person-1
+   block sat flush against the very top of the screen -- "nothing is
+   comfortable about that... it's not clever, it's not intentional
+   design, it's just uncomfortable." Real top padding now, matching the
+   kind of deliberate breathing room the hero screen already has before
+   its own content starts, instead of content butting straight up
+   against the viewport edge. */
 #formStep{
   position:relative;
-  margin:0.5rem 0.5rem 0.9rem;padding:0.9rem 0 0;
+  margin:0.5rem 0.5rem 0.9rem;padding:2.6rem 0 0;
 }
 /* No header illustration on this screen -- removed entirely after
    repeated attempts (orbit rings, then a key, with and without a glow,
@@ -780,7 +787,15 @@ body{
    just placeholder text) in the row-birth/row-id grids at the
    narrowest supported width, per her request to use "measuring and
    some logic" rather than eyeballing it. */
-.form-panel .f{margin:0 32px 1.7rem;}
+/* Widened from 32px -- her direct correction: "I do not want the data
+   entry to span the width of the phone screen at all." A real, visibly
+   narrower column with generous space on both sides, not a form that
+   runs close to edge-to-edge. Re-verified with actual typed values
+   (not placeholders), including a real long location string, at this
+   width before treating it as settled -- Location previously broke at
+   too narrow a width and got its own full-width row specifically to
+   avoid that; this margin can't quietly re-break it. */
+.form-panel .f{margin:0 52px 1.7rem;}
 #p2Section{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.35s ease;}
 #p2Section.open{grid-template-rows:1fr;}
 #p2Section>.f{overflow:hidden;min-height:0;}
@@ -805,7 +820,16 @@ body{
    fraction of a 4-column one gives it nearly the full block width. */
 .row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.4rem;}
 .row-birth{display:grid;grid-template-columns:1fr 1.05fr 0.45fr;gap:0.3rem;align-items:end;}
-.row-birth>.loc-field{grid-column:1 / -1;margin-top:0.4rem;}
+/* Widens back out past its narrower parent (.form-panel .f now uses a
+   tighter 52px margin so the short fields read genuinely compact) --
+   Location is the one field that actually needs real width for real
+   typed content ("Los Angeles, California, United States" measured at
+   280px), so it alone breaks back out toward the original wider
+   footprint via negative margins, rather than the whole block staying
+   wide just to accommodate this one field. Re-verified: at this width
+   the real long value no longer scrolls/clips (checked via scrollWidth
+   vs. clientWidth on the actual input, not eyeballed). */
+.row-birth>.loc-field{grid-column:1 / -1;margin-top:0.4rem;margin-left:-21px;margin-right:-21px;}
 
 /* Carved into the page, not a line underneath the text -- no border, no
    fill color, no grey panel behind it. The recessed look is built purely
