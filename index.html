@@ -211,6 +211,11 @@ body{
   min-height:calc(100vh - 2.45rem);
   min-height:calc(100dvh - 2.45rem);
   display:flex;flex-direction:column;justify-content:center;
+  /* Blue-and-green background restored -- her direct correction: this
+     combination was never what she asked to remove. It only existed in
+     a scratch preview before now; this is its first time actually on
+     the live site. */
+  background-image:radial-gradient(ellipse 150% 85% at 50% 60%, rgba(77,126,232,0.32) 0%, rgba(31,63,158,0.16) 38%, rgba(255,255,255,0) 72%);
 }
 /* .tagline-frame carries a 40px bottom margin (spacing when it's not the
    last thing on the page elsewhere) but no matching top margin -- used as
