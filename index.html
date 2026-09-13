@@ -699,6 +699,10 @@ body{
    narrowest supported width, per her request to use "measuring and
    some logic" rather than eyeballing it. */
 .form-panel .f{margin:0 32px 1.7rem;}
+#p2Section{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.35s ease;}
+#p2Section.open{grid-template-rows:1fr;}
+#p2Section>.f{overflow:hidden;min-height:0;}
+@media(prefers-reduced-motion:reduce){#p2Section{transition:none;}}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
 /* Marks Time/Location as genuinely optional (per her screenshot
@@ -1616,7 +1620,7 @@ body{
           </div>
         </div>
 
-        <div id="p2Section" style="display:none;">
+        <div id="p2Section">
           <div class="f">
             <div class="person-tag">Person 2</div>
             <label class="section-lbl">Full Name at Birth</label>
@@ -2097,7 +2101,7 @@ function setMode(rel){
   lblInd.classList.toggle('active', !rel);
   lblRel.classList.toggle('active', rel);
   p1Ttl.textContent = 'Full Name at Birth';
-  p2Section.style.display = rel ? 'block' : 'none';
+  p2Section.classList.toggle('open', rel);
   relWrap.style.display = rel ? 'flex' : 'none';
   if(typeof saveDraft==='function')saveDraft();
 }
