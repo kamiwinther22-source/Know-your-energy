@@ -227,11 +227,22 @@ body{
      the two but not covering most of the page either. The colors
      themselves (this blue, this green) are already confirmed right --
      only placement/distribution changed here, nothing recolored. */
+  /* Her next catch on the scattered version: "you had some in the
+     middle" -- the four accents above were all edge/corner-hugging,
+     which is its own kind of over-cautious pattern (avoiding the
+     illustration entirely rather than genuinely scattering). Added two
+     more, placed centrally, checked against a real screenshot for the
+     actual empty gaps in the composition (the band between the email
+     field and where the rings visually start, and the band between the
+     rings and the ribbon at the bottom) rather than the illustration's
+     full rotated bounding box, which is much larger than its real ink. */
   background-image:
     radial-gradient(circle 130px at 4% 5%, rgba(77,126,232,0.38) 0%, rgba(77,126,232,0) 72%),
     radial-gradient(circle 95px at 90% 11%, rgba(77,126,232,0.3) 0%, rgba(77,126,232,0) 72%),
     radial-gradient(circle 85px at 93% 80%, rgba(77,126,232,0.28) 0%, rgba(77,126,232,0) 70%),
     radial-gradient(circle 110px at 97% 97%, rgba(77,126,232,0.32) 0%, rgba(77,126,232,0) 70%),
+    radial-gradient(circle 70px at 50% 32%, rgba(77,126,232,0.26) 0%, rgba(77,126,232,0) 70%),
+    radial-gradient(circle 80px at 62% 78%, rgba(77,126,232,0.26) 0%, rgba(77,126,232,0) 70%),
     radial-gradient(ellipse 82% 42% at 14% 100%, rgba(15,122,76,0.22) 0%, rgba(15,122,76,0) 78%);
 }
 /* .tagline-frame carries a 40px bottom margin (spacing when it's not the
