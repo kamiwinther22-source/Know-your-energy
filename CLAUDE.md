@@ -234,12 +234,18 @@ All routes live in the single `fetch` handler, gated by `CORS_HEADERS` (open,
     `model: 'claude-sonnet-5'`, `thinking: { type: 'disabled' }`), returns
     the generated reading JSON.
 
-**No payment processor is currently connected.** Stripe was removed
-entirely from `worker.js` and `index.html` — her direct instruction:
-"Stripe is not and will not be the payment processor," and confirmed
-there was never a real Stripe account/key behind it anyway (the checkout
-flow was non-functional even before removal — the frontend never even
-finished the redirect-back loop). `createCheckoutSession()`/`PLAN_CONFIG`,
+**No payment processor is currently connected, and this app has never
+received a real payment from anyone.** Stripe was removed entirely from
+`worker.js` and `index.html` — her direct instruction: "Stripe is not
+and will not be the payment processor," and her direct correction when
+this was first summarized: "It has never received payments." Not "the
+integration was removed so it stopped working" — there is no prior
+period to account for, no real customer, no revenue, ever. The Stripe
+code that existed before removal was never backed by a real account/key,
+and the checkout flow was non-functional even before that (the frontend
+never finished the redirect-back loop that would have called
+/record-pass). Do not describe this app as having processed payments in
+the past, tersely or otherwise. `createCheckoutSession()`/`PLAN_CONFIG`,
 `recordPass()`, and the `/create-checkout-session` and `/record-pass`
 routes are gone. `checkPassRecord`/`passKey`/`PASS_DURATION_MS`/
 `UNLIMITED_EMAILS` are processor-agnostic (they just read KV) and were
