@@ -2190,39 +2190,49 @@ function openNumberDef(item){
            objectBoundingBox (SVG's default gradientUnits) maps it to
            each ring's own bounding box automatically, so this one
            definition gives every ring, at whatever size, the same real
-           catch-light-to-shadow arc a curved metal band actually has. -->
+           catch-light-to-shadow arc a curved metal band actually has.
+           Her direct, emphatic correction, all caps: "MAKE THE RINGS
+           SILVER" -- this gradient had real green (MINT/JADE/EMERALD)
+           and a warm cream stop baked into the metal's own color, not
+           just picked up from the page background behind it. The
+           background-patch fix earlier this session was real but only
+           solved half the problem; this is the other half, the actual
+           material color. Pure grayscale now, white through to a real
+           dark shadow tone, same technique as the sun's own already-
+           approved sunGrad, no hue anywhere in it. -->
       <linearGradient id="ringGrad" x1="15%" y1="8%" x2="85%" y2="92%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="18%" stop-color="${MINT}"/>
-        <stop offset="34%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="50%" stop-color="#f6eee0"/>
-        <stop offset="68%" stop-color="${CHROME_DEEP}"/>
-        <stop offset="88%" stop-color="${JADE}"/>
-        <stop offset="100%" stop-color="${EMERALD}"/>
+        <stop offset="20%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="42%" stop-color="#e4e6eb"/>
+        <stop offset="62%" stop-color="${CHROME_MID}"/>
+        <stop offset="82%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="100%" stop-color="#6b6f7a"/>
       </linearGradient>
       <!-- Real per-bead sphere shading (bright highlight, dark shadow
            edge) instead of a flat fill -- same reasoning as ringGrad
-           above. Three variants so the satellites keep real tonal
-           range, each still a genuine small sphere rather than a flat
-           disc. -->
+           above, and the same fix: pure grayscale, no green/cream mixed
+           into any of the three variants. Kept three genuinely distinct
+           gradients (not one gradient reused three times) so the
+           satellites still have real individual tonal range, just all
+           within silver/chrome, never color. -->
       <radialGradient id="beadGrad1" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="30%" stop-color="${MINT}"/>
-        <stop offset="65%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="30%" stop-color="${CHROME_LIGHT}"/>
+        <stop offset="65%" stop-color="#e4e6eb"/>
         <stop offset="100%" stop-color="${CHROME_MID}"/>
       </radialGradient>
       <radialGradient id="beadGrad2" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
         <stop offset="25%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="55%" stop-color="#f6eee0"/>
+        <stop offset="55%" stop-color="#d5d8de"/>
         <stop offset="80%" stop-color="${CHROME_DEEP}"/>
-        <stop offset="100%" stop-color="${EMERALD}"/>
+        <stop offset="100%" stop-color="#6b6f7a"/>
       </radialGradient>
       <radialGradient id="beadGrad3" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="40%" stop-color="#f6eee0"/>
+        <stop offset="40%" stop-color="#eceef1"/>
         <stop offset="75%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="100%" stop-color="${JADE}"/>
+        <stop offset="100%" stop-color="${CHROME_MID}"/>
       </radialGradient>
     </defs>
     <circle cx="${cx}" cy="${cy}" r="78" fill="url(#corona)"/>
