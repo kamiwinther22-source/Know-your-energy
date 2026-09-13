@@ -444,6 +444,15 @@ pass system despite the namespace's name).
   with zero or minimal blur radius) — never a blurred one. This applies
   retroactively to every depth/3D/glossy/metallic technique attempted
   earlier in this file's history; none of them are exempt.
+- **Never put a colored shadow/highlight directly behind body or headline
+  text.** Tried once this session (black headline text with a solid
+  magenta offset shadow) and rejected immediately: it reads as an
+  accident, like a highlighter dragged across black print in a newspaper
+  or magazine, not a deliberate design choice — regardless of the color
+  used, not specific to magenta. If a headline needs to carry an accent
+  color, put the color in the letters themselves or in a genuinely
+  separate element nearby, never as a colored shadow sitting behind
+  otherwise-plain text.
 - **A title's text color and its outline/frame color must never be the same
   tone.**
 - **Never a block layout.** No angled/diagonal solid-color panels cutting
