@@ -225,23 +225,39 @@ All routes live in the single `fetch` handler, gated by `CORS_HEADERS` (open,
   lifetime token/cost counter out of the `PASSES` KV namespace. Not
   customer data, intentionally public.
 - Everything else requires `POST`:
-  - `/create-checkout-session` — creates a Stripe Checkout session for one
-    of `PLAN_CONFIG` (`single` $5, `monthly` $10, `annual` $25 — all
-    one-time `payment` mode, never `subscription`).
-  - `/record-pass` / `/check-pass` — verify a Stripe session and read/write
-    a pass record in KV (`PASSES`), including the `UNLIMITED_EMAILS`
-    bypass for the three family addresses.
+  - `/check-pass` — reads a pass record from KV (`PASSES`), including the
+    `UNLIMITED_EMAILS` bypass for the three family addresses. Nothing
+    currently writes a pass record for a normal (non-family) email — see
+    the payment-processor note below.
   - `/report` — the main endpoint: takes person(s) astrology + numerology +
     Human Design data, calls the Claude API (`generateReport`,
     `model: 'claude-sonnet-5'`, `thinking: { type: 'disabled' }`), returns
     the generated reading JSON.
 
+**No payment processor is currently connected.** Stripe was removed
+entirely from `worker.js` and `index.html` — her direct instruction:
+"Stripe is not and will not be the payment processor," and confirmed
+there was never a real Stripe account/key behind it anyway (the checkout
+flow was non-functional even before removal — the frontend never even
+finished the redirect-back loop). `createCheckoutSession()`/`PLAN_CONFIG`,
+`recordPass()`, and the `/create-checkout-session` and `/record-pass`
+routes are gone. `checkPassRecord`/`passKey`/`PASS_DURATION_MS`/
+`UNLIMITED_EMAILS` are processor-agnostic (they just read KV) and were
+left in place for whichever processor replaces this. The frontend's
+`buyPass()` now fails honestly with a real "not available yet" message
+instead of hitting a route that no longer exists. She has not said which
+processor she wants instead — don't default to the next most common
+option (e.g. PayPal) on your own initiative; ask or research real options
+first, same as the "never default to the statistically common choice"
+rule above.
+
 ### Required secrets / env (not in the repo)
 
 Set via `wrangler secret put <NAME>` (or the GitHub Actions secrets used by
-`Deploy Worker`): `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `HumanDesign_key`,
-plus `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` for the deploy action
-itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
+`Deploy Worker`): `ANTHROPIC_API_KEY`, `HumanDesign_key`, plus
+`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` for the deploy action
+itself. `STRIPE_SECRET_KEY` is no longer used. The `PASSES` KV namespace
+binding lives in `wrangler.toml`.
 
 ## Development workflow
 
@@ -478,8 +494,9 @@ resurrect the "two pages, entry form is done" framing.
 - Astrology is computed **locally** (`astro-engine.js`) — no paid external
   API, no rate limit. `worker.js` strips house/Ascendant/Midheaven data when
   birth time is unknown rather than guessing from a defaulted time.
-- Stripe Checkout is wired for one-time charges only (single/month/year
-  passes) — never a subscription/auto-billing.
+- No payment processor is connected (Stripe was removed, see the Worker
+  API surface section above) — passes are one-time-charge by design
+  whenever a processor is wired in, never a subscription/auto-billing.
 - Three family emails have unlimited free access (see `UNLIMITED_EMAILS` in
   `worker.js`) — don't remove this without being asked.
 - Real Claude report generation is wired into `/report` in `worker.js`

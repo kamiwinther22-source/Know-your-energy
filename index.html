@@ -4616,9 +4616,11 @@ const REMEMBERED_EMAIL_KEY='kye_passEmail';
 function rememberPassEmail(email){ try{localStorage.setItem(REMEMBERED_EMAIL_KEY,email);}catch(e){} }
 function getRememberedPassEmail(){ try{return localStorage.getItem(REMEMBERED_EMAIL_KEY)||'';}catch(e){return '';} }
 
-// Matches worker.js's PLAN_CONFIG/PASS_DURATION_MS exactly (day/monthly/
-// annual) -- checkout still won't actually complete until Stripe itself
-// is turned on, but the plan names/amounts now agree end to end.
+// Matches worker.js's PASS_DURATION_MS exactly (day/monthly/annual). Stripe
+// has been removed entirely -- her direct instruction, and there was never
+// a real account behind it anyway -- so buyPass() below fails honestly
+// instead of hitting a route that no longer exists, until a real processor
+// replaces it.
 // Narrowed from 5 tiers to 3 per her direct instruction, tying back to
 // the choice-overload research already covered this session (3-or-fewer
 // pricing tiers convert meaningfully better than 4-5). Kept Day/Month/
@@ -4704,15 +4706,12 @@ async function checkEmailStatus(){
     pricingPanel.style.display='none';
   }
 }
+// No payment processor is connected right now (Stripe was removed --
+// her direct instruction) -- this fails honestly with a real message
+// instead of hitting the now-removed /create-checkout-session route.
 async function buyPass(plan){
-  const email=g('pEmail');
-  if(!email){ document.getElementById('gateErr').textContent='Missing email — please go back to the first page and enter it there.'; document.getElementById('gateErr').style.display='block'; return; }
-  try{
-    const res=await fetch(W_API+'/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan,email})});
-    const data=await res.json();
-    if(data.url){ window.location.href=data.url; }
-    else{ document.getElementById('gateErr').textContent=data.error||'Could not start checkout.'; document.getElementById('gateErr').style.display='block'; }
-  }catch(e){ document.getElementById('gateErr').textContent='Connection error: '+e.message; document.getElementById('gateErr').style.display='block'; }
+  document.getElementById('gateErr').textContent='Purchasing isn\'t available yet — payment processing isn\'t set up.';
+  document.getElementById('gateErr').style.display='block';
 }
 
 async function generate(){

@@ -397,51 +397,22 @@ async function assemblePersonData(env, person) {
   return { first, mid, last, numerology, numerologyError, astrology, astrologyError, humanDesign, humanDesignError };
 }
 
-// ─── STRIPE CHECKOUT ─────────────────────────────────────────────────────────
+// ─── PAYMENT PROCESSOR ───────────────────────────────────────────────────────
+// Removed entirely -- her direct instruction: "Stripe is not and will not be
+// the payment processor," and confirmed there was never a real Stripe
+// account/key behind this anyway, so the whole checkout flow was non-
+// functional even before this. createCheckoutSession()/PLAN_CONFIG and the
+// /create-checkout-session route are gone; recordPass() and /record-pass
+// (which verified a session against Stripe's API) are gone too. checkPassRecord/
+// passKey/PASS_DURATION_MS/UNLIMITED_EMAILS below are processor-agnostic --
+// they just read pass records out of KV -- so they're left in place for
+// whichever processor replaces this; only the piece that actually called
+// Stripe is removed.
 
-// All three plans are one-time charges. Nobody is ever auto-billed again —
-// "day"/"month"/"year" describe how long the pass lasts, not a recurring
-// charge. Matches the 3 tiers shown on the pricing screen -- narrowed
-// from 5 per her direct instruction (see index.html's PRICING_TIERS for
-// the full reasoning on which two got cut and why).
-const PLAN_CONFIG = {
-  day: { mode: "payment", amount: 500, name: "1 Day Pass" },
-  monthly: { mode: "payment", amount: 2200, name: "1 Month Pass" },
-  annual: { mode: "payment", amount: 7700, name: "12 Month Pass" }
-};
-
-async function createCheckoutSession(env, plan, origin, email) {
-  const config = PLAN_CONFIG[plan];
-  if (!config) throw new Error(`Unknown plan: "${plan}".`);
-
-  const params = new URLSearchParams();
-  params.set("mode", config.mode);
-  params.set("success_url", `${origin}/?checkout=success&plan=${plan}&session_id={CHECKOUT_SESSION_ID}`);
-  params.set("cancel_url", `${origin}/?checkout=cancel`);
-  params.set("line_items[0][quantity]", "1");
-  params.set("line_items[0][price_data][currency]", "usd");
-  params.set("line_items[0][price_data][unit_amount]", String(config.amount));
-  params.set("line_items[0][price_data][product_data][name]", config.name);
-  params.set("metadata[plan]", plan);
-  if (email) params.set("customer_email", email);
-
-  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: params.toString()
-  });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Stripe API error: ${errText}`);
-  }
-  return await res.json();
-}
-
-// ─── PASSES (verified against Stripe, stored in KV) ──────────────────────────
+// ─── PASSES (stored in KV) ────────────────────────────────────────────────────
+// checkPassRecord below only ever reads these records -- nothing currently
+// writes one (see the payment-processor note above), except the
+// UNLIMITED_EMAILS bypass, which doesn't need a stored record at all.
 
 const PASS_DURATION_MS = {
   day: 1 * 24 * 60 * 60 * 1000,
@@ -449,8 +420,8 @@ const PASS_DURATION_MS = {
   annual: 366 * 24 * 60 * 60 * 1000
 };
 
-// Family emails with unlimited free access — never go through Stripe,
-// never expire. Checked before any real KV pass lookup.
+// Family emails with unlimited free access — never expire, never depend on
+// a payment processor at all. Checked before any real KV pass lookup.
 const UNLIMITED_EMAILS = [
   "kamiwinther22@gmail.com",
   "maddiewinther@gmail.com",
@@ -566,39 +537,6 @@ function personSnapshot(p) {
   if (!p) return null;
   const { first, mid, last, dob, time, city, state, country } = p;
   return { first, mid, last, dob, time, city, state, country };
-}
-
-async function recordPass(env, sessionId, p1, p2) {
-  const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
-    headers: { "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}` }
-  });
-  if (!res.ok) throw new Error("Could not verify checkout session with Stripe.");
-  const session = await res.json();
-
-  if (session.payment_status !== "paid") {
-    return { ok: false, reason: "Payment not completed." };
-  }
-
-  const plan = session.metadata && session.metadata.plan;
-  const durationMs = PASS_DURATION_MS[plan];
-  if (!durationMs) {
-    // Every current plan has a real duration — this only fires for an
-    // unrecognized/stale plan key, not a normal purchase path.
-    return { ok: true, plan: plan || null };
-  }
-
-  const email = session.customer_details && session.customer_details.email;
-  if (!email) return { ok: false, reason: "No email on checkout session." };
-
-  const purchasedAt = Date.now();
-  const expiresAt = purchasedAt + durationMs;
-  await env.PASSES.put(
-    passKey(email),
-    JSON.stringify({ plan, purchasedAt, expiresAt, p1: personSnapshot(p1), p2: personSnapshot(p2) }),
-    { expirationTtl: Math.ceil(durationMs / 1000) }
-  );
-
-  return { ok: true, plan, expiresAt };
 }
 
 async function checkPassRecord(env, email) {
@@ -1565,46 +1503,13 @@ ${row('Estimated cost per reading', '$' + perReading.toFixed(4))}
 <table>${typeRows}</table>
 <h2>Recent requests (last 20, kept 90 days)</h2>
 <table>${recentRows}</table>
-<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Doesn't include Stripe fees. Output tokens include thinking -- Claude's API doesn't report thinking and final text as separate numbers.</p>
+<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Doesn't include payment-processor fees. Output tokens include thinking -- Claude's API doesn't report thinking and final text as separate numbers.</p>
 </body></html>`;
       return new Response(html, { headers: { "Content-Type": "text/html; charset=UTF-8", ...CORS_HEADERS } });
     }
 
     if (request.method !== "POST") {
       return new Response("Method Not Allowed", { status: 405, headers: { ...CORS_HEADERS, ...PRIVACY_HEADERS } });
-    }
-
-    if (url.pathname === "/create-checkout-session") {
-      let body;
-      try {
-        body = await request.json();
-      } catch (e) {
-        return jsonResponse({ error: "Invalid request body." }, 400);
-      }
-      try {
-        const origin = url.origin === "https://know-your-energy.kwdoanchor.workers.dev"
-          ? "https://know-your-energy.com"
-          : url.origin;
-        const session = await createCheckoutSession(env, body.plan, origin, body.email);
-        return jsonResponse({ url: session.url });
-      } catch (error) {
-        return jsonResponse({ error: error.message }, 500);
-      }
-    }
-
-    if (url.pathname === "/record-pass") {
-      let body;
-      try {
-        body = await request.json();
-      } catch (e) {
-        return jsonResponse({ error: "Invalid request body." }, 400);
-      }
-      try {
-        const result = await recordPass(env, body.session_id, body.p1, body.p2);
-        return jsonResponse(result);
-      } catch (error) {
-        return jsonResponse({ error: error.message }, 500);
-      }
     }
 
     if (url.pathname === "/check-pass") {
