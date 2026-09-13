@@ -278,11 +278,18 @@ body{
 .hero-illustration svg{display:block;width:100%;height:auto;overflow:visible;}
 /* Real ambient motion, not a static graphic -- the six satellite beads
    each travel along their own ring's fixed curve (see the illustration
-   script's own comment for the full reasoning and why the rings
-   themselves never move). Their actual @keyframes are generated once
-   at load time as static per-bead CSS, not computed live. */
+   script's own comment for the full reasoning, including why each bead
+   is drawn twice -- once behind the sun, once in front -- and why the
+   rings themselves never move). Their actual @keyframes are generated
+   once at load time as static per-bead CSS, not computed live. With
+   reduced motion, freeze on the front copy only, at its real starting
+   position (matches the original static design) -- just turning the
+   animation off on both copies would leave both permanently visible at
+   once, doubling every bead. */
 @media (prefers-reduced-motion:reduce){
   [class^="orbit-bead-"]{animation:none!important;}
+  [class^="orbit-bead-b-"]{display:none!important;}
+  [class^="orbit-bead-f-"]{opacity:1!important;transform:none!important;}
 }
 
 /* Narrower than the full content column and centered -- a full-width
@@ -2018,6 +2025,59 @@ function openNumberDef(item){
     [4, 335, 9],  [5, 190, 12], [1, 15, 9],
   ];
   const BEADS = BEAD_SPECS.map(([ring,angle,r]) => ringPoint(ring,angle,r));
+  const BEAD_GRADS=['beadGrad1','beadGrad2','beadGrad3'];
+  // Genuine ambient motion -- the one thing every static template hero
+  // is missing, and thematically exact here since this IS a solar
+  // system, not a decorative add-on. First attempt spun the whole ring
+  // group as one rigid disc; verified with real screenshots at several
+  // rotation angles and that broke the rings themselves -- a flat
+  // ellipse turned 90deg in-plane goes edge-on, and the carefully-tuned
+  // front/back split that makes a ring wrap around the sphere assumes
+  // this exact fixed tilt, so mid-rotation it read as a messy tangle
+  // cutting across the sun instead of rings around it. Reworked to move
+  // only the beads along their own ring's fixed curve instead -- but her
+  // direct catch on that version: a bead stayed visible the whole time,
+  // including the half of its orbit where it should be passing behind
+  // the sun, "so it looks sloppy and low budget." Real fix, using the
+  // exact same front/back split logic already proven on the rings
+  // themselves (see the long comment above ringArcs -- local angle in
+  // (0,180) is the near/front half, (180,360) is the far/back half of
+  // this same unrotated local ellipse parametrization ringPoint() uses):
+  // each bead is drawn TWICE, once in a group before the sun (so it's
+  // genuinely hidden behind it) and once in a group after the sun (so
+  // it's genuinely in front), and only one copy is ever opaque at a
+  // time -- computed exactly, not guessed, from the same angle math that
+  // places the bead. Precomputed once into static CSS @keyframes (96
+  // steps/loop, both position and the front/back opacity swap) rather
+  // than a live requestAnimationFrame loop, per this repo's own standing
+  // preference for static/hardcoded over JS-computed positioning.
+  const ORBIT_STEPS = 96, ORBIT_PERIOD_S = 48;
+  function wrap360(a){ const m = a % 360; return m < 0 ? m + 360 : m; }
+  let orbitCSS = '', BACK_BEADS_SVG = '', FRONT_BEADS_SVG = '';
+  BEADS.forEach((b,i)=>{
+    const [ringIdx, angle0] = BEAD_SPECS[i];
+    const grad = BEAD_GRADS[i%BEAD_GRADS.length];
+    let kfFront = '', kfBack = '';
+    for(let s=0; s<=ORBIT_STEPS; s++){
+      const frac = s/ORBIT_STEPS;
+      const pct = (frac*100).toFixed(3);
+      const curAngle = angle0 + frac*360;
+      const p = ringPoint(ringIdx, curAngle, b.r);
+      const dx = (p.cx-b.cx).toFixed(2), dy = (p.cy-b.cy).toFixed(2);
+      const isFront = wrap360(curAngle) < 180;
+      kfFront += `${pct}%{transform:translate(${dx}px,${dy}px);opacity:${isFront?1:0}}`;
+      kfBack  += `${pct}%{transform:translate(${dx}px,${dy}px);opacity:${isFront?0:1}}`;
+    }
+    orbitCSS += `@keyframes orbitBeadF${i}{${kfFront}}@keyframes orbitBeadB${i}{${kfBack}}`;
+    orbitCSS += `.orbit-bead-f-${i}{animation:orbitBeadF${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
+    orbitCSS += `.orbit-bead-b-${i}{animation:orbitBeadB${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
+    const attrs = `r="${b.r}" fill="url(#${grad})" stroke="rgba(70,72,80,0.35)" stroke-width="1.2"`;
+    BACK_BEADS_SVG += `<circle class="orbit-bead-b-${i}" cx="${b.cx}" cy="${b.cy}" ${attrs}/>`;
+    FRONT_BEADS_SVG += `<circle class="orbit-bead-f-${i}" cx="${b.cx}" cy="${b.cy}" ${attrs}/>`;
+  });
+  const orbitStyleTag = document.createElement('style');
+  orbitStyleTag.textContent = orbitCSS;
+  document.head.appendChild(orbitStyleTag);
   // Her actual reference has a dense stack of concentric rings, not two
   // -- direct correction: "why would you not put all of the rings
   // around it... why would you make something that doesn't look like
@@ -2192,6 +2252,15 @@ function openNumberDef(item){
          over the top of it. It doesn't look like the rings are going
          around it." -->
     ${BACK_ARCS_SVG}
+    <!-- The half of each orbiting bead's path that passes behind the sun
+         -- her direct catch on the first motion pass: a bead stayed
+         visible the whole time it should have been hidden here, "so it
+         looks sloppy and low budget." Drawn before the sphere, same as
+         the back ring-arcs above, so it's genuinely occluded; each
+         bead's own generated keyframes (see the comment above BEADS)
+         hold this copy's opacity at 0 for the half of the loop where the
+         other, front copy is the one actually showing. -->
+    ${BACK_BEADS_SVG}
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunGrad)"/>
     <!-- Front halves, drawn AFTER the sun so they're genuinely visible
          in front of it -- together with the back halves above, each
@@ -2219,46 +2288,10 @@ function openNumberDef(item){
     <path id="tapArc" d="M ${cx-58} ${cy} A 58 58 0 0 1 ${cx+58} ${cy}" fill="none"/>
     <text font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="800" letter-spacing="1.8" fill="#000000">
       <textPath href="#tapArc" startOffset="50%" text-anchor="middle">TAP TO BEGIN</textPath>
-    </text>`;
-  const BEAD_GRADS=['beadGrad1','beadGrad2','beadGrad3'];
-  // Genuine ambient motion -- the one thing every static template hero
-  // is missing, and thematically exact here since this IS a solar
-  // system, not a decorative add-on. First attempt spun the whole ring
-  // group as one rigid disc; verified with real screenshots at several
-  // rotation angles and that broke the rings themselves -- a flat
-  // ellipse turned 90in-plane goes edge-on, and the carefully-tuned
-  // front/back split that makes a ring wrap around the sphere assumes
-  // this exact fixed tilt, so mid-rotation it read as a messy tangle
-  // cutting across the sun instead of rings around it. The rings
-  // themselves now stay completely untouched, at their real tuned
-  // geometry, always. Only the six beads move -- each slides along its
-  // own ring's actual curve (real ringPoint() math, the same function
-  // used to place them, not a separate approximation), which is the
-  // physically correct way to show orbiting bodies anyway: the orbit
-  // path stays fixed, the object on it travels. Precomputed once into
-  // static CSS @keyframes (translate offsets at 24 steps around the
-  // loop) rather than a live requestAnimationFrame loop, per this
-  // repo's own standing preference for static/hardcoded over
-  // JS-computed positioning.
-  const ORBIT_STEPS = 24, ORBIT_PERIOD_S = 48;
-  let orbitCSS = '';
-  BEADS.forEach((b,i)=>{
-    const [ringIdx, angle0] = BEAD_SPECS[i];
-    let kf = '';
-    for(let s=0; s<=ORBIT_STEPS; s++){
-      const pct = (s/ORBIT_STEPS*100).toFixed(3);
-      const p = ringPoint(ringIdx, angle0 + (s/ORBIT_STEPS)*360, b.r);
-      kf += `${pct}%{transform:translate(${(p.cx-b.cx).toFixed(2)}px,${(p.cy-b.cy).toFixed(2)}px)}`;
-    }
-    orbitCSS += `@keyframes orbitBead${i}{${kf}}.orbit-bead-${i}{animation:orbitBead${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
-  });
-  const styleTag = document.createElement('style');
-  styleTag.textContent = orbitCSS;
-  document.head.appendChild(styleTag);
-  BEADS.forEach((b,i)=>{
-    const grad = BEAD_GRADS[i%BEAD_GRADS.length];
-    svg += `<circle class="orbit-bead-${i}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${grad})" stroke="rgba(70,72,80,0.35)" stroke-width="1.2"/>`;
-  });
+    </text>
+    <!-- The half of each bead's path on the near side of the sun -- see
+         the comment above BEADS for the full reasoning. -->
+    ${FRONT_BEADS_SVG}`;
   svg += '</svg>';
   host.innerHTML = svg;
 })();
