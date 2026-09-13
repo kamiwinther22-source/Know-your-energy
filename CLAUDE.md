@@ -495,6 +495,74 @@ already searched for this. There is no second, separate landing page to
 build later; this is the one page that has to do that job. Do not
 resurrect the "two pages, entry form is done" framing.
 
+## Data-entry page — the Person 1 / Person 2 relational connector
+
+**Shipped, live in `index.html` as of this note** (`#connectorWrap`, between
+the Person 1 `.f` block and `#p2Section`): two interlocking chrome rings,
+visible only in Relational mode, representing "energy between two people."
+Toggled the same way `#p2Section` is, in `setMode()`.
+
+This went through a long, expensive back-and-forth to land — worth reading
+before touching it again:
+
+- **The interlocking-rings concept itself is confirmed correct** — she said
+  so directly, more than once, after several detours (a wisp/ribbon idea,
+  an S-curve redraw) that wasted time chasing alternatives when the
+  original two-overlapping-circles idea was already right. Don't replace
+  the shape on your own theory; if she asks to reorient it ("tilt it
+  diagonally"), that means apply a transform to the existing shape, not
+  redraw new geometry.
+- **The rings are real interlocking geometry, not a flat Venn overlap** —
+  the two ellipses' true intersection points are computed numerically
+  (dense boundary sampling: walk one ellipse's own boundary, test each
+  point for "inside the other ellipse," record where that flips), and one
+  ring is split at those points into a "minor arc" (drawn behind the other
+  ring) and "major arc" (drawn in front) — real chain-link depth, not two
+  outlines stacked in the same plane. A flat overlap reads as "a circle
+  inside another circle," which she rejected directly.
+- **The rings themselves must stay pure chrome — never tinted green.**
+  She caught this specifically once: a version whose ring gradient itself
+  faded into green partway around the stroke got a direct, forceful "the
+  parts of the ring that are green, I don't like it at all." Green is only
+  ever light sitting on top of the chrome, never the metal's own color.
+- **A static green glow, however placed, reads badly — this took two
+  failed sizes to learn.** A small glow confined to just the lens-shaped
+  overlap read as an isolated, disconnected dot ("I don't like it confined
+  to that little circle"). A large, soft, low-opacity glow spanning nearly
+  the whole ring composition — the opposite fix — got the most direct
+  rejection yet: "faded, not energetic at all, predictable placement of
+  green that says amateur, low quality... not at all a high value look."
+  Both extremes failed for the same underlying reason: a static shape,
+  however sized, reads as generic decoration parked in the obvious spot.
+- **The actual fix: no static green shape anywhere.** All color now lives
+  in genuine motion — four small glowing "comets" (a soft halo + a hot
+  white-to-emerald head, `connCometHalo`/`connCometHead` gradients)
+  continuously travel around both rings via `animateMotion`/`mpath`, at
+  staggered timings so they never bunch in one obvious spot. This reads as
+  real energy actively moving between the two people, not a decoration
+  sitting still, and there is no "predictable" position for it to occupy
+  since it never stops moving.
+- **The `#formStep` background itself does not carry a color-layer
+  treatment right now.** An earlier attempt added two small radial-
+  gradient corner accents directly to `#formStep`'s CSS background,
+  reaching for "this page needs layers like the hero" — got the same
+  "faded/amateur" reaction and was removed rather than iterated on in
+  place. The connector above is the real answer for Relational mode;
+  Individual mode currently has no equivalent treatment. Don't reach for
+  another quick background-gradient guess there without new direction —
+  that specific move has now been tried and rejected once already.
+- **Not yet shown to her / not yet approved.** This whole section
+  describes a redesign made in direct response to her critique of an
+  earlier version, but she has not seen or confirmed this specific
+  comet-based version yet. Don't describe it as "settled" until she
+  reacts to it.
+- Geometry actually in use (all pre-rotation, local SVG units, `viewBox="0
+  0 280 130"`, whole thing rotated `-6deg` around `(140,65)`): ring A
+  `cx=95,cy=65,rx=78,ry=34`; ring B `cx=185,cy=65,rx=78,ry=34`;
+  intersection points `(140,92.8)` and `(140,37.2)` — computed
+  numerically, not guessed, same method as above. Reuse these if the
+  connector is ever resized rather than re-deriving by eye.
+
 ## Real repo facts worth not re-discovering
 
 - Astrology is computed **locally** (`astro-engine.js`) — no paid external

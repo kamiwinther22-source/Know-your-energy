@@ -180,6 +180,17 @@ body{
    kind of deliberate breathing room the hero screen already has before
    its own content starts, instead of content butting straight up
    against the viewport edge. */
+/* A first attempt at "this page needs real color/depth like the hero"
+   put two small radial-gradient corner accents directly on #formStep's
+   own background. Her direct reaction: "faded, not energetic... amateur,
+   not high value" -- a soft, low-opacity, generically-placed smudge
+   didn't meet the bar the hero sets. Removed rather than iterated on in
+   place; the real answer to "add a layer like the hero" for this screen
+   is the actual illustrated connector element (see #connectorWrap,
+   below the Person 1 block) -- genuine chrome-ring geometry with moving
+   colored light, not a background wash. That only shows in Relational
+   mode; Individual mode is intentionally plain for now rather than
+   reaching for another quick gradient guess. */
 #formStep{
   position:relative;
   margin:0.5rem 0.5rem 0.9rem;padding:2.6rem 0 0;
@@ -838,6 +849,11 @@ body{
    the field stay small than have it break the block's width for one
    long-value edge case. */
 .row-birth>.loc-field{grid-column:1 / -1;margin-top:0.4rem;}
+
+/* Same left/right inset as .f itself, so the rings line up with the data
+   blocks above and below instead of floating at a different width. */
+.connector-wrap{margin:0.15rem 52px 1.5rem;}
+.connector-wrap svg{display:block;width:100%;height:auto;}
 
 /* Carved into the page, not a line underneath the text -- no border, no
    fill color, no grey panel behind it. The recessed look is built purely
@@ -1758,6 +1774,61 @@ body{
           </div>
         </div>
 
+        <!-- Real "energy between two people," relational mode only --
+             two interlocking rings (numerically-computed intersection
+             points, front/back arc split for genuine depth, not a flat
+             Venn overlap), pure chrome material matching the hero's own
+             rings. Color lives only in moving light: four glowing comets
+             (soft halo + hot white-green head) actively circle both
+             rings -- there is no static green shape anywhere, so nothing
+             sits parked at the obvious crossing point. Direct fix for her
+             call on the first version: "faded, not energetic, predictable
+             placement of green, amateur" -- the static centered glow
+             blob that caused that reaction is gone; the rings never turn
+             green themselves (settled earlier: she does not want the
+             metal tinted, only lit). Toggled via #connectorWrap's own
+             display, same on/off switch as #p2Section (see setMode()). -->
+        <div class="connector-wrap" id="connectorWrap" style="display:none;">
+          <svg viewBox="0 0 280 130" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="connRingGradA" x1="0%" y1="50%" x2="100%" y2="50%">
+                <stop offset="0%" stop-color="#7d818c"/><stop offset="22%" stop-color="#e8eaef"/>
+                <stop offset="50%" stop-color="#ffffff"/><stop offset="78%" stop-color="#e8eaef"/>
+                <stop offset="100%" stop-color="#7d818c"/>
+              </linearGradient>
+              <linearGradient id="connRingGradB" x1="0%" y1="50%" x2="100%" y2="50%">
+                <stop offset="0%" stop-color="#7d818c"/><stop offset="22%" stop-color="#e8eaef"/>
+                <stop offset="50%" stop-color="#ffffff"/><stop offset="78%" stop-color="#e8eaef"/>
+                <stop offset="100%" stop-color="#7d818c"/>
+              </linearGradient>
+              <radialGradient id="connCometHead" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="30%" stop-color="#d4fae4"/>
+                <stop offset="60%" stop-color="#1ed488"/>
+                <stop offset="100%" stop-color="#0f7a4c" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="connCometHalo" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#22d98f" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#22d98f" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <g transform="rotate(-6 140 65)">
+              <path id="connABack" d="M 140 92.8 A 78 34 0 0 0 140 37.2" fill="none" stroke="url(#connRingGradA)" stroke-width="2.8" opacity="0.98"/>
+              <ellipse id="connRingB" cx="185" cy="65" rx="78" ry="34" fill="none" stroke="url(#connRingGradB)" stroke-width="2.8" opacity="0.98"/>
+              <path id="connRingA" d="M 140 92.8 A 78 34 0 1 1 140 37.2" fill="none" stroke="url(#connRingGradA)" stroke-width="2.8" opacity="0.98"/>
+
+              <g><circle r="12" fill="url(#connCometHalo)"><animateMotion dur="4.4s" repeatCount="indefinite" begin="0s"><mpath href="#connRingA"/></animateMotion></circle>
+              <circle r="3.8" fill="url(#connCometHead)"><animateMotion dur="4.4s" repeatCount="indefinite" begin="0s"><mpath href="#connRingA"/></animateMotion></circle></g>
+              <g><circle r="9.5" fill="url(#connCometHalo)" opacity="0.8"><animateMotion dur="4.4s" repeatCount="indefinite" begin="-2.2s"><mpath href="#connRingA"/></animateMotion></circle>
+              <circle r="3" fill="url(#connCometHead)" opacity="0.85"><animateMotion dur="4.4s" repeatCount="indefinite" begin="-2.2s"><mpath href="#connRingA"/></animateMotion></circle></g>
+              <g><circle r="12" fill="url(#connCometHalo)"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-1.1s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle>
+              <circle r="3.8" fill="url(#connCometHead)"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-1.1s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle></g>
+              <g><circle r="9.5" fill="url(#connCometHalo)" opacity="0.8"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-3.6s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle>
+              <circle r="3" fill="url(#connCometHead)" opacity="0.85"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-3.6s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle></g>
+            </g>
+          </svg>
+        </div>
+
         <div id="p2Section">
           <div class="f">
             <div class="person-tag">Person 2</div>
@@ -2301,6 +2372,7 @@ const lblRel = document.getElementById('lblRel');
 const p1Ttl = document.getElementById('p1Ttl');
 const p2Section = document.getElementById('p2Section');
 const relWrap = document.getElementById('relWrap');
+const connectorWrap = document.getElementById('connectorWrap');
 let isRelational = false;
 
 function setMode(rel){
@@ -2310,6 +2382,7 @@ function setMode(rel){
   lblRel.classList.toggle('active', rel);
   p1Ttl.textContent = 'Full Name at Birth';
   p2Section.classList.toggle('open', rel);
+  connectorWrap.style.display = rel ? 'block' : 'none';
   relWrap.style.display = rel ? 'flex' : 'none';
   if(typeof saveDraft==='function')saveDraft();
 }
