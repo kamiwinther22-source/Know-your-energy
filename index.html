@@ -215,7 +215,16 @@ body{
      combination was never what she asked to remove. It only existed in
      a scratch preview before now; this is its first time actually on
      the live site. */
-  background-image:radial-gradient(ellipse 62% 30% at 50% 55%, rgba(77,126,232,0.5) 0%, rgba(60,105,220,0.28) 45%, rgba(255,255,255,0) 72%);
+  /* Structurally different from every earlier attempt -- her exact
+     description: green prominent, white still showing, blue "filling
+     in in some places," not one shape the illustration sits on top of.
+     Green is now a broad, real presence (not confined to the bottom
+     ribbon glow); blue is two smaller, off-center accent patches placed
+     away from the sphere's own position, not a centered blob. */
+  background-image:
+    radial-gradient(circle 150px at 15% 26%, rgba(77,126,232,0.42) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(circle 170px at 88% 68%, rgba(77,126,232,0.38) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(ellipse 130% 65% at 50% 68%, rgba(15,122,76,0.2) 0%, rgba(15,122,76,0) 78%);
 }
 /* .tagline-frame carries a 40px bottom margin (spacing when it's not the
    last thing on the page elsewhere) but no matching top margin -- used as
