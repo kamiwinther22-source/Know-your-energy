@@ -106,10 +106,18 @@ body{
    heroIllustration script's own CHROME/ICE/PEARL/COBALT constants for
    the real palette now shared by both. Kept faint (opacity 0.10-0.22
    throughout) so it never competes with real content's full-strength
-   black text. The 300s rotation/7s twinkle below is still the original,
-   near-imperceptible motion -- her direct feedback: "A twinkle isn't
-   movement, it's not ever noticed." Not yet rebuilt with real, visibly
-   different orbital speeds; that's still open. */
+   black text.
+
+   Rotation/twinkle speed fixed for real this time -- her direct
+   feedback, on record from an earlier session and left unresolved
+   until now: "A twinkle isn't movement, it's not ever noticed." 300s
+   per rotation is a full 5 minutes for one turn -- genuinely
+   imperceptible in a normal glance, not just subtle. Sped up to 22s
+   per rotation (visible movement within a couple seconds of looking,
+   still smooth and unhurried, not a spinning-wheel effect) and the
+   twinkle's own cycle shortened 7s->4s with a wider opacity swing
+   (0.22-0.52 -> 0.14-0.62) so the dots actually read as sparkling
+   rather than a barely-there shimmer. */
 .ambient-bg{
   position:fixed;inset:0;z-index:0;overflow:hidden;
   pointer-events:none;
@@ -117,17 +125,17 @@ body{
 .ambient-bg svg{display:block;width:100%;height:100%;}
 @media (prefers-reduced-motion: no-preference){
   .ambient-bg .amb-rings{
-    animation:ambDrift 300s linear infinite;
+    animation:ambDrift 22s linear infinite;
     transform-origin:300px 130px;
   }
-  .ambient-bg .amb-dot{animation:ambTwinkle 7s ease-in-out infinite;}
-  .ambient-bg .amb-dot:nth-child(2){animation-delay:-1.4s;}
-  .ambient-bg .amb-dot:nth-child(3){animation-delay:-3.1s;}
-  .ambient-bg .amb-dot:nth-child(4){animation-delay:-4.6s;}
-  .ambient-bg .amb-dot:nth-child(5){animation-delay:-2.2s;}
+  .ambient-bg .amb-dot{animation:ambTwinkle 4s ease-in-out infinite;}
+  .ambient-bg .amb-dot:nth-child(2){animation-delay:-0.8s;}
+  .ambient-bg .amb-dot:nth-child(3){animation-delay:-1.8s;}
+  .ambient-bg .amb-dot:nth-child(4){animation-delay:-2.6s;}
+  .ambient-bg .amb-dot:nth-child(5){animation-delay:-1.3s;}
 }
 @keyframes ambDrift{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-@keyframes ambTwinkle{0%,100%{opacity:0.22;}50%{opacity:0.52;}}
+@keyframes ambTwinkle{0%,100%{opacity:0.14;}50%{opacity:0.62;}}
 /* min-width:0 overrides flexbox's automatic minimum size -- without it,
    the title's nowrap text was forcing this whole flex item (and
    everything inside it) wider than the actual phone viewport, which is
