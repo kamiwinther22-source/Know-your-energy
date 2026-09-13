@@ -211,48 +211,29 @@ body{
   min-height:calc(100vh - 2.45rem);
   min-height:calc(100dvh - 2.45rem);
   display:flex;flex-direction:column;justify-content:center;
-  /* Blue-and-green background restored -- her direct correction: this
-     combination was never what she asked to remove. It only existed in
-     a scratch preview before now; this is its first time actually on
-     the live site. */
-  /* Two corrections after the first live version of this: (1) the green
-     layer here was a real overreach on my part -- she pointed out she
-     never asked for more green than what already existed (the ribbon's
-     own glow, .ribbon-frame::before below, is the site's real green
-     presence). Cut down to a faint lift near the bottom instead of a
-     broad wash over the whole section. (2) the two blue patches were
-     floating in the middle of the composition with no anchor -- one sat
-     directly behind the tagline text. Moved both into the actual
-     corners (top-left; right edge, level with the illustration) so they
-     read as background filling the page's empty corners, not objects
-     placed on top of the content.
-     Her next catch, on that version: "the color is looking very faded
-     in general." Cutting the green down at the time went too far the
-     other way -- 0.08 opacity is barely there at all, not "less green,"
-     and the blue at 0.32-0.36 was thin enough to read as a pale tint
-     rather than real color. Same lesson already learned once earlier in
-     this same background (the "that's not blue, that's gray" round):
-     opacity that low doesn't just make a color smaller, it desaturates
-     it into a wash. Raised both colors' real strength -- same footprint,
-     same corner/bottom placement, not spread any wider -- rather than
-     covering more area, which is the other, separately-rejected mistake.
-     Her next catch, right after raising that strength: "that turned the
-     color of the rings the color of what's behind instead of a sharp
-     silver." Real, checkable cause, not a vague impression -- the second
-     blue patch was placed "at the right edge, level with the
-     illustration" (98% 98%->60%), which puts its center at almost
-     exactly the sun's own vertical position; at full strength its glow
-     reaches straight across the rings, and a pale chrome ring with a
-     saturated color glowing right behind/through it reads as tinted
-     chrome, not silver. Moved to the top-right corner instead -- mirrors
-     the existing top-left patch, keeps the same real strength, but its
-     reach now falls entirely above the illustration (checked against
-     where the rings actually sit on the page) instead of across it, so
-     the silver stays genuinely silver. */
+  /* Real history on this background, condensed: blue-and-green restored
+     per her correction that this combo (not flat gray) was what she
+     actually liked; green was cut back after "I don't believe I said I
+     wanted more green"; both colors were then raised back up after
+     "the color is looking very faded" (low opacity doesn't shrink a
+     color, it desaturates it into a wash); a patch was moved off the
+     illustration after it visibly tinted the rings.
+     Her next, final catch on all of it: mirrored top corners + a bottom
+     band is a tidy, symmetric, template arrangement she never asked
+     for -- "stop trying to make it average." This version breaks that
+     symmetry on purpose: one real green pool anchored low and to the
+     left (not centered, not a thin strip -- genuinely prominent, per
+     her original "green was prominent... white showing... blue filled
+     in in some places"), and two blue accents that are neither mirrored
+     nor the same size -- one top-left, one in the opposite corner
+     (bottom-right), asymmetric by real intent. Checked against the
+     illustration's actual measured position (.hero-illustration spans
+     roughly y 279-660 in this layout) and against a real screenshot, not
+     just the numbers below, so nothing sits on the rings or the text. */
   background-image:
-    radial-gradient(circle 210px at 2% 6%, rgba(77,126,232,0.5) 0%, rgba(77,126,232,0) 72%),
-    radial-gradient(circle 230px at 98% 6%, rgba(77,126,232,0.46) 0%, rgba(77,126,232,0) 72%),
-    radial-gradient(ellipse 110% 34% at 50% 94%, rgba(15,122,76,0.22) 0%, rgba(15,122,76,0) 80%);
+    radial-gradient(circle 210px at 3% 5%, rgba(77,126,232,0.5) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(circle 175px at 95% 90%, rgba(77,126,232,0.42) 0%, rgba(77,126,232,0) 70%),
+    radial-gradient(ellipse 100% 55% at 16% 102%, rgba(15,122,76,0.24) 0%, rgba(15,122,76,0) 78%);
 }
 /* .tagline-frame carries a 40px bottom margin (spacing when it's not the
    last thing on the page elsewhere) but no matching top margin -- used as
