@@ -442,19 +442,19 @@ body{
      to dominate... the largest thing here, full stop," but measured
      against the actual brand title's rendered size (clamp(1.7rem,
      8.6vw,2.4rem), ~33.5px at 390px) this was still rendering smaller
-     (~23.4px, about 70% of the title), not bigger -- the stated intent
-     and the actual CSS had drifted apart. Tried to genuinely exceed the
-     title's size; empirically (binary-searched across 360-430px, not
-     guessed) this exact sentence cannot go past ~28-32px at these
-     widths without breaking the 2-line rule, which is a real, separate
-     direct correction of hers ("bigger didn't mean as many lines as it
-     takes"). Closest defensible number that holds 2 lines everywhere
-     tested: ~86-88% of the title's size, up from ~70% -- real weight
-     (700, vs. the title's cursive 400) and solid black vs. the title's
-     green do the rest of the work of reading as the lead element. */
+     (~23.4px, about 70% of the title), not bigger.
+     First attempt at a fix tried to keep this at 2 lines while sizing
+     up, which capped out around 86-88% of the title's size -- still not
+     actually bigger, just less small, and she correctly called it
+     imperceptible: "I see no difference." Her direct correction: don't
+     shrink the illustration or move things around to make this look
+     relatively bigger by comparison -- just make it bigger, directly,
+     even if that costs the 2-line layout. This is that: sized to
+     genuinely exceed the title at every width, 3 lines now instead of
+     2, no other element touched. */
   font-weight:700;
-  font-size:clamp(1.75rem,7.7vw,2.0rem);
-  line-height:1.16;letter-spacing:-0.008em;
+  font-size:clamp(2.1rem,10vw,2.9rem);
+  line-height:1.14;letter-spacing:-0.01em;
   width:calc(100vw - 20px);
   margin-left:calc(50% - 50vw + 10px);
   margin-right:calc(50% - 50vw + 10px);
