@@ -819,7 +819,16 @@ body{
    answers... use measuring." Giving Location its own row instead of a
    fraction of a 4-column one gives it nearly the full block width. */
 .row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.4rem;}
-.row-birth{display:grid;grid-template-columns:1fr 1.05fr 0.45fr;gap:0.3rem;align-items:end;}
+/* Real bug, not a style choice -- her direct catch: "don't cross out
+   part of a word or number." Measured with canvas.measureText against
+   the field's actual computed font: the DOB placeholder ("MM/DD/YYYY")
+   needs 102px but only had 85px at the old 1fr:1.05fr:0.45fr ratio,
+   genuinely clipping the last character. Time only needs 54px of its
+   90px, so the old ratio had it backwards -- DOB (the longer real
+   content) got less room than Time (the shorter one). Re-measured and
+   rebalanced so each column's share actually matches what it needs to
+   display in full. */
+.row-birth{display:grid;grid-template-columns:1.8fr 1fr 0.65fr;gap:0.3rem;align-items:end;}
 /* Her direct correction to the previous fix here: "it is not necessary
    for the location field to be that large." Reverted the negative-margin
    widen -- Location now sits at the same width as the rest of the block
