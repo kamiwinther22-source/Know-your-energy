@@ -58,7 +58,21 @@
    reads close to white) plus a genuine fine-grain noise texture (an
    SVG feTurbulence filter, the standard real technique for this, blended
    in at low opacity) instead of a dead flat color. */
+/* min-height added here -- a real bug she caught by asking directly:
+   "Do you have the green background cutting off halfway down the
+   page." Confirmed by measurement: body's height was only as tall as
+   its own content (as short as 518px in Individual mode, with no
+   min-height forcing it to at least fill the screen), and this
+   gradient background lives on body itself -- so on any page shorter
+   than the real device viewport, the background just stopped where
+   the content stopped, and the empty space below it fell through to
+   transparent/white with no warning. min-height:100vh (100dvh as the
+   override for browsers that support it, same pattern already used on
+   #hookStep) means the background always covers at least the full
+   screen regardless of how short the actual content is. */
 body{
+  min-height:100vh;
+  min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background-color:#fbfdfb;
   background-image:
