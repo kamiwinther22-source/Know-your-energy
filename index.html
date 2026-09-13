@@ -275,7 +275,15 @@ body{
   position:relative;width:100%;max-width:380px;margin:0.5rem auto 1rem;
   transform:translateX(-20px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
 }
-.hero-illustration svg{display:block;width:100%;height:auto;}
+.hero-illustration svg{display:block;width:100%;height:auto;overflow:visible;}
+/* Real ambient motion, not a static graphic -- the six satellite beads
+   each travel along their own ring's fixed curve (see the illustration
+   script's own comment for the full reasoning and why the rings
+   themselves never move). Their actual @keyframes are generated once
+   at load time as static per-bead CSS, not computed live. */
+@media (prefers-reduced-motion:reduce){
+  [class^="orbit-bead-"]{animation:none!important;}
+}
 
 /* Narrower than the full content column and centered -- a full-width
    input here would read as a corporate form field cutting across the
@@ -2213,9 +2221,43 @@ function openNumberDef(item){
       <textPath href="#tapArc" startOffset="50%" text-anchor="middle">TAP TO BEGIN</textPath>
     </text>`;
   const BEAD_GRADS=['beadGrad1','beadGrad2','beadGrad3'];
+  // Genuine ambient motion -- the one thing every static template hero
+  // is missing, and thematically exact here since this IS a solar
+  // system, not a decorative add-on. First attempt spun the whole ring
+  // group as one rigid disc; verified with real screenshots at several
+  // rotation angles and that broke the rings themselves -- a flat
+  // ellipse turned 90in-plane goes edge-on, and the carefully-tuned
+  // front/back split that makes a ring wrap around the sphere assumes
+  // this exact fixed tilt, so mid-rotation it read as a messy tangle
+  // cutting across the sun instead of rings around it. The rings
+  // themselves now stay completely untouched, at their real tuned
+  // geometry, always. Only the six beads move -- each slides along its
+  // own ring's actual curve (real ringPoint() math, the same function
+  // used to place them, not a separate approximation), which is the
+  // physically correct way to show orbiting bodies anyway: the orbit
+  // path stays fixed, the object on it travels. Precomputed once into
+  // static CSS @keyframes (translate offsets at 24 steps around the
+  // loop) rather than a live requestAnimationFrame loop, per this
+  // repo's own standing preference for static/hardcoded over
+  // JS-computed positioning.
+  const ORBIT_STEPS = 24, ORBIT_PERIOD_S = 48;
+  let orbitCSS = '';
+  BEADS.forEach((b,i)=>{
+    const [ringIdx, angle0] = BEAD_SPECS[i];
+    let kf = '';
+    for(let s=0; s<=ORBIT_STEPS; s++){
+      const pct = (s/ORBIT_STEPS*100).toFixed(3);
+      const p = ringPoint(ringIdx, angle0 + (s/ORBIT_STEPS)*360, b.r);
+      kf += `${pct}%{transform:translate(${(p.cx-b.cx).toFixed(2)}px,${(p.cy-b.cy).toFixed(2)}px)}`;
+    }
+    orbitCSS += `@keyframes orbitBead${i}{${kf}}.orbit-bead-${i}{animation:orbitBead${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
+  });
+  const styleTag = document.createElement('style');
+  styleTag.textContent = orbitCSS;
+  document.head.appendChild(styleTag);
   BEADS.forEach((b,i)=>{
     const grad = BEAD_GRADS[i%BEAD_GRADS.length];
-    svg += `<circle cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${grad})" stroke="rgba(70,72,80,0.35)" stroke-width="1.2"/>`;
+    svg += `<circle class="orbit-bead-${i}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${grad})" stroke="rgba(70,72,80,0.35)" stroke-width="1.2"/>`;
   });
   svg += '</svg>';
   host.innerHTML = svg;
