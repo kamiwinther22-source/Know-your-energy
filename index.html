@@ -219,17 +219,27 @@ body{
      layer here was a real overreach on my part -- she pointed out she
      never asked for more green than what already existed (the ribbon's
      own glow, .ribbon-frame::before below, is the site's real green
-     presence). Cut way down, just a faint lift near the bottom instead
-     of a broad wash over the whole section. (2) the two blue patches
-     were floating in the middle of the composition with no anchor --
-     one sat directly behind the tagline text. Moved both into the
-     actual corners (top-left; right edge, level with the illustration)
-     so they read as background filling the page's empty corners, not
-     objects placed on top of the content. */
+     presence). Cut down to a faint lift near the bottom instead of a
+     broad wash over the whole section. (2) the two blue patches were
+     floating in the middle of the composition with no anchor -- one sat
+     directly behind the tagline text. Moved both into the actual
+     corners (top-left; right edge, level with the illustration) so they
+     read as background filling the page's empty corners, not objects
+     placed on top of the content.
+     Her next catch, on that version: "the color is looking very faded
+     in general." Cutting the green down at the time went too far the
+     other way -- 0.08 opacity is barely there at all, not "less green,"
+     and the blue at 0.32-0.36 was thin enough to read as a pale tint
+     rather than real color. Same lesson already learned once earlier in
+     this same background (the "that's not blue, that's gray" round):
+     opacity that low doesn't just make a color smaller, it desaturates
+     it into a wash. Raised both colors' real strength -- same footprint,
+     same corner/bottom placement, not spread any wider -- rather than
+     covering more area, which is the other, separately-rejected mistake. */
   background-image:
-    radial-gradient(circle 210px at 2% 6%, rgba(77,126,232,0.36) 0%, rgba(77,126,232,0) 72%),
-    radial-gradient(circle 230px at 98% 60%, rgba(77,126,232,0.32) 0%, rgba(77,126,232,0) 72%),
-    radial-gradient(ellipse 110% 40% at 50% 90%, rgba(15,122,76,0.08) 0%, rgba(15,122,76,0) 80%);
+    radial-gradient(circle 210px at 2% 6%, rgba(77,126,232,0.5) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(circle 230px at 98% 60%, rgba(77,126,232,0.46) 0%, rgba(77,126,232,0) 72%),
+    radial-gradient(ellipse 110% 40% at 50% 90%, rgba(15,122,76,0.22) 0%, rgba(15,122,76,0) 80%);
 }
 /* .tagline-frame carries a 40px bottom margin (spacing when it's not the
    last thing on the page elsewhere) but no matching top margin -- used as
