@@ -431,6 +431,19 @@ pass system despite the namespace's name).
   future layout, symmetric or not, still has to avoid that.
 - **Never fade text or reduce opacity for a "muted" look.** Text is always
   full-strength and legible. She has said this many times, forcefully.
+- **No blur, in any technique, anywhere — an absolute, standing rule with
+  no exceptions.** Stated directly after a long session of real depth/3D
+  attempts kept reading as "smeared together" and "blurry" to her,
+  regardless of the specific technique used underneath (SVG lighting
+  filters built on `feGaussianBlur`, blurred CSS `drop-shadow`/`box-shadow`,
+  soft glows). This rules out `feGaussianBlur` (and anything built on it,
+  including the emboss/engrave/bas-relief filter recipes explored this
+  session) and any shadow, glow, or highlight with a soft/blurred edge.
+  Real depth and shadow must come from hard-edged, crisp techniques
+  instead (flat offset shapes, solid layered shapes, sharp-edged shadows
+  with zero or minimal blur radius) — never a blurred one. This applies
+  retroactively to every depth/3D/glossy/metallic technique attempted
+  earlier in this file's history; none of them are exempt.
 - **A title's text color and its outline/frame color must never be the same
   tone.**
 - **Never a block layout.** No angled/diagonal solid-color panels cutting
