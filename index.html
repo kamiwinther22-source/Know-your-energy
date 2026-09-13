@@ -69,7 +69,14 @@
    transparent/white with no warning. min-height:100vh (100dvh as the
    override for browsers that support it, same pattern already used on
    #hookStep) means the background always covers at least the full
-   screen regardless of how short the actual content is. */
+   screen regardless of how short the actual content is.
+   (Briefly tried scoping this to a body.past-hero class, on the theory
+   that it was unconditionally creating dead space on the hero screen
+   too -- turned out to be a non-issue: the browser propagates body's
+   background to the whole viewport canvas regardless of body's own box
+   height, so scoping it changed nothing visible. Reverted to keep this
+   simple; not worth the added class-toggling complexity for zero
+   visual effect.) */
 body{
   min-height:100vh;
   min-height:100dvh;
@@ -187,10 +194,19 @@ body{
 #formStep .pricing-panel{
   margin-bottom:1.4rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(0,0,0,0.12);
 }
-/* Centers the whole hook screen as one group in the middle of the
-   screen, top to bottom, instead of it sitting pinned to the top with
-   empty space left below. Only applies here -- the form and results
-   screens stay normal top-down scrolling. */
+/* Tried dropping the centering here in favor of top-aligned content with
+   fixed padding, on the reasoning that min-height:100vh + center was
+   splitting leftover space into two ~105px gaps (above the tagline,
+   below the ribbon). That was a real, measured finding -- but the fix
+   was wrong: switching to top-aligned just relocated the entire ~190px
+   of leftover space to the bottom alone, recreating "pinned to the top
+   with empty space left below," the exact pattern centering was
+   originally chosen to avoid (see this rule's own prior history).
+   Reverted to centering. The actual leftover-space total (~190-210px
+   between the hero's real content height and a typical phone viewport)
+   isn't a CSS layout bug to be relocated -- it only goes away if the
+   content itself grows to fill more of the screen, which is a
+   different, real decision, not a free fix. */
 #hookStep{
   min-height:calc(100vh - 2.45rem);
   min-height:calc(100dvh - 2.45rem);
@@ -421,10 +437,24 @@ body{
      stack of short ones -- her direct correction to the "biggest thing
      on the page" pass: bigger didn't mean "as many lines as it takes,"
      it meant one strong 2-line statement. Held at 2 lines from a 300px
-     width up. */
-  font-weight:600;
-  font-size:clamp(1.3rem,6vw,1.95rem);
-  line-height:1.2;letter-spacing:-0.005em;
+     width up.
+     Bumped again -- the comment above already said this line is "meant
+     to dominate... the largest thing here, full stop," but measured
+     against the actual brand title's rendered size (clamp(1.7rem,
+     8.6vw,2.4rem), ~33.5px at 390px) this was still rendering smaller
+     (~23.4px, about 70% of the title), not bigger -- the stated intent
+     and the actual CSS had drifted apart. Tried to genuinely exceed the
+     title's size; empirically (binary-searched across 360-430px, not
+     guessed) this exact sentence cannot go past ~28-32px at these
+     widths without breaking the 2-line rule, which is a real, separate
+     direct correction of hers ("bigger didn't mean as many lines as it
+     takes"). Closest defensible number that holds 2 lines everywhere
+     tested: ~86-88% of the title's size, up from ~70% -- real weight
+     (700, vs. the title's cursive 400) and solid black vs. the title's
+     green do the rest of the work of reading as the lead element. */
+  font-weight:700;
+  font-size:clamp(1.75rem,7.7vw,2.0rem);
+  line-height:1.16;letter-spacing:-0.008em;
   width:calc(100vw - 20px);
   margin-left:calc(50% - 50vw + 10px);
   margin-right:calc(50% - 50vw + 10px);
@@ -1393,7 +1423,13 @@ body{
        professional polished classy, not like you tripped and fell and
        it dropped on there somewhere." -->
   <div class="hero-email-wrap">
-    <div class="privacy-note" style="margin-bottom:0.3rem;font-size:0.68rem;font-weight:600;">Enter Your Email That Acts As Your Key</div>
+    <!-- De-emphasized -- it was competing at nearly the same weight as
+         "TAP TO BEGIN" below it, two separate instructional moments
+         fighting for the same attention. This is a caption/reassurance
+         line, not the action; quieter (smaller, dark grey not black)
+         so the actual call-to-action stays the one thing that reads as
+         "do this." Still full-strength, legible color -- not faded. -->
+    <div class="privacy-note" style="margin-bottom:0.3rem;font-size:0.62rem;font-weight:600;color:#4a4a4a;">Enter Your Email That Acts As Your Key</div>
     <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
