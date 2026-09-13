@@ -266,10 +266,23 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
 
 ## Non-negotiable design rules
 
-- **The "Know Your Energy" title is always one line, in large loopy cursive
-  (Alex Brush).** Never split across lines, never a different font, never
-  omitted from a landing/entry page. This is a staple; versions without it
-  are an instant rejection.
+- **Superseded -- she removed it herself.** This rule used to say the
+  "Know Your Energy" cursive title was a non-negotiable staple that must
+  always appear on the landing/entry page, "versions without it are an
+  instant rejection." She directly reversed that: "Remove 'Know Your
+  Energy'" -- confirmed plainly when asked to make sure it meant the
+  on-page title, not something else. The `.brand-row` block (the
+  cursive "Know Your Energy" text, its silver glints, and the orbit-arc
+  behind it) was removed from `#hookStep` in `index.html`. Do not
+  re-add it on the assumption that this old "non-negotiable" framing
+  still holds -- it doesn't, and this is exactly the kind of
+  never-verified "settled" claim the rest of this file warns about
+  elsewhere. The browser-tab `<title>`, OG/Twitter meta tags, and the
+  results-page `.ttl` header still say "Know Your Energy" -- those
+  weren't part of this instruction (given only in the context of the
+  hero page this session was actively working on) and were left alone;
+  ask before touching those too if it's ever unclear whether she means
+  the whole site or just this one element again.
 - **No dark/night-sky BACKGROUND — but she has NOT banned celestial
   illustration or ribbon/light effects, and an earlier version of this rule
   said she had. She corrected this directly:** "I have not banned the Solar
