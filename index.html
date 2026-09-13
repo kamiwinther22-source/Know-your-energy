@@ -820,16 +820,15 @@ body{
    fraction of a 4-column one gives it nearly the full block width. */
 .row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.4rem;}
 .row-birth{display:grid;grid-template-columns:1fr 1.05fr 0.45fr;gap:0.3rem;align-items:end;}
-/* Widens back out past its narrower parent (.form-panel .f now uses a
-   tighter 52px margin so the short fields read genuinely compact) --
-   Location is the one field that actually needs real width for real
-   typed content ("Los Angeles, California, United States" measured at
-   280px), so it alone breaks back out toward the original wider
-   footprint via negative margins, rather than the whole block staying
-   wide just to accommodate this one field. Re-verified: at this width
-   the real long value no longer scrolls/clips (checked via scrollWidth
-   vs. clientWidth on the actual input, not eyeballed). */
-.row-birth>.loc-field{grid-column:1 / -1;margin-top:0.4rem;margin-left:-21px;margin-right:-21px;}
+/* Her direct correction to the previous fix here: "it is not necessary
+   for the location field to be that large." Reverted the negative-margin
+   widen -- Location now sits at the same width as the rest of the block
+   (the narrow 52px-margin footprint), accepting that a genuinely long
+   typed value may not show in full without scrolling within the field.
+   That's a real, known tradeoff, not an oversight -- she'd rather have
+   the field stay small than have it break the block's width for one
+   long-value edge case. */
+.row-birth>.loc-field{grid-column:1 / -1;margin-top:0.4rem;}
 
 /* Carved into the page, not a line underneath the text -- no border, no
    fill color, no grey panel behind it. The recessed look is built purely
