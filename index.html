@@ -460,6 +460,15 @@ body{
   margin-right:calc(50% - 50vw + 10px);
   margin-bottom:0.25rem;
 }
+/* Real typographic contrast, not one uniform block -- her direct
+   correction: "all exactly the same size and color letters... so
+   unnoticeable." Weight and style now vary within the line itself
+   (heavy upright / light italic / heavy upright again) so there's a
+   reason for the eye to move through it -- size alone was never going
+   to fix "boring," since the whole line was still one flat visual
+   event no matter how big it got. */
+.tl-emph{font-style:normal;font-weight:800;}
+.tl-light{font-style:italic;font-weight:400;}
 /* Her direct instruction after several real, documented metallic-text
    attempts (multi-band gradient, edge bevel via drop-shadow, SVG
    feSpecularLighting) all fell short of what she was actually
@@ -1335,7 +1344,7 @@ body{
      instead of purely decorative. ---------- -->
 <div class="content" id="hookStep">
   <div class="tagline-frame">
-    <div class="tagline-slide tagline-top c-gold">Reveal what was set into motion the day you were born</div>
+    <div class="tagline-slide tagline-top c-gold"><span class="tl-emph">Reveal</span> <span class="tl-light">what was set into motion</span> <span class="tl-emph">the day you were born</span></div>
 
     <div class="brand-row">
       <!-- Her suggestion: "It probably would make sense to have the energy
