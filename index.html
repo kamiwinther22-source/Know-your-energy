@@ -38,24 +38,14 @@
    fine grain for texture -- no scattered highlight blobs. Blue is then
    the only saturated color anywhere on the page, which is what actually
    makes it pop: contrast of saturation, not more background color. */
-/* Bright polished-metal surface -- her direct spec: "bright light shining
-   metallic surface, not with diagonal streaks running through it"
-   (rejecting the earlier rough draft's diagonal-streak texture outright).
-   Every band here runs horizontal (180deg), never diagonal. A soft bright
-   highlight top-center (where a light source would catch a curved metal
-   sheet) over a cool pale-steel base, with fine 2px horizontal grain
-   lines for the brushed-metal texture -- both subtle enough that black
-   text stays fully legible, per the never-fade-text rule (this changes
-   the background's own color, not any text's opacity). */
+/* Plain flat background -- the brushed-metal/striped texture was
+   rejected outright ("whatever those horizontal stripes are... get that
+   off"). Background/color is out of scope until a separate pass; this
+   is a neutral placeholder, not a design decision. */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#dde3e9;
-  background-image:
-    repeating-linear-gradient(180deg, rgba(255,255,255,0.85) 0px, rgba(255,255,255,0.85) 2px, rgba(150,164,182,0.28) 2px, rgba(150,164,182,0.28) 4px),
-    radial-gradient(ellipse 140% 55% at 50% 0%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 58%),
-    radial-gradient(ellipse 120% 45% at 50% 100%, rgba(160,174,190,0.55) 0%, rgba(160,174,190,0) 60%),
-    linear-gradient(180deg, #fbfcfd 0%, #dde3e9 45%, #c7cfd8 100%);
-  background-attachment:fixed;
+  background-color:#ffffff;
+  background-image:none;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
