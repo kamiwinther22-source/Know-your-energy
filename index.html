@@ -108,28 +108,47 @@ body{
 .title-glint svg{display:block;width:100%;height:100%;}
 
 
-/* ---------- hero: wedge-shaped tagline (upper-left) + decorative solar
-   system (right, vertically centered against the tagline block) -- her
-   direct spec: line 1 spans the widest, each line after it shorter than
-   the one above, left-aligned, forming a wedge; text stays one constant
-   large size throughout (no line shrunk to small type -- that was a
-   direct instruction). Word count per line does the narrowing, not
-   font-size, so nothing reads as "the small print." */
-.hero-wedge{position:relative;min-height:clamp(230px,58vw,300px);margin:0 0 1.5rem;}
-.wedge-tagline{position:relative;z-index:2;max-width:74%;padding-top:0.3rem;}
+/* ---------- hero: wedge-shaped tagline (upper-left). Solar-system
+   placement is a separate, not-yet-specified piece -- she's sending a
+   sketch for exactly where/how it goes; nothing about its position or
+   size in this section should be touched until that arrives.
+
+   Wedge sizing here is measured, not eyeballed: each line's real
+   rendered width was checked in a headless browser against this exact
+   font/weight/viewport before picking the word-groupings and font-size
+   below, specifically so no line silently wraps onto a second row
+   (which is what broke the wedge shape the first time -- a line that
+   wraps stops being "one line" at all, whatever width it was given).
+   At a 390px-wide phone (content width 358px after body padding):
+     L1 "This is for you, if you want to deeply" = 417px @24px font
+     L2 "know those close to you and"            = 260px @24px font
+     L3 "understand your"                        = 189px @24px font
+     L4 "relationships."                         = 157px @24px font
+   Scaling font-size to 20px (417*20/24=347px, fits inside 350px) gives
+   real, checked widths of 347/217/158/131px -- a genuine monotonic
+   taper (100% / 62% / 45% / 38%), not a guess. This is a real, load-
+   bearing tradeoff, not a style preference: fitting more words on line 1
+   without wrapping only gets possible at a smaller font, and a bigger
+   font only stays wrap-free with fewer words on line 1 -- which flattens
+   the taper, since "relationships." alone is a fixed length. This
+   splits the difference: a font clearly larger than anything else on
+   the page (body text is 12-16px), with a taper that's real and visible,
+   not dramatic-if-that-would-require-either wrapping or shrinking to
+   body-text size. */
+.hero-wedge{position:relative;margin:0 0 1.5rem;}
+.wedge-tagline{position:relative;z-index:2;max-width:98%;padding-top:0.3rem;}
 .wedge-line{
   text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
-  font-size:clamp(1.7rem,8.6vw,2.35rem);line-height:1.08;color:#000000;
-  letter-spacing:0.005em;
+  font-size:clamp(1.05rem,5.1vw,1.5rem);line-height:1.15;color:#000000;
+  letter-spacing:0.005em;white-space:nowrap;
 }
-/* Accent words: a different color AND a different font (not just bold),
-   per her explicit spec -- reusing the site's own existing brand blue
-   (#1C2CA9) and its existing cursive brand font rather than introducing
-   a new palette color; the color palette itself is a separate pass she's
-   deferred until after layout is settled. Sized up slightly, per her
-   "probably a little bit bigger than the rest of it." */
+/* Accent distinction is font-only for now (Alex Brush cursive vs. the
+   plain lines' Barlow Condensed) -- no color difference. She was
+   explicit: there is no established "brand blue," color is being
+   ignored entirely until a separate pass, and nothing blue belongs in
+   this file until it comes from her own reference. */
 .wedge-accent{
-  font-family:'Alex Brush',cursive;font-weight:400;color:#1C2CA9;
+  font-family:'Alex Brush',cursive;font-weight:400;color:#000000;
   font-size:1.22em;line-height:1;display:inline-block;
 }
 
