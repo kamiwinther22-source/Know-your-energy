@@ -133,12 +133,19 @@ body{
    for you to envision the space") -- it only marked the wedge-shaped
    negative space the tagline's own decreasing line-lengths leave open,
    which is exactly where the ring cluster nests. */
-.hero-wedge{position:relative;margin:0 0 1.5rem;min-height:42vh;}
-.wedge-tagline{position:relative;z-index:2;max-width:98%;padding-top:0.3rem;}
+.hero-wedge{position:relative;margin:0 0 1.5rem;min-height:58vh;}
+.wedge-tagline{position:relative;z-index:2;max-width:99%;padding-top:0.3rem;}
+/* Font-size is at its real ceiling for this exact wording (see the block
+   comment above -- 20.6px is the largest size line 1 fits without
+   wrapping at 358px available width; this uses that ceiling). "The whole
+   area significantly larger" is met by line-height and inter-line
+   spacing instead, which have no wrap constraint -- a taller, airier
+   block reads as significantly bigger without silently reintroducing
+   the wrap bug a bigger font-size alone would cause. */
 .wedge-line{
   text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
-  font-size:clamp(1.05rem,5.1vw,1.5rem);line-height:1.15;color:#000000;
-  letter-spacing:0.005em;white-space:nowrap;
+  font-size:clamp(1.1rem,5.15vw,1.5rem);line-height:1.55;color:#000000;
+  letter-spacing:0.005em;white-space:nowrap;margin-bottom:0.15em;
 }
 /* Accent distinction is font-only for now (Alex Brush cursive vs. the
    plain lines' Barlow Condensed) -- no color difference. She was
@@ -171,23 +178,31 @@ body{
   z-index:1;pointer-events:none;
 }
 .solar-decor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
-.orbit-ring{fill:none;stroke:rgba(70,85,120,0.4);stroke-width:2;}
+/* Bold enough to actually be seen -- the previous pass's rings were
+   stroke-width:2 at a 900-unit viewBox scaled down to ~350px on screen,
+   which rendered under a physical pixel and read as invisible hairlines
+   regardless of how wide they were drawn. Her direct correction: her
+   reference has 6 real rings, not 4 -- 3-4 stay fully inside the screen,
+   more than one genuinely runs off the right edge. Sizes below are
+   picked so that's literally what happens (see the per-ring comments),
+   not just "bigger for its own sake." */
+.orbit-ring{fill:none;stroke:rgba(40,48,64,0.5);stroke-width:6;}
 .orbit-moon{
-  fill:#e7edf5;stroke:rgba(90,110,140,0.4);stroke-width:1;
-  filter:drop-shadow(0 1px 2px rgba(30,40,60,0.35));
+  fill:#e7edf5;stroke:rgba(90,110,140,0.5);stroke-width:2;
+  filter:drop-shadow(0 2px 4px rgba(30,40,60,0.4));
 }
 /* The visible ring+planet cluster occupies the left ~59% of this wider
    container (matching her sketch's 53%-of-screen visible span inside
    the 90vw container) -- the sun-key bubble sits at its center. */
 .solar-decor .sun-key{
   position:absolute;left:35.6%;top:52%;transform:translate(-50%,-50%);
-  width:23%;aspect-ratio:1;padding:0;
+  width:24%;aspect-ratio:1;padding:0;
 }
 /* Sun is "still large" per her explicit follow-up, sized well past the
    old small triangle-accent bubble it's replacing. */
-.solar-decor .key-stack .key-one{font-size:0.72rem;}
-.solar-decor .key-stack .key-reading{font-size:0.85rem;}
-.solar-decor .key-hl-big{font-size:1.45rem;}
+.solar-decor .key-stack .key-one{font-size:0.76rem;}
+.solar-decor .key-stack .key-reading{font-size:0.9rem;}
+.solar-decor .key-hl-big{font-size:1.55rem;}
 
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
@@ -881,16 +896,26 @@ body{
            deliberately the largest, reaching toward the container's own
            right edge, which is what actually gets cropped by the real
            screen edge (see the .solar-decor comment above). -->
+      <!-- 6 rings, one shared center (320,244) in this 900x470 viewBox
+           (screen's own right edge falls at x=840 here -- see the CSS
+           comment above for that math). The first 4 are sized so their
+           full extent stays under 840 (fully on-screen, matching her
+           "3-4 fully visible" count); the last 2 are sized past it
+           (rightmost extent ~850 and ~970) so they genuinely run off the
+           real screen edge -- "more than one ring cut off," not just
+           the single outermost one. -->
       <svg viewBox="0 0 900 470">
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="520" ry="187" transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="340" ry="122" transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="220" ry="79" transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="130" ry="46" transform="rotate(-12 320 244)"/>
-        <circle class="orbit-moon" cx="30" cy="200" r="14"/>
-        <circle class="orbit-moon" cx="78" cy="160" r="9"/>
-        <circle class="orbit-moon" cx="640" cy="345" r="17"/>
-        <circle class="orbit-moon" cx="740" cy="300" r="10"/>
-        <circle class="orbit-moon" cx="820" cy="230" r="8"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="90"  ry="32"  transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="160" ry="58"  transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="240" ry="86"  transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="330" ry="119" transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="530" ry="191" transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="650" ry="234" transform="rotate(-12 320 244)"/>
+        <circle class="orbit-moon" cx="45"  cy="185" r="15"/>
+        <circle class="orbit-moon" cx="95"  cy="150" r="9"/>
+        <circle class="orbit-moon" cx="600" cy="355" r="20"/>
+        <circle class="orbit-moon" cx="690" cy="310" r="12"/>
+        <circle class="orbit-moon" cx="770" cy="255" r="9"/>
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
