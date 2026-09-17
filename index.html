@@ -135,7 +135,15 @@ body{
    the page (body text is 12-16px), with a taper that's real and visible,
    not dramatic-if-that-would-require-either wrapping or shrinking to
    body-text size. */
-.hero-wedge{position:relative;margin:0 0 1.5rem;}
+/* hero-wedge's height has to reach down to where the solar-system ring
+   cluster ends (per her sketch, ~43% of the first viewport), even though
+   the tagline text itself only fills the top of that box -- the sketch's
+   diagonal line is NOT a real element (her direct correction: "there
+   should not be an actual diagonal line anywhere on the website... it is
+   for you to envision the space") -- it only marked the wedge-shaped
+   negative space the tagline's own decreasing line-lengths leave open,
+   which is exactly where the ring cluster nests. */
+.hero-wedge{position:relative;margin:0 0 1.5rem;min-height:42vh;}
 .wedge-tagline{position:relative;z-index:2;max-width:98%;padding-top:0.3rem;}
 .wedge-line{
   text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
@@ -152,33 +160,44 @@ body{
   font-size:1.22em;line-height:1;display:inline-block;
 }
 
-/* ---------- decorative solar system: right side, vertically centered on
-   the hero block (not on the page) -- zigzags down/right from the wedge
-   tagline's upper-left start. Built from the same glass/metal sphere
-   language already used and approved for the "1 FREE reading" key bubble
-   (.key-item/.key-stack below), not a new visual language -- the ring
-   orbits + moons are added around that same sphere rather than replacing
-   it with a flat illustration. ---------- */
+/* ---------- decorative solar system: measured directly from her sketch,
+   not eyeballed -- the ring+planet cluster she drew sits at roughly
+   16%-69% of screen width and 17%-43% of screen height (real pixel
+   measurement of her drawing), landing in the wedge-shaped space the
+   tagline's shrinking lines leave open below/right of themselves. The
+   container below is deliberately wider than what's visible (90vw,
+   starting at 16vw from the true viewport edge) so the outer ring can
+   run to the container's own right edge and get cropped by the real
+   screen edge (her point 1: "cut off on the right edge... leaving the
+   rings that have the rotating planets in sight") without needing any
+   overflow trick -- the container itself simply extends ~6vw past
+   100vw, and body's existing overflow-x:hidden crops it there. The
+   `- 1rem` in `left` corrects for body's own 1rem padding, since 16vw
+   needs to be measured from the true screen edge, not from .content's
+   already-inset edge. ---------- */
 .solar-decor{
-  position:absolute;right:-6%;top:50%;transform:translateY(-50%);
-  width:clamp(170px,46vw,240px);height:clamp(170px,46vw,240px);
+  position:absolute;left:calc(16vw - 1rem);top:40%;
+  width:90vw;height:58%;
   z-index:1;pointer-events:none;
 }
 .solar-decor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
-.orbit-ring{fill:none;stroke:rgba(70,85,120,0.35);stroke-width:1.4;}
+.orbit-ring{fill:none;stroke:rgba(70,85,120,0.4);stroke-width:2;}
 .orbit-moon{
   fill:#e7edf5;stroke:rgba(90,110,140,0.4);stroke-width:1;
   filter:drop-shadow(0 1px 2px rgba(30,40,60,0.35));
 }
+/* The visible ring+planet cluster occupies the left ~59% of this wider
+   container (matching her sketch's 53%-of-screen visible span inside
+   the 90vw container) -- the sun-key bubble sits at its center. */
 .solar-decor .sun-key{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:58%;height:58%;padding:0;
+  position:absolute;left:35.6%;top:52%;transform:translate(-50%,-50%);
+  width:23%;aspect-ratio:1;padding:0;
 }
 /* Sun is "still large" per her explicit follow-up, sized well past the
    old small triangle-accent bubble it's replacing. */
-.solar-decor .key-stack .key-one{font-size:1.3rem;}
-.solar-decor .key-stack .key-reading{font-size:1.55rem;}
-.solar-decor .key-hl-big{font-size:2.7rem;}
+.solar-decor .key-stack .key-one{font-size:0.72rem;}
+.solar-decor .key-stack .key-reading{font-size:0.85rem;}
+.solar-decor .key-hl-big{font-size:1.45rem;}
 
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
@@ -864,15 +883,24 @@ body{
     </div>
 
     <div class="solar-decor" aria-hidden="true">
-      <svg viewBox="0 0 300 300">
-        <ellipse class="orbit-ring" cx="150" cy="150" rx="145" ry="52" transform="rotate(-18 150 150)"/>
-        <ellipse class="orbit-ring" cx="150" cy="150" rx="112" ry="40" transform="rotate(-18 150 150)"/>
-        <ellipse class="orbit-ring" cx="150" cy="150" rx="80" ry="29" transform="rotate(-18 150 150)"/>
-        <circle class="orbit-moon" cx="27" cy="112" r="7"/>
-        <circle class="orbit-moon" cx="55" cy="88" r="4.5"/>
-        <circle class="orbit-moon" cx="252" cy="176" r="9"/>
-        <circle class="orbit-moon" cx="278" cy="150" r="5.5"/>
-        <circle class="orbit-moon" cx="222" cy="205" r="6"/>
+      <!-- viewBox proportioned to match the container's own ~90vw x 58%-
+           of-hero-height aspect ratio, so the ring geometry below (traced
+           from her sketch's proportions, not guessed) lands where drawn
+           instead of getting stretched. Rings share one center near the
+           sun-key bubble (see its left/top in CSS); the outer ring is
+           deliberately the largest, reaching toward the container's own
+           right edge, which is what actually gets cropped by the real
+           screen edge (see the .solar-decor comment above). -->
+      <svg viewBox="0 0 900 470">
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="520" ry="187" transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="340" ry="122" transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="220" ry="79" transform="rotate(-12 320 244)"/>
+        <ellipse class="orbit-ring" cx="320" cy="244" rx="130" ry="46" transform="rotate(-12 320 244)"/>
+        <circle class="orbit-moon" cx="30" cy="200" r="14"/>
+        <circle class="orbit-moon" cx="78" cy="160" r="9"/>
+        <circle class="orbit-moon" cx="640" cy="345" r="17"/>
+        <circle class="orbit-moon" cx="740" cy="300" r="10"/>
+        <circle class="orbit-moon" cx="820" cy="230" r="8"/>
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
