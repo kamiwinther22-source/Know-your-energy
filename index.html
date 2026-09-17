@@ -98,33 +98,21 @@ body{
 .title-glint svg{display:block;width:100%;height:100%;}
 
 
-/* ---------- hero: wedge-shaped tagline (upper-left). Solar-system
-   placement is a separate, not-yet-specified piece -- she's sending a
-   sketch for exactly where/how it goes; nothing about its position or
-   size in this section should be touched until that arrives.
-
-   Wedge sizing here is measured, not eyeballed: each line's real
-   rendered width was checked in a headless browser against this exact
-   font/weight/viewport before picking the word-groupings and font-size
-   below, specifically so no line silently wraps onto a second row
-   (which is what broke the wedge shape the first time -- a line that
-   wraps stops being "one line" at all, whatever width it was given).
-   At a 390px-wide phone (content width 358px after body padding):
-     L1 "This is for you, if you want to deeply" = 417px @24px font
-     L2 "know those close to you and"            = 260px @24px font
-     L3 "understand your"                        = 189px @24px font
-     L4 "relationships."                         = 157px @24px font
-   Scaling font-size to 20px (417*20/24=347px, fits inside 350px) gives
-   real, checked widths of 347/217/158/131px -- a genuine monotonic
-   taper (100% / 62% / 45% / 38%), not a guess. This is a real, load-
-   bearing tradeoff, not a style preference: fitting more words on line 1
-   without wrapping only gets possible at a smaller font, and a bigger
-   font only stays wrap-free with fewer words on line 1 -- which flattens
-   the taper, since "relationships." alone is a fixed length. This
-   splits the difference: a font clearly larger than anything else on
-   the page (body text is 12-16px), with a taper that's real and visible,
-   not dramatic-if-that-would-require-either wrapping or shrinking to
-   body-text size. */
+/* ---------- hero: wedge-shaped tagline (upper-left), 5 lines now -- her
+   own rewrite, with her own exact line breaks (not mine): shorter lines
+   throughout, which is what actually let the font get bigger this time.
+   Measured, not eyeballed -- real rendered widths at 390px viewport
+   (content width 358px), Barlow Condensed 800:
+     L1 "This is for you if you want to" = 325px @24px font
+     L2 "Understand relationship"        = 278px @24px font
+     L3 "Dynamics and deeply"            = 247px @24px font
+     L4 "Know those close"              = 204px @24px font
+     L5 "To you"                        = 77px  @24px font
+   Line 1 alone at 24px already fits inside 358px with room to spare, so
+   font-size could go up from the previous wording's 20px ceiling to 25px
+   (325*25/24=339px, still comfortably under 358) -- real taper at that
+   size: 339/291/258/213/80px = 100% / 86% / 76% / 63% / 24%, monotonic
+   and checked, not assumed. */
 /* hero-wedge holds both the tagline and the ring cluster below it, with
    ~zero gap between them -- in her sketch the diagonal boundary line
    runs directly into the top edge of the outermost ring as one
@@ -138,16 +126,9 @@ body{
    not a bigger box with empty space padded in. */
 .hero-wedge{position:relative;margin:0 0 1rem;min-height:46vh;}
 .wedge-tagline{position:relative;z-index:2;max-width:99%;padding-top:0.3rem;}
-/* Font-size is at its real ceiling for this exact wording (see the block
-   comment above -- 20.6px is the largest size line 1 fits without
-   wrapping at 358px available width; this uses that ceiling). "The whole
-   area significantly larger" is met by line-height and inter-line
-   spacing instead, which have no wrap constraint -- a taller, airier
-   block reads as significantly bigger without silently reintroducing
-   the wrap bug a bigger font-size alone would cause. */
 .wedge-line{
   text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
-  font-size:clamp(1.1rem,5.15vw,1.5rem);line-height:1.55;color:#000000;
+  font-size:clamp(1.35rem,6.4vw,1.85rem);line-height:1.4;color:#000000;
   letter-spacing:0.005em;white-space:nowrap;margin-bottom:0.15em;
 }
 /* Accent distinction is font-only for now (Alex Brush cursive vs. the
@@ -884,10 +865,11 @@ body{
 
   <div class="hero-wedge">
     <div class="wedge-tagline">
-      <div class="wedge-line">This is for you, if you want to <span class="wedge-accent">deeply</span></div>
-      <div class="wedge-line">know those close to you and</div>
-      <div class="wedge-line">understand your</div>
-      <div class="wedge-line"><span class="wedge-accent">relationships.</span></div>
+      <div class="wedge-line">This is for you if you want to</div>
+      <div class="wedge-line"><span class="wedge-accent">Understand</span> relationship</div>
+      <div class="wedge-line">Dynamics and <span class="wedge-accent">deeply</span></div>
+      <div class="wedge-line">Know those close</div>
+      <div class="wedge-line">To you</div>
     </div>
 
     <div class="solar-decor" aria-hidden="true">
