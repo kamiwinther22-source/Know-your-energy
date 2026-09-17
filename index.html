@@ -125,15 +125,18 @@ body{
    the page (body text is 12-16px), with a taper that's real and visible,
    not dramatic-if-that-would-require-either wrapping or shrinking to
    body-text size. */
-/* hero-wedge's height has to reach down to where the solar-system ring
-   cluster ends (per her sketch, ~43% of the first viewport), even though
-   the tagline text itself only fills the top of that box -- the sketch's
-   diagonal line is NOT a real element (her direct correction: "there
-   should not be an actual diagonal line anywhere on the website... it is
-   for you to envision the space") -- it only marked the wedge-shaped
-   negative space the tagline's own decreasing line-lengths leave open,
-   which is exactly where the ring cluster nests. */
-.hero-wedge{position:relative;margin:0 0 1.5rem;min-height:58vh;}
+/* hero-wedge holds both the tagline and the ring cluster below it, with
+   ~zero gap between them -- in her sketch the diagonal boundary line
+   runs directly into the top edge of the outermost ring as one
+   continuous stroke, meaning the rings sit right against the tagline's
+   own lower boundary, not floating below it with dead space in between
+   (a real bug in the previous pass: the box was sized too tall and the
+   rings were centered too low inside it). Height here is just enough to
+   fit the tagline's own real rendered height (~181px on a typical
+   360-430px phone, per actual measurement) plus the ring cluster's
+   compact height (~18vh, per her sketch's 17%-43%-of-screen span) --
+   not a bigger box with empty space padded in. */
+.hero-wedge{position:relative;margin:0 0 1rem;min-height:46vh;}
 .wedge-tagline{position:relative;z-index:2;max-width:99%;padding-top:0.3rem;}
 /* Font-size is at its real ceiling for this exact wording (see the block
    comment above -- 20.6px is the largest size line 1 fits without
@@ -173,8 +176,8 @@ body{
    needs to be measured from the true screen edge, not from .content's
    already-inset edge. ---------- */
 .solar-decor{
-  position:absolute;left:calc(16vw - 1rem);top:40%;
-  width:90vw;height:58%;
+  position:absolute;left:calc(16vw - 1rem);top:38%;
+  width:90vw;height:40%;
   z-index:1;pointer-events:none;
 }
 .solar-decor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
