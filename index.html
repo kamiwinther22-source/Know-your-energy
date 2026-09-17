@@ -38,10 +38,23 @@
    fine grain for texture -- no scattered highlight blobs. Blue is then
    the only saturated color anywhere on the page, which is what actually
    makes it pop: contrast of saturation, not more background color. */
+/* Bright polished-metal surface -- her direct spec: "bright light shining
+   metallic surface, not with diagonal streaks running through it"
+   (rejecting the earlier rough draft's diagonal-streak texture outright).
+   Every band here runs horizontal (180deg), never diagonal. A soft bright
+   highlight top-center (where a light source would catch a curved metal
+   sheet) over a cool pale-steel base, with fine 2px horizontal grain
+   lines for the brushed-metal texture -- both subtle enough that black
+   text stays fully legible, per the never-fade-text rule (this changes
+   the background's own color, not any text's opacity). */
 body{
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#ffffff;
-  background-image:none;
+  background-color:#e9edf1;
+  background-image:
+    repeating-linear-gradient(180deg, rgba(255,255,255,0.5) 0px, rgba(255,255,255,0.5) 1px, rgba(170,182,196,0.14) 1px, rgba(170,182,196,0.14) 2px),
+    radial-gradient(ellipse 130% 60% at 50% 0%, rgba(255,255,255,0.95) 0%, rgba(233,237,241,0) 62%),
+    linear-gradient(180deg, #f8fafc 0%, #e7ebef 55%, #dbe1e7 100%);
+  background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
@@ -57,44 +70,8 @@ body{
 .bg-glints .glint{position:absolute;}
 .bg-glints .glint svg{display:block;width:100%;height:100%;}
 
-/* ---------- hero accent cluster: numerology at the top, astrology and HD
-   flanking the key bubble below it -- flipped from HD-at-top per her
-   direct instruction ("flip flop it with numerology"). The three
-   graphics and the bubble still read as a triangle with the bubble at
-   its center. Tapping a planet dot / HD center / number bead still opens
-   the same tap-to-reveal definition modal used everywhere else. */
-.icon-triangle{position:relative;margin:0.5rem auto 0.3rem;}
-/* Overlapping the top of the bubble, not sitting in its own row above it
-   -- her direct correction: "I want it over the circle like I have it...
-   put it exactly where I placed it." Positioned relative to the whole
-   triangle (not pushing tri-base down), sized wider than the shrunk
-   title was (close to the bubble's own width) to match "the same size,
-   taking up the exact same amount of space" she drew it at. Lowered a
-   further 8px per her follow-up so the text sits closer to the bubble,
-   with its own bottom edge measured to land ~4px above the real top
-   edge of the astro/HD circles (215.66px in a 400px-wide test render) --
-   her explicit constraint: the text must never go lower than that, or
-   overlap either chart. */
-.icon-triangle .brand-row{
-  position:absolute;left:50%;top:calc(112px + 0.15rem);
-  transform:translate(-50%,-50%);
-  width:max-content;max-width:92%;margin:0;padding:0;
-  pointer-events:none;z-index:2;
-}
-.icon-triangle .brand{font-size:clamp(1.5rem,8vw,2.2rem);}
-.tri-top{display:flex;justify-content:center;}
-.tri-base{display:flex;align-items:center;justify-content:space-between;gap:0.3rem;margin-top:0.15rem;}
-.accent-item{position:relative;flex:0 0 auto;height:78px;}
-.accent-item svg{display:block;width:auto;height:100%;}
-.accent-num{height:104px;}
-.hero-accent-caption{
-  text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;
-  margin-bottom:0.9rem;
-}
-
 /* ---------- title ---------- */
-.brand-row{position:relative;text-align:center;margin-bottom:0.6rem;padding:0 1.6rem;}
+.brand-top{text-align:center;margin:0.2rem 0 0.9rem;padding:0 1.6rem;}
 /* Title color: YInMn Blue. #1C2CA9 is pixel-sampled from her own reference
    photo of the actual pigment (mean of the well-lit, fully-saturated pixels
    across the pile, excluding shadow crevices and blown highlight) rather
@@ -130,28 +107,59 @@ body{
 .title-glint svg{display:block;width:100%;height:100%;}
 
 
-/* ---------- tagline / toggle ---------- */
-/* Both tagline lines shown at once, stacked, with the single remaining
-   key bubble centered in the gap between them -- per her sketch. */
-.tagline-frame{position:relative;max-width:380px;margin:0 auto 40px;padding:0 30px;}
-.tagline-slide{
-  width:100%;margin:0;
-  text-align:center;font-family:'Special Elite',monospace;font-size:clamp(1.05rem,5.2vw,1.55rem);line-height:1.32;font-weight:400;letter-spacing:0.005em;
+/* ---------- hero: wedge-shaped tagline (upper-left) + decorative solar
+   system (right, vertically centered against the tagline block) -- her
+   direct spec: line 1 spans the widest, each line after it shorter than
+   the one above, left-aligned, forming a wedge; text stays one constant
+   large size throughout (no line shrunk to small type -- that was a
+   direct instruction). Word count per line does the narrowing, not
+   font-size, so nothing reads as "the small print." */
+.hero-wedge{position:relative;min-height:clamp(230px,58vw,300px);margin:0 0 1.5rem;}
+.wedge-tagline{position:relative;z-index:2;max-width:74%;padding-top:0.3rem;}
+.wedge-line{
+  text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
+  font-size:clamp(1.7rem,8.6vw,2.35rem);line-height:1.08;color:#000000;
+  letter-spacing:0.005em;
 }
-.tagline-slide.c-gold{color:#000000;}
-/* Once the title dropped its own "focal point" size (see .brand), this
-   became solvable: bigger than the title AND 2 lines. Measured against
-   this exact sentence at real phone widths (360-430px), a 2-line wrap
-   needs the effective width close to the full viewport, not just the
-   tagline-frame's own (narrower, max-width:380px) content box -- so this
-   breaks out of that frame's width/padding entirely (position + left 50%
-   + negative transform) rather than trying to claw back a few px of
-   padding, which wasn't enough room on its own. */
-.tagline-top{
-  font-size:clamp(1.15rem,5.2vw,1.4rem);
-  position:relative;left:50%;transform:translateX(-50%);
-  width:calc(100vw - 32px);margin-bottom:0.3rem;
+/* Accent words: a different color AND a different font (not just bold),
+   per her explicit spec -- reusing the site's own existing brand blue
+   (#1C2CA9) and its existing cursive brand font rather than introducing
+   a new palette color; the color palette itself is a separate pass she's
+   deferred until after layout is settled. Sized up slightly, per her
+   "probably a little bit bigger than the rest of it." */
+.wedge-accent{
+  font-family:'Alex Brush',cursive;font-weight:400;color:#1C2CA9;
+  font-size:1.22em;line-height:1;display:inline-block;
 }
+
+/* ---------- decorative solar system: right side, vertically centered on
+   the hero block (not on the page) -- zigzags down/right from the wedge
+   tagline's upper-left start. Built from the same glass/metal sphere
+   language already used and approved for the "1 FREE reading" key bubble
+   (.key-item/.key-stack below), not a new visual language -- the ring
+   orbits + moons are added around that same sphere rather than replacing
+   it with a flat illustration. ---------- */
+.solar-decor{
+  position:absolute;right:-6%;top:50%;transform:translateY(-50%);
+  width:clamp(170px,46vw,240px);height:clamp(170px,46vw,240px);
+  z-index:1;pointer-events:none;
+}
+.solar-decor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.orbit-ring{fill:none;stroke:rgba(70,85,120,0.35);stroke-width:1.4;}
+.orbit-moon{
+  fill:#e7edf5;stroke:rgba(90,110,140,0.4);stroke-width:1;
+  filter:drop-shadow(0 1px 2px rgba(30,40,60,0.35));
+}
+.solar-decor .sun-key{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:58%;height:58%;padding:0;
+}
+/* Sun is "still large" per her explicit follow-up, sized well past the
+   old small triangle-accent bubble it's replacing. */
+.solar-decor .key-stack .key-one{font-size:1.3rem;}
+.solar-decor .key-stack .key-reading{font-size:1.55rem;}
+.solar-decor .key-hl-big{font-size:2.7rem;}
+
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
@@ -161,7 +169,14 @@ body{
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
-.rel-picker{margin:1.4rem 0 1.6rem;}
+.rel-picker{margin:0 0 1rem;}
+/* Mild left/right stagger between the two people's blocks, continuing the
+   same zigzag rhythm as the tagline/solar-system pair above -- Person 1
+   sits toward the left (her explicit instruction), Person 2 toward the
+   right, both still well inside the page's single narrow mobile column
+   so neither crosses its horizontal center. */
+.form-panel>.f{margin-right:8%;}
+#p2Section .f{margin-left:8%;margin-right:0;}
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
 .rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
 .rel-chip:hover{background:#243acc;}
@@ -257,14 +272,57 @@ body{
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
 .privacy-note{color:#1C2CA9;font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
+/* ---------- email gate: center of the page, per her spec -- key/access
+   check, disclaimer, Continue, then the pass options on one line. Sits
+   directly on the page's own metallic background, embossed like the
+   fields below it -- no separate card. ---------- */
+.gate-wrap{max-width:420px;width:100%;margin:0 auto 1.6rem;text-align:center;}
+.gate-lbl{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.03em;text-transform:uppercase;color:#000000;margin-bottom:0.5rem;}
+.gate-email-f .line-field{max-width:320px;margin:0 auto;}
+.gate-privacy{font-style:italic;font-size:0.66rem;color:#000000;margin:0.45rem 0 0;}
+/* One line, small, not a second decision point competing with the email
+   field -- her direct correction: "there's no reason for it to have that
+   much space... accessible but not obnoxious." Already-owned/used option
+   goes solid grey + unclickable (a real disabled state, not a faded one --
+   full-strength text on a flat grey fill, same principle as any other
+   disabled control on this page). */
+.pass-row{display:flex;justify-content:center;gap:0.4rem;margin-top:0.9rem;flex-wrap:wrap;}
+.pass-opt{
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.62rem;line-height:1.3;
+  padding:0.35rem 0.55rem;border-radius:8px;border:1.3px solid #1C2CA9;background:transparent;color:#000000;
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;min-width:56px;
+}
+.pass-opt .pass-name{display:block;}
+.pass-opt .pass-price{display:block;font-weight:800;}
+.pass-opt.active{background:#1C2CA9;color:#ffffff;}
+.pass-opt:disabled{background:#9a9fa6;border-color:#9a9fa6;color:#ffffff;cursor:not-allowed;opacity:1;}
+
 .form-col{position:relative;}
 /* Unboxed: the data-entry form sits directly on the page background, no
    card/blur/border around it -- the key bubbles above it aren't boxed
    either now, so nothing on this whole screen is. */
 .form-panel{
   position:relative;padding:0.3rem 0 0;
+  max-width:400px;margin:0 auto;
+  border:none;
 }
-.form-panel .f{margin-bottom:0.9rem;}
+/* Locked (pre-email) state: a real, keyboard-and-mouse disabled fieldset,
+   not a faded/dimmed one -- forced back to full-strength color on every
+   browser's own default disabled dimming, per the never-fade-text rule.
+   The lock is communicated by the legend note below, not by opacity. */
+.data-entry-gate[disabled]{cursor:not-allowed;}
+.data-entry-gate[disabled] .line-field input,
+.data-entry-gate[disabled] .line-field select{
+  color:#000000!important;-webkit-text-fill-color:#000000!important;opacity:1!important;cursor:not-allowed;
+}
+.data-entry-gate[disabled] .rel-chip,
+.data-entry-gate[disabled] .gen-btn{opacity:1!important;cursor:not-allowed;}
+.gate-legend{
+  display:block;width:100%;text-align:left;padding:0 0 0.7rem;margin:0 0 0.7rem;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.68rem;
+  letter-spacing:0.03em;text-transform:uppercase;color:#1C2CA9;
+}
+.form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
 .section-lbl{font-size:0.6rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
@@ -775,41 +833,84 @@ body{
 <body>
 <div class="bg-glints" id="bgGlints"></div>
 <div class="content">
-  <div class="tagline-frame">
-    <div class="tagline-slide tagline-top c-gold">Do you know your personal cycles currently in motion?</div>
+  <div class="brand-top"><div class="brand">Know Your Energy</div></div>
 
-    <div class="icon-triangle" id="heroAccentRow">
-      <div class="tri-top">
-        <div class="accent-item accent-num" id="numAccent"></div>
-      </div>
-
-      <div class="brand-row">
-        <div class="title-glint" style="width:20px;height:20px;top:-6px;left:2%;">
-          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#fff" opacity="0.9"/></svg>
-        </div>
-        <div class="title-glint" style="width:13px;height:13px;top:2px;right:4%;">
-          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#e9dbbd" opacity="0.9"/></svg>
-        </div>
-        <div class="title-glint" style="width:10px;height:10px;bottom:-2px;left:16%;">
-          <svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="#c6b395" opacity="0.85"/></svg>
-        </div>
-        <div class="brand">Know Your Energy</div>
-      </div>
-
-      <div class="tri-base">
-        <div class="accent-item accent-astro" id="solarIcon"></div>
-        <div class="keys-col" id="keysCol"></div>
-        <div class="accent-item accent-hd" id="hdIcon"></div>
-      </div>
+  <div class="hero-wedge">
+    <div class="wedge-tagline">
+      <div class="wedge-line">This is for you, if you want to <span class="wedge-accent">deeply</span></div>
+      <div class="wedge-line">know those close to you</div>
+      <div class="wedge-line">and understand your</div>
+      <div class="wedge-line"><span class="wedge-accent">relationships.</span></div>
     </div>
 
-    <div class="tagline-slide c-gold">Do you want to know how you effect others? or how they effect you?</div>
+    <div class="solar-decor" aria-hidden="true">
+      <svg viewBox="0 0 300 300">
+        <ellipse class="orbit-ring" cx="150" cy="150" rx="145" ry="52" transform="rotate(-18 150 150)"/>
+        <ellipse class="orbit-ring" cx="150" cy="150" rx="112" ry="40" transform="rotate(-18 150 150)"/>
+        <ellipse class="orbit-ring" cx="150" cy="150" rx="80" ry="29" transform="rotate(-18 150 150)"/>
+        <circle class="orbit-moon" cx="27" cy="112" r="7"/>
+        <circle class="orbit-moon" cx="55" cy="88" r="4.5"/>
+        <circle class="orbit-moon" cx="252" cy="176" r="9"/>
+        <circle class="orbit-moon" cx="278" cy="150" r="5.5"/>
+        <circle class="orbit-moon" cx="222" cy="205" r="6"/>
+      </svg>
+      <div class="key-item sun-key">
+        <span class="key-stack">
+          <span class="key-one">1</span>
+          <mark class="key-hl key-hl-big">FREE</mark>
+          <span class="key-reading">reading</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gate-wrap">
+    <label class="gate-lbl" for="pEmail">Your email is your key</label>
+    <div class="f gate-email-f">
+      <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
+    </div>
+    <div class="gate-privacy">Your email will not be shared or solicited.</div>
+    <div class="err" id="gateErr"></div>
+    <div class="submit-wrap">
+      <span class="glow-ring"><button type="button" class="gen-btn" id="gateContinueBtn">Continue</button></span>
+    </div>
+
+    <div class="pass-row" id="passRow">
+      <button type="button" class="pass-opt active" data-plan="free"><span class="pass-name">1st Reading</span><span class="pass-price">Free</span></button>
+      <button type="button" class="pass-opt" data-plan="single"><span class="pass-name">Single</span><span class="pass-price">$5</span></button>
+      <button type="button" class="pass-opt" data-plan="monthly"><span class="pass-name">1 Month</span><span class="pass-price">$10</span></button>
+      <button type="button" class="pass-opt" data-plan="annual"><span class="pass-name">1 Year</span><span class="pass-price">$25</span></button>
+    </div>
   </div>
 
   <div class="bottom-grid">
     <div class="form-col">
-      <div class="form-panel">
-        <div class="privacy-note">Data never saved</div>
+      <fieldset class="form-panel data-entry-gate" id="dataEntry" disabled>
+        <legend class="gate-legend" id="gateLegend">Enter your email above to unlock</legend>
+        <div class="rel-picker">
+          <div class="toggle-row">
+            <span class="tog-lbl active" id="lblInd">Individual</span>
+            <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
+            <span class="tog-lbl" id="lblRel">Relational</span>
+          </div>
+
+          <div class="rel-row" id="relWrap" style="display:none;">
+            <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
+            <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
+            <button type="button" class="rel-chip" data-rel="friends">Friends</button>
+            <button type="button" class="rel-chip" data-rel="other">Other</button>
+          </div>
+
+          <!-- TEMPORARY test control: generates a relational reading built
+               entirely from Human Design data (no astrology/numerology),
+               to compare against the normal combined reading. Remove this
+               block, #hdOnlyTest's use in generate(), and the matching
+               worker.js hdOnly branch once the test is done. -->
+          <label id="hdOnlyTestWrap" style="display:none;font-size:0.8rem;">
+            <input type="checkbox" id="hdOnlyTest"> TEST: Human Design–only reading
+          </label>
+        </div>
+
         <div class="f">
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
           <div class="row-id">
@@ -842,42 +943,12 @@ body{
           </div>
         </div>
 
-        <div class="rel-picker">
-          <div class="toggle-row">
-            <span class="tog-lbl active" id="lblInd">Individual</span>
-            <div class="toggle-pill" id="togPill" role="button" tabindex="0" aria-label="Toggle Individual or Relational"></div>
-            <span class="tog-lbl" id="lblRel">Relational</span>
-          </div>
-
-          <div class="rel-row" id="relWrap" style="display:none;">
-            <button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button>
-            <button type="button" class="rel-chip" data-rel="romantic">Romantic</button>
-            <button type="button" class="rel-chip" data-rel="friends">Friends</button>
-            <button type="button" class="rel-chip" data-rel="other">Other</button>
-          </div>
-
-          <!-- TEMPORARY test control: generates a relational reading built
-               entirely from Human Design data (no astrology/numerology),
-               to compare against the normal combined reading. Remove this
-               block, #hdOnlyTest's use in generate(), and the matching
-               worker.js hdOnly branch once the test is done. -->
-          <label id="hdOnlyTestWrap" style="display:none;font-size:0.8rem;opacity:0.85;">
-            <input type="checkbox" id="hdOnlyTest"> TEST: Human Design–only reading
-          </label>
+        <div class="submit-wrap">
+          <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()">Continue</button></span>
         </div>
-
-        <div class="f">
-          <div class="privacy-note">email is just a key/no soliciting</div>
-          <label for="pEmail">Email Address</label>
-          <div class="line-field"><input id="pEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email"></div>
-        </div>
-      </div>
+      </fieldset>
 
       <div class="err" id="err"></div>
-
-      <div class="submit-wrap">
-        <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()">Calculate</button></span>
-      </div>
     </div>
   </div>
 
@@ -1002,9 +1073,8 @@ const NUMS = [
   {n:22, lbl:'Master Builder'},
   {n:33, lbl:'Master Teacher'},
 ];
-// DOM tile grid removed -- see the numAccent bead cluster below for the
-// small decorative entry-page preview. NUMS itself is still real
-// content, used both there and by openNumberDef.
+// DOM tile grid removed. NUMS itself is still real content, used by
+// deepGlossaryRows (NUM_DEFS.core) and the results-page number cards.
 // A few small, fixed-size sparkle glints -- same restrained technique
 // as the reference sphere's accent glints, not a dense field.
 (function(){
@@ -1022,73 +1092,6 @@ const NUMS = [
     host.appendChild(d);
   });
 })();
-// item.lbl is this cell's real Pythagorean Square meaning (Character,
-// Energy, etc.) -- the body reuses NUM_DEFS.lifepath, which is a
-// different number system's content (what this digit means as a Life
-// Path number), included as this number's broader significance rather
-// than a claim that it's the Pythagorean Square meaning itself.
-function openNumberDef(item){
-  stopListening();
-  document.getElementById('cardExpandTitle').textContent=`Number ${item.n} — ${item.lbl}`;
-  document.getElementById('cardExpandBody').innerHTML=`<div class="dprow"><p class="report-body">${NUM_DEFS.core[item.n]||''}</p></div>`;
-  document.getElementById('cardExpandListenBtn').hidden=true;
-  document.getElementById('cardExpand').classList.add('open');
-}
-
-// ---------- numerology accent: small scattered bead cluster, flat-filled
-// in her own literal per-number colors (see NUMS above) instead of the
-// old pale metal-tone gradients -- deliberately NOT a grid, an organic
-// scatter to match. Only 1-9 shown (not the master numbers) -- this is a
-// decorative preview, not a claim to be exhaustive; the full set is
-// still real content inside the actual report. No word labels, same
-// reasoning as the other two accents: tapping a bead still opens the
-// real definition via openNumberDef. ----------
-(function(){
-  const numWrap = document.getElementById('numAccent');
-  if(!numWrap) return;
-  // Hand-placed, not grid-computed -- an organic scatter that keeps a
-  // real minimum gap between every pair of beads (checked, not eyeballed).
-  const POS = [
-    {cx:30,  cy:35,  r:15},
-    {cx:70,  cy:20,  r:13},
-    {cx:108, cy:38,  r:16},
-    {cx:24,  cy:78,  r:14},
-    {cx:62,  cy:65,  r:18},
-    {cx:100, cy:82,  r:13},
-    {cx:40,  cy:112, r:15},
-    {cx:80,  cy:118, r:14},
-    {cx:115, cy:105, r:12},
-  ];
-  // Per-bead text color chosen by real contrast math against its own
-  // fill (WCAG ratio, not eyeballed) -- black text reads fine on the
-  // light beads (yellow/white/green/orange) but is close to invisible on
-  // the dark ones (purple/blue/red/black/fuchsia), which get white text
-  // instead. White (2) also gets a real dark border so it doesn't
-  // disappear against the page's own white background.
-  const TEXT_COLOR = {1:'#000000',2:'#000000',3:'#ffffff',4:'#ffffff',5:'#000000',6:'#ffffff',7:'#000000',8:'#ffffff',9:'#ffffff'};
-  let svg = `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">`;
-  NUMS.slice(0,9).forEach((item,i)=>{
-    const {cx,cy,r} = POS[i];
-    const border = item.n===2 ? 'rgba(20,25,35,0.35)' : 'rgba(0,0,0,0.15)';
-    svg += `<circle class="n-bead" data-idx="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="${item.color}" stroke="${border}" stroke-width="1.2" style="cursor:pointer;"/>`;
-    svg += `<text x="${cx}" y="${cy+r*0.34}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="${r*1.05}" fill="${TEXT_COLOR[item.n]}" style="pointer-events:none;">${item.n}</text>`;
-  });
-  svg += '</svg>';
-  numWrap.innerHTML = svg;
-  numWrap.querySelectorAll('.n-bead').forEach(el=>{
-    el.addEventListener('click',()=>openNumberDef(NUMS[+el.dataset.idx]));
-  });
-})();
-
-// ---------- key selling point: single bubble centered between the two taglines ----------
-// Stacked vertically now, one word per line -- see .key-stack's own
-// comment for why. The wrapping <span> stays (still what .key-item's
-// flex centering targets), it's just a flex column itself now instead
-// of a line of inline text.
-const KEY_TEXT = '<span class="key-one">1</span><mark class="key-hl key-hl-big">FREE</mark><span class="key-reading">reading</span>';
-document.getElementById('keysCol').innerHTML =
-  `<div class="key-item" style="width:clamp(96px,34vw,140px);height:clamp(96px,34vw,140px);"><span class="key-stack">${KEY_TEXT}</span></div>`;
-
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
 const lblInd = document.getElementById('lblInd');
@@ -1109,12 +1112,188 @@ function setMode(rel){
   document.getElementById('hdOnlyTestWrap').style.display = rel ? 'block' : 'none'; // TEMPORARY, see note above
   if(typeof saveDraft==='function')saveDraft();
 }
-togPill.addEventListener('click', ()=>setMode(!isRelational));
+// entryUnlocked guards togPill specifically -- it's a plain div (role="button"),
+// not a real form control, so the data-entry fieldset's own `disabled`
+// attribute (which natively blocks every real input/select/button inside it)
+// doesn't reach it. Everything else in the gated block is a real form
+// element and gets that native protection for free.
+let entryUnlocked = false;
+togPill.addEventListener('click', ()=>{ if(entryUnlocked) setMode(!isRelational); });
 togPill.addEventListener('keydown', e=>{
+  if(!entryUnlocked) return;
   if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setMode(!isRelational); }
 });
-lblInd.addEventListener('click', ()=>setMode(false));
-lblRel.addEventListener('click', ()=>setMode(true));
+lblInd.addEventListener('click', ()=>{ if(entryUnlocked) setMode(false); });
+lblRel.addEventListener('click', ()=>{ if(entryUnlocked) setMode(true); });
+
+// ---------- email gate: her direct spec -- nothing in the birth-data
+// fields is enterable until the email is checked, because the email is
+// how the system knows whether this visitor still has a free reading
+// available, already holds an active pass, or needs to buy one. Talks to
+// the real /check-pass, /create-checkout-session and /record-pass routes
+// already in worker.js -- /check-pass additionally now reports freeUsed
+// (see worker.js's checkPassRecord), a field that didn't exist before
+// this pass, added specifically so this gate has something real to check
+// against instead of trusting client-side state alone.
+(function(){
+  const emailInput = document.getElementById('pEmail');
+  const gateContinueBtn = document.getElementById('gateContinueBtn');
+  const gateErr = document.getElementById('gateErr');
+  const gateLegend = document.getElementById('gateLegend');
+  const dataEntry = document.getElementById('dataEntry');
+  const passRow = document.getElementById('passRow');
+  const passOpts = Array.from(passRow.querySelectorAll('.pass-opt'));
+
+  function showGateErr(msg){
+    gateErr.textContent = msg;
+    gateErr.style.display = msg ? 'block' : 'none';
+  }
+
+  function unlockEntry(){
+    entryUnlocked = true;
+    dataEntry.disabled = false;
+    gateLegend.style.display = 'none';
+  }
+
+  function lockEntry(message){
+    entryUnlocked = false;
+    dataEntry.disabled = true;
+    gateLegend.textContent = message;
+    gateLegend.style.display = 'block';
+  }
+
+  // Reflects what /check-pass reported: an active pass greys out (and
+  // disables) every option, since nothing more needs to be bought -- her
+  // direct instruction, "if they have their pass already then those go
+  // grey and unclickable." Free-not-yet-used marks the free option as the
+  // active choice; free-already-used disables only that one option, since
+  // the paid ones are still genuinely purchasable.
+  function renderPassRow(access){
+    passOpts.forEach(btn=>{
+      const plan = btn.dataset.plan;
+      btn.classList.remove('active');
+      btn.disabled = false;
+      if(access.active){
+        btn.disabled = true;
+      } else if(plan==='free'){
+        if(access.freeUsed) btn.disabled = true;
+        else btn.classList.add('active');
+      }
+    });
+  }
+
+  async function checkAccess(email){
+    const res = await fetch(W_API+'/check-pass', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email})
+    });
+    if(!res.ok) throw new Error('Could not reach the server.');
+    return res.json();
+  }
+
+  async function runGate(email){
+    showGateErr('');
+    gateContinueBtn.disabled = true;
+    try{
+      const access = await checkAccess(email);
+      renderPassRow(access);
+      if(access.active){
+        unlockEntry();
+      } else if(!access.freeUsed){
+        unlockEntry();
+      } else {
+        lockEntry('Free reading already used — choose a pass above to continue');
+      }
+    }catch(e){
+      showGateErr(e.message || 'Something went wrong checking your email.');
+    }finally{
+      gateContinueBtn.disabled = false;
+    }
+  }
+
+  gateContinueBtn.addEventListener('click', ()=>{
+    const email = emailInput.value.trim();
+    if(!email || !emailInput.checkValidity()){
+      showGateErr('Enter a valid email to continue.');
+      return;
+    }
+    try{ localStorage.setItem('kye_gate_email', email); }catch(e){}
+    runGate(email);
+  });
+
+  passOpts.forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      if(btn.disabled) return;
+      const plan = btn.dataset.plan;
+      const email = emailInput.value.trim();
+      if(!email || !emailInput.checkValidity()){
+        showGateErr('Enter a valid email first.');
+        return;
+      }
+      if(plan==='free'){
+        unlockEntry();
+        renderPassRow({active:false, freeUsed:false});
+        return;
+      }
+      btn.disabled = true;
+      try{
+        const res = await fetch(W_API+'/create-checkout-session', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({plan, email})
+        });
+        const data = await res.json();
+        if(!res.ok || data.error) throw new Error(data.error || 'Could not start checkout.');
+        try{ localStorage.setItem('kye_gate_email', email); }catch(e){}
+        window.location.href = data.url;
+      }catch(e){
+        showGateErr(e.message || 'Could not start checkout.');
+        btn.disabled = false;
+      }
+    });
+  });
+
+  // Returning from Stripe Checkout: verify + activate the pass server-
+  // side, then re-check access the same way a fresh email entry would.
+  (async function handleCheckoutReturn(){
+    const params = new URLSearchParams(window.location.search);
+    const checkout = params.get('checkout');
+    if(!checkout) return;
+    let savedEmail = '';
+    try{ savedEmail = localStorage.getItem('kye_gate_email') || ''; }catch(e){}
+    if(savedEmail) emailInput.value = savedEmail;
+    if(checkout==='success'){
+      const sessionId = params.get('session_id');
+      if(sessionId){
+        try{
+          const res = await fetch(W_API+'/record-pass', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({session_id:sessionId})
+          });
+          const data = await res.json();
+          if(!res.ok || data.error || data.ok===false){
+            showGateErr((data && (data.error||data.reason)) || 'Could not confirm your purchase.');
+          } else if(data.plan==='single'){
+            // A single-reading purchase is deliberately never persisted as
+            // a pass (see worker.js's recordPass) -- it's one reading, not
+            // a standing access grant -- so there's no /check-pass record
+            // to look up here. Stripe already verified payment; unlock for
+            // this page load directly instead of asking check-pass to
+            // confirm something it was never going to have.
+            unlockEntry();
+            renderPassRow({active:false, freeUsed:true});
+          } else if(savedEmail){
+            await runGate(savedEmail);
+          }
+        }catch(e){
+          showGateErr('Could not confirm your purchase.');
+        }
+      }
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.delete('checkout'); url.searchParams.delete('plan'); url.searchParams.delete('session_id');
+    window.history.replaceState({}, '', url.toString());
+  })();
+})();
 
 const GLOSSARY={
   sun:"Your core identity — how you express your basic sense of self.",
@@ -1707,9 +1886,7 @@ const NUM_DEFS={
   // Each number's own essence, true of it wherever it shows up in a chart --
   // distinct from lifepath/expression/etc below, which describe what the
   // number means specifically *as* a life direction, a name-derived talent,
-  // and so on. Used (via openNumberDef) by the entry-page number-bead
-  // accent, which introduces the numbers themselves before anyone's seen
-  // their own chart.
+  // and so on.
   // Structured positive-shadow-positive throughout: the shadow side is
   // named honestly, in language that describes what the trait actually is
   // rather than what it's a deficiency in -- not a mechanical positive-
@@ -2483,90 +2660,6 @@ function hdWheelWrap(hd){
   return `<div class="wheel-wrap">${svg}</div>`;
 }
 
-// ---------- astro + HD entry-page accents: the REAL results-page chart
-// functions (astroWheelSVG / hdBodygraphSVG), fed illustrative example
-// data and shrunk down -- not a simplified redraw. Her direct instruction
-// after seeing the simplified version: "is there a reason you cannot use
-// the chart that I attached? it doesn't have to be legible... I want the
-// actual chart just shrink it." Has to run down here, after everything
-// these two functions depend on (SIGN_ORDER, PLANET_SVG/PLANET_COLOR,
-// CENTER_SHAPES, CENTER_GATES, GATE_CENTER, CHANNELS, GATE_WHEEL_ORDER)
-// is actually defined -- calling them any earlier hits a temporal-dead-
-// zone error. No real per-visitor data exists yet at this point in the
-// page, so this is a fixed illustrative example chart, not tied to any
-// real person. Both real functions draw a fixed-aspect (1:1) square SVG
-// with an inline width/height:100%, so the accent-item gets an explicit
-// equal width+height here instead of the height-only/auto-width sizing
-// the other (non-square) accent icons use. ----------
-(function(){
-  const astroWrap = document.getElementById('solarIcon');
-  const hdWrap = document.getElementById('hdIcon');
-  if(!astroWrap && !hdWrap) return;
-  // A real CSS clamp() string, not a fixed px number -- astro + bubble +
-  // HD (plus gaps) genuinely overflowed narrow phones (~360px and under)
-  // at a fixed 96px each. Verified this range doesn't overflow down to a
-  // 320px viewport, and still reaches the full 96px on wider phones.
-  const SIDE = 'clamp(64px,20vw,96px)';
-
-  // Both real chart functions size their strokes/text for the FULL-size
-  // results-page display (viewBox ~460-500 units, shown near 1:1). Squeezed
-  // into a 96px icon, a "2-unit" stroke renders under a physical pixel --
-  // that's the actual mechanism behind both her complaints: astro reads as
-  // thin/absent (it's almost entirely strokes, no fill area, so it has the
-  // least to fall back on), and HD reads as blurred (its 60+ tiny gate-
-  // number text labels anti-alias into visual noise at this size, and text
-  // isn't something a stroke fix touches at all). vector-effect:non-
-  // scaling-stroke keeps every line/ring/border a real, constant CSS pixel
-  // width regardless of the viewBox-to-96px scale ratio; removing the text
-  // elements (gate numbers, sign abbreviations) drops the actual source of
-  // the noise, not just blurs over it -- she's already said legibility
-  // doesn't matter here, so nothing legible is being lost. Scoped to these
-  // two injected copies only, via direct DOM styling after injection --
-  // the real astroWheelSVG/hdBodygraphSVG functions themselves, and the
-  // real full-size results-page charts, are untouched.
-  function sharpenForIcon(wrap){
-    wrap.querySelectorAll('text').forEach(el=>el.remove());
-    wrap.querySelectorAll('circle,line,path,polygon').forEach(el=>{
-      el.style.vectorEffect='non-scaling-stroke';
-    });
-  }
-
-  if(astroWrap){
-    const DEMO_ASTRO = {
-      planets: [
-        {name:'Sun',     absoluteDegrees:215},
-        {name:'Moon',    absoluteDegrees:280},
-        {name:'Mercury', absoluteDegrees:200},
-        {name:'Venus',   absoluteDegrees:190},
-        {name:'Mars',    absoluteDegrees:325},
-        {name:'Jupiter', absoluteDegrees:45},
-        {name:'Saturn',  absoluteDegrees:100},
-        {name:'Uranus',  absoluteDegrees:355},
-        {name:'Neptune', absoluteDegrees:340},
-        {name:'Pluto',   absoluteDegrees:260},
-      ],
-      houses: Array.from({length:12},(_,i)=>({house:i+1, absoluteDegrees:(215+i*30)%360})),
-      ascendant: {absoluteDegrees:215},
-      midheaven: {absoluteDegrees:125},
-    };
-    astroWrap.style.width = SIDE;
-    astroWrap.style.height = SIDE;
-    astroWrap.innerHTML = astroWheelSVG(DEMO_ASTRO);
-    sharpenForIcon(astroWrap);
-  }
-
-  if(hdWrap){
-    // A fixed illustrative gate list -- 5 complete channels (both gates
-    // active) across 8 of the 9 centers, plus real per-channel colored
-    // connections, the same as a real chart would show.
-    const DEMO_HD = { gates: [64,47,57,34,43,23,9,52,1,6,45,21] };
-    hdWrap.style.width = SIDE;
-    hdWrap.style.height = SIDE;
-    hdWrap.innerHTML = hdBodygraphSVG(DEMO_HD);
-    sharpenForIcon(hdWrap);
-  }
-})();
-
 function ar(astro,errMsg){
   if(!astro||astro.error)return apend(errMsg?`Unavailable — ${escapeHtml(errMsg)}`:'Unavailable');
   const planets=astro.planets||[];
@@ -2818,8 +2911,8 @@ function startListening(segments,btnId){
 // Only the narrative reading gets a Listen button -- browser TTS on chart
 // cards and glossary definitions kept failing to work reliably, and
 // reading a full chart's worth of jargon aloud is a worse experience than
-// reading the reading itself. See toggleModalListen/openGlossary/
-// openNumberDef for where the modal's own Listen button is hidden to match.
+// reading the reading itself. See toggleModalListen/openGlossary
+// for where the modal's own Listen button is hidden to match.
 function toggleListen(){
   if(!window.speechSynthesis){
     alert("Your browser doesn't support reading text aloud.");
@@ -2836,7 +2929,7 @@ function toggleListen(){
 // Reads whatever's currently shown in the tap-to-expand modal. Only ever
 // reachable for the Reading card -- the button itself is hidden for every
 // other card and for glossary/number definitions (see the data-card-idx
-// click handler, openNumberDef, and openGlossary below).
+// click handler and openGlossary below).
 function toggleModalListen(){
   if(!window.speechSynthesis){
     alert("Your browser doesn't support reading text aloud.");
