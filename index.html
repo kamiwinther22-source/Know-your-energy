@@ -141,21 +141,22 @@ body{
   font-size:1.22em;line-height:1;display:inline-block;
 }
 
-/* ---------- decorative solar system: measured directly from her sketch,
-   not eyeballed -- the ring+planet cluster she drew sits at roughly
-   16%-69% of screen width and 17%-43% of screen height (real pixel
-   measurement of her drawing), landing in the wedge-shaped space the
-   tagline's shrinking lines leave open below/right of themselves. The
-   container below is deliberately wider than what's visible (90vw,
-   starting at 16vw from the true viewport edge) so the outer ring can
-   run to the container's own right edge and get cropped by the real
-   screen edge (her point 1: "cut off on the right edge... leaving the
-   rings that have the rotating planets in sight") without needing any
-   overflow trick -- the container itself simply extends ~6vw past
-   100vw, and body's existing overflow-x:hidden crops it there. The
-   `- 1rem` in `left` corrects for body's own 1rem padding, since 16vw
-   needs to be measured from the true screen edge, not from .content's
-   already-inset edge. ---------- */
+/* ---------- decorative solar system. Position/size below is measured
+   from her own red-ink markup drawn directly on an actual screenshot of
+   this page (the most reliable reference so far, since it maps straight
+   to real CSS percentages rather than requiring translation from a
+   from-scratch sketch): the planet's real center sits at ~71.5% of
+   screen width, the fully-visible ring cluster's right edge lands at
+   ~89% of screen width. The container is deliberately wider than what's
+   visible (90vw, starting at 16vw from the true viewport edge) so 2 of
+   the 6 rings can run past the container's own bounds and get cropped by
+   the real screen edge (the original reference-photo instruction: more
+   than one ring genuinely cut off, not just the single outermost one)
+   without needing any overflow trick -- the container itself simply
+   extends ~6vw past 100vw, and body's existing overflow-x:hidden crops
+   it there. The `- 1rem` in `left` corrects for body's own 1rem padding,
+   since 16vw needs to be measured from the true screen edge, not from
+   .content's already-inset edge. ---------- */
 .solar-decor{
   position:absolute;left:calc(16vw - 1rem);top:48%;
   width:90vw;height:40%;
@@ -175,18 +176,25 @@ body{
   fill:#e7edf5;stroke:rgba(90,110,140,0.5);stroke-width:2;
   filter:drop-shadow(0 2px 4px rgba(30,40,60,0.4));
 }
-/* The visible ring+planet cluster occupies the left ~59% of this wider
-   container (matching her sketch's 53%-of-screen visible span inside
-   the 90vw container) -- the sun-key bubble sits at its center. */
+/* Repositioned per her direct markup on an actual screenshot (not a
+   from-scratch sketch this time -- the most reliable measurement so
+   far): the planet's real center should sit at ~71.5% of screen width
+   (was 48%, which read as dead-center -- a real bug, not a style
+   choice) and be ~45% bigger than before. Ring cluster's cx shifts to
+   match (390 instead of 320 in the 900-wide viewBox), and the 4 fully-
+   visible rings are pulled in so their widest right edge lands at ~89%
+   of screen width instead of stretching toward the true edge -- see the
+   SVG comment for the two rings that still genuinely bleed off past
+   that, kept from the earlier reference-photo instruction. */
 .solar-decor .sun-key{
-  position:absolute;left:35.6%;top:52%;transform:translate(-50%,-50%);
-  width:24%;aspect-ratio:1;padding:0;
+  position:absolute;left:61.7%;top:52%;transform:translate(-50%,-50%);
+  width:29%;aspect-ratio:1;padding:0;
 }
 /* Sun is "still large" per her explicit follow-up, sized well past the
    old small triangle-accent bubble it's replacing. */
-.solar-decor .key-stack .key-one{font-size:0.76rem;}
-.solar-decor .key-stack .key-reading{font-size:0.9rem;}
-.solar-decor .key-hl-big{font-size:1.55rem;}
+.solar-decor .key-stack .key-one{font-size:0.92rem;}
+.solar-decor .key-stack .key-reading{font-size:1.08rem;}
+.solar-decor .key-hl-big{font-size:1.85rem;}
 
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.56rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
@@ -881,26 +889,27 @@ body{
            deliberately the largest, reaching toward the container's own
            right edge, which is what actually gets cropped by the real
            screen edge (see the .solar-decor comment above). -->
-      <!-- 6 rings, one shared center (320,244) in this 900x470 viewBox
-           (screen's own right edge falls at x=840 here -- see the CSS
-           comment above for that math). The first 4 are sized so their
-           full extent stays under 840 (fully on-screen, matching her
-           "3-4 fully visible" count); the last 2 are sized past it
-           (rightmost extent ~850 and ~970) so they genuinely run off the
-           real screen edge -- "more than one ring cut off," not just
-           the single outermost one. -->
+      <!-- 6 rings, shared center now (390,244) instead of (320,244) --
+           shifted right so the visible cluster's own right edge lands at
+           ~89% of screen width (viewBox x=730) instead of stretching
+           toward the true edge (x=840), per her direct markup on an
+           actual screenshot. The first 4 stay under 730 (genuinely
+           pulled in, fully on-screen); the last 2 are sized past 840 (the
+           real screen edge) so they still bleed off it, per the original
+           reference-photo instruction that more than one ring gets cut
+           off, not just the single outermost one. -->
       <svg viewBox="0 0 900 470">
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="90"  ry="32"  transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="160" ry="58"  transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="240" ry="86"  transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="330" ry="119" transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="530" ry="191" transform="rotate(-12 320 244)"/>
-        <ellipse class="orbit-ring" cx="320" cy="244" rx="650" ry="234" transform="rotate(-12 320 244)"/>
-        <circle class="orbit-moon" cx="45"  cy="185" r="15"/>
-        <circle class="orbit-moon" cx="95"  cy="150" r="9"/>
-        <circle class="orbit-moon" cx="600" cy="355" r="20"/>
-        <circle class="orbit-moon" cx="690" cy="310" r="12"/>
-        <circle class="orbit-moon" cx="770" cy="255" r="9"/>
+        <ellipse class="orbit-ring" cx="390" cy="244" rx="90"  ry="32"  transform="rotate(-12 390 244)"/>
+        <ellipse class="orbit-ring" cx="390" cy="244" rx="160" ry="58"  transform="rotate(-12 390 244)"/>
+        <ellipse class="orbit-ring" cx="390" cy="244" rx="240" ry="86"  transform="rotate(-12 390 244)"/>
+        <ellipse class="orbit-ring" cx="390" cy="244" rx="330" ry="119" transform="rotate(-12 390 244)"/>
+        <ellipse class="orbit-ring" cx="390" cy="244" rx="480" ry="173" transform="rotate(-12 390 244)"/>
+        <ellipse class="orbit-ring" cx="390" cy="244" rx="600" ry="216" transform="rotate(-12 390 244)"/>
+        <circle class="orbit-moon" cx="115" cy="185" r="15"/>
+        <circle class="orbit-moon" cx="165" cy="150" r="9"/>
+        <circle class="orbit-moon" cx="670" cy="355" r="20"/>
+        <circle class="orbit-moon" cx="760" cy="310" r="12"/>
+        <circle class="orbit-moon" cx="840" cy="255" r="9"/>
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
