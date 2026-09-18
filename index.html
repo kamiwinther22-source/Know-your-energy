@@ -128,7 +128,7 @@ body{
    so it simply grows to fit the now-taller tagline on its own, and
    solar-decor (still positioned/sized exactly as last confirmed) follows
    naturally after it in the flow. */
-.hero-wedge{position:relative;margin:0;}
+.hero-wedge{position:relative;margin:0 0 1rem;min-height:53vh;}
 .wedge-tagline{position:relative;z-index:2;max-width:99%;padding-top:0.3rem;}
 .wedge-line{
   text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
@@ -171,8 +171,8 @@ body{
    tagline is. `left` still shifts it right the same way under
    position:relative, without displacing anything else. */
 .solar-decor{
-  position:relative;left:calc(16vw - 1rem);margin:0.4rem 0 0.6rem;
-  width:90vw;height:26vh;
+  position:absolute;left:calc(16vw - 1rem);top:65%;
+  width:90vw;height:25%;
   z-index:1;pointer-events:none;
 }
 .solar-decor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
