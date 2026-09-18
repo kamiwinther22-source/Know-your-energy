@@ -23,7 +23,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23000'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%234655D6'%3EK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,500;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
 <!-- Bodoni Moda (the old headline serif) swapped for Fraunces -- her
      direct instruction: "I didn't pick the font to begin with. That's
      you're doing so, if there's something that works better than just
@@ -278,7 +278,7 @@ body{
    real screenshot rather than computed blind. */
 .hero-illustration{
   position:relative;width:100%;max-width:380px;margin:0.5rem auto 1rem;
-  transform:translateX(140px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
+  transform:translateX(115px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
 }
 .hero-illustration svg{display:block;width:100%;height:auto;overflow:visible;
   /* Her broader catch: "the whole thing is so subtle... it all just
@@ -311,7 +311,20 @@ body{
    illustration-led hero. Kept small and deliberate, close under the
    sun so "type your email, tap the sun" reads as one motion, not two
    unrelated asks stacked on the page. */
-.hero-email-wrap{max-width:300px;margin:0.5rem auto 1rem;}
+/* margin-top pushed way down (0.5rem -> 400px) -- her direct instruction:
+   the email field goes below the Solar System, not overlapping it. The
+   illustration's CSS transform (rotate+scale) makes it render far
+   taller than the plain layout box it reserves, so without this the
+   next element in flow (this one) started drawing while the
+   illustration was still visually present -- measured the real gap via
+   getBoundingClientRect (illustration bottom vs. this element's
+   default top), not guessed. */
+/* margin-top increased (0.5rem -> 90px) -- the illustration's CSS
+   transform (rotate+scale) makes its real visual footprint taller than
+   its plain layout box, so without this the next element in flow (this
+   one) started before the illustration was visually finished. Measured
+   the real gap via getBoundingClientRect, not guessed. */
+.hero-email-wrap{max-width:300px;margin:90px auto 1rem;}
 .hero-email-wrap .err{text-align:center;}
 .hero-key{display:block;width:62px;height:auto;margin:0.25rem 0 0 4px;}
 
@@ -360,10 +373,10 @@ body{
   content:'';position:absolute;left:50%;top:50%;
   width:78%;height:150px;transform:translate(-50%,-50%);
   background:radial-gradient(ellipse,
-    rgba(15,122,76,0.4) 0%,
-    rgba(15,122,76,0.24) 35%,
-    rgba(15,122,76,0.09) 62%,
-    rgba(15,122,76,0) 82%);
+    rgba(120,124,132,0.4) 0%,
+    rgba(120,124,132,0.24) 35%,
+    rgba(120,124,132,0.09) 62%,
+    rgba(120,124,132,0) 82%);
   filter:blur(4px);z-index:0;
 }
 .energy-ribbon{
@@ -421,12 +434,13 @@ body{
      small cursive strokes reads as parts of the letters intermittently
      losing contrast, which is functionally the same problem the
      never-fade rule exists to prevent, whatever the literal opacity
-     value is. Solid, fully-opaque EMERALD -- guaranteed never to read as
-     faded, no matter how thin a stroke it's covering. The "silver and
+     value is. Solid, fully-opaque, never fading. The "silver and
      shiny" half of her ask now comes from the glints below (a technique
      that's never had this problem, since it's solid opaque shapes, not
-     a gradient), not from the text fill itself. */
-  color:#0f7a4c;
+     a gradient), not from the text fill itself. Green removed per her
+     direct instruction ("get all the green off the page") -- back to
+     the same neutral dark already used for body text elsewhere. */
+  color:#12161e;
 }
 .title-glint{position:absolute;pointer-events:none;}
 /* Same real insight already proven on the ribbon lower on this page --
@@ -529,7 +543,7 @@ body{
    word, not inventing a new color, gives the eye a deliberate path
    down the page instead of every element existing in its own
    unrelated color. */
-.tl-accent{color:#0f7a4c;}
+.tl-accent{color:#12161e;}
 /* Her direct instruction after several real, documented metallic-text
    attempts (multi-band gradient, edge bevel via drop-shadow, SVG
    feSpecularLighting) all fell short of what she was actually
@@ -1003,7 +1017,7 @@ body{
 
 .results-wrap{display:none;padding:1.6rem 0 2.5rem;max-width:460px;width:100%;min-width:0;margin:0 auto;}
 .results-wrap .ttl{font-family:'Alex Brush',cursive;font-size:1.9rem;
-  color:#0f7a4c;
+  color:#12161e;
   text-align:center;margin-bottom:1.4rem;}
 
 /* .dp is the Reading panel's own inner wrapper (used only inside
@@ -1405,25 +1419,25 @@ body{
   <defs>
     <linearGradient id="ambChrome" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="16%" stop-color="#d9f5e6"/>
-      <stop offset="34%" stop-color="#f5f6f8"/>
+      <stop offset="16%" stop-color="#f5f6f8"/>
+      <stop offset="34%" stop-color="#e8eaef"/>
       <stop offset="50%" stop-color="#f6eee0"/>
       <stop offset="68%" stop-color="#c9ccd4"/>
-      <stop offset="86%" stop-color="#4fae82"/>
-      <stop offset="100%" stop-color="#0f7a4c"/>
+      <stop offset="86%" stop-color="#8f929c"/>
+      <stop offset="100%" stop-color="#54585f"/>
     </linearGradient>
     <radialGradient id="ambGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#0f7a4c" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#0f7a4c" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#8f929c" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#8f929c" stop-opacity="0"/>
     </radialGradient>
   </defs>
   <!-- one small, tightly contained accent glow -- not a background fill -->
   <ellipse cx="300" cy="130" rx="120" ry="95" fill="url(#ambGlow)"/>
   <g class="amb-rings">
-    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="#6fac8f" stroke-width="1" opacity="0.18" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="#6fac8f" stroke-width="1" opacity="0.16" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="#6fac8f" stroke-width="1" opacity="0.13" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="#6fac8f" stroke-width="1" opacity="0.11" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.18" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.16" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.13" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.11" transform="rotate(-8 300 130)"/>
     <circle class="amb-dot" cx="128" cy="150" r="4" fill="url(#ambChrome)" opacity="0.4"/>
     <circle class="amb-dot" cx="472" cy="108" r="3" fill="url(#ambChrome)" opacity="0.4"/>
     <circle class="amb-dot" cx="405" cy="176" r="2.5" fill="url(#ambChrome)" opacity="0.35"/>
@@ -1446,6 +1460,21 @@ body{
      with a ring and a plain label added so it actually reads as pressable
      instead of purely decorative. ---------- -->
 <div class="content" id="hookStep">
+  <!-- Real tagline, locked at exact positions -- not flowing HTML a
+       browser could rewrap differently on a different screen. Each
+       line's font-size was measured (Playwright, real rendered width)
+       against this column's actual width (358px) so it fits as 4 lines,
+       not guessed -- the wider size tried first (34-38px) didn't fit
+       this narrower real column at all. Bold weight (Fraunces 900) for
+       real visual weight, not just point size. Positioned in the one
+       genuinely open zone above the email field and the sun -- verified
+       against the real rendered illustration, not assumed. -->
+  <div style="position:relative;height:210px;">
+    <div style="position:absolute;left:0;top:20px;font-family:'Fraunces',serif;font-weight:900;font-size:24px;line-height:1;color:#12161e;white-space:nowrap;">This is for you if you want</div>
+    <div style="position:absolute;left:0;top:67px;font-family:'Fraunces',serif;font-weight:900;font-size:24px;line-height:1;color:#12161e;white-space:nowrap;">to deeply understand your</div>
+    <div style="position:absolute;left:0;top:114px;font-family:'Fraunces',serif;font-weight:900;font-size:24px;line-height:1;color:#12161e;white-space:nowrap;">relationship dynamics and</div>
+    <div style="position:absolute;left:0;top:161px;font-family:'Fraunces',serif;font-weight:900;font-size:24px;line-height:1;color:#12161e;white-space:nowrap;">those close to you.</div>
+  </div>
 
   <!-- Email is the real gate now, right here on the landing page -- her
        direct logic: "when they click free reading it's going to take
@@ -1475,7 +1504,18 @@ body{
        dropped onto the illustration -- her explicit requirement: "it
        needs to be placed in a way that the first page looks nice and
        professional polished classy, not like you tripped and fell and
-       it dropped on there somewhere." -->
+       it dropped on there somewhere."
+       Moved to AFTER the Solar System illustration now -- her later,
+       direct correction superseding the "placed ABOVE the sun" reasoning
+       above: "get the email out of there. It needs to go down below
+       the Solar System." Kept the reasoning above for real history
+       instead of deleting it, but the actual DOM order is now
+       illustration first, then this. -->
+  <div class="hero-illustration">
+    <div id="heroIllustration"></div>
+    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
+  </div>
+
   <div class="hero-email-wrap">
     <!-- Pulled tight against the input (margin cut from 0.3rem to 0.1rem)
          so label + field read as one unit instead of a floating caption
@@ -1589,11 +1629,6 @@ body{
         <line x1="63" y1="212" x2="62" y2="236" stroke="#eef1ff" stroke-width="1.1" opacity="0.6"/>
       </g>
     </svg>
-  </div>
-
-  <div class="hero-illustration">
-    <div id="heroIllustration"></div>
-    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
   </div>
 
   <!-- The energy-ribbon graphic itself was NOT meant to be deleted --
@@ -2058,8 +2093,8 @@ function openNumberDef(item){
   // and the ambient background, where it reads as a shimmer on the orbit
   // path rather than a tint on the sphere's own material.
   const CHROME_LIGHT='#f5f6f8', CHROME_MID='#c9ccd4', CHROME_DEEP='#8f929c';
-  const MINT='#d9f5e6', JADE='#4fae82';
-  const EMERALD='#0f7a4c', EMERALD_DEEP='#0a3d28';
+  const MINT=CHROME_LIGHT, JADE=CHROME_MID;
+  const EMERALD='#54585f', EMERALD_DEEP='#22252a';
   const ACCENT=EMERALD;
   const RING_ROTATION_DEG = -8;
   const RING_RX = [64, 86, 108, 130, 152, 175];
@@ -2352,10 +2387,19 @@ function openNumberDef(item){
          radius 46) along its bottom arc. The button's aria-label still
          carries the real instruction for accessibility/screen readers;
          this is the visual echo of it. */ -->
-    <path id="tapArc" d="M ${cx-58} ${cy} A 58 58 0 0 1 ${cx+58} ${cy}" fill="none"/>
-    <text font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="800" letter-spacing="1.8" fill="#000000">
-      <textPath href="#tapArc" startOffset="50%" text-anchor="middle">TAP TO BEGIN</textPath>
-    </text>
+    <!-- Counter-rotated against .hero-illustration's own +22deg tilt, same
+         fix already used for "1 FREE READING" below -- without this, tipping
+         the whole graphic +22deg (then shifting it right per her "move the
+         Solar System farther right" instruction) flings this arc's right
+         end ("...BEGIN") up past the phone viewport's own right edge, where
+         it gets clipped. Counter-rotating just this arc keeps it level and
+         centered above the sun regardless of the container's tilt/position. -->
+    <g transform="rotate(-22 ${cx} ${cy})">
+      <path id="tapArc" d="M ${cx-58} ${cy} A 58 58 0 0 1 ${cx+58} ${cy}" fill="none"/>
+      <text font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="800" letter-spacing="1.8" fill="#000000">
+        <textPath href="#tapArc" startOffset="50%" text-anchor="middle">TAP TO BEGIN</textPath>
+      </text>
+    </g>
     <!-- The half of each bead's path on the near side of the sun -- see
          the comment above BEADS for the full reasoning. -->
     ${FRONT_BEADS_SVG}`;
