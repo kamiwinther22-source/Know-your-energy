@@ -250,10 +250,20 @@ body{
    from the previous pass, which was a tangent (her own "maybe" suggestion)
    that ended up drifting away from the reference's real look once
    combined with everything else. */
+/* Real root fix for the visible mask-disk artifact: this gradient (like
+   .key-item's shared base) has genuinely translucent stops (down to
+   30-50% alpha), so ring lines were showing through the sphere itself --
+   the SVG mask circle was a patch for that, and since it's round while
+   the flat rings don't reach as far vertically as horizontally, the
+   mask's own round edge became its own visible "disk" where no ring
+   ever reached it. Fixing the actual cause (an opaque white base layer
+   painted underneath the existing shading, so nothing can show through
+   the sphere at all) removes the need to fight the mask's shape. */
 .solar-decor .sun-key{
   background:
     radial-gradient(circle at 30% 22%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 14%, rgba(240,243,246,0.6) 30%, rgba(210,218,226,0.3) 55%, rgba(180,190,200,0.5) 100%),
-    radial-gradient(circle at 68% 78%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 26%);
+    radial-gradient(circle at 68% 78%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 26%),
+    #ffffff;
   border-color:rgba(140,152,166,0.45);
 }
 /* Sun is "still large" per her explicit follow-up, sized well past the
@@ -1030,21 +1040,15 @@ body{
         <circle class="orbit-moon" cx="129" cy="114" r="13"/>
         <circle class="orbit-moon" cx="124" cy="250" r="9"/>
         <circle class="orbit-moon" cx="27" cy="206" r="7"/>
-        <!-- Masks out every ring segment that passes behind the planet --
-             her direct correction: "I do not want to see the part of the
-             ring that is supposed to be on the other side." The sun-key
-             div's own glass background isn't fully opaque, so ring lines
-             were bleeding through it; painting a solid circle here, on
-             top of the rings within this same SVG, hides them cleanly
-             regardless of the sphere's own transparency. Solid white
-             matches the page background right up until the color pass. -->
-        <!-- radius kept slightly SMALLER than the sphere's own actual
-             radius (180, from sun-key's 40% width) so the sphere's own
-             shaded edge fully covers the mask -- it was 188 (bigger than
-             the sphere), which left a visible flat white ring gap around
-             the sphere reading as its own disc shape, separate from the
-             sphere's actual material. -->
-        <circle cx="509" cy="192" r="176" fill="#ffffff"/>
+        <!-- No mask circle anymore -- it was a patch for the sun-key
+             sphere's translucent background letting ring lines show
+             through, and being round while the flat rings don't reach as
+             far vertically as horizontally, its own edge became a
+             visible "disk" shape where no ring line ever reached it to
+             break it up. Real fix is above: an opaque white layer on the
+             sphere itself, so nothing shows through it and no separate
+             shape needs to be drawn to hide anything -- the sphere div
+             already sits on top of these rings in normal DOM order. -->
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
