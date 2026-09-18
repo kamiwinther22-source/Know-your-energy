@@ -184,7 +184,7 @@ body{
    more than one genuinely runs off the right edge. Sizes below are
    picked so that's literally what happens (see the per-ring comments),
    not just "bigger for its own sake." */
-.orbit-ring{fill:none;stroke:rgba(40,48,64,0.55);stroke-width:8;}
+.orbit-ring{fill:none;stroke:rgba(70,78,90,0.55);stroke-width:3;}
 .orbit-moon{
   fill:#e7edf5;stroke:rgba(90,110,140,0.5);stroke-width:2;
   filter:drop-shadow(0 2px 4px rgba(30,40,60,0.4));
@@ -203,17 +203,16 @@ body{
   position:absolute;left:61.7%;top:52%;transform:translate(-50%,-50%);
   width:38%;aspect-ratio:1;padding:0;
 }
-/* Real silver/metallic shading -- her direct suggestion: "maybe it will
-   help when you add actual color... make it silver." A cooler, higher-
-   contrast steel gradient (brighter specular highlight, a genuine
-   mid-grey body tone, darker shadow rim) instead of the flat pale
-   white/grey it had, specifically so the sphere reads as a solid,
-   substantial object rather than blending into the page. */
+/* Soft pearl/glass shading matching her reference photo's actual sphere --
+   bright and pale throughout, not the heavier silver-metallic contrast
+   from the previous pass, which was a tangent (her own "maybe" suggestion)
+   that ended up drifting away from the reference's real look once
+   combined with everything else. */
 .solar-decor .sun-key{
   background:
-    radial-gradient(circle at 30% 22%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 9%, rgba(226,232,238,0.35) 22%, rgba(180,190,200,0.15) 40%, rgba(140,152,166,0.55) 70%, rgba(96,108,122,0.85) 100%),
-    radial-gradient(circle at 68% 78%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 24%);
-  border-color:rgba(80,92,106,0.55);
+    radial-gradient(circle at 30% 22%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 14%, rgba(240,243,246,0.6) 30%, rgba(210,218,226,0.3) 55%, rgba(180,190,200,0.5) 100%),
+    radial-gradient(circle at 68% 78%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 26%);
+  border-color:rgba(140,152,166,0.45);
 }
 /* Sun is "still large" per her explicit follow-up, sized well past the
    old small triangle-accent bubble it's replacing. */
@@ -939,24 +938,33 @@ body{
            non-uniform stretch to fill the box exactly is what makes the
            percentage math in the CSS above actually correspond to where
            the artwork renders, permanently, regardless of container shape. -->
+      <!-- Rebuilt to actually match her reference photo's ring style,
+           which the "bolder/thicker/more tilt" requests had drifted away
+           from: thin, closely-nested rings (tight 50-unit radius steps,
+           not big jumps) and a shallow 6deg tilt, not a dramatic one.
+           Every ring's rx now starts above the mask circle's radius
+           (180) -- a ring smaller than the mask would be entirely hidden
+           behind the planet with nothing showing, which is a real
+           geometric floor, not a style choice. -->
       <svg viewBox="0 0 900 470" preserveAspectRatio="none" overflow="visible">
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="130" ry="55"  transform="rotate(16 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="220" ry="92"  transform="rotate(16 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="310" ry="130" transform="rotate(16 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="350" ry="147" transform="rotate(16 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="400" ry="168" transform="rotate(16 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="450" ry="189" transform="rotate(16 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="185" ry="68"  transform="rotate(6 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="230" ry="85"  transform="rotate(6 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="280" ry="104" transform="rotate(6 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="330" ry="122" transform="rotate(6 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="380" ry="141" transform="rotate(6 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="430" ry="159" transform="rotate(6 555 244)"/>
         <!-- Each moon sits at an exact parametric point on ONE specific
              ring (computed from that ring's own rx/ry/rotation, not
              eyeballed) -- her direct correction: "don't put the little
              rotating nodes on the same circle... put it on different
              lines." One moon per ring, rings 2 through 6 (skipping the
-             innermost, tightest one). -->
-        <circle class="orbit-moon" cx="359" cy="236" r="10"/>
-        <circle class="orbit-moon" cx="791" cy="216" r="16"/>
-        <circle class="orbit-moon" cx="241" cy="114" r="20"/>
-        <circle class="orbit-moon" cx="213" cy="246" r="13"/>
-        <circle class="orbit-moon" cx="120" cy="136" r="9"/>
+             innermost, whose entire distance-from-center range is too
+             close to the mask for a moon to clear it). -->
+        <circle class="orbit-moon" cx="344" cy="258" r="10"/>
+        <circle class="orbit-moon" cx="742" cy="184" r="16"/>
+        <circle class="orbit-moon" cx="251" cy="170" r="13"/>
+        <circle class="orbit-moon" cx="220" cy="280" r="9"/>
+        <circle class="orbit-moon" cx="128" cy="213" r="7"/>
         <!-- Masks out every ring segment that passes behind the planet --
              her direct correction: "I do not want to see the part of the
              ring that is supposed to be on the other side." The sun-key
