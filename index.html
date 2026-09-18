@@ -1462,33 +1462,31 @@ body{
 <div class="content" id="hookStep">
   <!-- Real tagline, locked at exact positions -- not flowing HTML a
        browser could rewrap differently on a different screen.
-       Her non-negotiable directive on the shape: no two lines the same
-       length, each one strictly shorter than the one above it, each
-       line's font as large as possible for its own row. The accent is
-       ONLY "deeply understand" / "relationship" (her actual original
-       reasoning: the real hook is deeply understanding a relationship).
-       Fixed a real defect from the previous pass: cramming all 10 words
-       of "This is for you if you want to deeply understand" onto one
-       line forced its font down to 16px to avoid overflowing the real
-       358px column -- objectively weak, not bold, regardless of the
-       wedge math being technically satisfied. Split into 6 shorter
-       lines instead so every single line, including the first, can
-       actually be large -- no line under 23px now (vs. 16px before).
-       This also gives "deeply understand" and "relationship" each their
-       own dedicated line, which reads as real emphasis on its own,
-       separate from the accent's own slightly-larger size within it.
-       Every width/font number below is a real Playwright measurement
-       against the live Fraunces-900 render: widths 349/299/253/220/
-       193/151px, strictly decreasing, no ties, all verified. -->
-  <div style="position:relative;height:354px;margin-top:48px;">
-    <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;font-size:57px;">This is for you</div>
-    <div style="position:absolute;left:0;top:83px;line-height:1;white-space:nowrap;color:#12161e;font-size:51px;">if you want to</div>
-    <div style="position:absolute;left:0;top:160px;line-height:1;white-space:nowrap;color:#12161e;font-size:32px;">deeply understand</div>
-    <div style="position:absolute;left:0;top:218px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:26px;">your </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:32px;">relationship</span>
+       Her exact correction to the previous pass (which varied the base
+       font size per line -- wrong): ONE uniform base size for every
+       normal word, all the way down. Only the accent phrase ("deeply
+       understand" / "relationship") is bigger than that base -- nothing
+       else varies. The wedge shape (no two lines the same length, each
+       strictly shorter than the one above) comes entirely from how many
+       words are on each line, not from resizing the font line to line.
+       Word-count per line was chosen specifically so a large uniform
+       base size still fits every line without overflow: base=31px,
+       accent=36px, real Playwright measurement, widths 346/319/253/
+       184/140/90px, strictly decreasing, no ties, all under the real
+       350px safety margin. Gaps between lines and the top margin are
+       sized so the last line's bottom lands at the real vertical middle
+       of a standard phone screen, per her direct instruction. -->
+  <div style="position:relative;height:376px;margin-top:55px;">
+    <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">This is for you if you want</div>
+    <div style="position:absolute;left:0;top:67px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:31px;">to </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:36px;">deeply understand</span>
     </div>
-    <div style="position:absolute;left:0;top:276px;line-height:1;white-space:nowrap;color:#12161e;font-size:23px;">dynamics and those</div>
-    <div style="position:absolute;left:0;top:325px;line-height:1;white-space:nowrap;color:#12161e;font-size:29px;">close to you.</div>
+    <div style="position:absolute;left:0;top:139px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:31px;">your </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:36px;">relationship</span>
+    </div>
+    <div style="position:absolute;left:0;top:211px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">dynamics and</div>
+    <div style="position:absolute;left:0;top:278px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">those close</div>
+    <div style="position:absolute;left:0;top:345px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">to you.</div>
   </div>
 
   <!-- Email is the real gate now, right here on the landing page -- her
