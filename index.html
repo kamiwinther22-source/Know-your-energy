@@ -124,12 +124,19 @@ body{
    360-430px phone, per actual measurement) plus the ring cluster's
    compact height (~18vh, per her sketch's 17%-43%-of-screen span) --
    not a bigger box with empty space padded in. */
+/* She corrected this directly: the tagline was "bunched up at the top" --
+   she wants real vertical space between lines specifically (line-height/
+   margin-bottom on the lines themselves), not the solar-system box moved
+   or resized -- min-height stays as it was; hero-wedge has no max-height,
+   so it simply grows to fit the now-taller tagline on its own, and
+   solar-decor (still positioned/sized exactly as last confirmed) follows
+   naturally after it in the flow. */
 .hero-wedge{position:relative;margin:0 0 1rem;min-height:54vh;}
 .wedge-tagline{position:relative;z-index:2;max-width:99%;padding-top:0.3rem;}
 .wedge-line{
   text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
-  font-size:clamp(1.35rem,6.4vw,1.85rem);line-height:1.4;color:#000000;
-  letter-spacing:0.005em;white-space:nowrap;margin-bottom:0.15em;
+  font-size:clamp(1.35rem,6.4vw,1.85rem);line-height:1.9;color:#000000;
+  letter-spacing:0.005em;white-space:nowrap;margin-bottom:0.5em;
 }
 /* Accent distinction is font-only for now (Alex Brush cursive vs. the
    plain lines' Barlow Condensed) -- no color difference. She was
@@ -891,27 +898,27 @@ body{
            screen edge (see the .solar-decor comment above). -->
       <!-- 6 rings, shared center (555,244) -- MUST equal the sun-key's
            own center (its left/top in the CSS, 61.7%/52% of this same
-           900x470 viewBox = 555,244). Sized large and open per her
-           direct correction: "you have shrunk the solar system... don't
-           make it look like a Jetsons spaceship... open, expansive" --
-           the ry:rx ratio went from ~0.36 to ~0.42 (taller, less like a
-           flat saucer disc) and the radii themselves are substantially
-           bigger. With the sun centered at 71.5% of the screen, there
-           isn't room for 4 rings to both be this large AND stay fully
-           on-screen -- 3 stay inboard (right edge under 835, inside the
-           true screen edge at 840), the other 3 run well past it, still
-           satisfying "more than one ring cut off" from the original
-           reference-photo instruction (now more than one *and* bigger,
-           not a smaller ring count traded for size). -->
+           900x470 viewBox = 555,244). Her direct correction: the rings
+           must never reach the left side of the screen -- only the
+           right half-to-two-thirds of it. Since every ring is centered
+           on the sun at 71.5% of screen width, its left edge sits at
+           (71.5% - rx-as-%-of-screen); rx is capped at 370 viewBox units
+           (=37% of screen, since viewBox width 900 = 90vw) so the
+           widest ring's left edge lands at ~34.5%, inside her 33%-50%
+           band. The 3 smaller rings stay fully on-screen (right edge
+           under 97.5%); the 3 larger ones still bleed past the true
+           right edge (100%), satisfying "more than one ring cut off"
+           from the original reference-photo instruction, without
+           reaching left of ~35% to do it. -->
       <svg viewBox="0 0 900 470" overflow="visible">
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="120" ry="50"  transform="rotate(3 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="200" ry="84"  transform="rotate(3 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="280" ry="118" transform="rotate(3 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="380" ry="160" transform="rotate(3 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="480" ry="202" transform="rotate(3 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="580" ry="244" transform="rotate(3 555 244)"/>
-        <circle class="orbit-moon" cx="330" cy="150" r="9"/>
-        <circle class="orbit-moon" cx="395" cy="175" r="14"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="100" ry="42"  transform="rotate(3 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="180" ry="76"  transform="rotate(3 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="260" ry="109" transform="rotate(3 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="290" ry="122" transform="rotate(3 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="330" ry="139" transform="rotate(3 555 244)"/>
+        <ellipse class="orbit-ring" cx="555" cy="244" rx="370" ry="155" transform="rotate(3 555 244)"/>
+        <circle class="orbit-moon" cx="410" cy="170" r="9"/>
+        <circle class="orbit-moon" cx="460" cy="185" r="14"/>
         <circle class="orbit-moon" cx="680" cy="310" r="19"/>
         <circle class="orbit-moon" cx="740" cy="280" r="12"/>
         <circle class="orbit-moon" cx="790" cy="250" r="8"/>
