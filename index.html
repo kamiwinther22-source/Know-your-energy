@@ -1462,36 +1462,30 @@ body{
 <div class="content" id="hookStep">
   <!-- Real tagline, locked at exact positions -- not flowing HTML a
        browser could rewrap differently on a different screen. Her exact,
-       non-negotiable directive on this rebuild: (1) a wedge shape -- no
-       two lines the same length, each one strictly shorter than the one
-       above it; (2) each line's font as large as possible to fill ITS
-       row of that shape (not maximized to one shared column width --
-       that was the earlier, rejected version, which is why lines 1-3
-       there all landed at the same ~31px/~same width and read as ties);
-       (3) within each line, the phrase that carries the real meaning
-       ("deeply understand," "relationship dynamics," "close," "you.")
-       is sized ~18% larger than the rest of that same line, not just
-       bold weight; (4) real, generous vertical gaps between lines (not
-       the cramped ~15px before); (5) real top clearance, not flush
-       against the top of the screen.
+       non-negotiable directive on the shape: no two lines the same
+       length, each one strictly shorter than the one above it, each
+       line's font as large as possible to fill ITS row of that shape.
+       The accent phrase is ONLY "deeply understand" / "relationship" --
+       her actual original reasoning (psychology/conversion: the real
+       hook is deeply understanding a relationship), not the wider set
+       ("relationship dynamics," "close," "you.") a previous pass added
+       without that same grounding. Lines 3-4 are plain, single-size --
+       no accent span, since nothing in them was ever part of that
+       reasoning.
        Every width/height number below came from a real Playwright
        measurement against the live Fraunces-900 render (binary-searched
        per line to hit a deliberately decreasing target width -- 342,
-       272, 230, 164px -- forming the actual wedge silhouette, verified
+       263, 224, 162px -- forming the actual wedge silhouette, verified
        strictly decreasing with no ties), not estimated or eyeballed. -->
-  <div style="position:relative;height:274px;margin-top:48px;">
+  <div style="position:relative;height:218px;margin-top:48px;">
     <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;">
       <span style="font-family:'Fraunces',serif;font-weight:900;font-size:16px;">This is for you if you want to </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:18px;">deeply understand</span>
     </div>
     <div style="position:absolute;left:0;top:46px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:21px;">your </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:24px;">relationship dynamics</span>
+      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:21px;">your </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:24px;">relationship</span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:21px;"> dynamics</span>
     </div>
-    <div style="position:absolute;left:0;top:98px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:34px;">and those </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:40px;">close</span>
-    </div>
-    <div style="position:absolute;left:0;top:166px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:51px;">to </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:60px;">you.</span>
-    </div>
+    <div style="position:absolute;left:0;top:99px;line-height:1;white-space:nowrap;color:#12161e;font-size:35px;">and those close</div>
+    <div style="position:absolute;left:0;top:162px;line-height:1;white-space:nowrap;color:#12161e;font-size:56px;">to you.</div>
   </div>
 
   <!-- Email is the real gate now, right here on the landing page -- her
