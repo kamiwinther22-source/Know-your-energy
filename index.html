@@ -1006,12 +1006,20 @@ body{
             <stop offset="100%" stop-color="#c7d1db"/>
           </radialGradient>
         </defs>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="220" ry="81"  transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="280" ry="104" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="340" ry="126" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="400" ry="148" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="460" ry="170" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="509" ry="188" transform="rotate(6 509 192)"/>
+        <!-- rx/cx/cy unchanged (locked). ry opened up substantially (ratio
+             ~0.37 -> ~0.55) -- her direct correction: the sphere sits close
+             to the locked right edge, leaving almost no horizontal room for
+             a ring arc to show to its right, so the rings only looked like
+             they wrapped on the left. Taller ellipses bring visible curve
+             above/below the sphere much closer to its right edge too,
+             closing the "goes around it" illusion without moving anything
+             the lock covers. -->
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="220" ry="121" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="280" ry="154" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="340" ry="187" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="400" ry="220" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="460" ry="253" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="509" ry="280" transform="rotate(6 509 192)"/>
         <!-- Each moon sits at an exact parametric point on ONE specific
              ring (computed from that ring's own rx/ry/rotation, not
              eyeballed) -- her direct correction: "don't put the little
@@ -1019,11 +1027,11 @@ body{
              lines." One moon per ring, rings 2 through 6 (skipping the
              innermost, whose entire distance-from-center range is too
              close to the mask for a moon to clear it). -->
-        <circle class="orbit-moon" cx="262" cy="218" r="10"/>
-        <circle class="orbit-moon" cx="171" cy="168" r="16"/>
-        <circle class="orbit-moon" cx="129" cy="114" r="13"/>
-        <circle class="orbit-moon" cx="124" cy="250" r="9"/>
-        <circle class="orbit-moon" cx="27" cy="206" r="7"/>
+        <circle class="orbit-moon" cx="260" cy="243" r="10"/>
+        <circle class="orbit-moon" cx="170" cy="173" r="16"/>
+        <circle class="orbit-moon" cx="131" cy="95" r="13"/>
+        <circle class="orbit-moon" cx="119" cy="297" r="9"/>
+        <circle class="orbit-moon" cx="23" cy="237" r="7"/>
         <!-- Masks out every ring segment that passes behind the planet --
              her direct correction: "I do not want to see the part of the
              ring that is supposed to be on the other side." The sun-key
