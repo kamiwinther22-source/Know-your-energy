@@ -1032,7 +1032,13 @@ body{
              top of the rings within this same SVG, hides them cleanly
              regardless of the sphere's own transparency. Solid white
              matches the page background right up until the color pass. -->
-        <circle cx="509" cy="192" r="188" fill="#ffffff"/>
+        <!-- radius kept slightly SMALLER than the sphere's own actual
+             radius (180, from sun-key's 40% width) so the sphere's own
+             shaded edge fully covers the mask -- it was 188 (bigger than
+             the sphere), which left a visible flat white ring gap around
+             the sphere reading as its own disc shape, separate from the
+             sphere's actual material. -->
+        <circle cx="509" cy="192" r="176" fill="#ffffff"/>
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
