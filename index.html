@@ -86,13 +86,10 @@ body{
      measured against). Still one line, still Alex Brush, never omitted --
      that part of the rule didn't change, only its size. */
   font-size:clamp(0.95rem,4vw,1.3rem);white-space:nowrap;
-  /* Brightened for a black background -- the previous gradient's dark
-     anchor stops (#0F1758/#121C6C) were built for contrast against a
-     light page and would nearly vanish on black. Same blue family,
-     shifted bright enough to actually read. */
-  background:linear-gradient(100deg,#4655D6 0%,#8A96EE 35%,#5364D6 50%,#8A96EE 65%,#4655D6 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-  filter:drop-shadow(0 0 18px rgba(90,110,230,0.55));
+  /* Plain black -- she asked for blue off the page entirely, right now.
+     Color is still out of scope for a real decision; this is just not-
+     blue, not a replacement palette choice. */
+  color:#000000;
 }
 .title-glint{position:absolute;pointer-events:none;}
 .title-glint svg{display:block;width:100%;height:100%;}
@@ -131,7 +128,7 @@ body{
    so it simply grows to fit the now-taller tagline on its own, and
    solar-decor (still positioned/sized exactly as last confirmed) follows
    naturally after it in the flow. */
-.hero-wedge{position:relative;margin:0 0 1rem;min-height:54vh;}
+.hero-wedge{position:relative;margin:0;}
 .wedge-tagline{position:relative;z-index:2;max-width:99%;padding-top:0.3rem;}
 .wedge-line{
   text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;
@@ -164,9 +161,18 @@ body{
    it there. The `- 1rem` in `left` corrects for body's own 1rem padding,
    since 16vw needs to be measured from the true screen edge, not from
    .content's already-inset edge. ---------- */
+/* position:relative, normal flow -- NOT a % of hero-wedge's height.
+   Percentage top/height against a container whose own height depends on
+   the tagline kept breaking every time the tagline's height changed
+   (overlapping the text, or leaving a large gap before the email
+   section) -- this happened three separate times. Flow positioning with
+   a fixed vh height means this always sits directly after the tagline
+   with one small, exact margin, full stop, regardless of how tall the
+   tagline is. `left` still shifts it right the same way under
+   position:relative, without displacing anything else. */
 .solar-decor{
-  position:absolute;left:calc(16vw - 1rem);top:38%;
-  width:90vw;height:60%;
+  position:relative;left:calc(16vw - 1rem);margin:0.4rem 0 0.6rem;
+  width:90vw;height:26vh;
   z-index:1;pointer-events:none;
 }
 .solar-decor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
@@ -220,23 +226,24 @@ body{
 .tog-lbl.active{color:#000000;}
 .toggle-pill{position:relative;width:32px;height:17px;border-radius:9px;background:#c7cbc0;box-shadow:inset 0 1px 3px rgba(40,45,30,0.3);cursor:pointer;transition:background 0.2s;}
 .toggle-pill::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e9dbbd 60%,#c6b395 100%);box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s;}
-.toggle-pill.on{background:#1C2CA9;}
+.toggle-pill.on{background:#000000;}
 .toggle-pill.on::after{left:16.5px;}
 
 /* ---------- relationship-type chips (Relational mode only) ---------- */
 .rel-picker{margin:0 0 1rem;}
-/* Mild left/right stagger between the two people's blocks, continuing the
-   same zigzag rhythm as the tagline/solar-system pair above -- Person 1
-   sits toward the left (her explicit instruction), Person 2 toward the
-   right, both still well inside the page's single narrow mobile column
-   so neither crosses its horizontal center. */
-.form-panel>.f{margin-right:8%;}
-#p2Section .f{margin-left:8%;margin-right:0;}
+/* Person 1 must not cross the page's horizontal middle at all -- her
+   direct, explicit correction: a small margin-right was nowhere near
+   enough, since the field's own width still spanned nearly the full
+   panel. Real width cap (47%, safely under half) pinned to the left
+   edge (no auto-centering) instead. Person 2 gets the mirror treatment
+   on the right. */
+.form-panel>.f{width:47%;margin-right:0;margin-left:0;}
+#p2Section .f{width:47%;margin-left:auto;margin-right:0;}
 .rel-row{display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;margin-bottom:0;}
-.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #1C2CA9;background:#1C2CA9;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
-.rel-chip:hover{background:#243acc;}
-.rel-chip.active{background:#ffffff;color:#0d1550;border-color:#ffffff;box-shadow:0 2px 10px -1px rgba(255,255,255,0.45);}
-.rel-chip.active:hover{background:#e8eaf6;}
+.rel-chip{font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;padding:0.32rem 0.7rem;border-radius:20px;border:1.3px solid #000000;background:#000000;color:#ffffff;cursor:pointer;transition:background 0.15s,color 0.15s,box-shadow 0.15s;box-shadow:0 2px 8px -2px rgba(0,0,0,0.6);}
+.rel-chip:hover{background:#2a2a2a;}
+.rel-chip.active{background:#ffffff;color:#000000;border-color:#000000;box-shadow:0 2px 10px -1px rgba(0,0,0,0.25);}
+.rel-chip.active:hover{background:#eeeeee;}
 
 /* ---------- bottom section: key bubbles floating above the form ---------- */
 .bottom-grid{display:block;}
@@ -335,22 +342,26 @@ body{
 .gate-lbl{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.03em;text-transform:uppercase;color:#000000;margin-bottom:0.5rem;}
 .gate-email-f .line-field{max-width:320px;margin:0 auto;}
 .gate-privacy{font-style:italic;font-size:0.66rem;color:#000000;margin:0.45rem 0 0;}
-/* One line, small, not a second decision point competing with the email
-   field -- her direct correction: "there's no reason for it to have that
-   much space... accessible but not obnoxious." Already-owned/used option
-   goes solid grey + unclickable (a real disabled state, not a faded one --
-   full-strength text on a flat grey fill, same principle as any other
-   disabled control on this page). */
-.pass-row{display:flex;justify-content:center;gap:0.4rem;margin-top:0.9rem;flex-wrap:wrap;}
+/* One straight row, no boxes -- her direct correction: "get the squares
+   off the page... I want one row straight line across... a little dot
+   that they press." Each option is plain text with a small radio-style
+   dot in front of it as the visual click target; the row scrolls
+   horizontally instead of wrapping to a second line if it doesn't fit,
+   so it stays one line at every width. Already-owned/used option goes
+   solid grey + unclickable (a real disabled state, not a faded one). */
+.pass-row{display:flex;justify-content:space-between;align-items:center;gap:0.4rem;margin-top:0.6rem;flex-wrap:nowrap;overflow-x:auto;padding:0 0.2rem;font-size:0.9em;}
 .pass-opt{
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.62rem;line-height:1.3;
-  padding:0.35rem 0.55rem;border-radius:8px;border:1.3px solid #1C2CA9;background:transparent;color:#000000;
-  cursor:pointer;display:flex;flex-direction:column;align-items:center;min-width:56px;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.62rem;
+  background:none;border:none;padding:0;color:#000000;
+  cursor:pointer;display:flex;align-items:center;gap:0.35rem;white-space:nowrap;flex-shrink:0;
 }
-.pass-opt .pass-name{display:block;}
-.pass-opt .pass-price{display:block;font-weight:800;}
-.pass-opt.active{background:#1C2CA9;color:#ffffff;}
-.pass-opt:disabled{background:#9a9fa6;border-color:#9a9fa6;color:#ffffff;cursor:not-allowed;opacity:1;}
+.pass-opt::before{
+  content:'';width:11px;height:11px;border-radius:50%;
+  border:1.5px solid #000000;flex-shrink:0;box-sizing:border-box;
+}
+.pass-opt.active::before{background:#000000;}
+.pass-opt:disabled{color:#9a9fa6;cursor:not-allowed;}
+.pass-opt:disabled::before{border-color:#9a9fa6;background:none;}
 
 .form-col{position:relative;}
 /* Unboxed: the data-entry form sits directly on the page background, no
@@ -372,11 +383,6 @@ body{
 }
 .data-entry-gate[disabled] .rel-chip,
 .data-entry-gate[disabled] .gen-btn{opacity:1!important;cursor:not-allowed;}
-.gate-legend{
-  display:block;width:100%;text-align:left;padding:0 0 0.7rem;margin:0 0 0.7rem;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.68rem;
-  letter-spacing:0.03em;text-transform:uppercase;color:#1C2CA9;
-}
 .form-panel .f{margin-bottom:0.7rem;}
 .form-panel .f:last-child{margin-bottom:0;}
 .form-panel label{display:block;font-size:0.52rem;letter-spacing:0.07em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
@@ -922,7 +928,18 @@ body{
            right edge (100%), satisfying "more than one ring cut off"
            from the original reference-photo instruction, without
            reaching left of ~35% to do it. -->
-      <svg viewBox="0 0 900 470" overflow="visible">
+      <!-- preserveAspectRatio="none" is load-bearing, not decorative: without
+           it, the SVG letterboxes to keep its own 900:470 ratio whenever the
+           container's aspect ratio differs (which it does every time
+           .solar-decor's width/height CSS changes), silently shifting the
+           rendered rings away from the sun-key div's plain CSS-percentage
+           position -- this, not any one specific size/position value, is
+           the actual reason the sun kept drifting off the rings' true
+           center every time the container was resized. Forcing a direct,
+           non-uniform stretch to fill the box exactly is what makes the
+           percentage math in the CSS above actually correspond to where
+           the artwork renders, permanently, regardless of container shape. -->
+      <svg viewBox="0 0 900 470" preserveAspectRatio="none" overflow="visible">
         <ellipse class="orbit-ring" cx="555" cy="244" rx="130" ry="55"  transform="rotate(16 555 244)"/>
         <ellipse class="orbit-ring" cx="555" cy="244" rx="220" ry="92"  transform="rotate(16 555 244)"/>
         <ellipse class="orbit-ring" cx="555" cy="244" rx="310" ry="130" transform="rotate(16 555 244)"/>
@@ -972,17 +989,16 @@ body{
     </div>
 
     <div class="pass-row" id="passRow">
-      <button type="button" class="pass-opt active" data-plan="free"><span class="pass-name">1st Reading</span><span class="pass-price">Free</span></button>
-      <button type="button" class="pass-opt" data-plan="single"><span class="pass-name">1 Day</span><span class="pass-price">$11</span></button>
-      <button type="button" class="pass-opt" data-plan="monthly"><span class="pass-name">1 Month</span><span class="pass-price">$22</span></button>
-      <button type="button" class="pass-opt" data-plan="annual"><span class="pass-name">3 Months</span><span class="pass-price">$33</span></button>
+      <button type="button" class="pass-opt active" data-plan="free"><span class="pass-name">1st Reading Free</span></button>
+      <button type="button" class="pass-opt" data-plan="single"><span class="pass-name">1 Day $11</span></button>
+      <button type="button" class="pass-opt" data-plan="monthly"><span class="pass-name">1 Month $22</span></button>
+      <button type="button" class="pass-opt" data-plan="annual"><span class="pass-name">3 Months $33</span></button>
     </div>
   </div>
 
   <div class="bottom-grid">
     <div class="form-col">
       <fieldset class="form-panel data-entry-gate" id="dataEntry" disabled>
-        <legend class="gate-legend" id="gateLegend">Enter your email above to unlock</legend>
         <div class="rel-picker">
           <div class="toggle-row">
             <span class="tog-lbl active" id="lblInd">Individual</span>
@@ -1235,7 +1251,6 @@ lblRel.addEventListener('click', ()=>{ if(entryUnlocked) setMode(true); });
   const emailInput = document.getElementById('pEmail');
   const gateContinueBtn = document.getElementById('gateContinueBtn');
   const gateErr = document.getElementById('gateErr');
-  const gateLegend = document.getElementById('gateLegend');
   const dataEntry = document.getElementById('dataEntry');
   const passRow = document.getElementById('passRow');
   const passOpts = Array.from(passRow.querySelectorAll('.pass-opt'));
@@ -1248,14 +1263,13 @@ lblRel.addEventListener('click', ()=>{ if(entryUnlocked) setMode(true); });
   function unlockEntry(){
     entryUnlocked = true;
     dataEntry.disabled = false;
-    gateLegend.style.display = 'none';
+    showGateErr('');
   }
 
   function lockEntry(message){
     entryUnlocked = false;
     dataEntry.disabled = true;
-    gateLegend.textContent = message;
-    gateLegend.style.display = 'block';
+    showGateErr(message);
   }
 
   // Reflects what /check-pass reported: an active pass greys out (and
