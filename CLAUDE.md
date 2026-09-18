@@ -291,6 +291,26 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
 - **If she shares a real reference image, actually use it** — don't
   substitute a generic/invented version, and don't crop it down to something
   smaller/safer than what she asked for.
+- **When she wants a look "like this reference photo," copy its actual
+  pixels — never synthesize an approximation of it, however technically
+  the approximation is built.** A metallic-background request went through
+  several rounds of procedurally generated stand-ins — a Blinn-Phong render
+  off a noise-based height field (produced ring/ripple artifacts and read
+  as flat), then layered soft Gaussian "light pool" gradients — before she
+  cut it off. That second attempt is worth naming precisely because it
+  regressed, by a different technical route, into exactly the single
+  soft-glow-blob-on-flat-background look already banned elsewhere in this
+  file — a real lesson that "I built this with a legitimate lighting
+  technique" does not exempt a result from that ban if what actually
+  renders is one soft bright blob fading into a flat field. Any procedural
+  light/shading synthesis (noise height-fields, layered radial/Gaussian
+  gradients standing in for a photographed material, or anything in that
+  family) is now off the table for matching a reference photo. The
+  corrected, settled approach: extract the real pixels from her reference
+  image(s) directly (crop/copy, verified byte-identical to the source) and
+  treat that as the actual material — apply only real, transparent, global
+  operations to it when a change is wanted (e.g. a measured levels/screen-
+  blend lighten of the real crop), never a from-scratch recreation.
 - **Prefer real, verified techniques over fabricated ones.** Research things
   for real (WebSearch, actual docs) and verify designs by actual measurement
   (Playwright screenshots, pixel sampling, bounding-box checks) — never
