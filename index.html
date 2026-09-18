@@ -170,9 +170,15 @@ body{
    with one small, exact margin, full stop, regardless of how tall the
    tagline is. `left` still shifts it right the same way under
    position:relative, without displacing anything else. */
+/* Container now spans nearly the full screen width (was 16vw-106vw, a
+   narrower right-weighted band) -- her direct correction after I kept
+   working from a derived/annotated position instead of the actual
+   photo: measured the reference photo itself (grid overlay, not
+   eyeballed) and the real ring cluster spans roughly 2%-98% of the
+   screen, not a band pulled in toward the right. */
 .solar-decor{
-  position:absolute;left:calc(16vw - 1rem);top:65%;
-  width:90vw;height:25%;
+  position:absolute;left:calc(2vw - 1rem);top:65%;
+  width:96vw;height:25%;
   z-index:1;pointer-events:none;
 }
 .solar-decor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
@@ -199,9 +205,16 @@ body{
    of screen width instead of stretching toward the true edge -- see the
    SVG comment for the two rings that still genuinely bleed off past
    that, kept from the earlier reference-photo instruction. */
+/* Sphere center measured directly off the reference photo (grid overlay
+   at 1080x2340, the photo's real resolution) -- it sits at ~46.5% of
+   screen width, not 71.5%. That 71.5% number came from her red-ink
+   markup on my OWN earlier (broken) render, not from the actual photo --
+   a mistake to keep building on a derived number instead of the source
+   once she pointed back to it directly. Diameter measured at ~25% of
+   screen width -> 26% of this 96vw-wide container. */
 .solar-decor .sun-key{
-  position:absolute;left:61.7%;top:52%;transform:translate(-50%,-50%);
-  width:38%;aspect-ratio:1;padding:0;
+  position:absolute;left:46.4%;top:52%;transform:translate(-50%,-50%);
+  width:26%;aspect-ratio:1;padding:0;
 }
 /* Soft pearl/glass shading matching her reference photo's actual sphere --
    bright and pale throughout, not the heavier silver-metallic contrast
@@ -947,12 +960,12 @@ body{
            behind the planet with nothing showing, which is a real
            geometric floor, not a style choice. -->
       <svg viewBox="0 0 900 470" preserveAspectRatio="none" overflow="visible">
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="185" ry="68"  transform="rotate(6 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="230" ry="85"  transform="rotate(6 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="280" ry="104" transform="rotate(6 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="330" ry="122" transform="rotate(6 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="380" ry="141" transform="rotate(6 555 244)"/>
-        <ellipse class="orbit-ring" cx="555" cy="244" rx="430" ry="159" transform="rotate(6 555 244)"/>
+        <ellipse class="orbit-ring" cx="418" cy="244" rx="150" ry="56"  transform="rotate(6 418 244)"/>
+        <ellipse class="orbit-ring" cx="418" cy="244" rx="220" ry="81"  transform="rotate(6 418 244)"/>
+        <ellipse class="orbit-ring" cx="418" cy="244" rx="290" ry="107" transform="rotate(6 418 244)"/>
+        <ellipse class="orbit-ring" cx="418" cy="244" rx="360" ry="133" transform="rotate(6 418 244)"/>
+        <ellipse class="orbit-ring" cx="418" cy="244" rx="410" ry="152" transform="rotate(6 418 244)"/>
+        <ellipse class="orbit-ring" cx="418" cy="244" rx="460" ry="170" transform="rotate(6 418 244)"/>
         <!-- Each moon sits at an exact parametric point on ONE specific
              ring (computed from that ring's own rx/ry/rotation, not
              eyeballed) -- her direct correction: "don't put the little
@@ -960,11 +973,11 @@ body{
              lines." One moon per ring, rings 2 through 6 (skipping the
              innermost, whose entire distance-from-center range is too
              close to the mask for a moon to clear it). -->
-        <circle class="orbit-moon" cx="344" cy="258" r="10"/>
-        <circle class="orbit-moon" cx="742" cy="184" r="16"/>
-        <circle class="orbit-moon" cx="251" cy="170" r="13"/>
-        <circle class="orbit-moon" cx="220" cy="280" r="9"/>
-        <circle class="orbit-moon" cx="128" cy="213" r="7"/>
+        <circle class="orbit-moon" cx="224" cy="264" r="10"/>
+        <circle class="orbit-moon" cx="630" cy="190" r="16"/>
+        <circle class="orbit-moon" cx="76" cy="173" r="13"/>
+        <circle class="orbit-moon" cx="75" cy="296" r="9"/>
+        <circle class="orbit-moon" cx="840" cy="216" r="7"/>
         <!-- Masks out every ring segment that passes behind the planet --
              her direct correction: "I do not want to see the part of the
              ring that is supposed to be on the other side." The sun-key
@@ -973,7 +986,7 @@ body{
              top of the rings within this same SVG, hides them cleanly
              regardless of the sphere's own transparency. Solid white
              matches the page background right up until the color pass. -->
-        <circle cx="555" cy="244" r="180" fill="#ffffff"/>
+        <circle cx="418" cy="244" r="122" fill="#ffffff"/>
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
