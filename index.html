@@ -922,6 +922,15 @@ body{
         <circle class="orbit-moon" cx="690" cy="320" r="22"/>
         <circle class="orbit-moon" cx="755" cy="288" r="14"/>
         <circle class="orbit-moon" cx="810" cy="255" r="9"/>
+        <!-- Masks out every ring segment that passes behind the planet --
+             her direct correction: "I do not want to see the part of the
+             ring that is supposed to be on the other side." The sun-key
+             div's own glass background isn't fully opaque, so ring lines
+             were bleeding through it; painting a solid circle here, on
+             top of the rings within this same SVG, hides them cleanly
+             regardless of the sphere's own transparency. Solid white
+             matches the page background right up until the color pass. -->
+        <circle cx="555" cy="244" r="145" fill="#ffffff"/>
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
