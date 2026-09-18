@@ -1461,31 +1461,37 @@ body{
      instead of purely decorative. ---------- -->
 <div class="content" id="hookStep">
   <!-- Real tagline, locked at exact positions -- not flowing HTML a
-       browser could rewrap differently on a different screen. Her direct
-       correction to the uniform-24px version: "this is not a bold tag
-       line... if you had to do 5 rows... then do that." Her marked-up
-       screenshot drew directly on that original 4-line wording/line
-       breaks -- so those first 3 lines are kept exactly as she marked
-       them, not re-broken into new fragments. They're long phrases
-       (6-7 words); the real measured column (358px, safety-margined to
-       350px) only allows ~31px before one of them runs off the edge, so
-       all three share that one uniform size. The 4th original line
-       ("those close to you.") is what actually got split into 2 short
-       lines to make her "5 rows" -- short enough to genuinely blow up
-       big (44px, then 60px on the very last, biggest line) without
-       overflowing, landing as a real escalating punch at the end instead
-       of the flat, jagged, independently-maxed-per-line version she
-       rejected. Every size verified with a real Playwright text-width
-       measurement against the live Fraunces-900 render. #hookStep
-       vertically centers its content (justify-content:center), so this
-       taller block also naturally pulls the first line higher up the
-       screen -- no manual top-offset hack needed for that part. -->
-  <div style="position:relative;height:261px;">
-    <div style="position:absolute;left:0;top:0px;font-family:'Fraunces',serif;font-weight:900;font-size:31px;line-height:1;color:#12161e;white-space:nowrap;">This is for you if you want</div>
-    <div style="position:absolute;left:0;top:45px;font-family:'Fraunces',serif;font-weight:900;font-size:31px;line-height:1;color:#12161e;white-space:nowrap;">to deeply understand your</div>
-    <div style="position:absolute;left:0;top:90px;font-family:'Fraunces',serif;font-weight:900;font-size:31px;line-height:1;color:#12161e;white-space:nowrap;">relationship dynamics and</div>
-    <div style="position:absolute;left:0;top:139px;font-family:'Fraunces',serif;font-weight:900;font-size:44px;line-height:1;color:#12161e;white-space:nowrap;">those close</div>
-    <div style="position:absolute;left:0;top:201px;font-family:'Fraunces',serif;font-weight:900;font-size:60px;line-height:1;color:#12161e;white-space:nowrap;">to you.</div>
+       browser could rewrap differently on a different screen. Her exact,
+       non-negotiable directive on this rebuild: (1) a wedge shape -- no
+       two lines the same length, each one strictly shorter than the one
+       above it; (2) each line's font as large as possible to fill ITS
+       row of that shape (not maximized to one shared column width --
+       that was the earlier, rejected version, which is why lines 1-3
+       there all landed at the same ~31px/~same width and read as ties);
+       (3) within each line, the phrase that carries the real meaning
+       ("deeply understand," "relationship dynamics," "close," "you.")
+       is sized ~18% larger than the rest of that same line, not just
+       bold weight; (4) real, generous vertical gaps between lines (not
+       the cramped ~15px before); (5) real top clearance, not flush
+       against the top of the screen.
+       Every width/height number below came from a real Playwright
+       measurement against the live Fraunces-900 render (binary-searched
+       per line to hit a deliberately decreasing target width -- 342,
+       272, 230, 164px -- forming the actual wedge silhouette, verified
+       strictly decreasing with no ties), not estimated or eyeballed. -->
+  <div style="position:relative;height:274px;margin-top:48px;">
+    <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:16px;">This is for you if you want to </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:18px;">deeply understand</span>
+    </div>
+    <div style="position:absolute;left:0;top:46px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:21px;">your </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:24px;">relationship dynamics</span>
+    </div>
+    <div style="position:absolute;left:0;top:98px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:34px;">and those </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:40px;">close</span>
+    </div>
+    <div style="position:absolute;left:0;top:166px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:51px;">to </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:60px;">you.</span>
+    </div>
   </div>
 
   <!-- Email is the real gate now, right here on the landing page -- her
