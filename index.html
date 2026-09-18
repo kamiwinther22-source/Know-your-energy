@@ -1016,30 +1016,41 @@ body{
             <stop offset="100%" stop-color="#c7d1db"/>
           </radialGradient>
         </defs>
-        <!-- Reverted -- opening the outer rings' ry made the whole cluster
-             taller and it started overflowing into the email section
-             below. She clarified the real problem was only the inner
-             relationship between the sphere and the ring right next to
-             it, not the outer rings' own shape -- that's handled by the
-             mask-radius fix below, not by resizing every ring. -->
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="220" ry="81"  transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="280" ry="104" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="340" ry="126" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="400" ry="148" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="460" ry="170" transform="rotate(6 509 192)"/>
-        <ellipse class="orbit-ring" cx="509" cy="192" rx="509" ry="188" transform="rotate(6 509 192)"/>
+        <!-- ry values below are the actual fix for "the sun isn't
+             surrounded by the rings, it sits on top of a flat disc of
+             them" -- this is a real geometric fact, not a style choice:
+             the SVG stretches non-uniformly onto the container (see the
+             preserveAspectRatio="none" note above), so a ring's true
+             on-screen clearance around the round sphere depends on both
+             its ry AND that stretch factor, not ry alone. Measured the
+             actual rendered sphere radius and the actual svg stretch
+             factors (sx=svg_px_width/900, sy=svg_px_height/470) via
+             Playwright, then solved for the minimum ry, per ring, whose
+             closest point on the rotated ellipse still clears the
+             sphere's real pixel radius with a small margin -- the old ry
+             values (81-188) were all solved for a DIFFERENT, wrong
+             assumption (uniform scale) and left every ring's top/bottom
+             arc entirely behind the now-opaque sphere. rx (the locked
+             horizontal footprint/bleed) is untouched -- only ry changes,
+             per her correction that the problem is the vertical wrap
+             around the sun, not the outer rings' own horizontal shape. -->
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="220" ry="140" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="280" ry="148" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="340" ry="158" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="400" ry="168" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="460" ry="180" transform="rotate(6 509 192)"/>
+        <ellipse class="orbit-ring" cx="509" cy="192" rx="509" ry="195" transform="rotate(6 509 192)"/>
         <!-- Each moon sits at an exact parametric point on ONE specific
              ring (computed from that ring's own rx/ry/rotation, not
              eyeballed) -- her direct correction: "don't put the little
              rotating nodes on the same circle... put it on different
-             lines." One moon per ring, rings 2 through 6 (skipping the
-             innermost, whose entire distance-from-center range is too
-             close to the mask for a moon to clear it). -->
-        <circle class="orbit-moon" cx="262" cy="218" r="10"/>
-        <circle class="orbit-moon" cx="171" cy="168" r="16"/>
-        <circle class="orbit-moon" cx="129" cy="114" r="13"/>
-        <circle class="orbit-moon" cx="124" cy="250" r="9"/>
-        <circle class="orbit-moon" cx="27" cy="206" r="7"/>
+             lines." Recomputed to match the new ry values above so every
+             moon still sits exactly on its ring's actual path. -->
+        <circle class="orbit-moon" cx="301" cy="134" r="10"/>
+        <circle class="orbit-moon" cx="253" cy="114" r="16"/>
+        <circle class="orbit-moon" cx="261" cy="64" r="13"/>
+        <circle class="orbit-moon" cx="173" cy="72" r="9"/>
+        <circle class="orbit-moon" cx="72" cy="99" r="7"/>
         <!-- No mask circle anymore -- it was a patch for the sun-key
              sphere's translucent background letting ring lines show
              through, and being round while the flat rings don't reach as
