@@ -181,13 +181,19 @@ body{
    position for her instruction -- her words and her own markup always
    said "off to the right," never centered. Only the ring/sphere STYLE
    comes from the reference photo; position comes from her, always. */
-/* Measured directly from her red-ink markup on the actual last render
-   (pixel analysis of the marked screenshot, not eyeballed): the oval's
-   left edge sits at 31.5% of screen width, its top edge overlaps
-   slightly into the "know those close" line, its bottom edge sits well
-   below "to you", and its right edge runs off the photo's own edge
-   (meant to bleed past the true screen edge). Container geometry below
-   solves for exactly those pixel targets on this viewport. */
+/* LOCKED -- position and size confirmed final by her direct instruction
+   ("lock it into that position and that size") after being verified
+   against her own marked-up screenshot (pixel analysis, not eyeballed):
+   sun center at 79.5% of screen width, ~41px below the tagline's last
+   line; ring cluster's left edge at 31.5% of screen width, right edge
+   bleeding past the true screen edge. Do not change left/top/width/
+   height here, the sun-key left/top below, or the ellipse/mask cx/cy/rx/
+   ry values further down, without a new explicit instruction from her --
+   this whole geometry is one solved system, not independent numbers, so
+   changing any one value without redoing the rest will break the
+   others' alignment (this has happened repeatedly). Only the visual
+   *style* (stroke width/color, tilt angle, sphere shading) remains open
+   to change; the space it occupies does not. */
 .solar-decor{
   position:absolute;left:calc(31.5vw - 1rem);top:51%;
   width:85vw;height:57%;
