@@ -23,7 +23,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23000'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%234655D6'%3EK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,500;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=Bodoni+Moda:opsz,wght@6..96,700;6..96,900&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,500;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
 <!-- Bodoni Moda (the old headline serif) swapped for Fraunces -- her
      direct instruction: "I didn't pick the font to begin with. That's
      you're doing so, if there's something that works better than just
@@ -1462,31 +1462,39 @@ body{
 <div class="content" id="hookStep">
   <!-- Real tagline, locked at exact positions -- not flowing HTML a
        browser could rewrap differently on a different screen.
-       Her exact correction to the previous pass (which varied the base
-       font size per line -- wrong): ONE uniform base size for every
-       normal word, all the way down. Only the accent phrase ("deeply
-       understand" / "relationship") is bigger than that base -- nothing
-       else varies. The wedge shape (no two lines the same length, each
-       strictly shorter than the one above) comes entirely from how many
-       words are on each line, not from resizing the font line to line.
-       Word-count per line was chosen specifically so a large uniform
-       base size still fits every line without overflow: base=31px,
-       accent=36px, real Playwright measurement, widths 346/319/253/
-       184/140/90px, strictly decreasing, no ties, all under the real
-       350px safety margin. Gaps between lines and the top margin are
-       sized so the last line's bottom lands at the real vertical middle
-       of a standard phone screen, per her direct instruction. -->
-  <div style="position:relative;height:376px;margin-top:55px;">
-    <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">This is for you if you want</div>
-    <div style="position:absolute;left:0;top:67px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:31px;">to </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:36px;">deeply understand</span>
+       Font swapped Fraunces -> Bodoni Moda 900: her call, "do a font
+       that is bold" -- Bodoni Moda's real high-contrast, dramatic strokes
+       read as bold/premium at a glance, not soft/generic like Fraunces
+       did at this size. Real defect fixed in the same pass: this
+       sandbox's proxy silently fails to load Google Fonts in the
+       headless browser used to verify layout here (TLS cert rejected),
+       so every previous "measured against the live font" claim in this
+       block was actually measuring a fallback system serif, not
+       Fraunces -- never caught until switching fonts required
+       re-measuring and the numbers didn't match. Fixed for good: the
+       real .ttf is now downloaded once and loaded locally
+       (FontFace().load()) for every measurement from here on, so what
+       gets verified is what she actually sees, not a stand-in.
+       One uniform base size for every normal word (21px); only the
+       accent phrase ("deeply understand" / "relationship") is bigger
+       (24px) -- nothing else varies. The wedge (no two lines the same
+       length, each strictly shorter than the one above) comes entirely
+       from word count per line. Real widths against the real font:
+       277/264/211/150/114/72px, strictly decreasing, no ties, all
+       under the real 345px safety margin (358px column). Gaps and
+       margin sized so the last line's bottom still lands at the real
+       vertical middle of a standard 844px phone screen. -->
+  <div style="position:relative;height:393px;margin-top:55px;">
+    <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">This is for you if you want</div>
+    <div style="position:absolute;left:0;top:73px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">to </span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:24px;">deeply understand</span>
     </div>
-    <div style="position:absolute;left:0;top:139px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Fraunces',serif;font-weight:900;font-size:31px;">your </span><span style="font-family:'Fraunces',serif;font-weight:900;font-size:36px;">relationship</span>
+    <div style="position:absolute;left:0;top:149px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">your </span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:24px;">relationship</span>
     </div>
-    <div style="position:absolute;left:0;top:211px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">dynamics and</div>
-    <div style="position:absolute;left:0;top:278px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">those close</div>
-    <div style="position:absolute;left:0;top:345px;line-height:1;white-space:nowrap;color:#12161e;font-size:31px;">to you.</div>
+    <div style="position:absolute;left:0;top:225px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">dynamics and</div>
+    <div style="position:absolute;left:0;top:298px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">those close</div>
+    <div style="position:absolute;left:0;top:371px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">to you.</div>
   </div>
 
   <!-- Email is the real gate now, right here on the landing page -- her
