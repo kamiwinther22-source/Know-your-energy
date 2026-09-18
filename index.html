@@ -195,7 +195,19 @@ body{
    that, kept from the earlier reference-photo instruction. */
 .solar-decor .sun-key{
   position:absolute;left:61.7%;top:52%;transform:translate(-50%,-50%);
-  width:29%;aspect-ratio:1;padding:0;
+  width:38%;aspect-ratio:1;padding:0;
+}
+/* Real silver/metallic shading -- her direct suggestion: "maybe it will
+   help when you add actual color... make it silver." A cooler, higher-
+   contrast steel gradient (brighter specular highlight, a genuine
+   mid-grey body tone, darker shadow rim) instead of the flat pale
+   white/grey it had, specifically so the sphere reads as a solid,
+   substantial object rather than blending into the page. */
+.solar-decor .sun-key{
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 9%, rgba(226,232,238,0.35) 22%, rgba(180,190,200,0.15) 40%, rgba(140,152,166,0.55) 70%, rgba(96,108,122,0.85) 100%),
+    radial-gradient(circle at 68% 78%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 24%);
+  border-color:rgba(80,92,106,0.55);
 }
 /* Sun is "still large" per her explicit follow-up, sized well past the
    old small triangle-accent bubble it's replacing. */
@@ -917,11 +929,17 @@ body{
         <ellipse class="orbit-ring" cx="555" cy="244" rx="350" ry="147" transform="rotate(16 555 244)"/>
         <ellipse class="orbit-ring" cx="555" cy="244" rx="400" ry="168" transform="rotate(16 555 244)"/>
         <ellipse class="orbit-ring" cx="555" cy="244" rx="450" ry="189" transform="rotate(16 555 244)"/>
-        <circle class="orbit-moon" cx="400" cy="165" r="11"/>
-        <circle class="orbit-moon" cx="455" cy="182" r="16"/>
-        <circle class="orbit-moon" cx="690" cy="320" r="22"/>
-        <circle class="orbit-moon" cx="755" cy="288" r="14"/>
-        <circle class="orbit-moon" cx="810" cy="255" r="9"/>
+        <!-- Each moon sits at an exact parametric point on ONE specific
+             ring (computed from that ring's own rx/ry/rotation, not
+             eyeballed) -- her direct correction: "don't put the little
+             rotating nodes on the same circle... put it on different
+             lines." One moon per ring, rings 2 through 6 (skipping the
+             innermost, tightest one). -->
+        <circle class="orbit-moon" cx="359" cy="236" r="10"/>
+        <circle class="orbit-moon" cx="791" cy="216" r="16"/>
+        <circle class="orbit-moon" cx="241" cy="114" r="20"/>
+        <circle class="orbit-moon" cx="213" cy="246" r="13"/>
+        <circle class="orbit-moon" cx="120" cy="136" r="9"/>
         <!-- Masks out every ring segment that passes behind the planet --
              her direct correction: "I do not want to see the part of the
              ring that is supposed to be on the other side." The sun-key
@@ -930,7 +948,7 @@ body{
              top of the rings within this same SVG, hides them cleanly
              regardless of the sphere's own transparency. Solid white
              matches the page background right up until the color pass. -->
-        <circle cx="555" cy="244" r="145" fill="#ffffff"/>
+        <circle cx="555" cy="244" r="180" fill="#ffffff"/>
       </svg>
       <div class="key-item sun-key">
         <span class="key-stack">
