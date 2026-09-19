@@ -372,6 +372,30 @@ body{
 }
 .hero-continue-btn:active{transform:translateY(1px);}
 .hero-continue-btn svg{position:relative;}
+/* Centered row, real gap from the button above -- her direct
+   instruction: "put a space between the button and where you put the
+   prices, which need to be centered." Label/price text stay plain
+   black (the existing site-wide price styling); only the dot carries
+   the new color, larger than her reference photo's own dot. */
+.hero-pricing-row{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:0.5rem 1rem;margin-top:1.1rem;width:100%;
+}
+.hero-price-item{
+  display:inline-flex;align-items:center;gap:0.45rem;
+  background:none;border:none;cursor:pointer;padding:0;font-family:inherit;
+}
+/* Real sphere shading (white highlight, rose-gold body, deep shadow
+   edge), same technique as the sun/bead gradients -- not a flat dot.
+   14px, clearly larger than the ~9px dot in her reference photo. */
+.hero-price-dot{
+  width:14px;height:14px;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 32% 28%,
+    #ffffff 0%, #f8e5d8 30%, #f2c6b7 65%, #78574f 100%);
+  box-shadow:0 1px 2px rgba(0,0,0,0.3);
+}
+.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;color:#000000;}
+.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.9rem;color:#000000;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -1609,6 +1633,14 @@ body{
     <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
     </button>
+    <!-- Real space between the button and the prices, centered -- her
+         direct instruction. Same PRICING_TIERS data and buyPass() the
+         second-screen pricing panel already uses, just its own centered
+         row here with a real, larger colored dot per her reference
+         photo (color sampled from that photo's sun/dots -- see
+         ROSE_LIGHT/MID/DEEP in the illustration script -- used ONLY on
+         this dot, nowhere else on the button/background/text). -->
+    <div class="hero-pricing-row" id="heroPricingList"></div>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
          coin edge, stepped ward-cut bit, all in the site's blue -- "I
          don't want Gray... make the whole thing blue"), sized and
@@ -2177,6 +2209,13 @@ function openNumberDef(item){
   const MINT=CHROME_LIGHT, JADE=CHROME_MID;
   const EMERALD='#54585f', EMERALD_DEEP='#22252a';
   const ACCENT=EMERALD;
+  // Rose-gold, sampled directly (not guessed) from her reference photo's
+  // own sun sphere and price-tier dots: light/mid/deep pulled from the
+  // sphere's real bright highlight, mid body, and shadow-side pixels.
+  // Her instruction was narrow and explicit: this color goes on the sun
+  // and the orbit beads ("nodes") only -- the rings stay the plain
+  // silver/chrome established above.
+  const ROSE_LIGHT='#f8e5d8', ROSE_MID='#f2c6b7', ROSE_DEEP='#78574f';
   const RING_ROTATION_DEG = -8;
   const RING_RX = [64, 86, 108, 130, 152, 175];
   // Beads computed to sit exactly ON a ring's actual curve -- real
@@ -2336,11 +2375,11 @@ function openNumberDef(item){
     <defs>
       <radialGradient id="sunGrad" cx="32%" cy="27%" r="78%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="16%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="38%" stop-color="#e4e6eb"/>
-        <stop offset="60%" stop-color="${CHROME_MID}"/>
-        <stop offset="84%" stop-color="#a7abb5"/>
-        <stop offset="100%" stop-color="${CHROME_DEEP}"/>
+        <stop offset="16%" stop-color="${ROSE_LIGHT}"/>
+        <stop offset="38%" stop-color="${ROSE_MID}"/>
+        <stop offset="60%" stop-color="#d69f8c"/>
+        <stop offset="84%" stop-color="#9c6f63"/>
+        <stop offset="100%" stop-color="${ROSE_DEEP}"/>
       </radialGradient>
       <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
@@ -2409,22 +2448,22 @@ function openNumberDef(item){
            within silver/chrome, never color. -->
       <radialGradient id="beadGrad1" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="30%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="65%" stop-color="#e4e6eb"/>
-        <stop offset="100%" stop-color="${CHROME_MID}"/>
+        <stop offset="30%" stop-color="${ROSE_LIGHT}"/>
+        <stop offset="65%" stop-color="${ROSE_MID}"/>
+        <stop offset="100%" stop-color="#d69f8c"/>
       </radialGradient>
       <radialGradient id="beadGrad2" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="25%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="55%" stop-color="#d5d8de"/>
-        <stop offset="80%" stop-color="${CHROME_DEEP}"/>
-        <stop offset="100%" stop-color="#6b6f7a"/>
+        <stop offset="25%" stop-color="${ROSE_LIGHT}"/>
+        <stop offset="55%" stop-color="#e0ac9a"/>
+        <stop offset="80%" stop-color="${ROSE_DEEP}"/>
+        <stop offset="100%" stop-color="#5c4038"/>
       </radialGradient>
       <radialGradient id="beadGrad3" cx="32%" cy="28%" r="75%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="40%" stop-color="#eceef1"/>
-        <stop offset="75%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="100%" stop-color="${CHROME_MID}"/>
+        <stop offset="40%" stop-color="#fbf1ea"/>
+        <stop offset="75%" stop-color="${ROSE_LIGHT}"/>
+        <stop offset="100%" stop-color="${ROSE_MID}"/>
       </radialGradient>
     </defs>
     <circle cx="${cx}" cy="${cy}" r="78" fill="url(#corona)"/>
@@ -4898,6 +4937,13 @@ async function checkPassStatus(email){
 // already in the markup.
 document.getElementById('pricingList').innerHTML=PRICING_TIERS
   .map(t=>`<span class="glow-ring-sm"><button type="button" class="price-row" onclick="buyPass('${t.plan}')" aria-label="Get the ${t.label} pass for ${t.price}"><span class="price-label">${t.label}</span><span class="price-amt">${t.price}</span></button></span>`)
+  .join('');
+
+// Same tiers, same buyPass() action, a separate centered row for the
+// hero screen directly under its own continue button (see
+// .hero-pricing-row above).
+document.getElementById('heroPricingList').innerHTML=PRICING_TIERS
+  .map(t=>`<button type="button" class="hero-price-item" onclick="buyPass('${t.plan}')" aria-label="Get the ${t.label} pass for ${t.price}"><span class="hero-price-dot"></span><span class="hero-price-label">${t.label}:</span><span class="hero-price-amt">${t.price}</span></button>`)
   .join('');
 
 // Both render*Banner() functions below return only the INNER content
