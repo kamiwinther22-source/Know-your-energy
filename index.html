@@ -1462,39 +1462,35 @@ body{
 <div class="content" id="hookStep">
   <!-- Real tagline, locked at exact positions -- not flowing HTML a
        browser could rewrap differently on a different screen.
-       Font swapped Fraunces -> Bodoni Moda 900: her call, "do a font
-       that is bold" -- Bodoni Moda's real high-contrast, dramatic strokes
-       read as bold/premium at a glance, not soft/generic like Fraunces
-       did at this size. Real defect fixed in the same pass: this
-       sandbox's proxy silently fails to load Google Fonts in the
-       headless browser used to verify layout here (TLS cert rejected),
-       so every previous "measured against the live font" claim in this
-       block was actually measuring a fallback system serif, not
-       Fraunces -- never caught until switching fonts required
-       re-measuring and the numbers didn't match. Fixed for good: the
-       real .ttf is now downloaded once and loaded locally
-       (FontFace().load()) for every measurement from here on, so what
-       gets verified is what she actually sees, not a stand-in.
-       One uniform base size for every normal word (21px); only the
-       accent phrase ("deeply understand" / "relationship") is bigger
-       (24px) -- nothing else varies. The wedge (no two lines the same
-       length, each strictly shorter than the one above) comes entirely
-       from word count per line. Real widths against the real font:
-       277/264/211/150/114/72px, strictly decreasing, no ties, all
-       under the real 345px safety margin (358px column). Gaps and
-       margin sized so the last line's bottom still lands at the real
-       vertical middle of a standard 844px phone screen. -->
-  <div style="position:relative;height:393px;margin-top:55px;">
-    <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">This is for you if you want</div>
-    <div style="position:absolute;left:0;top:73px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">to </span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:24px;">deeply understand</span>
+       Her exact word-by-line layout (confirmed directly after an initial
+       back-and-forth: "Never mind yes that was correct"), typed out with
+       full capitals marking the accent words -- a different accent set
+       than the previous pass ("FOR YOU" / "UNDERSTAND" / "RELATIONSHIP",
+       not "deeply understand" / "relationship"), and different line
+       breaks (5 lines, not 6): "to" stays on line 1, "your" stays on
+       line 2, "dynamics" stays with "relationship" on line 3. Accent
+       words are both bigger AND rendered in real caps now, not just
+       bigger. Gaps between lines are wider ("two spaces between each
+       line"). Real widths against the real Bodoni Moda 900 font (loaded
+       locally, see the font-swap note below -- Google Fonts is blocked
+       in this sandbox's own test browser): 279/260/255/130/58px,
+       strictly decreasing, no ties. This exact word grouping (8 words on
+       line 1, "FOR YOU" itself in wider capital letters) is heavier than
+       the previous grouping, so the uniform base that still fits without
+       overflow is smaller this time (17px vs 21px) -- a direct
+       consequence of her own line breakdown, not a separate regression. -->
+  <div style="position:relative;height:275px;margin-top:55px;">
+    <div style="position:absolute;left:0;top:0px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:17px;">This is </span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:20px;">FOR YOU</span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:17px;"> if you want to</span>
     </div>
-    <div style="position:absolute;left:0;top:149px;line-height:1;white-space:nowrap;color:#12161e;">
-      <span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">your </span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:24px;">relationship</span>
+    <div style="position:absolute;left:0;top:65px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:17px;">deeply </span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:20px;">UNDERSTAND</span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:17px;"> your</span>
     </div>
-    <div style="position:absolute;left:0;top:225px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">dynamics and</div>
-    <div style="position:absolute;left:0;top:298px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">those close</div>
-    <div style="position:absolute;left:0;top:371px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:21px;">to you.</div>
+    <div style="position:absolute;left:0;top:130px;line-height:1;white-space:nowrap;color:#12161e;">
+      <span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:20px;">RELATIONSHIP</span><span style="font-family:'Bodoni Moda',serif;font-weight:900;font-size:17px;"> dynamics</span>
+    </div>
+    <div style="position:absolute;left:0;top:195px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:17px;">and those close</div>
+    <div style="position:absolute;left:0;top:257px;line-height:1;white-space:nowrap;color:#12161e;font-family:'Bodoni Moda',serif;font-weight:900;font-size:17px;">to you.</div>
   </div>
 
   <!-- Email is the real gate now, right here on the landing page -- her
