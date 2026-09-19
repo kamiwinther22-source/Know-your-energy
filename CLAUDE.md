@@ -311,40 +311,31 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   treat that as the actual material — apply only real, transparent, global
   operations to it when a change is wanted (e.g. a measured levels/screen-
   blend lighten of the real crop), never a from-scratch recreation.
-- **Metal must never have a streak of light running through it, in any
-  direction.** Her direct, repeated correction, stated as a rule for the
-  whole project, not a one-off note. First correction: no diagonal band
-  (the generic CSS/stock-photo "brushed metal" look reads as fake and
-  cheap regardless of how it's built or how many bands there are). She
-  then corrected that fix too — straightening the same gradient to
-  horizontal was still wrong: **no gradient axis at all**, in any
-  direction (horizontal, vertical, diagonal), is acceptable. Any
-  synthesized linear gradient has a direction, and a direction is exactly
-  what reads as a streak to her. A flat, single-tone fill has no streak
-  but also isn't metallic on its own (no light variation at all). The
-  real, project-standard answer (see the rule above this one): real
-  photographed metal pixels from an actual reference photo, not a
-  from-scratch gradient of any shape — a rendered/app-generated gradient
-  swatch (even one she likes the tones of) is not itself that reference;
-  it still has to become real photo pixels before it's usable as the
-  material. **This closes off the radial/soft-glow option too, tested
-  directly and rejected in the same conversation:** a radial gradient
-  (an off-center highlight falling off in every direction, no straight
-  axis) was tried as the non-streak alternative, reasoning that this
-  project's own already-banned "soft glow blob" ruling was about a
-  giant page-background blob specifically, and a small, properly-executed
-  radial highlight on a contained shape (the same technique the Sun
-  sphere elsewhere on this page already uses, which she has not
-  objected to) might be a different, acceptable case. It was not — she
-  rejected it immediately as the same soft blob. **The real rule has no
-  such exception: no procedurally generated gradient of any shape
-  (linear at any angle, radial, conic/angle, reflected, diamond — every
-  option her own reference app's gradient-type picker offers) is
-  acceptable, full stop, regardless of size, context, or which other
-  element on the page already uses a similar technique.** Stop testing
-  new gradient shapes against this rule; none of them are the fix. The
-  only path to genuine metallic material is real photographed pixels,
-  per the rule above.
+- **Metal must never have a clear/distinct line running through it, and
+  must never be just a single soft light-circle stuck on a surface and
+  called "metallic."** Her own words, direct correction after an
+  overreaching version of this rule got written here: "What I said was
+  no sticking a light circle on something and calling it metallic. And
+  not to have a clear line either. That does not rule out everything you
+  just said." Two specific, narrow things are banned:
+  1. A visible line/edge/band anywhere in the material (a linear-gradient
+     streak, at any angle — this is what a straightened-out "brushed
+     metal" attempt still had).
+  2. Treating one lone soft radial highlight — a single circular glow
+     dropped on a flat surface — as if that alone constitutes "metallic."
+     That specific move (one soft blob, nothing else) was tried and
+     rejected here.
+  **This is not a blanket ban on gradients, radial techniques, or
+  procedural shading in general** — a previous pass in this same
+  conversation over-corrected into exactly that sweeping claim, and she
+  corrected it back. What's actually open: anything with real, more than
+  single-point light/shadow complexity — multiple tonal variations,
+  texture, genuine material depth — as long as it doesn't reduce to
+  "one line" or "one dot of light on a flat field." The standing
+  preference (see the rule above this one) is still to work from real
+  photographed pixels when she has a reference photo to give; this entry
+  is about what to avoid when building or testing something in the
+  meantime, not a claim that only photography can ever work.
 - **Prefer real, verified techniques over fabricated ones.** Research things
   for real (WebSearch, actual docs) and verify designs by actual measurement
   (Playwright screenshots, pixel sampling, bounding-box checks) — never
