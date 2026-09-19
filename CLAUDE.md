@@ -311,6 +311,23 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   treat that as the actual material — apply only real, transparent, global
   operations to it when a change is wanted (e.g. a measured levels/screen-
   blend lighten of the real crop), never a from-scratch recreation.
+- **Metal must never have a streak of light running through it, in any
+  direction.** Her direct, repeated correction, stated as a rule for the
+  whole project, not a one-off note. First correction: no diagonal band
+  (the generic CSS/stock-photo "brushed metal" look reads as fake and
+  cheap regardless of how it's built or how many bands there are). She
+  then corrected that fix too — straightening the same gradient to
+  horizontal was still wrong: **no gradient axis at all**, in any
+  direction (horizontal, vertical, diagonal), is acceptable. Any
+  synthesized linear gradient has a direction, and a direction is exactly
+  what reads as a streak to her. A flat, single-tone fill has no streak
+  but also isn't metallic on its own (no light variation at all). The
+  real, project-standard answer (see the rule above this one): real
+  photographed metal pixels from an actual reference photo, not a
+  from-scratch gradient of any shape — a rendered/app-generated gradient
+  swatch (even one she likes the tones of) is not itself that reference;
+  it still has to become real photo pixels before it's usable as the
+  material.
 - **Prefer real, verified techniques over fabricated ones.** Research things
   for real (WebSearch, actual docs) and verify designs by actual measurement
   (Playwright screenshots, pixel sampling, bounding-box checks) — never
