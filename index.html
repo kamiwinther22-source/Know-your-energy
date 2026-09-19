@@ -81,18 +81,14 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct correction, looking at a real screenshot: still flat
-     and gray, no visible metal. Root cause: a big blur radius spreads
-     the 0.45/0.95 opacity out into an imperceptibly slow fade over
-     the whole page -- the OFFSET (not just opacity) needs to be large
-     enough that a real, substantially solid dark/light corner exists
-     before the blur ever softens its edge. Pushed the offsets much
-     further in, with a tighter blur, so the contrast is unmistakable,
-     not theoretical. */
-  background-color:#eef0f2;
-  box-shadow:
-    inset 160px 190px 80px rgba(0,0,0,0.45),
-    inset -160px -190px 80px rgba(255,255,255,0.95);
+  /* Her direct correction: a stronger version of the same technique
+     is still a wash -- one gradient bleeding across the whole page
+     with no edges anywhere. Removed entirely. Real metal here now
+     lives in actual bounded objects with their own edges (the
+     embossed rectangles in the ambient-bg SVG below), sitting on a
+     plain flat canvas -- the same relationship the sun/button/key
+     already have to the rest of the page, not a tint over everything. */
+  background-color:#f4f4f3;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
@@ -364,7 +360,14 @@ body{
   box-shadow:
     inset 3px 4px 7px rgba(0,0,0,0.45),
     inset -2px -2px 3px rgba(255,255,255,0.95),
-    inset 0 0 0 1px rgba(0,0,0,0.15);
+    inset 0 0 0 1px rgba(0,0,0,0.15),
+    /* Her direct instruction: use the rectangle that's already there,
+       not a new shape. Real OUTER shadow/highlight, same dark/light
+       direction as its own inset bevel, cast onto the actual page
+       around it -- the existing object's own light and dark bleeding
+       outward, nothing added. */
+    30px 35px 70px rgba(0,0,0,0.35),
+    -30px -35px 70px rgba(255,255,255,0.9);
 }
 .hero-key{display:block;width:62px;height:auto;margin:0.25rem 0 0 4px;}
 /* The exact button from her reference photo -- real pill/stadium shape,
