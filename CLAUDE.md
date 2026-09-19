@@ -327,7 +327,24 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   from-scratch gradient of any shape — a rendered/app-generated gradient
   swatch (even one she likes the tones of) is not itself that reference;
   it still has to become real photo pixels before it's usable as the
-  material.
+  material. **This closes off the radial/soft-glow option too, tested
+  directly and rejected in the same conversation:** a radial gradient
+  (an off-center highlight falling off in every direction, no straight
+  axis) was tried as the non-streak alternative, reasoning that this
+  project's own already-banned "soft glow blob" ruling was about a
+  giant page-background blob specifically, and a small, properly-executed
+  radial highlight on a contained shape (the same technique the Sun
+  sphere elsewhere on this page already uses, which she has not
+  objected to) might be a different, acceptable case. It was not — she
+  rejected it immediately as the same soft blob. **The real rule has no
+  such exception: no procedurally generated gradient of any shape
+  (linear at any angle, radial, conic/angle, reflected, diamond — every
+  option her own reference app's gradient-type picker offers) is
+  acceptable, full stop, regardless of size, context, or which other
+  element on the page already uses a similar technique.** Stop testing
+  new gradient shapes against this rule; none of them are the fix. The
+  only path to genuine metallic material is real photographed pixels,
+  per the rule above.
 - **Prefer real, verified techniques over fabricated ones.** Research things
   for real (WebSearch, actual docs) and verify designs by actual measurement
   (Playwright screenshots, pixel sampling, bounding-box checks) — never
