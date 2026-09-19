@@ -81,18 +81,18 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Lighter still -- nothing was actually stopping this, the mid-gray
-     patches below were left in for "depth" reasoning that didn't need
-     to override her actual, repeated ask for a light silver
-     background. Same real multi-region structure/positions, every
-     stop raised again so the darkest point on the page is a pale
-     silver, not a mid-gray. */
+  /* Her direct correction: I already know how to do this -- the sun
+     sphere elsewhere on this page isn't a flat blob, it's a real
+     layered recipe (an off-center base sphere gradient, THEN a small,
+     tight specular hotspot on top, fast falloff, not a big soft
+     wash). Same recipe here at page scale instead of a diffuse patch
+     collage: one real off-center sphere-style base gradient, plus a
+     small tight hotspot layered on top of it -- same technique
+     already proven and approved on the sun, not a new invention. */
   background-image:
-    radial-gradient(ellipse 65% 48% at 68% 92%, #ffffff 0%, #fcfdfd 45%, rgba(252,253,253,0) 100%),
-    radial-gradient(ellipse 55% 45% at 35% 68%, #e4e6eb 0%, #edeff1 55%, rgba(237,239,241,0) 100%),
-    radial-gradient(ellipse 50% 40% at 72% 46%, #e8eaed 0%, #f0f1f3 55%, rgba(240,241,243,0) 100%),
-    radial-gradient(ellipse 70% 45% at 38% 12%, #ffffff 0%, #f7f8f9 55%, rgba(247,248,249,0) 100%),
-    linear-gradient(135deg, #fdfdfe 0%, #f5f6f8 50%, #ececef 100%);
+    radial-gradient(circle at 32% 22%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.35) 35%, rgba(255,255,255,0) 65%),
+    radial-gradient(ellipse 120% 90% at 32% 24%,
+      #ffffff 0%, #f5f6f8 22%, #e4e6eb 42%, #c9ccd4 62%, #a7abb5 82%, #8f929c 100%);
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
