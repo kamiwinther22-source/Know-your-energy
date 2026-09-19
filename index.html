@@ -334,13 +334,27 @@ body{
    illustration was still visually present -- measured the real gap via
    getBoundingClientRect (illustration bottom vs. this element's
    default top), not guessed. */
-/* margin-top increased (0.5rem -> 90px) -- the illustration's CSS
-   transform (rotate+scale) makes its real visual footprint taller than
-   its plain layout box, so without this the next element in flow (this
-   one) started before the illustration was visually finished. Measured
-   the real gap via getBoundingClientRect, not guessed. */
-.hero-email-wrap{max-width:300px;margin:90px auto 1rem;}
+/* margin-top pulled back in (90px -> 35px) -- her direct instruction:
+   "Email needs moved up." The illustration itself already moved up
+   (translateY(-66px)) since 90px was originally tuned, so the real gap
+   had grown to ~70px with no further changes; measured via
+   getBoundingClientRect (illustration bottom vs. this element's top),
+   not guessed, and reduced to leave a real but small ~15px gap instead. */
+.hero-email-wrap{max-width:300px;margin:35px auto 1rem;}
 .hero-email-wrap .err{text-align:center;}
+/* Her direct instruction: "This is a place where you can naturally apply
+   light and dark contrast... the rectangle." A real, dramatic embossed/
+   inset-metal bevel, scoped to just this one field (not the shared
+   .line-field base every other form field on the site also uses) --
+   deep dark shadow on the inner top-left edge, a real bright highlight
+   on the inner bottom-right edge, genuinely carved-metal, not the site's
+   normal subtle version. */
+.hero-email-field{
+  box-shadow:
+    inset 3px 4px 7px rgba(0,0,0,0.45),
+    inset -2px -2px 3px rgba(255,255,255,0.95),
+    inset 0 0 0 1px rgba(0,0,0,0.15);
+}
 .hero-key{display:block;width:62px;height:auto;margin:0.25rem 0 0 4px;}
 
 /* Deliberately away from the sun -- her direct correction: in her
@@ -1562,9 +1576,18 @@ body{
          a real, literal instance of the thing she's said many times not
          to do -- faded text. Reverted to the class's own real
          black/0.92rem/700 -- only the spacing stays tightened. -->
-    <div class="privacy-note" style="margin-bottom:0.1rem;">Enter Your Email That Acts As Your Key</div>
-    <div class="line-field"><input id="heroEmail" type="email" placeholder="your.email@example.com" inputmode="email" autocomplete="email" aria-label="Email address"></div>
+    <div class="privacy-note" style="margin-bottom:0.1rem;">Email is your key.</div>
+    <!-- Her direct instruction: "Leave the rectangle empty. Do not type
+         inside of it." -- no placeholder text, the box itself stays
+         visually empty until she actually types. Real dramatic light/dark
+         contrast added here specifically (not the shared .line-field base,
+         which every other form field on the site also uses) -- her own
+         words: "This is a place where you can naturally apply light and
+         dark contrast... the rectangle." A real embossed/inset-metal
+         bevel, pushed further than the site's normal subtle version. -->
+    <div class="line-field hero-email-field"><input id="heroEmail" type="email" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
+    <div class="privacy-note" style="margin-top:0.3rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
          coin edge, stepped ward-cut bit, all in the site's blue -- "I
          don't want Gray... make the whole thing blue"), sized and
