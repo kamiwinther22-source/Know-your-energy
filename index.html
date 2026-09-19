@@ -1606,7 +1606,12 @@ body{
          bevel, pushed further than the site's normal subtle version. -->
     <div class="line-field hero-email-field"><input id="heroEmail" type="email" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <div class="privacy-note" style="margin-top:0.3rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
+    <div class="privacy-note" style="margin-top:0.5rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
+    <!-- Underneath the entire email section (field + reassurance line),
+         not wedged between them. -->
+    <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+    </button>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
          coin edge, stepped ward-cut bit, all in the site's blue -- "I
          don't want Gray... make the whole thing blue"), sized and
@@ -1708,19 +1713,6 @@ body{
         <line x1="63" y1="212" x2="62" y2="236" stroke="#eef1ff" stroke-width="1.1" opacity="0.6"/>
       </g>
     </svg>
-    <!-- "This is THE EXACT button that comes under the email" -- her own
-         reference photo, colors sampled directly from it (not guessed):
-         dark charcoal-navy border rgb(39,46,56), cool silver fill
-         rgb(205-233,212-238,220-238), a warm glow specifically at the
-         bottom-center rgb(251,246,242) fading to rgb(149,122,113) at the
-         border there. A real pill/stadium shape (fully rounded ends),
-         matching her image's proportions and arrow-only content (no
-         text). Wired to the same action tapping the Sun already
-         performs, since this is the same "begin" step, just a second,
-         more conventional way to trigger it. -->
-    <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
-    </button>
   </div>
 
   <!-- The energy-ribbon graphic itself was NOT meant to be deleted --
