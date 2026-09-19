@@ -394,18 +394,18 @@ body{
    guessed. */
 .hero-pricing-row{
   display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;
-  gap:0.5rem;margin-top:2rem;width:100%;
+  gap:0.2rem;margin-top:2rem;width:100%;
 }
 .hero-price-item{
-  display:inline-flex;align-items:center;gap:0.3rem;
+  display:inline-flex;align-items:center;gap:0.15rem;
   background:none;border:none;cursor:pointer;padding:0;font-family:inherit;
   white-space:nowrap;
 }
 /* Real sphere shading (white highlight, rose-gold body, deep shadow
    edge), same technique as the sun/bead gradients -- not a flat dot.
-   12px, still clearly larger than the ~9px dot in her reference photo. */
+   16px, clearly larger than the ~9px dot in her reference photo. */
 .hero-price-dot{
-  width:12px;height:12px;border-radius:50%;flex:none;
+  width:14px;height:14px;border-radius:50%;flex:none;
   background:radial-gradient(circle at 32% 28%,
     #ffffff 0%, #f8e5d8 30%, #f2c6b7 65%, #78574f 100%);
   box-shadow:0 1px 2px rgba(0,0,0,0.3);
@@ -416,8 +416,8 @@ body{
    same as ROSE_DEEP/the key's own shadow stop), so it's actually
    legible against white instead of just the whitest part of the
    material. */
-.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:600;color:#78574f;}
-.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.78rem;color:#78574f;}
+.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;color:#78574f;}
+.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.95rem;color:#78574f;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -1650,7 +1650,7 @@ body{
     <div class="line-field hero-email-field"><input id="heroEmail" type="email" inputmode="email" autocomplete="email" aria-label="Email address"></div>
     <!-- Her direct instruction, twice now: this line goes right under
          the box, not at the end of the section. -->
-    <div class="privacy-note" style="margin-top:0.5rem;margin-bottom:0.5rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
+    <div class="privacy-note" style="margin-top:0.5rem;margin-bottom:0.5rem;">your email is not shared or solicited</div>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
          coin edge, stepped ward-cut bit, all in the site's blue -- "I
          don't want Gray... make the whole thing blue"), sized and
