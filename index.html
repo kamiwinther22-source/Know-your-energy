@@ -426,10 +426,16 @@ body{
     rgba(120,124,132,0.09) 62%,
     rgba(120,124,132,0) 82%);
   filter:blur(4px);z-index:0;
+  /* Her direct instruction: "I do not want to see any line pattern in
+     the background whatsoever. None." Hidden rather than deleted --
+     the frame keeps its reserved height so nothing else on the page
+     shifts. */
+  display:none;
 }
 .energy-ribbon{
   position:absolute;left:50%;top:50%;width:115%;
   transform:translate(-50%,-50%);z-index:0;pointer-events:none;
+  display:none;
 }
 /* Real vector strokes, not an extracted photo -- her direct, final word
    on the photo-extraction approach after seven rounds of tuning it:
