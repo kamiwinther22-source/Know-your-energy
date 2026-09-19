@@ -410,11 +410,14 @@ body{
     #ffffff 0%, #f8e5d8 30%, #f2c6b7 65%, #78574f 100%);
   box-shadow:0 1px 2px rgba(0,0,0,0.3);
 }
-/* The exact sampled color, not a darkened "safer" substitute -- her
-   direct correction: "I don't care if that's normal, I hope it isn't."
-   Same #f2c6b7 as the dot/sun/beads/key's own mid tone. */
-.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:600;color:#f2c6b7;}
-.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.78rem;color:#f2c6b7;}
+/* Her direct correction: the pale #f2c6b7 highlight tone is nearly
+   invisible text on this page's near-white background -- the same
+   rose-gold family, but its real darker/deep sampled tone (#78574f,
+   same as ROSE_DEEP/the key's own shadow stop), so it's actually
+   legible against white instead of just the whitest part of the
+   material. */
+.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:600;color:#78574f;}
+.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.78rem;color:#78574f;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -1645,21 +1648,6 @@ body{
          dark contrast... the rectangle." A real embossed/inset-metal
          bevel, pushed further than the site's normal subtle version. -->
     <div class="line-field hero-email-field"><input id="heroEmail" type="email" inputmode="email" autocomplete="email" aria-label="Email address"></div>
-    <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <div class="privacy-note" style="margin-top:0.5rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
-    <!-- Underneath the entire email section (field + reassurance line),
-         not wedged between them. -->
-    <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
-    </button>
-    <!-- Real space between the button and the prices, centered -- her
-         direct instruction. Same PRICING_TIERS data and buyPass() the
-         second-screen pricing panel already uses, just its own centered
-         row here with a real, larger colored dot per her reference
-         photo (color sampled from that photo's sun/dots -- see
-         ROSE_LIGHT/MID/DEEP in the illustration script -- used ONLY on
-         this dot, nowhere else on the button/background/text). -->
-    <div class="hero-pricing-row" id="heroPricingList"></div>
     <!-- Coin-medallion key design she approved (jeweled bow, reeded
          coin edge, stepped ward-cut bit, all in the site's blue -- "I
          don't want Gray... make the whole thing blue"), sized and
@@ -1766,6 +1754,21 @@ body{
         <line x1="63" y1="212" x2="62" y2="236" stroke="#fbf1ea" stroke-width="1.1" opacity="0.6"/>
       </g>
     </svg>
+    <div class="err" id="heroEmailErr" style="display:none;"></div>
+    <div class="privacy-note" style="margin-top:0.5rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
+    <!-- Underneath the entire email section (field + reassurance line),
+         not wedged between them. -->
+    <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+    </button>
+    <!-- Real space between the button and the prices, centered -- her
+         direct instruction. Same PRICING_TIERS data and buyPass() the
+         second-screen pricing panel already uses, just its own centered
+         row here with a real, larger colored dot per her reference
+         photo (color sampled from that photo's sun/dots -- see
+         ROSE_LIGHT/MID/DEEP in the illustration script -- used ONLY on
+         this dot, nowhere else on the button/background/text). -->
+    <div class="hero-pricing-row" id="heroPricingList"></div>
   </div>
 
   <!-- The energy-ribbon graphic itself was NOT meant to be deleted --
