@@ -81,19 +81,18 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct follow-up: the sharp highlight alone isn't enough --
-     real metal is the highlight AND real dark shadow together, the
-     same bright-next-to-genuinely-dark contrast a real specular
-     highlight always sits next to in a photo. Extended the same
-     off-center gradient out to a real dark chrome tone (same
-     #54585f used on the rings/sun/button, not a new color) at its
-     far corner -- which, because the highlight sits up-left, lands
-     bottom-right where the page is empty, not under any text. */
-  background-image:
-    radial-gradient(circle at 30% 20%, #ffffff 0%, #ffffff 8%, rgba(255,255,255,0.4) 18%, rgba(255,255,255,0) 30%),
-    radial-gradient(ellipse 120% 90% at 32% 24%,
-      #fafbfc 0%, #f0f1f3 20%, #dee1e5 40%, #c2c5cb 58%, #9a9d9f 75%, #6b6f7a 90%, #54585f 100%);
-  background-attachment:fixed;
+  /* "USE THE FUCKING RECTANGLE." Her repeated, direct instruction --
+     and every prior attempt diluted the rectangle's own real
+     opacity values (0.45 dark / 0.95 light) down to something much
+     weaker, which is why it kept reading as no different / soft
+     gray. This is the EXACT same box-shadow recipe as
+     .hero-email-field below (same 0.45/0.95 opacities, not diluted),
+     just scaled up in offset/blur to cover the page instead of a
+     300px field. Real, undiluted contrast. */
+  background-color:#eef0f2;
+  box-shadow:
+    inset 45px 55px 100px rgba(0,0,0,0.45),
+    inset -45px -55px 100px rgba(255,255,255,0.95);
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
