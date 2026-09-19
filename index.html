@@ -81,19 +81,21 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background-color:#e4e6e9;
-  /* Her direct correction: the photo-crop background was still just
-     "soft glow." Real fix: contrast built from the same techniques
-     already proven and approved elsewhere on THIS page, not a new
-     photo/gradient -- (1) the rectangle's own embossed inset-shadow
-     recipe (.hero-email-field below), reused here at full-page
-     scale as a genuine light/dark emboss across the whole panel,
-     and (2) the solar system's ring gradient technique, reused on
-     the ambient rings themselves (see ambRingGrad in the ambient-bg
-     SVG) instead of a flat gray stroke. No image, no soft blob. */
+  /* "I WANT THE BACKGROUND TO LOOK METALLIC." The 2-tone inset-shadow
+     vignette still wasn't reading as metal -- real metal on this page
+     (the sun, the rings, the button) is never just 2 tones, it's the
+     same full chrome ramp: white through light/mid/deep chrome to a
+     real charcoal shadow. This is exactly that ramp -- the identical
+     stop values as ringGrad/sunGrad/the button's own gradient, not a
+     new palette -- applied at page scale on the same diagonal axis
+     the rings already use (15%,8% to 85%,92%). Fixed so it reads as
+     one continuous metal sheet behind the whole page. */
+  background-image:linear-gradient(115deg,
+    #ffffff 0%, #f5f6f8 18%, #e4e6eb 36%, #c9ccd4 58%, #8f929c 80%, #54585f 100%);
+  background-attachment:fixed;
   box-shadow:
-    inset 60px 70px 140px rgba(0,0,0,0.16),
-    inset -60px -70px 140px rgba(255,255,255,0.75);
+    inset 60px 70px 140px rgba(0,0,0,0.12),
+    inset -60px -70px 140px rgba(255,255,255,0.35);
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
