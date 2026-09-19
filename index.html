@@ -1531,29 +1531,59 @@ body{
       <stop offset="86%" stop-color="#8f929c"/>
       <stop offset="100%" stop-color="#54585f"/>
     </linearGradient>
+    <!-- Same rose-gold already established on the sun/beads/key/price
+         dots, reused here instead of staying pure grayscale. -->
+    <linearGradient id="ambRose" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="20%" stop-color="#f8e5d8"/>
+      <stop offset="50%" stop-color="#f2c6b7"/>
+      <stop offset="80%" stop-color="#b17c6d"/>
+      <stop offset="100%" stop-color="#78574f"/>
+    </linearGradient>
     <radialGradient id="ambGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#8f929c" stop-opacity="0.16"/>
       <stop offset="100%" stop-color="#8f929c" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <!-- one small, tightly contained accent glow -- not a background fill -->
+  <!-- Reworked because the page still read as flat: same faint
+       elements below, strengthened enough to actually register
+       instead of being near-invisible ghosts, plus 2 more small wisp
+       strokes (same curved, multi-stroke technique as the energy
+       ribbon, just smaller and fewer strands) so there's real
+       light/dark variation in more than one spot on the page. Rings
+       stay the established neutral chrome; the wisp nearer the
+       email/key/price cluster picks up the same rose-gold already
+       used there (ambRose below), so it relates to what's next to it
+       instead of everything staying uniformly gray. -->
   <ellipse cx="300" cy="130" rx="120" ry="95" fill="url(#ambGlow)"/>
   <g class="amb-rings">
-    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.18" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.16" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.13" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="#9a9d9f" stroke-width="1" opacity="0.11" transform="rotate(-8 300 130)"/>
-    <circle class="amb-dot" cx="128" cy="150" r="4" fill="url(#ambChrome)" opacity="0.4"/>
-    <circle class="amb-dot" cx="472" cy="108" r="3" fill="url(#ambChrome)" opacity="0.4"/>
-    <circle class="amb-dot" cx="405" cy="176" r="2.5" fill="url(#ambChrome)" opacity="0.35"/>
+    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="#9a9d9f" stroke-width="1.2" opacity="0.3" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="#9a9d9f" stroke-width="1.2" opacity="0.27" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="#9a9d9f" stroke-width="1.2" opacity="0.22" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="#9a9d9f" stroke-width="1.2" opacity="0.18" transform="rotate(-8 300 130)"/>
+    <circle class="amb-dot" cx="128" cy="150" r="4" fill="url(#ambChrome)" opacity="0.55"/>
+    <circle class="amb-dot" cx="472" cy="108" r="3" fill="url(#ambChrome)" opacity="0.55"/>
+    <circle class="amb-dot" cx="405" cy="176" r="2.5" fill="url(#ambChrome)" opacity="0.5"/>
   </g>
-  <circle class="amb-dot" cx="55" cy="420" r="3" fill="url(#ambChrome)" opacity="0.32"/>
+  <circle class="amb-dot" cx="55" cy="420" r="3" fill="url(#ambChrome)" opacity="0.45"/>
+  <!-- Small wisp near the very top, above the tagline -- same idea as
+       the energy ribbon (multiple offset curved strokes sharing one
+       gradient), just a couple strands instead of the ribbon's full
+       set, and much smaller. -->
+  <path d="M -30 40 Q 140 5 340 55" fill="none" stroke="url(#ambChrome)" stroke-width="2" stroke-linecap="round" opacity="0.28"/>
+  <path d="M -20 60 Q 150 30 330 75" fill="none" stroke="url(#ambChrome)" stroke-width="1.3" stroke-linecap="round" opacity="0.22"/>
   <!-- Deliberately stops well above the ribbon zone at the bottom of the
        page (roughly y=580+ in this viewBox) -- that zone has its own
        glow behind it (.ribbon-frame::before in the CSS above). A second
        glow/wisp layered underneath it from here risks the same
        compounding-glow problem already fixed once this session. -->
-  <path d="M -20 340 Q 180 300 380 380" fill="none" stroke="url(#ambChrome)" stroke-width="14" stroke-linecap="round" opacity="0.13"/>
+  <path d="M -20 340 Q 180 300 380 380" fill="none" stroke="url(#ambChrome)" stroke-width="14" stroke-linecap="round" opacity="0.2"/>
+  <!-- Second small wisp, mid-page, near the email/key/button cluster --
+       real material continuity between that cluster and the ambient
+       layer instead of it sitting alone in a flat field. Rose-gold,
+       not chrome, since it sits right next to the key/price dots. -->
+  <path d="M 20 460 Q 200 430 380 470" fill="none" stroke="url(#ambRose)" stroke-width="2.4" stroke-linecap="round" opacity="0.28"/>
+  <path d="M 30 480 Q 210 460 370 495" fill="none" stroke="url(#ambRose)" stroke-width="1.5" stroke-linecap="round" opacity="0.22"/>
 </svg></div>
 
 <!-- ---------- Step 1: the hook screen. Zero-context first impression --
