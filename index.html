@@ -81,13 +81,12 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct correction: a stronger version of the same technique
-     is still a wash -- one gradient bleeding across the whole page
-     with no edges anywhere. Removed entirely. Real metal here now
-     lives in actual bounded objects with their own edges (the
-     embossed rectangles in the ambient-bg SVG below), sitting on a
-     plain flat canvas -- the same relationship the sun/button/key
-     already have to the rest of the page, not a tint over everything. */
+  /* Her direct, standing rule: nowhere on this page should there be
+     anything that reads as a wash -- one gradient bleeding across a
+     large area, however strong, is still a wash. Plain flat color,
+     nothing else. Any real metal contrast lives in actual bounded
+     objects that are already part of the page (the sun, the button,
+     the key, the rectangle), not in a tint over the canvas itself. */
   background-color:#f4f4f3;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
@@ -360,14 +359,7 @@ body{
   box-shadow:
     inset 3px 4px 7px rgba(0,0,0,0.45),
     inset -2px -2px 3px rgba(255,255,255,0.95),
-    inset 0 0 0 1px rgba(0,0,0,0.15),
-    /* Her direct instruction: use the rectangle that's already there,
-       not a new shape. Real OUTER shadow/highlight, same dark/light
-       direction as its own inset bevel, cast onto the actual page
-       around it -- the existing object's own light and dark bleeding
-       outward, nothing added. */
-    30px 35px 70px rgba(0,0,0,0.35),
-    -30px -35px 70px rgba(255,255,255,0.9);
+    inset 0 0 0 1px rgba(0,0,0,0.15);
 }
 .hero-key{display:block;width:62px;height:auto;margin:0.25rem 0 0 4px;}
 /* The exact button from her reference photo -- real pill/stadium shape,
