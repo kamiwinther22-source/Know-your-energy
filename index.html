@@ -81,13 +81,18 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct, standing rule: nowhere on this page should there be
-     anything that reads as a wash -- one gradient bleeding across a
-     large area, however strong, is still a wash. Plain flat color,
-     nothing else. Any real metal contrast lives in actual bounded
-     objects that are already part of the page (the sun, the button,
-     the key, the rectangle), not in a tint over the canvas itself. */
+  /* Her direct instruction: there is an actual sun on this page --
+     treat it as the real light source. Measured its true screen
+     position (getBBox + getScreenCTM on the real circle, not
+     guessed): 77%/42% of the viewport at 390x900. A contained glow
+     sits there, sized and fast-falling like a real light source (not
+     a wash), and the far corner from it (bottom-left, where the page
+     is otherwise empty) gets real dark chrome -- the logical "shadow
+     side" of a scene actually lit from that one point. */
   background-color:#f4f4f3;
+  background-image:
+    radial-gradient(circle at 77% 42%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 10%, rgba(255,255,255,0) 24%),
+    radial-gradient(ellipse 55% 45% at 8% 88%, #6b6f7a 0%, #9a9d9f 55%, rgba(154,157,159,0) 100%);
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
