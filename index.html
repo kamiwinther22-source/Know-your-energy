@@ -81,18 +81,18 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* "USE THE FUCKING RECTANGLE." Her repeated, direct instruction --
-     and every prior attempt diluted the rectangle's own real
-     opacity values (0.45 dark / 0.95 light) down to something much
-     weaker, which is why it kept reading as no different / soft
-     gray. This is the EXACT same box-shadow recipe as
-     .hero-email-field below (same 0.45/0.95 opacities, not diluted),
-     just scaled up in offset/blur to cover the page instead of a
-     300px field. Real, undiluted contrast. */
+  /* Her direct correction, looking at a real screenshot: still flat
+     and gray, no visible metal. Root cause: a big blur radius spreads
+     the 0.45/0.95 opacity out into an imperceptibly slow fade over
+     the whole page -- the OFFSET (not just opacity) needs to be large
+     enough that a real, substantially solid dark/light corner exists
+     before the blur ever softens its edge. Pushed the offsets much
+     further in, with a tighter blur, so the contrast is unmistakable,
+     not theoretical. */
   background-color:#eef0f2;
   box-shadow:
-    inset 45px 55px 100px rgba(0,0,0,0.45),
-    inset -45px -55px 100px rgba(255,255,255,0.95);
+    inset 160px 190px 80px rgba(0,0,0,0.45),
+    inset -160px -190px 80px rgba(255,255,255,0.95);
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
