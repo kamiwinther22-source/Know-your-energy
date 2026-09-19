@@ -81,22 +81,18 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Studied her 5 reference photos directly (the puzzle floor, the
-     compass rim, the metal card grid, the key/puzzle piece, the gear
-     dashboard): what actually makes each read as real metal isn't
-     texture or a repeating pattern -- it's ONE consistent, offset
-     light source producing a SMALL, SHARP, genuinely bright glint
-     against otherwise smooth, low-contrast shading, plus real cast
-     shadows on actual raised edges (handled by the embossed rectangle
-     panels and rings elsewhere in this layer, not here). Sharpened
-     the hotspot to be small and punchy instead of a big soft wash --
-     that contrast between a tiny sharp highlight and smooth
-     surrounding shading is what reads as shine, not a pattern
-     covering the whole surface. */
+  /* Her direct follow-up: the sharp highlight alone isn't enough --
+     real metal is the highlight AND real dark shadow together, the
+     same bright-next-to-genuinely-dark contrast a real specular
+     highlight always sits next to in a photo. Extended the same
+     off-center gradient out to a real dark chrome tone (same
+     #54585f used on the rings/sun/button, not a new color) at its
+     far corner -- which, because the highlight sits up-left, lands
+     bottom-right where the page is empty, not under any text. */
   background-image:
     radial-gradient(circle at 30% 20%, #ffffff 0%, #ffffff 8%, rgba(255,255,255,0.4) 18%, rgba(255,255,255,0) 30%),
     radial-gradient(ellipse 120% 90% at 32% 24%,
-      #fafbfc 0%, #f0f1f3 25%, #dee1e5 48%, #c2c5cb 70%, #a7abb5 100%);
+      #fafbfc 0%, #f0f1f3 20%, #dee1e5 40%, #c2c5cb 58%, #9a9d9f 75%, #6b6f7a 90%, #54585f 100%);
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
