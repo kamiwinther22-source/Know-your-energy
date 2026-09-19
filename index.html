@@ -337,7 +337,17 @@ body{
    had grown to ~70px with no further changes; measured via
    getBoundingClientRect (illustration bottom vs. this element's top),
    not guessed, and reduced to leave a real but small ~15px gap instead. */
-.hero-email-wrap{max-width:300px;margin:-55px auto 142px;}
+/* Real root cause of the key/pricing-row shift, not a margin patch on
+   the key itself: this div is a flex child of #hookStep with auto
+   left/right margins for centering, which (per the flexbox spec) makes
+   it size to shrink-to-fit its content instead of stretching -- so
+   when the new one-line pricing row's un-wrapping content got wider
+   than anything here before, this whole box silently grew wider too,
+   shifting its own centered left edge and, with it, the key that sits
+   inside it. width:100% (capped at the same 300px) makes this box's
+   size fixed and independent of whatever its children measure, so no
+   future child content change can ever shift it or the key again. */
+.hero-email-wrap{width:100%;max-width:300px;margin:-55px auto 142px;}
 .hero-email-wrap .err{text-align:center;}
 /* Her direct instruction: "This is a place where you can naturally apply
    light and dark contrast... the rectangle." A real, dramatic embossed/
