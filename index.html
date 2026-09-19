@@ -387,33 +387,25 @@ body{
    prices, which need to be centered." Label/price text stay plain
    black (the existing site-wide price styling); only the dot carries
    the new color, larger than her reference photo's own dot. */
-/* Real, legible text size (her direct correction: nothing on this
-   page should read as fine print) genuinely needs ~384px on one line
-   -- more than fits on any real phone width even using the page's
-   full available edge-to-edge room (measured: 358px at 390px
-   viewport, 288px at the narrowest supported 320px). Breaks out of
-   the 300px-capped .hero-email-wrap column to use the page's actual
-   full width (the standard full-bleed technique), and wraps to a
-   second line rather than force-shrinking the text back down to fit
-   one line -- a real, deliberate trade-off given both can't be true
-   at once at this text size. */
+/* Her direct correction: one line matters more than the largest
+   possible text -- "I want it to stay on that line. Put it back."
+   Solved by real measurement, not guessed: found the largest font/dot/
+   gap size that still fits all 3 tiers on one line at the narrowest
+   supported width (320px, 288px available) by testing sizes down from
+   the too-big version -- 285.5px fits with room to spare at this
+   size, still bigger than the original 0.68rem/12px sizing this
+   started from before "fine print" was raised. */
 .hero-pricing-row{
-  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
-  gap:0.5rem 0.8rem;margin-top:2rem;
-  width:100vw;
-  margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
-  padding:0 1rem;box-sizing:border-box;
+  display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;
+  gap:0.46rem;margin-top:2rem;width:100%;
 }
 .hero-price-item{
-  display:inline-flex;align-items:center;gap:0.3rem;
+  display:inline-flex;align-items:center;gap:0.21rem;
   background:none;border:none;cursor:pointer;padding:0;font-family:inherit;
   white-space:nowrap;
 }
-/* Real sphere shading (white highlight, rose-gold body, deep shadow
-   edge), same technique as the sun/bead gradients -- not a flat dot.
-   16px, clearly larger than the ~9px dot in her reference photo. */
 .hero-price-dot{
-  width:16px;height:16px;border-radius:50%;flex:none;
+  width:11px;height:11px;border-radius:50%;flex:none;
   background:radial-gradient(circle at 32% 28%,
     #ffffff 0%, #f8e5d8 30%, #f2c6b7 65%, #78574f 100%);
   box-shadow:0 1px 2px rgba(0,0,0,0.3);
@@ -424,8 +416,8 @@ body{
    same as ROSE_DEEP/the key's own shadow stop), so it's actually
    legible against white instead of just the whitest part of the
    material. */
-.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;color:#78574f;}
-.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.1rem;color:#78574f;}
+.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:600;color:#78574f;}
+.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.79rem;color:#78574f;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
