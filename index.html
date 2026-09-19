@@ -1755,9 +1755,11 @@ body{
       </g>
     </svg>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <div class="privacy-note" style="margin-top:0.5rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
-    <!-- Underneath the entire email section (field + reassurance line),
-         not wedged between them. -->
+    <!-- Her direct instruction: "nothing between the rectangle and the
+         key" -- the key sits immediately after the rectangle above
+         (only the hidden, empty error div between them). Button comes
+         next with real space, then the prices with their own real
+         space -- same order she just gave. -->
     <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
     </button>
@@ -1769,6 +1771,7 @@ body{
          ROSE_LIGHT/MID/DEEP in the illustration script -- used ONLY on
          this dot, nowhere else on the button/background/text). -->
     <div class="hero-pricing-row" id="heroPricingList"></div>
+    <div class="privacy-note" style="margin-top:0.7rem;font-weight:500;font-size:0.7rem;">your email is not shared or solicited</div>
   </div>
 
   <!-- The energy-ribbon graphic itself was NOT meant to be deleted --
