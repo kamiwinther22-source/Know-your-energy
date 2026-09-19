@@ -81,9 +81,23 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct instruction: "get it off." Removed -- plain flat color,
-     no gradient/image/shadow, until she gives different direction. */
-  background-color:#f4f4f3;
+  /* Her reference photo (the blue puzzle piece on a metal floor):
+     looked at as a WHOLE picture, not a zoomed crop -- sampled real
+     brightness across an 8x8 grid over the floor (excluding the piece
+     itself). It is NOT one smooth axis: darker regions left-of-center
+     and right-of-center, a genuine bright reflective sheen low and
+     right-of-center (the piece's real reflection), lighter overall up
+     top. These radial patches are placed at those real sampled
+     positions, in the site's own established chrome palette -- real
+     multi-region contrast, not a single ramp, not a repeating patch,
+     not a filter. */
+  background-color:#c7cad0;
+  background-image:
+    radial-gradient(ellipse 55% 40% at 68% 92%, #ffffff 0%, #f5f6f8 35%, rgba(245,246,248,0) 75%),
+    radial-gradient(ellipse 45% 35% at 35% 68%, #8f929c 0%, #a5a8b1 40%, rgba(165,168,177,0) 75%),
+    radial-gradient(ellipse 40% 30% at 70% 48%, #9a9d9f 0%, #b0b3ba 40%, rgba(176,179,186,0) 75%),
+    radial-gradient(ellipse 60% 35% at 40% 15%, #f5f6f8 0%, #e4e6eb 45%, rgba(228,230,235,0) 75%);
+  background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
