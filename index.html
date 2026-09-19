@@ -81,20 +81,18 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct correction: precisely dodging every line of text with
-     irregular dark patches is fragile (text position varies by
-     device/viewport), and what it had turned into read as "a dark
-     site" -- explicitly against this file's own standing rule. Fix:
-     raised the entire floor so nothing goes below a light silver
-     tone -- same real multi-region structure/positions as before
-     (still not flat, still not one axis), just brightened enough that
-     no patch can ever compromise text legibility or read as dark. */
+  /* Lighter still -- nothing was actually stopping this, the mid-gray
+     patches below were left in for "depth" reasoning that didn't need
+     to override her actual, repeated ask for a light silver
+     background. Same real multi-region structure/positions, every
+     stop raised again so the darkest point on the page is a pale
+     silver, not a mid-gray. */
   background-image:
-    radial-gradient(ellipse 65% 48% at 68% 92%, #ffffff 0%, #f9fafb 45%, rgba(249,250,251,0) 100%),
-    radial-gradient(ellipse 55% 45% at 35% 68%, #c9ccd4 0%, #d7dade 55%, rgba(215,218,222,0) 100%),
-    radial-gradient(ellipse 50% 40% at 72% 46%, #d0d3d9 0%, #dee1e5 55%, rgba(222,225,229,0) 100%),
-    radial-gradient(ellipse 70% 45% at 38% 12%, #ffffff 0%, #f0f1f3 55%, rgba(240,241,243,0) 100%),
-    linear-gradient(135deg, #fafbfc 0%, #eceef1 50%, #dcdfe3 100%);
+    radial-gradient(ellipse 65% 48% at 68% 92%, #ffffff 0%, #fcfdfd 45%, rgba(252,253,253,0) 100%),
+    radial-gradient(ellipse 55% 45% at 35% 68%, #e4e6eb 0%, #edeff1 55%, rgba(237,239,241,0) 100%),
+    radial-gradient(ellipse 50% 40% at 72% 46%, #e8eaed 0%, #f0f1f3 55%, rgba(240,241,243,0) 100%),
+    radial-gradient(ellipse 70% 45% at 38% 12%, #ffffff 0%, #f7f8f9 55%, rgba(247,248,249,0) 100%),
+    linear-gradient(135deg, #fdfdfe 0%, #f5f6f8 50%, #ececef 100%);
   background-attachment:fixed;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
