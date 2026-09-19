@@ -387,17 +387,25 @@ body{
    prices, which need to be centered." Label/price text stay plain
    black (the existing site-wide price styling); only the dot carries
    the new color, larger than her reference photo's own dot. */
-/* All 3 tiers on one line, no wrap -- her direct instruction, same fix
-   already applied to the other pricing row (.pricing-list) elsewhere
-   on this page. Sizing shrunk just enough to actually fit 3 items at
-   the narrowest supported width (320px), verified by measurement, not
-   guessed. */
+/* Real, legible text size (her direct correction: nothing on this
+   page should read as fine print) genuinely needs ~384px on one line
+   -- more than fits on any real phone width even using the page's
+   full available edge-to-edge room (measured: 358px at 390px
+   viewport, 288px at the narrowest supported 320px). Breaks out of
+   the 300px-capped .hero-email-wrap column to use the page's actual
+   full width (the standard full-bleed technique), and wraps to a
+   second line rather than force-shrinking the text back down to fit
+   one line -- a real, deliberate trade-off given both can't be true
+   at once at this text size. */
 .hero-pricing-row{
-  display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;
-  gap:0.2rem;margin-top:2rem;width:100%;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:0.5rem 0.8rem;margin-top:2rem;
+  width:100vw;
+  margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+  padding:0 1rem;box-sizing:border-box;
 }
 .hero-price-item{
-  display:inline-flex;align-items:center;gap:0.15rem;
+  display:inline-flex;align-items:center;gap:0.3rem;
   background:none;border:none;cursor:pointer;padding:0;font-family:inherit;
   white-space:nowrap;
 }
@@ -405,7 +413,7 @@ body{
    edge), same technique as the sun/bead gradients -- not a flat dot.
    16px, clearly larger than the ~9px dot in her reference photo. */
 .hero-price-dot{
-  width:14px;height:14px;border-radius:50%;flex:none;
+  width:16px;height:16px;border-radius:50%;flex:none;
   background:radial-gradient(circle at 32% 28%,
     #ffffff 0%, #f8e5d8 30%, #f2c6b7 65%, #78574f 100%);
   box-shadow:0 1px 2px rgba(0,0,0,0.3);
@@ -416,8 +424,8 @@ body{
    same as ROSE_DEEP/the key's own shadow stop), so it's actually
    legible against white instead of just the whitest part of the
    material. */
-.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;color:#78574f;}
-.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.95rem;color:#78574f;}
+.hero-price-label{font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;color:#78574f;}
+.hero-price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.1rem;color:#78574f;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -792,7 +800,7 @@ body{
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
    already used for the toggle pill, rel-chip, and focus border. */
-.privacy-note{color:#000000;font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
+.privacy-note{color:#000000;font-family:'DM Sans',sans-serif;font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:0.4rem;}
 
 /* ---------- Step-2 status line: shows nothing for a fresh email, a note
    to pick a pass once that email's free reading is already used, or a
