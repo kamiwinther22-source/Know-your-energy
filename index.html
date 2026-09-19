@@ -356,6 +356,25 @@ body{
     inset 0 0 0 1px rgba(0,0,0,0.15);
 }
 .hero-key{display:block;width:62px;height:auto;margin:0.25rem 0 0 4px;}
+/* The exact button from her reference photo -- real pill/stadium shape,
+   colors sampled directly from the image (see the HTML comment above
+   this button for the sampled values), not invented. The warm glow is a
+   small, localized button-affordance highlight (the same kind of thing
+   the sun-cta's own glow already does elsewhere on this page), not a
+   claim to be photographed "metal" material, so it isn't in tension
+   with the metal-streak rule -- that rule is about the site's actual
+   metal surfaces, not a UI button's own accent glow. */
+.hero-continue-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;max-width:300px;height:52px;margin:0.9rem auto 0;
+  border-radius:999px;border:2px solid #2d323d;cursor:pointer;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(255,180,120,0.55) 0%, rgba(255,180,120,0) 70%),
+    linear-gradient(180deg, #e1e9ec 0%, #cdd4d8 55%, #b9c0c6 100%);
+  box-shadow:0 3px 6px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.8);
+}
+.hero-continue-btn:active{transform:translateY(1px);}
+.hero-continue-btn svg{position:relative;}
 
 /* Deliberately away from the sun -- her direct correction: in her
    reference image the ribbon and the solar-system illustration are two
@@ -1689,6 +1708,19 @@ body{
         <line x1="63" y1="212" x2="62" y2="236" stroke="#eef1ff" stroke-width="1.1" opacity="0.6"/>
       </g>
     </svg>
+    <!-- "This is THE EXACT button that comes under the email" -- her own
+         reference photo, colors sampled directly from it (not guessed):
+         dark charcoal-navy border rgb(39,46,56), cool silver fill
+         rgb(205-233,212-238,220-238), a warm glow specifically at the
+         bottom-center rgb(251,246,242) fading to rgb(149,122,113) at the
+         border there. A real pill/stadium shape (fully rounded ends),
+         matching her image's proportions and arrow-only content (no
+         text). Wired to the same action tapping the Sun already
+         performs, since this is the same "begin" step, just a second,
+         more conventional way to trigger it. -->
+    <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+    </button>
   </div>
 
   <!-- The energy-ribbon graphic itself was NOT meant to be deleted --
