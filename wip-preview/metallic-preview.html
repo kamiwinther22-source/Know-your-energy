@@ -81,9 +81,23 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
+  /* PERMANENTLY REJECTED, DO NOT REBUILD THIS: any radial-gradient (or
+     equivalent circular/elliptical shape -- CSS layer, SVG element,
+     blurred shape, whatever the implementation) used to represent "the
+     glow behind the sun." She has rejected this exact underlying
+     technique repeatedly, across every implementation tried this
+     session (a separate SVG ellipse, a blurred SVG shape, an SVG
+     lighting filter, this CSS background layer) -- moving it between
+     code locations or retuning its color/size/position is NOT a fix,
+     because the method itself ("a shape that fades from bright to the
+     base color, centered near the sun") is what reads as "a fucking
+     yellow/orange circle" to her, no matter how it's tuned. Her own
+     words, repeated: "change your technique... stop doing it like
+     that." Before touching the sun's surrounding brightness again in
+     any future session: do NOT reach for radial-gradient/blur/lighting-
+     filter-on-a-circle again. Find or ask her for an actually different
+     mechanism first. -->
   background:
-    radial-gradient(ellipse 230px 200px at 323px 389px,
-      #fcf6e8 0%, #f0dcae 25%, #dcbb7e 50%, #bdbec1 82%),
     radial-gradient(ellipse 620px 420px at 30px 40px,
       #e9eaeb 0%, #cfd0d3 35%, #bcbdc0 55%, #bdbec1 78%),
     #bdbec1;
