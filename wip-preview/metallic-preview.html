@@ -2594,11 +2594,12 @@ function openNumberDef(item){
     <defs>
       <radialGradient id="sunGrad" cx="30%" cy="26%" r="88%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="24%" stop-color="${ROSE_LIGHT}"/>
-        <stop offset="52%" stop-color="${ROSE_MID}"/>
-        <stop offset="74%" stop-color="#cbab7a"/>
-        <stop offset="90%" stop-color="#9c7a50"/>
-        <stop offset="100%" stop-color="#6b4f34"/>
+        <stop offset="20%" stop-color="${ROSE_LIGHT}"/>
+        <stop offset="45%" stop-color="${ROSE_MID}"/>
+        <stop offset="65%" stop-color="#b28f60"/>
+        <stop offset="82%" stop-color="#7d5c38"/>
+        <stop offset="95%" stop-color="#4a3624"/>
+        <stop offset="100%" stop-color="#2e2015"/>
       </radialGradient>
       <!-- Second, smaller reflection spot -- a real chrome sphere shows
            more than one environment highlight, not one smooth gradient
@@ -2655,7 +2656,7 @@ function openNumberDef(item){
            organic (photographic bloom), not a mathematically perfect
            radial gradient with a visible geometric edge. -->
       <filter id="sunBloom" x="-150%" y="-150%" width="400%" height="400%">
-        <feGaussianBlur stdDeviation="16"/>
+        <feGaussianBlur stdDeviation="11"/>
       </filter>
       <!-- One shared gradient, reused across every ring's stroke --
            objectBoundingBox (SVG's default gradientUnits) maps it to
