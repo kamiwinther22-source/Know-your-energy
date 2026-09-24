@@ -41,41 +41,21 @@
 <style>
 :root{color-scheme:dark;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: real brushed-metal treatment, built directly from her two
-   reference photos (the app-mockup metal panel, and the engraved plaque).
-   Two things separately make an untextured gradient read as "blurry/
-   hazy/soft glow" instead of metal, and both are fixed here:
-   (a) no visible surface grain at all -- a smooth color blend alone
-       can't read as a reflective material, per this file's own earlier,
-       correct observation; and
-   (b) too little tonal range -- the original gradient's stops were all
-       close, pale near-white values (a ~10-15 point delta between them),
-       which is what actually reads as a washed-out haze, not the fact
-       that it was a gradient. A real photographed metal panel legitimately
-       *is* a smooth, gradual falloff (see both reference photos: bright
-       near the upper area, gradually darker toward the corners) -- that
-       gradualness was never the problem.
-   First attempt at a fix here used many small hard-edged stripes to avoid
-   "blur" -- that was wrong too: it read as a single repeating diagonal
-   gloss streak (the exact cheap shortcut this page's own rules elsewhere
-   warn against), not brushed metal, because real metal's large-scale
-   shading has no macro banding at all.
-   The actual fix, two stacked layers:
-   1) a repeating-radial-gradient, centered above/left of the panel, for
-      the fine brush-grain visible up close in both photos -- 1px-3px
-      hard steps (no smoothing at this scale), blended with `overlay` so
-      it reads as real grain cut into the surface.
-   2) underneath, ONE real radial falloff (no repeats, no stripes) from
-      near-white near the upper-left-of-center -- matching where both
-      photos are brightest -- down through the same CHROME_LIGHT/MID/DEEP
-      trio already validated elsewhere on this page (#f5f6f8/#c9ccd4/
-      #8f929c), with real contrast between every stop (not clustered pale
-      values) so it keeps definition instead of washing out. The ellipse
-      is sized wide (150%/110%) so most of a real, tall page stays in the
-      bright zone -- matching the actual app-mockup reference photo,
-      which reads bright and fairly even, not heavily vignetted -- rather
-      than reaching its darkest floor tone partway down and holding flat
-      grey for everything below the fold.
+/* Background: matches her reference photo directly. Her own direct
+   corrections, in order: the original pale gradient (stops within ~10-15
+   points of each other) read as a washed-out haze -- not because it was
+   a gradient, but because it had too little real contrast to read as
+   reflective. A fix that added visible surface grain (a repeating fine
+   texture layer) was her next direct call: "flat grainy grey," wrong --
+   the reference photo has no visible grain or line texture at all. Her
+   own words on what's actually wanted: "I want the contrast in colors
+   for the shine. I do not want a line pattern." That's exactly this: one
+   smooth radial color blend, no repeats, no steps, no texture layer --
+   just real light-to-dark contrast (near-white peak down to a genuinely
+   darker silver at the far edge) so it reads as shine, not a flat wash,
+   and without ever producing a visible line, band, or repeating edge.
+   Colors stay in the same neutral cool-silver family already validated
+   elsewhere on this page (CHROME_LIGHT/MID/DEEP: #f5f6f8/#c9ccd4/#8f929c).
    Layout/position of every element on the page is unchanged; only the
    surface color changed. */
 /* min-height added here -- a real bug she caught by asking directly:
@@ -102,11 +82,6 @@ body{
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background:
-    repeating-radial-gradient(circle at 12% -20%,
-      rgba(255,255,255,0.30) 0px, rgba(255,255,255,0.30) 1px,
-      rgba(20,22,26,0.055) 1px, rgba(20,22,26,0.055) 2px,
-      rgba(255,255,255,0.13) 2px, rgba(255,255,255,0.13) 3px
-    ),
     radial-gradient(ellipse 150% 110% at 38% 6%,
       #ffffff 0%,
       #f5f6f8 22%,
@@ -115,7 +90,6 @@ body{
       #adb0b8 82%,
       #8f929c 100%
     );
-  background-blend-mode:overlay,normal;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
