@@ -2592,6 +2592,17 @@ function openNumberDef(item){
         <stop offset="78%" stop-color="#6b4f34"/>
         <stop offset="100%" stop-color="#4a3624"/>
       </radialGradient>
+      <!-- Second, smaller reflection spot -- a real chrome sphere shows
+           more than one environment highlight, not one smooth gradient
+           and not concentric rings around a single point (tried, looked
+           like a target/bullseye, reverted). This is a real, offset
+           second glint, the way a ball bearing actually shows two
+           separate catch-lights. -->
+      <radialGradient id="sunGlint2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+        <stop offset="45%" stop-color="#fdf6e8" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#fdf6e8" stop-opacity="0"/>
+      </radialGradient>
       <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
         <stop offset="40%" stop-color="#ffffff" stop-opacity="0.55"/>
@@ -2714,6 +2725,7 @@ function openNumberDef(item){
          other, front copy is the one actually showing. -->
     ${BACK_BEADS_SVG}
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunGrad)"/>
+    <ellipse cx="${cx+20}" cy="${cy+13}" rx="13" ry="9" fill="url(#sunGlint2)"/>
     <!-- Front halves, drawn AFTER the sun so they're genuinely visible
          in front of it -- together with the back halves above, each
          ring now actually wraps around the sphere instead of sitting
