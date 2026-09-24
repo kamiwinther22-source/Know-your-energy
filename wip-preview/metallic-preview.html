@@ -81,13 +81,7 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  background:
-    linear-gradient(18deg,
-      rgba(255,255,255,0) 30%, rgba(255,255,255,0.95) 34%,
-      #ffffff 35.5%, rgba(255,255,255,0.35) 37.5%, rgba(255,255,255,0) 42%),
-    linear-gradient(180deg,
-      #ffffff 0px, #f5f6f8 120px, #e4e6eb 350px, #9a9da5 400px,
-      #6b6f7a 430px, #b0b3ba 470px, #eff0f2 520px, #fdfdfe 900px, #fdfdfe 100%);
+  background:#a4a5a8;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
@@ -2645,13 +2639,23 @@ function openNumberDef(item){
            material color. Pure grayscale now, white through to a real
            dark shadow tone, same technique as the sun's own already-
            approved sunGrad, no hue anywhere in it. -->
+      <!-- Real chrome, not a smooth one-direction fade -- her direct
+           correction: "the rings do not look like chrome, they are as
+           flat as the rest." A monotonic light-to-dark fade reads as a
+           shaded/beveled tube, not a mirror -- actual chrome reflects
+           multiple separate patches of its environment (sky, ground,
+           whatever's around it), so it shows several sharp light/dark
+           REVERSALS across the same surface, not one smooth gradient.
+           This alternates white/near-black/white/near-black/white -- the
+           real technique behind every "chrome text" effect. -->
       <linearGradient id="ringGrad" x1="15%" y1="8%" x2="85%" y2="92%">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="20%" stop-color="${CHROME_LIGHT}"/>
-        <stop offset="42%" stop-color="#e4e6eb"/>
-        <stop offset="62%" stop-color="${CHROME_MID}"/>
-        <stop offset="82%" stop-color="${CHROME_DEEP}"/>
-        <stop offset="100%" stop-color="#6b6f7a"/>
+        <stop offset="14%" stop-color="#4a4d55"/>
+        <stop offset="28%" stop-color="#f5f6f8"/>
+        <stop offset="46%" stop-color="#2e3036"/>
+        <stop offset="64%" stop-color="#e4e6eb"/>
+        <stop offset="80%" stop-color="#54585f"/>
+        <stop offset="100%" stop-color="#c9ccd4"/>
       </linearGradient>
       <!-- Real per-bead sphere shading (bright highlight, dark shadow
            edge) instead of a flat fill -- same reasoning as ringGrad
