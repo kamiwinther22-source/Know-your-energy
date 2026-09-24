@@ -279,6 +279,14 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   full-strength and legible. She has said this many times, forcefully.
 - **A title's text color and its outline/frame color must never be the same
   tone.**
+- **Never use a diagonal light streak/gloss-sweep as a stand-in for an
+  actual metallic look.** That's a cheap, lazy shortcut, not a real metal
+  render — this was already a hard rule once and got lost. When a genuine
+  metallic surface is wanted, build the real thing (layered gradients that
+  actually simulate how metal reflects light — a highlight band, a darker
+  reflective mid-tone, lightening again toward the edge — the way the
+  Continue button's chrome-pill treatment was built), not a single angled
+  white streak dragged across a flat gradient.
 - **Never write her copy.** Build visuals and layout only; leave clearly
   marked placeholder text. Her wording will always be better than anything
   generated, and seeing generated copy actively distracts her from writing
