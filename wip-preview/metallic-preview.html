@@ -1659,27 +1659,14 @@ body{
      hide that checkbox too, on the rare real person who actually needs
      it, leaving them stuck failing verification with nothing to click. -->
 <div id="turnstileWidget"></div>
-<!-- Real, documented technique for brushed metal -- feTurbulence
-     (anisotropic baseFrequency, so the noise stretches into horizontal
-     grain instead of uniform static) feeding feDiffuseLighting (an
-     actual simulated light source reacting to that noise as a bump map),
-     the standard SVG "brushed metal" filter recipe -- not a hand-guessed
-     gradient or a repeating-dot texture. Fixed, full-viewport, behind
-     everything including .ambient-bg. -->
-<div style="position:fixed;inset:0;z-index:-1;" aria-hidden="true">
-  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-    <filter id="brushedMetalBg" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.9" numOctaves="2" seed="7" result="noise"/>
-      <feDiffuseLighting in="noise" lighting-color="#ffffff" surfaceScale="2.2" diffuseConstant="1.15" result="light">
-        <feDistantLight azimuth="45" elevation="55"/>
-      </feDiffuseLighting>
-      <feColorMatrix in="light" type="matrix"
-        values="0.62 0 0 0 0.12  0.62 0 0 0 0.13  0.62 0 0 0 0.14  0 0 0 1 0"/>
-    </filter>
-    <rect width="100%" height="100%" fill="#a4a5a8"/>
-    <rect width="100%" height="100%" filter="url(#brushedMetalBg)"/>
-  </svg>
-</div>
+<!-- feTurbulence brushed-metal texture tried and rejected -- her direct
+     call: "looks like a printer running out of ink." Any visible fine
+     texture/grain reads as a defect to her regardless of the technique
+     behind it (this is now the third distinct method rejected for the
+     same reason: repeating-dot noise, repeating stripes, and now real
+     procedural turbulence+lighting). Do not reintroduce texture/grain on
+     this background again -- contrast has to come from smooth color
+     zones and the real objects (sun, rings), not surface texture. -->
 <div class="ambient-bg" aria-hidden="true"><svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="ambChrome" x1="0%" y1="0%" x2="100%" y2="100%">
