@@ -82,6 +82,8 @@ body{
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background:
+    radial-gradient(ellipse 130px 130px at 323px 389px,
+      #fcf6e8 0%, #dcbb7e 40%, #a4a5a8 78%),
     radial-gradient(ellipse 620px 420px at 30px 40px,
       #e9eaeb 0%, #cfd0d3 35%, #bcbdc0 55%, #a4a5a8 78%),
     #a4a5a8;
@@ -2652,13 +2654,6 @@ function openNumberDef(item){
            236/217/200/184 to the flat base 164,165,168), placed where
            that measurement put them. Contrast comes from the fill
            itself, not an effect layered on top of it. -->
-      <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="35%" stop-color="#fdf4d8"/>
-        <stop offset="62%" stop-color="#eecf8e"/>
-        <stop offset="85%" stop-color="#a4a5a8"/>
-        <stop offset="100%" stop-color="#a4a5a8"/>
-      </radialGradient>
       <!-- One shared gradient, reused across every ring's stroke --
            objectBoundingBox (SVG's default gradientUnits) maps it to
            each ring's own bounding box automatically, so this one
@@ -2718,7 +2713,6 @@ function openNumberDef(item){
         <stop offset="100%" stop-color="${ROSE_MID}"/>
       </radialGradient>
     </defs>
-    <ellipse cx="${cx+2}" cy="${cy+3}" rx="90" ry="88" fill="url(#sunGlow)"/>
     <!-- Back halves of every ring, drawn BEFORE the sun so they're
          genuinely hidden behind its silhouette where they cross it --
          her direct correction to the prior "all rings on top" version:
