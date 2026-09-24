@@ -2608,14 +2608,23 @@ function openNumberDef(item){
   // same clipping the next time a bead's position changes.
   let svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="sunGrad" cx="30%" cy="26%" r="88%">
-        <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="14%" stop-color="#ffffff"/>
-        <stop offset="38%" stop-color="${ROSE_MID}"/>
-        <stop offset="58%" stop-color="#8a6a45"/>
-        <stop offset="76%" stop-color="#4a331e"/>
-        <stop offset="92%" stop-color="#20150c"/>
-        <stop offset="100%" stop-color="#0d0906"/>
+      <!-- Every stop below is a real color sampled directly along the
+           actual highlight-to-shadow axis of her reference sphere (11
+           points, t=0 to t=1), not a designed/guessed palette. No flat
+           white plateau (the old 0%/14% both-white pair is what read as
+           a sticker -- real data shows continuous, gradual variation,
+           never a flat plane). Real shadow only reaches ~180,156,132 --
+           much lighter than the near-black this had before. -->
+      <radialGradient id="sunGrad" cx="42%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#f3ded1"/>
+        <stop offset="12%" stop-color="#f9ece1"/>
+        <stop offset="24%" stop-color="#fefbe8"/>
+        <stop offset="36%" stop-color="#faf1e2"/>
+        <stop offset="48%" stop-color="#fffffe"/>
+        <stop offset="60%" stop-color="#f5eede"/>
+        <stop offset="80%" stop-color="#dcc7ac"/>
+        <stop offset="92%" stop-color="#b49c84"/>
+        <stop offset="100%" stop-color="#8a6f4e"/>
       </radialGradient>
       <!-- Second, smaller reflection spot -- a real chrome sphere shows
            more than one environment highlight, not one smooth gradient
