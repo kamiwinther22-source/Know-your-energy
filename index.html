@@ -41,23 +41,19 @@
 <style>
 :root{color-scheme:dark;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-/* Background: quiet, not more gradient variety in the sense of scattered
-   light/dark patches -- every prior pass that tried that (champagne,
-   steel, graphite) made the background itself visually busy and
-   competed with the actual UI for attention. But quiet doesn't mean
-   flat: the comment that used to sit here described "a single soft
-   top-to-bottom falloff, and fine grain for texture" as the actual
-   design, then the code right below it never did either one
-   (background-image:none) -- a real gap between what this said and
-   what it did. Her direct correction, twice: the flat fill was reading
-   as too saturated a green ("needs to be closer to white than green"),
-   and asked directly why real shading wasn't being used. Fixed for
-   real this time: a real top-to-bottom gradient (white at the top,
-   easing down toward the same green-tinted white as before, but only
-   reached near the bottom -- most of what's actually on screen at once
-   reads close to white) plus a genuine fine-grain noise texture (an
-   SVG feTurbulence filter, the standard real technique for this, blended
-   in at low opacity) instead of a dead flat color. */
+/* Background: NOT SOLVED YET. What's been tried and rejected: a top-to-
+   bottom gradient, a fine-grain noise texture, a "sun is the real light
+   source" glow + dark corner pair, and a flat single color with zero
+   variation -- all four, explicitly. Her actual requirement is a real
+   one, not yet met by any of those: smooth, bright, reads as metal --
+   not flat, not a visible gradient/wash/band/grain/pattern of any kind.
+   A mathematically flat single color cannot itself look like metal --
+   metal requires some reflective quality to read as metal at all -- so
+   "flat" was never actually a valid answer to "make it look metallic,"
+   just the easiest wrong one. Whatever the real fix is, it has to be
+   subtle enough that a viewer doesn't consciously register an effect
+   (no visible edge, spot, or band) while still being different from a
+   flat, non-reflective fill. Do not mark this solved again on a guess. */
 /* min-height added here -- a real bug she caught by asking directly:
    "Do you have the green background cutting off halfway down the
    page." Confirmed by measurement: body's height was only as tall as
@@ -81,18 +77,14 @@ body{
   min-height:100vh;
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
-  /* Her direct instruction: there is an actual sun on this page --
-     treat it as the real light source. Measured its true screen
-     position (getBBox + getScreenCTM on the real circle, not
-     guessed): 77%/42% of the viewport at 390x900. A contained glow
-     sits there, sized and fast-falling like a real light source (not
-     a wash), and the far corner from it (bottom-left, where the page
-     is otherwise empty) gets real dark chrome -- the logical "shadow
-     side" of a scene actually lit from that one point. */
-  background-color:#f4f4f3;
-  background-image:
-    radial-gradient(circle at 77% 42%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 10%, rgba(255,255,255,0) 24%),
-    radial-gradient(ellipse 55% 45% at 8% 88%, #6b6f7a 0%, #9a9d9f 55%, rgba(154,157,159,0) 100%);
+  /* Removed the background radial highlight too -- her direct catch: a
+     soft-edged radial fade IS the diffuse-glow problem, no matter how
+     the light-source math behind it is justified. The metal is on the
+     actual objects now (the rectangle, the rings, the button); the page
+     itself is just plain -- but "plain" still has to mean bright silver,
+     not medium-dark grey. #aeb2b8 read as "flat dark grey site," her
+     direct words -- raised substantially. */
+  background-color:#e6e8ea;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
@@ -217,23 +209,17 @@ body{
 #formStep .pricing-panel{
   margin-bottom:1.4rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(0,0,0,0.12);
 }
-/* Tried dropping the centering here in favor of top-aligned content with
-   fixed padding, on the reasoning that min-height:100vh + center was
-   splitting leftover space into two ~105px gaps (above the tagline,
-   below the ribbon). That was a real, measured finding -- but the fix
-   was wrong: switching to top-aligned just relocated the entire ~190px
-   of leftover space to the bottom alone, recreating "pinned to the top
-   with empty space left below," the exact pattern centering was
-   originally chosen to avoid (see this rule's own prior history).
-   Reverted to centering. The actual leftover-space total (~190-210px
-   between the hero's real content height and a typical phone viewport)
-   isn't a CSS layout bug to be relocated -- it only goes away if the
-   content itself grows to fill more of the screen, which is a
-   different, real decision, not a free fix. */
+/* The min-height:100vh + centering this rule used to have made sense
+   when #hookStep was a standalone full-screen hero with nothing below
+   it -- her direct instruction: "it's all 1 page, make it all
+   connected." Now #formStep continues in normal flow right after it,
+   so forcing hookStep to fill a whole screen just pushes Person 1 down
+   by however much real content it's short of one viewport, creating
+   exactly the dead gap she flagged. Removed -- hookStep now takes only
+   its real content height, and Person 1 starts right after the pricing
+   row with its own small margin, not after a forced blank screen. */
 #hookStep{
-  min-height:calc(100vh - 2.45rem);
-  min-height:calc(100dvh - 2.45rem);
-  display:flex;flex-direction:column;justify-content:center;
+  display:flex;flex-direction:column;
   /* Background color treatment removed entirely -- after many rounds
      chasing each specific complaint in turn without landing on what she
      actually pictured, she said "remove it" rather than continue
@@ -297,14 +283,11 @@ body{
   transform:translateX(100px) translateY(-66px) rotate(22deg) scale(1.28);transform-origin:50% 50%;
 }
 .hero-illustration svg{display:block;width:100%;height:auto;overflow:visible;
-  /* Her broader catch: "the whole thing is so subtle... it all just
-     meshes into nothing." Not just a color problem -- the illustration
-     had no real shadow, so a pale chrome graphic sat at almost the same
-     tonal weight as the page behind it with nothing separating the two.
-     A real grounding shadow (not a fade, not a color change -- genuine
-     depth) gives it actual object-presence instead of floating flush
-     with the background. */
-  filter:drop-shadow(0 10px 22px rgba(20,30,40,0.22));
+  /* Removed the generic straight-down drop-shadow that used to be here --
+     her direct catch: the sun is INSIDE this same illustration, so a
+     shadow with no light logic sitting right next to it made no sense.
+     There's never a reason for a shadow near the sun; it's the light
+     source, not something lit by an external light. */
 }
 /* Real ambient motion, not a static graphic -- the six satellite beads
    each travel along their own ring's fixed curve (see the illustration
@@ -351,7 +334,11 @@ body{
    inside it. width:100% (capped at the same 300px) makes this box's
    size fixed and independent of whatever its children measure, so no
    future child content change can ever shift it or the key again. */
-.hero-email-wrap{width:100%;max-width:300px;margin:-55px auto 142px;}
+/* Bottom margin cut from 142px -> 24px -- that 142px was sized to help
+   fill a forced full-screen hero height (see #hookStep's own note on
+   removing min-height:100vh). With the page now continuous, it was
+   just dead air between the pricing row and the ribbon. */
+.hero-email-wrap{width:100%;max-width:300px;margin:-55px auto 24px;}
 .hero-email-wrap .err{text-align:center;}
 /* Her direct instruction: "This is a place where you can naturally apply
    light and dark contrast... the rectangle." A real, dramatic embossed/
@@ -360,11 +347,28 @@ body{
    deep dark shadow on the inner top-left edge, a real bright highlight
    on the inner bottom-right edge, genuinely carved-metal, not the site's
    normal subtle version. */
-.hero-email-field{
+/* Real geometry, not the generic top-left default: measured this field's
+   actual center (195,722) against the sun's real center (301,555) with
+   Playwright -- the sun sits up and to the right of this field (+106
+   right, -167 up, roughly a 1:1.6 ratio, mostly vertical). For an inset/
+   carved shape, the shadow falls on the side FACING the light (the near
+   rim occludes it) and the highlight falls on the far side -- so dark
+   goes top-right here, light goes bottom-left, weighted the same 1:1.6
+   ratio, not the generic top-left/bottom-right every other inset field
+   on the web defaults to. */
+/* Added a uniform darkening layer -- her catch: the inside was reading
+   net BRIGHTER than the flat page around it, which is backwards for a
+   carved/recessed cut. A cut into metal lets less light out overall,
+   even on its lit side, than the flat surface next to it does. */
+/* Blur radii cut way down (14/11/5px -> 5/3/1.5px) -- large soft blur is
+   what makes a shadow read as a pressed-rubber dent (neumorphism), not
+   cut metal. Metal's transitions are tight, not spread out. */
+.line-field.hero-email-field{
   box-shadow:
-    inset 3px 4px 7px rgba(0,0,0,0.45),
-    inset -2px -2px 3px rgba(255,255,255,0.95),
-    inset 0 0 0 1px rgba(0,0,0,0.15);
+    inset 0 0 5px rgba(0,0,0,0.3),
+    inset -3px 5px 3px rgba(0,0,0,0.65),
+    inset 2px -4px 1.5px rgba(255,255,255,0.95),
+    inset 0 0 0 1px rgba(0,0,0,0.25);
 }
 .hero-key{display:block;width:62px;height:auto;margin:0.25rem 0 0 4px;}
 /* The exact button from her reference photo -- real pill/stadium shape,
@@ -375,6 +379,15 @@ body{
    claim to be photographed "metal" material, so it isn't in tension
    with the metal-streak rule -- that rule is about the site's actual
    metal surfaces, not a UI button's own accent glow. */
+/* Real geometry: measured this button's center (195,841) against the
+   sun's real center (301,555) with Playwright -- the sun sits mostly
+   ABOVE this button and somewhat right (+106 right, -286 up, roughly
+   1:2.7, much more vertical than the email field's ratio because this
+   button sits much farther below the sun). Raised object -- shadow
+   falls on the OPPOSITE side from light, so mostly below and slightly
+   left, weighted the same ratio. Made deliberately dramatic (larger
+   offset, higher opacity), not the old generic straight-down 3px/6px
+   "raised from above" default. */
 .hero-continue-btn{
   display:flex;align-items:center;justify-content:center;
   width:100%;max-width:300px;height:52px;margin:0.9rem auto 0;
@@ -382,7 +395,7 @@ body{
   background:
     radial-gradient(ellipse 60% 75% at 50% 105%, rgba(255,205,165,0.85) 0%, rgba(255,205,165,0.35) 40%, rgba(255,205,165,0) 68%),
     linear-gradient(180deg, #f2f6fa 0%, #dbe2ec 55%, #c9d3e0 100%);
-  box-shadow:0 3px 6px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.9);
+  box-shadow:-3px 8px 6px -1px rgba(0,0,0,0.5), inset 0 1.5px 1.5px rgba(255,255,255,0.95);
 }
 .hero-continue-btn:active{transform:translateY(1px);}
 .hero-continue-btn svg{position:relative;}
@@ -651,7 +664,7 @@ body{
    heading, and every field on this page are left-aligned (how a form
    naturally reads); the toggle and chips were the only centered
    elements, an inconsistency, not a deliberate contrast. */
-.toggle-row{display:flex;align-items:center;justify-content:flex-start;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:0.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;color:#000000;}
 .tog-lbl{cursor:pointer;color:#000000;transition:color 0.2s;user-select:none;}
 .tog-lbl.active{color:#000000;}
 /* No grey -- her direct instruction: "Get the Grey out of the
@@ -693,7 +706,7 @@ body{
    smaller chips, not just removing the wrap -- see .rel-chip's own
    updated sizing below, sized down and verified by real measurement to
    actually fit in one row, not just told not to wrap. */
-.rel-row{display:flex;flex-wrap:nowrap;gap:0.22rem;justify-content:flex-start;margin-bottom:0;}
+.rel-row{display:flex;flex-wrap:nowrap;gap:0.22rem;justify-content:center;margin-bottom:0;}
 /* Not a pill. Her direct correction: "I do not like the pills. It's
    standard, why can you not do something that is different." A full
    stadium-radius capsule is the single most default shape for a tag/
@@ -918,20 +931,36 @@ body{
    width before treating it as settled -- Location previously broke at
    too narrow a width and got its own full-width row specifically to
    avoid that; this margin can't quietly re-break it. */
-.form-panel .f{margin:0 52px 1.7rem;}
-#p2Section{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.35s ease;}
+.form-panel .f{margin:0 20px 0.25rem;}
+/* Her direct instruction: all of Person 2's data moves to the right
+   half of the page, never crossing center -- not just the heading.
+   Constrained to the right 50% of the form width; everything inside
+   (name row, DOB, time, location) shrinks to fit since those grids are
+   already fr-based/responsive. */
+/* Person 1 gets the same treatment, mirrored -- confined to the left
+   half, never crossing center, matching Person 2's right-half
+   confinement below. */
+#p1Block{width:50%;}
+#p2Section{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.35s ease;width:50%;margin-left:auto;}
 #p2Section.open{grid-template-rows:1fr;}
 #p2Section>.f{overflow:hidden;min-height:0;}
 @media(prefers-reduced-motion:reduce){#p2Section{transition:none;}}
 .form-panel .f:last-child{margin-bottom:0;}
-.form-panel label{display:block;font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.2rem;font-weight:700;}
+.form-panel label{display:block;font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.08rem;font-weight:700;}
 /* Marks Time/Location as genuinely optional (per her screenshot
    correction) -- distinguished from the main label by weight and case,
    not by fading color/opacity, which the never-fade-text rule already
    rules out. Full-strength black, same as everything else. */
 .opt-lbl{text-transform:none;font-weight:500;letter-spacing:0;}
-.person-tag{font-family:'Alex Brush',cursive;font-size:1.4rem;color:#000000;line-height:1;margin-bottom:0.15rem;}
-.section-lbl{font-size:0.75rem!important;color:#000000!important;margin-bottom:0.35rem!important;}
+.person-tag{font-family:'Alex Brush',cursive;font-size:1.5rem;color:#000000;line-height:1;margin-bottom:0.08rem;}
+/* Her direct correction, from her own reference photo: only the cursive
+   heading itself sits offset -- "Person 1" fully in the left half, not
+   crossing center; "Person 2" fully in the right half, not crossing
+   center. The field rows below stay full-width/left-aligned on both --
+   this is not a two-column layout, just the two headings offset from
+   each other, matching the diagonal-line motif in her photo. */
+#p2Section .person-tag{text-align:right;}
+.section-lbl{font-size:0.62rem!important;color:#000000!important;margin-bottom:0.08rem!important;}
 /* Person's whole entry in 3 rows: identity (First/Mid/Last) on one row,
    DOB/Time/AM-PM on the next, Location on its own full-width row below
    that. Location used to share row 2 as a 4th column, but real typed
@@ -941,7 +970,18 @@ body{
    her direct correction flagged: "leave space for the actual typing of
    answers... use measuring." Giving Location its own row instead of a
    fraction of a 4-column one gives it nearly the full block width. */
-.row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;gap:0.35rem;margin-bottom:0.4rem;}
+/* One connected pill with thin dividers between First/Mid/Last, not
+   three separate boxes with gaps -- matches her reference photo exactly.
+   The carved-metal shadow now lives on this outer container; each child
+   .line-field loses its own shadow/radius so they read as one shape. */
+.row-id{display:grid;grid-template-columns:1fr 0.7fr 1fr;margin-bottom:0.12rem;
+  border-radius:12px;
+  box-shadow:
+    inset 1.5px 2px 3px rgba(0,0,0,0.22),
+    inset -1px -1px 1.5px rgba(255,255,255,0.9);
+}
+.row-id .line-field{box-shadow:none;border-radius:0;border-right:1px solid rgba(0,0,0,0.18);}
+.row-id .line-field:last-child{border-right:none;}
 /* Real bug, not a style choice -- her direct catch: "don't cross out
    part of a word or number." Measured with canvas.measureText against
    the field's actual computed font: the DOB placeholder ("MM/DD/YYYY")
@@ -951,7 +991,15 @@ body{
    content) got less room than Time (the shorter one). Re-measured and
    rebalanced so each column's share actually matches what it needs to
    display in full. */
-.row-birth{display:grid;grid-template-columns:1.8fr 1fr 0.65fr;gap:0.3rem;align-items:end;}
+/* Restructured to match her reference photo exactly: DOB alone on its
+   own full-width row, Time+AM/PM sharing a separate row below it -- not
+   all three crammed into one row like before. "Placement is not at all
+   like the image" was her direct catch on the old version. */
+.row-birth label{display:block;font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:#000000;margin-bottom:0.06rem;font-weight:700;}
+.row-birth .row-dob{margin-bottom:0.12rem;}
+.row-birth .row-time{display:grid;grid-template-columns:1.6fr 0.7fr;align-items:end;margin-bottom:0.12rem;}
+.row-birth .row-time>div:first-child .line-field{border-radius:12px 0 0 12px;}
+.row-birth .row-time .ampm-field{border-radius:0 12px 12px 0;}
 /* Her direct correction to the previous fix here: "it is not necessary
    for the location field to be that large." Reverted the negative-margin
    widen -- Location now sits at the same width as the rest of the block
@@ -964,8 +1012,26 @@ body{
 
 /* Same left/right inset as .f itself, so the rings line up with the data
    blocks above and below instead of floating at a different width. */
-.connector-wrap{margin:0.15rem 52px 1.5rem;}
+/* Needs the same position:relative + min-height treatment .ribbon-frame
+   has -- .energy-ribbon (now reused here) is absolutely positioned and
+   centers itself against its nearest positioned ancestor, which has to
+   be this element, not something further up the page. */
+.connector-wrap{position:relative;min-height:90px;margin:0.05rem 20px 0.2rem;}
 .connector-wrap svg{display:block;width:100%;height:auto;}
+/* Same dark halo .ribbon-frame::before gives the original ribbon -- her
+   direct catch: without it, the white ribbon threads have nothing to
+   read against and wash out. This instance never had it since
+   .ribbon-frame's rule only targets that exact class. */
+.connector-wrap::before{
+  content:'';position:absolute;left:50%;top:50%;
+  width:78%;height:150px;transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,
+    rgba(120,124,132,0.4) 0%,
+    rgba(120,124,132,0.24) 35%,
+    rgba(120,124,132,0.09) 62%,
+    rgba(120,124,132,0) 82%);
+  filter:blur(4px);z-index:0;
+}
 
 /* Carved into the page, not a line underneath the text -- no border, no
    fill color, no grey panel behind it. The recessed look is built purely
@@ -975,9 +1041,14 @@ body{
    depth in the page itself rather than a drawn line or a colored box.
    The field's own background stays fully transparent -- it's still the
    page's own white showing through, at every state. */
+/* Scaled up substantially -- her direct catch, looking at the whole
+   page next to her reference photo: everything there is big and
+   dominant (thick chunky pills, large text), everything here was
+   thin and modest by comparison. Not a measuring problem, a scale
+   problem. */
 .line-field{
-  position:relative;border-radius:7px;
-  padding:0.4rem 0.3rem;
+  position:relative;border-radius:10px;
+  padding:0.22rem 0.5rem;
   background:transparent;
   box-shadow:
     inset 1.5px 2px 3px rgba(0,0,0,0.22),
@@ -997,6 +1068,16 @@ body{
 .line-field select{width:auto;padding-right:1rem;}
 .line-field select option{color:#000000;}
 .line-field input::placeholder{color:#000000;font-style:italic;opacity:1;}
+/* Real bug, found from her real device screenshot: "Mid" clipped to
+   "Mic", "City, State, Country" clipped mid-word. The input font-size
+   above is a vw-based clamp calibrated for a full-width field -- it has
+   no idea these fields now sit in a half-width column (#p1Block/
+   #p2Section), so it kept sizing text for the full 390px viewport even
+   though the actual available width had been cut in half. Fixed font-
+   size here instead, small enough that real typed values fit too, not
+   just the placeholders. */
+#p1Block .line-field input,#p1Block .line-field select,
+#p2Section .line-field input,#p2Section .line-field select{font-size:0.78rem;}
 /* Chrome/Android autofill forces its own background color (shows as a
    grey box) that normal background rules can't override -- this is the
    real, standard defeat for it: an absurdly large inset box-shadow
@@ -1014,6 +1095,14 @@ body{
    white / light silver / translucent layers -- slow-spinning silver ring
    still wraps it, same verified technique as the live entry form's button ---------- */
 .submit-wrap{margin-top:0.8rem;display:flex;justify-content:center;}
+/* Relational mode only: the button sits directly under Person 2 (the
+   right half), not centered across the whole width -- her direct
+   instruction, since Person 2's own column ends well short of center
+   page now. .submit-wrap isn't a direct sibling of #p2Section in the
+   DOM (a form-panel wrapper sits between them), so this is a real class
+   toggled by setMode() rather than a CSS sibling-selector trick that
+   wouldn't actually match. */
+.submit-wrap.under-p2{width:50%;margin-left:auto;justify-content:flex-start;padding-left:20px;}
 .glow-ring{position:relative;display:block;width:fit-content;border-radius:9px;padding:3px;overflow:hidden;}
 .glow-ring::before{content:'';position:absolute;inset:-100%;
   background:conic-gradient(from 0deg,#8a8fa0 0%,#eef1fb 12%,#fefeff 20%,#eef1fb 28%,#8a8fa0 40%,#5a5f70 50%,#8a8fa0 60%,#eef1fb 72%,#fefeff 80%,#eef1fb 88%,#8a8fa0 100%);
@@ -1512,7 +1601,6 @@ body{
      hide that checkbox too, on the rare real person who actually needs
      it, leaving them stuck failing verification with nothing to click. -->
 <div id="turnstileWidget"></div>
-
 <div class="ambient-bg" aria-hidden="true"><svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="ambChrome" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1537,18 +1625,29 @@ body{
       <stop offset="0%" stop-color="#8f929c" stop-opacity="0.16"/>
       <stop offset="100%" stop-color="#8f929c" stop-opacity="0"/>
     </radialGradient>
-    <!-- Same real light-to-dark arc as the solar system's own ring
-         stroke (ringGrad in the illustration script) -- her direct
-         instruction to use the rings for contrast, not a flat gray
-         line. objectBoundingBox (the default) maps this to each
-         ring's own box automatically. -->
-    <linearGradient id="ambRingGrad" x1="15%" y1="8%" x2="85%" y2="92%">
+    <!-- Real direction this time: measured the rings' actual screen
+         center (370,227) against the sun's real button position
+         (301,555) -- the sun sits BELOW and slightly left of the rings
+         (-69 left, +328 down, overwhelmingly vertical), not up-left like
+         the old default assumed. Bright end now at bottom-left (15%,92%),
+         dark at top-right (85%,8%) -- flipped from the generic top-left
+         convention to match where the real light actually is. Darkest
+         stop pushed further down for more real contrast, per her direct
+         "dramatic, not subtle" instruction. Direction corrected again --
+         her catch: center-to-center math isn't what matters, what
+         matters is where the actual sphere object visually sits against
+         these rings in the real composition, which is their bottom-
+         right (the sphere is large and positioned to the right/below
+         the rings' own extent) -- bright there, dark at the true far
+         side, top-left, away from the sphere. objectBoundingBox (the
+         default) maps this to each ring's own box automatically. -->
+    <linearGradient id="ambRingGrad" x1="85%" y1="92%" x2="15%" y2="8%">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="20%" stop-color="#f5f6f8"/>
-      <stop offset="42%" stop-color="#e4e6eb"/>
-      <stop offset="62%" stop-color="#c9ccd4"/>
-      <stop offset="82%" stop-color="#8f929c"/>
-      <stop offset="100%" stop-color="#54585f"/>
+      <stop offset="42%" stop-color="#dfe1e6"/>
+      <stop offset="62%" stop-color="#b8bcc4"/>
+      <stop offset="82%" stop-color="#767a84"/>
+      <stop offset="100%" stop-color="#3c3f45"/>
     </linearGradient>
   </defs>
   <!-- Reworked because the page still read as flat: same faint
@@ -1562,12 +1661,20 @@ body{
        used there (ambRose below), so it relates to what's next to it
        instead of everything staying uniformly gray. -->
   <ellipse cx="300" cy="130" rx="120" ry="95" fill="url(#ambGlow)"/>
+  <!-- Reverted the opacity/width boost -- it made these lines cross
+       right through the tagline text at real near-black values (verified
+       18,22,30 by pixel sampling), which breaks the never-darkness-over-
+       words rule. These are faint background decoration sitting behind
+       readable text, not the object that needed real contrast -- back to
+       thin and quiet. Her direct follow-up: "close to invisible if
+       anything, white" -- switched off the gradient entirely (its dark
+       end was still the problem at any opacity) to a flat white stroke,
+       very low opacity, nothing that reads as a "line" near the text. */ -->
   <g class="amb-rings">
-    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="url(#ambRingGrad)" stroke-width="2" opacity="0.55" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="url(#ambRingGrad)" stroke-width="2" opacity="0.5" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="url(#ambRingGrad)" stroke-width="2" opacity="0.42" transform="rotate(-8 300 130)"/>
-    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="url(#ambRingGrad)" stroke-width="2" opacity="0.35" transform="rotate(-8 300 130)"/>
-    <circle class="amb-dot" cx="128" cy="150" r="4" fill="url(#ambChrome)" opacity="0.55"/>
+    <ellipse cx="300" cy="130" rx="150" ry="36" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.18" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="195" ry="47" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.16" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="240" ry="58" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.14" transform="rotate(-8 300 130)"/>
+    <ellipse cx="300" cy="130" rx="285" ry="69" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.12" transform="rotate(-8 300 130)"/>
     <circle class="amb-dot" cx="472" cy="108" r="3" fill="url(#ambChrome)" opacity="0.55"/>
     <circle class="amb-dot" cx="405" cy="176" r="2.5" fill="url(#ambChrome)" opacity="0.5"/>
   </g>
@@ -1813,107 +1920,23 @@ body{
     <button type="button" class="hero-continue-btn" aria-label="Continue" onclick="revealForm()">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2d323d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
     </button>
-    <!-- Real space between the button and the prices, centered -- her
-         direct instruction. Same PRICING_TIERS data and buyPass() the
-         second-screen pricing panel already uses, just its own centered
-         row here with a real, larger colored dot per her reference
-         photo (color sampled from that photo's sun/dots -- see
-         ROSE_LIGHT/MID/DEEP in the illustration script -- used ONLY on
-         this dot, nowhere else on the button/background/text). -->
     <div class="hero-pricing-row" id="heroPricingList"></div>
   </div>
-
-  <!-- The energy-ribbon graphic itself was NOT meant to be deleted --
-       her correction: "I DID NOT SAY DELET3 TH3 ENERGY RIBBON. PUT IT
-       BACK." Only the tagline text that used to sit on top of it ("See
-       the dynamics you haven't been able to name between you and
-       them.") was the actual "bottom tagline" she wanted gone -- this
-       restores the ribbon graphic without that text. -->
-  <div class="tagline-frame ribbon-frame">
-    <div class="energy-ribbon"><svg viewBox="0 0 820 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="ribbonGrad" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
-          <stop offset="0%" stop-color="#b0b6c4"/>
-          <stop offset="10%" stop-color="#d8dbe4"/>
-          <stop offset="24%" stop-color="#ffffff"/>
-          <stop offset="50%" stop-color="#ffffff"/>
-          <stop offset="76%" stop-color="#ffffff"/>
-          <stop offset="90%" stop-color="#d8dbe4"/>
-          <stop offset="100%" stop-color="#b0b6c4"/>
-        </linearGradient>
-        <linearGradient id="ribbonGlow" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
-          <stop offset="0%" stop-color="#b0b6c4" stop-opacity="0"/>
-          <stop offset="25%" stop-color="#ffffff" stop-opacity="0.3"/>
-          <stop offset="50%" stop-color="#ffffff" stop-opacity="0.55"/>
-          <stop offset="75%" stop-color="#ffffff" stop-opacity="0.3"/>
-          <stop offset="100%" stop-color="#b0b6c4" stop-opacity="0"/>
-        </linearGradient>
-        <radialGradient id="hotspot" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
-          <stop offset="45%" stop-color="#ffffff" stop-opacity="0.5"/>
-          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <ellipse cx="470" cy="148" rx="90" ry="46" fill="url(#hotspot)"/>
-      <g fill="none" stroke-linecap="round">
-        <path d="M15,238 C130,228 210,196 300,180 C400,163 435,155 485,145 C565,126 615,92 700,58 C752,37 780,26 806,17" stroke="url(#ribbonGlow)" stroke-width="30" opacity="0.6"/>
-        <!-- Crossing pair 1: swap order around x=470 -->
-        <path d="M15,245 C160,236 320,196 470,150 C610,107 700,68 806,20" stroke="url(#ribbonGrad)" stroke-width="2.8"/>
-        <path d="M15,215 C170,222 340,176 470,150 C600,125 700,50 806,58" stroke="url(#ribbonGrad)" stroke-width="2.4"/>
-        <!-- Crossing pair 2: swap order around x=420, offset from pair 1 -->
-        <path d="M20,258 C150,252 300,214 420,178 C540,142 640,86 720,50 C760,32 786,22 808,11" stroke="url(#ribbonGrad)" stroke-width="2.1"/>
-        <path d="M20,222 C155,206 300,192 420,178 C560,163 630,104 712,66 C752,47 782,35 808,44" stroke="url(#ribbonGrad)" stroke-width="1.8"/>
-        <!-- Crossing pair 3, tighter, near the dense middle cluster -->
-        <path d="M280,192 C360,178 400,168 450,152 C500,136 530,128 570,116" stroke="url(#ribbonGrad)" stroke-width="1.6"/>
-        <path d="M280,168 C355,182 405,158 450,152 C495,146 535,110 570,116" stroke="url(#ribbonGrad)" stroke-width="1.4"/>
-        <!-- Accent strands for texture, thin, varied opacity -->
-        <path d="M25,266 C145,260 224,232 312,217 C412,201 448,192 497,182 C576,163 625,130 708,96 C759,74 787,63 810,53" stroke="url(#ribbonGrad)" stroke-width="1.1" opacity="0.75"/>
-        <path d="M10,206 C120,190 200,160 294,144 C394,127 428,118 478,108 C556,89 604,56 688,27 C740,9 770,0 798,-6" stroke="url(#ribbonGrad)" stroke-width="0.9" opacity="0.6"/>
-        <path d="M35,196 C155,188 255,174 355,166 C435,160 455,164 495,174 C595,198 645,156 725,96" stroke="url(#ribbonGrad)" stroke-width="1.2" opacity="0.65"/>
-      </g>
-      <g fill="#ffffff">
-        <path d="M486,144 L490,157 L503,161 L490,165 L486,178 L482,165 L469,161 L482,157 Z" opacity="1"/>
-        <path d="M300,178 L302.8,187.6 L312,190 L302.8,192.4 L300,202 L297.2,192.4 L288,190 L297.2,187.6 Z" opacity="0.95"/>
-        <path d="M700,56 L703.2,66.4 L713,69.6 L703.2,72.8 L700,83.2 L696.8,72.8 L687,69.6 L696.8,66.4 Z" opacity="1"/>
-        <path d="M612,90 L614.4,98 L622,100.4 L614.4,102.8 L612,110.8 L609.6,102.8 L602,100.4 L609.6,98 Z" opacity="0.9"/>
-        <path d="M545,120 L547,126.4 L553,128.4 L547,130.4 L545,136.8 L543,130.4 L537,128.4 L543,126.4 Z" opacity="0.85"/>
-        <path d="M415,163 L417,169.4 L423,171.4 L417,173.4 L415,179.8 L413,173.4 L407,171.4 L413,169.4 Z" opacity="0.85"/>
-        <path d="M760,40 L761.7,45.2 L766.8,46.9 L761.7,48.6 L760,53.8 L758.3,48.6 L753.2,46.9 L758.3,45.2 Z" opacity="0.95"/>
-        <path d="M120,232 L121.7,237.2 L126.8,238.9 L121.7,240.6 L120,245.8 L118.3,240.6 L113.2,238.9 L118.3,237.2 Z" opacity="0.85"/>
-        <path d="M55,252 L56.4,256.4 L60.8,257.8 L56.4,259.2 L55,263.6 L53.6,259.2 L49.2,257.8 L53.6,256.4 Z" opacity="0.8"/>
-        <path d="M85,244 L86.4,248.4 L90.8,249.8 L86.4,251.2 L85,255.6 L83.6,251.2 L79.2,249.8 L83.6,248.4 Z" opacity="0.75"/>
-        <path d="M775,25 L776.4,29.4 L780.8,30.8 L776.4,32.2 L775,36.6 L773.6,32.2 L769.2,30.8 L773.6,29.4 Z" opacity="0.85"/>
-      </g>
-      <g fill="#eef0f5" stroke="#ffffff" stroke-width="1">
-        <circle cx="600" cy="98" r="5"/>
-        <circle cx="622" cy="88" r="4.4"/>
-        <circle cx="644" cy="78" r="5.2"/>
-        <circle cx="666" cy="69" r="4"/>
-        <circle cx="688" cy="60" r="4.6"/>
-        <circle cx="712" cy="49" r="3.6"/>
-        <circle cx="735" cy="40" r="4.2"/>
-        <circle cx="757" cy="31" r="3.4"/>
-        <circle cx="150" cy="222" r="4.2"/>
-        <circle cx="178" cy="210" r="3.6"/>
-        <circle cx="565" cy="105" r="3.6"/>
-        <circle cx="222" cy="196" r="3.2"/>
-      </g>
-      <g fill="#ffffff" opacity="0.9">
-        <circle cx="622" cy="88" r="1.6"/>
-        <circle cx="666" cy="69" r="1.4"/>
-        <circle cx="735" cy="40" r="1.5"/>
-        <circle cx="178" cy="210" r="1.1"/>
-      </g>
-    </svg></div>
-  </div>
 </div>
+
+<!-- The energy-ribbon graphic itself still exists in this file's history
+     and is not deleted from the codebase's design vocabulary -- her
+     direct, narrow instruction was only that it shouldn't sit between
+     the pricing row and Person 1 specifically. It's not placed anywhere
+     else on the page right now; say the word if you want it somewhere
+     else instead of just gone from here. -->
 
 <!-- ---------- Step 2: the actual data-entry form, hidden until the hook
      bubble is tapped (see revealForm()). Structurally unchanged from the
      single-page version -- same field IDs, same generate()/validation --
      only wrapped separately so it can be shown as its own step, with a
      state banner slot on top for the free-reading/pass status. ---------- -->
-<div class="content" id="formStep" style="display:none;">
+<div class="content" id="formStep">
   <!-- Everything on this page at once -- email, pricing, and the full
        data-entry form, all visible together, nothing hidden behind a
        click. The email is the real key (checked against the server by
@@ -1994,7 +2017,7 @@ body{
           </label>
         </div>
 
-        <div class="f">
+        <div class="f" id="p1Block">
           <div class="person-tag">Person 1</div>
           <label class="section-lbl" id="p1Ttl">Full Name at Birth</label>
           <div class="row-id">
@@ -2003,66 +2026,94 @@ body{
             <div class="line-field"><input id="p1l" placeholder="Last" aria-label="Last name" autocomplete="family-name"></div>
           </div>
           <div class="row-birth">
-            <div><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
-            <div><label for="p1t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
-            <div class="line-field ampm-field"><select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
+            <div class="row-dob"><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
+            <div class="row-time">
+              <div><label for="p1t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
+              <div class="line-field ampm-field"><select id="p1ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
+            </div>
             <div class="loc-field"><label for="p1loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
           </div>
         </div>
 
-        <!-- Real "energy between two people," relational mode only --
-             two interlocking rings (numerically-computed intersection
-             points, front/back arc split for genuine depth, not a flat
-             Venn overlap), pure chrome material matching the hero's own
-             rings. Color lives only in moving light: four glowing comets
-             (soft halo + hot white-green head) actively circle both
-             rings -- there is no static green shape anywhere, so nothing
-             sits parked at the obvious crossing point. Direct fix for her
-             call on the first version: "faded, not energetic, predictable
-             placement of green, amateur" -- the static centered glow
-             blob that caused that reaction is gone; the rings never turn
-             green themselves (settled earlier: she does not want the
-             metal tinted, only lit). Toggled via #connectorWrap's own
-             display, same on/off switch as #p2Section (see setMode()). -->
+        <!-- Her direct instruction: the energy-ribbon (removed from
+             between the pricing row and Person 1) goes here instead --
+             after Person 1, before Person 2. This is the exact, complete
+             graphic (every strand, every sparkle, every gradient) copied
+             from its original spot, not the earlier shortened/simplified
+             version that read as thin and incomplete. Relational mode
+             only, same on/off switch as #p2Section (see setMode()). -->
         <div class="connector-wrap" id="connectorWrap" style="display:none;">
-          <svg viewBox="0 0 280 130" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <div class="energy-ribbon"><svg viewBox="0 0 820 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
             <defs>
-              <linearGradient id="connRingGradA" x1="0%" y1="50%" x2="100%" y2="50%">
-                <stop offset="0%" stop-color="#7d818c"/><stop offset="22%" stop-color="#e8eaef"/>
-                <stop offset="50%" stop-color="#ffffff"/><stop offset="78%" stop-color="#e8eaef"/>
-                <stop offset="100%" stop-color="#7d818c"/>
+              <linearGradient id="connRibbonGrad2" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
+                <stop offset="0%" stop-color="#b0b6c4"/>
+                <stop offset="10%" stop-color="#d8dbe4"/>
+                <stop offset="24%" stop-color="#ffffff"/>
+                <stop offset="50%" stop-color="#ffffff"/>
+                <stop offset="76%" stop-color="#ffffff"/>
+                <stop offset="90%" stop-color="#d8dbe4"/>
+                <stop offset="100%" stop-color="#b0b6c4"/>
               </linearGradient>
-              <linearGradient id="connRingGradB" x1="0%" y1="50%" x2="100%" y2="50%">
-                <stop offset="0%" stop-color="#7d818c"/><stop offset="22%" stop-color="#e8eaef"/>
-                <stop offset="50%" stop-color="#ffffff"/><stop offset="78%" stop-color="#e8eaef"/>
-                <stop offset="100%" stop-color="#7d818c"/>
+              <linearGradient id="connRibbonGlow2" gradientUnits="userSpaceOnUse" x1="15" y1="235" x2="805" y2="15">
+                <stop offset="0%" stop-color="#b0b6c4" stop-opacity="0"/>
+                <stop offset="25%" stop-color="#ffffff" stop-opacity="0.3"/>
+                <stop offset="50%" stop-color="#ffffff" stop-opacity="0.55"/>
+                <stop offset="75%" stop-color="#ffffff" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#b0b6c4" stop-opacity="0"/>
               </linearGradient>
-              <radialGradient id="connCometHead" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="30%" stop-color="#d4fae4"/>
-                <stop offset="60%" stop-color="#1ed488"/>
-                <stop offset="100%" stop-color="#0f7a4c" stop-opacity="0"/>
-              </radialGradient>
-              <radialGradient id="connCometHalo" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#22d98f" stop-opacity="0.55"/>
-                <stop offset="100%" stop-color="#22d98f" stop-opacity="0"/>
+              <radialGradient id="connHotspot2" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+                <stop offset="45%" stop-color="#ffffff" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
               </radialGradient>
             </defs>
-            <g transform="rotate(-6 140 65)">
-              <path id="connABack" d="M 140 92.8 A 78 34 0 0 0 140 37.2" fill="none" stroke="url(#connRingGradA)" stroke-width="2.8" opacity="0.98"/>
-              <ellipse id="connRingB" cx="185" cy="65" rx="78" ry="34" fill="none" stroke="url(#connRingGradB)" stroke-width="2.8" opacity="0.98"/>
-              <path id="connRingA" d="M 140 92.8 A 78 34 0 1 1 140 37.2" fill="none" stroke="url(#connRingGradA)" stroke-width="2.8" opacity="0.98"/>
-
-              <g><circle r="12" fill="url(#connCometHalo)"><animateMotion dur="4.4s" repeatCount="indefinite" begin="0s"><mpath href="#connRingA"/></animateMotion></circle>
-              <circle r="3.8" fill="url(#connCometHead)"><animateMotion dur="4.4s" repeatCount="indefinite" begin="0s"><mpath href="#connRingA"/></animateMotion></circle></g>
-              <g><circle r="9.5" fill="url(#connCometHalo)" opacity="0.8"><animateMotion dur="4.4s" repeatCount="indefinite" begin="-2.2s"><mpath href="#connRingA"/></animateMotion></circle>
-              <circle r="3" fill="url(#connCometHead)" opacity="0.85"><animateMotion dur="4.4s" repeatCount="indefinite" begin="-2.2s"><mpath href="#connRingA"/></animateMotion></circle></g>
-              <g><circle r="12" fill="url(#connCometHalo)"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-1.1s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle>
-              <circle r="3.8" fill="url(#connCometHead)"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-1.1s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle></g>
-              <g><circle r="9.5" fill="url(#connCometHalo)" opacity="0.8"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-3.6s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle>
-              <circle r="3" fill="url(#connCometHead)" opacity="0.85"><animateMotion dur="5.1s" repeatCount="indefinite" begin="-3.6s" keyPoints="1;0" keyTimes="0;1"><mpath href="#connRingB"/></animateMotion></circle></g>
+            <ellipse cx="470" cy="148" rx="90" ry="46" fill="url(#connHotspot2)"/>
+            <g fill="none" stroke-linecap="round">
+              <path d="M15,238 C130,228 210,196 300,180 C400,163 435,155 485,145 C565,126 615,92 700,58 C752,37 780,26 806,17" stroke="url(#connRibbonGlow2)" stroke-width="30" opacity="0.6"/>
+              <path d="M15,245 C160,236 320,196 470,150 C610,107 700,68 806,20" stroke="url(#connRibbonGrad2)" stroke-width="2.8"/>
+              <path d="M15,215 C170,222 340,176 470,150 C600,125 700,50 806,58" stroke="url(#connRibbonGrad2)" stroke-width="2.4"/>
+              <path d="M20,258 C150,252 300,214 420,178 C540,142 640,86 720,50 C760,32 786,22 808,11" stroke="url(#connRibbonGrad2)" stroke-width="2.1"/>
+              <path d="M20,222 C155,206 300,192 420,178 C560,163 630,104 712,66 C752,47 782,35 808,44" stroke="url(#connRibbonGrad2)" stroke-width="1.8"/>
+              <path d="M280,192 C360,178 400,168 450,152 C500,136 530,128 570,116" stroke="url(#connRibbonGrad2)" stroke-width="1.6"/>
+              <path d="M280,168 C355,182 405,158 450,152 C495,146 535,110 570,116" stroke="url(#connRibbonGrad2)" stroke-width="1.4"/>
+              <path d="M25,266 C145,260 224,232 312,217 C412,201 448,192 497,182 C576,163 625,130 708,96 C759,74 787,63 810,53" stroke="url(#connRibbonGrad2)" stroke-width="1.1" opacity="0.75"/>
+              <path d="M10,206 C120,190 200,160 294,144 C394,127 428,118 478,108 C556,89 604,56 688,27 C740,9 770,0 798,-6" stroke="url(#connRibbonGrad2)" stroke-width="0.9" opacity="0.6"/>
+              <path d="M35,196 C155,188 255,174 355,166 C435,160 455,164 495,174 C595,198 645,156 725,96" stroke="url(#connRibbonGrad2)" stroke-width="1.2" opacity="0.65"/>
             </g>
-          </svg>
+            <g fill="#ffffff">
+              <path d="M486,144 L490,157 L503,161 L490,165 L486,178 L482,165 L469,161 L482,157 Z" opacity="1"/>
+              <path d="M300,178 L302.8,187.6 L312,190 L302.8,192.4 L300,202 L297.2,192.4 L288,190 L297.2,187.6 Z" opacity="0.95"/>
+              <path d="M700,56 L703.2,66.4 L713,69.6 L703.2,72.8 L700,83.2 L696.8,72.8 L687,69.6 L696.8,66.4 Z" opacity="1"/>
+              <path d="M612,90 L614.4,98 L622,100.4 L614.4,102.8 L612,110.8 L609.6,102.8 L602,100.4 L609.6,98 Z" opacity="0.9"/>
+              <path d="M545,120 L547,126.4 L553,128.4 L547,130.4 L545,136.8 L543,130.4 L537,128.4 L543,126.4 Z" opacity="0.85"/>
+              <path d="M415,163 L417,169.4 L423,171.4 L417,173.4 L415,179.8 L413,173.4 L407,171.4 L413,169.4 Z" opacity="0.85"/>
+              <path d="M760,40 L761.7,45.2 L766.8,46.9 L761.7,48.6 L760,53.8 L758.3,48.6 L753.2,46.9 L758.3,45.2 Z" opacity="0.95"/>
+              <path d="M120,232 L121.7,237.2 L126.8,238.9 L121.7,240.6 L120,245.8 L118.3,240.6 L113.2,238.9 L118.3,237.2 Z" opacity="0.85"/>
+              <path d="M55,252 L56.4,256.4 L60.8,257.8 L56.4,259.2 L55,263.6 L53.6,259.2 L49.2,257.8 L53.6,256.4 Z" opacity="0.8"/>
+              <path d="M85,244 L86.4,248.4 L90.8,249.8 L86.4,251.2 L85,255.6 L83.6,251.2 L79.2,249.8 L83.6,248.4 Z" opacity="0.75"/>
+              <path d="M775,25 L776.4,29.4 L780.8,30.8 L776.4,32.2 L775,36.6 L773.6,32.2 L769.2,30.8 L773.6,29.4 Z" opacity="0.85"/>
+            </g>
+            <g fill="#eef0f5" stroke="#ffffff" stroke-width="1">
+              <circle cx="600" cy="98" r="5"/>
+              <circle cx="622" cy="88" r="4.4"/>
+              <circle cx="644" cy="78" r="5.2"/>
+              <circle cx="666" cy="69" r="4"/>
+              <circle cx="688" cy="60" r="4.6"/>
+              <circle cx="712" cy="49" r="3.6"/>
+              <circle cx="735" cy="40" r="4.2"/>
+              <circle cx="757" cy="31" r="3.4"/>
+              <circle cx="150" cy="222" r="4.2"/>
+              <circle cx="178" cy="210" r="3.6"/>
+              <circle cx="565" cy="105" r="3.6"/>
+              <circle cx="222" cy="196" r="3.2"/>
+            </g>
+            <g fill="#ffffff" opacity="0.9">
+              <circle cx="622" cy="88" r="1.6"/>
+              <circle cx="666" cy="69" r="1.4"/>
+              <circle cx="735" cy="40" r="1.5"/>
+              <circle cx="178" cy="210" r="1.1"/>
+            </g>
+          </svg></div>
         </div>
 
         <div id="p2Section">
@@ -2075,9 +2126,11 @@ body{
               <div class="line-field"><input id="p2l" placeholder="Last" aria-label="Last name"></div>
             </div>
             <div class="row-birth">
-              <div><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
-              <div><label for="p2t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
-              <div class="line-field ampm-field"><select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
+              <div class="row-dob"><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
+              <div class="row-time">
+                <div><label for="p2t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
+                <div class="line-field ampm-field"><select id="p2ap" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select></div>
+              </div>
               <div class="loc-field"><label for="p2loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
             </div>
           </div>
@@ -2423,8 +2476,8 @@ function openNumberDef(item){
     const front = `M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`;
     const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
     return {
-      back: `<path d="${back}" fill="none" stroke="url(#ringGrad)" stroke-width="2.3" opacity="1" transform="${xf}"/>`,
-      front: `<path d="${front}" fill="none" stroke="url(#ringGrad)" stroke-width="2.3" opacity="1" transform="${xf}"/>`,
+      back: `<path d="${back}" fill="none" stroke="url(#ringGrad)" stroke-width="2.3" opacity="1" transform="${xf}" filter="drop-shadow(2px 5px 2.5px rgba(0,0,0,0.5))"/>`,
+      front: `<path d="${front}" fill="none" stroke="url(#ringGrad)" stroke-width="2.3" opacity="1" transform="${xf}" filter="drop-shadow(2px 5px 2.5px rgba(0,0,0,0.5))"/>`,
     };
   }
   const RING_ARCS = RING_RX.map(ringArcs);
@@ -2616,6 +2669,7 @@ function setMode(rel){
   p2Section.classList.toggle('open', rel);
   connectorWrap.style.display = rel ? 'block' : 'none';
   relWrap.style.display = rel ? 'flex' : 'none';
+  document.querySelector('.submit-wrap').classList.toggle('under-p2', rel);
   if(typeof saveDraft==='function')saveDraft();
 }
 togPill.addEventListener('click', ()=>setMode(!isRelational));
@@ -4953,10 +5007,13 @@ async function revealForm(){
   cta.disabled=false;
   labelEl.innerHTML=originalLabel;
 
-  document.getElementById('hookStep').style.display='none';
-  const formStep=document.getElementById('formStep');
-  formStep.style.display='block';
-  formStep.scrollIntoView({behavior:'smooth',block:'start'});
+  // Her direct instruction: "it's all 1 page, make it all connected" --
+  // #formStep is no longer a hidden screen to reveal, it's already part
+  // of the normal page flow below #hookStep. This still runs the real
+  // email check (pass status, pricing panel) and just scrolls down to
+  // the already-visible form instead of hiding one screen and showing
+  // another.
+  document.getElementById('formStep').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 // Returning visitor convenience -- prefills the hero's own email field
