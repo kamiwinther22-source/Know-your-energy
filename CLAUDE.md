@@ -284,9 +284,23 @@ itself. The `PASSES` KV namespace binding lives in `wrangler.toml`.
   render — this was already a hard rule once and got lost. When a genuine
   metallic surface is wanted, build the real thing (layered gradients that
   actually simulate how metal reflects light — a highlight band, a darker
-  reflective mid-tone, lightening again toward the edge — the way the
-  Continue button's chrome-pill treatment was built), not a single angled
-  white streak dragged across a flat gradient.
+  reflective mid-tone, lightening again toward the edge), not a single
+  angled white streak dragged across a flat gradient. (A first attempt at
+  this on the Continue button was itself rejected as looking like a dark
+  streak, not real dimension, and was reverted to a plain flat fill as a
+  placeholder — see the open item below. Don't point to that button as a
+  solved example; it isn't one yet.)
+- **Open, not yet solved: the site currently reads as grey, not metallic.**
+  She has said this repeatedly and directly: she never asked for a grey
+  site, she asked for metallic. The current entry-page background and most
+  elements (button fills, pricing pills, etc.) are flat light-grey
+  placeholders, not an actual rendered metal surface. This is a real,
+  acknowledged gap, not something to paper over with another gradient
+  guess — actually solving it (what real metallic rendering takes, in CSS/
+  SVG, without the banned streak shortcut and without just being "flat")
+  is deferred, explicitly, until she brings it back up. Do not mark
+  anything metallic-related "done" until she confirms it actually reads
+  as metal to her, not grey.
 - **Never write her copy.** Build visuals and layout only; leave clearly
   marked placeholder text. Her wording will always be better than anything
   generated, and seeing generated copy actively distracts her from writing
