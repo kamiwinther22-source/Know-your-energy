@@ -82,11 +82,9 @@ body{
   min-height:100dvh;
   font-family:'DM Sans',sans-serif;overflow-x:hidden;
   background:
-    radial-gradient(ellipse 40% 20% at 75% 37%,
-      #f6e8d1 0%, #e3d0b4 35%, rgba(227,208,180,0) 75%),
-    radial-gradient(ellipse 140% 120% at 50% 12%,
-      #adaeb3 0%, #9a9ba0 45%, #a7a8ac 100%
-    );
+    radial-gradient(ellipse 220px 170px at 75% 386px,
+      #fffdf7 0%, #f6ecd8 25%, #e6d5b8 45%, #cfc3ac 65%, rgba(207,195,172,0) 90%),
+    #a4a5a8;
   padding:1.15rem 1rem 1.3rem;
   display:flex;flex-direction:column;align-items:center;
   color:#000000;
@@ -2428,7 +2426,7 @@ function openNumberDef(item){
   // Her instruction was narrow and explicit: this color goes on the sun
   // and the orbit beads ("nodes") only -- the rings stay the plain
   // silver/chrome established above.
-  const ROSE_LIGHT='#f8e5d8', ROSE_MID='#f2c6b7', ROSE_DEEP='#78574f';
+  const ROSE_LIGHT='#fdf6e8', ROSE_MID='#e8d3ae', ROSE_DEEP='#8a6f4e';
   const RING_ROTATION_DEG = -8;
   const RING_RX = [64, 86, 108, 130, 152, 175];
   // Beads computed to sit exactly ON a ring's actual curve -- real
@@ -2590,8 +2588,8 @@ function openNumberDef(item){
         <stop offset="0%" stop-color="#ffffff"/>
         <stop offset="16%" stop-color="${ROSE_LIGHT}"/>
         <stop offset="38%" stop-color="${ROSE_MID}"/>
-        <stop offset="60%" stop-color="#d69f8c"/>
-        <stop offset="84%" stop-color="#9c6f63"/>
+        <stop offset="60%" stop-color="#cdae82"/>
+        <stop offset="84%" stop-color="#7d6248"/>
         <stop offset="100%" stop-color="${ROSE_DEEP}"/>
       </radialGradient>
       <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
