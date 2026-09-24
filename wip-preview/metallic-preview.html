@@ -2607,11 +2607,6 @@ function openNumberDef(item){
            like a target/bullseye, reverted). This is a real, offset
            second glint, the way a ball bearing actually shows two
            separate catch-lights. -->
-      <radialGradient id="sunGlint2" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-        <stop offset="45%" stop-color="#fdf6e8" stop-opacity="0.35"/>
-        <stop offset="100%" stop-color="#fdf6e8" stop-opacity="0"/>
-      </radialGradient>
       <radialGradient id="sunHotspot" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
         <stop offset="40%" stop-color="#ffffff" stop-opacity="0.55"/>
@@ -2655,9 +2650,20 @@ function openNumberDef(item){
            Gaussian blur of an actual bright shape, so the falloff is
            organic (photographic bloom), not a mathematically perfect
            radial gradient with a visible geometric edge. -->
-      <filter id="sunBloom" x="-150%" y="-150%" width="400%" height="400%">
-        <feGaussianBlur stdDeviation="11"/>
-      </filter>
+      <!-- No blur filter, no separate lighting simulation -- one plain
+           gradient, stops set to the real colors sampled directly from
+           her reference photo earlier this session (measured straight up
+           from the sun's center: 252,246,232 near the edge down through
+           236/217/200/184 to the flat base 164,165,168), placed where
+           that measurement put them. Contrast comes from the fill
+           itself, not an effect layered on top of it. -->
+      <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fcf6e8"/>
+        <stop offset="30%" stop-color="#ece5d5"/>
+        <stop offset="60%" stop-color="#c9bfa8"/>
+        <stop offset="85%" stop-color="#a4a5a8"/>
+        <stop offset="100%" stop-color="#a4a5a8"/>
+      </radialGradient>
       <!-- One shared gradient, reused across every ring's stroke --
            objectBoundingBox (SVG's default gradientUnits) maps it to
            each ring's own bounding box automatically, so this one
@@ -2717,7 +2723,7 @@ function openNumberDef(item){
         <stop offset="100%" stop-color="${ROSE_MID}"/>
       </radialGradient>
     </defs>
-    <ellipse cx="${cx+10}" cy="${cy+5}" rx="62" ry="62" fill="#f5e2ae" filter="url(#sunBloom)"/>
+    <ellipse cx="${cx+10}" cy="${cy+5}" rx="62" ry="62" fill="url(#sunGlow)"/>
     <!-- Back halves of every ring, drawn BEFORE the sun so they're
          genuinely hidden behind its silhouette where they cross it --
          her direct correction to the prior "all rings on top" version:
@@ -2735,7 +2741,6 @@ function openNumberDef(item){
          other, front copy is the one actually showing. -->
     ${BACK_BEADS_SVG}
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunGrad)"/>
-    <ellipse cx="${cx+20}" cy="${cy+13}" rx="13" ry="9" fill="url(#sunGlint2)"/>
     <!-- Front halves, drawn AFTER the sun so they're genuinely visible
          in front of it -- together with the back halves above, each
          ring now actually wraps around the sphere instead of sitting
