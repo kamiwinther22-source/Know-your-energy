@@ -2592,30 +2592,15 @@ function openNumberDef(item){
   // same clipping the next time a bead's position changes.
   let svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <!-- Direct comparison against the reference found the shadow isn't
-           a radial side-shadow at all -- it's a bottom band, like a
-           pearl with a contact shadow at its base, brightest across the
-           whole top rather than one tight corner hotspot. Linear
-           top-to-bottom, not radial. -->
-      <!-- Different mechanism, not another set of hand-picked gradient
-           stops: real physically-simulated lighting. Blurs the shape's
-           own alpha into a soft dome (a bump map), runs feDiffuseLighting
-           with an actual fePointLight against that dome, then multiplies
-           the result onto the base gold fill -- the highlight/shadow
-           distribution comes from real lighting math reacting to the
-           sphere's form, not percentages picked by eye. -->
-      <linearGradient id="sunGrad" x1="50%" y1="0%" x2="50%" y2="100%">
-        <stop offset="0%" stop-color="#e8c98f"/>
-        <stop offset="100%" stop-color="#8a6f4e"/>
-      </linearGradient>
-      <filter id="sunLight" x="-60%" y="-60%" width="220%" height="220%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="bump"/>
-        <feDiffuseLighting in="bump" surfaceScale="11" diffuseConstant="1.15" lighting-color="#fff8e6" result="diffLight">
-          <fePointLight x="120" y="45" z="65"/>
-        </feDiffuseLighting>
-        <feComposite in="diffLight" in2="SourceAlpha" operator="in" result="diffClipped"/>
-        <feComposite in="diffClipped" in2="SourceGraphic" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
-      </filter>
+      <radialGradient id="sunGrad" cx="30%" cy="26%" r="88%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="20%" stop-color="${ROSE_LIGHT}"/>
+        <stop offset="45%" stop-color="${ROSE_MID}"/>
+        <stop offset="65%" stop-color="#b28f60"/>
+        <stop offset="82%" stop-color="#7d5c38"/>
+        <stop offset="95%" stop-color="#4a3624"/>
+        <stop offset="100%" stop-color="#2e2015"/>
+      </radialGradient>
       <!-- Second, smaller reflection spot -- a real chrome sphere shows
            more than one environment highlight, not one smooth gradient
            and not concentric rings around a single point (tried, looked
@@ -2749,7 +2734,7 @@ function openNumberDef(item){
          hold this copy's opacity at 0 for the half of the loop where the
          other, front copy is the one actually showing. -->
     ${BACK_BEADS_SVG}
-    <ellipse cx="${cx}" cy="${cy}" rx="${r*1.12}" ry="${r*0.92}" fill="url(#sunGrad)" filter="url(#sunLight)"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunGrad)"/>
     <ellipse cx="${cx+20}" cy="${cy+13}" rx="13" ry="9" fill="url(#sunGlint2)"/>
     <!-- Front halves, drawn AFTER the sun so they're genuinely visible
          in front of it -- together with the back halves above, each
