@@ -2622,12 +2622,21 @@ function openNumberDef(item){
            within its own radius, well short of the page background --
            verify with a real screenshot that it reads as a genuine
            glow, not a wash, before treating this as settled. -->
+      <!-- Real pixel measurement straight up from the sun's center in her
+           reference photo (not a guess): 252,246,232 near the sphere's own
+           edge, fading through 236/217/200/184/182 down to 169 (matching
+           the flat base) roughly 240px out. That's the actual material
+           getting brighter, fully opaque at every point -- not a
+           translucent white layered on top fading to see-through, which
+           is what stop-opacity was doing here and is exactly what reads
+           as a "soft glow effect" instead of metal. Opaque stops now,
+           color itself walks down to the flat base tone. -->
       <radialGradient id="corona" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
-        <stop offset="18%" stop-color="#ffffff" stop-opacity="0.92"/>
-        <stop offset="40%" stop-color="#f2f3f5" stop-opacity="0.7"/>
-        <stop offset="65%" stop-color="#c9ccd4" stop-opacity="0.42"/>
-        <stop offset="100%" stop-color="#c9ccd4" stop-opacity="0"/>
+        <stop offset="0%" stop-color="#fcf6e8"/>
+        <stop offset="25%" stop-color="#e4ddd0"/>
+        <stop offset="50%" stop-color="#c2beb8"/>
+        <stop offset="75%" stop-color="#aeaead"/>
+        <stop offset="100%" stop-color="#a4a5a8"/>
       </radialGradient>
       <!-- One shared gradient, reused across every ring's stroke --
            objectBoundingBox (SVG's default gradientUnits) maps it to
@@ -2688,7 +2697,7 @@ function openNumberDef(item){
         <stop offset="100%" stop-color="${ROSE_MID}"/>
       </radialGradient>
     </defs>
-    <ellipse cx="${cx}" cy="${cy}" rx="58" ry="150" fill="url(#corona)"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="58" ry="105" fill="url(#corona)"/>
     <!-- Back halves of every ring, drawn BEFORE the sun so they're
          genuinely hidden behind its silhouette where they cross it --
          her direct correction to the prior "all rings on top" version:
