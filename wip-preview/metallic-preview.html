@@ -2771,7 +2771,16 @@ function openNumberDef(item){
          the comment above BEADS for the full reasoning. -->
     ${FRONT_BEADS_SVG}`;
   svg += '</svg>';
-  host.innerHTML = svg;
+  // Her direct instruction: nothing here needs to be tappable, so the
+  // whole hand-built illustration above (kept, untouched, in case this
+  // needs reverting) is superseded by the actual reference photo itself --
+  // a hand-authored gradient is always an approximation of a photo, no
+  // amount of measurement changes that; the photo is exact by definition.
+  // object-fit:contain shows the whole reference image undistorted inside
+  // the same box the generated SVG used to occupy, rather than cropping
+  // it or resizing this container (which would shift the title/CTA text
+  // around it) -- flag if she'd rather it fill/crop instead.
+  host.innerHTML = '<img src="hero-illustration-reference.jpg" alt="" style="display:block;width:100%;height:100%;object-fit:contain;">';
 })();
 
 // ---------- the hook screen's real CTA -- the sun itself, a real
