@@ -790,15 +790,66 @@ body{
   font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:#1C2CA9;
   margin-top:0.15rem;position:relative;z-index:1;
 }
-/* sun-cta removed entirely -- her direct instruction: no button on or
-   connected to the sun, and there shouldn't be. Continue
-   (.hero-continue-btn) already called the same revealForm(), so nothing
-   about the actual flow was lost. */
+/* The sun itself IS the CTA now -- her direct call: "I think probably
+   the middle of the Solar System could be the button that gets pushed.
+   I don't know why it wouldn't be." All the actual visual rendering
+   (the sphere shading, fresnel edge, corona) happens in the SVG drawn by
+   the heroIllustration script above; this is a real, invisible <button>
+   sized and positioned with plain percentages to land exactly on the
+   sun circle in that SVG's viewBox (cx=180,cy=100,r=46 in user-space;
+   the viewBox itself is "-8 20 376 185" after being cropped tighter to
+   its content vertically, then widened again horizontally to stop
+   clipping the outermost bead -- see that script's own notes on both).
+   Recalculated for that box: left = (180-46-(-8))/376 = 37.77%,
+   width = 92/376 = 24.47%, top = (100-46-20)/185 = 18.38%,
+   height = 92/185 = 49.73%. */
+.sun-cta{
+  position:absolute;left:37.77%;top:18.38%;width:24.47%;height:49.73%;
+  border-radius:50%;border:none;background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;padding:0;
+}
+.sun-cta:focus-visible{outline:2.5px solid #ffffff;outline-offset:3px;}
+/* The solid badge (round 3) is REJECTED -- her direct, forceful
+   correction: "get the box off of it... I'm not sure how you can
+   possibly look at that and think that that blue square is OK at all."
+   Back to plain colored text, no fill/box -- her own words: "It was
+   much better when the words were blue." This is round 2's treatment
+   (accent-blue text with a white halo for legibility against the
+   sphere), settled as the actual answer -- do not reintroduce a
+   badge/pill/box around this text again. */
+.sun-cta span{
+  position:relative;display:block;text-align:center;color:#000000;
+  /* "The words one free reading... needs to be noticeable" -- bumped from
+     0.66rem/700 to 0.85rem/800 (DM Sans 800 now loaded in the font link
+     above), a real, visible jump in both size and weight, not just one. */
+  font-family:'DM Sans',sans-serif;font-weight:800;font-size:0.85rem;
+  /* Counter-rotate against .hero-illustration's own +22deg tilt -- her
+     direct instruction: "make the ONE FREE READING upright." The sun
+     graphic and this button both rotate together (it's a child of the
+     tilted container, correctly following the sun's position), but the
+     text inside it shouldn't tilt with it -- this cancels exactly that
+     much rotation on the text alone, so the sphere reads diagonal while
+     its label stays level. */
+  transform:rotate(-22deg);
+  text-shadow:
+    0 0 2px rgba(255,255,255,0.95),
+    0 1px 3px rgba(255,255,255,0.9),
+    0 0 9px rgba(255,255,255,0.9),
+    0 0 18px rgba(255,255,255,0.6);
+}
 .key-hl{background:none;color:inherit;font-weight:800;}
 /* "It's a big deal. It needs to look like it's a big deal" -- the
    actual free-reading offer is now noticeably bigger again, a real
    jump from the size that was reading as an ordinary label. */
 .key-hl-big{display:block;font-size:1.65em;line-height:1;margin:0.05em 0;}
+.sun-cta span .sun-cta-tap{
+  display:block;font-size:0.5em;font-weight:700;letter-spacing:0.06em;
+  text-transform:uppercase;margin-top:0.4em;color:#ffffff;
+  text-shadow:
+    0 1px 2px rgba(0,0,0,0.6),
+    0 0 3px rgba(0,0,0,0.4),
+    0 0 12px rgba(255,255,255,0.8);
+}
 
 /* Replaces the 3 deleted key bubbles' messages -- plain text where each
    one is actually relevant instead of a decorative circle. Same #1C2CA9
@@ -1821,6 +1872,7 @@ body{
        illustration first, then this. -->
   <div class="hero-illustration">
     <div id="heroIllustration"></div>
+    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
   </div>
 
   <div class="free-reading-line">your first<br>reading<br>is completely<br>free.</div>
@@ -2719,16 +2771,7 @@ function openNumberDef(item){
          the comment above BEADS for the full reasoning. -->
     ${FRONT_BEADS_SVG}`;
   svg += '</svg>';
-  // Her direct instruction: nothing here needs to be tappable, so the
-  // whole hand-built illustration above (kept, untouched, in case this
-  // needs reverting) is superseded by the actual reference photo itself --
-  // a hand-authored gradient is always an approximation of a photo, no
-  // amount of measurement changes that; the photo is exact by definition.
-  // object-fit:contain shows the whole reference image undistorted inside
-  // the same box the generated SVG used to occupy, rather than cropping
-  // it or resizing this container (which would shift the title/CTA text
-  // around it) -- flag if she'd rather it fill/crop instead.
-  host.innerHTML = '<img src="hero-illustration-reference.jpg" alt="" style="display:block;width:100%;height:100%;object-fit:contain;">';
+  host.innerHTML = svg;
 })();
 
 // ---------- the hook screen's real CTA -- the sun itself, a real
@@ -2740,9 +2783,7 @@ function openNumberDef(item){
 // look at that and think that that blue square is OK at all." Her own
 // words on what actually worked: "It was much better when the words
 // were blue." ----------
-// (sun-cta button removed entirely -- her direct instruction: no button
-// on or connected to the sun. Continue (.hero-continue-btn) is the only
-// trigger for revealForm() now.)
+document.getElementById('sunCtaLabel').innerHTML = '';
 
 // ---------- Individual / Relational toggle ----------
 const togPill = document.getElementById('togPill');
@@ -5168,11 +5209,11 @@ async function revealForm(){
   errEl.style.display='none';
   document.getElementById('pEmail').value=email;
 
-  const cta=document.querySelector('.hero-continue-btn');
-  const labelEl=cta.querySelector('.hero-continue-label');
+  const cta=document.getElementById('freeReadingCta');
+  const labelEl=document.getElementById('sunCtaLabel');
   const originalLabel=labelEl.innerHTML;
   cta.disabled=true;
-  labelEl.innerHTML='Checking&hellip;';
+  labelEl.innerHTML='<span class="sun-cta-tap">Checking&hellip;</span>';
 
   const statusResult = await checkEmailStatus();
 
