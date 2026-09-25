@@ -2608,33 +2608,6 @@ function openNumberDef(item){
   // same clipping the next time a bead's position changes.
   let svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <!-- Real measured halo, attempt 1 of 3 (her cap on this task). Not a
-           brightness/opacity gradient -- that exact family of technique is
-           the one PERMANENTLY REJECTED at the top of this file's CSS, tried
-           and rejected in every implementation. Measured directly from her
-           reference photo instead of designed: isolated the sphere via
-           HSV-threshold + connected-components (center/radius computed,
-           not eyeballed), then sampled real RGB at 5px steps across 96
-           angles around it, median-filtered per distance bucket, floor
-           anchored to 4 true corner-pixel samples of the actual page
-           background. Real finding: brightness barely changes near the
-           sphere (the photo is already near-white almost everywhere) --
-           what actually falls off with distance is warmth/saturation, a
-           color shift from ~f5ead7 near the sphere down to the measured
-           true background ~eeecf1. Applied with mix-blend-mode:color so it
-           shifts hue/chroma of whatever is already behind it without
-           touching lightness -- a different mechanism from every rejected
-           attempt, which all operated on lightness/opacity. Radius 113 =
-           46 (the sun's own r) x 2.45, the real measured d/r where the
-           photo's warmth reaches the true background floor. -->
-      <radialGradient id="warmHalo" cx="180" cy="100" r="113" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#f5ead7"/>
-        <stop offset="41%" stop-color="#f5ead7"/>
-        <stop offset="53%" stop-color="#efe4d3"/>
-        <stop offset="65%" stop-color="#e8dacc"/>
-        <stop offset="77%" stop-color="#dcd6d2"/>
-        <stop offset="100%" stop-color="#eeecf1"/>
-      </radialGradient>
       <!-- Every stop below is a real color sampled directly along the
            actual highlight-to-shadow axis of her reference sphere (11
            points, t=0 to t=1), not a designed/guessed palette. No flat
@@ -2763,7 +2736,6 @@ function openNumberDef(item){
         <stop offset="100%" stop-color="${ROSE_MID}"/>
       </radialGradient>
     </defs>
-    <circle cx="180" cy="100" r="113" fill="url(#warmHalo)" style="mix-blend-mode:color"/>
     <!-- Back halves of every ring, drawn BEFORE the sun so they're
          genuinely hidden behind its silhouette where they cross it --
          her direct correction to the prior "all rings on top" version:
