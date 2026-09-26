@@ -833,16 +833,34 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
 
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   const usageType = hdOnly ? "hd-only" : rtype === "two-person" ? "two-person" : "individual";
-  let result;
-  try {
-    if (hdOnly) {
-      result = await generateSingleCallReading(env, buildHDOnlyRelationalPrompt(relLabel, p1, p2), HD_ONLY_RELATIONAL_SYSTEM_PROMPT);
-    } else {
-      result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
+  let result, lastError;
+  const failedUsages = [];
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      if (hdOnly) {
+        result = await generateSingleCallReading(env, buildHDOnlyRelationalPrompt(relLabel, p1, p2), HD_ONLY_RELATIONAL_SYSTEM_PROMPT);
+      } else {
+        result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
+      }
+      lastError = null;
+      break;
+    } catch (error) {
+      lastError = error;
+      if (error.usage) failedUsages.push(error.usage);
+      console.error(`Report generation attempt ${attempt + 1} received nothing: ${error.message}`);
     }
-  } catch (error) {
-    if (ctx && error.usage) ctx.waitUntil(recordUsage(env, error.usage, usageType));
-    throw error;
+  }
+  if (lastError) {
+    if (ctx && failedUsages.length) {
+      const usage = failedUsages.reduce((total, u) => ({
+        input_tokens: (total.input_tokens || 0) + (u.input_tokens || 0),
+        output_tokens: (total.output_tokens || 0) + (u.output_tokens || 0),
+        cache_creation_input_tokens: (total.cache_creation_input_tokens || 0) + (u.cache_creation_input_tokens || 0),
+        cache_read_input_tokens: (total.cache_read_input_tokens || 0) + (u.cache_read_input_tokens || 0)
+      }), {});
+      ctx.waitUntil(recordUsage(env, usage, usageType));
+    }
+    throw lastError;
   }
   if (ctx) ctx.waitUntil(recordUsage(env, result.usage, usageType));
   return { reading: result.parsed };
