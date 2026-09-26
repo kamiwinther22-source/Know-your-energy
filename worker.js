@@ -823,56 +823,6 @@ async function callReportModel(env, userPrompt, systemPrompt = REPORT_SYSTEM_PRO
   };
 }
 
-const ZODIAC_SIGNS = [ "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces" ];
-
-const CITATION_PATTERNS = [ new RegExp(`\\b(Sun|Moon)\\s+in\\s+(${ZODIAC_SIGNS.join("|")})\\b`, "i"), new RegExp(`\\b(${ZODIAC_SIGNS.join("|")})\\b`, "i"), /\b(Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto|Chiron|Ascendant|Midheaven|Lilith)\b/i, /\b(North|South)\s+Node\b/i, /\bLife\s+Path\s+\d+/i, /\bExpression\s+\d+/i, /\bSoul\s+Urge\s+\d+/i, /\bPersonality\s+(number\s+)?\d+/i, /\bPersonal\s+(Year|Month|Day)\s+\d+/i, /\bPinnacle\s+\d+/i, /\bChallenge\s+(number\s+)?\d+/i, /\bKarmic\s+(Debt|Lesson)/i, /\bEssence\s+(cycle|number)/i, /\b\d+(st|nd|rd|th)\s+house\b/i, /\d+(\.\d+)?°/, /\b\d{1,2}\s+degrees?\b/i ];
-
-function findCitationSpan(text) {
-  for (const re of CITATION_PATTERNS) {
-    const m = text.match(re);
-    if (m) return m[0];
-  }
-  return null;
-}
-
-function findCitationLeak(reading) {
-  const fields = [ {
-    sectionIndex: -1,
-    key: "headline",
-    text: reading.headline
-  } ];
-  (reading.sections || []).forEach((s, i) => {
-    fields.push({
-      sectionIndex: i,
-      key: "eyebrow",
-      text: s.eyebrow
-    });
-    fields.push({
-      sectionIndex: i,
-      key: "title",
-      text: s.title
-    });
-    fields.push({
-      sectionIndex: i,
-      key: "body",
-      text: s.body
-    });
-  });
-  for (const f of fields) {
-    if (!f.text) continue;
-    const snippet = findCitationSpan(f.text);
-    if (snippet) {
-      return {
-        message: `Names a placement, aspect, cycle, or number directly in the text ("${snippet}") instead of stating what it produces -- rewrite with no technical astrology or numerology term anywhere in it, only what it means for the person.`,
-        sectionIndex: f.sectionIndex,
-        key: f.key,
-        text: f.text
-      };
-    }
-  }
-  return null;
-}
-
 async function generateSingleCallReading(env, userPrompt, systemPrompt) {
   const {text: text, usage: usage} = await callReportModel(env, userPrompt, systemPrompt);
   let parsed;
@@ -889,71 +839,25 @@ async function generateSingleCallReading(env, userPrompt, systemPrompt) {
   };
 }
 
-const CITATION_FIX_SYSTEM_PROMPT = `You're fixing one specific, mechanical problem in one short piece of text from an already-written astrology/numerology reading. You'll be given the text and a description of what's wrong with it.\n\nRewrite it so the problem is gone. Keep every fact, keep the exact same voice ("you", or a first name, whichever the text already uses), keep roughly the same length. Change only what the described problem requires -- leave everything else as close to the original wording as it can stay.\n\nReturn ONLY the corrected text. No JSON, no quotation marks around it, no preamble, no explanation.`;
-
-async function correctCitationDefect(env, fieldText, defectMessage) {
-  const userPrompt = `Problem: ${defectMessage}\n\nText:\n${fieldText}`;
-  const {text: text, usage: usage} = await callReportModel(env, userPrompt, CITATION_FIX_SYSTEM_PROMPT, {
-    max_tokens: 2e3,
-    thinking: {
-      type: "adaptive"
-    },
-    effort: "low"
-  });
-  return {
-    text: text.trim(),
-    usage: usage
-  };
-}
-
 async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   const usageType = hdOnly ? "hd-only" : rtype === "two-person" ? "two-person" : "individual";
-  let result, lastError;
-  const failedUsages = [];
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      if (hdOnly) {
-        result = await generateSingleCallReading(env, buildHDOnlyRelationalPrompt(relLabel, p1, p2), HD_ONLY_RELATIONAL_SYSTEM_PROMPT);
-      } else {
-        result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
-      }
-      lastError = null;
-      break;
-    } catch (error) {
-      lastError = error;
-      if (error.usage) failedUsages.push(error.usage);
-      console.error(`Report generation attempt ${attempt + 1} failed: ${error.message}`);
+  let result;
+  try {
+    if (hdOnly) {
+      result = await generateSingleCallReading(env, buildHDOnlyRelationalPrompt(relLabel, p1, p2), HD_ONLY_RELATIONAL_SYSTEM_PROMPT);
+    } else {
+      result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
     }
-  }
-  const combineUsage = usages => usages.reduce((total, u) => ({
-    input_tokens: (total.input_tokens || 0) + (u.input_tokens || 0),
-    output_tokens: (total.output_tokens || 0) + (u.output_tokens || 0),
-    cache_creation_input_tokens: (total.cache_creation_input_tokens || 0) + (u.cache_creation_input_tokens || 0),
-    cache_read_input_tokens: (total.cache_read_input_tokens || 0) + (u.cache_read_input_tokens || 0)
-  }), {});
-  if (lastError) {
-    if (ctx && failedUsages.length) ctx.waitUntil(recordUsage(env, combineUsage(failedUsages), usageType));
+  } catch (error) {
+    console.error(`Report generation failed: ${error.message}`);
+    if (ctx && error.usage) ctx.waitUntil(recordUsage(env, error.usage, usageType));
     return {
       reading: buildFallbackReading(rtype, p1, p2),
       usedFallback: true,
-      fallbackReason: lastError.message
+      fallbackReason: error.message
     };
   }
-  let defect = findCitationLeak(result.parsed);
-  for (let fixAttempt = 0; defect && fixAttempt < 2; fixAttempt++) {
-    try {
-      const fix = await correctCitationDefect(env, defect.text, defect.message);
-      failedUsages.push(fix.usage);
-      if (defect.sectionIndex === -1) result.parsed.headline = fix.text; else result.parsed.sections[defect.sectionIndex][defect.key] = fix.text;
-      defect = findCitationLeak(result.parsed);
-    } catch (fixError) {
-      console.error(`Citation-defect fix attempt ${fixAttempt + 1} failed: ${fixError.message}`);
-      if (fixError.usage) failedUsages.push(fixError.usage);
-    }
-  }
-  const usage = failedUsages.length ? combineUsage([ ...failedUsages, result.usage ]) : result.usage;
-  if (ctx) ctx.waitUntil(recordUsage(env, usage, usageType));
-  if (defect) console.error(`Report generation defect, delivering anyway: ${defect.message}`);
+  if (ctx) ctx.waitUntil(recordUsage(env, result.usage, usageType));
   return {
     reading: result.parsed,
     usedFallback: false
