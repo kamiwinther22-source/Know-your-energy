@@ -694,6 +694,7 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
     return `\n${p.first}${p.last ? " " + p.last : ""}:\nCurrent age: ${n.essenceCycle?.currentAge ?? "unknown"}\nNumerology:\n  ${numerologyLines}\nAstrology:\n  ${astrologyLines}${hasHD ? `\nHuman Design:\n  ${hdLines}` : ""}`;
   };
   if (rtype === "two-person") {
+    if (!p2) throw new Error("A two-person reading needs both people's data.");
     const hdConnection = buildHDConnectionLine(p1.humanDesign, p2.humanDesign, p1.first, p2.first);
     return `Relationship type: ${relLabel}\n${personBlock(p1)}\n${personBlock(p2)}${hdConnection ? `\n${hdConnection}` : ""}`;
   }
@@ -1080,7 +1081,9 @@ export default {
         const [p1Data, p2Data] = body.p1Data ? [ body.p1Data, body.p2Data || null ] : await Promise.all([ assemblePersonData(env, body.p1), body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null) ]);
         console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
         let report = null, reportError = null;
-        if (body.hdOnly && (body.rtype !== "two-person" || !p1Data.humanDesign || !p2Data?.humanDesign)) {
+        if (body.rtype === "two-person" && !p2Data) {
+          reportError = "A two-person reading needs both people's data.";
+        } else if (body.hdOnly && (body.rtype !== "two-person" || !p1Data.humanDesign || !p2Data?.humanDesign)) {
           reportError = "HD-only test mode needs a two-person reading with both people's Human Design charts available (birth time and city required for both).";
         } else {
           try {
