@@ -2447,12 +2447,13 @@ function toggleListen() {
     alert("Your browser doesn't support reading text aloud.");
     return;
   }
-  if (speechSynthesis.speaking || speechSynthesis.pending) {
+  if (activeListenBtnId === "listenBtn") {
     stopListening();
     return;
   }
   const segments = getReadableSegments();
   if (!segments.length) return;
+  stopListening();
   startListening(segments, "listenBtn");
 }
 
@@ -2461,13 +2462,14 @@ function toggleModalListen() {
     alert("Your browser doesn't support reading text aloud.");
     return;
   }
-  if (speechSynthesis.speaking || speechSynthesis.pending) {
+  if (activeListenBtnId === "cardExpandListenBtn") {
     stopListening();
     return;
   }
   const title = document.getElementById("cardExpandTitle").textContent.trim();
   const body = document.getElementById("cardExpandBody").textContent.replace(/\s+/g, " ").trim();
   if (!body) return;
+  stopListening();
   startListening([ title ? `${title}. ${body}` : body ], "cardExpandListenBtn");
 }
 
