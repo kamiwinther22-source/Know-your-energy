@@ -2434,8 +2434,11 @@ function startListening(segments, btnId) {
   updateListenBtn(true);
   stopListenKeepAlive();
   listenKeepAlive = setInterval(() => {
-    if (window.speechSynthesis && speechSynthesis.speaking) speechSynthesis.resume();
-  }, 1e4);
+    if (window.speechSynthesis && speechSynthesis.speaking) {
+      speechSynthesis.pause();
+      speechSynthesis.resume();
+    }
+  }, 5e3);
   speakNext();
 }
 
