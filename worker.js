@@ -626,14 +626,6 @@ function buildHDOnlyRelationalPrompt(relLabel, p1, p2) {
   return `Relationship type: ${relLabel}\n${hdBlock(p1)}\n${hdBlock(p2)}`;
 }
 
-function buildFallbackReading() {
-  return {
-    headline: "Please Try Again",
-    sections: [],
-    references: []
-  };
-}
-
 const HD_CENTER_GATES = {
   Head: [ 64, 61, 63 ],
   Ajna: [ 47, 24, 4, 11, 43, 17 ],
@@ -849,19 +841,11 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
       result = await generateSingleCallReading(env, buildReportUserPrompt(rtype, relLabel, p1, p2), REPORT_SYSTEM_PROMPT);
     }
   } catch (error) {
-    console.error(`Report generation failed: ${error.message}`);
     if (ctx && error.usage) ctx.waitUntil(recordUsage(env, error.usage, usageType));
-    return {
-      reading: buildFallbackReading(rtype, p1, p2),
-      usedFallback: true,
-      fallbackReason: error.message
-    };
+    throw error;
   }
   if (ctx) ctx.waitUntil(recordUsage(env, result.usage, usageType));
-  return {
-    reading: result.parsed,
-    usedFallback: false
-  };
+  return { reading: result.parsed };
 }
 
 export default {
@@ -1077,16 +1061,14 @@ export default {
       try {
         const [p1Data, p2Data] = body.p1Data ? [ body.p1Data, body.p2Data || null ] : await Promise.all([ assemblePersonData(env, body.p1), body.p2 ? assemblePersonData(env, body.p2) : Promise.resolve(null) ]);
         console.log(`[report] person data assembled at +${Date.now() - reportStart}ms jobId=${jobId}`);
-        let report = null, reportError = null, reportUsedFallback = false, reportFallbackReason = null;
+        let report = null, reportError = null;
         if (body.hdOnly && (body.rtype !== "two-person" || !p1Data.humanDesign || !p2Data?.humanDesign)) {
           reportError = "HD-only test mode needs a two-person reading with both people's Human Design charts available (birth time and city required for both).";
         } else {
           try {
             const result = await generateReport(env, body.rtype, body.relLabel, p1Data, p2Data, ctx, body.hdOnly);
             report = result.reading;
-            reportUsedFallback = result.usedFallback;
-            reportFallbackReason = result.fallbackReason || null;
-            console.log(`[report] generation done at +${Date.now() - reportStart}ms usedFallback=${result.usedFallback}${result.fallbackReason ? ` reason=${result.fallbackReason}` : ""} jobId=${jobId}`);
+            console.log(`[report] generation done at +${Date.now() - reportStart}ms jobId=${jobId}`);
           } catch (error) {
             reportError = error.message;
             console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
@@ -1099,9 +1081,7 @@ export default {
           p1: p1Data,
           p2: p2Data,
           report: report,
-          reportError: reportError,
-          reportUsedFallback: reportUsedFallback,
-          reportFallbackReason: reportFallbackReason
+          reportError: reportError
         };
         streamBody = JSON.stringify(payload);
         kvRecord = {
