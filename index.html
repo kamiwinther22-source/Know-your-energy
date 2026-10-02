@@ -674,11 +674,6 @@ body{background:var(--ground);color:var(--ink);}
 .hl-3{color:var(--tz-x);}
 .free-reading-line,.privacy-note{color:var(--ink);}
 
-/* the email block: a light plane with stacked hue layers underneath */
-.hero-email-wrap{position:relative;isolation:isolate;margin-bottom:26px;}
-.hero-email-wrap::before{content:'';position:absolute;inset:-16px -20px -18px -20px;z-index:-1;border-radius:22px;
-  background:var(--aq-l);box-shadow:5px 5px 0 var(--sa-m),10px 10px 0 var(--tz-m);}
-
 /* fields: carved into the plane */
 .line-field{background:var(--well);box-shadow:inset 2px 2px 0 var(--well-edge),inset -2px -2px 0 var(--lip);}
 .line-field:focus-within{box-shadow:inset 2px 2px 0 var(--sa-d),inset -2px -2px 0 var(--lip),0 0 0 2px var(--sa-m);}
@@ -694,17 +689,12 @@ body{background:var(--ground);color:var(--ink);}
 #p1Block{--well-edge:var(--aq-d);--ph:var(--aq-x);}
 #p2Section{--well-edge:var(--tz-m);--ph:var(--tz-x);}
 
-/* the form area: one light plane, three hue layers stacked beneath it */
-.form-col{background:var(--plane);border-radius:26px;padding:0 0 26px;margin:0 20px 40px 0;isolation:isolate;
-  box-shadow:6px 6px 0 var(--tp-m),12px 12px 0 var(--sa-m),18px 18px 0 var(--tz-m);}
-.form-col>.form-panel{padding:20px 20px 0 0;}
-.form-panel label,.row-birth label,.section-lbl{color:var(--ink);font-size:0.7rem;letter-spacing:0.08em;background:var(--plane);}
+.form-col{isolation:isolate;}
+.form-panel label,.row-birth label,.section-lbl{color:var(--ink);font-size:0.7rem;letter-spacing:0.08em;background:var(--ground);}
 .opt-lbl{letter-spacing:0;}
-.person-tag{background:var(--plane);}
+.person-tag{background:var(--ground);}
 #p1Block .person-tag{color:var(--aq-x);}
 #p2Section .person-tag{color:#664B3D;}
-.form-col .row-id{grid-template-columns:1fr 0.9fr 1fr;}
-.form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
 
 .toggle-row,.tog-lbl{color:var(--ink);}
 .tog-lbl.active{color:var(--sa-d);}
