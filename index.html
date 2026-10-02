@@ -2257,7 +2257,7 @@ function escapeHtml(s) {
   }[c]));
 }
 
-function arow(l, v, defKey, defNum, note) {
+function arow(l, v, defKey, defNum, note, altNum) {
   let specific;
   if (defKey && defNum != null && NUM_DEFS[defKey] && NUM_DEFS[defKey][defNum]) {
     specific = NUM_DEFS[defKey][defNum];
@@ -2266,11 +2266,18 @@ function arow(l, v, defKey, defNum, note) {
   } else if (defKey && defNum != null && HD_DEFS[defKey] && HD_DEFS[defKey][defNum]) {
     specific = HD_DEFS[defKey][defNum];
   }
+  let altSpecific;
+  if (altNum != null && altNum !== defNum && defKey && ASTRO_DEFS[defKey] && ASTRO_DEFS[defKey][altNum]) {
+    altSpecific = ASTRO_DEFS[defKey][altNum];
+  }
   const general = defKey && GLOSSARY[defKey] ? GLOSSARY[defKey] : null;
   const parts = [];
   if (note) parts.push(`<p class="dpdef-note">${note}</p>`);
   if (general) parts.push(`<p>${general}</p>`);
-  if (specific) parts.push(`<p>${specific}</p>`);
+  if (specific && altSpecific) {
+    parts.push(`<p><strong>${escapeHtml(String(defNum))}</strong> — ${specific}</p>`);
+    parts.push(`<p><strong>${escapeHtml(String(altNum))}</strong> — ${altSpecific}</p>`);
+  } else if (specific) parts.push(`<p>${specific}</p>`);
   const def = parts.length ? parts.join("") : null;
   const lbl = def ? `<span class="dprl term" data-def="${defKey}">${l}</span>` : `<span class="dprl">${l}</span>`;
   return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def ? `<div class="dpdef" hidden>${def}</div>` : ""}</div>`;
@@ -2729,7 +2736,7 @@ function ar(astro, errMsg) {
     const glyph = glyphIcon(name, PLANET_COLOR[name]);
     let signOut = sign;
     if (p.signUncertain) signOut = `${sign} or ${p.signAlt} — changes sign this day, exact birth time needed`; else if (p.house) signOut += ` · House ${p.house}`;
-    h += arow(glyph + name, signOut, ASTRO_KEY[name], sign);
+    h += arow(glyph + name, signOut, ASTRO_KEY[name], sign, null, p.signUncertain ? p.signAlt : null);
     if (p.house) h += arow("House " + p.house, HOUSE_THEME[p.house] || "House " + p.house, "housecombo", `${ASTRO_KEY[name]}_${p.house}`);
   };
   if (byName.Sun) emitPlanet(byName.Sun);
@@ -2757,7 +2764,7 @@ function ar(astro, errMsg) {
         signOut = p.sign;
         if (p.house) signOut += ` · House ${p.house}`;
       }
-      h += arow(glyph + name, signOut, POINT_KEY[name], defNum, note);
+      h += arow(glyph + name, signOut, POINT_KEY[name], defNum, note, p.signUncertain ? p.signAlt : null);
     });
   }
   return h || apend("Unavailable");
