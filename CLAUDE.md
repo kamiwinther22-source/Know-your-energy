@@ -227,8 +227,8 @@ All routes live in the single `fetch` handler, gated by `CORS_HEADERS` (open,
 - Everything else requires `POST`:
   - `/check-pass` — reads a pass record from KV (`PASSES`), including the
     `UNLIMITED_EMAILS` bypass for the three family addresses. No payment
-    processor is connected: Stripe was removed (`/create-checkout-session`
-    and `/record-pass` no longer exist), and the frontend's `buyPass()` is a stub.
+    processor is connected: there are no checkout or record-pass routes, and
+    the frontend's `buyPass()` is a stub.
   - `/report` — the main endpoint: takes person(s) astrology + numerology +
     Human Design data, calls the Claude API (`generateReport`,
     `model: 'claude-sonnet-5'`, `thinking: { type: 'disabled' }`), returns
@@ -382,7 +382,7 @@ resurrect the "two pages, entry form is done" framing.
 - Astrology is computed **locally** (`astro-engine.js`) — no paid external
   API, no rate limit. `worker.js` strips house/Ascendant/Midheaven data when
   birth time is unknown rather than guessing from a defaulted time.
-- No payment processor is connected (Stripe was removed from `worker.js`).
+- No payment processor is connected; `worker.js` has no payment code.
 - Three family emails have unlimited free access (see `UNLIMITED_EMAILS` in
   `worker.js`) — don't remove this without being asked.
 - Real Claude report generation is wired into `/report` in `worker.js`
