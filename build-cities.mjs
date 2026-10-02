@@ -1,17 +1,3 @@
-// build-cities.mjs
-// Runs automatically during deploy (see the GitHub Actions workflow).
-// It downloads the free GeoNames city database (cities1000.zip —
-// every place in the world with population 1,000+, about 145,000 places),
-// and writes a compact version into cities-data.js so the Worker can
-// look up birth-city coordinates without calling any outside service.
-//
-// GeoNames data is free under the Creative Commons Attribution 4.0
-// license (https://www.geonames.org/). Attribution note: city data
-// from GeoNames.org.
-//
-// If the automatic download fails (network hiccup etc.), the built-in
-// city list in cities.js still keeps the site working.
-
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { inflateRawSync } from "node:zlib";
 import { fileURLToPath } from "node:url";
@@ -23,7 +9,6 @@ const ZIP_URL = "https://download.geonames.org/export/dump/cities1000.zip";
 const LOCAL_TXT = join(HERE, "cities1000.txt");
 
 function extractFromZip(buf) {
-  // Locate End Of Central Directory record (signature 0x06054b50)
   let eocd = -1;
   for (let i = buf.length - 22; i >= Math.max(0, buf.length - 65558); i--) {
     if (buf.readUInt32LE(i) === 0x06054b50) { eocd = i; break; }
@@ -31,21 +16,19 @@ function extractFromZip(buf) {
   if (eocd < 0) throw new Error("Not a valid zip file (no end-of-central-directory).");
   const cdOffset = buf.readUInt32LE(eocd + 16);
 
-  // First central directory entry (signature 0x02014b50)
   if (buf.readUInt32LE(cdOffset) !== 0x02014b50) throw new Error("Bad central directory.");
   const method = buf.readUInt16LE(cdOffset + 10);
   const compSize = buf.readUInt32LE(cdOffset + 20);
   const localOffset = buf.readUInt32LE(cdOffset + 42);
 
-  // Local file header (signature 0x04034b50)
   if (buf.readUInt32LE(localOffset) !== 0x04034b50) throw new Error("Bad local file header.");
   const nameLen = buf.readUInt16LE(localOffset + 26);
   const extraLen = buf.readUInt16LE(localOffset + 28);
   const dataStart = localOffset + 30 + nameLen + extraLen;
   const data = buf.subarray(dataStart, dataStart + compSize);
 
-  if (method === 0) return data;                 // stored
-  if (method === 8) return inflateRawSync(data); // deflated
+  if (method === 0) return data;
+  if (method === 8) return inflateRawSync(data);
   throw new Error(`Unsupported zip compression method: ${method}`);
 }
 
@@ -70,8 +53,6 @@ let text;
 try {
   text = await getText();
 } catch (err) {
-  // Never break the site deploy over a download hiccup — the built-in
-  // major-cities list keeps things working until the next successful build.
   console.warn("City database download failed:", err.message);
   console.warn("Deploy continues with the built-in city list.");
   process.exit(0);
@@ -81,7 +62,6 @@ const out = [];
 for (const line of lines) {
   if (!line.trim()) continue;
   const c = line.split("\t");
-  // GeoNames columns: 1=name 2=asciiname 4=lat 5=lng 8=countryCode 10=admin1 14=population
   const name = clean(c[1]);
   const ascii = clean(c[2]);
   const lat = parseFloat(c[4]);

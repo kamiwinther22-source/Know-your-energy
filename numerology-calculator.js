@@ -1,50 +1,3 @@
-/**
- * PYTHAGOREAN NUMEROLOGY CALCULATOR
- * ----------------------------------
- * Full-chart calculator built from the standard, documented Pythagorean
- * numerology system. No external API calls, no vendor, no cost. Runs
- * entirely inside your own code.
- *
- * Returns RAW NUMBERS ONLY — no interpretive text. Interpretation is
- * intentionally left to Claude downstream, per your architecture.
- *
- * ============================================================
- * LOCKED CONTRACT — DO NOT CHANGE WITHOUT EXPLICIT SIGN-OFF:
- * 1. calculateFullChart() takes exactly ONE person and returns
- *    exactly ONE set of numbers for that person. Nothing else.
- * 2. There is NO compatibility, bridge, or cross-comparison logic
- *    in this file, and there never should be. For a two-person
- *    reading, calling code (worker.js) calls this function twice —
- *    once per person — and passes both plain results to Claude.
- *    All comparison between two people happens in Claude's prompt,
- *    never inside this calculator.
- * 3. Formulas in this file are verified against Kami's own known
- *    chart (Life Path 22) as of the date they were last confirmed
- *    correct. Any future formula change must be re-verified against
- *    a real, known chart before being trusted — see the "KNOWN
- *    UNVERIFIED EDGE CASES" note below for what hasn't been tested yet.
- * ============================================================
- *
- * KNOWN UNVERIFIED EDGE CASES (not yet tested against a real chart):
- * - Hyphenated or apostrophe'd names (Smith-Jones, O'Brien)
- * - Master numbers appearing in Expression, Soul Urge, or Personality
- *   (only verified so far for Life Path)
- * - Leap years and other date edge cases
- * - No input validation on malformed dates (Feb 31, etc.)
- *
- * Input shape expected by calculateFullChart():
- * {
- *   first: "Jane",
- *   middle: "Ann",       // optional, pass "" if none. If more than one
- *                        // middle name, they belong together in this
- *                        // single field (see frontend input guidance).
- *   last: "Doe",
- *   dob: "07/16/1990",   // MM/DD/YYYY
- *   currentDate: "07/05/2026" // MM/DD/YYYY — for Personal Year/Month/Day + Essence
- * }
- */
-
-// ---------- LETTER VALUE MAP (Pythagorean) ----------
 const LETTER_VALUES = {
   A: 1, J: 1, S: 1,
   B: 2, K: 2, T: 2,
@@ -61,15 +14,6 @@ const VOWELS = new Set(["A", "E", "I", "O", "U"]);
 const MASTER_NUMBERS = [11, 22, 33];
 const KARMIC_DEBT_NUMBERS = [13, 14, 16, 19];
 
-// Y as a vowel: Y counts as a vowel when it's the only vowel SOUND in its
-// syllable — practically, when it is not word-initial and not immediately
-// preceded by a true vowel letter.
-//   - Word-initial Y is a consonant glide: Yolanda, Yes, Young, Yvonne.
-//   - Y immediately after a true vowel closes a diphthong, so it's a
-//     consonant: Kay, Faye, Joy, Toy, Player.
-//   - Y after a consonant, not word-initial, carries the vowel sound itself:
-//     Lynn, Ryan, Bryan, Kyle, Tyler, Sylvia, Cyndi, Rhythm, Myth.
-// Verified against all of the above names before being trusted here.
 function isVowelChar(ch, index, letters) {
   if (VOWELS.has(ch)) return true;
   if (ch !== "Y") return false;
@@ -79,10 +23,6 @@ function isVowelChar(ch, index, letters) {
   return true;
 }
 
-// ---------- CORE REDUCTION HELPERS ----------
-
-// Reduces a number to a single digit, UNLESS it's a Master Number (11/22/33).
-// Also flags Karmic Debt if 13/14/16/19 appears at any point during reduction.
 function reducePreserveMasters(num) {
   let karmicDebt = null;
   let n = num;
@@ -95,9 +35,6 @@ function reducePreserveMasters(num) {
   return { value: n, karmicDebt };
 }
 
-// Fully reduces to a single digit regardless of Master Numbers.
-// Used for Challenge Number inputs, where master birth components
-// are fully reduced before subtraction (standard rule for this calculation).
 function reduceFully(num) {
   let n = num;
   while (n > 9) {
@@ -121,9 +58,6 @@ function sumLetters(name, filterFn) {
     .reduce((sum, ch) => sum + LETTER_VALUES[ch], 0);
 }
 
-// Reduces each name segment separately (preserving masters within each),
-// then sums the segment results and reduces the total (preserving masters).
-// This is the standard approach for name-based numbers.
 function nameBasedNumber(nameParts, filterFn) {
   let karmicDebt = null;
   const segmentTotal = nameParts
@@ -146,8 +80,6 @@ function parseDate(dateStr) {
   return { month, day, year };
 }
 
-// ---------- CORE NUMBERS ----------
-
 function calculateLifePath(dob) {
   const { month, day, year } = parseDate(dob);
   const m = reducePreserveMasters(month);
@@ -161,7 +93,7 @@ function calculateLifePath(dob) {
 }
 
 function calculateExpression(first, middle, last) {
-  return nameBasedNumber([first, middle, last], null); // all letters
+  return nameBasedNumber([first, middle, last], null);
 }
 
 function calculateSoulUrge(first, middle, last) {
@@ -172,21 +104,11 @@ function calculatePersonality(first, middle, last) {
   return nameBasedNumber([first, middle, last], (ch, i, letters) => !isVowelChar(ch, i, letters));
 }
 
-// The Birthday Number is the actual calendar day of birth (1-31), NOT
-// reduced -- this is the one number in the whole chart that stays raw.
-// Every documented Pythagorean source (Decoz included) treats days 10-31
-// as their own distinct numbers with their own meaning, not as a shorthand
-// for their reduced single digit. Reducing this was a real bug: it made
-// day 14 display as "5", which looks like an error to anyone who already
-// knows their own birth day.
 function calculateBirthdayNumber(dob) {
   const { day } = parseDate(dob);
   return { value: day, karmicDebt: null };
 }
 
-// ---------- ATTITUDE / SUN NUMBER ----------
-// The outward first impression a person gives off — distinct from Personality.
-// Calculated from birth month + birth day only (not year).
 function calculateAttitudeNumber(dob) {
   const { month, day } = parseDate(dob);
   const m = reducePreserveMasters(month).value;
@@ -194,9 +116,6 @@ function calculateAttitudeNumber(dob) {
   return reducePreserveMasters(m + d);
 }
 
-// ---------- BALANCE NUMBER ----------
-// How a person handles stress and conflict, calculated from the FIRST LETTER
-// of each name part (First/Middle/Last), summed and reduced.
 function calculateBalanceNumber(first, middle, last) {
   const parts = [first, middle, last].filter((p) => p && p.trim().length > 0);
   const total = parts.reduce((sum, part) => {
@@ -206,9 +125,6 @@ function calculateBalanceNumber(first, middle, last) {
   return reducePreserveMasters(total);
 }
 
-// ---------- CHALLENGE NUMBERS ----------
-// Master birth-date components are FULLY reduced before subtraction
-// (this differs from Life Path, where masters are preserved).
 function calculateChallengeNumbers(dob) {
   const { month, day, year } = parseDate(dob);
   const m = reduceFully(month);
@@ -223,13 +139,6 @@ function calculateChallengeNumbers(dob) {
   return { challenge1, challenge2, challenge3, challenge4 };
 }
 
-// ---------- PINNACLE NUMBERS ----------
-// The PINNACLE VALUES themselves preserve master numbers (11/22/33), but the
-// AGE FORMULA ("36 minus Life Path") uses the Life Path number FULLY REDUCED
-// to a single digit, even when the actual Life Path is a master number. These
-// are two separate rules applied to two different things — the previous
-// version of this file conflated them and used the raw master number in the
-// age formula, which is the bug that gave wrong Pinnacle age ranges.
 function calculatePinnacles(dob, lifePathRawValue) {
   const { month, day, year } = parseDate(dob);
   const m = reducePreserveMasters(month).value;
@@ -252,18 +161,6 @@ function calculatePinnacles(dob, lifePathRawValue) {
   };
 }
 
-// ---------- PERIOD CYCLES ----------
-// A distinct technique from Pinnacles: three long chapters, each drawn from
-// ONE raw piece of the birthdate on its own (month, then day, then year --
-// each reduced separately), not a blended sum of two parts the way each
-// Pinnacle is. Real, sourced numerology convention (Hans Decoz / World
-// Numerology, cross-checked against multiple independent sources):
-//   Period 1 = reduced birth month, birth -> age (37 - Life Path).
-//   Period 2 = reduced birth day, next 27 years exactly.
-//   Period 3 = reduced birth year, onward from there.
-// The age-formula base (37, one more than Pinnacles' 36) uses the same
-// reduceFully(lifePathRawValue) treatment Pinnacles already use, for
-// consistency within this file -- deliberate, not an oversight.
 function calculatePeriodCycles(dob, lifePathRawValue) {
   const { month, day, year } = parseDate(dob);
   const period1 = reducePreserveMasters(month);
@@ -281,14 +178,10 @@ function calculatePeriodCycles(dob, lifePathRawValue) {
   };
 }
 
-// ---------- MATURITY NUMBER ----------
-// Who a person grows into later in life. Life Path + Expression, reduced.
-// Relevant for long-term trajectory, not just who someone is right now.
 function calculateMaturityNumber(lifePathValue, expressionValue) {
   return reducePreserveMasters(lifePathValue + expressionValue);
 }
 
-// ---------- PERSONAL YEAR / MONTH / DAY ----------
 function calculatePersonalYear(dob, currentDate) {
   const { month, day } = parseDate(dob);
   const { year: currentYear } = parseDate(currentDate);
@@ -307,11 +200,6 @@ function calculatePersonalDay(personalMonthValue, currentDate) {
   const { day: currentDay } = parseDate(currentDate);
   return reducePreserveMasters(personalMonthValue + currentDay);
 }
-
-// ---------- ESSENCE CYCLES ----------
-// Tracks which letter is "active" in each name segment (First/Middle/Last)
-// at a given age, based on each letter's numerology value = years of influence.
-// Sums the currently-active letters across segments, reduces (preserving masters).
 
 function activeLetterAtAge(name, age) {
   const letters = name.toUpperCase().replace(/[^A-Z]/g, "").split("");
@@ -348,9 +236,6 @@ function getCurrentAge(dob, currentDate) {
   return age;
 }
 
-// ---------- KARMIC LESSONS ----------
-// Numbers 1-9 that never appear anywhere in the letter-value conversion
-// of the full birth name.
 function calculateKarmicLessons(first, middle, last) {
   const fullName = [first, middle, last].filter(Boolean).join("");
   const valuesPresent = new Set(nameLetterValues(fullName));
@@ -361,22 +246,11 @@ function calculateKarmicLessons(first, middle, last) {
   return missing;
 }
 
-// ---------- SUBCONSCIOUS SELF NUMBER ----------
-// Reflects how well someone draws on inner resources during sudden crises
-// or unexpected events. Calculated as 9 minus the count of Karmic Lessons
-// (missing numbers 1-9 in the full birth name) — fewer missing numbers
-// means more numbers to draw on, and a higher Subconscious Self.
 function calculateSubconsciousSelf(karmicLessonsArray) {
   return 9 - karmicLessonsArray.length;
 }
 
-// ---------- FULL CHART ----------
-
 function calculateFullChart(person) {
-  // Runtime guard: this function is locked to single-person input only.
-  // If calling code accidentally passes two people's data (e.g. a
-  // "person1"/"person2" wrapper, or an array), fail loudly rather than
-  // silently computing something wrong.
   if (Array.isArray(person) || "person1" in (person || {}) || "person2" in (person || {})) {
     throw new Error(
       "calculateFullChart() takes exactly ONE person. For two-person readings, call this function twice — once per person — from worker.js."
@@ -394,8 +268,6 @@ function calculateFullChart(person) {
   const balance = calculateBalanceNumber(first, middle, last);
   const challenges = calculateChallengeNumbers(dob);
 
-  // Pinnacles need the raw (pre-final-reduction) Life Path number for age-range math.
-  // We recompute the un-reduced month+day+year sum here to get that raw value.
   const { month, day, year } = parseDate(dob);
   const rawLifePathForPinnacles = (() => {
     const m = reducePreserveMasters(month).value;
@@ -449,7 +321,4 @@ function calculateFullChart(person) {
   };
 }
 
-// ---------- EXPORT ----------
-// In a Cloudflare Worker, import this directly:
-//   import { calculateFullChart } from './numerology-calculator.js';
 export { calculateFullChart };
