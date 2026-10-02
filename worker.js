@@ -411,7 +411,7 @@ const PLAN_CONFIG = {
     amount: 2200,
     name: "One Month Pass"
   },
-  annual: {
+  threemonth: {
     mode: "payment",
     amount: 3300,
     name: "Three Month Pass"
@@ -449,7 +449,7 @@ async function createCheckoutSession(env, plan, origin, email) {
 const PASS_DURATION_MS = {
   day: 24 * 60 * 60 * 1e3,
   monthly: 31 * 24 * 60 * 60 * 1e3,
-  annual: 92 * 24 * 60 * 60 * 1e3
+  threemonth: 92 * 24 * 60 * 60 * 1e3
 };
 
 const UNLIMITED_DURATION_MS = 366 * 24 * 60 * 60 * 1e3;
@@ -533,7 +533,7 @@ async function checkPassRecord(env, email) {
     const record = raw ? JSON.parse(raw) : {};
     return {
       active: true,
-      plan: "annual",
+      plan: "unlimited",
       expiresAt: Date.now() + UNLIMITED_DURATION_MS,
       p1: record.p1 || null,
       p2: record.p2 || null
@@ -563,7 +563,7 @@ async function refreshPassSnapshot(env, email, p1, p2) {
   const isUnlimited = UNLIMITED_EMAILS.includes(email.trim().toLowerCase());
   if (!raw && !isUnlimited) return;
   const record = raw ? JSON.parse(raw) : {
-    plan: "annual",
+    plan: "unlimited",
     purchasedAt: Date.now()
   };
   if (!isUnlimited && record.expiresAt < Date.now()) return;
