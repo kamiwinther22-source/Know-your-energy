@@ -767,6 +767,12 @@ body{background:conic-gradient(from 200deg at 92% -4%,#FFFFFF 0deg,#F6F6F6 8deg,
 .price-label,.price-amt{font-size:14px;}
 .rel-chip,.price-row,.gen-btn{height:auto;line-height:1.2;}
 .hero-continue-btn{display:flex;width:max-content;}
+/*tidy-grid*/.rel-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;justify-items:stretch;max-width:340px;margin-left:auto;margin-right:auto;}
+.rel-row .glow-ring-sm{display:block;}.rel-row .rel-chip{width:100%;padding-left:8px;padding-right:8px;text-align:center;}
+.pricing-list{display:grid;grid-template-columns:1fr;gap:14px;max-width:260px;margin-left:auto;margin-right:auto;}
+.pricing-list .glow-ring-sm{display:block;}.pricing-list .price-row{width:100%;justify-content:center;}
+/*tidy-flex*/.rel-row{max-width:340px;margin-left:auto;margin-right:auto;}
+.rel-row .glow-ring-sm{flex:0 0 calc(50% - 7px);}
 
 </style>
 </head>
