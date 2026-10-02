@@ -1,7 +1,7 @@
 // build-cities.mjs
 // Runs automatically during deploy (see the GitHub Actions workflow).
-// It downloads the free GeoNames city database (cities15000.zip —
-// every city in the world with population 15,000+, about 31,000 cities),
+// It downloads the free GeoNames city database (cities1000.zip —
+// every place in the world with population 1,000+, about 145,000 places),
 // and writes a compact version into cities-data.js so the Worker can
 // look up birth-city coordinates without calling any outside service.
 //
@@ -19,8 +19,8 @@ import { dirname, join } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT_FILE = join(HERE, "cities-data.js");
-const ZIP_URL = "https://download.geonames.org/export/dump/cities15000.zip";
-const LOCAL_TXT = join(HERE, "cities15000.txt");
+const ZIP_URL = "https://download.geonames.org/export/dump/cities1000.zip";
+const LOCAL_TXT = join(HERE, "cities1000.txt");
 
 function extractFromZip(buf) {
   // Locate End Of Central Directory record (signature 0x06054b50)
@@ -51,10 +51,10 @@ function extractFromZip(buf) {
 
 async function getText() {
   if (existsSync(LOCAL_TXT)) {
-    console.log("Using local cities15000.txt");
+    console.log("Using local cities1000.txt");
     return readFileSync(LOCAL_TXT, "utf8");
   }
-  console.log("Downloading city database from GeoNames (about 3 MB)...");
+  console.log("Downloading city database from GeoNames (about 10 MB)...");
   const res = await fetch(ZIP_URL);
   if (!res.ok) throw new Error(`Download failed: HTTP ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());
@@ -91,7 +91,7 @@ for (const line of lines) {
   const pop = parseInt(c[14], 10) || 0;
   if (!name || !cc || Number.isNaN(lat) || Number.isNaN(lng)) continue;
   out.push(
-    `${name}|${ascii}|${cc}|${admin1}|${lat.toFixed(4)}|${lng.toFixed(4)}|${pop}`
+    `${name}|${ascii === name ? "" : ascii}|${cc}|${admin1}|${lat.toFixed(3)}|${lng.toFixed(3)}|${pop}`
   );
 }
 
