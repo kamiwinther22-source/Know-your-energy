@@ -663,7 +663,9 @@ body{
   .gate-def-print p{font-family:'DM Sans',sans-serif;font-size:0.82rem;line-height:1.5;margin:0 0 0.5rem;}
   .gate-chip{cursor:default!important;}
 }
-.connector-wrap{position:absolute;margin:0;min-height:0;pointer-events:none;}
+.connector-wrap{position:absolute;margin:0;min-height:0;pointer-events:none;z-index:-1;}
+.energy-ribbon svg{height:100%;}
+.metal-plaque{display:none!important;}
 @media screen{
 html,body{background:#000!important;color:#fff!important;}
 body *:not(#_){color:#fff!important;border-color:#fff!important;text-shadow:none!important;box-shadow:none!important;background-image:none!important;background-color:transparent!important;filter:none!important;}
@@ -1327,32 +1329,22 @@ function positionPlaque() {
 function positionRibbon() {
   const formCol = document.querySelector(".form-col");
   const p1Block = document.getElementById("p1Block");
-  const p2Tag = document.querySelector("#p2Section .person-tag");
   const ribbon = connectorWrap.querySelector(".energy-ribbon");
-  if (!formCol || !p1Block || !p2Tag || !ribbon) return;
+  if (!formCol || !p1Block || !ribbon) return;
   const f = formCol.getBoundingClientRect();
   const p1 = p1Block.getBoundingClientRect();
-  const t = p2Tag.getBoundingClientRect();
-  const gap = 6;
-  const left = p1.right + gap, top = p1.top;
-  const W = f.right - left, H = t.top - gap - top;
+  const p2 = p2Section.getBoundingClientRect();
+  const W = f.width, H = p2.bottom - p1.top;
   if (W <= 0 || H <= 0) return;
-  const ratio = 820 / 300;
-  let best = null;
-  for (let deg = 15; deg <= 75; deg++) {
-    const a = deg * Math.PI / 180;
-    const L = Math.min(W / (Math.cos(a) + Math.sin(a) / ratio), H / (Math.sin(a) + Math.cos(a) / ratio));
-    if (!best || L > best.L) best = {
-      deg: deg,
-      L: L
-    };
-  }
-  connectorWrap.style.left = left - f.left + "px";
-  connectorWrap.style.top = top - f.top + "px";
+  const deg = Math.atan2(H, W) * 180 / Math.PI;
+  const L = Math.hypot(W, H) * .94;
+  connectorWrap.style.left = "0px";
+  connectorWrap.style.top = p1.top - f.top + "px";
   connectorWrap.style.width = W + "px";
   connectorWrap.style.height = H + "px";
-  ribbon.style.width = best.L + "px";
-  ribbon.style.transform = "translate(-50%,-50%) rotate(" + -best.deg + "deg)";
+  ribbon.style.width = L + "px";
+  ribbon.style.height = L * .12 + "px";
+  ribbon.style.transform = "translate(-50%,-50%) rotate(" + -deg + "deg)";
 }
 
 window.addEventListener("resize", () => {
