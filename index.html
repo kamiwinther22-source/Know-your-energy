@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know Your Energy — Astrology, Numerology &amp; Human Design</title>
 <meta name="description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design — from just your name and birth details.">
-<meta name="theme-color" content="#F7F4EE">
+<meta name="theme-color" content="#F7F3EA">
 <meta property="og:title" content="Know Your Energy">
 <meta property="og:description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design.">
 <meta property="og:type" content="website">
@@ -657,12 +657,12 @@ body{
 }
 :root{
   color-scheme:light;
-  --ground:#F7F4EE;--ink:#0B1438;--diamond:#FBFDFF;--lip:#FFFFFF;
-  --aq-l:#C6F2EC;--aq-m:#4FCDC2;--aq-d:#129A90;--aq-x:#0B625C;
-  --tp-l:#CFEAFA;--tp-m:#62BDEB;--tp-d:#2A87C8;--tp-x:#165A8F;
-  --sa-l:#CDD8FB;--sa-m:#5C7FF0;--sa-d:#2447D0;--sa-x:#14288A;
-  --tz-l:#DED6FA;--tz-m:#8B72EC;--tz-d:#5A44C4;--tz-x:#38288A;
-  --plane:var(--tp-l);--well:var(--diamond);--well-edge:var(--tp-d);--ph:var(--tp-x);
+  --ground:#F7F3EA;--ink:#020643;--diamond:#FFFFFF;--lip:#FFFFFF;
+  --aq-l:#D6E7F3;--aq-m:#47B2D6;--aq-d:#1C87B5;--aq-x:#01528E;
+  --tp-l:#BECFE1;--tp-m:#74D5F6;--tp-d:#4290C6;--tp-x:#0B3B7C;
+  --sa-l:#A4BED2;--sa-m:#324ECD;--sa-d:#0F33AF;--sa-x:#0A1C91;
+  --tz-l:#E1D7D0;--tz-m:#D0B4AA;--tz-d:#887C6E;--tz-x:#664B3D;
+  --plane:var(--aq-l);--well:var(--diamond);--well-edge:var(--tp-d);--ph:var(--tp-x);
 }
 body{background:var(--ground);color:var(--ink);}
 
@@ -671,13 +671,13 @@ body{background:var(--ground);color:var(--ink);}
 #hookStep>div[style*="292px"]>div{color:var(--ink)!important;}
 .hl-1{color:var(--sa-d);}
 .hl-2{color:var(--aq-d);}
-.hl-3{color:var(--tz-d);}
+.hl-3{color:var(--tz-x);}
 .free-reading-line,.privacy-note{color:var(--ink);}
 
 /* the email block: a light plane with stacked hue layers underneath */
 .hero-email-wrap{position:relative;isolation:isolate;margin-bottom:26px;}
 .hero-email-wrap::before{content:'';position:absolute;inset:-16px -20px -18px -20px;z-index:-1;border-radius:22px;
-  background:var(--sa-l);box-shadow:5px 5px 0 var(--sa-m),10px 10px 0 var(--tz-m);}
+  background:var(--aq-l);box-shadow:5px 5px 0 var(--sa-m),10px 10px 0 var(--tz-m);}
 
 /* fields: carved into the plane */
 .line-field{background:var(--well);box-shadow:inset 2px 2px 0 var(--well-edge),inset -2px -2px 0 var(--lip);}
@@ -702,7 +702,7 @@ body{background:var(--ground);color:var(--ink);}
 .opt-lbl{letter-spacing:0;}
 .person-tag{background:var(--plane);}
 #p1Block .person-tag{color:var(--aq-x);}
-#p2Section .person-tag{color:var(--tz-d);}
+#p2Section .person-tag{color:#664B3D;}
 .form-col .row-id{grid-template-columns:1fr 0.9fr 1fr;}
 .form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
 
@@ -742,7 +742,7 @@ body{background:var(--ground);color:var(--ink);}
 .pricing-list>.glow-ring-sm:nth-child(3) .price-row{background:var(--tz-m);box-shadow:inset 1px 1px 0 var(--tz-l),1px 1px 0 var(--tz-d),2px 2px 0 var(--tz-x),3px 3px 0 var(--sa-x),4px 4px 0 var(--ink);}
 .price-row:hover,.price-row:focus-visible{transform:translate(-1px,-1px);}
 
-.err{color:#8C1530;background:#FFE1E6;border:2px solid #8C1530;}
+.err{color:#664B3D;background:#E1D7D0;border:2px solid #664B3D;}
 .sun-cta span,.sun-cta span .sun-cta-tap{text-shadow:none;}
 .metal-plaque{display:none!important;}
 .connector-wrap{position:absolute;margin:0;min-height:0;pointer-events:none;z-index:-1;}
@@ -794,29 +794,29 @@ body{background:var(--ground);color:var(--ink);}
       <defs>
         
         <linearGradient id="heroKeyMetal" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#CDD8FB"/>
-          <stop offset="20%" stop-color="#A9BBF8"/>
-          <stop offset="48%" stop-color="#5C7FF0"/>
-          <stop offset="76%" stop-color="#2447D0"/>
-          <stop offset="100%" stop-color="#14288A"/>
+          <stop offset="0%" stop-color="#D6E7F3"/>
+          <stop offset="20%" stop-color="#BECFE1"/>
+          <stop offset="48%" stop-color="#8CA6BD"/>
+          <stop offset="76%" stop-color="#4290C6"/>
+          <stop offset="100%" stop-color="#0A1C91"/>
         </linearGradient>
         <linearGradient id="heroKeyMetalRim" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#FFFFFF"/>
-          <stop offset="32%" stop-color="#A9BBF8"/>
-          <stop offset="68%" stop-color="#2447D0"/>
-          <stop offset="100%" stop-color="#14288A"/>
+          <stop offset="32%" stop-color="#BECFE1"/>
+          <stop offset="68%" stop-color="#4290C6"/>
+          <stop offset="100%" stop-color="#0A1C91"/>
         </linearGradient>
         <radialGradient id="heroKeyRecessed" cx="35%" cy="30%" r="75%">
-          <stop offset="0%" stop-color="#5A44C4"/>
-          <stop offset="60%" stop-color="#14288A"/>
-          <stop offset="100%" stop-color="#38288A"/>
+          <stop offset="0%" stop-color="#0F33AF"/>
+          <stop offset="60%" stop-color="#0A1C91"/>
+          <stop offset="100%" stop-color="#020643"/>
         </radialGradient>
-        <linearGradient id="heroKeyGem" x1="10%" y1="0%" x2="90%" y2="100%"><stop offset="0%" stop-color="#C9F1FF"/><stop offset="45%" stop-color="#12A0E8"/><stop offset="100%" stop-color="#1127A8"/></linearGradient>
+        <linearGradient id="heroKeyGem" x1="10%" y1="0%" x2="90%" y2="100%"><stop offset="0%" stop-color="#D6E7F3"/><stop offset="45%" stop-color="#47B2D6"/><stop offset="100%" stop-color="#1C87B5"/></linearGradient>
       </defs>
       <g transform="translate(46.5,-72.5) rotate(-90 70 122)">
         <circle cx="70" cy="55" r="49.5" fill="url(#heroKeyMetalRim)"/>
-        <circle cx="70" cy="55" r="45" fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.7"/>
-        <g stroke="#0B1438" stroke-width="1.3">
+        <circle cx="70" cy="55" r="45" fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.7"/>
+        <g stroke="#020643" stroke-width="1.3">
           <line x1="115.00" y1="55.00" x2="119.50" y2="55.00"/>
           <line x1="114.14" y1="63.78" x2="118.55" y2="64.66"/>
           <line x1="111.57" y1="72.22" x2="115.73" y2="73.94"/>
@@ -851,27 +851,27 @@ body{background:var(--ground);color:var(--ink);}
           <line x1="114.14" y1="46.22" x2="118.55" y2="45.34"/>
         </g>
         <circle cx="70" cy="55" r="30" fill="url(#heroKeyRecessed)"/>
-        <circle cx="70" cy="55" r="30" fill="none" stroke="#4FCDC2" stroke-width="1.1"/>
-        <circle cx="70" cy="30" r="3.6" fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.6"/>
-        <circle cx="95" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.6"/>
-        <circle cx="70" cy="80" r="3.6" fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.6"/>
-        <circle cx="45" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.6"/>
-        <path d="M70,40 L80,49 L80,62 L70,71 L60,62 L60,49 Z" fill="url(#heroKeyGem)" stroke="#0B1438" stroke-width="0.9"/>
+        <circle cx="70" cy="55" r="30" fill="none" stroke="#74D5F6" stroke-width="1.1"/>
+        <circle cx="70" cy="30" r="3.6" fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.6"/>
+        <circle cx="95" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.6"/>
+        <circle cx="70" cy="80" r="3.6" fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.6"/>
+        <circle cx="45" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.6"/>
+        <path d="M70,40 L80,49 L80,62 L70,71 L60,62 L60,49 Z" fill="url(#heroKeyGem)" stroke="#020643" stroke-width="0.9"/>
         <path d="M70,40 L80,49 L70,55.5 Z" fill="#FFFFFF"/>
-        <path d="M70,55.5 L60,49 L70,40 Z" fill="#129A90"/>
-        <path d="M70,55.5 L60,49 L60,62 L70,71 Z" fill="#14288A"/>
+        <path d="M70,55.5 L60,49 L70,40 Z" fill="#1C87B5"/>
+        <path d="M70,55.5 L60,49 L60,62 L70,71 Z" fill="#0A1C91"/>
         <g fill="#ffffff">
           <path d="M64,44 L65.3,47.4 L68.7,48.7 L65.3,50 L64,53.4 L62.7,50 L59.3,48.7 L62.7,47.4 Z"/>
           <circle cx="75" cy="60" r="1.1"/>
         </g>
-        <ellipse cx="70" cy="103" rx="21" ry="7.5" fill="url(#heroKeyMetalRim)" stroke="#0B1438" stroke-width="0.7"/>
-        <ellipse cx="70" cy="115" rx="15.5" ry="5.5" fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.7"/>
-        <path d="M60,119 L80,119 L78.5,208 L61.5,208 Z" fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.7"/>
-        <line x1="66" y1="124" x2="65.3" y2="203" stroke="#14288A" stroke-width="1"/>
-        <line x1="75" y1="124" x2="74.3" y2="203" stroke="#14288A" stroke-width="1"/>
+        <ellipse cx="70" cy="103" rx="21" ry="7.5" fill="url(#heroKeyMetalRim)" stroke="#020643" stroke-width="0.7"/>
+        <ellipse cx="70" cy="115" rx="15.5" ry="5.5" fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.7"/>
+        <path d="M60,119 L80,119 L78.5,208 L61.5,208 Z" fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.7"/>
+        <line x1="66" y1="124" x2="65.3" y2="203" stroke="#0A1C91" stroke-width="1"/>
+        <line x1="75" y1="124" x2="74.3" y2="203" stroke="#0A1C91" stroke-width="1"/>
         <line x1="63" y1="123" x2="62.4" y2="204" stroke="#FFFFFF" stroke-width="1.6"/>
         <path d="M61.5,208 L60.3,238 L67,238 L67.5,229 L74,229 L74.4,220 L79.8,220 L78.5,208 Z"
-              fill="url(#heroKeyMetal)" stroke="#0B1438" stroke-width="0.7"/>
+              fill="url(#heroKeyMetal)" stroke="#020643" stroke-width="0.7"/>
         <line x1="63" y1="212" x2="62" y2="236" stroke="#FFFFFF" stroke-width="1.1"/>
       </g>
     </svg>
@@ -965,7 +965,7 @@ body{background:var(--ground);color:var(--ink);}
 
         
         <div class="metal-plaque" id="metalPlaque">
-          <svg viewBox="0 0 729 490" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Astrology, Numerology, Human Design" style="display:block;width:100%;height:100%;"><g font-family="'Alex Brush',cursive" text-anchor="middle" font-size="126" fill="#ffffff"><text x="364" y="128">Astrology</text><text x="364" y="288">Numerology</text><text x="364" y="448">Human Design</text></g></svg>
+          
         </div>
 
       </div>
@@ -978,7 +978,7 @@ body{background:var(--ground);color:var(--ink);}
 
       
       <div class="connector-wrap" id="connectorWrap" style="display:none;">
-        <div class="energy-ribbon"><svg viewBox="-20 -28 856 346" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="rbHue" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#4FCDC2"/><stop offset="35%" stop-color="#62BDEB"/><stop offset="65%" stop-color="#5C7FF0"/><stop offset="100%" stop-color="#8B72EC"/></linearGradient><linearGradient id="rbShade" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#0B625C"/><stop offset="35%" stop-color="#165A8F"/><stop offset="65%" stop-color="#14288A"/><stop offset="100%" stop-color="#38288A"/></linearGradient></defs><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbShade)" stroke-width="5.7" transform="translate(4 6)"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbShade)" stroke-width="4.8" transform="translate(4 6)"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbShade)" stroke-width="4.2" transform="translate(4 6)"/><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbHue)" stroke-width="5.7"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbHue)" stroke-width="4.8"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbHue)" stroke-width="4.2"/><path d="M20,234 C160,200 300,190 420,176 C560,160 630,108 712,70 C752,52 782,34 804,26" stroke="url(#rbHue)" stroke-width="3.4"/><path d="M20,234 C130,226 224,230 312,217 C412,201 448,192 497,182 C576,163 625,130 708,98 C759,76 787,52 804,26" stroke="url(#rbHue)" stroke-width="2.5"/><path d="M20,234 C120,200 200,160 294,144 C394,127 428,118 478,108 C556,90 604,58 688,32 C740,16 780,24 804,26" stroke="url(#rbHue)" stroke-width="2.1"/><path d="M20,234 C150,194 255,176 355,166 C435,160 455,164 495,174 C595,198 660,150 740,86 C770,62 790,40 804,26" stroke="url(#rbHue)" stroke-width="2.3"/></g><circle cx="131.7" cy="232.9" r="7.0" fill="#0B625C"/><circle cx="129.3" cy="229.5" r="7.0" fill="#4FCDC2" stroke="#0B625C" stroke-width="1.4"/><circle cx="126.9" cy="227.0" r="2.1" fill="#FFFFFF"/><circle cx="205.3" cy="222.8" r="8.4" fill="#38288A"/><circle cx="202.9" cy="219.4" r="8.4" fill="#8B72EC" stroke="#38288A" stroke-width="1.4"/><circle cx="200.0" cy="216.4" r="2.5" fill="#FFFFFF"/><circle cx="278.5" cy="208.2" r="7.0" fill="#165A8F"/><circle cx="276.1" cy="204.8" r="7.0" fill="#62BDEB" stroke="#165A8F" stroke-width="1.4"/><circle cx="273.8" cy="202.3" r="2.1" fill="#FFFFFF"/><circle cx="565.4" cy="121.6" r="7.0" fill="#14288A"/><circle cx="563.0" cy="118.2" r="7.0" fill="#5C7FF0" stroke="#14288A" stroke-width="1.4"/><circle cx="560.7" cy="115.6" r="2.1" fill="#FFFFFF"/><circle cx="607.1" cy="105.8" r="8.4" fill="#0B625C"/><circle cx="604.7" cy="102.4" r="8.4" fill="#4FCDC2" stroke="#0B625C" stroke-width="1.4"/><circle cx="601.9" cy="99.3" r="2.5" fill="#FFFFFF"/><circle cx="646.5" cy="90.2" r="7.0" fill="#38288A"/><circle cx="644.1" cy="86.8" r="7.0" fill="#8B72EC" stroke="#38288A" stroke-width="1.4"/><circle cx="641.7" cy="84.3" r="2.1" fill="#FFFFFF"/><circle cx="684.2" cy="75.1" r="7.0" fill="#165A8F"/><circle cx="681.8" cy="71.7" r="7.0" fill="#62BDEB" stroke="#165A8F" stroke-width="1.4"/><circle cx="679.4" cy="69.1" r="2.1" fill="#FFFFFF"/><circle cx="720.9" cy="60.5" r="8.4" fill="#14288A"/><circle cx="718.5" cy="57.1" r="8.4" fill="#5C7FF0" stroke="#14288A" stroke-width="1.4"/><circle cx="715.7" cy="54.1" r="2.5" fill="#FFFFFF"/><circle cx="757.3" cy="46.6" r="7.0" fill="#0B625C"/><circle cx="754.9" cy="43.2" r="7.0" fill="#4FCDC2" stroke="#0B625C" stroke-width="1.4"/><circle cx="752.5" cy="40.7" r="2.1" fill="#FFFFFF"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#129A90" transform="translate(470.0 150.0) scale(2.60) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#5A44C4" transform="translate(300.0 196.0) scale(1.90) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#2447D0" transform="translate(700.0 60.0) scale(2.20) translate(-12 -38)"/><circle cx="23" cy="239" r="17" fill="#0B625C"/><circle cx="20" cy="234" r="17" fill="#4FCDC2" stroke="#0B625C" stroke-width="1.6"/><circle cx="14.2" cy="228.0" r="5.4" fill="#FFFFFF"/><circle cx="807" cy="31" r="17" fill="#38288A"/><circle cx="804" cy="26" r="17" fill="#8B72EC" stroke="#38288A" stroke-width="1.6"/><circle cx="798.2" cy="20.0" r="5.4" fill="#FFFFFF"/></svg></div>
+        <div class="energy-ribbon"><svg viewBox="-20 -28 856 346" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="rbHue" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#47B2D6"/><stop offset="35%" stop-color="#74D5F6"/><stop offset="65%" stop-color="#324ECD"/><stop offset="100%" stop-color="#D0B4AA"/></linearGradient><linearGradient id="rbShade" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#01528E"/><stop offset="35%" stop-color="#0B3B7C"/><stop offset="65%" stop-color="#0A1C91"/><stop offset="100%" stop-color="#020643"/></linearGradient></defs><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbShade)" stroke-width="5.7" transform="translate(4 6)"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbShade)" stroke-width="4.8" transform="translate(4 6)"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbShade)" stroke-width="4.2" transform="translate(4 6)"/><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbHue)" stroke-width="5.7"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbHue)" stroke-width="4.8"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbHue)" stroke-width="4.2"/><path d="M20,234 C160,200 300,190 420,176 C560,160 630,108 712,70 C752,52 782,34 804,26" stroke="url(#rbHue)" stroke-width="3.4"/><path d="M20,234 C130,226 224,230 312,217 C412,201 448,192 497,182 C576,163 625,130 708,98 C759,76 787,52 804,26" stroke="url(#rbHue)" stroke-width="2.5"/><path d="M20,234 C120,200 200,160 294,144 C394,127 428,118 478,108 C556,90 604,58 688,32 C740,16 780,24 804,26" stroke="url(#rbHue)" stroke-width="2.1"/><path d="M20,234 C150,194 255,176 355,166 C435,160 455,164 495,174 C595,198 660,150 740,86 C770,62 790,40 804,26" stroke="url(#rbHue)" stroke-width="2.3"/></g><circle cx="131.7" cy="232.9" r="7.0" fill="#01528E"/><circle cx="129.3" cy="229.5" r="7.0" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="126.9" cy="227.0" r="2.1" fill="#FFFFFF"/><circle cx="205.3" cy="222.8" r="8.4" fill="#020643"/><circle cx="202.9" cy="219.4" r="8.4" fill="#D0B4AA" stroke="#020643" stroke-width="1.4"/><circle cx="200.0" cy="216.4" r="2.5" fill="#FFFFFF"/><circle cx="278.5" cy="208.2" r="7.0" fill="#0B3B7C"/><circle cx="276.1" cy="204.8" r="7.0" fill="#74D5F6" stroke="#0B3B7C" stroke-width="1.4"/><circle cx="273.8" cy="202.3" r="2.1" fill="#FFFFFF"/><circle cx="565.4" cy="121.6" r="7.0" fill="#0A1C91"/><circle cx="563.0" cy="118.2" r="7.0" fill="#324ECD" stroke="#0A1C91" stroke-width="1.4"/><circle cx="560.7" cy="115.6" r="2.1" fill="#FFFFFF"/><circle cx="607.1" cy="105.8" r="8.4" fill="#01528E"/><circle cx="604.7" cy="102.4" r="8.4" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="601.9" cy="99.3" r="2.5" fill="#FFFFFF"/><circle cx="646.5" cy="90.2" r="7.0" fill="#020643"/><circle cx="644.1" cy="86.8" r="7.0" fill="#D0B4AA" stroke="#020643" stroke-width="1.4"/><circle cx="641.7" cy="84.3" r="2.1" fill="#FFFFFF"/><circle cx="684.2" cy="75.1" r="7.0" fill="#0B3B7C"/><circle cx="681.8" cy="71.7" r="7.0" fill="#74D5F6" stroke="#0B3B7C" stroke-width="1.4"/><circle cx="679.4" cy="69.1" r="2.1" fill="#FFFFFF"/><circle cx="720.9" cy="60.5" r="8.4" fill="#0A1C91"/><circle cx="718.5" cy="57.1" r="8.4" fill="#324ECD" stroke="#0A1C91" stroke-width="1.4"/><circle cx="715.7" cy="54.1" r="2.5" fill="#FFFFFF"/><circle cx="757.3" cy="46.6" r="7.0" fill="#01528E"/><circle cx="754.9" cy="43.2" r="7.0" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="752.5" cy="40.7" r="2.1" fill="#FFFFFF"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#1C87B5" transform="translate(470.0 150.0) scale(2.60) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#887C6E" transform="translate(300.0 196.0) scale(1.90) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#0F33AF" transform="translate(700.0 60.0) scale(2.20) translate(-12 -38)"/><circle cx="23" cy="239" r="17" fill="#01528E"/><circle cx="20" cy="234" r="17" fill="#47B2D6" stroke="#01528E" stroke-width="1.6"/><circle cx="14.2" cy="228.0" r="5.4" fill="#FFFFFF"/><circle cx="807" cy="31" r="17" fill="#020643"/><circle cx="804" cy="26" r="17" fill="#D0B4AA" stroke="#020643" stroke-width="1.6"/><circle cx="798.2" cy="20.0" r="5.4" fill="#FFFFFF"/></svg></div>
       </div>
     </div>
   </div>
@@ -1111,8 +1111,8 @@ function openNumberDef(item) {
   const cx = 180, cy = 100, r = 46;
   const RING_ROTATION_DEG = -8;
   const RING_RX = [ 64, 86, 108, 130, 152, 175 ];
-  const RING_COLOR = [ "#4FCDC2", "#62BDEB", "#5C7FF0", "#8B72EC", "#129A90", "#2447D0" ];
-  const RING_SHADE = [ "#0B625C", "#165A8F", "#14288A", "#38288A", "#0B625C", "#14288A" ];
+  const RING_COLOR = [ "#47B2D6", "#74D5F6", "#324ECD", "#D0B4AA", "#1C87B5", "#0F33AF" ];
+  const RING_SHADE = [ "#01528E", "#0B3B7C", "#0A1C91", "#020643", "#01528E", "#0A1C91" ];
   const SHADOW_DX = 1.6, SHADOW_DY = 2.4;
   function ringPoint(ringIdx, angleDeg, beadR) {
     const rx = RING_RX[ringIdx], ry = rx * .26;
@@ -1127,7 +1127,7 @@ function openNumberDef(item) {
     };
   }
   const BEAD_SPECS = [ [ 1, 205, 10 ], [ 2, 20, 10 ], [ 4, 335, 9 ], [ 1, 15, 9 ] ];
-  const BEAD_COLOR = [ [ "#4FCDC2", "#0B625C" ], [ "#8B72EC", "#38288A" ], [ "#62BDEB", "#165A8F" ], [ "#5C7FF0", "#14288A" ] ];
+  const BEAD_COLOR = [ [ "#47B2D6", "#01528E" ], [ "#D0B4AA", "#020643" ], [ "#74D5F6", "#0B3B7C" ], [ "#324ECD", "#0A1C91" ] ];
   const BEADS = BEAD_SPECS.map(([ring, angle, br]) => ringPoint(ring, angle, br));
   const ORBIT_STEPS = 96, ORBIT_PERIOD_S = 48;
   function wrap360(a) {
@@ -1180,16 +1180,16 @@ function openNumberDef(item) {
       </defs>
     ${BACK_ARCS_SVG}
     ${BACK_BEADS_SVG}
-    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#14288A"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#38288A"/>
-    <circle cx="${cx - 2}" cy="${cy - 2}" r="42" fill="#2447D0"/>
-    <circle cx="${cx - 5}" cy="${cy - 5}" r="35" fill="#62BDEB"/>
-    <circle cx="${cx - 9}" cy="${cy - 9}" r="27" fill="#4FCDC2"/>
-    <circle cx="${cx - 13}" cy="${cy - 13}" r="18" fill="#BDEFE8"/>
+    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#0A1C91"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#020643"/>
+    <circle cx="${cx - 2}" cy="${cy - 2}" r="42" fill="#0F33AF"/>
+    <circle cx="${cx - 5}" cy="${cy - 5}" r="35" fill="#74D5F6"/>
+    <circle cx="${cx - 9}" cy="${cy - 9}" r="27" fill="#47B2D6"/>
+    <circle cx="${cx - 13}" cy="${cy - 13}" r="18" fill="#D6E7F3"/>
     ${FRONT_ARCS_SVG}
-    <path d="${STAR}" fill="#129A90" transform="translate(322,10) scale(0.6)"/>
-    <path d="${STAR}" fill="#5A44C4" transform="translate(30,150) scale(0.42)"/>
-    <path d="${STAR}" fill="#2447D0" transform="translate(190,182) scale(0.34)"/>
+    <path d="${STAR}" fill="#1C87B5" transform="translate(322,10) scale(0.6)"/>
+    <path d="${STAR}" fill="#887C6E" transform="translate(30,150) scale(0.42)"/>
+    <path d="${STAR}" fill="#0F33AF" transform="translate(190,182) scale(0.34)"/>
     ${FRONT_BEADS_SVG}
   </svg>`;
   host.innerHTML = svg;
