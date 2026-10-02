@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know Your Energy — Astrology, Numerology &amp; Human Design</title>
 <meta name="description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design — from just your name and birth details.">
-<meta name="theme-color" content="#F7F0DF">
+<meta name="theme-color" content="#F6F1EC">
 <meta property="og:title" content="Know Your Energy">
 <meta property="og:description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design.">
 <meta property="og:type" content="website">
@@ -657,89 +657,92 @@ body{
 }
 :root{
   color-scheme:light;
-  --cream:#F7F0DF;--ink:#10264A;--lip:#FFF9EA;
-  --cy-l:#A9EAF2;--cy-f:#6FE0EE;--cy:#19C2D6;--cy-d:#0A8CA3;--cy-x:#07667A;
-  --pe-l:#CFD5FF;--pe-f:#A5B0FF;--pe:#7B88F5;--pe-d:#4F5BD9;--pe-x:#3640A8;
-  --or-l:#E4D6FF;--or-f:#CDB2FF;--or:#A97DF0;--or-d:#7C4FD0;--or-x:#5A35A0;
-  --well:var(--pe-l);--edge:var(--pe);--deep:var(--pe-x);
+  --pearl:#F6F1EC;--ink:#0A1030;
+  --ult-900:#070B52;--ult-800:#0C1470;--ult-700:#1127A8;--ult-500:#1F3FE0;--ult-400:#4D6BFF;
+  --cy-600:#0A6FB8;--cy-500:#12A0E8;--cy-300:#5CCBFF;--cy-100:#C9F1FF;
+  --ice-300:#A9C4DF;--ice-200:#CFE2F2;--ice-100:#E9F4FB;
+  --ch-800:#6E4A2E;--ch-600:#A87B50;--ch-400:#D2AB80;--ch-200:#EBCFB3;--ch-100:#FBEFE2;
+  --slab:#0C1470;
+  --well:var(--ice-100);--well-edge:var(--ice-300);--well-lip:#FFFFFF;--ph:var(--ult-700);
 }
-#p1Block{--well:var(--cy-l);--edge:var(--cy);--deep:var(--cy-x);}
-#p2Section{--well:var(--or-l);--edge:var(--or);--deep:var(--or-x);}
+#p2Section{--well:var(--ch-100);--well-edge:var(--ch-400);--ph:#8A5E3A;}
+.hero-email-field{--well-edge:var(--ult-500);}
 
-body{background:var(--cream);color:var(--ink);}
-
+body{background:var(--pearl);color:var(--ink);}
 .hook-brand{margin:0 0 1.3rem;padding:0;}
 .hook-brand .brand{font-size:clamp(2rem,10vw,2.7rem);white-space:nowrap;color:var(--ink);background:none;-webkit-text-fill-color:currentColor;}
-
 #hookStep>div[style*="292px"]>div{color:var(--ink)!important;}
-.hl-1{color:var(--cy-d);}
-.hl-2{color:var(--pe-d);}
-.hl-3{color:var(--or-d);}
-.free-reading-line{color:var(--ink);}
-.privacy-note{color:var(--ink);}
+.hl-1{color:var(--ult-500);}
+.hl-2{color:var(--cy-600);}
+.hl-3{color:#8A5E3A;}
+.free-reading-line,.privacy-note{color:var(--ink);}
 
-
-.line-field{background:var(--well);box-shadow:inset 3px 3px 0 var(--edge),inset -2px -2px 0 var(--lip);}
-.line-field:focus-within{box-shadow:inset 3px 3px 0 var(--deep),inset -2px -2px 0 var(--lip),0 0 0 2px var(--deep);}
+.line-field{background:var(--well);box-shadow:inset 2px 2px 0 var(--well-edge),inset -2px -2px 0 var(--well-lip);}
+.line-field:focus-within{box-shadow:inset 2px 2px 0 var(--ult-500),inset -2px -2px 0 var(--well-lip),0 0 0 2px var(--cy-300);}
 .line-field input,.line-field select{color:var(--ink);}
-.line-field input::placeholder{color:var(--deep);opacity:1;}
-.line-field select option{color:var(--ink);background:var(--cream);}
+.line-field input::placeholder{color:var(--ph);opacity:1;}
+.line-field select option{color:var(--ink);background:var(--pearl);}
 .line-field input:-webkit-autofill,.line-field input:-webkit-autofill:hover,.line-field input:-webkit-autofill:focus{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 1000px var(--well) inset;}
-.row-id{background:var(--well);box-shadow:inset 3px 3px 0 var(--edge),inset -2px -2px 0 var(--lip);}
-.row-id .line-field{background:transparent;box-shadow:none;border-right:2px solid var(--edge);}
+#p1Block .line-field input,#p1Block .line-field select{box-shadow:none;-webkit-text-fill-color:var(--ink);}
+.row-id{background:var(--well);box-shadow:inset 2px 2px 0 var(--well-edge),inset -2px -2px 0 var(--well-lip);}
+.row-id .line-field{background:transparent;box-shadow:none;border-right:2px solid var(--well-edge);}
 .row-id .line-field:last-child{border-right:none;}
 
-.form-panel label,.row-birth label{color:var(--ink);font-size:0.7rem;letter-spacing:0.08em;background:var(--cream);}
-.section-lbl{color:var(--ink);font-size:0.7rem;}
+.form-col{background:var(--slab);border-radius:26px;padding:0 0 26px;isolation:isolate;
+  box-shadow:inset 3px 3px 0 var(--ult-900),inset -3px -3px 0 var(--ult-500);}
+.form-panel label,.row-birth label,.section-lbl{color:var(--pearl);font-size:0.7rem;letter-spacing:0.08em;background:var(--slab);}
 .opt-lbl{letter-spacing:0;}
-.person-tag{background:var(--cream);}
-#p1Block .person-tag{color:var(--cy-d);}
-#p2Section .person-tag{color:var(--or-d);}
+.person-tag{background:var(--slab);}
+#p1Block .person-tag{color:var(--cy-300);}
+#p2Section .person-tag{color:var(--ch-400);}
 
-.toggle-row,.tog-lbl{color:var(--ink);}
-.tog-lbl.active{color:var(--pe-d);}
-.toggle-pill{background:var(--pe-l);border:none;box-shadow:inset 2px 2px 0 var(--pe),inset -2px -2px 0 var(--lip);}
-.toggle-pill::after{background:var(--pe-d);box-shadow:1px 1px 0 var(--pe-x),2px 2px 0 var(--pe-x);}
-.toggle-pill.on{background:var(--or-l);border:none;box-shadow:inset 2px 2px 0 var(--or),inset -2px -2px 0 var(--lip);}
-.toggle-pill.on::after{background:var(--or-d);box-shadow:1px 1px 0 var(--or-x),2px 2px 0 var(--or-x);}
+.toggle-row,.tog-lbl{color:var(--pearl);}
+.tog-lbl.active{color:var(--ch-200);}
+.toggle-pill{background:var(--ult-900);border:none;box-shadow:inset 2px 2px 0 #04062E,inset -2px -2px 0 var(--ult-500);}
+.toggle-pill::after{background:linear-gradient(180deg,var(--ch-100) 0 40%,var(--ch-400) 40% 100%);box-shadow:1px 1px 0 var(--ch-800);}
+.toggle-pill.on{background:var(--ult-900);border:none;}
+.toggle-pill.on::after{background:linear-gradient(180deg,var(--cy-100) 0 40%,var(--cy-500) 40% 100%);box-shadow:1px 1px 0 var(--ult-900);}
 
 .glow-ring,.glow-ring-sm{overflow:visible;padding:0;background:none;}
 .glow-ring::before,.glow-ring-sm::before{display:none;}
 .rel-row{gap:0.5rem;}
-.rel-chip{background:var(--pe-f);color:var(--ink);border:none;overflow:visible;
-  box-shadow:inset 2px 2px 0 var(--lip),1px 1px 0 var(--pe-d),2px 2px 0 var(--pe-d),3px 3px 0 var(--pe-d),4px 4px 0 var(--pe-x);}
-.rel-chip:hover{background:var(--pe);}
-.rel-chip.active{background:var(--pe);color:var(--ink);transform:translate(3px,3px);
-  box-shadow:inset 3px 3px 0 var(--pe-x),inset -2px -2px 0 var(--lip);}
-.rel-chip.active:hover{background:var(--pe);}
+.rel-chip{background:var(--ice-200);color:var(--ink);border:1px solid var(--ult-900);overflow:visible;
+  box-shadow:inset 1px 1px 0 #FFFFFF,1px 1px 0 var(--ice-300),2px 2px 0 #4A6A94,3px 3px 0 var(--ult-900);}
+.rel-chip:hover{background:var(--cy-100);}
+.rel-chip.active{background:var(--ch-400);color:var(--ink);transform:translate(2px,2px);box-shadow:inset 2px 2px 0 var(--ch-600);}
+.rel-chip.active:hover{background:var(--ch-400);}
 
-.hero-continue-btn,.gen-btn{background:var(--pe);color:var(--ink);border:none;overflow:visible;
-  box-shadow:inset 2px 2px 0 var(--pe-f),1px 1px 0 var(--pe-d),2px 2px 0 var(--pe-d),3px 3px 0 var(--pe-d),4px 4px 0 var(--pe-x),5px 5px 0 var(--pe-x);}
-.hero-continue-label{color:var(--ink);}
-.gen-btn{border-radius:6px;font-size:0.74rem;}
+.hero-continue-btn{background:var(--ult-500);color:var(--pearl);border:1px solid var(--ult-900);overflow:visible;
+  box-shadow:inset 0 2px 0 var(--ult-400),0 1px 0 var(--ult-700),0 2px 0 var(--ult-700),0 3px 0 var(--ult-900),0 4px 0 var(--ult-900);}
+.hero-continue-label{color:var(--pearl);}
+.gen-btn{background:linear-gradient(180deg,var(--ch-100) 0 18%,var(--ch-200) 18% 82%,var(--ch-400) 82% 100%);color:var(--ink);border:1px solid var(--ch-800);border-radius:6px;overflow:visible;font-size:0.74rem;
+  box-shadow:0 1px 0 var(--ch-600),0 2px 0 var(--ch-600),0 3px 0 var(--ch-800),0 4px 0 var(--ch-800);}
 .gen-btn::before{display:none;}
-.hero-continue-btn:hover,.gen-btn:hover{transform:translate(-1px,-1px);}
-.hero-continue-btn:active,.gen-btn:active{transform:translate(4px,4px);
-  box-shadow:inset 3px 3px 0 var(--pe-x),inset -2px -2px 0 var(--lip);}
+.hero-continue-btn:hover,.gen-btn:hover{transform:translateY(-1px);}
+.hero-continue-btn:active,.gen-btn:active{transform:translateY(3px);box-shadow:none;}
 
-.pricing-panel{border-bottom:2px solid var(--pe);}
+.pricing-panel{border-bottom:2px solid var(--ult-500);}
 .state-banner-ttl,.state-banner-sub,.hero-pricing-intro{color:var(--ink);}
 .pricing-list{gap:0.7rem;}
-.price-row{background:var(--pe-f);border:none;overflow:visible;
-  box-shadow:inset 2px 2px 0 var(--lip),1px 1px 0 var(--pe-d),2px 2px 0 var(--pe-d),3px 3px 0 var(--pe-d),4px 4px 0 var(--pe-x);}
+.price-row{overflow:visible;border:1px solid var(--ult-900);
+  background:var(--ice-200);box-shadow:inset 1px 1px 0 #FFFFFF,1px 1px 0 var(--ice-300),2px 2px 0 #4A6A94,3px 3px 0 var(--ult-900);}
 .price-label,.price-amt{color:var(--ink);}
-.pricing-list>.glow-ring-sm:nth-child(1) .price-row{background:var(--cy-f);box-shadow:inset 2px 2px 0 var(--lip),1px 1px 0 var(--cy-d),2px 2px 0 var(--cy-d),3px 3px 0 var(--cy-d),4px 4px 0 var(--cy-x);}
-.pricing-list>.glow-ring-sm:nth-child(3) .price-row{background:var(--or-f);box-shadow:inset 2px 2px 0 var(--lip),1px 1px 0 var(--or-d),2px 2px 0 var(--or-d),3px 3px 0 var(--or-d),4px 4px 0 var(--or-x);}
+.pricing-list>.glow-ring-sm:nth-child(2) .price-row{background:var(--ult-500);box-shadow:inset 1px 1px 0 var(--ult-400),1px 1px 0 var(--ult-700),2px 2px 0 var(--ult-700),3px 3px 0 var(--ult-900);}
+.pricing-list>.glow-ring-sm:nth-child(2) .price-label,.pricing-list>.glow-ring-sm:nth-child(2) .price-amt{color:var(--pearl);}
+.pricing-list>.glow-ring-sm:nth-child(3) .price-row{background:linear-gradient(180deg,var(--ch-100) 0 18%,var(--ch-200) 18% 82%,var(--ch-400) 82% 100%);border-color:var(--ch-800);box-shadow:1px 1px 0 var(--ch-600),2px 2px 0 var(--ch-600),3px 3px 0 var(--ch-800);}
 .price-row:hover,.price-row:focus-visible{transform:translate(-1px,-1px);}
 
 .err{color:#8C1530;background:#FFE1E6;border:2px solid #8C1530;}
+.sun-cta span,.sun-cta span .sun-cta-tap{text-shadow:none;}
 .metal-plaque{display:none!important;}
 .connector-wrap{position:absolute;margin:0;min-height:0;pointer-events:none;z-index:-1;}
 .connector-wrap::before{display:none;}
 .energy-ribbon svg{display:block;width:100%;height:auto;overflow:visible;}
-.submit-wrap{margin-bottom:1.4rem;}
-#p1Block .line-field input,#p1Block .line-field select{box-shadow:none;-webkit-text-fill-color:var(--ink);}
-.sun-cta span,.sun-cta span .sun-cta-tap{text-shadow:none;}
+.submit-wrap{margin-bottom:0.2rem;}
+.form-col>.form-panel{padding:20px 20px 0 0;}
+.form-col .row-id{grid-template-columns:1fr 0.9fr 1fr;}
+.form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
+#p2Section:not(.open) .person-tag{visibility:hidden;}
 
 </style>
 </head>
@@ -784,33 +787,29 @@ body{background:var(--cream);color:var(--ink);}
       <defs>
         
         <linearGradient id="heroKeyMetal" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#CFD5FF"/>
-          <stop offset="20%" stop-color="#A5B0FF"/>
-          <stop offset="48%" stop-color="#7B88F5"/>
-          <stop offset="76%" stop-color="#4F5BD9"/>
-          <stop offset="100%" stop-color="#3640A8"/>
+          <stop offset="0%" stop-color="#FBEFE2"/>
+          <stop offset="20%" stop-color="#EBCFB3"/>
+          <stop offset="48%" stop-color="#D2AB80"/>
+          <stop offset="76%" stop-color="#A87B50"/>
+          <stop offset="100%" stop-color="#6E4A2E"/>
         </linearGradient>
         <linearGradient id="heroKeyMetalRim" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#E4E8FF"/>
-          <stop offset="32%" stop-color="#A5B0FF"/>
-          <stop offset="68%" stop-color="#4F5BD9"/>
-          <stop offset="100%" stop-color="#3640A8"/>
+          <stop offset="0%" stop-color="#FFFFFF"/>
+          <stop offset="32%" stop-color="#EBCFB3"/>
+          <stop offset="68%" stop-color="#A87B50"/>
+          <stop offset="100%" stop-color="#6E4A2E"/>
         </linearGradient>
         <radialGradient id="heroKeyRecessed" cx="35%" cy="30%" r="75%">
-          <stop offset="0%" stop-color="#7C4FD0"/>
-          <stop offset="60%" stop-color="#3640A8"/>
-          <stop offset="100%" stop-color="#3A2270"/>
+          <stop offset="0%" stop-color="#1F3FE0"/>
+          <stop offset="60%" stop-color="#6E4A2E"/>
+          <stop offset="100%" stop-color="#070B52"/>
         </radialGradient>
-        <linearGradient id="heroKeyGem" x1="10%" y1="0%" x2="90%" y2="100%">
-          <stop offset="0%" stop-color="#8EE6F1"/>
-          <stop offset="45%" stop-color="#19C2D6"/>
-          <stop offset="100%" stop-color="#0A8CA3"/>
-        </linearGradient>
+        <linearGradient id="heroKeyGem" x1="10%" y1="0%" x2="90%" y2="100%"><stop offset="0%" stop-color="#C9F1FF"/><stop offset="45%" stop-color="#12A0E8"/><stop offset="100%" stop-color="#1127A8"/></linearGradient>
       </defs>
       <g transform="translate(46.5,-72.5) rotate(-90 70 122)">
         <circle cx="70" cy="55" r="49.5" fill="url(#heroKeyMetalRim)"/>
-        <circle cx="70" cy="55" r="45" fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.7"/>
-        <g stroke="#10264A" stroke-width="1.3">
+        <circle cx="70" cy="55" r="45" fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.7"/>
+        <g stroke="#070B52" stroke-width="1.3">
           <line x1="115.00" y1="55.00" x2="119.50" y2="55.00"/>
           <line x1="114.14" y1="63.78" x2="118.55" y2="64.66"/>
           <line x1="111.57" y1="72.22" x2="115.73" y2="73.94"/>
@@ -845,28 +844,28 @@ body{background:var(--cream);color:var(--ink);}
           <line x1="114.14" y1="46.22" x2="118.55" y2="45.34"/>
         </g>
         <circle cx="70" cy="55" r="30" fill="url(#heroKeyRecessed)"/>
-        <circle cx="70" cy="55" r="30" fill="none" stroke="#6FE0EE" stroke-width="1.1"/>
-        <circle cx="70" cy="30" r="3.6" fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.6"/>
-        <circle cx="95" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.6"/>
-        <circle cx="70" cy="80" r="3.6" fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.6"/>
-        <circle cx="45" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.6"/>
-        <path d="M70,40 L80,49 L80,62 L70,71 L60,62 L60,49 Z" fill="url(#heroKeyGem)" stroke="#10264A" stroke-width="0.9"/>
-        <path d="M70,40 L80,49 L70,55.5 Z" fill="#FFF3D2"/>
-        <path d="M70,55.5 L60,49 L70,40 Z" fill="#19C2D6"/>
-        <path d="M70,55.5 L60,49 L60,62 L70,71 Z" fill="#3640A8"/>
+        <circle cx="70" cy="55" r="30" fill="none" stroke="#5CCBFF" stroke-width="1.1"/>
+        <circle cx="70" cy="30" r="3.6" fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.6"/>
+        <circle cx="95" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.6"/>
+        <circle cx="70" cy="80" r="3.6" fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.6"/>
+        <circle cx="45" cy="55" r="3.6" fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.6"/>
+        <path d="M70,40 L80,49 L80,62 L70,71 L60,62 L60,49 Z" fill="url(#heroKeyGem)" stroke="#070B52" stroke-width="0.9"/>
+        <path d="M70,40 L80,49 L70,55.5 Z" fill="#FFFFFF"/>
+        <path d="M70,55.5 L60,49 L70,40 Z" fill="#12A0E8"/>
+        <path d="M70,55.5 L60,49 L60,62 L70,71 Z" fill="#1127A8"/>
         <g fill="#ffffff">
           <path d="M64,44 L65.3,47.4 L68.7,48.7 L65.3,50 L64,53.4 L62.7,50 L59.3,48.7 L62.7,47.4 Z"/>
           <circle cx="75" cy="60" r="1.1"/>
         </g>
-        <ellipse cx="70" cy="103" rx="21" ry="7.5" fill="url(#heroKeyMetalRim)" stroke="#10264A" stroke-width="0.7"/>
-        <ellipse cx="70" cy="115" rx="15.5" ry="5.5" fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.7"/>
-        <path d="M60,119 L80,119 L78.5,208 L61.5,208 Z" fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.7"/>
-        <line x1="66" y1="124" x2="65.3" y2="203" stroke="#3640A8" stroke-width="1"/>
-        <line x1="75" y1="124" x2="74.3" y2="203" stroke="#3640A8" stroke-width="1"/>
-        <line x1="63" y1="123" x2="62.4" y2="204" stroke="#FFF3D2" stroke-width="1.6"/>
+        <ellipse cx="70" cy="103" rx="21" ry="7.5" fill="url(#heroKeyMetalRim)" stroke="#070B52" stroke-width="0.7"/>
+        <ellipse cx="70" cy="115" rx="15.5" ry="5.5" fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.7"/>
+        <path d="M60,119 L80,119 L78.5,208 L61.5,208 Z" fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.7"/>
+        <line x1="66" y1="124" x2="65.3" y2="203" stroke="#1127A8" stroke-width="1"/>
+        <line x1="75" y1="124" x2="74.3" y2="203" stroke="#1127A8" stroke-width="1"/>
+        <line x1="63" y1="123" x2="62.4" y2="204" stroke="#FFFFFF" stroke-width="1.6"/>
         <path d="M61.5,208 L60.3,238 L67,238 L67.5,229 L74,229 L74.4,220 L79.8,220 L78.5,208 Z"
-              fill="url(#heroKeyMetal)" stroke="#10264A" stroke-width="0.7"/>
-        <line x1="63" y1="212" x2="62" y2="236" stroke="#FFF3D2" stroke-width="1.1"/>
+              fill="url(#heroKeyMetal)" stroke="#070B52" stroke-width="0.7"/>
+        <line x1="63" y1="212" x2="62" y2="236" stroke="#FFFFFF" stroke-width="1.1"/>
       </g>
     </svg>
 </div>
@@ -972,7 +971,7 @@ body{background:var(--cream);color:var(--ink);}
 
       
       <div class="connector-wrap" id="connectorWrap" style="display:none;">
-        <div class="energy-ribbon"><svg viewBox="-20 -28 856 346" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="rbHue" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#19C2D6"/><stop offset="35%" stop-color="#3FA9F5"/><stop offset="65%" stop-color="#7B88F5"/><stop offset="100%" stop-color="#A97DF0"/></linearGradient><linearGradient id="rbShade" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#07667A"/><stop offset="35%" stop-color="#1C79D0"/><stop offset="65%" stop-color="#3640A8"/><stop offset="100%" stop-color="#5A35A0"/></linearGradient></defs><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbShade)" stroke-width="5.7" transform="translate(4 6)"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbShade)" stroke-width="4.8" transform="translate(4 6)"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbShade)" stroke-width="4.2" transform="translate(4 6)"/><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbHue)" stroke-width="5.7"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbHue)" stroke-width="4.8"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbHue)" stroke-width="4.2"/><path d="M20,234 C160,200 300,190 420,176 C560,160 630,108 712,70 C752,52 782,34 804,26" stroke="url(#rbHue)" stroke-width="3.4"/><path d="M20,234 C130,226 224,230 312,217 C412,201 448,192 497,182 C576,163 625,130 708,98 C759,76 787,52 804,26" stroke="url(#rbHue)" stroke-width="2.5"/><path d="M20,234 C120,200 200,160 294,144 C394,127 428,118 478,108 C556,90 604,58 688,32 C740,16 780,24 804,26" stroke="url(#rbHue)" stroke-width="2.1"/><path d="M20,234 C150,194 255,176 355,166 C435,160 455,164 495,174 C595,198 660,150 740,86 C770,62 790,40 804,26" stroke="url(#rbHue)" stroke-width="2.3"/></g><circle cx="131.7" cy="232.9" r="7.0" fill="#0C7A60"/><circle cx="129.3" cy="229.5" r="7.0" fill="#34D1A8" stroke="#0C7A60" stroke-width="1.4"/><circle cx="126.9" cy="227.0" r="2.1" fill="#FFF3D2"/><circle cx="205.3" cy="222.8" r="8.4" fill="#5A35A0"/><circle cx="202.9" cy="219.4" r="8.4" fill="#A97DF0" stroke="#5A35A0" stroke-width="1.4"/><circle cx="200.0" cy="216.4" r="2.5" fill="#FFF3D2"/><circle cx="278.5" cy="208.2" r="7.0" fill="#07667A"/><circle cx="276.1" cy="204.8" r="7.0" fill="#19C2D6" stroke="#07667A" stroke-width="1.4"/><circle cx="273.8" cy="202.3" r="2.1" fill="#FFF3D2"/><circle cx="565.4" cy="121.6" r="7.0" fill="#3640A8"/><circle cx="563.0" cy="118.2" r="7.0" fill="#7B88F5" stroke="#3640A8" stroke-width="1.4"/><circle cx="560.7" cy="115.6" r="2.1" fill="#FFF3D2"/><circle cx="607.1" cy="105.8" r="8.4" fill="#0C7A60"/><circle cx="604.7" cy="102.4" r="8.4" fill="#34D1A8" stroke="#0C7A60" stroke-width="1.4"/><circle cx="601.9" cy="99.3" r="2.5" fill="#FFF3D2"/><circle cx="646.5" cy="90.2" r="7.0" fill="#5A35A0"/><circle cx="644.1" cy="86.8" r="7.0" fill="#A97DF0" stroke="#5A35A0" stroke-width="1.4"/><circle cx="641.7" cy="84.3" r="2.1" fill="#FFF3D2"/><circle cx="684.2" cy="75.1" r="7.0" fill="#07667A"/><circle cx="681.8" cy="71.7" r="7.0" fill="#19C2D6" stroke="#07667A" stroke-width="1.4"/><circle cx="679.4" cy="69.1" r="2.1" fill="#FFF3D2"/><circle cx="720.9" cy="60.5" r="8.4" fill="#3640A8"/><circle cx="718.5" cy="57.1" r="8.4" fill="#7B88F5" stroke="#3640A8" stroke-width="1.4"/><circle cx="715.7" cy="54.1" r="2.5" fill="#FFF3D2"/><circle cx="757.3" cy="46.6" r="7.0" fill="#0C7A60"/><circle cx="754.9" cy="43.2" r="7.0" fill="#34D1A8" stroke="#0C7A60" stroke-width="1.4"/><circle cx="752.5" cy="40.7" r="2.1" fill="#FFF3D2"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#0A8CA3" transform="translate(470.0 150.0) scale(2.60) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#7C4FD0" transform="translate(300.0 196.0) scale(1.90) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#14A582" transform="translate(700.0 60.0) scale(2.20) translate(-12 -38)"/><circle cx="23" cy="239" r="17" fill="#07667A"/><circle cx="20" cy="234" r="17" fill="#19C2D6" stroke="#07667A" stroke-width="1.6"/><circle cx="14.2" cy="228.0" r="5.4" fill="#FFF3D2"/><circle cx="807" cy="31" r="17" fill="#5A35A0"/><circle cx="804" cy="26" r="17" fill="#A97DF0" stroke="#5A35A0" stroke-width="1.6"/><circle cx="798.2" cy="20.0" r="5.4" fill="#FFF3D2"/></svg></div>
+        <div class="energy-ribbon"><svg viewBox="-20 -28 856 346" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="rbHue" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#CFE2F2"/><stop offset="38%" stop-color="#5CCBFF"/><stop offset="68%" stop-color="#FBEFE2"/><stop offset="100%" stop-color="#D2AB80"/></linearGradient><linearGradient id="rbShade" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#07667A"/><stop offset="35%" stop-color="#1C79D0"/><stop offset="65%" stop-color="#3640A8"/><stop offset="100%" stop-color="#5A35A0"/></linearGradient></defs><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbHue)" stroke-width="5.7"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbHue)" stroke-width="4.8"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbHue)" stroke-width="4.2"/><path d="M20,234 C160,200 300,190 420,176 C560,160 630,108 712,70 C752,52 782,34 804,26" stroke="url(#rbHue)" stroke-width="3.4"/><path d="M20,234 C130,226 224,230 312,217 C412,201 448,192 497,182 C576,163 625,130 708,98 C759,76 787,52 804,26" stroke="url(#rbHue)" stroke-width="2.5"/><path d="M20,234 C120,200 200,160 294,144 C394,127 428,118 478,108 C556,90 604,58 688,32 C740,16 780,24 804,26" stroke="url(#rbHue)" stroke-width="2.1"/><path d="M20,234 C150,194 255,176 355,166 C435,160 455,164 495,174 C595,198 660,150 740,86 C770,62 790,40 804,26" stroke="url(#rbHue)" stroke-width="2.3"/></g><circle cx="131.7" cy="232.9" r="7.0" fill="#070B52"/><circle cx="129.3" cy="229.5" r="7.0" fill="#E9F4FB" stroke="#070B52" stroke-width="1.4"/><circle cx="126.9" cy="227.0" r="2.1" fill="#FFF3D2"/><circle cx="205.3" cy="222.8" r="8.4" fill="#070B52"/><circle cx="202.9" cy="219.4" r="8.4" fill="#5CCBFF" stroke="#070B52" stroke-width="1.4"/><circle cx="200.0" cy="216.4" r="2.5" fill="#FFF3D2"/><circle cx="278.5" cy="208.2" r="7.0" fill="#070B52"/><circle cx="276.1" cy="204.8" r="7.0" fill="#FBEFE2" stroke="#070B52" stroke-width="1.4"/><circle cx="273.8" cy="202.3" r="2.1" fill="#FFF3D2"/><circle cx="565.4" cy="121.6" r="7.0" fill="#070B52"/><circle cx="563.0" cy="118.2" r="7.0" fill="#D2AB80" stroke="#070B52" stroke-width="1.4"/><circle cx="560.7" cy="115.6" r="2.1" fill="#FFF3D2"/><circle cx="607.1" cy="105.8" r="8.4" fill="#070B52"/><circle cx="604.7" cy="102.4" r="8.4" fill="#E9F4FB" stroke="#070B52" stroke-width="1.4"/><circle cx="601.9" cy="99.3" r="2.5" fill="#FFF3D2"/><circle cx="646.5" cy="90.2" r="7.0" fill="#070B52"/><circle cx="644.1" cy="86.8" r="7.0" fill="#5CCBFF" stroke="#070B52" stroke-width="1.4"/><circle cx="641.7" cy="84.3" r="2.1" fill="#FFF3D2"/><circle cx="684.2" cy="75.1" r="7.0" fill="#070B52"/><circle cx="681.8" cy="71.7" r="7.0" fill="#FBEFE2" stroke="#070B52" stroke-width="1.4"/><circle cx="679.4" cy="69.1" r="2.1" fill="#FFF3D2"/><circle cx="720.9" cy="60.5" r="8.4" fill="#070B52"/><circle cx="718.5" cy="57.1" r="8.4" fill="#D2AB80" stroke="#070B52" stroke-width="1.4"/><circle cx="715.7" cy="54.1" r="2.5" fill="#FFF3D2"/><circle cx="757.3" cy="46.6" r="7.0" fill="#070B52"/><circle cx="754.9" cy="43.2" r="7.0" fill="#E9F4FB" stroke="#070B52" stroke-width="1.4"/><circle cx="752.5" cy="40.7" r="2.1" fill="#FFF3D2"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#FFFFFF" transform="translate(470.0 150.0) scale(2.60) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#CFE2F2" transform="translate(300.0 196.0) scale(1.90) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#FBEFE2" transform="translate(700.0 60.0) scale(2.20) translate(-12 -38)"/><circle cx="23" cy="239" r="17" fill="#070B52"/><circle cx="20" cy="234" r="17" fill="#CFE2F2" stroke="#070B52" stroke-width="1.6"/><circle cx="14.2" cy="228.0" r="5.4" fill="#FFF3D2"/><circle cx="807" cy="31" r="17" fill="#070B52"/><circle cx="804" cy="26" r="17" fill="#D2AB80" stroke="#070B52" stroke-width="1.6"/><circle cx="798.2" cy="20.0" r="5.4" fill="#FFF3D2"/></svg></div>
       </div>
     </div>
   </div>
@@ -1105,9 +1104,6 @@ function openNumberDef(item) {
   const cx = 180, cy = 100, r = 46;
   const RING_ROTATION_DEG = -8;
   const RING_RX = [ 64, 86, 108, 130, 152, 175 ];
-  const RING_COLOR = [ "#19C2D6", "#7B88F5", "#A97DF0", "#3FA9F5", "#34D1A8", "#7C4FD0" ];
-  const RING_SHADE = [ "#07667A", "#3640A8", "#5A35A0", "#1C79D0", "#0C7A60", "#5A35A0" ];
-  const SHADOW_DX = 1.6, SHADOW_DY = 2.4;
   function ringPoint(ringIdx, angleDeg, beadR) {
     const rx = RING_RX[ringIdx], ry = rx * .26;
     const t = angleDeg * Math.PI / 180, rot = RING_ROTATION_DEG * Math.PI / 180;
@@ -1121,7 +1117,7 @@ function openNumberDef(item) {
     };
   }
   const BEAD_SPECS = [ [ 1, 205, 10 ], [ 2, 20, 10 ], [ 4, 335, 9 ], [ 1, 15, 9 ] ];
-  const BEAD_COLOR = [ [ "#34D1A8", "#0C7A60" ], [ "#A97DF0", "#5A35A0" ], [ "#3FA9F5", "#1C79D0" ], [ "#19C2D6", "#07667A" ] ];
+  const BEAD_GRAD = [ "bd0", "bd1", "bd2", "bd0" ];
   const BEADS = BEAD_SPECS.map(([ring, angle, br]) => ringPoint(ring, angle, br));
   const ORBIT_STEPS = 96, ORBIT_PERIOD_S = 48;
   function wrap360(a) {
@@ -1145,48 +1141,56 @@ function openNumberDef(item) {
     orbitCSS += `@keyframes orbitBeadF${i}{${kfFront}}@keyframes orbitBeadB${i}{${kfBack}}`;
     orbitCSS += `.orbit-bead-f-${i}{animation:orbitBeadF${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
     orbitCSS += `.orbit-bead-b-${i}{animation:orbitBeadB${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
-    const [face, shade] = BEAD_COLOR[i % BEAD_COLOR.length];
-    const bead = cls => `<circle class="${cls}" cx="${b.cx + SHADOW_DX}" cy="${b.cy + SHADOW_DY}" r="${b.r}" fill="${shade}"/>` + `<circle class="${cls}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${face}" stroke="${shade}" stroke-width="1"/>` + `<circle class="${cls}" cx="${(b.cx - b.r * .34).toFixed(1)}" cy="${(b.cy - b.r * .36).toFixed(1)}" r="${(b.r * .3).toFixed(1)}" fill="#FFF3D2"/>`;
+    const bead = cls => `<circle class="${cls}" cx="${b.cx + 1.8}" cy="${b.cy + 2.6}" r="${b.r}" fill="#070B52"/>` + `<circle class="${cls}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${BEAD_GRAD[i]})" stroke="#070B52" stroke-width="0.9"/>` + `<path class="${cls}" d="M ${(b.cx - b.r * .62).toFixed(1)} ${(b.cy - b.r * .1).toFixed(1)} A ${(b.r * .64).toFixed(1)} ${(b.r * .64).toFixed(1)} 0 0 1 ${(b.cx + b.r * .1).toFixed(1)} ${(b.cy - b.r * .62).toFixed(1)}" fill="none" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round"/>`;
     BACK_BEADS_SVG += bead(`orbit-bead-b-${i}`);
     FRONT_BEADS_SVG += bead(`orbit-bead-f-${i}`);
   });
   const orbitStyleTag = document.createElement("style");
   orbitStyleTag.textContent = orbitCSS;
   document.head.appendChild(orbitStyleTag);
-  function ringArcs(rx, idx) {
-    const ry = Math.round(rx * .26);
-    const back = `M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0`;
-    const front = `M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`;
-    const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
-    const xs = `translate(${cx + SHADOW_DX} ${cy + SHADOW_DY}) rotate(${RING_ROTATION_DEG})`;
-    const arc = d => `<path d="${d}" fill="none" stroke="${RING_SHADE[idx]}" stroke-width="2.3" transform="${xs}"/>` + `<path d="${d}" fill="none" stroke="${RING_COLOR[idx]}" stroke-width="2.3" transform="${xf}"/>`;
-    return {
-      back: arc(back),
-      front: arc(front)
-    };
+  const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
+  function ringLayers(d) {
+    return `<path d="${d}" fill="none" stroke="url(#metal)" stroke-width="4.6" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#1F3FE0" stroke-width="1.5" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="0.7" transform="${xf} translate(0 -1.9)"/>`;
   }
-  const RING_ARCS = RING_RX.map(ringArcs);
-  const BACK_ARCS_SVG = RING_ARCS.map(a => a.back).join("");
-  const FRONT_ARCS_SVG = RING_ARCS.map(a => a.front).join("");
+  const FULL_RINGS = RING_RX.map(rx => {
+    const ry = Math.round(rx * .26);
+    return ringLayers(`M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0 A ${rx} ${ry} 0 0 1 ${-rx} 0`);
+  }).join("");
+  const FRONT_RINGS = RING_RX.map(rx => {
+    const ry = Math.round(rx * .26);
+    return ringLayers(`M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`);
+  }).join("");
+  let engraving = "";
+  [ -62, -38, -14, 10, 34, 58 ].forEach((lat, i) => {
+    const a = lat * Math.PI / 180, R = r * Math.cos(a), yc = cy - r * Math.sin(a) * .97;
+    engraving += `<path d="M ${(cx - R).toFixed(1)} ${yc.toFixed(1)} A ${R.toFixed(1)} ${(R * .26).toFixed(1)} 0 0 0 ${(cx + R).toFixed(1)} ${yc.toFixed(1)}" fill="none" stroke="${i % 2 ? "#D2AB80" : "#C9F1FF"}" stroke-width="0.8" transform="rotate(-8 ${cx} ${cy})"/>`;
+  });
   const STAR = "M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z";
   const svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="sunGrad" cx="38%" cy="36%" r="72%">
-        <stop offset="0%" stop-color="#FFF3D2"/>
-        <stop offset="18%" stop-color="#B8F2DE"/>
-        <stop offset="42%" stop-color="#2EC8D8"/>
-        <stop offset="74%" stop-color="#6F7CF0"/>
-        <stop offset="100%" stop-color="#4F5BD9"/>
-      </radialGradient>
+      <linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="-175" y1="-20" x2="175" y2="20">
+        <stop offset="0" stop-color="#6E4A2E"/><stop offset=".22" stop-color="#D2AB80"/><stop offset=".4" stop-color="#FBEFE2"/><stop offset=".58" stop-color="#A87B50"/><stop offset=".78" stop-color="#EBCFB3"/><stop offset="1" stop-color="#6E4A2E"/>
+      </linearGradient>
+      <radialGradient id="lit" cx="34%" cy="30%" r="80%"><stop offset="0" stop-color="#8FDCFF"/><stop offset=".45" stop-color="#1F55F0"/><stop offset="1" stop-color="#1127A8"/></radialGradient>
+      <clipPath id="sphere"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
+      <radialGradient id="bd0" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#C9F1FF"/><stop offset=".4" stop-color="#2F55F0"/><stop offset="1" stop-color="#070B52"/></radialGradient>
+      <radialGradient id="bd1" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#FBEFE2"/><stop offset=".4" stop-color="#B58552"/><stop offset="1" stop-color="#4A2F1C"/></radialGradient>
+      <radialGradient id="bd2" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#E9F4FB"/><stop offset=".4" stop-color="#12A0E8"/><stop offset="1" stop-color="#0A3F7A"/></radialGradient>
     </defs>
-    ${BACK_ARCS_SVG}
+    ${FULL_RINGS}
     ${BACK_BEADS_SVG}
-    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#3640A8"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#sunGrad)" stroke="#3640A8" stroke-width="1.4"/>
-    ${FRONT_ARCS_SVG}
-    <path d="${STAR}" fill="#0A8CA3" transform="translate(322,10) scale(0.6)"/>
-    <path d="${STAR}" fill="#7C4FD0" transform="translate(30,150) scale(0.42)"/>
-    <path d="${STAR}" fill="#14A582" transform="translate(190,182) scale(0.34)"/>
+    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#070B52"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#0C1470"/>
+    <g clip-path="url(#sphere)">
+      <circle cx="${cx - 6}" cy="${cy - 7}" r="${r - 3}" fill="url(#lit)"/>
+      ${engraving}
+    </g>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#070B52" stroke-width="1.3"/>
+    <path d="M ${cx - 33} ${cy - 18} A ${r - 4} ${r - 4} 0 0 1 ${cx - 10} ${cy - 42}" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+    ${FRONT_RINGS}
+    <path d="${STAR}" fill="#1F3FE0" transform="translate(322,10) scale(0.6)"/>
+    <path d="${STAR}" fill="#A87B50" transform="translate(30,150) scale(0.42)"/>
+    <path d="${STAR}" fill="#12A0E8" transform="translate(190,182) scale(0.34)"/>
     ${FRONT_BEADS_SVG}
   </svg>`;
   host.innerHTML = svg;
