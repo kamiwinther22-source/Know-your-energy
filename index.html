@@ -662,14 +662,16 @@ body{
   --cy-x:#01528E;--cy-d:#1C87B5;--cy-m:#47B2D6;--cy-l:#74D5F6;
   --ice:#D6E7F3;--ice2:#BECFE1;
   --br-x:#664B3D;--br-d:#887C6E;--br-m:#D0B4AA;--br-c:#D1BDA9;
+  --steel:conic-gradient(from 90deg at 50% 50%,#FFFFFF 0deg,#F6F6F6 18deg,#C2BDB8 38deg,#8E9CAD 72deg,#404D5E 85deg,#111628 90deg,#404D5E 95deg,#8E9CAD 108deg,#C2BDB8 142deg,#F6F6F6 162deg,#FFFFFF 180deg,#F6F6F6 198deg,#C2BDB8 218deg,#8E9CAD 252deg,#404D5E 265deg,#111628 270deg,#404D5E 275deg,#8E9CAD 288deg,#C2BDB8 322deg,#F6F6F6 342deg,#FFFFFF 360deg);
+  --steel-dark:conic-gradient(from 90deg at 50% 50%,#8E9CAD 0deg,#404D5E 30deg,#111628 70deg,#404D5E 110deg,#8E9CAD 150deg,#C2BDB8 180deg,#8E9CAD 210deg,#404D5E 250deg,#111628 290deg,#404D5E 330deg,#8E9CAD 360deg);
   --sapphire:linear-gradient(180deg,#324ECD 0%,#0F33AF 30%,#0A1C91 50%,#020643 51%,#0A1C91 68%,#0F33AF 100%);
   --glass:linear-gradient(180deg,#74D5F6 0%,#47B2D6 58%,#1C87B5 100%);
-  --bezel:linear-gradient(135deg,#F7F3EA 0%,#D0B4AA 20%,#887C6E 42%,#E1D7D0 60%,#D1BDA9 78%,#887C6E 100%);
+  --bezel:linear-gradient(135deg,#F6F6F6 0%,#C2BDB8 22%,#8E9CAD 44%,#F6F6F6 62%,#C2BDB8 80%,#8E9CAD 100%);
   --metal:linear-gradient(180deg,#F7F3EA 0%,#E1D7D0 34%,#D0B4AA 52%,#887C6E 53%,#D0B4AA 100%);
   --satin:linear-gradient(112deg,#F7F3EA 0%,#FFFFFF 16%,#F7F3EA 32%,#E1D7D0 56%,#F7F3EA 74%,#FFFFFF 90%,#F7F3EA 100%);
 }
 html{background:#F7F3EA;}
-body{background:var(--satin);color:var(--ink);}
+body{background:conic-gradient(from 188deg at 88% -6%,#F7F3EA 0deg,#FFFFFF 7deg,#F7F3EA 14deg,#C2BDB8 19deg,#F7F3EA 25deg,#FFFFFF 36deg,#F7F3EA 44deg,#F6F6F6 52deg,#C2BDB8 58deg,#F7F3EA 64deg,#FFFFFF 78deg,#F7F3EA 92deg,#C2BDB8 98deg,#F7F3EA 106deg,#FFFFFF 120deg,#F7F3EA 140deg);background-attachment:scroll;color:var(--ink);}
 
 .hook-brand{margin:0 0 1.3rem;padding:0;}
 .hook-brand .brand{font-size:clamp(2rem,10vw,2.7rem);white-space:nowrap;color:var(--ink);background:none;-webkit-text-fill-color:currentColor;}
@@ -713,18 +715,15 @@ body{background:var(--satin);color:var(--ink);}
 .glow-ring,.glow-ring-sm{overflow:visible;padding:0;background:none;}
 .glow-ring::before,.glow-ring-sm::before{display:none;}
 .rel-row{gap:0.55rem;}
-.rel-chip{border:1.5px solid transparent;overflow:visible;color:var(--cb-d);letter-spacing:0.04em;
-  background:linear-gradient(180deg,#FFFFFF 0%,#E1D7D0 100%) padding-box,var(--bezel) border-box;box-shadow:inset 0 1px 0 #FFFFFF;}
-.rel-chip:hover{background:linear-gradient(180deg,#FFFFFF 0%,#D6E7F3 100%) padding-box,var(--bezel) border-box;}
-.rel-chip.active{color:var(--pearl);background:var(--sapphire) padding-box,var(--bezel) border-box;box-shadow:inset 0 1px 0 #74D5F6;}
-.rel-chip.active:hover{background:var(--sapphire) padding-box,var(--bezel) border-box;}
+/*C*/.rel-chip{border:none;overflow:visible;color:#111628;letter-spacing:0.18em;text-transform:uppercase;text-shadow:0 1px 0 #FFFFFF;background:var(--steel);box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,0 1px 0 #8E9CAD;}
+/*D*/.rel-chip:hover{background:var(--steel);}
+/*E*/.rel-chip.active{color:#FFFFFF;text-shadow:0 1px 0 #111628;background:linear-gradient(#111628,#111628) padding-box,var(--steel) border-box;border:3px solid transparent;box-shadow:0 2px 0 #404D5E;}
+/*F*/.rel-chip.active:hover{background:linear-gradient(#111628,#111628) padding-box,var(--steel) border-box;}
 
 /* buttons: sapphire and glass enamel in a bronze bezel */
-.hero-continue-btn{background:var(--sapphire);color:var(--pearl);border:1px solid #020643;overflow:visible;
-  box-shadow:inset 0 1px 0 #74D5F6,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
-.hero-continue-label{color:var(--pearl);letter-spacing:0.16em;text-transform:uppercase;font-weight:700;}
-.gen-btn{background:var(--sapphire);color:var(--pearl);border:1px solid #020643;border-radius:6px;overflow:visible;font-size:0.72rem;letter-spacing:0.16em;
-  box-shadow:inset 0 1px 0 #74D5F6,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
+/*A*/.hero-continue-btn{background:var(--steel);color:#111628;border:none;overflow:visible;text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
+.hero-continue-label{color:#111628;letter-spacing:0.3em;text-transform:uppercase;font-weight:700;text-shadow:0 1px 0 #FFFFFF;}
+/*B*/.gen-btn{background:var(--steel);color:#111628;border:none;border-radius:8px;overflow:visible;font-size:0.72rem;letter-spacing:0.3em;text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
 .gen-btn::before{display:none;}
 .hero-continue-btn:hover,.gen-btn:hover{transform:translateY(-1px);}
 .hero-continue-btn:active,.gen-btn:active{transform:translateY(1px);}
@@ -732,11 +731,11 @@ body{background:var(--satin);color:var(--ink);}
 .pricing-panel{border-bottom:1.5px solid #D0B4AA;}
 .state-banner-ttl,.state-banner-sub,.hero-pricing-intro{color:var(--ink);}
 .pricing-list{gap:0.9rem;}
-.price-row{overflow:visible;border:1px solid #01528E;background:var(--glass);box-shadow:inset 0 1px 0 #D6E7F3,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
-.price-label,.price-amt{color:var(--ink);}
-.pricing-list>.glow-ring-sm:nth-child(2) .price-row{background:var(--sapphire);border-color:#020643;box-shadow:inset 0 1px 0 #74D5F6,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
-.pricing-list>.glow-ring-sm:nth-child(2) .price-label,.pricing-list>.glow-ring-sm:nth-child(2) .price-amt{color:var(--pearl);}
-.pricing-list>.glow-ring-sm:nth-child(3) .price-row{background:var(--metal);border-color:#664B3D;box-shadow:inset 0 1px 0 #FFFFFF,0 0 0 2px #0F33AF,0 0 0 3px #020643;}
+/*G*/.price-row{overflow:visible;border:none;background:var(--steel);text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,0 1px 0 #8E9CAD;}
+.price-label,.price-amt{color:#111628;}
+
+
+
 .price-row:hover,.price-row:focus-visible{transform:translateY(-1px);}
 
 .err{color:#664B3D;background:#E1D7D0;border:2px solid #664B3D;}
