@@ -657,21 +657,21 @@ body{
 }
 :root{
   color-scheme:light;
-  --ink:#020643;--pearl:#F7F3EA;--pearl2:#E1D7D0;--white:#FFFFFF;
+  --ink:#020643;--pearl:#F6F6F6;--pearl2:#C2BDB8;--white:#FFFFFF;
   --cb-x:#020643;--cb-9:#0B136C;--cb-d:#0A1C91;--cb-m:#0F33AF;--cb-l:#324ECD;
   --cy-x:#01528E;--cy-d:#1C87B5;--cy-m:#47B2D6;--cy-l:#74D5F6;
   --ice:#D6E7F3;--ice2:#BECFE1;
-  --br-x:#664B3D;--br-d:#887C6E;--br-m:#D0B4AA;--br-c:#D1BDA9;
+  --br-x:#664B3D;--br-d:#404D5E;--br-m:#8E9CAD;--br-c:#D1BDA9;
   --steel:conic-gradient(from 90deg at 50% 50%,#FFFFFF 0deg,#F6F6F6 18deg,#C2BDB8 38deg,#8E9CAD 72deg,#404D5E 85deg,#111628 90deg,#404D5E 95deg,#8E9CAD 108deg,#C2BDB8 142deg,#F6F6F6 162deg,#FFFFFF 180deg,#F6F6F6 198deg,#C2BDB8 218deg,#8E9CAD 252deg,#404D5E 265deg,#111628 270deg,#404D5E 275deg,#8E9CAD 288deg,#C2BDB8 322deg,#F6F6F6 342deg,#FFFFFF 360deg);
   --steel-dark:conic-gradient(from 90deg at 50% 50%,#8E9CAD 0deg,#404D5E 30deg,#111628 70deg,#404D5E 110deg,#8E9CAD 150deg,#C2BDB8 180deg,#8E9CAD 210deg,#404D5E 250deg,#111628 290deg,#404D5E 330deg,#8E9CAD 360deg);
   --sapphire:linear-gradient(180deg,#324ECD 0%,#0F33AF 30%,#0A1C91 50%,#020643 51%,#0A1C91 68%,#0F33AF 100%);
   --glass:linear-gradient(180deg,#74D5F6 0%,#47B2D6 58%,#1C87B5 100%);
   --bezel:linear-gradient(135deg,#F6F6F6 0%,#C2BDB8 22%,#8E9CAD 44%,#F6F6F6 62%,#C2BDB8 80%,#8E9CAD 100%);
-  --metal:linear-gradient(180deg,#F7F3EA 0%,#E1D7D0 34%,#D0B4AA 52%,#887C6E 53%,#D0B4AA 100%);
-  --satin:linear-gradient(112deg,#F7F3EA 0%,#FFFFFF 16%,#F7F3EA 32%,#E1D7D0 56%,#F7F3EA 74%,#FFFFFF 90%,#F7F3EA 100%);
+  --metal:linear-gradient(180deg,#F6F6F6 0%,#C2BDB8 34%,#8E9CAD 52%,#404D5E 53%,#8E9CAD 100%);
+  --satin:linear-gradient(112deg,#F6F6F6 0%,#FFFFFF 16%,#F6F6F6 32%,#C2BDB8 56%,#F6F6F6 74%,#FFFFFF 90%,#F6F6F6 100%);
 }
-html{background:#F7F3EA;}
-body{background:conic-gradient(from 188deg at 88% -6%,#F7F3EA 0deg,#FFFFFF 7deg,#F7F3EA 14deg,#C2BDB8 19deg,#F7F3EA 25deg,#FFFFFF 36deg,#F7F3EA 44deg,#F6F6F6 52deg,#C2BDB8 58deg,#F7F3EA 64deg,#FFFFFF 78deg,#F7F3EA 92deg,#C2BDB8 98deg,#F7F3EA 106deg,#FFFFFF 120deg,#F7F3EA 140deg);background-attachment:scroll;color:var(--ink);}
+html{background:#F6F6F6;}
+body{background:conic-gradient(from 200deg at 92% -4%,#FFFFFF 0deg,#F6F6F6 6deg,#C2BDB8 12deg,#8E9CAD 17deg,#C2BDB8 22deg,#FFFFFF 32deg,#F6F6F6 42deg,#C2BDB8 50deg,#8E9CAD 55deg,#F6F6F6 64deg,#FFFFFF 78deg,#C2BDB8 88deg,#8E9CAD 93deg,#C2BDB8 99deg,#FFFFFF 112deg,#F6F6F6 126deg,#C2BDB8 134deg,#FFFFFF 150deg);background-attachment:scroll;color:var(--ink);}
 
 .hook-brand{margin:0 0 1.3rem;padding:0;}
 .hook-brand .brand{font-size:clamp(2rem,10vw,2.7rem);white-space:nowrap;color:var(--ink);background:none;-webkit-text-fill-color:currentColor;}
@@ -679,22 +679,22 @@ body{background:conic-gradient(from 188deg at 88% -6%,#F7F3EA 0deg,#FFFFFF 7deg,
 .hl{-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .hl-1{color:var(--cb-d);background-image:linear-gradient(180deg,#324ECD 0%,#0F33AF 40%,#020643 100%);}
 .hl-2{color:var(--cy-d);background-image:linear-gradient(180deg,#74D5F6 0%,#1C87B5 45%,#01528E 100%);}
-.hl-3{color:var(--br-x);background-image:linear-gradient(180deg,#D0B4AA 0%,#887C6E 40%,#664B3D 100%);}
+.hl-3{color:var(--br-x);background-image:linear-gradient(180deg,#8E9CAD 0%,#404D5E 40%,#664B3D 100%);}
 .free-reading-line{color:var(--ink);}
 .privacy-note{color:var(--ink);}
 
 /* fields: a metal bezel around a carved pearl well */
 .line-field{border:1.5px solid transparent;border-radius:9px;
-  background:linear-gradient(180deg,#FFFFFF 0%,#F7F3EA 100%) padding-box,var(--bezel) border-box;
-  box-shadow:inset 0 2px 0 #E1D7D0;}
+  background:linear-gradient(180deg,#FFFFFF 0%,#F6F6F6 100%) padding-box,var(--bezel) border-box;
+  box-shadow:inset 0 2px 0 #C2BDB8;}
 .line-field:focus-within{background:linear-gradient(180deg,#FFFFFF 0%,#D6E7F3 100%) padding-box,var(--glass) border-box;box-shadow:inset 0 2px 0 #BECFE1;}
 .line-field input,.line-field select{color:var(--ink);}
 .line-field input::placeholder{color:var(--cb-d);opacity:1;}
 .line-field select option{color:var(--ink);background:var(--pearl);}
-.line-field input:-webkit-autofill,.line-field input:-webkit-autofill:hover,.line-field input:-webkit-autofill:focus{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 1000px #F7F3EA inset;}
+.line-field input:-webkit-autofill,.line-field input:-webkit-autofill:hover,.line-field input:-webkit-autofill:focus{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 1000px #F6F6F6 inset;}
 #p1Block .line-field input,#p1Block .line-field select{box-shadow:none;-webkit-text-fill-color:var(--ink);}
-.row-id{border:1.5px solid transparent;border-radius:12px;background:linear-gradient(180deg,#FFFFFF 0%,#F7F3EA 100%) padding-box,var(--bezel) border-box;box-shadow:inset 0 2px 0 #E1D7D0;}
-.row-id .line-field{background:transparent;border:none;border-radius:0;box-shadow:none;border-right:1.5px solid #D0B4AA;}
+.row-id{border:1.5px solid transparent;border-radius:12px;background:linear-gradient(180deg,#FFFFFF 0%,#F6F6F6 100%) padding-box,var(--bezel) border-box;box-shadow:inset 0 2px 0 #C2BDB8;}
+.row-id .line-field{background:transparent;border:none;border-radius:0;box-shadow:none;border-right:1.5px solid #8E9CAD;}
 .row-id .line-field:last-child{border-right:none;}
 .row-birth .row-time>div:first-child .line-field{border-radius:12px 0 0 12px;}
 .row-birth .row-time .ampm-field{border-radius:0 12px 12px 0;}
@@ -708,7 +708,7 @@ body{background:conic-gradient(from 188deg at 88% -6%,#F7F3EA 0deg,#FFFFFF 7deg,
 .toggle-row,.tog-lbl{color:var(--ink);}
 .tog-lbl.active{color:var(--cb-d);}
 .toggle-pill{border:1.5px solid transparent;background:linear-gradient(180deg,#D6E7F3,#BECFE1) padding-box,var(--bezel) border-box;box-shadow:inset 0 2px 0 #8CA6BD;}
-.toggle-pill::after{background:var(--sapphire);box-shadow:0 0 0 1px #D0B4AA;}
+.toggle-pill::after{background:var(--sapphire);box-shadow:0 0 0 1px #8E9CAD;}
 .toggle-pill.on{background:linear-gradient(180deg,#74D5F6,#47B2D6) padding-box,var(--bezel) border-box;border:1.5px solid transparent;}
 .toggle-pill.on::after{background:var(--metal);box-shadow:0 0 0 1px #664B3D;}
 
@@ -728,7 +728,7 @@ body{background:conic-gradient(from 188deg at 88% -6%,#F7F3EA 0deg,#FFFFFF 7deg,
 .hero-continue-btn:hover,.gen-btn:hover{transform:translateY(-1px);}
 .hero-continue-btn:active,.gen-btn:active{transform:translateY(1px);}
 
-.pricing-panel{border-bottom:1.5px solid #D0B4AA;}
+.pricing-panel{border-bottom:1.5px solid #8E9CAD;}
 .state-banner-ttl,.state-banner-sub,.hero-pricing-intro{color:var(--ink);}
 .pricing-list{gap:0.9rem;}
 /*G*/.price-row{overflow:visible;border:none;background:var(--steel);text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,0 1px 0 #8E9CAD;}
@@ -738,7 +738,7 @@ body{background:conic-gradient(from 188deg at 88% -6%,#F7F3EA 0deg,#FFFFFF 7deg,
 
 .price-row:hover,.price-row:focus-visible{transform:translateY(-1px);}
 
-.err{color:#664B3D;background:#E1D7D0;border:2px solid #664B3D;}
+.err{color:#664B3D;background:#C2BDB8;border:2px solid #664B3D;}
 .sun-cta span,.sun-cta span .sun-cta-tap{text-shadow:none;}
 .metal-plaque{display:none!important;}
 .connector-wrap{position:absolute;margin:0;min-height:0;pointer-events:none;z-index:-1;}
@@ -750,6 +750,14 @@ body{background:conic-gradient(from 188deg at 88% -6%,#F7F3EA 0deg,#FFFFFF 7deg,
 .form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
 .submit-wrap{margin-bottom:1.2rem;}
 #p2Section:not(.open) .person-tag{visibility:hidden;}
+
+/*sheet-match*/.hero-continue-btn,.gen-btn,.price-row,.price-label,.price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.2em;}
+.hero-continue-btn,.hero-continue-label{font-size:17px;}
+.hero-continue-btn{padding:18px 44px;border-radius:999px;}
+.gen-btn{font-size:17px;padding:16px 34px;border-radius:9px;}
+.rel-chip{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;padding:9px 11px;border-radius:999px;}
+.price-row{font-size:14px;padding:11px 12px;border-radius:999px;}
+.price-label,.price-amt{font-size:14px;letter-spacing:.12em;}
 
 </style>
 </head>
