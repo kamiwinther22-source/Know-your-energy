@@ -671,7 +671,7 @@ body{
   --satin:linear-gradient(112deg,#F6F6F6 0%,#FFFFFF 16%,#F6F6F6 32%,#C2BDB8 56%,#F6F6F6 74%,#FFFFFF 90%,#F6F6F6 100%);
 }
 html{background:#F6F6F6;}
-body{background:#F6F6F6;background-attachment:scroll;color:var(--ink);}
+body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 0,#F6F6F6 560px,#C2BDB8 592px,#F6F6F6 636px,#FFFFFF 668px,#FFFFFF 706px,#F6F6F6 738px,#F6F6F6 741px,#C2BDB8 741px,#C2BDB8 744px,#F6F6F6 744px);background-size:100% 1600px;background-repeat:no-repeat;background-attachment:scroll;color:var(--ink);}
 
 .hook-brand{margin:0 0 1.3rem;padding:0;}
 .hook-brand .brand{font-size:clamp(2rem,10vw,2.7rem);white-space:nowrap;color:var(--ink);background:none;-webkit-text-fill-color:currentColor;}
@@ -775,6 +775,35 @@ body{background:#F6F6F6;background-attachment:scroll;color:var(--ink);}
 .rel-chip{font-size:13px;letter-spacing:.14em;padding:9px 11px;}
 .price-row{font-size:14px;padding:11px 12px;}
 .price-label,.price-amt{font-size:14px;letter-spacing:.12em;}
+
+/* ===== black entry page, white elements. Results page keeps the light ground. ===== */
+html,body{background:#000000;color:#FFFFFF;}
+html:has(#resultsWrap[style*="block"]),body:has(#resultsWrap[style*="block"]){background:#FFFFFF;color:#000000;}
+#hookStep,#hookStep *,#formStep,#formStep *{color:#FFFFFF;}
+#hookStep .hl-1,#hookStep .hl-2,#hookStep .hl-3{background:none;-webkit-text-fill-color:#FFFFFF;color:#FFFFFF;}
+.line-field{background:#000000 !important;border:1.5px solid #FFFFFF !important;box-shadow:none !important;}
+.line-field:focus-within{background:#000000 !important;box-shadow:none !important;border:1.5px solid #FFFFFF !important;}
+.row-id{background:#000000 !important;border:1.5px solid #FFFFFF !important;box-shadow:none !important;}
+.row-id .line-field{background:transparent !important;border:none !important;border-right:1.5px solid #FFFFFF !important;}
+.row-id .line-field:last-child{border-right:none !important;}
+#formStep input,#formStep select,#p1Block input,#p1Block select,#p2Block input,#p2Block select,#p2Section input,#p2Section select{background:transparent !important;border:none !important;box-shadow:none !important;color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;}
+#formStep select option{background:#000000;color:#FFFFFF;}
+.line-field input::placeholder,.row-id input::placeholder{color:#FFFFFF !important;opacity:1;-webkit-text-fill-color:#FFFFFF;}
+.line-field input:-webkit-autofill,.line-field input:-webkit-autofill:hover,.line-field input:-webkit-autofill:focus{-webkit-text-fill-color:#FFFFFF !important;box-shadow:0 0 0 1000px #000000 inset !important;}
+.hero-continue-btn,.gen-btn,.rel-chip,.price-row{background:#FFFFFF !important;box-shadow:none !important;text-shadow:none !important;border:none !important;}
+.hero-continue-btn,.hero-continue-btn *,.gen-btn,.gen-btn *,.rel-chip,.price-row,.price-row *{color:#000000 !important;}
+.rel-chip.active{background:#000000 !important;border:2px solid #FFFFFF !important;}
+.rel-chip.active{color:#FFFFFF !important;}
+.toggle-pill{background:#000000 !important;border:1.5px solid #FFFFFF !important;}
+.toggle-pill::after{background:#FFFFFF !important;box-shadow:none !important;}
+.toggle-pill.on{background:#000000 !important;border:1.5px solid #FFFFFF !important;}
+.tog-lbl.active,.tog-lbl{color:#FFFFFF !important;}
+.hero-key{filter:brightness(0) invert(1);}
+.line-field,.hero-pricing-intro{background:none;}
+#formStep hr,#hookStep hr{border-color:#FFFFFF;background:#FFFFFF;}
+#hookStep div[style*="12161e"]{color:#FFFFFF !important;}
+#p1Block .person-tag,#p2Section .person-tag,.person-tag{color:#FFFFFF !important;}
+#hookStep>div[style*="292px"]>div{color:#FFFFFF !important;}
 
 </style>
 </head>
@@ -1168,7 +1197,7 @@ function openNumberDef(item) {
     orbitCSS += `@keyframes orbitBeadF${i}{${kfFront}}@keyframes orbitBeadB${i}{${kfBack}}`;
     orbitCSS += `.orbit-bead-f-${i}{animation:orbitBeadF${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
     orbitCSS += `.orbit-bead-b-${i}{animation:orbitBeadB${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
-    const bead = cls => `<circle class="${cls}" cx="${b.cx + 1.8}" cy="${b.cy + 2.6}" r="${b.r}" fill="#020643"/>` + `<circle class="${cls}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${BEAD_GRAD[i]})" stroke="#020643" stroke-width="0.9"/>` + `<path class="${cls}" d="M ${(b.cx - b.r * .62).toFixed(1)} ${(b.cy - b.r * .1).toFixed(1)} A ${(b.r * .64).toFixed(1)} ${(b.r * .64).toFixed(1)} 0 0 1 ${(b.cx + b.r * .1).toFixed(1)} ${(b.cy - b.r * .62).toFixed(1)}" fill="none" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round"/>`;
+    const bead = cls => `<circle class="${cls}" cx="${b.cx + 1.8}" cy="${b.cy + 2.6}" r="${b.r}" fill="#000000"/>` + `<circle class="${cls}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${BEAD_GRAD[i]})" stroke="#FFFFFF" stroke-width="0.9"/>` + `<path class="${cls}" d="M ${(b.cx - b.r * .62).toFixed(1)} ${(b.cy - b.r * .1).toFixed(1)} A ${(b.r * .64).toFixed(1)} ${(b.r * .64).toFixed(1)} 0 0 1 ${(b.cx + b.r * .1).toFixed(1)} ${(b.cy - b.r * .62).toFixed(1)}" fill="none" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round"/>`;
     BACK_BEADS_SVG += bead(`orbit-bead-b-${i}`);
     FRONT_BEADS_SVG += bead(`orbit-bead-f-${i}`);
   });
@@ -1177,7 +1206,7 @@ function openNumberDef(item) {
   document.head.appendChild(orbitStyleTag);
   const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
   function ringLayers(d) {
-    return `<path d="${d}" fill="none" stroke="url(#metal)" stroke-width="5.2" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#12182A" stroke-width="1.5" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="0.7" transform="${xf} translate(0 -1.9)"/>`;
+    return `<path d="${d}" fill="none" stroke="url(#metal)" stroke-width="5.2" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#000000" stroke-width="1.5" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="0.7" transform="${xf} translate(0 -1.9)"/>`;
   }
   const FULL_RINGS = RING_RX.map(rx => {
     const ry = Math.round(rx * .26);
@@ -1195,29 +1224,27 @@ function openNumberDef(item) {
   const STAR = "M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z";
   const svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="-175" y1="-20" x2="175" y2="20">
-        <stop offset="0" stop-color="#12182A"/><stop offset=".16" stop-color="#404D5E"/><stop offset=".3" stop-color="#C2BDB8"/><stop offset=".38" stop-color="#FFFFFF"/><stop offset=".44" stop-color="#8E9CAD"/><stop offset=".56" stop-color="#12182A"/><stop offset=".7" stop-color="#404D5E"/><stop offset=".82" stop-color="#F6F6F6"/><stop offset=".9" stop-color="#8E9CAD"/><stop offset="1" stop-color="#12182A"/>
-      </linearGradient>
-      <radialGradient id="lit" cx="0.5" cy="0.5" r="0.62" fx="0.33" fy="0.28"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".16" stop-color="#F6F6F6"/><stop offset=".36" stop-color="#C2BDB8"/><stop offset=".56" stop-color="#8E9CAD"/><stop offset=".74" stop-color="#404D5E"/><stop offset=".88" stop-color="#12182A"/><stop offset=".96" stop-color="#404D5E"/><stop offset="1" stop-color="#8E9CAD"/></radialGradient>
+      <linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="-175" y1="-20" x2="175" y2="20"><stop offset="0" stop-color="#F6F6F6"/><stop offset=".3" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#C2BDB8"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+      <radialGradient id="lit" cx="0.5" cy="0.5" r="0.62" fx="0.33" fy="0.28"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#FFFFFF"/><stop offset=".85" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
       <clipPath id="sphere"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
-      <radialGradient id="bd0" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#D6E7F3"/><stop offset=".4" stop-color="#324ECD"/><stop offset="1" stop-color="#020643"/></radialGradient>
-      <radialGradient id="bd1" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#F7F3EA"/><stop offset=".4" stop-color="#887C6E"/><stop offset="1" stop-color="#664B3D"/></radialGradient>
-      <radialGradient id="bd2" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#D6E7F3"/><stop offset=".4" stop-color="#47B2D6"/><stop offset="1" stop-color="#01528E"/></radialGradient>
+      <radialGradient id="bd0" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
+      <radialGradient id="bd1" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
+      <radialGradient id="bd2" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
     </defs>
     ${FULL_RINGS}
     ${BACK_BEADS_SVG}
-    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#404D5E"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#8E9CAD"/>
+    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#000000"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#000000"/>
     <g clip-path="url(#sphere)">
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#lit)"/>
 
     </g>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#12182A" stroke-width="1.3"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#FFFFFF" stroke-width="1.3"/>
     <path d="M ${cx - 33} ${cy - 18} A ${r - 4} ${r - 4} 0 0 1 ${cx - 10} ${cy - 42}" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
     ${FRONT_RINGS}
-    <path d="${STAR}" fill="#0F33AF" transform="translate(322,10) scale(0.6)"/>
-    <path d="${STAR}" fill="#887C6E" transform="translate(30,150) scale(0.42)"/>
-    <path d="${STAR}" fill="#47B2D6" transform="translate(190,182) scale(0.34)"/>
+    <path d="${STAR}" fill="#FFFFFF" transform="translate(322,10) scale(0.6)"/>
+    <path d="${STAR}" fill="#FFFFFF" transform="translate(30,150) scale(0.42)"/>
+    <path d="${STAR}" fill="#FFFFFF" transform="translate(190,182) scale(0.34)"/>
     ${FRONT_BEADS_SVG}
   </svg>`;
   host.innerHTML = svg;
