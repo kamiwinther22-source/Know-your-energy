@@ -657,80 +657,87 @@ body{
 }
 :root{
   color-scheme:light;
-  --ground:#F7F3EA;--ink:#020643;--diamond:#FFFFFF;--lip:#FFFFFF;
-  --aq-l:#D6E7F3;--aq-m:#47B2D6;--aq-d:#1C87B5;--aq-x:#01528E;
-  --tp-l:#BECFE1;--tp-m:#74D5F6;--tp-d:#4290C6;--tp-x:#0B3B7C;
-  --sa-l:#A4BED2;--sa-m:#324ECD;--sa-d:#0F33AF;--sa-x:#0A1C91;
-  --tz-l:#E1D7D0;--tz-m:#D0B4AA;--tz-d:#887C6E;--tz-x:#664B3D;
-  --plane:var(--aq-l);--well:var(--diamond);--well-edge:var(--tp-d);--ph:var(--tp-x);
+  --ink:#020643;--pearl:#F7F3EA;--pearl2:#E1D7D0;--white:#FFFFFF;
+  --cb-x:#020643;--cb-9:#0B136C;--cb-d:#0A1C91;--cb-m:#0F33AF;--cb-l:#324ECD;
+  --cy-x:#01528E;--cy-d:#1C87B5;--cy-m:#47B2D6;--cy-l:#74D5F6;
+  --ice:#D6E7F3;--ice2:#BECFE1;
+  --br-x:#664B3D;--br-d:#887C6E;--br-m:#D0B4AA;--br-c:#D1BDA9;
+  --sapphire:linear-gradient(180deg,#324ECD 0%,#0F33AF 30%,#0A1C91 50%,#020643 51%,#0A1C91 68%,#0F33AF 100%);
+  --glass:linear-gradient(180deg,#74D5F6 0%,#47B2D6 58%,#1C87B5 100%);
+  --bezel:linear-gradient(135deg,#F7F3EA 0%,#D0B4AA 20%,#887C6E 42%,#E1D7D0 60%,#D1BDA9 78%,#887C6E 100%);
+  --metal:linear-gradient(180deg,#F7F3EA 0%,#E1D7D0 34%,#D0B4AA 52%,#887C6E 53%,#D0B4AA 100%);
+  --satin:linear-gradient(112deg,#F7F3EA 0%,#FFFFFF 16%,#F7F3EA 32%,#E1D7D0 56%,#F7F3EA 74%,#FFFFFF 90%,#F7F3EA 100%);
 }
-body{background:var(--ground);color:var(--ink);}
+html{background:#F7F3EA;}
+body{background:var(--satin);color:var(--ink);}
 
 .hook-brand{margin:0 0 1.3rem;padding:0;}
 .hook-brand .brand{font-size:clamp(2rem,10vw,2.7rem);white-space:nowrap;color:var(--ink);background:none;-webkit-text-fill-color:currentColor;}
 #hookStep>div[style*="292px"]>div{color:var(--ink)!important;}
-.hl-1{color:var(--sa-d);}
-.hl-2{color:var(--aq-d);}
-.hl-3{color:var(--tz-x);}
-.free-reading-line,.privacy-note{color:var(--ink);}
+.hl{-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.hl-1{color:var(--cb-d);background-image:linear-gradient(180deg,#324ECD 0%,#0F33AF 40%,#020643 100%);}
+.hl-2{color:var(--cy-d);background-image:linear-gradient(180deg,#74D5F6 0%,#1C87B5 45%,#01528E 100%);}
+.hl-3{color:var(--br-x);background-image:linear-gradient(180deg,#D0B4AA 0%,#887C6E 40%,#664B3D 100%);}
+.free-reading-line{color:var(--ink);}
+.privacy-note{color:var(--ink);}
 
-/* fields: carved into the plane */
-.line-field{background:var(--well);box-shadow:inset 2px 2px 0 var(--well-edge),inset -2px -2px 0 var(--lip);}
-.line-field:focus-within{box-shadow:inset 2px 2px 0 var(--sa-d),inset -2px -2px 0 var(--lip),0 0 0 2px var(--sa-m);}
+/* fields: a metal bezel around a carved pearl well */
+.line-field{border:1.5px solid transparent;border-radius:9px;
+  background:linear-gradient(180deg,#FFFFFF 0%,#F7F3EA 100%) padding-box,var(--bezel) border-box;
+  box-shadow:inset 0 2px 0 #E1D7D0;}
+.line-field:focus-within{background:linear-gradient(180deg,#FFFFFF 0%,#D6E7F3 100%) padding-box,var(--glass) border-box;box-shadow:inset 0 2px 0 #BECFE1;}
 .line-field input,.line-field select{color:var(--ink);}
-.line-field input::placeholder{color:var(--ph);opacity:1;}
-.line-field select option{color:var(--ink);background:var(--ground);}
-.line-field input:-webkit-autofill,.line-field input:-webkit-autofill:hover,.line-field input:-webkit-autofill:focus{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 1000px var(--well) inset;}
+.line-field input::placeholder{color:var(--cb-d);opacity:1;}
+.line-field select option{color:var(--ink);background:var(--pearl);}
+.line-field input:-webkit-autofill,.line-field input:-webkit-autofill:hover,.line-field input:-webkit-autofill:focus{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 1000px #F7F3EA inset;}
 #p1Block .line-field input,#p1Block .line-field select{box-shadow:none;-webkit-text-fill-color:var(--ink);}
-.row-id{background:var(--well);box-shadow:inset 2px 2px 0 var(--well-edge),inset -2px -2px 0 var(--lip);}
-.row-id .line-field{background:transparent;box-shadow:none;border-right:2px solid var(--well-edge);}
+.row-id{border:1.5px solid transparent;border-radius:12px;background:linear-gradient(180deg,#FFFFFF 0%,#F7F3EA 100%) padding-box,var(--bezel) border-box;box-shadow:inset 0 2px 0 #E1D7D0;}
+.row-id .line-field{background:transparent;border:none;border-radius:0;box-shadow:none;border-right:1.5px solid #D0B4AA;}
 .row-id .line-field:last-child{border-right:none;}
-.hero-email-field{--well-edge:var(--sa-d);--ph:var(--sa-x);}
-#p1Block{--well-edge:var(--aq-d);--ph:var(--aq-x);}
-#p2Section{--well-edge:var(--tz-m);--ph:var(--tz-x);}
+.row-birth .row-time>div:first-child .line-field{border-radius:12px 0 0 12px;}
+.row-birth .row-time .ampm-field{border-radius:0 12px 12px 0;}
 
-.form-col{isolation:isolate;}
-.form-panel label,.row-birth label,.section-lbl{color:var(--ink);font-size:0.7rem;letter-spacing:0.08em;background:var(--ground);}
+.form-panel label,.row-birth label,.section-lbl{color:var(--ink);font-size:0.7rem;letter-spacing:0.1em;background:transparent;}
 .opt-lbl{letter-spacing:0;}
-.person-tag{background:var(--ground);}
-#p1Block .person-tag{color:var(--aq-x);}
-#p2Section .person-tag{color:#664B3D;}
+.person-tag{background:transparent;}
+#p1Block .person-tag{color:var(--cy-x);}
+#p2Section .person-tag{color:var(--br-x);}
 
 .toggle-row,.tog-lbl{color:var(--ink);}
-.tog-lbl.active{color:var(--sa-d);}
-.toggle-pill{background:var(--tp-l);border:none;box-shadow:inset 2px 2px 0 var(--tp-d),inset -2px -2px 0 var(--lip);}
-.toggle-pill::after{background:var(--aq-m);box-shadow:1px 1px 0 var(--aq-d),2px 2px 0 var(--aq-x);}
-.toggle-pill.on{background:var(--tz-l);border:none;box-shadow:inset 2px 2px 0 var(--tz-m),inset -2px -2px 0 var(--lip);}
-.toggle-pill.on::after{background:var(--tz-m);box-shadow:1px 1px 0 var(--tz-d),2px 2px 0 var(--tz-x);}
+.tog-lbl.active{color:var(--cb-d);}
+.toggle-pill{border:1.5px solid transparent;background:linear-gradient(180deg,#D6E7F3,#BECFE1) padding-box,var(--bezel) border-box;box-shadow:inset 0 2px 0 #8CA6BD;}
+.toggle-pill::after{background:var(--sapphire);box-shadow:0 0 0 1px #D0B4AA;}
+.toggle-pill.on{background:linear-gradient(180deg,#74D5F6,#47B2D6) padding-box,var(--bezel) border-box;border:1.5px solid transparent;}
+.toggle-pill.on::after{background:var(--metal);box-shadow:0 0 0 1px #664B3D;}
 
 .glow-ring,.glow-ring-sm{overflow:visible;padding:0;background:none;}
 .glow-ring::before,.glow-ring-sm::before{display:none;}
-.rel-row{gap:0.5rem;}
-.rel-chip{background:var(--diamond);color:var(--ink);border:none;overflow:visible;
-  box-shadow:inset 1px 1px 0 var(--lip),1px 1px 0 var(--tp-m),2px 2px 0 var(--tp-d),3px 3px 0 var(--sa-d),4px 4px 0 var(--sa-x);}
-.rel-chip:hover{background:var(--tp-l);}
-.rel-chip.active{background:var(--aq-m);color:var(--ink);transform:translate(3px,3px);box-shadow:inset 2px 2px 0 var(--aq-d),inset -2px -2px 0 var(--lip);}
-.rel-chip.active:hover{background:var(--aq-m);}
+.rel-row{gap:0.55rem;}
+.rel-chip{border:1.5px solid transparent;overflow:visible;color:var(--cb-d);letter-spacing:0.04em;
+  background:linear-gradient(180deg,#FFFFFF 0%,#E1D7D0 100%) padding-box,var(--bezel) border-box;box-shadow:inset 0 1px 0 #FFFFFF;}
+.rel-chip:hover{background:linear-gradient(180deg,#FFFFFF 0%,#D6E7F3 100%) padding-box,var(--bezel) border-box;}
+.rel-chip.active{color:var(--pearl);background:var(--sapphire) padding-box,var(--bezel) border-box;box-shadow:inset 0 1px 0 #74D5F6;}
+.rel-chip.active:hover{background:var(--sapphire) padding-box,var(--bezel) border-box;}
 
-.hero-continue-btn{background:var(--sa-d);color:#FFFFFF;border:none;overflow:visible;
-  box-shadow:inset 0 2px 0 var(--sa-m),1px 1px 0 var(--sa-x),2px 2px 0 var(--sa-x),3px 3px 0 var(--tz-d),4px 4px 0 var(--tz-x);}
-.hero-continue-label{color:#FFFFFF;}
-.gen-btn{background:var(--aq-m);color:var(--ink);border:none;border-radius:6px;overflow:visible;font-size:0.74rem;
-  box-shadow:inset 0 2px 0 var(--aq-l),1px 1px 0 var(--aq-d),2px 2px 0 var(--aq-d),3px 3px 0 var(--tp-d),4px 4px 0 var(--sa-x);}
+/* buttons: sapphire and glass enamel in a bronze bezel */
+.hero-continue-btn{background:var(--sapphire);color:var(--pearl);border:1px solid #020643;overflow:visible;
+  box-shadow:inset 0 1px 0 #74D5F6,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
+.hero-continue-label{color:var(--pearl);letter-spacing:0.16em;text-transform:uppercase;font-weight:700;}
+.gen-btn{background:var(--sapphire);color:var(--pearl);border:1px solid #020643;border-radius:6px;overflow:visible;font-size:0.72rem;letter-spacing:0.16em;
+  box-shadow:inset 0 1px 0 #74D5F6,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
 .gen-btn::before{display:none;}
-.hero-continue-btn:hover,.gen-btn:hover{transform:translate(-1px,-1px);}
-.hero-continue-btn:active,.gen-btn:active{transform:translate(4px,4px);box-shadow:inset 3px 3px 0 var(--sa-x);}
-.gen-btn:active{box-shadow:inset 3px 3px 0 var(--aq-d);}
+.hero-continue-btn:hover,.gen-btn:hover{transform:translateY(-1px);}
+.hero-continue-btn:active,.gen-btn:active{transform:translateY(1px);}
 
-.pricing-panel{border-bottom:2px solid var(--sa-m);}
+.pricing-panel{border-bottom:1.5px solid #D0B4AA;}
 .state-banner-ttl,.state-banner-sub,.hero-pricing-intro{color:var(--ink);}
-.pricing-list{gap:0.8rem;}
-.price-row{overflow:visible;border:none;background:var(--aq-l);
-  box-shadow:inset 1px 1px 0 var(--lip),1px 1px 0 var(--aq-m),2px 2px 0 var(--aq-d),3px 3px 0 var(--tp-d),4px 4px 0 var(--tp-x);}
+.pricing-list{gap:0.9rem;}
+.price-row{overflow:visible;border:1px solid #01528E;background:var(--glass);box-shadow:inset 0 1px 0 #D6E7F3,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
 .price-label,.price-amt{color:var(--ink);}
-.pricing-list>.glow-ring-sm:nth-child(2) .price-row{background:var(--tp-m);box-shadow:inset 1px 1px 0 var(--tp-l),1px 1px 0 var(--tp-d),2px 2px 0 var(--sa-d),3px 3px 0 var(--sa-x),4px 4px 0 var(--tz-x);}
-.pricing-list>.glow-ring-sm:nth-child(3) .price-row{background:var(--tz-m);box-shadow:inset 1px 1px 0 var(--tz-l),1px 1px 0 var(--tz-d),2px 2px 0 var(--tz-x),3px 3px 0 var(--sa-x),4px 4px 0 var(--ink);}
-.price-row:hover,.price-row:focus-visible{transform:translate(-1px,-1px);}
+.pricing-list>.glow-ring-sm:nth-child(2) .price-row{background:var(--sapphire);border-color:#020643;box-shadow:inset 0 1px 0 #74D5F6,0 0 0 2px #D0B4AA,0 0 0 3px #664B3D;}
+.pricing-list>.glow-ring-sm:nth-child(2) .price-label,.pricing-list>.glow-ring-sm:nth-child(2) .price-amt{color:var(--pearl);}
+.pricing-list>.glow-ring-sm:nth-child(3) .price-row{background:var(--metal);border-color:#664B3D;box-shadow:inset 0 1px 0 #FFFFFF,0 0 0 2px #0F33AF,0 0 0 3px #020643;}
+.price-row:hover,.price-row:focus-visible{transform:translateY(-1px);}
 
 .err{color:#664B3D;background:#E1D7D0;border:2px solid #664B3D;}
 .sun-cta span,.sun-cta span .sun-cta-tap{text-shadow:none;}
@@ -738,7 +745,11 @@ body{background:var(--ground);color:var(--ink);}
 .connector-wrap{position:absolute;margin:0;min-height:0;pointer-events:none;z-index:-1;}
 .connector-wrap::before{display:none;}
 .energy-ribbon svg{display:block;width:100%;height:auto;overflow:visible;}
-.submit-wrap{margin-bottom:0.2rem;}
+.form-col{isolation:isolate;}
+.form-col>.form-panel{padding:20px 14px 0 0;}
+.form-col .row-id{grid-template-columns:1fr 0.9fr 1fr;}
+.form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
+.submit-wrap{margin-bottom:1.2rem;}
 #p2Section:not(.open) .person-tag{visibility:hidden;}
 
 </style>
@@ -968,7 +979,7 @@ body{background:var(--ground);color:var(--ink);}
 
       
       <div class="connector-wrap" id="connectorWrap" style="display:none;">
-        <div class="energy-ribbon"><svg viewBox="-20 -28 856 346" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="rbHue" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#47B2D6"/><stop offset="35%" stop-color="#74D5F6"/><stop offset="65%" stop-color="#324ECD"/><stop offset="100%" stop-color="#D0B4AA"/></linearGradient><linearGradient id="rbShade" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#01528E"/><stop offset="35%" stop-color="#0B3B7C"/><stop offset="65%" stop-color="#0A1C91"/><stop offset="100%" stop-color="#020643"/></linearGradient></defs><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbShade)" stroke-width="5.7" transform="translate(4 6)"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbShade)" stroke-width="4.8" transform="translate(4 6)"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbShade)" stroke-width="4.2" transform="translate(4 6)"/><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbHue)" stroke-width="5.7"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbHue)" stroke-width="4.8"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbHue)" stroke-width="4.2"/><path d="M20,234 C160,200 300,190 420,176 C560,160 630,108 712,70 C752,52 782,34 804,26" stroke="url(#rbHue)" stroke-width="3.4"/><path d="M20,234 C130,226 224,230 312,217 C412,201 448,192 497,182 C576,163 625,130 708,98 C759,76 787,52 804,26" stroke="url(#rbHue)" stroke-width="2.5"/><path d="M20,234 C120,200 200,160 294,144 C394,127 428,118 478,108 C556,90 604,58 688,32 C740,16 780,24 804,26" stroke="url(#rbHue)" stroke-width="2.1"/><path d="M20,234 C150,194 255,176 355,166 C435,160 455,164 495,174 C595,198 660,150 740,86 C770,62 790,40 804,26" stroke="url(#rbHue)" stroke-width="2.3"/></g><circle cx="131.7" cy="232.9" r="7.0" fill="#01528E"/><circle cx="129.3" cy="229.5" r="7.0" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="126.9" cy="227.0" r="2.1" fill="#FFFFFF"/><circle cx="205.3" cy="222.8" r="8.4" fill="#020643"/><circle cx="202.9" cy="219.4" r="8.4" fill="#D0B4AA" stroke="#020643" stroke-width="1.4"/><circle cx="200.0" cy="216.4" r="2.5" fill="#FFFFFF"/><circle cx="278.5" cy="208.2" r="7.0" fill="#0B3B7C"/><circle cx="276.1" cy="204.8" r="7.0" fill="#74D5F6" stroke="#0B3B7C" stroke-width="1.4"/><circle cx="273.8" cy="202.3" r="2.1" fill="#FFFFFF"/><circle cx="565.4" cy="121.6" r="7.0" fill="#0A1C91"/><circle cx="563.0" cy="118.2" r="7.0" fill="#324ECD" stroke="#0A1C91" stroke-width="1.4"/><circle cx="560.7" cy="115.6" r="2.1" fill="#FFFFFF"/><circle cx="607.1" cy="105.8" r="8.4" fill="#01528E"/><circle cx="604.7" cy="102.4" r="8.4" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="601.9" cy="99.3" r="2.5" fill="#FFFFFF"/><circle cx="646.5" cy="90.2" r="7.0" fill="#020643"/><circle cx="644.1" cy="86.8" r="7.0" fill="#D0B4AA" stroke="#020643" stroke-width="1.4"/><circle cx="641.7" cy="84.3" r="2.1" fill="#FFFFFF"/><circle cx="684.2" cy="75.1" r="7.0" fill="#0B3B7C"/><circle cx="681.8" cy="71.7" r="7.0" fill="#74D5F6" stroke="#0B3B7C" stroke-width="1.4"/><circle cx="679.4" cy="69.1" r="2.1" fill="#FFFFFF"/><circle cx="720.9" cy="60.5" r="8.4" fill="#0A1C91"/><circle cx="718.5" cy="57.1" r="8.4" fill="#324ECD" stroke="#0A1C91" stroke-width="1.4"/><circle cx="715.7" cy="54.1" r="2.5" fill="#FFFFFF"/><circle cx="757.3" cy="46.6" r="7.0" fill="#01528E"/><circle cx="754.9" cy="43.2" r="7.0" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="752.5" cy="40.7" r="2.1" fill="#FFFFFF"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#1C87B5" transform="translate(470.0 150.0) scale(2.60) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#887C6E" transform="translate(300.0 196.0) scale(1.90) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#0F33AF" transform="translate(700.0 60.0) scale(2.20) translate(-12 -38)"/><circle cx="23" cy="239" r="17" fill="#01528E"/><circle cx="20" cy="234" r="17" fill="#47B2D6" stroke="#01528E" stroke-width="1.6"/><circle cx="14.2" cy="228.0" r="5.4" fill="#FFFFFF"/><circle cx="807" cy="31" r="17" fill="#020643"/><circle cx="804" cy="26" r="17" fill="#D0B4AA" stroke="#020643" stroke-width="1.6"/><circle cx="798.2" cy="20.0" r="5.4" fill="#FFFFFF"/></svg></div>
+        <div class="energy-ribbon"><svg viewBox="-20 -28 856 346" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="rbHue" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#47B2D6"/><stop offset="35%" stop-color="#74D5F6"/><stop offset="65%" stop-color="#324ECD"/><stop offset="100%" stop-color="#D0B4AA"/></linearGradient><linearGradient id="rbShade" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="804" y2="0"><stop offset="0%" stop-color="#01528E"/><stop offset="35%" stop-color="#0B3B7C"/><stop offset="65%" stop-color="#0A1C91"/><stop offset="100%" stop-color="#020643"/></linearGradient></defs><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbShade)" stroke-width="5.7" transform="translate(4 6)"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbShade)" stroke-width="4.8" transform="translate(4 6)"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbShade)" stroke-width="4.2" transform="translate(4 6)"/><path d="M20,234 C170,238 330,196 470,150 C610,106 700,60 804,26" stroke="url(#rbHue)" stroke-width="5.7"/><path d="M20,234 C175,216 340,172 470,150 C600,128 700,34 804,26" stroke="url(#rbHue)" stroke-width="4.8"/><path d="M20,234 C150,256 300,214 420,178 C540,142 640,92 720,54 C760,38 785,28 804,26" stroke="url(#rbHue)" stroke-width="4.2"/><path d="M20,234 C160,200 300,190 420,176 C560,160 630,108 712,70 C752,52 782,34 804,26" stroke="url(#rbHue)" stroke-width="3.4"/><path d="M20,234 C130,226 224,230 312,217 C412,201 448,192 497,182 C576,163 625,130 708,98 C759,76 787,52 804,26" stroke="url(#rbHue)" stroke-width="2.5"/><path d="M20,234 C120,200 200,160 294,144 C394,127 428,118 478,108 C556,90 604,58 688,32 C740,16 780,24 804,26" stroke="url(#rbHue)" stroke-width="2.1"/><path d="M20,234 C150,194 255,176 355,166 C435,160 455,164 495,174 C595,198 660,150 740,86 C770,62 790,40 804,26" stroke="url(#rbHue)" stroke-width="2.3"/></g><circle cx="131.7" cy="232.9" r="7.0" fill="#01528E"/><circle cx="129.3" cy="229.5" r="7.0" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="126.9" cy="227.0" r="2.1" fill="#FFFFFF"/><circle cx="205.3" cy="222.8" r="8.4" fill="#020643"/><circle cx="202.9" cy="219.4" r="8.4" fill="#D0B4AA" stroke="#020643" stroke-width="1.4"/><circle cx="200.0" cy="216.4" r="2.5" fill="#FFFFFF"/><circle cx="278.5" cy="208.2" r="7.0" fill="#0B3B7C"/><circle cx="276.1" cy="204.8" r="7.0" fill="#74D5F6" stroke="#0B3B7C" stroke-width="1.4"/><circle cx="273.8" cy="202.3" r="2.1" fill="#FFFFFF"/><circle cx="565.4" cy="121.6" r="7.0" fill="#0A1C91"/><circle cx="563.0" cy="118.2" r="7.0" fill="#324ECD" stroke="#0A1C91" stroke-width="1.4"/><circle cx="560.7" cy="115.6" r="2.1" fill="#FFFFFF"/><circle cx="607.1" cy="105.8" r="8.4" fill="#01528E"/><circle cx="604.7" cy="102.4" r="8.4" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="601.9" cy="99.3" r="2.5" fill="#FFFFFF"/><circle cx="646.5" cy="90.2" r="7.0" fill="#020643"/><circle cx="644.1" cy="86.8" r="7.0" fill="#D0B4AA" stroke="#020643" stroke-width="1.4"/><circle cx="641.7" cy="84.3" r="2.1" fill="#FFFFFF"/><circle cx="684.2" cy="75.1" r="7.0" fill="#0B3B7C"/><circle cx="681.8" cy="71.7" r="7.0" fill="#74D5F6" stroke="#0B3B7C" stroke-width="1.4"/><circle cx="679.4" cy="69.1" r="2.1" fill="#FFFFFF"/><circle cx="720.9" cy="60.5" r="8.4" fill="#0A1C91"/><circle cx="718.5" cy="57.1" r="8.4" fill="#324ECD" stroke="#0A1C91" stroke-width="1.4"/><circle cx="715.7" cy="54.1" r="2.5" fill="#FFFFFF"/><circle cx="757.3" cy="46.6" r="7.0" fill="#01528E"/><circle cx="754.9" cy="43.2" r="7.0" fill="#47B2D6" stroke="#01528E" stroke-width="1.4"/><circle cx="752.5" cy="40.7" r="2.1" fill="#FFFFFF"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#1C87B5" transform="translate(630.0 96.0) scale(2.60) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#887C6E" transform="translate(300.0 196.0) scale(1.90) translate(-12 -38)"/><path d="M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z" fill="#0F33AF" transform="translate(700.0 60.0) scale(2.20) translate(-12 -38)"/><circle cx="23" cy="239" r="17" fill="#01528E"/><circle cx="20" cy="234" r="17" fill="#47B2D6" stroke="#01528E" stroke-width="1.6"/><circle cx="14.2" cy="228.0" r="5.4" fill="#FFFFFF"/><circle cx="807" cy="31" r="17" fill="#020643"/><circle cx="804" cy="26" r="17" fill="#D0B4AA" stroke="#020643" stroke-width="1.6"/><circle cx="798.2" cy="20.0" r="5.4" fill="#FFFFFF"/></svg></div>
       </div>
     </div>
   </div>
@@ -1101,9 +1112,6 @@ function openNumberDef(item) {
   const cx = 180, cy = 100, r = 46;
   const RING_ROTATION_DEG = -8;
   const RING_RX = [ 64, 86, 108, 130, 152, 175 ];
-  const RING_COLOR = [ "#47B2D6", "#74D5F6", "#324ECD", "#D0B4AA", "#1C87B5", "#0F33AF" ];
-  const RING_SHADE = [ "#01528E", "#0B3B7C", "#0A1C91", "#020643", "#01528E", "#0A1C91" ];
-  const SHADOW_DX = 1.6, SHADOW_DY = 2.4;
   function ringPoint(ringIdx, angleDeg, beadR) {
     const rx = RING_RX[ringIdx], ry = rx * .26;
     const t = angleDeg * Math.PI / 180, rot = RING_ROTATION_DEG * Math.PI / 180;
@@ -1117,7 +1125,7 @@ function openNumberDef(item) {
     };
   }
   const BEAD_SPECS = [ [ 1, 205, 10 ], [ 2, 20, 10 ], [ 4, 335, 9 ], [ 1, 15, 9 ] ];
-  const BEAD_COLOR = [ [ "#47B2D6", "#01528E" ], [ "#D0B4AA", "#020643" ], [ "#74D5F6", "#0B3B7C" ], [ "#324ECD", "#0A1C91" ] ];
+  const BEAD_GRAD = [ "bd0", "bd1", "bd2", "bd0" ];
   const BEADS = BEAD_SPECS.map(([ring, angle, br]) => ringPoint(ring, angle, br));
   const ORBIT_STEPS = 96, ORBIT_PERIOD_S = 48;
   function wrap360(a) {
@@ -1141,45 +1149,56 @@ function openNumberDef(item) {
     orbitCSS += `@keyframes orbitBeadF${i}{${kfFront}}@keyframes orbitBeadB${i}{${kfBack}}`;
     orbitCSS += `.orbit-bead-f-${i}{animation:orbitBeadF${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
     orbitCSS += `.orbit-bead-b-${i}{animation:orbitBeadB${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
-    const [face, shade] = BEAD_COLOR[i % BEAD_COLOR.length];
-    const bead = cls => `<circle class="${cls}" cx="${b.cx + SHADOW_DX}" cy="${b.cy + SHADOW_DY}" r="${b.r}" fill="${shade}"/>` + `<circle class="${cls}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="${face}" stroke="${shade}" stroke-width="1"/>` + `<circle class="${cls}" cx="${(b.cx - b.r * .34).toFixed(1)}" cy="${(b.cy - b.r * .36).toFixed(1)}" r="${(b.r * .3).toFixed(1)}" fill="#FFFFFF"/>`;
+    const bead = cls => `<circle class="${cls}" cx="${b.cx + 1.8}" cy="${b.cy + 2.6}" r="${b.r}" fill="#020643"/>` + `<circle class="${cls}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${BEAD_GRAD[i]})" stroke="#020643" stroke-width="0.9"/>` + `<path class="${cls}" d="M ${(b.cx - b.r * .62).toFixed(1)} ${(b.cy - b.r * .1).toFixed(1)} A ${(b.r * .64).toFixed(1)} ${(b.r * .64).toFixed(1)} 0 0 1 ${(b.cx + b.r * .1).toFixed(1)} ${(b.cy - b.r * .62).toFixed(1)}" fill="none" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round"/>`;
     BACK_BEADS_SVG += bead(`orbit-bead-b-${i}`);
     FRONT_BEADS_SVG += bead(`orbit-bead-f-${i}`);
   });
   const orbitStyleTag = document.createElement("style");
   orbitStyleTag.textContent = orbitCSS;
   document.head.appendChild(orbitStyleTag);
-  function ringArcs(rx, idx) {
-    const ry = Math.round(rx * .26);
-    const back = `M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0`;
-    const front = `M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`;
-    const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
-    const xs = `translate(${cx + SHADOW_DX} ${cy + SHADOW_DY}) rotate(${RING_ROTATION_DEG})`;
-    const arc = d => `<path d="${d}" fill="none" stroke="${RING_SHADE[idx]}" stroke-width="2.3" transform="${xs}"/>` + `<path d="${d}" fill="none" stroke="${RING_COLOR[idx]}" stroke-width="2.3" transform="${xf}"/>`;
-    return {
-      back: arc(back),
-      front: arc(front)
-    };
+  const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
+  function ringLayers(d) {
+    return `<path d="${d}" fill="none" stroke="url(#metal)" stroke-width="4.6" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#0F33AF" stroke-width="1.5" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="0.7" transform="${xf} translate(0 -1.9)"/>`;
   }
-  const RING_ARCS = RING_RX.map(ringArcs);
-  const BACK_ARCS_SVG = RING_ARCS.map(a => a.back).join("");
-  const FRONT_ARCS_SVG = RING_ARCS.map(a => a.front).join("");
+  const FULL_RINGS = RING_RX.map(rx => {
+    const ry = Math.round(rx * .26);
+    return ringLayers(`M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0 A ${rx} ${ry} 0 0 1 ${-rx} 0`);
+  }).join("");
+  const FRONT_RINGS = RING_RX.map(rx => {
+    const ry = Math.round(rx * .26);
+    return ringLayers(`M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`);
+  }).join("");
+  let engraving = "";
+  [ -62, -38, -14, 10, 34, 58 ].forEach((lat, i) => {
+    const a = lat * Math.PI / 180, R = r * Math.cos(a), yc = cy - r * Math.sin(a) * .97;
+    engraving += `<path d="M ${(cx - R).toFixed(1)} ${yc.toFixed(1)} A ${R.toFixed(1)} ${(R * .26).toFixed(1)} 0 0 0 ${(cx + R).toFixed(1)} ${yc.toFixed(1)}" fill="none" stroke="${i % 2 ? "#D0B4AA" : "#D6E7F3"}" stroke-width="0.8" transform="rotate(-8 ${cx} ${cy})"/>`;
+  });
   const STAR = "M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z";
   const svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      </defs>
-    ${BACK_ARCS_SVG}
+      <linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="-175" y1="-20" x2="175" y2="20">
+        <stop offset="0" stop-color="#664B3D"/><stop offset=".22" stop-color="#D0B4AA"/><stop offset=".4" stop-color="#F7F3EA"/><stop offset=".58" stop-color="#887C6E"/><stop offset=".78" stop-color="#E1D7D0"/><stop offset="1" stop-color="#664B3D"/>
+      </linearGradient>
+      <radialGradient id="lit" cx="34%" cy="30%" r="80%"><stop offset="0" stop-color="#74D5F6"/><stop offset=".45" stop-color="#324ECD"/><stop offset="1" stop-color="#0A1C91"/></radialGradient>
+      <clipPath id="sphere"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
+      <radialGradient id="bd0" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#D6E7F3"/><stop offset=".4" stop-color="#324ECD"/><stop offset="1" stop-color="#020643"/></radialGradient>
+      <radialGradient id="bd1" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#F7F3EA"/><stop offset=".4" stop-color="#887C6E"/><stop offset="1" stop-color="#664B3D"/></radialGradient>
+      <radialGradient id="bd2" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#D6E7F3"/><stop offset=".4" stop-color="#47B2D6"/><stop offset="1" stop-color="#01528E"/></radialGradient>
+    </defs>
+    ${FULL_RINGS}
     ${BACK_BEADS_SVG}
-    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#0A1C91"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#020643"/>
-    <circle cx="${cx - 2}" cy="${cy - 2}" r="42" fill="#0F33AF"/>
-    <circle cx="${cx - 5}" cy="${cy - 5}" r="35" fill="#74D5F6"/>
-    <circle cx="${cx - 9}" cy="${cy - 9}" r="27" fill="#47B2D6"/>
-    <circle cx="${cx - 13}" cy="${cy - 13}" r="18" fill="#D6E7F3"/>
-    ${FRONT_ARCS_SVG}
-    <path d="${STAR}" fill="#1C87B5" transform="translate(322,10) scale(0.6)"/>
+    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#020643"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#0B136C"/>
+    <g clip-path="url(#sphere)">
+      <circle cx="${cx - 6}" cy="${cy - 7}" r="${r - 3}" fill="url(#lit)"/>
+      ${engraving}
+    </g>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#020643" stroke-width="1.3"/>
+    <path d="M ${cx - 33} ${cy - 18} A ${r - 4} ${r - 4} 0 0 1 ${cx - 10} ${cy - 42}" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+    ${FRONT_RINGS}
+    <path d="${STAR}" fill="#0F33AF" transform="translate(322,10) scale(0.6)"/>
     <path d="${STAR}" fill="#887C6E" transform="translate(30,150) scale(0.42)"/>
-    <path d="${STAR}" fill="#0F33AF" transform="translate(190,182) scale(0.34)"/>
+    <path d="${STAR}" fill="#47B2D6" transform="translate(190,182) scale(0.34)"/>
     ${FRONT_BEADS_SVG}
   </svg>`;
   host.innerHTML = svg;
