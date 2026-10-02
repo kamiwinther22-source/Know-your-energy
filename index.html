@@ -1177,7 +1177,7 @@ function openNumberDef(item) {
   document.head.appendChild(orbitStyleTag);
   const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
   function ringLayers(d) {
-    return `<path d="${d}" fill="none" stroke="url(#metal)" stroke-width="4.6" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#404D5E" stroke-width="1.5" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="0.7" transform="${xf} translate(0 -1.9)"/>`;
+    return `<path d="${d}" fill="none" stroke="url(#metal)" stroke-width="5.2" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#12182A" stroke-width="1.5" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="0.7" transform="${xf} translate(0 -1.9)"/>`;
   }
   const FULL_RINGS = RING_RX.map(rx => {
     const ry = Math.round(rx * .26);
@@ -1196,7 +1196,7 @@ function openNumberDef(item) {
   const svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="-175" y1="-20" x2="175" y2="20">
-        <stop offset="0" stop-color="#404D5E"/><stop offset=".22" stop-color="#C2BDB8"/><stop offset=".4" stop-color="#FFFFFF"/><stop offset=".58" stop-color="#8E9CAD"/><stop offset=".78" stop-color="#F6F6F6"/><stop offset="1" stop-color="#404D5E"/>
+        <stop offset="0" stop-color="#12182A"/><stop offset=".16" stop-color="#404D5E"/><stop offset=".3" stop-color="#C2BDB8"/><stop offset=".38" stop-color="#FFFFFF"/><stop offset=".44" stop-color="#8E9CAD"/><stop offset=".56" stop-color="#12182A"/><stop offset=".7" stop-color="#404D5E"/><stop offset=".82" stop-color="#F6F6F6"/><stop offset=".9" stop-color="#8E9CAD"/><stop offset="1" stop-color="#12182A"/>
       </linearGradient>
       <radialGradient id="lit" cx="0.5" cy="0.5" r="0.62" fx="0.33" fy="0.28"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".16" stop-color="#F6F6F6"/><stop offset=".36" stop-color="#C2BDB8"/><stop offset=".56" stop-color="#8E9CAD"/><stop offset=".74" stop-color="#404D5E"/><stop offset=".88" stop-color="#12182A"/><stop offset=".96" stop-color="#404D5E"/><stop offset="1" stop-color="#8E9CAD"/></radialGradient>
       <clipPath id="sphere"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
