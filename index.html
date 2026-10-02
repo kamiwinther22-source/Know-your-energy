@@ -664,7 +664,6 @@ body{
   .gate-chip{cursor:default!important;}
 }
 .connector-wrap{position:absolute;margin:0;min-height:0;pointer-events:none;z-index:-1;}
-.energy-ribbon svg{height:100%;}
 .metal-plaque{display:none!important;}
 @media screen{
 html,body{background:#000!important;color:#fff!important;}
@@ -1337,13 +1336,12 @@ function positionRibbon() {
   const W = f.width, H = p2.bottom - p1.top;
   if (W <= 0 || H <= 0) return;
   const deg = Math.atan2(H, W) * 180 / Math.PI;
-  const L = Math.hypot(W, H) * .94;
+  const L = f.width * 1.15;
   connectorWrap.style.left = "0px";
   connectorWrap.style.top = p1.top - f.top + "px";
   connectorWrap.style.width = W + "px";
   connectorWrap.style.height = H + "px";
   ribbon.style.width = L + "px";
-  ribbon.style.height = L * .12 + "px";
   ribbon.style.transform = "translate(-50%,-50%) rotate(" + -deg + "deg)";
 }
 
