@@ -662,7 +662,7 @@ body{
   --cy-x:#01528E;--cy-d:#1C87B5;--cy-m:#47B2D6;--cy-l:#74D5F6;
   --ice:#D6E7F3;--ice2:#BECFE1;
   --br-x:#664B3D;--br-d:#404D5E;--br-m:#8E9CAD;--br-c:#D1BDA9;
-  --steel:conic-gradient(from 90deg at 50% 50%,#FFFFFF 0deg,#F6F6F6 18deg,#C2BDB8 38deg,#8E9CAD 72deg,#404D5E 85deg,#111628 90deg,#404D5E 95deg,#8E9CAD 108deg,#C2BDB8 142deg,#F6F6F6 162deg,#FFFFFF 180deg,#F6F6F6 198deg,#C2BDB8 218deg,#8E9CAD 252deg,#404D5E 265deg,#111628 270deg,#404D5E 275deg,#8E9CAD 288deg,#C2BDB8 322deg,#F6F6F6 342deg,#FFFFFF 360deg);
+  --steel:conic-gradient(from 0deg at 50% var(--cy,400%),#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);
   --steel-dark:conic-gradient(from 90deg at 50% 50%,#8E9CAD 0deg,#404D5E 30deg,#111628 70deg,#404D5E 110deg,#8E9CAD 150deg,#C2BDB8 180deg,#8E9CAD 210deg,#404D5E 250deg,#111628 290deg,#404D5E 330deg,#8E9CAD 360deg);
   --sapphire:linear-gradient(180deg,#324ECD 0%,#0F33AF 30%,#0A1C91 50%,#020643 51%,#0A1C91 68%,#0F33AF 100%);
   --glass:linear-gradient(180deg,#74D5F6 0%,#47B2D6 58%,#1C87B5 100%);
@@ -671,7 +671,7 @@ body{
   --satin:linear-gradient(112deg,#F6F6F6 0%,#FFFFFF 16%,#F6F6F6 32%,#C2BDB8 56%,#F6F6F6 74%,#FFFFFF 90%,#F6F6F6 100%);
 }
 html{background:#F6F6F6;}
-body{background:conic-gradient(from 200deg at 92% -4%,#FFFFFF 0deg,#F6F6F6 6deg,#C2BDB8 12deg,#8E9CAD 17deg,#C2BDB8 22deg,#FFFFFF 32deg,#F6F6F6 42deg,#C2BDB8 50deg,#8E9CAD 55deg,#F6F6F6 64deg,#FFFFFF 78deg,#C2BDB8 88deg,#8E9CAD 93deg,#C2BDB8 99deg,#FFFFFF 112deg,#F6F6F6 126deg,#C2BDB8 134deg,#FFFFFF 150deg);background-attachment:scroll;color:var(--ink);}
+body{background:conic-gradient(from 200deg at 92% -4%,#FFFFFF 0deg,#F6F6F6 8deg,#C2BDB8 12deg,#F6F6F6 15deg,#FFFFFF 30deg,#F6F6F6 40deg,#C2BDB8 44deg,#8E9CAD 46deg,#F6F6F6 50deg,#FFFFFF 70deg,#C2BDB8 78deg,#F6F6F6 82deg,#FFFFFF 100deg,#F6F6F6 118deg,#C2BDB8 122deg,#FFFFFF 135deg,#F6F6F6 150deg);background-attachment:scroll;color:var(--ink);}
 
 .hook-brand{margin:0 0 1.3rem;padding:0;}
 .hook-brand .brand{font-size:clamp(2rem,10vw,2.7rem);white-space:nowrap;color:var(--ink);background:none;-webkit-text-fill-color:currentColor;}
@@ -679,7 +679,7 @@ body{background:conic-gradient(from 200deg at 92% -4%,#FFFFFF 0deg,#F6F6F6 6deg,
 .hl{-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .hl-1{color:var(--cb-d);background-image:linear-gradient(180deg,#324ECD 0%,#0F33AF 40%,#020643 100%);}
 .hl-2{color:var(--cy-d);background-image:linear-gradient(180deg,#74D5F6 0%,#1C87B5 45%,#01528E 100%);}
-.hl-3{color:var(--br-x);background-image:linear-gradient(180deg,#8E9CAD 0%,#404D5E 40%,#664B3D 100%);}
+.hl-3{color:var(--cb-d);background-image:linear-gradient(180deg,#324ECD 0%,#0F33AF 40%,#020643 100%);}
 .free-reading-line{color:var(--ink);}
 .privacy-note{color:var(--ink);}
 
@@ -758,6 +758,12 @@ body{background:conic-gradient(from 200deg at 92% -4%,#FFFFFF 0deg,#F6F6F6 6deg,
 .rel-chip{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;padding:9px 11px;border-radius:999px;}
 .price-row{font-size:14px;padding:11px 12px;border-radius:999px;}
 .price-label,.price-amt{font-size:14px;letter-spacing:.12em;}
+
+.hero-continue-btn{--cy:430%;}.gen-btn{--cy:420%;}.rel-chip{--cy:300%;}.price-row{--cy:300%;}
+
+/*per-size metal*/.hero-continue-btn{--steel:conic-gradient(from 0deg at 50% 589%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}.gen-btn{--steel:conic-gradient(from 0deg at 50% 413%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}
+.rel-chip[data-rel=parent-child]{--steel:conic-gradient(from 0deg at 50% 428%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}.rel-chip[data-rel=romantic]{--steel:conic-gradient(from 0deg at 50% 351%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}.rel-chip[data-rel=friends]{--steel:conic-gradient(from 0deg at 50% 309%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}.rel-chip[data-rel=other]{--steel:conic-gradient(from 0deg at 50% 267%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}
+.glow-ring-sm:nth-child(1) .price-row{--steel:conic-gradient(from 0deg at 50% 289%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}.glow-ring-sm:nth-child(2) .price-row{--steel:conic-gradient(from 0deg at 50% 379%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}.glow-ring-sm:nth-child(3) .price-row{--steel:conic-gradient(from 0deg at 50% 405%,#FFFFFF 0deg,#F6F6F6 9deg,#C2BDB8 15deg,#8E9CAD 21deg,#404D5E 26deg,#111628 30deg,#111628 330deg,#404D5E 334deg,#8E9CAD 339deg,#C2BDB8 345deg,#F6F6F6 351deg,#FFFFFF 360deg);}
 
 </style>
 </head>
