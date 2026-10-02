@@ -55,129 +55,20 @@ more important than another. Sun is still a fine place to *start*, just
 not because it matters more.)
 
 **Checklist every entry must pass:**
-1. Names the real, verified mechanism for this specific placement —
-   checked against actual source material, not just internally
-   plausible. (The Scorpio error: attributing a learning-style preference
-   to Scorpio's core identity, when the real tradition is intensity and
-   facing hard truths.)
-2. No overused clichés or phrases that have stopped meaning anything
-   through repetition (e.g. "runs deep").
-3. Shows the full, real picture — doesn't lead with and end on the hard
-   part alone, doesn't oversell positivity either.
-4. **No lesson, no growth edge, no implied verdict about which side of a
-   trait is better — this superseded an earlier, wrong version of this
-   rule.** An earlier version of this checklist said lesson framing was
-   fine, even expected, for placements astrology treats as literal
-   lessons (Saturn, Chiron, the Nodes, Karmic Lessons/Debt Numbers). She
-   corrected this directly, after reading entries that had been "fixed"
-   under that old rule and finding the pattern itself the problem, not
-   just its wording: no entry should tell the reader a trait is something
-   to work on, soften, or grow out of — regardless of which placement
-   it's on. Her test case was her own Sun/Scorpio guardedness: she is
-   rightfully proud of it, has never regretted trusting her own judgment
-   about who to let close, and would reject any wording implying she
-   should. That same standard applies everywhere, not just to Scorpio.
-   The fix: state the tendency plainly — including something that can
-   read as friction to other people, alongside something that reads as a
-   real asset — without declaring either one the "right" way to be or the
-   direction to move toward. Name both sides and stop; let the reader
-   draw their own conclusion. **This applies retroactively to every
-   category already marked "audited, complete" below** — that status was
-   about factual/sourcing accuracy only. None of it has been checked
-   against this rule yet, and the old lesson-ending pattern is still
-   present throughout ASTRO_DEFS, NUM_DEFS, the new Chiron/Node/Lilith
-   entries, and the GATES/HD_DEFS closing-sentence template.
-5. Direct, economical wording — not padded, not hedging, not sideways.
-6. Observational, not advice-giving: describes what a period *is* or
-   *supports*, never what happens *if you act a certain way inside it*.
-   If it's genuinely observational it needs no "this isn't advice"
-   disclaimer — the wording itself should make that obvious.
-7. Doesn't universalize a specific narrative onto everyone. State only
-   what's structurally/mechanically true for the whole cycle, not an
-   assumed emotional experience (excess, struggle, overdue-ness).
-8. No dramatic-sounding writing performing depth it doesn't have — state
-   the structural fact plainly; the accuracy should be what's striking,
-   not the prose style.
-9. Doesn't argue with a strawman left over from a previous draft.
-10. No dressing up plain things with fancier names.
-11. **No jargon, no reaching for a clever or "certain-sounding" turn of
-    phrase — plain, complete, factual sentences, stated observationally.**
-    Not shorter for its own sake: sentences must stay complete, nothing
-    trimmed down to where the meaning has to be guessed at. After writing
-    a line, check: would a reader be left wondering what this actually
-    means? If yes, rewrite it. Real example she flagged as broken: the
-    old `housecombo.moon_8` entry said emotional life was "drawn toward
-    depth rather than surface calm" — sounded moody, explained nothing.
-    Replaced with the plain mechanism: emotional life focuses on what's
-    hidden or intense rather than everyday feelings, closeness usually
-    forms through shared crisis or real vulnerability rather than casual
-    time together, and ordinary calm can feel unfamiliar or hard to
-    trust. She confirmed this version actually landed ("I got a lot more
-    out of that explanation").
-12. **Never reduce a placement to one or two traits.** Her real
-    complaint about an early Sun/Leo rewrite: "there's a lot more to
-    them than needing recognition." A placement should read as several
-    distinct, real facets woven together (e.g. Leo: generosity/warmth
-    given without calculation, a natural presence, pride in creative
-    work, loyalty once committed, *and* pride's harder edge — five
-    separate things, not one theme restated). Research each placement
-    broadly enough to find that range before writing it; don't lock
-    onto the single most-searched trait and elaborate on just that one.
-13. **Name what's distinctive about a trait without comparing it to
-    other people or other placements in the sentence itself.** Not "this
-    bothers you more than it bothers most people" or "lands harder on
-    you than it would on someone else" — just state what's true of this
-    placement directly. Research can and should identify what's
-    genuinely *different* about a sign (that's how you decide which
-    traits are worth including at all) — the rule is about the written
-    sentence, not the research process: the comparison should never
-    surface as comparison language in the final text. This pattern
-    ("more than most people," "harder than for other placements") turned
-    out to be nearly as widespread across ASTRO_DEFS/NUM_DEFS as the
-    lesson-ending pattern in item 4 — same retroactive scope applies.
-14. **For planet-in-sign entries specifically, ask two questions before
-    finalizing:** (1) How is this planet's placement in this sign
-    actually distinct from the Sun being in that sign — i.e. does the
-    entry read differently because it's filtered through *this* planet's
-    real domain (Moon = emotional/instinctive response, Mercury =
-    thinking/communication, Venus = love and values, Mars = drive and
-    action, etc.), not just the Sun's identity content with the planet
-    name swapped in? (2) The "blind guess" test: if you lined up entries
-    for every sign of just one planet (e.g. all 12 Moon signs) with the
-    sign names hidden, could a reader actually tell which description
-    belongs to which sign from real, distinguishing tells — or is the
-    language generic enough it could apply to several signs
-    interchangeably? If the second is true, the entry needs sharper,
-    more specific detail.
-15. **Don't default to negative-coded language for a trait when the same
-    real mechanism can be stated in neutral or positive-coded language —
-    but don't force every entry into a mechanical positive-negative-
-    positive template either.** Two separate corrections that arrived
-    together: first, she reacted physically ("my stomach felt sick")
-    to a batch of number descriptions that each ended on its shadow
-    clause as the literal last sentence — a real, distinct problem from
-    item 4's lesson-framing rule, since these weren't prescriptive
-    ("the lesson is X"), just descriptive shadow content that happened
-    to land as the closing note of the whole entry. The first fix
-    attempt bolted a "Still,/Even so," positive sentence onto the end
-    of every entry to force a sandwich shape — she corrected this too,
-    directly: forcing rich, specific content into a rigid 3-part
-    formula is its own kind of cliché, the same failure mode as the
-    template this whole audit exists to remove. Her actual standard:
-    most tendencies can be described in language that states what the
-    trait *is* rather than what it's a deficiency in, without erasing
-    the real, honest cost when one exists (item 3 still applies — don't
-    oversell positivity either). Example fix: NUM_DEFS.core's 4 entry
-    changed "that same discipline can tip into rigidity, or a quickness
-    to judge people who don't share the same standards" to "that same
-    discipline holds its own standards firmly, and doesn't bend them
-    easily for someone working a different way" — same honest fact,
-    stated as a trait rather than a flaw, no forced positive coda
-    after it. **This item's retroactive scope is still open** — it was
-    applied to the new `NUM_DEFS.core` category and needs to be checked
-    against everything else eventually, but nothing else has been
-    re-screened against it yet, including the Moon rewrite from item 14
-    that was drafted the same session before this rule existed.
+1. Names the verified mechanism for this specific placement, checked against actual source material, not just internally plausible.
+2. No overused clichés or phrases that have stopped meaning anything through repetition (e.g. "runs deep").
+3. Includes both what the placement does well and what it costs, each in proportion to how much it is true of that placement.
+4. States the tendency plainly. Never tells the reader to change it, work on it, or grow out of it.
+5. Direct, economical wording, not padded, not hedging, not sideways.
+6. Describes; does not instruct. No commands and no "if you do X, then Y", in any entry.
+7. Describes the tendency itself, not an assumed emotional experience such as struggle, excess, or being overdue.
+8. No dressing up plain things with fancier names.
+9. No jargon and no clever turns of phrase.
+10. Sentences are complete. Nothing is trimmed so far that the meaning has to be guessed.
+11. Covers the placement's range: each of its several well-supported traditional meanings, not one or two.
+12. No comparison language in the sentence ("more than most people", "harder than for other placements"). State what is true of the placement directly.
+13. Planet-in-sign entries are written from that planet's own domain (Moon = emotional response, Mercury = thinking and communication, Venus = love and values, Mars = drive and action), not as the Sun's description with the planet name swapped in.
+14. Uses neutral or positive wording when it states the same fact accurately, without forcing every entry into a fixed positive-negative-positive shape.
 
 **Current status of this rewrite (all of the above, not just
 factual/sourcing accuracy):** `ASTRO_DEFS.sun` (12 signs) is the only
