@@ -1,13 +1,3 @@
-// astro-engine.js
-// Local astrology calculation engine for Know Your Energy.
-// Replaces the paid astrology-api.io call. Runs entirely inside the
-// Cloudflare Worker — no external API, no key, no usage limits.
-//
-// Engine: circular-natal-horoscope-js (Unlicense / public domain),
-// which uses a JavaScript port of Moshier's ephemeris internally.
-// Settings mirror what the old API was asked for:
-//   tropical zodiac, Placidus houses, Sun through Pluto, major aspects.
-
 import pkg from "circular-natal-horoscope-js";
 const { Origin, Horoscope } = pkg;
 import { findCity } from "./cities.js";
@@ -48,21 +38,6 @@ function readBody(body) {
   };
 }
 
-/**
- * Compute a full natal chart locally.
- *
- * @param {Object} input
- * @param {number} input.year   4-digit year
- * @param {number} input.month  1-12  (this module converts to the library's 0-11 internally)
- * @param {number} input.day    1-31
- * @param {number} input.hour   0-23 (already converted from AM/PM upstream)
- * @param {number} input.minute 0-59
- * @param {string} input.cityName
- * @param {string} input.countryCode  ISO-2, e.g. "US"
- * @param {string} [input.state]      state / province name or code, used to
- *                                    disambiguate duplicate city names
- * @returns {Object} chart data (planets, houses, angles, aspects, location)
- */
 export function computeAstrology(input) {
   const { year, month, day, hour, minute, cityName, countryCode, state, skipAspects } = input;
 
@@ -76,7 +51,7 @@ export function computeAstrology(input) {
 
   const origin = new Origin({
     year,
-    month: month - 1, // library uses 0-indexed months (0 = January)
+    month: month - 1,
     date: day,
     hour,
     minute,
@@ -84,10 +59,6 @@ export function computeAstrology(input) {
     longitude: loc.lng,
   });
 
-  // skipAspects: callers that only need body/point signs (e.g. the
-  // unknown-birth-time sign-boundary check in worker.js, which calls this
-  // twice more per request just to compare) don't need aspect data, so
-  // skip computing it rather than pay for real work nobody reads.
   const buildHoroscope = (houseSystem) =>
     new Horoscope({
       origin,
@@ -100,14 +71,6 @@ export function computeAstrology(input) {
       language: "en",
     });
 
-  // Planet signs and house cusps are computed together in one pass by the
-  // library, so a Placidus-specific failure (its house-cusp formula can
-  // break down at extreme latitudes) would otherwise take the planet signs
-  // down with it, even though signs don't actually depend on the house
-  // system. Whole-sign houses use simple 30-degree divisions with no such
-  // failure mode, so retrying with it recovers the signs; the houses/
-  // Ascendant/Midheaven from that retry are still real, just a different
-  // (less precise) house system than the default.
   let horoscope, houseSystemUsed = "placidus";
   try {
     horoscope = buildHoroscope("placidus");
@@ -116,27 +79,20 @@ export function computeAstrology(input) {
     houseSystemUsed = "whole-sign";
   }
 
-  // --- Planets (Sun through Pluto) ---
   const planets = [];
   for (const key of PLANET_KEYS) {
     const b = readBody(horoscope.CelestialBodies?.[key]);
     if (b) planets.push(b);
   }
 
-  // --- Angles ---
   const ascendant = readBody(horoscope.Ascendant);
   const midheaven = readBody(horoscope.Midheaven);
 
-  // --- North Node / South Node / Chiron / Lilith (bonus points the old API didn't send) ---
   const northNode = readBody(horoscope.CelestialPoints?.northnode);
   const southNode = readBody(horoscope.CelestialPoints?.southnode);
   const chiron = readBody(horoscope.CelestialBodies?.chiron);
-  // Lilith here is Black Moon Lilith (a calculated point, not a physical
-  // body), which the library ships under CelestialPoints alongside the
-  // nodes.
   const lilith = readBody(horoscope.CelestialPoints?.lilith);
 
-  // --- House cusps ---
   const houses = (horoscope.Houses || []).map((h, i) => {
     const deg =
       h?.ChartPosition?.StartPosition?.Ecliptic?.DecimalDegrees ??
@@ -150,7 +106,6 @@ export function computeAstrology(input) {
     };
   });
 
-  // --- Aspects ---
   const aspects = skipAspects ? [] : (horoscope.Aspects?.all || []).map((a) => ({
     point1: a?.point1Label ?? a?.point1Key ?? null,
     point2: a?.point2Label ?? a?.point2Key ?? null,
@@ -166,7 +121,7 @@ export function computeAstrology(input) {
       country: loc.country,
       latitude: loc.lat,
       longitude: loc.lng,
-      source: loc.source, // "dataset" or "fallback"
+      source: loc.source,
     },
     planets,
     ascendant,

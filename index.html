@@ -683,7 +683,6 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .free-reading-line{color:var(--ink);}
 .privacy-note{color:var(--ink);}
 
-/* fields: a metal bezel around a carved pearl well */
 .line-field{border:1.5px solid transparent;border-radius:9px;
   background:linear-gradient(180deg,#FFFFFF 0%,#F6F6F6 100%) padding-box,var(--bezel) border-box;
   box-shadow:inset 0 2px 0 #C2BDB8;}
@@ -715,15 +714,14 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .glow-ring,.glow-ring-sm{overflow:visible;padding:0;background:none;}
 .glow-ring::before,.glow-ring-sm::before{display:none;}
 .rel-row{gap:0.55rem;}
-/*C*/.rel-chip{border:none;overflow:visible;color:#111628;letter-spacing:0.18em;text-transform:uppercase;text-shadow:0 1px 0 #FFFFFF;background:var(--steel);box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,0 1px 0 #8E9CAD;}
-/*D*/.rel-chip:hover{background:var(--steel);}
-/*E*/.rel-chip.active{color:#FFFFFF;text-shadow:0 1px 0 #111628;background:linear-gradient(#111628,#111628) padding-box,var(--steel) border-box;border:3px solid transparent;box-shadow:0 2px 0 #404D5E;}
-/*F*/.rel-chip.active:hover{background:linear-gradient(#111628,#111628) padding-box,var(--steel) border-box;}
+.rel-chip{border:none;overflow:visible;color:#111628;letter-spacing:0.18em;text-transform:uppercase;text-shadow:0 1px 0 #FFFFFF;background:var(--steel);box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,0 1px 0 #8E9CAD;}
+.rel-chip:hover{background:var(--steel);}
+.rel-chip.active{color:#FFFFFF;text-shadow:0 1px 0 #111628;background:linear-gradient(#111628,#111628) padding-box,var(--steel) border-box;border:3px solid transparent;box-shadow:0 2px 0 #404D5E;}
+.rel-chip.active:hover{background:linear-gradient(#111628,#111628) padding-box,var(--steel) border-box;}
 
-/* buttons: sapphire and glass enamel in a bronze bezel */
-/*A*/.hero-continue-btn{background:var(--steel);color:#111628;border:none;overflow:visible;text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
+.hero-continue-btn{background:var(--steel);color:#111628;border:none;overflow:visible;text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
 .hero-continue-label{color:#111628;letter-spacing:0.3em;text-transform:uppercase;font-weight:700;text-shadow:0 1px 0 #FFFFFF;}
-/*B*/.gen-btn{background:var(--steel);color:#111628;border:none;border-radius:8px;overflow:visible;font-size:0.72rem;letter-spacing:0.3em;text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
+.gen-btn{background:var(--steel);color:#111628;border:none;border-radius:8px;overflow:visible;font-size:0.72rem;letter-spacing:0.3em;text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
 .gen-btn::before{display:none;}
 .hero-continue-btn:hover,.gen-btn:hover{transform:translateY(-1px);}
 .hero-continue-btn:active,.gen-btn:active{transform:translateY(1px);}
@@ -731,7 +729,7 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .pricing-panel{border-bottom:1.5px solid #8E9CAD;}
 .state-banner-ttl,.state-banner-sub,.hero-pricing-intro{color:var(--ink);}
 .pricing-list{gap:0.9rem;}
-/*G*/.price-row{overflow:visible;border:none;background:var(--steel);text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,0 1px 0 #8E9CAD;}
+.price-row{overflow:visible;border:none;background:var(--steel);text-shadow:0 1px 0 #FFFFFF;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,0 1px 0 #8E9CAD;}
 .price-label,.price-amt{color:#111628;}
 
 
@@ -751,7 +749,7 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .submit-wrap{margin-bottom:1.2rem;}
 #p2Section:not(.open) .person-tag{visibility:hidden;}
 
-/*sheet-exact*/.hero-continue-btn,.gen-btn,.rel-chip,.price-row{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.3em;color:#12182A;text-shadow:0 1px 0 #FFFFFF;background:var(--steel);border:none;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
+.hero-continue-btn,.gen-btn,.rel-chip,.price-row{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.3em;color:#12182A;text-shadow:0 1px 0 #FFFFFF;background:var(--steel);border:none;box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #404D5E,inset 1px 0 0 #F6F6F6,inset -1px 0 0 #8E9CAD,0 1px 0 #8E9CAD;}
 .hero-continue-btn,.hero-continue-label{font-size:17px;}
 .hero-continue-btn{padding:20px 60px;border-radius:999px;}
 .gen-btn{font-size:17px;padding:19px 48px;border-radius:9px;}
@@ -761,22 +759,21 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .hero-continue-btn:hover,.gen-btn:hover,.rel-chip:hover,.price-row:hover{background:var(--steel);}
 .rel-chip.active{color:#FFFFFF;text-shadow:0 1px 0 #12182A;background:linear-gradient(#12182A,#12182A) padding-box,var(--steel) border-box;border:3px solid transparent;}
 .gen-btn{padding:19px 38px;}
-/*clear-old*/.hero-continue-btn{height:auto;line-height:1.2;display:inline-flex;margin:0.9rem auto 0;}
+.hero-continue-btn{height:auto;line-height:1.2;display:inline-flex;margin:0.9rem auto 0;}
 .hero-continue-btn .hero-continue-label,.price-label,.price-amt{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#12182A;}
 .price-label,.price-amt{font-size:14px;}
 .rel-chip,.price-row,.gen-btn{height:auto;line-height:1.2;}
 .hero-continue-btn{display:flex;width:max-content;}
-/*straight-metal*/.hero-continue-btn,.gen-btn,.rel-chip,.price-row{--steel:linear-gradient(100deg,#8E9CAD 0%,#C2BDB8 6%,#F6F6F6 14%,#FFFFFF 30%,#FFFFFF 62%,#F6F6F6 76%,#C2BDB8 90%,#8E9CAD 100%);background:var(--steel);box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -2px 0 #8E9CAD,inset 0 -3px 0 #404D5E,0 1px 0 #404D5E,0 3px 0 #8E9CAD;}
+.hero-continue-btn,.gen-btn,.rel-chip,.price-row{--steel:linear-gradient(100deg,#8E9CAD 0%,#C2BDB8 6%,#F6F6F6 14%,#FFFFFF 30%,#FFFFFF 62%,#F6F6F6 76%,#C2BDB8 90%,#8E9CAD 100%);background:var(--steel);box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -2px 0 #8E9CAD,inset 0 -3px 0 #404D5E,0 1px 0 #404D5E,0 3px 0 #8E9CAD;}
 .hero-continue-btn:hover,.gen-btn:hover,.rel-chip:hover,.price-row:hover{background:var(--steel);}
 .rel-chip.active{background:linear-gradient(#12182A,#12182A) padding-box,var(--steel) border-box;border:3px solid transparent;}
 .rel-chip.active:hover{background:linear-gradient(#12182A,#12182A) padding-box,var(--steel) border-box;}
 
-/*single-row*/.rel-row,.pricing-list{flex-wrap:nowrap;}
+.rel-row,.pricing-list{flex-wrap:nowrap;}
 .rel-chip{font-size:13px;letter-spacing:.14em;padding:9px 11px;}
 .price-row{font-size:14px;padding:11px 12px;}
 .price-label,.price-amt{font-size:14px;letter-spacing:.12em;}
 
-/* ===== black entry page, white elements. Results page keeps the light ground. ===== */
 html,body{background:#000000;color:#FFFFFF;}
 html:has(#resultsWrap[style*="block"]),body:has(#resultsWrap[style*="block"]){background:#FFFFFF;color:#000000;}
 #hookStep,#hookStep *,#formStep,#formStep *{color:#FFFFFF;}
