@@ -597,9 +597,9 @@ body{
 .card-expand-body .numwrap .dprow{background:transparent;border-bottom:1.5px solid var(--card-a1);padding:0.55rem 0;}
 .card-expand-body .numwrap .dpsec{font-size:1.2rem;letter-spacing:0.07em;margin-top:1.7rem;padding:0.55rem 0 0.45rem;border-top:3px solid var(--card-accent);}
 .card-expand-body .numwrap .dpsec:first-child{margin-top:0.3rem;}
-.card-expand-body .numwrap .dprow>.dpr{flex-direction:row;align-items:center;justify-content:space-between;}
-.card-expand-body .numwrap .dprow>.dpr .dprl{font-size:1.15rem;}
-.card-expand-body .numwrap .dprow>.dpr .dprv{font-size:2.1rem;line-height:1;text-align:right;}
+.card-expand-body .numwrap .dprow>.dpr{display:grid;grid-template-columns:13rem 1fr;align-items:center;}
+.card-expand-body .numwrap .dprow>.dpr .dprl{font-size:1.15rem;justify-self:start;}
+.card-expand-body .numwrap .dprow>.dpr .dprv{font-size:2.1rem;line-height:1;text-align:left;}
 .card-expand-body .numwrap .stage-pair .pc-col .dprv{font-size:2.1rem;line-height:1;}
 .card-expand-body .numwrap .stage-pair .dprl{overflow-wrap:normal;word-break:normal;}
 .card-expand-body .numwrap .birthdate-row{gap:0.4rem;}
