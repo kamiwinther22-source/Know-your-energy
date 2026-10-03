@@ -594,6 +594,30 @@ body{
 .card-expand-body .gate-def{font-size:1.15rem;line-height:1.5;padding:0.5rem 0.7rem;margin:0 0.3rem 0.5rem;}
 .card-expand-body .report-body{font-size:1.2rem;line-height:1.65;padding:0 0.3rem;}
 .card-expand-body .report-sig{font-size:1.2rem;line-height:1.65;padding:0.6rem 0.3rem 0;}
+.card-expand-body .numwrap .dprow{background:transparent;border-bottom:1.5px solid var(--card-a1);padding:0.55rem 0;}
+.card-expand-body .numwrap .dpsec{font-size:1.2rem;letter-spacing:0.07em;margin-top:1.7rem;padding:0.55rem 0 0.45rem;border-top:3px solid var(--card-accent);}
+.card-expand-body .numwrap .dpsec:first-child{margin-top:0.3rem;}
+.card-expand-body .numwrap .dprow>.dpr{flex-direction:row;align-items:center;justify-content:space-between;}
+.card-expand-body .numwrap .dprow>.dpr .dprl{font-size:1.15rem;}
+.card-expand-body .numwrap .dprow>.dpr .dprv{font-size:2.1rem;line-height:1;text-align:right;}
+.card-expand-body .numwrap .stage-pair .pc-col .dprv{font-size:2.1rem;line-height:1;}
+.card-expand-body .numwrap .stage-pair .dprl{overflow-wrap:normal;word-break:normal;}
+.card-expand-body .numwrap .birthdate-row{gap:0.4rem;}
+.card-expand-body .numwrap .birthdate-row .dpr{align-items:center;border:1.5px solid var(--card-a1);border-radius:8px;padding:0.6rem 0.2rem 0.5rem;text-align:center;}
+.card-expand-body .numwrap .pinn-pair,.card-expand-body .numwrap .birthdate-row{display:grid;gap:0 0.4rem;}
+.card-expand-body .numwrap .pinn-pair{grid-template-columns:1fr 1fr;}
+.card-expand-body .numwrap .birthdate-row{grid-template-columns:1fr 1fr 1fr;}
+.card-expand-body .numwrap .pinn-pair .pc-col,.card-expand-body .numwrap .birthdate-row .pc-col{display:contents;}
+.card-expand-body .numwrap .pc-col:nth-child(1)>.dpr{grid-column:1;grid-row:1;}
+.card-expand-body .numwrap .pc-col:nth-child(2)>.dpr{grid-column:2;grid-row:1;}
+.card-expand-body .numwrap .pc-col:nth-child(3)>.dpr{grid-column:3;grid-row:1;}
+.card-expand-body .numwrap .pc-col:nth-child(1)>.dpdef{grid-column:1 / -1;grid-row:2;}
+.card-expand-body .numwrap .pc-col:nth-child(2)>.dpdef{grid-column:1 / -1;grid-row:3;}
+.card-expand-body .numwrap .pc-col:nth-child(3)>.dpdef{grid-column:1 / -1;grid-row:4;}
+.card-expand-body .numwrap .birthdate-row .dprv{font-size:2.8rem;}
+.card-expand-body .numwrap .birthdate-row .dprl{font-size:0.95rem;align-self:center;text-align:center;}
+.card-expand-body .numwrap .dprow.now{border-left:5px solid var(--card-accent);padding-left:0.7rem;}
+.now-tag{margin-left:0.6em;padding:0.1em 0.5em;border-radius:3px;background:var(--card-accent);color:#ffffff;font-size:0.9em;letter-spacing:0.08em;}
 @media print{
   .form-col,.hero-accent-row,.hero-accent-caption,.brand-row,.tagline-frame,.grid-nav-btn,.bottom-btns{display:none!important;}
   
@@ -2897,32 +2921,45 @@ function pcCol(label, value, defKey, defNum, specKey, showGeneral) {
   return `<div class="pc-col"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(value)}</span></div>${def ? `<div class="dpdef" hidden>${def}</div>` : ""}</div>`;
 }
 
-function pinnacleChallengeRow(n, pinnacle, challengeVal) {
-  const pinnSpec = n === 1 ? "pinnacle1child" : "pinnacle" + n;
-  const chalSpec = n === 1 ? "challenge1child" : "challenge" + n;
-  return `<div class="dprow"><div class="stage-range">${escapeHtml(pinnacle.ageRange)}</div><div class="stage-pair">${pcCol("Pinnacle " + n, pinnacle.value, "pinnacle", pinnacle.value, pinnSpec)}${pcCol("Challenge " + n, challengeVal, "challenge", challengeVal, chalSpec)}</div></div>`;
+function ageInRange(range, age) {
+  const parts = String(range || "").split("–");
+  if (parts.length !== 2 || age == null) return false;
+  const start = parts[0].trim() === "birth" ? 0 : Number(parts[0]);
+  const end = /onward/i.test(parts[1]) ? Infinity : Number(parts[1]);
+  return age >= start && age <= end;
 }
 
-function periodCycleRow(n, period) {
-  return `<div class="dprow"><div class="stage-range">${escapeHtml(period.ageRange)}</div><div class="stage-pair">${pcCol("Period " + n, period.value, "periodcycle", period.value, "periodcycle" + n, n === 1)}</div></div>`;
+function nowTag(isNow) {
+  return isNow ? '<span class="now-tag">Now</span>' : "";
+}
+
+function pinnacleChallengeRow(n, pinnacle, challengeVal, isNow) {
+  const pinnSpec = n === 1 ? "pinnacle1child" : "pinnacle" + n;
+  const chalSpec = n === 1 ? "challenge1child" : "challenge" + n;
+  return `<div class="dprow${isNow ? " now" : ""}"><div class="stage-range">${escapeHtml(pinnacle.ageRange)}${nowTag(isNow)}</div><div class="stage-pair pinn-pair">${pcCol("Pinnacle " + n, pinnacle.value, "pinnacle", pinnacle.value, pinnSpec)}${pcCol("Challenge " + n, challengeVal, "challenge", challengeVal, chalSpec)}</div></div>`;
+}
+
+function periodCycleRow(n, period, isNow) {
+  return `<div class="dprow${isNow ? " now" : ""}"><div class="stage-range">${escapeHtml(period.ageRange)}${nowTag(isNow)}</div><div class="stage-pair">${pcCol("Period " + n, period.value, "periodcycle", period.value, "periodcycle" + n, n === 1)}</div></div>`;
 }
 
 function nr(num) {
   if (!num) return apend("Unavailable");
+  const age = num.essenceCycle ? num.essenceCycle.currentAge : null;
   let h = "";
   h += dpsec("Active Cycles");
   h += `<div class="dprow"><div class="stage-pair birthdate-row">${pcCol("Personal Year", num.personalYear, "personalyear", num.personalYear)}${pcCol("Personal Month", num.personalMonth, "personalmonth", num.personalMonth)}${pcCol("Personal Day", num.personalDay, "personalday", num.personalDay)}</div></div>`;
   h += arow("Essence (age " + num.essenceCycle.currentAge + ")", num.essenceCycle.value, "essence", num.essenceCycle.value);
   h += arow("Maturity", num.maturity, "maturity", num.maturity);
   h += dpsec("Period Cycles — Three Long Chapters");
-  h += periodCycleRow(1, num.periodCycles.period1);
-  h += periodCycleRow(2, num.periodCycles.period2);
-  h += periodCycleRow(3, num.periodCycles.period3);
+  h += periodCycleRow(1, num.periodCycles.period1, ageInRange(num.periodCycles.period1.ageRange, age));
+  h += periodCycleRow(2, num.periodCycles.period2, ageInRange(num.periodCycles.period2.ageRange, age));
+  h += periodCycleRow(3, num.periodCycles.period3, ageInRange(num.periodCycles.period3.ageRange, age));
   h += dpsec("Pinnacles & Challenges — By Life Stage");
-  h += pinnacleChallengeRow(1, num.pinnacles.pinnacle1, num.challengeNumbers.challenge1);
-  h += pinnacleChallengeRow(2, num.pinnacles.pinnacle2, num.challengeNumbers.challenge2);
-  h += pinnacleChallengeRow(3, num.pinnacles.pinnacle3, num.challengeNumbers.challenge3);
-  h += pinnacleChallengeRow(4, num.pinnacles.pinnacle4, num.challengeNumbers.challenge4);
+  h += pinnacleChallengeRow(1, num.pinnacles.pinnacle1, num.challengeNumbers.challenge1, ageInRange(num.pinnacles.pinnacle1.ageRange, age));
+  h += pinnacleChallengeRow(2, num.pinnacles.pinnacle2, num.challengeNumbers.challenge2, ageInRange(num.pinnacles.pinnacle2.ageRange, age));
+  h += pinnacleChallengeRow(3, num.pinnacles.pinnacle3, num.challengeNumbers.challenge3, ageInRange(num.pinnacles.pinnacle3.ageRange, age));
+  h += pinnacleChallengeRow(4, num.pinnacles.pinnacle4, num.challengeNumbers.challenge4, ageInRange(num.pinnacles.pinnacle4.ageRange, age));
   h += dpsec("Core Numbers");
   h += arow("Life Path", num.lifePath, "lifepath", num.lifePath);
   h += arow("Birthday", num.birthday, "birthday", num.birthday);
@@ -2933,7 +2970,7 @@ function nr(num) {
   h += arow("Balance", num.balance, "balance", num.balance);
   h += karmicRow("Karmic Lessons", num.karmicLessons, "karmiclessons");
   h += karmicRow("Karmic Debt", num.karmicDebtNumbers, "karmicdebt");
-  return h;
+  return `<div class="numwrap">${h}</div>`;
 }
 
 function hdr(hd, errMsg) {
