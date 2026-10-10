@@ -5,7 +5,7 @@ import {EXRLoader} from './vendor/loaders/EXRLoader.js';
 const Q=new URLSearchParams(''),ENVNAME=Q.get('env')||'warehouse',ENVROT=parseFloat(Q.get('rot')||'0.25');
 const host=document.getElementById('heroIllustration');
 await new Promise(r=>{const t=()=>host.querySelector('svg')?r():requestAnimationFrame(t);t();});
-const svg=host.querySelector('svg');svg.style.visibility='hidden';host.style.position='relative';
+const svg=host.querySelector('svg');host.style.position='relative';
 // --- the page's own geometry (from index.html) ---
 const cx=180,cy=100,R_SUN=46,ROT=-8,RING_RX=[64,86,108,130,152,175];
 const SPECS=[[1,205,10],[2,20,10],[4,335,9],[1,15,9]],PERIOD=48;
@@ -14,7 +14,7 @@ const TILT=Math.acos(.26);
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-const cv=renderer.domElement;cv.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none';host.appendChild(cv);
+const cv=renderer.domElement;cv.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;visibility:hidden';host.appendChild(cv);
 const camera=new THREE.OrthographicCamera(-8,368,-20,-205,-2000,2000);camera.position.z=1000;
 const scene=new THREE.Scene();
 // --- the real room the silver reflects ---
@@ -78,5 +78,7 @@ const still=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performanc
 function frame(now){place(still?0:(now-t0)/1000);
   if(first){first=false;for(const q of pCubes){q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);}}
   capture(cubeCam,sun);const q=pCubes[pi=(pi+1)%pCubes.length];q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);
-  renderer.render(scene,camera);if(!still)requestAnimationFrame(frame);}
+  renderer.render(scene,camera);
+  if(svg.style.visibility!=='hidden'){svg.style.visibility='hidden';cv.style.visibility='visible';}   // swap only once the 3D version has actually drawn
+  if(!still)requestAnimationFrame(frame);}
 requestAnimationFrame(frame);
