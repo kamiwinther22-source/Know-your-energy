@@ -48,3 +48,7 @@ html.look-base #formStep .submit-wrap,html.look-base #formStep .submit-wrap.unde
 /* the optional reflective surface (?refl=1) sits behind everything */
 html.look-base #metal3d{position:fixed;left:0;top:0;pointer-events:none;z-index:0;}
 html.look-base .content{position:relative;z-index:1;}
+
+/* when the 3D scene draws the buttons, the page's own ovals become transparent controls */
+html.look-base.m3d .hero-continue-btn,html.look-base.m3d .gen-btn,html.look-base.m3d .price-row,html.look-base.m3d .rel-chip{background:none !important;box-shadow:none !important;}
+html.look-base.m3d .rel-chip.active,html.look-base.m3d .rel-chip.active *{color:#f2f2f4 !important;}
