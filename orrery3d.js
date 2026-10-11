@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import {EXRLoader} from './vendor/loaders/EXRLoader.js';
 const Q=new URLSearchParams(''),ENVNAME=Q.get('env')||'warehouse',ENVROT=parseFloat(Q.get('rot')||'0.25');
+const DEEP=/[?&]look=deep\b/.test(location.search); // opt-in deep-space look: blue/cyan ambient, warm brass key reflections
 const host=document.getElementById('heroIllustration');
 await new Promise(r=>{const t=()=>host.querySelector('svg')?r():requestAnimationFrame(t);t();});
 const svg=host.querySelector('svg');host.style.position='relative';
@@ -21,7 +22,8 @@ const scene=new THREE.Scene();
 const eq=await new EXRLoader().setDataType(THREE.FloatType).loadAsync(`hdri/${ENVNAME}.exr`);
 { // silver, not tinted: pull the room's colour most of the way to neutral
   const SAT=parseFloat(Q.get('sat')||'0.15'),d=eq.image.data,n=eq.image.width*eq.image.height,ch=d.length/n;
-  for(let i=0;i<n;i++){const k=i*ch,l=.2126*d[k]+.7152*d[k+1]+.0722*d[k+2];for(let c=0;c<3;c++)d[k+c]=l+(d[k+c]-l)*SAT;}
+  for(let i=0;i<n;i++){const k=i*ch,l=.2126*d[k]+.7152*d[k+1]+.0722*d[k+2];if(DEEP){const w=Math.min(1,Math.max(0,(l-1.5)/6)),cool=[.95,1.5,3.1],warm=[1.9,1.5,1.05];for(let c=0;c<3;c++)d[k+c]=l*(cool[c]+(warm[c]-cool[c])*w);}
+    else for(let c=0;c<3;c++)d[k+c]=l+(d[k+c]-l)*SAT;}
   const BL=parseInt(Q.get('blur')||'2'),w=eq.image.width,h=eq.image.height,tmp=new Float32Array(d.length);
   for(let pass=0;pass<2;pass++){const src=pass?tmp:d,dst=pass?d:tmp;
     for(let y=0;y<h;y++)for(let x=0;x<w;x++){let r=0,g=0,b=0,c=0;

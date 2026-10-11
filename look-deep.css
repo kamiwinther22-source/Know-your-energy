@@ -1,0 +1,73 @@
+/* ?look=deep — deep-space look. Opt-in only; the default page is untouched. */
+html.look-deep{--deep-0:#01021a;--deep-1:#020643;--deep-2:#0A1C91;--cobalt:#324ECD;--cyan:#74D5F6;--cyan-d:#47B2D6;--brass:#D1BDA9;}
+html.look-deep:not(:has(#resultsWrap[style*="block"])),
+html.look-deep:not(:has(#resultsWrap[style*="block"])) body{
+  background:
+    radial-gradient(ellipse 90% 46% at 62% 24%,rgba(50,78,205,.50) 0%,rgba(15,51,175,.22) 45%,transparent 72%),
+    radial-gradient(ellipse 70% 40% at 8% 62%,rgba(71,178,214,.20) 0%,transparent 70%),
+    radial-gradient(ellipse 70% 36% at 100% 88%,rgba(209,189,169,.16) 0%,transparent 70%),
+    linear-gradient(180deg,#040a52 0%,#020643 38%,#01021a 100%);
+  background-attachment:fixed;
+}
+html.look-deep #lookBg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+html.look-deep:has(#resultsWrap[style*="block"]) #lookBg{display:none;}
+html.look-deep #lookBg canvas{position:absolute;inset:-4%;width:108%;height:108%;will-change:transform;transition:transform .5s ease-out;}
+html.look-deep #lookBg .neb{position:absolute;inset:-20%;will-change:transform;
+  background:
+    radial-gradient(circle at 70% 30%,rgba(116,213,246,.20) 0,transparent 32%),
+    radial-gradient(circle at 20% 55%,rgba(50,78,205,.34) 0,transparent 38%),
+    radial-gradient(circle at 80% 80%,rgba(209,189,169,.12) 0,transparent 30%);
+  animation:lookDrift 70s ease-in-out infinite alternate;}
+html.look-deep #lookBg .grain{position:absolute;inset:0;opacity:.10;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+html.look-deep #lookBg .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(1,2,26,.65) 100%);}
+html.look-deep #lookBg .s1{animation:lookTwinkle 5s ease-in-out infinite alternate;}
+html.look-deep #lookBg .s2{animation:lookTwinkle 7s ease-in-out -2s infinite alternate;}
+@keyframes lookDrift{to{transform:translate3d(-4%,3%,0) scale(1.08);}}
+@keyframes lookTwinkle{from{opacity:.65;}to{opacity:1;}}
+
+/* hero: the sun is a light source */
+html.look-deep .hero-illustration::before{content:"";position:absolute;left:48%;top:54%;width:112%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:-1;
+  background:radial-gradient(circle,rgba(116,213,246,.55) 0%,rgba(50,78,205,.46) 24%,rgba(15,51,175,.14) 42%,transparent 66%);
+  animation:lookBreathe 9s ease-in-out infinite alternate;}
+@keyframes lookBreathe{from{opacity:.75;transform:translate(-50%,-50%) scale(.97);}to{opacity:1;transform:translate(-50%,-50%) scale(1.04);}}
+
+/* type */
+html.look-deep #hookStep .brand{color:#fff;text-shadow:0 0 18px rgba(116,213,246,.55),0 0 2px rgba(255,255,255,.8);}
+html.look-deep #hookStep .hl{-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 10px rgba(71,178,214,.45));}
+html.look-deep #hookStep .hl-1{background-image:linear-gradient(180deg,#E3EAFF 0%,#7C97FF 55%,#4F6DEB 100%);}
+html.look-deep #hookStep .hl-2{background-image:linear-gradient(180deg,#F0FBFF 0%,#74D5F6 55%,#2FA3CF 100%);}
+html.look-deep #hookStep .hl-3{background-image:linear-gradient(180deg,#FFF4E6 0%,#E8CDAE 55%,#C79A6B 100%);filter:drop-shadow(0 0 10px rgba(209,189,169,.4));}
+html.look-deep .free-reading-line{text-shadow:0 0 22px rgba(116,213,246,.35);}
+
+/* glass fields */
+html.look-deep .line-field,html.look-deep .row-id{
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03)) !important;
+  border:1px solid rgba(150,185,255,.45) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 22px -8px rgba(0,0,20,.7) !important;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+html.look-deep .row-id .line-field{background:transparent !important;border:none !important;border-right:1px solid rgba(150,185,255,.35) !important;box-shadow:none !important;-webkit-backdrop-filter:none;backdrop-filter:none;}
+html.look-deep .row-id .line-field:last-child{border-right:none !important;}
+html.look-deep .line-field:focus-within,html.look-deep .row-id:focus-within{
+  border-color:#74D5F6 !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 0 0 3px rgba(116,213,246,.28),0 0 22px rgba(116,213,246,.45) !important;}
+html.look-deep .row-id .line-field:focus-within{box-shadow:none !important;}
+html.look-deep .hero-key{filter:drop-shadow(0 0 6px rgba(116,213,246,.7)) brightness(1.25);}
+
+/* chrome buttons that glow */
+html.look-deep .hero-continue-btn,html.look-deep .gen-btn,html.look-deep .price-row,html.look-deep .rel-chip:not(.active){
+  background:linear-gradient(100deg,#8E9CAD 0%,#C2BDB8 6%,#F6F6F6 14%,#FFFFFF 30%,#FFFFFF 62%,#F6F6F6 76%,#C2BDB8 90%,#8E9CAD 100%) !important;
+  box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 #8E9CAD,0 0 0 1px rgba(255,255,255,.25),0 6px 18px -4px rgba(0,0,30,.8),0 0 26px rgba(116,213,246,.38) !important;}
+html.look-deep .hero-continue-btn{animation:lookGlow 4s ease-in-out infinite alternate;}
+@keyframes lookGlow{to{box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 #8E9CAD,0 0 0 1px rgba(255,255,255,.35),0 6px 18px -4px rgba(0,0,30,.8),0 0 40px rgba(116,213,246,.7) !important;}}
+html.look-deep .rel-chip.active{background:linear-gradient(180deg,#0F33AF,#020643) !important;border:1.5px solid #74D5F6 !important;box-shadow:0 0 18px rgba(116,213,246,.5) !important;}
+html.look-deep .toggle-pill,html.look-deep .toggle-pill.on{background:rgba(255,255,255,.08) !important;border:1px solid rgba(150,185,255,.5) !important;}
+html.look-deep .toggle-pill::after{background:linear-gradient(180deg,#fff,#8E9CAD) !important;box-shadow:0 0 10px rgba(116,213,246,.7) !important;}
+html.look-deep .toggle-pill.on{box-shadow:0 0 16px rgba(116,213,246,.5) !important;}
+html.look-deep #formStep hr,html.look-deep #hookStep hr{background:linear-gradient(90deg,transparent,#74D5F6,transparent);border:0;height:1px;}
+
+@media (prefers-reduced-motion:reduce){
+  html.look-deep #lookBg .neb,html.look-deep #lookBg .s1,html.look-deep #lookBg .s2,
+  html.look-deep .hero-illustration::before,html.look-deep .hero-continue-btn{animation:none !important;}
+  html.look-deep #lookBg canvas{transition:none;}
+}
+html.look-deep body{overflow-x:clip;}
