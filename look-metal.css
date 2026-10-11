@@ -83,3 +83,6 @@ html.look-metal #p2Section.open .person-tag{top:-30px !important;}
 
 /* plain message text, no box */
 html.look-metal .err{background:none !important;border:none !important;}
+
+/* Calculate is always centered on the page (the default layout parks it under Person 2) */
+html.look-metal #formStep .submit-wrap,html.look-metal #formStep .submit-wrap.under-p2{width:100% !important;margin-left:0 !important;margin-right:0 !important;justify-content:center !important;}
