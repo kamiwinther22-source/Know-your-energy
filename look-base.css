@@ -95,3 +95,34 @@ html.look-base .pricing-list{margin-bottom:46px !important;}
 /* "(optional)" sits beside TIME on one line, so the DOB and TIME boxes line up */
 html.look-base .row-time label,html.look-base .row-dob label,html.look-base .loc-field label{white-space:nowrap !important;}
 html.look-base .opt-lbl{display:inline !important;white-space:nowrap;}
+
+/* the offer: "first reading" small, "free" very large; flat ink, refined, uncluttered */
+html.look-base .free-reading-line{margin:-3.6rem auto 1.2rem !important;line-height:1 !important;text-align:center;}
+html.look-base .free-reading-line .fr-a{display:block;font-family:'Libre Baskerville',Baskerville,serif;font-style:italic;font-weight:400;font-size:30px;letter-spacing:.02em;line-height:1.1;}
+html.look-base .free-reading-line .fr-b{display:block;font-family:'Libre Baskerville',Baskerville,serif;font-style:italic;font-weight:400;font-size:132px;line-height:.92;letter-spacing:-.02em;margin-top:2px;}
+/* tighter first screen so the email field and Continue show above the fold */
+html.look-base #hookStep>div[style*="292px"]{height:236px !important;margin-top:34px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(1){top:0 !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(2){top:48px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(3){top:96px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(4){top:144px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(5){top:192px !important;}
+html.look-base .hero-illustration{margin-top:0 !important;margin-bottom:0 !important;}
+
+/* fold pass 2 */
+html.look-base #hookStep>div[style*="292px"]{height:190px !important;margin-top:26px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(2){top:38px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(3){top:76px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(4){top:114px !important;}
+html.look-base #hookStep>div[style*="292px"]>div:nth-child(5){top:152px !important;}
+html.look-base .hero-illustration{margin-bottom:-96px !important;}
+html.look-base .free-reading-line{margin-top:-4.6rem !important;margin-bottom:.4rem !important;}
+html.look-base .free-reading-line .fr-b{font-size:124px;}
+html.look-base .hero-email-wrap .privacy-note:first-child{margin-bottom:0 !important;}
+html.look-base .hero-continue-btn{margin-top:6px !important;margin-bottom:46px !important;}
+
+/* fold pass 3: the rings get their own space; 'free' clears the email label */
+html.look-base .free-reading-line{margin-top:6px !important;margin-bottom:26px !important;}
+html.look-base .free-reading-line .fr-a{font-size:28px;}
+html.look-base .free-reading-line .fr-b{font-size:112px;line-height:.9;}
+html.look-base .hero-illustration{margin-top:18px !important;}
