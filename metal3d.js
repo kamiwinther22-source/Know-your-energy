@@ -67,7 +67,7 @@ function build(){
   for(let i=0;i<n.count;i++){const u=P.getX(i)/W+.5,v=P.getY(i)/H+.5;
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
-const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1'){plate.material=new THREE.MeshBasicMaterial({color:0xf3f4f5,transparent:true,opacity:num('pop',.9),depthWrite:true});}group.add(plate);
+const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1'){plate.material=new THREE.MeshBasicMaterial({color:0xe4e7ea,transparent:true,opacity:num('pop',.62),depthWrite:true});}group.add(plate);
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;
@@ -100,7 +100,7 @@ function frame(t){
   items.forEach(i=>{const d=i.target-i.press;if(Math.abs(d)>.05){i.press+=d*.25;moving=true;}else i.press=i.target;i.mesh.position.z=i.z+i.press;
     if(!FULL){const k=(D-(i.z+i.press+i.top))/D;   // a raised top face is magnified by perspective: pull it in so it lands exactly under its page element
       i.mesh.position.x=ccx+(i.lx-ccx)*k;i.mesh.position.y=ccy+(i.ly-ccy)*k;i.mesh.scale.set(k,k,1);}
-    if(i.mir){i.mir.position.set(i.mesh.position.x,i.mesh.position.y-i.mir.userData.h*.58*(FULL?1:(i.mesh.scale.x||1)),-(i.z+i.press)*.5);i.mir.scale.set(i.mesh.scale.x,i.mesh.scale.y*.62,-.5);}});
+    if(i.mir){i.mir.position.set(i.mesh.position.x,i.mesh.position.y-i.mir.userData.h*.62*(FULL?1:(i.mesh.scale.x||1)),-(i.z+i.press)*.5);i.mir.scale.set(i.mesh.scale.x,i.mesh.scale.y*.7,-.5);}});
   tilt.x+=(tilt.tx-tilt.x)*.06;tilt.y+=(tilt.ty-tilt.y)*.06;if(Math.abs(tilt.tx-tilt.x)>.0002||Math.abs(tilt.ty-tilt.y)>.0002)moving=true;
   group.rotation.set(tilt.x,tilt.y,0);
   const d=(drift&&!REDUCED)?Math.sin(t/9000)*1:0,sx=page.sx+d*70,sy=page.sy+Math.cos(t/11000)*(drift?1:0)*40;

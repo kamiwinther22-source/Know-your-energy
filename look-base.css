@@ -73,3 +73,10 @@ html.look-base.no-shadows #heroIllustration canvas{filter:none !important;}
 
 /* look=final: a clean bright polished surface; the metal reads through real reflections (buttons mirrored in the sheet), not through a pattern */
 html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])),html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])) body{background:#f3f4f5 !important;}
+
+/* look=final: slightly deeper polished-silver base so reflections have something to show against */
+html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])),html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])) body{background:#e4e7ea !important;}
+/* the solar system reflects in the sheet below it */
+/* fields: cut into the metal — bright lower lip, dark upper edge */
+html.look-base.no-shadows .row-id,html.look-base.no-shadows .row-dob .line-field,html.look-base.no-shadows .row-time>div>.line-field,html.look-base.no-shadows .ampm-field,html.look-base.no-shadows .loc-field .line-field,html.look-base.no-shadows .hero-email-field{box-shadow:inset 0 4px 5px rgba(15,18,24,.45),0 2px 0 #ffffff,0 3px 4px rgba(255,255,255,.9) !important;}
+html.look-base.no-shadows .row-id .line-field{box-shadow:none !important;}
