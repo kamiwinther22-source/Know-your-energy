@@ -59,7 +59,7 @@ function build(){
   const vw=FULL?W:innerWidth,vh=FULL?H:innerHeight;
   renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));renderer.setSize(vw,vh,false);cv.style.width=vw+'px';cv.style.height=vh+'px';
   if(plate){plate.geometry.dispose();group.remove(plate);}
-  items.forEach(i=>{i.mesh.traverse(o=>{if(o.geometry)o.geometry.dispose();});group.remove(i.mesh);});items=[];
+  items.forEach(i=>{i.mesh.traverse(o=>{if(o.geometry)o.geometry.dispose();});group.remove(i.mesh);if(i.mir){group.remove(i.mir);}});items=[];
   group.position.set(W/2,-H/2,0);
   const g=new THREE.PlaneGeometry(W,H,96,96),p=g.attributes.position;
   for(let i=0;i<p.count;i++)p.setZ(i,plateZ(p.getX(i)/W,p.getY(i)/H));
@@ -110,7 +110,7 @@ function frame(t){
   else{camera.left=0;camera.right=page.W;camera.top=0;camera.bottom=-page.H;}
   camera.updateProjectionMatrix();
   renderer.render(scene,camera);
-  window.__m3d={W:page.W,H:page.H,n:items.length,roles:ROLE};
+  window.__m3d={W:page.W,H:page.H,n:items.length,roles:ROLE,mirrors:items.filter(i=>i.mir).length,groupKids:group.children.length,kinds:group.children.map(c=>c.type+(c.userData&&c.userData.h?'M':''))};
 }
 /* render on demand, plus a very slow ambient drift of the sun (about 12 frames a second) */
 drift=(Q.get('drift')==='0'||REDUCED)?0:1;
