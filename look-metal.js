@@ -1,7 +1,7 @@
 /* ?look=metal — one light source (the sun). The page is a lit metal surface; every raised or cut element is lit from the sun's real position. */
 (function(){
   var root=document.documentElement,body=document.body;
-  var bg=document.createElement('div');bg.id='metalBg';bg.setAttribute('aria-hidden','true');body.insertBefore(bg,body.firstChild);
+  var bg=document.getElementById('metalBg');if(!bg){bg=document.createElement('div');bg.id='metalBg';body.insertBefore(bg,body.firstChild);}bg.setAttribute('aria-hidden','true');
   var LIT=['.brand-row','#hookStep>div[style*="292px"]','.free-reading-line','.hero-email-wrap','.hero-email-field','.hero-continue-btn','.gen-btn','.price-row','.rel-chip','.toggle-pill','.row-id','.line-field','.f','.person-tag','.pricing-panel','.state-banner-ttl','.hero-key','.section-lbl','.toggle-row'].join(',');
   var TILTED='.hero-continue-btn,.gen-btn,.price-row,.rel-chip',TILT=-12;
   // field: smooth anisotropic sheen around the sun (two bright wedges, two soft dark ones), fading toward the edges
@@ -59,6 +59,7 @@
     if(i2&&n2[0]){i2.placeholder=n2[0].textContent.trim();n2[0].style.display='none';}
     if(n2[1]&&b2){b2.insertAdjacentElement('afterend',n2[1]);}
   }
+  addEventListener('scroll',function(){root.style.setProperty('--scrollY',scrollY);},{passive:true});
   var raf=0;function sched(){if(!raf)raf=requestAnimationFrame(function(){raf=0;layout();});}
   layout();addEventListener('resize',sched);addEventListener('load',sched);
   new ResizeObserver(sched).observe(body);

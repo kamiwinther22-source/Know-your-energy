@@ -94,5 +94,10 @@ html.look-metal .free-reading-line.free-v2 .fl-b{display:block;font-size:176px;l
 /* ---------- when the 3D metal scene is running, it draws the surface and the buttons; the page elements become transparent controls ---------- */
 html.look-metal.m3d #metalField,html.look-metal.m3d #metalGrain{display:none;}
 html.look-metal #metal3d{position:absolute;left:0;top:0;pointer-events:none;}
+html.look-metal #metal3d.fixed{position:fixed;z-index:0;}
 html.look-metal.m3d .hero-continue-btn,html.look-metal.m3d .gen-btn,html.look-metal.m3d .price-row,html.look-metal.m3d .rel-chip:not(.active),html.look-metal.m3d .rel-chip.active{
   background:none !important;box-shadow:none !important;}
+
+/* dark accent metals take light lettering; the sun-lit hero floats a little against the surface as you scroll */
+html.look-metal.cta-dark #hookStep .hero-continue-btn,html.look-metal.cta-dark #hookStep .hero-continue-btn *,html.look-metal.cta-dark #formStep .gen-btn,html.look-metal.cta-dark #formStep .gen-btn *{color:#f4f2ee !important;-webkit-text-fill-color:#f4f2ee !important;}
+html.look-metal .hero-illustration{translate:0 calc(var(--scrollY,0)*-.06px);}
