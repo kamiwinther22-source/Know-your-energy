@@ -30,7 +30,7 @@ const pm=new THREE.PMREMGenerator(renderer);
 scene.environment=pm.fromEquirectangular(window.__eq).texture;
 const camera=FULL?new THREE.OrthographicCamera(0,100,0,-100,-4000,4000):new THREE.PerspectiveCamera(40,1,10,8000);camera.position.z=1000;   // a real perspective camera: every point on a polished face reflects a slightly different part of the room
 /* warm sun against cool reflections: the colour contrast is what makes metal look alive */
-const sunLight=new THREE.SpotLight(0xfff0de,num('sun',2.4),0,1.35,1,0);sunLight.castShadow=true;
+const sunLight=new THREE.SpotLight(0xfff0de,num('sun',0.002),0,1.35,1,0);   sunLight.castShadow=true;   // practically zero intensity: no glow on the surface; it only casts shadows
 sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',7);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
 scene.add(sunLight,sunLight.target);
 const group=new THREE.Group();scene.add(group);
@@ -49,7 +49,8 @@ function build(){
   group.position.set(W/2,-H/2,0);
   const g=new THREE.PlaneGeometry(W,H,96,96),p=g.attributes.position;
   for(let i=0;i<p.count;i++)p.setZ(i,plateZ(p.getX(i)/W,p.getY(i)/H));
-  g.computeVertexNormals();plate=new THREE.Mesh(g,mat(ROLE.plate));plate.receiveShadow=true;group.add(plate);
+  g.computeVertexNormals();plate=new THREE.Mesh(g,mat(ROLE.plate));group.add(plate);
+  const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=6;
     const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,Math.PI/2,Math.PI/2+Math.PI*2,false,0);   // the outline starts at the bottom edge, so its seam sits where it can't be seen
