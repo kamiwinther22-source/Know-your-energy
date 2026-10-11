@@ -11,9 +11,9 @@ await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAni
 if(!window.__eq)throw new Error('no environment');
 
 /* measured metals: the base colour of a metal is the colour of its reflection (F0) */
-const METALS={   // sharper (lower roughness) = more mirror-like; copper is a deep warm base so its reflections go brown-red in shadow and gold-orange in light
-  aluminum:{c:0xf0eeea,r:.34},silver:{c:0xfcfaf5,r:.10},titanium:{c:0xc9c2b9,r:.13},
-  copper:{c:0xde8259,r:.10},bronze:{c:0xb68a5e,r:.14},gunmetal:{c:0x5b5f68,r:.13},black:{c:0x17171b,r:.09}};
+const METALS={   // lower roughness = more mirror-like. Silver and black are polished; copper and titanium are satin, as real hardware copper is: muted, warm and soft-lit
+  aluminum:{c:0xf0eeea,r:.34},silver:{c:0xfcfaf5,r:.10},titanium:{c:0xc9c2b9,r:.30},
+  copper:{c:0xb4806a,r:.42},bronze:{c:0xb68a5e,r:.14},gunmetal:{c:0x5b5f68,r:.13},black:{c:0x17171b,r:.09}};
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
 const DARKTEXT={gunmetal:1,black:1};
 const mats={};const mat=n=>mats[n]||(mats[n]=new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='aluminum'?num('env',1.0):1.0}));
@@ -51,7 +51,7 @@ function build(){
   g.computeVertexNormals();plate=new THREE.Mesh(g,mat(ROLE.plate));plate.receiveShadow=true;group.add(plate);
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=6;
-    const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,0,Math.PI*2,false,0);
+    const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,Math.PI/2,Math.PI/2+Math.PI*2,false,0);   // the outline starts at the bottom edge, so its seam sits where it can't be seen
     const geo=new THREE.ExtrudeGeometry(sh,{depth:T,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:22,curveSegments:120});
     const role=e.classList.contains('active')?'dark':e.classList.contains('price-row')?'price':e.classList.contains('rel-chip')?'chip':'cta';
     const m=new THREE.Mesh(geo,mat(ROLE[role]));m.castShadow=true;m.receiveShadow=true;

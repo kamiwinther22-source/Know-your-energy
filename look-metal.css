@@ -46,7 +46,7 @@ html.look-metal .price-row{width:118px !important;height:62px !important;min-wid
 html.look-metal .price-label,html.look-metal .price-amt{font-size:11px !important;letter-spacing:.05em !important;}
 html.look-metal .pricing-list{display:flex !important;justify-content:space-between !important;gap:0 !important;flex-wrap:nowrap !important;margin-top:20px;}
 html.look-metal .rel-row{display:flex;justify-content:space-between !important;flex-wrap:nowrap !important;margin:12px 0 4px !important;}
-html.look-metal .rel-chip{width:min(90px,21.5%) !important;height:50px !important;font-size:10px !important;letter-spacing:.03em !important;line-height:1.1 !important;white-space:normal !important;text-align:center !important;}
+html.look-metal .rel-chip{width:90px !important;height:50px !important;font-size:10px !important;letter-spacing:.03em !important;line-height:1.1 !important;white-space:normal !important;text-align:center !important;}
 html.look-metal .rel-chip.active{border:none !important;border-radius:50% !important;padding:0 !important;display:flex !important;align-items:center;justify-content:center;transform:rotate(-12deg) !important;
   background:radial-gradient(ellipse 62% 56% at calc(50% + var(--ux)*24%) calc(50% + var(--uy)*40%),#52545c 0%,#17181c 45%,#07070a 100%) !important;
   box-shadow:inset calc(var(--ux)*-2px) calc(var(--uy)*-2px) 2px rgba(255,255,255,.55),calc(var(--ux)*-9px) calc(var(--uy)*-13px) 15px rgba(0,0,0,.30) !important;}
@@ -101,3 +101,6 @@ html.look-metal.m3d .hero-continue-btn,html.look-metal.m3d .gen-btn,html.look-me
 /* dark accent metals take light lettering; the sun-lit hero floats a little against the surface as you scroll */
 html.look-metal.cta-dark #hookStep .hero-continue-btn,html.look-metal.cta-dark #hookStep .hero-continue-btn *,html.look-metal.cta-dark #formStep .gen-btn,html.look-metal.cta-dark #formStep .gen-btn *{color:#f4f2ee !important;-webkit-text-fill-color:#f4f2ee !important;}
 html.look-metal .hero-illustration{translate:0 calc(var(--scrollY,0)*-.06px);}
+
+/* on narrow phones the four relationship choices get a little smaller so none runs off the edge */
+@media (max-width:400px){html.look-metal .rel-chip{width:78px !important;height:46px !important;font-size:9px !important;}}
