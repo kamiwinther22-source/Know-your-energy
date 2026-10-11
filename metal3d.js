@@ -85,7 +85,7 @@ const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromE
       const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=PUSH?(T+bev-.8):topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    let mir=null;if(Q.get('final')==='1'&&(e.classList.contains('hero-continue-btn')||e.classList.contains('gen-btn'))){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
+    let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
     const it={mesh:m,mir,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-3));e.addEventListener('pointerleave',()=>set(0));

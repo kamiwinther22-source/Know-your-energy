@@ -86,3 +86,8 @@ html.look-base .hero-email-wrap .err{display:none !important;}
 html.look-base,html.look-base body{overflow-x:clip;}
 html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])),html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])) body{background:#eceff1 !important;}
 html.look-base .hero-continue-btn,html.look-base .gen-btn{margin-bottom:58px !important;}
+
+/* the solar system's reflection in the sheet, fading out downward */
+html.look-base #orrRefl{position:absolute;z-index:0;pointer-events:none;opacity:.42;-webkit-mask-image:linear-gradient(rgba(0,0,0,.9),rgba(0,0,0,0) 85%);mask-image:linear-gradient(rgba(0,0,0,.9),rgba(0,0,0,0) 85%);}
+html.look-base .rel-row{margin-bottom:40px !important;}
+html.look-base .pricing-list{margin-bottom:46px !important;}
