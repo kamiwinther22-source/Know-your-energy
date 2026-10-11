@@ -42,11 +42,11 @@ const sunLight=new THREE.SpotLight(0xfff0de,num('sun',0.002),0,1.35,1,0);   sunL
 sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',7);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
 scene.add(sunLight,sunLight.target);
 const group=new THREE.Group();scene.add(group);
-function plateStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');   // neutral white / silver studio: soft bright strips and darker steel strips, no colour zones
-  g.fillStyle='#eef0f2';g.fillRect(0,0,W,H);
-  const strip=(u,v,w,h,col,a)=>{const x=u*W,y=v*H,R=Math.max(w,h),r=g.createRadialGradient(x,y,0,x,y,R);r.addColorStop(0,col);r.addColorStop(1,'rgba(238,240,242,0)');g.save();g.globalAlpha=a;g.translate(x,y);g.scale(w/R,h/R);g.translate(-x,-y);g.fillStyle=r;g.fillRect(x-R*2,y-R*2,R*4,R*4);g.restore();};
-  for(let i=0;i<9;i++){const u=.60+i*.035;strip(u,.5,55,330,i%2?'#ffffff':'#7f858c',i%2?1:.9);}   // alternating bright / steel strips across the patch the sheet looks at
-  strip(.75,.38,260,40,'#ffffff',1);strip(.75,.64,300,50,'#6f757c',.8);
+function plateStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');   // the sheet reflects a bright studio with clean dark-steel and white strips (defined edges, neutral silver)
+  g.fillStyle='#f6f7f8';g.fillRect(0,0,W,H);
+  const bar=(u,w,col)=>{const x=u*W,s=g.createLinearGradient(x-w/2,0,x+w/2,0);s.addColorStop(0,'rgba(0,0,0,0)');s.addColorStop(.18,col);s.addColorStop(.82,col);s.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=s;g.fillRect(x-w/2,0,w,H);};
+  const P=[[.585,40,'#4c5258'],[.62,26,'#ffffff'],[.655,48,'#6a7077'],[.695,30,'#ffffff'],[.73,56,'#3d4349'],[.775,26,'#ffffff'],[.81,44,'#767c83'],[.85,30,'#ffffff'],[.89,40,'#565c63']];
+  for(const [u,w,col] of P)bar(u,w,col);
   const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;}
 let plate=null,items=[],last='',page={W:0,H:0,sx:0,sy:0},tilt={x:0,y:0,tx:0,ty:0},drift=0,needs=true;
 function sun(){const s=document.querySelector('.sun-cta');if(!s)return[0,0];const r=s.getBoundingClientRect();return[r.left+r.width/2+scrollX,r.top+r.height/2+scrollY];}
@@ -63,11 +63,11 @@ function build(){
   group.position.set(W/2,-H/2,0);
   const g=new THREE.PlaneGeometry(W,H,96,96),p=g.attributes.position;
   for(let i=0;i<p.count;i++)p.setZ(i,plateZ(p.getX(i)/W,p.getY(i)/H));
-  {const n=g.attributes.normal,P=g.attributes.position,k=num('tilt',.30);   // the sheet's surface tilts smoothly across the page, so each part reflects a different strip of the studio
+  {const n=g.attributes.normal,P=g.attributes.position,k=num('tilt',.42);   // the sheet's surface tilts smoothly across the page, so each part reflects a different strip of the studio
   for(let i=0;i<n.count;i++){const u=P.getX(i)/W+.5,v=P.getY(i)/H+.5;
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
-const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.5);}plate=new THREE.Mesh(g,pmat);group.add(plate);
+const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);group.add(plate);
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;
