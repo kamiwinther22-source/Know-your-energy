@@ -5,6 +5,7 @@ html.look-metal:not(:has(#resultsWrap[style*="block"])),
 html.look-metal:not(:has(#resultsWrap[style*="block"])) body{background:#d6d2c9 !important;}
 html.look-metal #metalBg{position:absolute;left:0;top:0;width:100%;z-index:0;pointer-events:none;}
 html.look-metal:has(#resultsWrap[style*="block"]) #metalBg{display:none;}
+html.look-metal #metalField{position:absolute;left:0;top:0;pointer-events:none;}
 html.look-metal #metalGrain{position:absolute;left:0;top:0;pointer-events:none;}
 
 /* ---------- engraved ink: all ordinary text. Crisp, with a thin lit lip on the side away from the sun ---------- */

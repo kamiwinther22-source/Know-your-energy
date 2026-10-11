@@ -6,12 +6,16 @@
   var TILTED='.hero-continue-btn,.gen-btn,.price-row,.rel-chip',TILT=-12;
   // field: smooth anisotropic sheen around the sun (two bright wedges, two soft dark ones), fading toward the edges
   var Q=new URLSearchParams(location.search),num=function(k,d){var v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
-  var BASE=[.88,.875,.86],LO=num('lo',.80),HI=num('hi',1.18),FAR=LO+(HI-LO)*.5,GRAIN=Q.get('grain')==='1';   // lo/hi set how light the sheen is; grain is off unless asked for
-  function conic(sx,sy){
-    var st=[];for(var a=0;a<=360;a+=15){var t=(a-90)*Math.PI/180,w=.5+.5*Math.cos(2*(t+.7)),F=LO+(HI-LO)*w;
-      st.push('rgb('+BASE.map(function(c){return Math.round(Math.min(1,c*F)*255);}).join(',')+') '+a+'deg');}
-    var lo='rgba('+BASE.map(function(c){return Math.round(c*FAR*255);}).join(',')+',.45)';
-    return 'radial-gradient(circle 1500px at '+sx+'px '+sy+'px,rgba(0,0,0,0) 0%,'+lo+' 100%),conic-gradient(from 0deg at '+sx+'px '+sy+'px,'+st.join(',')+')';
+  var BASE=[.86,.84,.80],LO=num('lo',.50),HI=num('hi',1.12),GRAIN=Q.get('grain')==='1';   // lo/hi set how light the sheen is; grain is off unless asked for
+  var fc=document.createElement('canvas');fc.id='metalField';bg.appendChild(fc);
+  function field(sx,sy,W,H){   // the approved smooth steel sheen, evaluated per pixel (low-res, scaled up smoothly)
+    var sc=4,w=Math.ceil(W/sc),h=Math.ceil(H/sc);fc.width=w;fc.height=h;fc.style.width=W+'px';fc.style.height=H+'px';
+    var g=fc.getContext('2d'),im=g.createImageData(w,h),d=im.data,x,y,i=0;
+    for(y=0;y<h;y++)for(x=0;x<w;x++){
+      var dx=(x+.5)*sc-sx,dy=(y+.5)*sc-sy,r=Math.hypot(dx,dy),th=Math.atan2(dy,dx);
+      var wedge=Math.pow(.5+.5*Math.cos(2*(th+.7)),1.4),env=.5+.5*Math.exp(-r/500),F=LO+(HI-LO)*wedge*env;
+      d[i++]=Math.min(255,BASE[0]*F*255);d[i++]=Math.min(255,BASE[1]*F*255);d[i++]=Math.min(255,BASE[2]*F*255);d[i++]=255;}
+    g.putImageData(im,0,0);
   }
   var cv=document.createElement('canvas');cv.id='metalGrain';bg.appendChild(cv);var gKey='';
   function grain(sx,sy,W,H){
@@ -30,7 +34,7 @@
     var r=s.getBoundingClientRect(),sx=r.left+r.width/2+scrollX,sy=r.top+r.height/2+scrollY;
     root.style.setProperty('--sx',sx+'px');root.style.setProperty('--sy',sy+'px');
     bg.style.height=Math.max(document.documentElement.scrollHeight,innerHeight)+'px';bg.style.width=Math.max(document.documentElement.scrollWidth,innerWidth)+'px';
-    bg.style.backgroundImage=conic(sx,sy);
+    field(sx,sy,Math.max(document.documentElement.scrollWidth,innerWidth),Math.max(document.documentElement.scrollHeight,innerHeight));
     if(GRAIN)grain(sx,sy,Math.max(document.documentElement.scrollWidth,innerWidth),Math.max(document.documentElement.scrollHeight,innerHeight));
     var tilt=new Set(document.querySelectorAll(TILTED)),c=Math.cos(-TILT*Math.PI/180),sn=Math.sin(-TILT*Math.PI/180);
     document.querySelectorAll(LIT).forEach(function(el){
