@@ -5,7 +5,7 @@
    and the sun drifts very slowly. Motion respects prefers-reduced-motion. URL options: cta=, chip=, price=, plate=, drift=0, full=1 (page-size canvas, for screenshots). */
 import * as THREE from 'three';
 const root=document.documentElement,Q=new URLSearchParams(location.search);
-if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'0',shade:'0',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'40',by:'110',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
+if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'0',shade:'0',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'0',by:'0',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
 const num=(k,d)=>{const v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
 const TILT=12*Math.PI/180,FULL=Q.get('full')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAnimationFrame(t);t();});
@@ -67,7 +67,7 @@ function build(){
   for(let i=0;i<n.count;i++){const u=P.getX(i)/W+.5,v=P.getY(i)/H+.5;
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
-const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);plate.visible=Q.get('final')!=='1';group.add(plate);
+const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1'){plate.material=new THREE.MeshBasicMaterial({color:0xf3f4f5,transparent:true,opacity:num('pop',.9),depthWrite:true});}group.add(plate);
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;
@@ -85,7 +85,8 @@ const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromE
       const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=PUSH?(T+bev-.8):topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    const it={mesh:m,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
+    let mir=null;if(Q.get('final')==='1'&&(e.classList.contains('hero-continue-btn')||e.classList.contains('gen-btn'))){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
+    const it={mesh:m,mir,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-3));e.addEventListener('pointerleave',()=>set(0));
       e.addEventListener('pointerdown',()=>set(-7));e.addEventListener('pointerup',()=>set(-3));e.addEventListener('focus',()=>set(-3));e.addEventListener('blur',()=>set(0));}
@@ -98,7 +99,8 @@ function frame(t){
   const D=num('cam',1100),vh=innerHeight,ccx=innerWidth/2-page.W/2,ccy=-(scrollY+vh/2)+page.H/2;   // camera centre, in the plate's own coordinates
   items.forEach(i=>{const d=i.target-i.press;if(Math.abs(d)>.05){i.press+=d*.25;moving=true;}else i.press=i.target;i.mesh.position.z=i.z+i.press;
     if(!FULL){const k=(D-(i.z+i.press+i.top))/D;   // a raised top face is magnified by perspective: pull it in so it lands exactly under its page element
-      i.mesh.position.x=ccx+(i.lx-ccx)*k;i.mesh.position.y=ccy+(i.ly-ccy)*k;i.mesh.scale.set(k,k,1);}});
+      i.mesh.position.x=ccx+(i.lx-ccx)*k;i.mesh.position.y=ccy+(i.ly-ccy)*k;i.mesh.scale.set(k,k,1);}
+    if(i.mir){i.mir.position.set(i.mesh.position.x,i.mesh.position.y-i.mir.userData.h*.58*(FULL?1:(i.mesh.scale.x||1)),-(i.z+i.press)*.5);i.mir.scale.set(i.mesh.scale.x,i.mesh.scale.y*.62,-.5);}});
   tilt.x+=(tilt.tx-tilt.x)*.06;tilt.y+=(tilt.ty-tilt.y)*.06;if(Math.abs(tilt.tx-tilt.x)>.0002||Math.abs(tilt.ty-tilt.y)>.0002)moving=true;
   group.rotation.set(tilt.x,tilt.y,0);
   const d=(drift&&!REDUCED)?Math.sin(t/9000)*1:0,sx=page.sx+d*70,sy=page.sy+Math.cos(t/11000)*(drift?1:0)*40;
