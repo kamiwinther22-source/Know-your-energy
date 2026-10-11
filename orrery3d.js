@@ -30,7 +30,7 @@ const eq=await new EXRLoader().setDataType(THREE.FloatType).loadAsync(`hdri/${EN
   eq.needsUpdate=true;}
 eq.mapping=THREE.EquirectangularReflectionMapping;eq.wrapS=THREE.RepeatWrapping;eq.offset.x=ENVROT;
 const pmrem=new THREE.PMREMGenerator(renderer);const ENV=pmrem.fromEquirectangular(eq).texture;scene.environment=ENV;
-if(/[?&]look=metal\b/.test(location.search))window.__eq=eq;   // lets the page-wide metal scene reflect the same room
+if(/[?&]look=(metal|base)\b/.test(location.search))window.__eq=eq;   // lets the page-wide metal scene reflect the same room
 
 // --- organic cast-silver surface for the planets (fractal noise, no geometric shapes) ---
 function cast(seed,band){const W=512,H=256,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d'),im=g.createImageData(W,H);

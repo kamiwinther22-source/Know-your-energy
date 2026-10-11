@@ -1,0 +1,50 @@
+/* ?look=base — the page as it is (your fonts, wording, layout, sizes), on a light metal surface, lit from ONE direction: the sun's real position.
+   The sun is up and slightly right of the middle of the page, so light comes from above and a little right: raised things are bright on top and cast their shadow down and a little left.
+   Nothing else is restyled. */
+html.look-base{--ink:#101114;}
+html.look-base:not(:has(#resultsWrap[style*="block"])),html.look-base:not(:has(#resultsWrap[style*="block"])) body{
+  background:#dadde0 !important;color:var(--ink);}
+html.look-base #hookStep,html.look-base #hookStep *,html.look-base #formStep,html.look-base #formStep *{
+  color:var(--ink) !important;-webkit-text-fill-color:var(--ink) !important;text-shadow:none;}
+html.look-base #hookStep .hl{background:none !important;}
+html.look-base #hookStep hr,html.look-base #formStep hr{display:none !important;}
+html.look-base #formStep .pricing-panel{border:none !important;}
+html.look-base .err{background:none !important;border:none !important;}
+
+/* your tilted ovals: same shapes and sizes, lit from the sun */
+html.look-base .hero-continue-btn,html.look-base .gen-btn,html.look-base .price-row,html.look-base .rel-chip{
+  border:none !important;border-radius:50% !important;padding:0 !important;display:flex !important;align-items:center;justify-content:center;transform:rotate(-12deg) !important;
+  background:linear-gradient(28deg,#8c9096 0%,#c4c7cc 42%,#f3f4f5 78%,#ffffff 100%) !important;
+  box-shadow:inset 0 2px 1px rgba(255,255,255,.95),inset 0 -4px 6px rgba(40,42,48,.28),-3px 12px 16px rgba(30,32,36,.30) !important;}
+html.look-base .hero-continue-btn,html.look-base .gen-btn{width:226px !important;height:82px !important;margin:22px auto !important;}
+html.look-base .price-row{width:118px !important;height:62px !important;min-width:0 !important;}
+html.look-base .pricing-list{display:flex !important;justify-content:space-between !important;gap:0 !important;flex-wrap:nowrap !important;margin-top:20px;}
+html.look-base .price-label,html.look-base .price-amt{font-size:11px !important;letter-spacing:.05em !important;}
+html.look-base .rel-row{display:flex;justify-content:space-between !important;flex-wrap:nowrap !important;margin:12px 0 4px !important;}
+html.look-base .rel-chip{width:90px !important;height:50px !important;font-size:10px !important;letter-spacing:.03em !important;line-height:1.1 !important;white-space:normal !important;text-align:center !important;}
+@media (max-width:400px){html.look-base .rel-chip{width:78px !important;height:46px !important;font-size:9px !important;}}
+html.look-base .rel-chip.active{background:linear-gradient(28deg,#050507 0%,#17181c 55%,#4a4c54 100%) !important;}
+html.look-base .rel-chip.active,html.look-base .rel-chip.active *{color:#f2f2f4 !important;-webkit-text-fill-color:#f2f2f4 !important;}
+
+/* fields: cut into the metal, lit from above — no outline, no divider */
+html.look-base .line-field,html.look-base .row-id{
+  background:rgba(40,42,48,.07) !important;border:none !important;border-radius:12px;
+  box-shadow:inset 0 3px 6px rgba(20,22,26,.38),0 1.5px 0 rgba(255,255,255,.95) !important;-webkit-backdrop-filter:none;backdrop-filter:none;}
+html.look-base .row-id .line-field{background:transparent !important;box-shadow:none !important;}
+html.look-base #formStep input,html.look-base #formStep select,html.look-base #heroEmail{
+  color:var(--ink) !important;-webkit-text-fill-color:var(--ink) !important;background:transparent !important;border:none !important;box-shadow:none !important;}
+html.look-base .line-field input::placeholder,html.look-base .row-id input::placeholder{color:#4d4e55 !important;-webkit-text-fill-color:#4d4e55 !important;opacity:1;}
+html.look-base .hero-key{filter:none !important;}
+html.look-base .hero-key *{fill:#101114 !important;stroke:none !important;}
+html.look-base .toggle-pill{border:none !important;background:rgba(40,42,48,.12) !important;box-shadow:inset 0 2px 4px rgba(20,22,26,.4),0 1.5px 0 rgba(255,255,255,.95) !important;}
+html.look-base .toggle-pill::after{background:linear-gradient(28deg,#8c9096,#e6e8ea 60%,#fff) !important;box-shadow:-1px 3px 4px rgba(0,0,0,.35) !important;}
+/* the floating solar system casts a soft shadow down and a little left, the same direction as everything else */
+html.look-base #heroIllustration canvas{filter:drop-shadow(-4px 22px 20px rgba(20,22,26,.30));}
+html.look-base #p2Section.open{margin-top:96px;}
+html.look-base #p2Section{position:relative;}
+html.look-base #p2Section.open .person-tag{top:-30px !important;}
+html.look-base #formStep .submit-wrap,html.look-base #formStep .submit-wrap.under-p2{width:100% !important;margin-left:0 !important;margin-right:0 !important;justify-content:center !important;}
+
+/* the optional reflective surface (?refl=1) sits behind everything */
+html.look-base #metal3d{position:fixed;left:0;top:0;pointer-events:none;z-index:0;}
+html.look-base .content{position:relative;z-index:1;}

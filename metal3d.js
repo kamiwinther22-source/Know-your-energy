@@ -12,7 +12,7 @@ if(!window.__eq)throw new Error('no environment');
 
 /* measured metals: the base colour of a metal is the colour of its reflection (F0) */
 const METALS={   // lower roughness = more mirror-like. Silver and black are polished; copper and titanium are satin, as real hardware copper is: muted, warm and soft-lit
-  aluminum:{c:0xf0eeea,r:.34},silver:{c:0xfcfaf5,r:.10},titanium:{c:0xc9c2b9,r:.30},
+  aluminum:{c:0xeeeeed,r:.34},silver:{c:0xfcfaf5,r:.10},titanium:{c:0xc9c2b9,r:.30},
   copper:{c:0xb4806a,r:.42},bronze:{c:0xb68a5e,r:.14},gunmetal:{c:0x5b5f68,r:.13},black:{c:0x17171b,r:.09}};
 if(Q.get('cu'))METALS.copper.c=parseInt(Q.get('cu'),16);if(Q.get('cur'))METALS.copper.r=parseFloat(Q.get('cur'));   // copper colour and roughness can be tried from the address bar
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
@@ -39,7 +39,7 @@ function sun(){const s=document.querySelector('.sun-cta');if(!s)return[0,0];cons
 const plateZ=(u,v)=>num('bx',26)*Math.pow(2*u,2)+num('by',70)*Math.pow(2*v,2)+num('bw',10)*Math.sin(6.283*(u*.8+v*1.2)+.6);
 function build(){
   const W=Math.max(root.scrollWidth,innerWidth),H=Math.max(root.scrollHeight,innerHeight),[sx,sy]=sun();
-  const els=[...document.querySelectorAll('.hero-continue-btn,.gen-btn,.price-row,.rel-chip')].filter(e=>e.getBoundingClientRect().width>0);
+  const els=Q.get('nobtn')==='1'?[]:[...document.querySelectorAll('.hero-continue-btn,.gen-btn,.price-row,.rel-chip')].filter(e=>e.getBoundingClientRect().width>0);
   const specs=els.map(e=>{const b=e.getBoundingClientRect();return[Math.round(b.left+b.width/2+scrollX),Math.round(b.top+b.height/2+scrollY),e.offsetWidth,e.offsetHeight,e.classList.contains('active')?1:0].join()}).join('|');
   const key=[W,H,Math.round(sx),Math.round(sy),specs].join('/');if(key===last)return;last=key;page={W,H,sx,sy};
   const vw=FULL?W:innerWidth,vh=FULL?H:innerHeight;
