@@ -55,13 +55,16 @@ function build(){
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=6;
-    const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,Math.PI/2,Math.PI/2+Math.PI*2,false,0);   // the outline starts at the bottom edge, so its seam sits where it can't be seen
-    const geo=new THREE.ExtrudeGeometry(sh,{depth:T,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:22,curveSegments:120});
+    const DOME=Q.get('solar')==='1';   // a domed (sphere-like) surface, so it reflects the whole room the way the solar system's sphere does
+    let geo,topH=14;
+    if(DOME){topH=h*num('dome',.55);geo=new THREE.SphereGeometry(1,128,64);geo.scale(w/2,h/2,topH);}
+    else{const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,Math.PI/2,Math.PI/2+Math.PI*2,false,0);
+      geo=new THREE.ExtrudeGeometry(sh,{depth:T,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:22,curveSegments:120});}
     const role=e.classList.contains('active')?'dark':e.classList.contains('price-row')?'price':e.classList.contains('rel-chip')?'chip':'cta';
     const m=new THREE.Mesh(geo,mat(ROLE[role]));m.castShadow=true;m.receiveShadow=true;
-    const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+bev+num('lift',10);
+    const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    const it={mesh:m,el:e,z:lz,press:0,target:0,lx,ly};items.push(it);
+    const it={mesh:m,el:e,z:lz,press:0,target:0,lx,ly,top:topH};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-3));e.addEventListener('pointerleave',()=>set(0));
       e.addEventListener('pointerdown',()=>set(-7));e.addEventListener('pointerup',()=>set(-3));e.addEventListener('focus',()=>set(-3));e.addEventListener('blur',()=>set(0));}
@@ -73,7 +76,7 @@ function frame(t){
   let moving=false;
   const D=num('cam',1100),vh=innerHeight,ccx=innerWidth/2-page.W/2,ccy=-(scrollY+vh/2)+page.H/2;   // camera centre, in the plate's own coordinates
   items.forEach(i=>{const d=i.target-i.press;if(Math.abs(d)>.05){i.press+=d*.25;moving=true;}else i.press=i.target;i.mesh.position.z=i.z+i.press;
-    if(!FULL){const k=(D-(i.z+i.press+14))/D;   // a raised top face is magnified by perspective: pull it in so it lands exactly under its page element
+    if(!FULL){const k=(D-(i.z+i.press+i.top))/D;   // a raised top face is magnified by perspective: pull it in so it lands exactly under its page element
       i.mesh.position.x=ccx+(i.lx-ccx)*k;i.mesh.position.y=ccy+(i.ly-ccy)*k;i.mesh.scale.set(k,k,1);}});
   tilt.x+=(tilt.tx-tilt.x)*.06;tilt.y+=(tilt.ty-tilt.y)*.06;if(Math.abs(tilt.tx-tilt.x)>.0002||Math.abs(tilt.ty-tilt.y)>.0002)moving=true;
   group.rotation.set(tilt.x,tilt.y,0);
