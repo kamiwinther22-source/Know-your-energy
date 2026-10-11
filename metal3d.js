@@ -37,7 +37,7 @@ const pm=new THREE.PMREMGenerator(renderer);
 scene.environment=pm.fromEquirectangular(window.__eq).texture;
 const camera=FULL?new THREE.OrthographicCamera(0,100,0,-100,-4000,4000):new THREE.PerspectiveCamera(40,1,10,8000);camera.position.z=1000;   // a real perspective camera: every point on a polished face reflects a slightly different part of the room
 /* warm sun against cool reflections: the colour contrast is what makes metal look alive */
-const sunLight=new THREE.SpotLight(0xfff0de,num('sun',0.002),0,1.35,1,0);   sunLight.castShadow=true;   // practically zero intensity: no glow on the surface; it only casts shadows
+const sunLight=new THREE.SpotLight(0xfff0de,num('sun',0.002),0,1.35,1,0);   sunLight.castShadow=Q.get('shadows')!=='0';   // practically zero intensity: no glow on the surface; it only casts shadows
 sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',7);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
 scene.add(sunLight,sunLight.target);
 const group=new THREE.Group();scene.add(group);

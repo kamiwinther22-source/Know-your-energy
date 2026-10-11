@@ -68,3 +68,5 @@ html.look-base.labels-below .price-row::after{font-size:11px;letter-spacing:.14e
 html.look-base.labels-below .rel-chip::after{font-size:10px;letter-spacing:.1em;transform:translate(-50%,8px) rotate(12deg);}
 html.look-base.labels-below .hero-continue-btn,html.look-base.labels-below .gen-btn{margin-bottom:46px !important;}
 html.look-base.labels-below .rel-row,html.look-base.labels-below .pricing-list{margin-bottom:34px !important;}
+
+html.look-base.no-shadows #heroIllustration canvas{filter:none !important;}
