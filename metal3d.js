@@ -12,7 +12,7 @@ if(!window.__eq)throw new Error('no environment');
 
 /* measured metals: the base colour of a metal is the colour of its reflection (F0) */
 const METALS={
-  aluminum:{c:0xeceeee,r:.40},silver:{c:0xfcfaf5,r:.17},titanium:{c:0xc2bbb3,r:.22},
+  aluminum:{c:0xf0eeea,r:.36},silver:{c:0xfcfaf5,r:.17},titanium:{c:0xc2bbb3,r:.22},
   copper:{c:0xe9a58a,r:.20},bronze:{c:0xb68a5e,r:.24},gunmetal:{c:0x5b5f68,r:.20},black:{c:0x17171b,r:.14}};
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
 const DARKTEXT={gunmetal:1,black:1};
@@ -27,7 +27,7 @@ if(FULL){let bgEl=document.getElementById('metalBg');if(!bgEl){bgEl=document.cre
 const scene=new THREE.Scene();
 const pm=new THREE.PMREMGenerator(renderer);
 scene.environment=pm.fromEquirectangular(window.__eq).texture;
-const camera=new THREE.OrthographicCamera(0,100,0,-100,-4000,4000);camera.position.z=1000;
+const camera=FULL?new THREE.OrthographicCamera(0,100,0,-100,-4000,4000):new THREE.PerspectiveCamera(40,1,10,8000);camera.position.z=1000;   // a real perspective camera: every point on a polished face reflects a slightly different part of the room
 /* warm sun against cool reflections: the colour contrast is what makes metal look alive */
 const sunLight=new THREE.SpotLight(0xfff0de,num('sun',2.4),0,1.35,1,0);sunLight.castShadow=true;
 sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',7);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
@@ -57,7 +57,7 @@ function build(){
     const m=new THREE.Mesh(geo,mat(ROLE[role]));m.castShadow=true;m.receiveShadow=true;
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+bev+num('lift',10);
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    const it={mesh:m,el:e,z:lz,press:0,target:0};items.push(it);
+    const it={mesh:m,el:e,z:lz,press:0,target:0,lx,ly};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-3));e.addEventListener('pointerleave',()=>set(0));
       e.addEventListener('pointerdown',()=>set(-7));e.addEventListener('pointerup',()=>set(-3));e.addEventListener('focus',()=>set(-3));e.addEventListener('blur',()=>set(0));}
@@ -67,12 +67,16 @@ function build(){
 function frame(t){
   build();
   let moving=false;
-  items.forEach(i=>{const d=i.target-i.press;if(Math.abs(d)>.05){i.press+=d*.25;moving=true;}else i.press=i.target;i.mesh.position.z=i.z+i.press;});
+  const D=num('cam',1100),vh=innerHeight,ccx=innerWidth/2-page.W/2,ccy=-(scrollY+vh/2)+page.H/2;   // camera centre, in the plate's own coordinates
+  items.forEach(i=>{const d=i.target-i.press;if(Math.abs(d)>.05){i.press+=d*.25;moving=true;}else i.press=i.target;i.mesh.position.z=i.z+i.press;
+    if(!FULL){const k=(D-(i.z+i.press+14))/D;   // a raised top face is magnified by perspective: pull it in so it lands exactly under its page element
+      i.mesh.position.x=ccx+(i.lx-ccx)*k;i.mesh.position.y=ccy+(i.ly-ccy)*k;i.mesh.scale.set(k,k,1);}});
   tilt.x+=(tilt.tx-tilt.x)*.06;tilt.y+=(tilt.ty-tilt.y)*.06;if(Math.abs(tilt.tx-tilt.x)>.0002||Math.abs(tilt.ty-tilt.y)>.0002)moving=true;
   group.rotation.set(tilt.x,tilt.y,0);
   const d=(drift&&!REDUCED)?Math.sin(t/9000)*1:0,sx=page.sx+d*70,sy=page.sy+Math.cos(t/11000)*(drift?1:0)*40;
   sunLight.position.set(sx,-sy,num('sunz',650));sunLight.target.position.set(page.W/2,-page.H/2,0);sunLight.target.updateMatrixWorld();
-  if(!FULL){camera.left=0;camera.right=innerWidth;camera.top=-scrollY;camera.bottom=-(scrollY+innerHeight);}
+  if(!FULL){const vw=innerWidth,vh=innerHeight,D=num('cam',1100),cy=-(scrollY+vh/2);   // the page plane maps 1:1 onto CSS pixels
+    camera.fov=2*Math.atan(vh/2/D)*180/Math.PI;camera.aspect=vw/vh;camera.position.set(vw/2,cy,D);camera.lookAt(vw/2,cy,0);}
   else{camera.left=0;camera.right=page.W;camera.top=0;camera.bottom=-page.H;}
   camera.updateProjectionMatrix();
   renderer.render(scene,camera);
