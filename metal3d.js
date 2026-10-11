@@ -14,9 +14,10 @@ if(!window.__eq)throw new Error('no environment');
 const METALS={   // lower roughness = more mirror-like. Silver and black are polished; copper and titanium are satin, as real hardware copper is: muted, warm and soft-lit
   aluminum:{c:0xf0eeea,r:.34},silver:{c:0xfcfaf5,r:.10},titanium:{c:0xc9c2b9,r:.30},
   copper:{c:0xb4806a,r:.42},bronze:{c:0xb68a5e,r:.14},gunmetal:{c:0x5b5f68,r:.13},black:{c:0x17171b,r:.09}};
+if(Q.get('cu'))METALS.copper.c=parseInt(Q.get('cu'),16);if(Q.get('cur'))METALS.copper.r=parseFloat(Q.get('cur'));   // copper colour and roughness can be tried from the address bar
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
 const DARKTEXT={gunmetal:1,black:1};
-const mats={};const mat=n=>mats[n]||(mats[n]=new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='aluminum'?num('env',1.0):1.0}));
+const mats={};const mat=n=>mats[n]||(mats[n]=new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='aluminum'?num('env',1.0):n==='copper'?num('cue',1.0):1.0}));
 root.classList.toggle('cta-dark',!!DARKTEXT[ROLE.cta]);
 
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
