@@ -67,7 +67,7 @@ function build(){
   for(let i=0;i<n.count;i++){const u=P.getX(i)/W+.5,v=P.getY(i)/H+.5;
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
-const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);group.add(plate);
+const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);plate.visible=Q.get('final')!=='1';group.add(plate);
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;

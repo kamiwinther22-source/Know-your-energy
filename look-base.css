@@ -70,3 +70,8 @@ html.look-base.labels-below .hero-continue-btn,html.look-base.labels-below .gen-
 html.look-base.labels-below .rel-row,html.look-base.labels-below .pricing-list{margin-bottom:34px !important;}
 
 html.look-base.no-shadows #heroIllustration canvas{filter:none !important;}
+
+/* look=final: a bright polished surface with a few strong, crisp light and dark-steel areas, fixed to the phone screen so it reads as reflecting something */
+html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])),html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])) body{
+  background:
+    linear-gradient(112deg,#ffffff 0%,#fbfbfc 24%,#e3e6e9 33%,#9aa0a7 37%,#c2c6cb 44%,#f7f8f9 52%,#ffffff 60%,#ffffff 72%,#dfe2e6 80%,#a9afb5 84%,#eef0f2 90%,#ffffff 100%) fixed !important;}
