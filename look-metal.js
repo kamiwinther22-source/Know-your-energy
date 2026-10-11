@@ -5,11 +5,12 @@
   var LIT=['.brand-row','#hookStep>div[style*="292px"]','.free-reading-line','.hero-email-wrap','.hero-email-field','.hero-continue-btn','.gen-btn','.price-row','.rel-chip','.toggle-pill','.row-id','.line-field','.f','.person-tag','.pricing-panel','.state-banner-ttl','.hero-key','.section-lbl','.toggle-row'].join(',');
   var TILTED='.hero-continue-btn,.gen-btn,.price-row,.rel-chip',TILT=-12;
   // field: smooth anisotropic sheen around the sun (two bright wedges, two soft dark ones), fading toward the edges
-  var BASE=[.88,.875,.86],LO=.68,HI=1.26,FAR=.90;
+  var Q=new URLSearchParams(location.search),num=function(k,d){var v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
+  var BASE=[.88,.875,.86],LO=num('lo',.80),HI=num('hi',1.18),FAR=LO+(HI-LO)*.5,GRAIN=Q.get('grain')==='1';   // lo/hi set how light the sheen is; grain is off unless asked for
   function conic(sx,sy){
     var st=[];for(var a=0;a<=360;a+=15){var t=(a-90)*Math.PI/180,w=.5+.5*Math.cos(2*(t+.7)),F=LO+(HI-LO)*w;
       st.push('rgb('+BASE.map(function(c){return Math.round(Math.min(1,c*F)*255);}).join(',')+') '+a+'deg');}
-    var lo='rgba('+BASE.map(function(c){return Math.round(c*FAR*255);}).join(',')+',.55)';
+    var lo='rgba('+BASE.map(function(c){return Math.round(c*FAR*255);}).join(',')+',.45)';
     return 'radial-gradient(circle 1500px at '+sx+'px '+sy+'px,rgba(0,0,0,0) 0%,'+lo+' 100%),conic-gradient(from 0deg at '+sx+'px '+sy+'px,'+st.join(',')+')';
   }
   var cv=document.createElement('canvas');cv.id='metalGrain';bg.appendChild(cv);var gKey='';
@@ -30,7 +31,7 @@
     root.style.setProperty('--sx',sx+'px');root.style.setProperty('--sy',sy+'px');
     bg.style.height=Math.max(document.documentElement.scrollHeight,innerHeight)+'px';bg.style.width=Math.max(document.documentElement.scrollWidth,innerWidth)+'px';
     bg.style.backgroundImage=conic(sx,sy);
-    grain(sx,sy,Math.max(document.documentElement.scrollWidth,innerWidth),Math.max(document.documentElement.scrollHeight,innerHeight));
+    if(GRAIN)grain(sx,sy,Math.max(document.documentElement.scrollWidth,innerWidth),Math.max(document.documentElement.scrollHeight,innerHeight));
     var tilt=new Set(document.querySelectorAll(TILTED)),c=Math.cos(-TILT*Math.PI/180),sn=Math.sin(-TILT*Math.PI/180);
     document.querySelectorAll(LIT).forEach(function(el){
       var b=el.getBoundingClientRect();if(!b.width&&!b.height)return;
