@@ -59,8 +59,8 @@ function build(){
   g.computeVertexNormals();plate=new THREE.Mesh(g,mat(ROLE.plate));group.add(plate);
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
-    const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=6;
-    const DOME=Q.get('solar')==='1';   // a domed (sphere-like) surface, so it reflects the whole room the way the solar system's sphere does
+    const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;
+    const DOME=Q.get('solar')==='1'&&Q.get('shape')!=='push';   // a domed (sphere-like) surface, so it reflects the whole room the way the solar system's sphere does
     let geo,topH=14;
     if(DOME){topH=h*num('dome',.55);geo=new THREE.SphereGeometry(1,128,64);geo.scale(w/2,h/2,topH);}
     else{const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,Math.PI/2,Math.PI/2+Math.PI*2,false,0);
@@ -68,13 +68,13 @@ function build(){
     const role=e.classList.contains('active')?'dark':e.classList.contains('price-row')?'price':e.classList.contains('rel-chip')?'chip':'cta';
     const dome=new THREE.Mesh(geo,mat(ROLE[role]));dome.castShadow=true;dome.receiveShadow=true;
     const m=new THREE.Group();m.add(dome);
-    if(DOME&&INLAY&&role!=='dark'){   // the calm centre: flat, so the lettering never sits on a moving reflection
-      const R=.62,ish=new THREE.Shape();ish.absellipse(0,0,w/2*R,h/2*R,0,Math.PI*2,false,0);
+    if(INLAY&&role!=='dark'){   // the calm centre: flat, so the lettering never sits on a moving reflection
+      const PUSH=Q.get('shape')==='push',R=PUSH?.8:.62,ish=new THREE.Shape();ish.absellipse(0,0,w/2*R,h/2*R,0,Math.PI*2,false,0);
       const ig=new THREE.ExtrudeGeometry(ish,{depth:1.6,bevelEnabled:true,bevelThickness:.7,bevelSize:.7,bevelSegments:1,curveSegments:96});
-      const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
+      const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=PUSH?(T+bev-.8):topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    const it={mesh:m,el:e,z:lz,press:0,target:0,lx,ly,top:topH};items.push(it);
+    const it={mesh:m,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-3));e.addEventListener('pointerleave',()=>set(0));
       e.addEventListener('pointerdown',()=>set(-7));e.addEventListener('pointerup',()=>set(-3));e.addEventListener('focus',()=>set(-3));e.addEventListener('blur',()=>set(0));}
