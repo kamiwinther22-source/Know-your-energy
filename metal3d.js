@@ -5,6 +5,7 @@
    and the sun drifts very slowly. Motion respects prefers-reduced-motion. URL options: cta=, chip=, price=, plate=, drift=0, full=1 (page-size canvas, for screenshots). */
 import * as THREE from 'three';
 const root=document.documentElement,Q=new URLSearchParams(location.search);
+if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'0',shade:'0',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'40',by:'110',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
 const num=(k,d)=>{const v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
 const TILT=12*Math.PI/180,FULL=Q.get('full')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAnimationFrame(t);t();});
@@ -41,6 +42,13 @@ const sunLight=new THREE.SpotLight(0xfff0de,num('sun',0.002),0,1.35,1,0);   sunL
 sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',7);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
 scene.add(sunLight,sunLight.target);
 const group=new THREE.Group();scene.add(group);
+function plateStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  g.fillStyle='#f4f5f6';g.fillRect(0,0,W,H);
+  const band=(x,y,w,h,col,a)=>{const R=Math.max(w,h),r=g.createRadialGradient(x,y,0,x,y,R);r.addColorStop(0,col);r.addColorStop(1,'rgba(244,245,246,0)');g.save();g.globalAlpha=a;g.translate(x,y);g.scale(w/R,h/R);g.translate(-x,-y);g.fillStyle=r;g.fillRect(x-R*2,y-R*2,R*4,R*4);g.restore();};
+  const px=u=>u*W,py=v=>v*H;
+  band(px(.70),py(.45),420,70,'#ffffff',1);band(px(.80),py(.55),360,60,'#ffffff',1);band(px(.75),py(.38),500,50,'#ffffff',1);
+  band(px(.66),py(.58),380,90,'#7d838a',.95);band(px(.84),py(.43),300,80,'#8a9097',.9);band(px(.75),py(.66),520,70,'#6f757c',.9);
+  const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;}
 let plate=null,items=[],last='',page={W:0,H:0,sx:0,sy:0},tilt={x:0,y:0,tx:0,ty:0},drift=0,needs=true;
 function sun(){const s=document.querySelector('.sun-cta');if(!s)return[0,0];const r=s.getBoundingClientRect();return[r.left+r.width/2+scrollX,r.top+r.height/2+scrollY];}
 const plateZ=(u,v)=>num('bx',26)*Math.pow(2*u,2)+num('by',70)*Math.pow(2*v,2)+num('bw',10)*Math.sin(6.283*(u*.8+v*1.2)+.6);
@@ -56,7 +64,7 @@ function build(){
   group.position.set(W/2,-H/2,0);
   const g=new THREE.PlaneGeometry(W,H,96,96),p=g.attributes.position;
   for(let i=0;i<p.count;i++)p.setZ(i,plateZ(p.getX(i)/W,p.getY(i)/H));
-  g.computeVertexNormals();plate=new THREE.Mesh(g,mat(ROLE.plate));group.add(plate);
+  g.computeVertexNormals();const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.6);}plate=new THREE.Mesh(g,pmat);group.add(plate);
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;
