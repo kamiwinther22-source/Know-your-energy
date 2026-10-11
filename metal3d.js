@@ -12,15 +12,10 @@ if(!window.__eq)throw new Error('no environment');
 
 /* measured metals: the base colour of a metal is the colour of its reflection (F0) */
 const METALS={
-  aluminum:{c:0xf3f2ef,r:.30},silver:{c:0xfcfaf5,r:.17},titanium:{c:0xc2bbb3,r:.22},
+  aluminum:{c:0xeceeee,r:.40},silver:{c:0xfcfaf5,r:.17},titanium:{c:0xc2bbb3,r:.22},
   copper:{c:0xe9a58a,r:.20},bronze:{c:0xb68a5e,r:.24},gunmetal:{c:0x5b5f68,r:.20},black:{c:0x17171b,r:.14}};
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
 const DARKTEXT={gunmetal:1,black:1};
-function sunburst(){const S=512,c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d');g.fillStyle='#808080';g.fillRect(0,0,S,S);
-  g.translate(S/2,S/2);let s=99991;const rnd=()=>((s=(s*16807)%2147483647)/2147483647);
-  for(let a=0;a<6.2832;a+=.0045){const v=Math.round(96+rnd()*64);g.strokeStyle='rgb('+v+','+v+','+v+')';g.lineWidth=1.2;g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(a)*S,Math.sin(a)*S);g.stroke();}
-  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping;return t;}
-const BURST=sunburst();
 const mats={};const mat=n=>mats[n]||(mats[n]=new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='aluminum'?num('env',1.0):1.2}));
 root.classList.toggle('cta-dark',!!DARKTEXT[ROLE.cta]);
 
@@ -31,26 +26,11 @@ const cv=renderer.domElement;cv.id='metal3d';
 if(FULL){let bgEl=document.getElementById('metalBg');if(!bgEl){bgEl=document.createElement('div');bgEl.id='metalBg';document.body.insertBefore(bgEl,document.body.firstChild);}bgEl.appendChild(cv);}else{cv.classList.add('fixed');document.body.insertBefore(cv,document.body.firstChild);}
 const scene=new THREE.Scene();
 const pm=new THREE.PMREMGenerator(renderer);
-function studio(){   // equirectangular studio: what a flat sheet looks straight up into is the patch around u=.75, v=.5
-  const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
-  const sky=g.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#ffffff');sky.addColorStop(.36,'#f2f1ee');sky.addColorStop(.5,'#d6d4cf');sky.addColorStop(.64,'#8f8e8b');sky.addColorStop(1,'#3c3c40');g.fillStyle=sky;g.fillRect(0,0,W,H);
-  const box=(x,y,w,h,col,a)=>{const r=g.createRadialGradient(x,y,0,x,y,Math.max(w,h));r.addColorStop(0,col);r.addColorStop(1,'rgba(255,255,255,0)');g.save();g.globalAlpha=a;g.translate(x,y);g.scale(w/Math.max(w,h),h/Math.max(w,h));g.translate(-x,-y);g.fillStyle=r;g.fillRect(x-Math.max(w,h)*2,y-Math.max(w,h)*2,Math.max(w,h)*4,Math.max(w,h)*4);g.restore();};
-  const px=u=>u*W,py=v=>v*H;
-  box(px(.665),py(.44),150,120,'#f0d9b8',.95);   // warm tan key light, left of the sheet's view
-  box(px(.835),py(.47),170,130,'#cfdbea',.95);   // cool silver-blue fill, right
-  box(px(.75),py(.40),120,40,'#ffffff',1);       // bright white strip overhead
-  box(px(.75),py(.60),230,50,'#6d6d73',.9);      // dark flag below, for contrast
-  box(px(.70),py(.55),90,35,'#a08a70',.7);       // low warm bounce
-  box(px(.80),py(.36),90,30,'#ffffff',.9);
-  box(px(.25),py(.45),260,140,'#f5ead8',.9);     // other side of the room, warm
-  box(px(.5),py(.5),260,160,'#e1e6ee',.9);
-  const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;
-}
-scene.environment=(Q.get('env')==='hdri')?pm.fromEquirectangular(window.__eq).texture:pm.fromEquirectangular(studio()).texture;
+scene.environment=pm.fromEquirectangular(window.__eq).texture;
 const camera=new THREE.OrthographicCamera(0,100,0,-100,-4000,4000);camera.position.z=1000;
 /* warm sun against cool reflections: the colour contrast is what makes metal look alive */
 const sunLight=new THREE.SpotLight(0xfff0de,num('sun',2.4),0,1.35,1,0);sunLight.castShadow=true;
-sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',4);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
+sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',7);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
 scene.add(sunLight,sunLight.target);
 const group=new THREE.Group();scene.add(group);
 let plate=null,items=[],last='',page={W:0,H:0,sx:0,sy:0},tilt={x:0,y:0,tx:0,ty:0},drift=0,needs=true;
@@ -70,13 +50,12 @@ function build(){
   for(let i=0;i<p.count;i++)p.setZ(i,plateZ(p.getX(i)/W,p.getY(i)/H));
   g.computeVertexNormals();plate=new THREE.Mesh(g,mat(ROLE.plate));plate.receiveShadow=true;group.add(plate);
   els.forEach(e=>{
-    const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=3.2,T=4;
+    const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=6;
     const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,0,Math.PI*2,false,0);
-    const geo=new THREE.ExtrudeGeometry(sh,{depth:T,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:2,curveSegments:160});
+    const geo=new THREE.ExtrudeGeometry(sh,{depth:T,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:22,curveSegments:120});
     const role=e.classList.contains('active')?'dark':e.classList.contains('price-row')?'price':e.classList.contains('rel-chip')?'chip':'cta';
-    const base=mat(ROLE[role]),bm=base.clone();const bt=BURST.clone();bt.needsUpdate=true;bt.repeat.set(1/w,1/h);bt.offset.set(.5,.5);bm.bumpMap=bt;bm.bumpScale=num('bump',1.6);
-    const m=new THREE.Mesh(geo,bm);m.castShadow=true;m.receiveShadow=true;
-    const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+bev+num('lift',7);
+    const m=new THREE.Mesh(geo,mat(ROLE[role]));m.castShadow=true;m.receiveShadow=true;
+    const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+bev+num('lift',10);
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
     const it={mesh:m,el:e,z:lz,press:0,target:0};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
