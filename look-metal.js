@@ -6,7 +6,7 @@
   var TILTED='.hero-continue-btn,.gen-btn,.price-row,.rel-chip',TILT=-12;
   // field: smooth anisotropic sheen around the sun (two bright wedges, two soft dark ones), fading toward the edges
   var Q=new URLSearchParams(location.search),num=function(k,d){var v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
-  var BASE=[.86,.84,.80],LO=num('lo',.50),HI=num('hi',1.12),GRAIN=Q.get('grain')==='1';   // lo/hi set how light the sheen is; grain is off unless asked for
+  var FLAT=Q.get('field')==='flat',BASE=FLAT?[.85,.84,.82]:[.86,.84,.80],LO=FLAT?1:num('lo',.50),HI=FLAT?1:num('hi',1.12),GRAIN=Q.get('grain')==='1';   // lo/hi set how light the sheen is; grain is off unless asked for
   var fc=document.createElement('canvas');fc.id='metalField';bg.appendChild(fc);
   function field(sx,sy,W,H){   // the approved smooth steel sheen, evaluated per pixel (low-res, scaled up smoothly)
     var sc=4,w=Math.ceil(W/sc),h=Math.ceil(H/sc);fc.width=w;fc.height=h;fc.style.width=W+'px';fc.style.height=H+'px';
@@ -44,6 +44,20 @@
       el.style.setProperty('--ux',dx.toFixed(3));el.style.setProperty('--uy',dy.toFixed(3));
       el.style.setProperty('--ang',(Math.atan2(dx,-dy)*180/Math.PI).toFixed(1)+'deg');
     });
+  }
+  var FREE=Q.get('free');
+  if(FREE==='1'){   // offer first: the label moves into the field, the note moves under the button, the stray line goes
+    var wrap=document.querySelector('.hero-email-wrap'),notes=wrap.querySelectorAll('.privacy-note'),inp=document.getElementById('heroEmail'),btn=wrap.querySelector('.hero-continue-btn');
+    if(inp&&notes[0]){inp.placeholder=notes[0].textContent.trim();notes[0].style.display='none';}
+    if(notes[1]&&btn){btn.insertAdjacentElement('afterend',notes[1]);}
+    wrap.classList.add('free-v1');
+  }
+  if(FREE==='2'){   // one word carries the page
+    var fl=document.querySelector('.free-reading-line');
+    if(fl){fl.innerHTML='<span class="fl-s">your first reading is</span><span class="fl-b">free.</span>';fl.classList.add('free-v2');}
+    var w2=document.querySelector('.hero-email-wrap'),n2=w2.querySelectorAll('.privacy-note'),i2=document.getElementById('heroEmail'),b2=w2.querySelector('.hero-continue-btn');
+    if(i2&&n2[0]){i2.placeholder=n2[0].textContent.trim();n2[0].style.display='none';}
+    if(n2[1]&&b2){b2.insertAdjacentElement('afterend',n2[1]);}
   }
   var raf=0;function sched(){if(!raf)raf=requestAnimationFrame(function(){raf=0;layout();});}
   layout();addEventListener('resize',sched);addEventListener('load',sched);

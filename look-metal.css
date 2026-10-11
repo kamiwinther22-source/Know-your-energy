@@ -85,3 +85,11 @@ html.look-metal .err{background:none !important;border:none !important;}
 
 /* Calculate is always centered on the page (the default layout parks it under Person 2) */
 html.look-metal #formStep .submit-wrap,html.look-metal #formStep .submit-wrap.under-p2{width:100% !important;margin-left:0 !important;margin-right:0 !important;justify-content:center !important;}
+
+/* free-reading option 1 and 2 */
+html.look-metal .hero-email-wrap .err{display:none !important;}
+html.look-metal .hero-email-wrap .privacy-note{margin-top:.2rem !important;}
+html.look-metal .free-reading-line.free-v2{text-align:center;margin-top:-4.6rem;}
+html.look-metal .free-reading-line.free-v2 .fl-s{display:block;font-family:'Barlow Condensed',sans-serif;font-style:normal;font-weight:700;font-size:23px;letter-spacing:.34em;text-transform:uppercase;
+  -webkit-text-fill-color:var(--ink) !important;color:var(--ink) !important;text-shadow:calc(var(--ux)*-1px) calc(var(--uy)*-1px) 0 rgba(255,255,255,.8);padding-left:.34em;}
+html.look-metal .free-reading-line.free-v2 .fl-b{display:block;font-size:176px;line-height:.82;letter-spacing:-.03em;margin-top:6px;}
