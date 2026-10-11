@@ -91,3 +91,7 @@ html.look-base .hero-continue-btn,html.look-base .gen-btn{margin-bottom:58px !im
 html.look-base #orrRefl{position:absolute;z-index:0;pointer-events:none;opacity:.42;-webkit-mask-image:linear-gradient(rgba(0,0,0,.9),rgba(0,0,0,0) 85%);mask-image:linear-gradient(rgba(0,0,0,.9),rgba(0,0,0,0) 85%);}
 html.look-base .rel-row{margin-bottom:40px !important;}
 html.look-base .pricing-list{margin-bottom:46px !important;}
+
+/* "(optional)" sits beside TIME on one line, so the DOB and TIME boxes line up */
+html.look-base .row-time label,html.look-base .row-dob label,html.look-base .loc-field label{white-space:nowrap !important;}
+html.look-base .opt-lbl{display:inline !important;white-space:nowrap;}
