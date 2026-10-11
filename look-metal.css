@@ -11,7 +11,7 @@ html.look-metal #metalGrain{position:absolute;left:0;top:0;pointer-events:none;}
 /* ---------- engraved ink: all ordinary text. Crisp, with a thin lit lip on the side away from the sun ---------- */
 html.look-metal #hookStep,html.look-metal #hookStep *,html.look-metal #formStep,html.look-metal #formStep *{
   color:var(--ink) !important;-webkit-text-fill-color:var(--ink) !important;
-  text-shadow:calc(var(--ux)*-1px) calc(var(--uy)*-1px) 0 rgba(255,255,255,.8);}
+  text-shadow:none;}
 html.look-metal #hookStep .hl{background:none !important;}
 html.look-metal #hookStep hr,html.look-metal #formStep hr{display:none !important;}
 html.look-metal #formStep .pricing-panel{border:none !important;}
@@ -26,9 +26,7 @@ html.look-metal #hookStep>div[style*="292px"]>div span{font-family:inherit !impo
 /* ---------- the big line: raised black lacquer, lit by the sun ---------- */
 html.look-metal #hookStep .free-reading-line{
   font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:64px;line-height:1;text-align:center;margin:-4.2rem auto 2.4rem;
-  -webkit-text-fill-color:transparent !important;color:transparent !important;text-shadow:none;
-  background:linear-gradient(var(--ang),#0a0a0d 0%,#050507 55%,#2d2e35 80%,#767881 92%,#b4b6be 100%);-webkit-background-clip:text;background-clip:text;
-  filter:drop-shadow(calc(var(--ux)*1.3px) calc(var(--uy)*1.3px) 0 rgba(255,255,255,.75)) drop-shadow(calc(var(--ux)*-4px) calc(var(--uy)*-4px) 5px rgba(0,0,0,.5));}
+  color:var(--ink) !important;-webkit-text-fill-color:var(--ink) !important;text-shadow:none;background:none;filter:none;}
 
 /* the floating solar system casts a soft shadow away from where it floats */
 html.look-metal #heroIllustration canvas{filter:drop-shadow(10px 24px 22px rgba(20,18,14,.30));}
@@ -65,7 +63,7 @@ html.look-metal #formStep input,html.look-metal #formStep select,html.look-metal
   color:var(--ink) !important;-webkit-text-fill-color:var(--ink) !important;background:transparent !important;border:none !important;box-shadow:none !important;}
 html.look-metal .line-field input::placeholder,html.look-metal .row-id input::placeholder{color:#4d4e55 !important;-webkit-text-fill-color:#4d4e55 !important;opacity:1;}
 html.look-metal .line-field select option{color:#0f1013;background:#e8e5de;}
-html.look-metal .hero-key{filter:drop-shadow(calc(var(--ux)*-1px) calc(var(--uy)*-1px) 0 rgba(255,255,255,.85)) !important;}
+html.look-metal .hero-key{filter:none !important;}
 html.look-metal .hero-key *{fill:#0f1013 !important;stroke:none !important;}
 
 /* ---------- toggle: a cut track with a metal knob ---------- */
@@ -90,6 +88,11 @@ html.look-metal #formStep .submit-wrap,html.look-metal #formStep .submit-wrap.un
 html.look-metal .hero-email-wrap .err{display:none !important;}
 html.look-metal .hero-email-wrap .privacy-note{margin-top:.2rem !important;}
 html.look-metal .free-reading-line.free-v2{text-align:center;margin-top:-4.6rem;}
-html.look-metal .free-reading-line.free-v2 .fl-s{display:block;font-family:'Barlow Condensed',sans-serif;font-style:normal;font-weight:700;font-size:23px;letter-spacing:.34em;text-transform:uppercase;
-  -webkit-text-fill-color:var(--ink) !important;color:var(--ink) !important;text-shadow:calc(var(--ux)*-1px) calc(var(--uy)*-1px) 0 rgba(255,255,255,.8);padding-left:.34em;}
+html.look-metal .free-reading-line.free-v2 .fl-s{display:block;font-family:'Barlow Condensed',sans-serif;font-style:normal;font-weight:700;font-size:23px;letter-spacing:.34em;text-transform:uppercase;padding-left:.34em;}
 html.look-metal .free-reading-line.free-v2 .fl-b{display:block;font-size:176px;line-height:.82;letter-spacing:-.03em;margin-top:6px;}
+
+/* ---------- when the 3D metal scene is running, it draws the surface and the buttons; the page elements become transparent controls ---------- */
+html.look-metal.m3d #metalField,html.look-metal.m3d #metalGrain{display:none;}
+html.look-metal #metal3d{position:absolute;left:0;top:0;pointer-events:none;}
+html.look-metal.m3d .hero-continue-btn,html.look-metal.m3d .gen-btn,html.look-metal.m3d .price-row,html.look-metal.m3d .rel-chip:not(.active),html.look-metal.m3d .rel-chip.active{
+  background:none !important;box-shadow:none !important;}
