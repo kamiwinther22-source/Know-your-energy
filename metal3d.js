@@ -11,12 +11,12 @@ await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAni
 if(!window.__eq)throw new Error('no environment');
 
 /* measured metals: the base colour of a metal is the colour of its reflection (F0) */
-const METALS={
-  aluminum:{c:0xf0eeea,r:.36},silver:{c:0xfcfaf5,r:.17},titanium:{c:0xc2bbb3,r:.22},
-  copper:{c:0xe9a58a,r:.20},bronze:{c:0xb68a5e,r:.24},gunmetal:{c:0x5b5f68,r:.20},black:{c:0x17171b,r:.14}};
+const METALS={   // sharper (lower roughness) = more mirror-like; copper is a deep warm base so its reflections go brown-red in shadow and gold-orange in light
+  aluminum:{c:0xf0eeea,r:.34},silver:{c:0xfcfaf5,r:.10},titanium:{c:0xc9c2b9,r:.13},
+  copper:{c:0xde8259,r:.10},bronze:{c:0xb68a5e,r:.14},gunmetal:{c:0x5b5f68,r:.13},black:{c:0x17171b,r:.09}};
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
 const DARKTEXT={gunmetal:1,black:1};
-const mats={};const mat=n=>mats[n]||(mats[n]=new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='aluminum'?num('env',1.0):1.2}));
+const mats={};const mat=n=>mats[n]||(mats[n]=new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='aluminum'?num('env',1.0):1.0}));
 root.classList.toggle('cta-dark',!!DARKTEXT[ROLE.cta]);
 
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
