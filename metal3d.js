@@ -18,7 +18,7 @@ if(Q.get('cu'))METALS.copper.c=parseInt(Q.get('cu'),16);if(Q.get('cur'))METALS.c
 METALS.chrome={c:0xfff7ec,r:0};METALS.planet={c:0xcfccc6,r:0};METALS.mirror={c:0xffffff,r:num('mr',.12)};   // chrome = exactly the solar system's sun material; planet = its planets; mirror = a polished sheet
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
 const DARKTEXT={gunmetal:1,black:1};
-const mats={};const mat=n=>mats[n]||(mats[n]=new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='mirror'?num('env',1.8):n==='chrome'?1.6:n==='aluminum'?num('env',1.0):n==='copper'?num('cue',1.0):1.0}));
+const mats={};const mat=n=>mats[n]||(mats[n]=((x)=>{if(n==='chrome'||n==='planet'){x.envMap=cubeRT.texture;}return x;})(new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='mirror'?num('env',1.8):n==='chrome'?1.6:n==='aluminum'?num('env',1.0):n==='copper'?num('cue',1.0):1.0})));
 if(Q.get('solar')==='1'){ROLE.plate='mirror';ROLE.cta=ROLE.chip=ROLE.price='chrome';ROLE.dark='planet';}   // everything in the solar system's own metal
 root.classList.toggle('cta-dark',!!DARKTEXT[ROLE.cta]);
 
@@ -28,6 +28,8 @@ renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 const cv=renderer.domElement;cv.id='metal3d';
 if(FULL){let bgEl=document.getElementById('metalBg');if(!bgEl){bgEl=document.createElement('div');bgEl.id='metalBg';document.body.insertBefore(bgEl,document.body.firstChild);}bgEl.appendChild(cv);}else{cv.classList.add('fixed');document.body.insertBefore(cv,document.body.firstChild);}
 const scene=new THREE.Scene();
+const cubeRT=new THREE.WebGLCubeRenderTarget(512,{type:THREE.HalfFloatType,generateMipmaps:false,minFilter:THREE.LinearFilter});
+{const room=new THREE.Scene();room.background=window.__eq;const cc=new THREE.CubeCamera(1,6000,cubeRT);cc.update(renderer,room);}   // captured once, exactly as the solar system does for its sun
 const pm=new THREE.PMREMGenerator(renderer);
 scene.environment=pm.fromEquirectangular(window.__eq).texture;
 const camera=FULL?new THREE.OrthographicCamera(0,100,0,-100,-4000,4000):new THREE.PerspectiveCamera(40,1,10,8000);camera.position.z=1000;   // a real perspective camera: every point on a polished face reflects a slightly different part of the room
