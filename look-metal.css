@@ -26,7 +26,7 @@ html.look-metal #hookStep>div[style*="292px"]>div span{font-family:inherit !impo
 
 /* ---------- the big line: raised black lacquer, lit by the sun ---------- */
 html.look-metal #hookStep .free-reading-line{
-  font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:64px;line-height:1;text-align:left;margin:-4.2rem auto 2.4rem 2px;
+  font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:64px;line-height:1;text-align:center;margin:-4.2rem auto 2.4rem;
   -webkit-text-fill-color:transparent !important;color:transparent !important;text-shadow:none;
   background:linear-gradient(var(--ang),#0a0a0d 0%,#050507 55%,#2d2e35 80%,#767881 92%,#b4b6be 100%);-webkit-background-clip:text;background-clip:text;
   filter:drop-shadow(calc(var(--ux)*1.3px) calc(var(--uy)*1.3px) 0 rgba(255,255,255,.75)) drop-shadow(calc(var(--ux)*-4px) calc(var(--uy)*-4px) 5px rgba(0,0,0,.5));}
