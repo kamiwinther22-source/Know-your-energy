@@ -18,6 +18,9 @@ if(Q.get('cu'))METALS.copper.c=parseInt(Q.get('cu'),16);if(Q.get('cur'))METALS.c
 METALS.chrome={c:0xfff7ec,r:0};METALS.planet={c:0xcfccc6,r:0};METALS.mirror={c:0xffffff,r:num('mr',.12)};   // chrome = exactly the solar system's sun material; planet = its planets; mirror = a polished sheet
 const ROLE={plate:Q.get('plate')||'aluminum',cta:Q.get('cta')||'copper',chip:Q.get('chip')||'titanium',price:Q.get('price')||'titanium',dark:'black'};
 const DARKTEXT={gunmetal:1,black:1};
+const INLAY=Q.get('inlay');   // 'dark' = black polished centre, 'light' = satin silver centre
+const inlayDark=new THREE.MeshStandardMaterial({color:0x050507,metalness:0,roughness:.18,envMapIntensity:.45}),inlayLight=new THREE.MeshStandardMaterial({color:0xf0f0f0,metalness:1,roughness:.5,envMapIntensity:1.1});
+root.classList.toggle('inlay-dark',INLAY==='dark');
 const mats={};const mat=n=>mats[n]||(mats[n]=((x)=>{if(n==='chrome'||n==='planet'){x.envMap=cubeRT.texture;}return x;})(new THREE.MeshStandardMaterial({color:METALS[n].c,metalness:1,roughness:METALS[n].r,envMapIntensity:n==='mirror'?num('env',1.8):n==='chrome'?1.6:n==='aluminum'?num('env',1.0):n==='copper'?num('cue',1.0):1.0})));
 if(Q.get('solar')==='1'){ROLE.plate='mirror';ROLE.cta=ROLE.chip=ROLE.price='chrome';ROLE.dark='planet';}   // everything in the solar system's own metal
 root.classList.toggle('cta-dark',!!DARKTEXT[ROLE.cta]);
@@ -49,7 +52,7 @@ function build(){
   const vw=FULL?W:innerWidth,vh=FULL?H:innerHeight;
   renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));renderer.setSize(vw,vh,false);cv.style.width=vw+'px';cv.style.height=vh+'px';
   if(plate){plate.geometry.dispose();group.remove(plate);}
-  items.forEach(i=>{i.mesh.geometry.dispose();group.remove(i.mesh);});items=[];
+  items.forEach(i=>{i.mesh.traverse(o=>{if(o.geometry)o.geometry.dispose();});group.remove(i.mesh);});items=[];
   group.position.set(W/2,-H/2,0);
   const g=new THREE.PlaneGeometry(W,H,96,96),p=g.attributes.position;
   for(let i=0;i<p.count;i++)p.setZ(i,plateZ(p.getX(i)/W,p.getY(i)/H));
@@ -63,7 +66,12 @@ function build(){
     else{const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,Math.PI/2,Math.PI/2+Math.PI*2,false,0);
       geo=new THREE.ExtrudeGeometry(sh,{depth:T,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:22,curveSegments:120});}
     const role=e.classList.contains('active')?'dark':e.classList.contains('price-row')?'price':e.classList.contains('rel-chip')?'chip':'cta';
-    const m=new THREE.Mesh(geo,mat(ROLE[role]));m.castShadow=true;m.receiveShadow=true;
+    const dome=new THREE.Mesh(geo,mat(ROLE[role]));dome.castShadow=true;dome.receiveShadow=true;
+    const m=new THREE.Group();m.add(dome);
+    if(DOME&&INLAY&&role!=='dark'){   // the calm centre: flat, so the lettering never sits on a moving reflection
+      const R=.62,ish=new THREE.Shape();ish.absellipse(0,0,w/2*R,h/2*R,0,Math.PI*2,false,0);
+      const ig=new THREE.ExtrudeGeometry(ish,{depth:1.6,bevelEnabled:true,bevelThickness:.7,bevelSize:.7,bevelSegments:1,curveSegments:96});
+      const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
     const it={mesh:m,el:e,z:lz,press:0,target:0,lx,ly,top:topH};items.push(it);

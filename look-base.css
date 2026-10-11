@@ -52,3 +52,19 @@ html.look-base .content{position:relative;z-index:1;}
 /* when the 3D scene draws the buttons, the page's own ovals become transparent controls */
 html.look-base.m3d .hero-continue-btn,html.look-base.m3d .gen-btn,html.look-base.m3d .price-row,html.look-base.m3d .rel-chip{background:none !important;box-shadow:none !important;}
 html.look-base.m3d .rel-chip.active,html.look-base.m3d .rel-chip.active *{color:#f2f2f4 !important;}
+
+/* lettering on a black polished centre is white */
+html.look-base.inlay-dark #hookStep .hero-continue-btn,html.look-base.inlay-dark #hookStep .hero-continue-btn *,html.look-base.inlay-dark #formStep .gen-btn,html.look-base.inlay-dark #formStep .gen-btn *,
+html.look-base.inlay-dark #formStep .price-row,html.look-base.inlay-dark #formStep .price-row *,html.look-base.inlay-dark #formStep .rel-chip:not(.active),html.look-base.inlay-dark #formStep .rel-chip:not(.active) *{color:#f5f5f6 !important;-webkit-text-fill-color:#f5f5f6 !important;}
+
+/* words off the metal: the buttons carry no lettering; each word sits just below its button, horizontal, in plain ink */
+html.look-base.labels-below .hero-continue-btn,html.look-base.labels-below .gen-btn,html.look-base.labels-below .price-row,html.look-base.labels-below .rel-chip{position:relative;overflow:visible !important;font-size:0 !important;}
+html.look-base.labels-below .hero-continue-btn *,html.look-base.labels-below .gen-btn *,html.look-base.labels-below .price-row *,html.look-base.labels-below .rel-chip *{font-size:0 !important;}
+html.look-base.labels-below .hero-continue-btn::after,html.look-base.labels-below .gen-btn::after,html.look-base.labels-below .price-row::after,html.look-base.labels-below .rel-chip::after{
+  content:attr(data-label);position:absolute;left:50%;top:100%;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.3em;color:var(--ink);-webkit-text-fill-color:var(--ink);
+  transform:translate(-50%,12px) rotate(12deg);transform-origin:50% 0;}
+html.look-base.labels-below .hero-continue-btn::after,html.look-base.labels-below .gen-btn::after{font-size:17px;}
+html.look-base.labels-below .price-row::after{font-size:11px;letter-spacing:.14em;transform:translate(-50%,8px) rotate(12deg);}
+html.look-base.labels-below .rel-chip::after{font-size:10px;letter-spacing:.1em;transform:translate(-50%,8px) rotate(12deg);}
+html.look-base.labels-below .hero-continue-btn,html.look-base.labels-below .gen-btn{margin-bottom:46px !important;}
+html.look-base.labels-below .rel-row,html.look-base.labels-below .pricing-list{margin-bottom:34px !important;}
