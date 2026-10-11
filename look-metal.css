@@ -1,0 +1,85 @@
+/* ?look=metal — see look-metal.js. Opt-in only; the default page is untouched. */
+html.look-metal{--ink:#0f1013;--ux:0;--uy:-1;--ang:0deg;overflow-x:clip;}
+html.look-metal body{overflow-x:clip;}
+html.look-metal:not(:has(#resultsWrap[style*="block"])),
+html.look-metal:not(:has(#resultsWrap[style*="block"])) body{background:#d6d2c9 !important;}
+html.look-metal #metalBg{position:absolute;left:0;top:0;width:100%;z-index:0;pointer-events:none;}
+html.look-metal:has(#resultsWrap[style*="block"]) #metalBg{display:none;}
+/* satin: a very fine, low-contrast grain so the surface reads as metal and not paper (remove this rule to switch it off) */
+html.look-metal #metalBg::after{content:"";position:absolute;inset:0;opacity:.09;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1 0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.4 -0.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+
+/* ---------- engraved ink: all ordinary text. Crisp, with a thin lit lip on the side away from the sun ---------- */
+html.look-metal #hookStep,html.look-metal #hookStep *,html.look-metal #formStep,html.look-metal #formStep *{
+  color:var(--ink) !important;-webkit-text-fill-color:var(--ink) !important;
+  text-shadow:calc(var(--ux)*-1px) calc(var(--uy)*-1px) 0 rgba(255,255,255,.8);}
+html.look-metal #hookStep .hl{background:none !important;}
+html.look-metal #hookStep hr,html.look-metal #formStep hr{display:none !important;}
+html.look-metal #formStep .pricing-panel{border:none !important;}
+html.look-metal .brand{font-size:clamp(2rem,10vw,2.7rem);}
+
+/* ---------- tagline: bold, left, one block (the words are left exactly as they are) ---------- */
+html.look-metal #hookStep>div[style*="292px"]{height:auto !important;min-height:196px;margin-top:46px !important;}
+html.look-metal #hookStep>div[style*="292px"]>div{position:static !important;display:block;white-space:normal !important;
+  font-family:'Barlow Condensed',sans-serif !important;font-weight:800 !important;font-size:27px !important;line-height:1.08 !important;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap !important;}
+html.look-metal #hookStep>div[style*="292px"]>div span{font-family:inherit !important;font-weight:inherit !important;font-size:inherit !important;}
+
+/* ---------- the big line: raised black lacquer, lit by the sun ---------- */
+html.look-metal #hookStep .free-reading-line{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:64px;line-height:1;text-align:left;margin:-4.2rem auto 2.4rem 2px;
+  -webkit-text-fill-color:transparent !important;color:transparent !important;text-shadow:none;
+  background:linear-gradient(var(--ang),#0a0a0d 0%,#050507 55%,#2d2e35 80%,#767881 92%,#b4b6be 100%);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(calc(var(--ux)*1.3px) calc(var(--uy)*1.3px) 0 rgba(255,255,255,.75)) drop-shadow(calc(var(--ux)*-4px) calc(var(--uy)*-4px) 5px rgba(0,0,0,.5));}
+
+/* the floating solar system casts a soft shadow away from where it floats */
+html.look-metal #heroIllustration canvas{filter:drop-shadow(10px 24px 22px rgba(20,18,14,.30));}
+
+/* ---------- buttons: tilted metal ovals, domed, lit from the sun ---------- */
+html.look-metal .hero-continue-btn,html.look-metal .gen-btn,html.look-metal .price-row,html.look-metal .rel-chip:not(.active){
+  border:none !important;border-radius:50% !important;padding:0 !important;display:flex !important;align-items:center;justify-content:center;
+  transform:rotate(-12deg) !important;
+  background:radial-gradient(ellipse 62% 56% at calc(50% + var(--ux)*24%) calc(50% + var(--uy)*40%),#fff 0%,#efede7 30%,#c8c5bc 66%,#9b988f 100%) !important;
+  box-shadow:
+    inset calc(var(--ux)*-3px) calc(var(--uy)*-3px) 3px rgba(255,255,255,.95),
+    inset calc(var(--ux)*6px) calc(var(--uy)*6px) 9px rgba(35,35,40,.5),
+    calc(var(--ux)*-9px) calc(var(--uy)*-13px) 15px rgba(0,0,0,.30) !important;}
+html.look-metal .hero-continue-btn,html.look-metal .gen-btn{width:226px !important;height:82px !important;margin:22px auto !important;}
+html.look-metal .hero-continue-btn:hover,html.look-metal .gen-btn:hover,html.look-metal .price-row:hover,html.look-metal .rel-chip:hover{filter:brightness(1.06);}
+html.look-metal .price-row{width:118px !important;height:62px !important;min-width:0 !important;}
+html.look-metal .price-label,html.look-metal .price-amt{font-size:11px !important;letter-spacing:.05em !important;}
+html.look-metal .pricing-list{display:flex !important;justify-content:space-between !important;gap:0 !important;flex-wrap:nowrap !important;margin-top:20px;}
+html.look-metal .rel-row{display:flex;justify-content:space-between !important;flex-wrap:nowrap !important;margin:12px 0 4px !important;}
+html.look-metal .rel-chip{width:90px !important;height:50px !important;font-size:10px !important;letter-spacing:.03em !important;line-height:1.1 !important;white-space:normal !important;text-align:center !important;}
+html.look-metal .rel-chip.active{border:none !important;border-radius:50% !important;padding:0 !important;display:flex !important;align-items:center;justify-content:center;transform:rotate(-12deg) !important;
+  background:radial-gradient(ellipse 62% 56% at calc(50% + var(--ux)*24%) calc(50% + var(--uy)*40%),#52545c 0%,#17181c 45%,#07070a 100%) !important;
+  box-shadow:inset calc(var(--ux)*-2px) calc(var(--uy)*-2px) 2px rgba(255,255,255,.55),calc(var(--ux)*-9px) calc(var(--uy)*-13px) 15px rgba(0,0,0,.30) !important;}
+html.look-metal #formStep .rel-chip.active,html.look-metal #formStep .rel-chip.active *{color:#f2f2f4 !important;-webkit-text-fill-color:#f2f2f4 !important;text-shadow:none !important;}
+
+/* ---------- fields: cut into the metal. No outline, no divider — shading only ---------- */
+html.look-metal .line-field,html.look-metal .row-id{
+  background:linear-gradient(180deg,rgba(40,40,46,.12),rgba(40,40,46,.04)) !important;border:none !important;border-radius:12px;
+  box-shadow:inset calc(var(--ux)*-4px) calc(var(--uy)*-4px) 6px rgba(0,0,0,.45),calc(var(--ux)*-1.5px) calc(var(--uy)*-1.5px) 0 rgba(255,255,255,.9) !important;
+  -webkit-backdrop-filter:none;backdrop-filter:none;}
+html.look-metal .row-id .line-field{background:transparent !important;box-shadow:none !important;border:none !important;}
+html.look-metal .line-field:focus-within,html.look-metal .row-id:focus-within{box-shadow:inset calc(var(--ux)*-4px) calc(var(--uy)*-4px) 6px rgba(0,0,0,.45),calc(var(--ux)*-1.5px) calc(var(--uy)*-1.5px) 0 rgba(255,255,255,.9),0 0 0 3px rgba(15,16,19,.18) !important;}
+html.look-metal #formStep input,html.look-metal #formStep select,html.look-metal #p1Block input,html.look-metal #p2Section input,html.look-metal #heroEmail{
+  color:var(--ink) !important;-webkit-text-fill-color:var(--ink) !important;background:transparent !important;border:none !important;box-shadow:none !important;}
+html.look-metal .line-field input::placeholder,html.look-metal .row-id input::placeholder{color:#4d4e55 !important;-webkit-text-fill-color:#4d4e55 !important;opacity:1;}
+html.look-metal .line-field select option{color:#0f1013;background:#e8e5de;}
+html.look-metal .hero-key{filter:drop-shadow(calc(var(--ux)*-1px) calc(var(--uy)*-1px) 0 rgba(255,255,255,.85)) !important;}
+html.look-metal .hero-key *{fill:#0f1013 !important;stroke:none !important;}
+
+/* ---------- toggle: a cut track with a metal knob ---------- */
+html.look-metal .toggle-pill{width:46px !important;height:25px !important;border-radius:13px !important;border:none !important;
+  background:rgba(40,40,46,.18) !important;box-shadow:inset calc(var(--ux)*-3px) calc(var(--uy)*-3px) 4px rgba(0,0,0,.45),calc(var(--ux)*-1.5px) calc(var(--uy)*-1.5px) 0 rgba(255,255,255,.9) !important;}
+html.look-metal .toggle-pill::after{width:19px !important;height:19px !important;top:3px !important;left:3px !important;border-radius:50% !important;
+  background:radial-gradient(circle at calc(50% + var(--ux)*22%) calc(50% + var(--uy)*22%),#fff 0%,#d4d1c9 55%,#8f8c84 100%) !important;box-shadow:calc(var(--ux)*-2px) calc(var(--uy)*-3px) 4px rgba(0,0,0,.4) !important;}
+html.look-metal .toggle-pill.on::after{left:24px !important;}
+
+/* ---------- Person 2 moves down; its tag stays with it ---------- */
+html.look-metal #p2Section{position:relative;}
+html.look-metal #p2Section.open{margin-top:96px;}
+html.look-metal #p2Section.open .person-tag{top:-30px !important;}
+
+/* plain message text, no box */
+html.look-metal .err{background:none !important;border:none !important;}
