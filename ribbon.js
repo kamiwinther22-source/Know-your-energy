@@ -1,7 +1,7 @@
 /* ?look=final — the energy ribbon between Person 1 and Person 2 (visible only in the relational view). It fills the gap between the two blocks and never takes clicks. */
 (function(){
   var form=document.getElementById('formStep'),p1=document.getElementById('p1Block'),p2=document.getElementById('p2Section');if(!form||!p1||!p2)return;
-  var img=document.createElement('img');img.id='energyRibbon';img.alt='';img.setAttribute('aria-hidden','true');img.src='energy-ribbon.png';form.appendChild(img);
+  var img=document.createElement('img');img.id='energyRibbon';img.alt='';img.setAttribute('aria-hidden','true');img.src=(/[?&]ribbon=b\b/.test(location.search)||window.__ribbon==='b')?'energy-ribbon-b.png':'energy-ribbon-a.png';form.appendChild(img);
   var raf=0;
   function place(){raf=0;
     var open=p2.classList.contains('open');img.style.display=open?'block':'none';if(!open)return;
