@@ -754,11 +754,6 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .connector-wrap::before{display:none;}
 .energy-ribbon svg{display:block;width:100%;height:auto;overflow:visible;}
 .form-col{isolation:isolate;}
-.energy-ribbon-svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:-1;opacity:0;transition:opacity .35s ease;}
-.energy-ribbon-svg.on{opacity:1;}
-.energy-ribbon-svg .er-glint{stroke-dasharray:46 420;animation:erflow 5.5s linear infinite;}
-@keyframes erflow{from{stroke-dashoffset:466;}to{stroke-dashoffset:0;}}
-@media(prefers-reduced-motion:reduce){.energy-ribbon-svg .er-glint{animation:none;display:none;}}
 .form-col>.form-panel{padding:20px 14px 0 0;}
 .form-col .row-id{grid-template-columns:1fr 0.9fr 1fr;}
 .form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
@@ -965,7 +960,6 @@ html:has(#resultsWrap[style*="block"]),body:has(#resultsWrap[style*="block"]){ba
 
   <div class="bottom-grid" id="formFields">
     <div class="form-col">
-      <svg class="energy-ribbon-svg" id="energyRibbon" aria-hidden="true" focusable="false"></svg>
       <div class="form-panel">
         
         <input type="email" id="pEmail" style="display:none;" aria-hidden="true" tabindex="-1">
@@ -1290,7 +1284,6 @@ function setMode(rel) {
   p1Ttl.textContent = "Full Name at Birth";
   p2Section.classList.toggle("open", rel);
   relWrap.style.display = rel ? "flex" : "none";
-  if (!rel) { const er = document.getElementById("energyRibbon"); if (er) er.classList.remove("on"); }
   document.querySelector(".submit-wrap").classList.toggle("under-p2", rel);
   const plaque = document.getElementById("metalPlaque");
   plaque.style.display = rel ? "flex" : "none";
@@ -1299,72 +1292,6 @@ function setMode(rel) {
     positionPlaque();
   }
   if (typeof saveDraft === "function") saveDraft();
-}
-
-function drawRibbon() {
-  const svg = document.getElementById("energyRibbon");
-  const formCol = document.querySelector(".form-col");
-  const p1Loc = document.querySelector("#p1Block .loc-field .line-field");
-  const p1Block = document.getElementById("p1Block");
-  const p2Lbl = document.querySelector("#p2Section .section-lbl");
-  const p2Box = document.querySelector("#p2Section > .f");
-  if (!svg || !formCol || !p1Loc || !p1Block || !p2Lbl || !p2Box) return;
-  const open = isRelational && p2Section.classList.contains("open");
-  const fc = formCol.getBoundingClientRect();
-  const r1 = p1Block.getBoundingClientRect();
-  const r2 = p2Box.getBoundingClientRect();
-  if (!open || r2.height < 40 || r2.width < 40) { svg.classList.remove("on"); return; }
-  const lc = p1Loc.getBoundingClientRect();
-  const lb = p2Lbl.getBoundingClientRect();
-  const ox = fc.left, oy = fc.top;
-  const gapY = (lc.bottom + lb.top) / 2 - oy;
-  const xl = (Math.min(r1.left, r2.left) + r2.left) / 2 - ox;
-  const xr = (r1.right + Math.max(fc.right, r2.right)) / 2 - ox;
-  const yS = r2.bottom - oy + 28;
-  const yE = r1.top - oy - 8;
-  const xm = ((r2.left + r1.right) / 2) - ox;
-  const W = Math.max(12, Math.min(34, Math.min(r2.left - fc.left - 8, fc.right - r1.right + 14)));
-  const pts = [
-    [xl - 4, yS], [xl, (yS + gapY) / 2 + 30], [xl + 6, gapY + 34],
-    [r2.left - ox - 4, gapY + 6], [xm - 40, gapY], [xm + 40, gapY], [r1.right - ox + 4, gapY - 6],
-    [xr - 6, gapY - 34], [xr, (gapY + yE) / 2 - 30], [xr + 4, yE]
-  ];
-  const cr = (p0, p1, p2, p3, t) => {
-    const t2 = t * t, t3 = t2 * t;
-    return [0, 1].map(i => 0.5 * ((2 * p1[i]) + (-p0[i] + p2[i]) * t + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * t2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * t3));
-  };
-  const c = [];
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
-    for (let k = 0; k < 24; k++) c.push(cr(p0, p1, p2, p3, k / 24));
-  }
-  c.push(pts[pts.length - 1]);
-  const half = (y) => {
-    const d = Math.min(1, Math.abs(y - gapY) / 130);
-    return (1.1 + (W - 1.1) * Math.pow(d, 1.6)) / 2;
-  };
-  const L = [], R = [];
-  for (let i = 0; i < c.length; i++) {
-    const a = c[Math.max(0, i - 1)], b = c[Math.min(c.length - 1, i + 1)];
-    let dx = b[0] - a[0], dy = b[1] - a[1];
-    const n = Math.hypot(dx, dy) || 1;
-    const u = i / (c.length - 1), e = Math.min(1, Math.min(u, 1 - u) / 0.16);
-    const h = half(c[i][1]) * Math.sin(e * Math.PI / 2);
-    const nx = -dy / n * h, ny = dx / n * h;
-    L.push([c[i][0] + nx, c[i][1] + ny]);
-    R.push([c[i][0] - nx, c[i][1] - ny]);
-  }
-  const f = v => v.map(q => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" ");
-  const center = "M" + c.map(q => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" L");
-  const y1 = yS.toFixed(0), y2 = yE.toFixed(0);
-  svg.setAttribute("viewBox", "0 0 " + fc.width.toFixed(1) + " " + fc.height.toFixed(1));
-  svg.innerHTML =
-    '<defs><linearGradient id="erFill" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="' + fc.width.toFixed(0) + '" y2="' + y2 + '">' +
-    '<stop offset="0" stop-color="#5a5f70"/><stop offset=".22" stop-color="#eef1fb"/><stop offset=".4" stop-color="#8a8fa0"/>' +
-    '<stop offset=".6" stop-color="#fefeff"/><stop offset=".8" stop-color="#8a8fa0"/><stop offset="1" stop-color="#eef1fb"/></linearGradient></defs>' +
-    '<polygon points="' + f(L.concat(R.reverse())) + '" fill="url(#erFill)" fill-opacity=".92"/>' +
-    '<path class="er-glint" d="' + center + '" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".85"/>';
-  svg.classList.add("on");
 }
 
 function positionPlaque() {
@@ -1397,7 +1324,6 @@ function positionPlaque() {
   plaque.style.top = areaTop + (areaHeight - h) / 2 - formColRect.top + "px";
   plaque.style.width = w + "px";
   plaque.style.height = h + "px";
-  drawRibbon();
 }
 
 window.addEventListener("resize", () => {
@@ -1428,13 +1354,6 @@ function alignP2Title() {
   p2Tag.style.top = tagCenter - tagRect.height / 2 + "px";
   p2Tag.style.left = p1Block.getBoundingClientRect().right - formColRect.left + 12 + "px";
 }
-
-if (window.ResizeObserver) {
-  const ribbonRO = new ResizeObserver(() => drawRibbon());
-  ribbonRO.observe(document.querySelector(".form-col"));
-  ribbonRO.observe(p2Section);
-}
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => drawRibbon());
 
 togPill.addEventListener("click", () => setMode(!isRelational));
 
