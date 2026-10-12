@@ -6,7 +6,7 @@
   function place(){raf=0;
     var open=p2.classList.contains('open');img.style.display=open?'block':'none';if(!open)return;
     var f=form.getBoundingClientRect(),a=p1.getBoundingClientRect(),b=p2.getBoundingClientRect();
-    var top=a.bottom-f.top+4,h=Math.max(60,(b.top-f.top)-top-34);
+    var w=f.width,top=a.bottom-f.top-45*w/390,h=195*w/390;
     img.style.top=top+'px';img.style.height=h+'px';img.style.left='0px';img.style.width=f.width+'px';
   }
   function sched(){if(!raf)raf=requestAnimationFrame(place);}

@@ -144,3 +144,22 @@ html.look-base .price-amt{font-size:17px !important;letter-spacing:.06em !import
 /* the energy ribbon: a fine flowing line of light between the two people (relational view only) */
 html.look-base #energyRibbon{position:absolute;z-index:0;pointer-events:none;object-fit:fill;display:none;}
 html.look-base #p2Section.open{margin-top:150px !important;}
+
+/* the note above the relationship choices */
+html.look-base #relNote{display:none;text-align:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.03em;color:var(--ink);margin:10px 0 2px;}
+/* the confirmation window */
+.kye-scrim{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(236,239,241,.78);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:kyeIn .22s ease;}
+@keyframes kyeIn{from{opacity:0}to{opacity:1}}
+.kye-card{width:min(330px,100%);background:linear-gradient(180deg,#fbfcfc,#eef1f3);border-radius:24px;padding:26px 22px 22px;text-align:center;color:#101114;box-shadow:0 1px 0 #fff inset,0 26px 60px -12px rgba(20,24,30,.38),0 2px 6px rgba(20,24,30,.12);}
+.kye-kicker{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:#3a3d44;}
+.kye-type{font-family:'Libre Baskerville',Baskerville,serif;font-style:italic;font-size:34px;line-height:1.15;margin:10px 0 2px;color:#101114;}
+.kye-names{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:#2a2d34;}
+.kye-note{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.4;color:#3a3d44;margin:14px 6px 20px;}
+.kye-row{display:flex;justify-content:center;gap:18px;}
+.kye-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.24em;text-transform:uppercase;border:none;cursor:pointer;width:122px;height:48px;border-radius:50%;transform:rotate(-12deg);-webkit-tap-highlight-color:transparent;transition:transform .08s ease;}
+.kye-change{color:#101114;background:linear-gradient(28deg,#8c9096 0%,#c4c7cc 42%,#f3f4f5 78%,#fff 100%);box-shadow:inset 0 2px 1px rgba(255,255,255,.95),inset 0 -4px 6px rgba(40,42,48,.28),-2px 8px 12px rgba(30,32,36,.28);}
+.kye-ok{color:#f4f5f7;background:linear-gradient(28deg,#050507 0%,#17181c 55%,#50525a 100%);box-shadow:inset 0 2px 1px rgba(255,255,255,.35),inset 0 -4px 6px rgba(0,0,0,.5),-2px 8px 12px rgba(30,32,36,.32);}
+.kye-btn:active{transform:rotate(-12deg) scale(.95) translateY(2px);}
+.kye-btn:focus-visible{outline:2px solid #101114;outline-offset:3px;}
+.kye-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:2100;background:#101114;color:#f4f5f7;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 16px;border-radius:999px;}
+@media (prefers-reduced-motion:reduce){.kye-scrim{animation:none;}}
