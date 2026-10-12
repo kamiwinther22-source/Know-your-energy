@@ -128,3 +128,8 @@ html.look-base .pricing-list{justify-content:space-between !important;padding:0 
 html.look-base .hero-continue-btn,html.look-base .gen-btn,html.look-base .price-row,html.look-base .rel-chip{transition:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 html.look-base .hero-continue-btn:active>*,html.look-base .gen-btn:active>*,html.look-base .price-row:active>*{transform:translateY(2.5px) scale(.97);}
 html.look-base .rel-chip:active{padding-top:2px !important;}
+
+/* prices: the same component as Continue / Calculate — same oval, same size, same push — stacked so each is easy to see and press */
+html.look-base .pricing-list{flex-direction:column !important;align-items:center !important;gap:0 !important;margin-top:18px !important;margin-bottom:0 !important;padding:0 !important;}
+html.look-base .price-row{width:226px !important;height:82px !important;max-width:100% !important;margin:0 0 58px 0 !important;}
+html.look-base .price-label,html.look-base .price-amt{font-size:17px !important;letter-spacing:.2em !important;}
