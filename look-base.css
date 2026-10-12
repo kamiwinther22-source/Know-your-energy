@@ -140,3 +140,7 @@ html.look-base .pricing-list>span,html.look-base .pricing-list .glow-ring-sm{fle
 html.look-base .price-row{width:100% !important;max-width:124px !important;height:54px !important;margin:0 0 50px 0 !important;flex-direction:column !important;gap:1px;}
 html.look-base .price-label{font-size:9.5px !important;letter-spacing:.14em !important;line-height:1.1 !important;}
 html.look-base .price-amt{font-size:17px !important;letter-spacing:.06em !important;line-height:1.05 !important;}
+
+/* the energy ribbon: a fine flowing line of light between the two people (relational view only) */
+html.look-base #energyRibbon{position:absolute;z-index:0;pointer-events:none;object-fit:fill;display:none;}
+html.look-base #p2Section.open{margin-top:150px !important;}
