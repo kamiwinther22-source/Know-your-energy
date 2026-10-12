@@ -112,3 +112,13 @@ html.look-base .row-id .line-field,html.look-base.no-shadows .row-id .line-field
 /* data-entry text: one smaller, consistent size everywhere, so MM/DD/YYYY shows all four year digits */
 html.look-base #formStep input,html.look-base #formStep select,html.look-base #heroEmail,html.look-base #formStep input::placeholder{font-size:14px !important;letter-spacing:0 !important;font-style:italic;}
 html.look-base #formStep select{font-style:normal;}
+
+/* narrow-phone fixes: Person 2 label stays on one line beside the name row; AM/PM fits; entry text a touch smaller */
+html.look-base .person-tag{white-space:nowrap !important;}
+html.look-base #formStep #p2Section .person-tag{left:auto !important;right:0 !important;}
+html.look-base #formStep .row-birth .row-time{grid-template-columns:1.25fr 1fr !important;}
+html.look-base #formStep .row-time .ampm-field{min-width:0;padding-left:.2rem !important;padding-right:.1rem !important;}
+html.look-base #formStep .ampm-field select{width:100% !important;padding:0 !important;font-size:13px !important;text-align:center;}
+html.look-base #formStep input,html.look-base #formStep input::placeholder,html.look-base #heroEmail{font-size:13px !important;}
+html.look-base .price-row{width:min(118px,30%) !important;}
+html.look-base .pricing-list{justify-content:space-between !important;padding:0 2px;}

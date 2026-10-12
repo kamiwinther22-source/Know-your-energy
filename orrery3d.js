@@ -75,7 +75,7 @@ var place=function(t){for(const p of planets){const a=THREE.MathUtils.degToRad(p
 function size(){const r=svg.getBoundingClientRect();const w=svg.clientWidth||svg.parentNode.clientWidth,h=svg.clientHeight||w*185/376;
   renderer.setPixelRatio(Math.min(4,(devicePixelRatio||1)*Math.max(1,r.width/(w||1))));renderer.setSize(w,h,false);}
 new ResizeObserver(size).observe(host);size();
-const still=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now();let first=true;
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&]still=1\b/.test(location.search)||window.__still===true,t0=performance.now();let first=true;
 function frame(now){place(still?0:(now-t0)/1000);
   if(first){first=false;for(const q of pCubes){q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);}}
   capture(cubeCam,sun);const q=pCubes[pi=(pi+1)%pCubes.length];q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);
