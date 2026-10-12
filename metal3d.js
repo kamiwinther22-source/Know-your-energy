@@ -7,7 +7,7 @@ import * as THREE from 'three';
 const root=document.documentElement,Q=new URLSearchParams(location.search);
 if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'0',shade:'0',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'0',by:'0',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
 const num=(k,d)=>{const v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
-const TILT=12*Math.PI/180,FULL=Q.get('full')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TILT=12*Math.PI/180,FULL=Q.get('full')==='1'||Q.get('final')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAnimationFrame(t);t();});
 if(!window.__eq)throw new Error('no environment');
 
@@ -57,7 +57,7 @@ function build(){
   const specs=els.map(e=>{const b=e.getBoundingClientRect();return[Math.round(b.left+b.width/2+scrollX),Math.round(b.top+b.height/2+scrollY),e.offsetWidth,e.offsetHeight,e.classList.contains('active')?1:0].join()}).join('|');
   const key=[W,H,Math.round(sx),Math.round(sy),specs].join('/');if(key===last)return;last=key;page={W,H,sx,sy};
   const vw=FULL?W:innerWidth,vh=FULL?H:innerHeight;
-  renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));renderer.setSize(vw,vh,false);cv.style.width=vw+'px';cv.style.height=vh+'px';
+  renderer.setPixelRatio(Math.max(1,Math.min(2,devicePixelRatio||1,4096/Math.max(vh,1))));renderer.setSize(vw,vh,false);cv.style.width=vw+'px';cv.style.height=vh+'px';
   if(plate){plate.geometry.dispose();group.remove(plate);}
   items.forEach(i=>{i.mesh.traverse(o=>{if(o.geometry)o.geometry.dispose();});group.remove(i.mesh);if(i.mir){group.remove(i.mir);}});items=[];
   group.position.set(W/2,-H/2,0);
@@ -121,8 +121,8 @@ function loop(t){requestAnimationFrame(loop);if(document.hidden)return;
 requestAnimationFrame(loop);
 const need=()=>{needs=true;};
 addEventListener('resize',need);addEventListener('load',need);
-addEventListener('scroll',()=>{tilt.ty=((scrollY/Math.max(1,page.H-innerHeight))-.5)*.05;need();},{passive:true});
-if(!REDUCED){addEventListener('pointermove',e=>{tilt.tx=(e.clientY/innerHeight-.5)*-.035;tilt.ty=(e.clientX/innerWidth-.5)*.045;},{passive:true});
+if(Q.get('final')!=='1')addEventListener('scroll',()=>{tilt.ty=((scrollY/Math.max(1,page.H-innerHeight))-.5)*.05;need();},{passive:true});
+if(!REDUCED&&Q.get('final')!=='1'){addEventListener('pointermove',e=>{tilt.tx=(e.clientY/innerHeight-.5)*-.035;tilt.ty=(e.clientX/innerWidth-.5)*.045;},{passive:true});
   addEventListener('deviceorientation',e=>{if(e.gamma==null)return;tilt.ty=Math.max(-.5,Math.min(.5,e.gamma/45))*.045;tilt.tx=Math.max(-.5,Math.min(.5,(e.beta-45)/60))*-.035;},{passive:true});}
 new ResizeObserver(need).observe(document.body);
 new MutationObserver(need).observe(document.body,{attributes:true,childList:true,subtree:true,attributeFilter:['class','style']});

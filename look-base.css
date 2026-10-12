@@ -46,7 +46,8 @@ html.look-base #p2Section.open .person-tag{top:-30px !important;}
 html.look-base #formStep .submit-wrap,html.look-base #formStep .submit-wrap.under-p2{width:100% !important;margin-left:0 !important;margin-right:0 !important;justify-content:center !important;}
 
 /* the optional reflective surface (?refl=1) sits behind everything */
-html.look-base #metal3d{position:fixed;left:0;top:0;pointer-events:none;z-index:0;}
+html.look-base #metal3d{position:absolute;left:0;top:0;pointer-events:none;}
+html.look-base #metalBg{position:absolute;left:0;top:0;width:100%;z-index:0;pointer-events:none;}
 html.look-base .content{position:relative;z-index:1;}
 
 /* when the 3D scene draws the buttons, the page's own ovals become transparent controls */
