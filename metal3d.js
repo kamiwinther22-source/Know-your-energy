@@ -88,8 +88,8 @@ const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromE
     let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
     const it={mesh:m,mir,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
-      e.addEventListener('pointerenter',()=>set(-3));e.addEventListener('pointerleave',()=>set(0));
-      e.addEventListener('pointerdown',()=>set(-7));e.addEventListener('pointerup',()=>set(-3));e.addEventListener('focus',()=>set(-3));e.addEventListener('blur',()=>set(0));}
+      e.addEventListener('pointerenter',()=>set(-1));e.addEventListener('pointerleave',()=>set(0));e.addEventListener('pointercancel',()=>set(0));
+      e.addEventListener('pointerdown',()=>set(-8));e.addEventListener('pointerup',()=>set(-1));e.addEventListener('focus',()=>set(-3));e.addEventListener('blur',()=>set(0));}
   });
   needs=true;root.classList.add('m3d');
 }
@@ -100,7 +100,8 @@ function frame(t){
   items.forEach(i=>{const d=i.target-i.press;if(Math.abs(d)>.05){i.press+=d*.25;moving=true;}else i.press=i.target;i.mesh.position.z=i.z+i.press;
     if(!FULL){const k=(D-(i.z+i.press+i.top))/D;   // a raised top face is magnified by perspective: pull it in so it lands exactly under its page element
       i.mesh.position.x=ccx+(i.lx-ccx)*k;i.mesh.position.y=ccy+(i.ly-ccy)*k;i.mesh.scale.set(k,k,1);}
-    if(i.mir){i.mir.position.set(i.mesh.position.x,i.mesh.position.y-i.mir.userData.h*.62*(FULL?1:(i.mesh.scale.x||1)),-(i.z+i.press)*.5);i.mir.scale.set(i.mesh.scale.x,i.mesh.scale.y*.7,-.5);}});
+    if(FULL){const pr=Math.max(0,-i.press),s=1-pr*.0105;i.mesh.scale.set(s,s,1);i.mesh.position.y=i.ly-pr*.8;}   // pressed = sunk and slightly smaller
+    if(i.mir){const pr=FULL?Math.max(0,-i.press):0;i.mir.position.set(i.mesh.position.x,i.mesh.position.y-i.mir.userData.h*.62*(FULL?1:(i.mesh.scale.x||1))+pr*.9,-(i.z+i.press)*.5);i.mir.scale.set(i.mesh.scale.x,i.mesh.scale.y*.7,-.5);}});
   tilt.x+=(tilt.tx-tilt.x)*.06;tilt.y+=(tilt.ty-tilt.y)*.06;if(Math.abs(tilt.tx-tilt.x)>.0002||Math.abs(tilt.ty-tilt.y)>.0002)moving=true;
   group.rotation.set(tilt.x,tilt.y,0);
   const d=(drift&&!REDUCED)?Math.sin(t/9000)*1:0,sx=page.sx+d*70,sy=page.sy+Math.cos(t/11000)*(drift?1:0)*40;

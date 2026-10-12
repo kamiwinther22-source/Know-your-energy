@@ -123,3 +123,8 @@ html.look-base #formStep .ampm-field select{width:100% !important;padding:0 !imp
 html.look-base #formStep input,html.look-base #formStep input::placeholder,html.look-base #heroEmail{font-size:13px !important;}
 html.look-base .price-row{width:min(118px,30%) !important;}
 html.look-base .pricing-list{justify-content:space-between !important;padding:0 2px;}
+
+/* pushable: the lettering sinks with the button while it is pressed */
+html.look-base .hero-continue-btn,html.look-base .gen-btn,html.look-base .price-row,html.look-base .rel-chip{transition:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+html.look-base .hero-continue-btn:active>*,html.look-base .gen-btn:active>*,html.look-base .price-row:active>*{transform:translateY(2.5px) scale(.97);}
+html.look-base .rel-chip:active{padding-top:2px !important;}
