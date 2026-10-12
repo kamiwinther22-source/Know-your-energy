@@ -133,3 +133,10 @@ html.look-base .rel-chip:active{padding-top:2px !important;}
 html.look-base .pricing-list{flex-direction:column !important;align-items:center !important;gap:0 !important;margin-top:18px !important;margin-bottom:0 !important;padding:0 !important;}
 html.look-base .price-row{width:226px !important;height:82px !important;max-width:100% !important;margin:0 0 58px 0 !important;}
 html.look-base .price-label,html.look-base .price-amt{font-size:17px !important;letter-spacing:.2em !important;}
+
+/* prices: one row of three, the same oval as Continue (slightly shorter so three fit a phone), duration small over a larger price */
+html.look-base .pricing-list{flex-direction:row !important;justify-content:space-between !important;align-items:flex-start !important;gap:8px !important;margin-top:22px !important;padding:0 !important;}
+html.look-base .pricing-list>span,html.look-base .pricing-list .glow-ring-sm{flex:1 1 0;min-width:0;display:flex;justify-content:center;}
+html.look-base .price-row{width:100% !important;max-width:124px !important;height:54px !important;margin:0 0 50px 0 !important;flex-direction:column !important;gap:1px;}
+html.look-base .price-label{font-size:9.5px !important;letter-spacing:.14em !important;line-height:1.1 !important;}
+html.look-base .price-amt{font-size:17px !important;letter-spacing:.06em !important;line-height:1.05 !important;}
