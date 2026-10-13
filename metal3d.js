@@ -7,7 +7,7 @@ import * as THREE from 'three';
 const root=document.documentElement,Q=new URLSearchParams(location.search);
 if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'0',shade:'0',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'0',by:'0',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
 const num=(k,d)=>{const v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
-const TILT=12*Math.PI/180,FULL=Q.get('full')==='1'||Q.get('final')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches,OLDBG=Q.get('bg')==='old';   // final look: only the old flat plate is replaced by the brushed-metal background (brushed-bg.js) unless ?bg=old; reflections and the point of light stay
+const TILT=12*Math.PI/180,FULL=Q.get('full')==='1'||Q.get('final')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches,OLDBG=Q.get('bg')==='old';   // final look: only the old flat plate is replaced by the brushed-metal background (brushed-bg.js) unless ?bg=old; the button/solar-system reflections stay, the white point of light is gone
 await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAnimationFrame(t);t();});
 if(!window.__eq)throw new Error('no environment');
 
@@ -87,7 +87,7 @@ function build(){
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
 const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',.5);pmat.roughness=num('pr',.03);pmat.metalness=1;pmat.color.set(0xffffff);pmat.depthWrite=false;}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1')plate.renderOrder=-10;group.add(plate);plate.visible=OLDBG||Q.get('final')!=='1';
-  if(Q.get('final')==='1'){if(spec){group.remove(spec);spec.geometry.dispose();}spec=new THREE.Mesh(new THREE.PlaneGeometry(page.W,page.H,1,1),specMat);spec.position.set(0,0,num('gz',.6));spec.renderOrder=3;group.add(spec);}
+  if(Q.get('final')==='1'){if(spec){group.remove(spec);spec.geometry.dispose();}spec=new THREE.Mesh(new THREE.PlaneGeometry(page.W,page.H,1,1),specMat);spec.position.set(0,0,num('gz',.6));spec.renderOrder=3;spec.visible=OLDBG;group.add(spec);}
 
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
