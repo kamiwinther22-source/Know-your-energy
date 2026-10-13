@@ -1335,7 +1335,14 @@ function drawFlow() {
   let seed = 11;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
   const f1 = n => n.toFixed(1);
-  const axis = x => { const t = (x - X0) / (X1 - X0); return T + 0.55 * H - 0.24 * H * t + 0.27 * H * Math.sin(6.283 * t); };
+  const shape = new URLSearchParams(location.search).get("shape") || "a";
+  const sm = t => t * t * t * (t * (6 * t - 15) + 10);
+  const axis = x => {
+    const t = (x - X0) / (X1 - X0);
+    if (shape === "b") return T + 0.5 * H - 0.1 * H * (2 * t - 1) + 0.24 * H * Math.sin(6.283 * t);
+    if (shape === "c") return T + 0.86 * H - 0.72 * H * Math.pow(t, 1.7);
+    return T + 0.82 * H - 0.64 * H * sm(t);
+  };
   const spread = t => 0.62 + 0.38 * Math.cos(6.283 * (1.35 * t + 0.15));
   const Yat = (s, t) => { const x = X0 + (X1 - X0) * t; return axis(x) + s.c * spread(t) + s.w * Math.sin(6.283 * s.f * t + s.ph); };
   const pathOf = (s, off) => { let d = ""; for (let n = 0; n <= N; n++) { const t = n / N; if (t < s.a || t > s.b) continue; d += (d ? "L" : "M") + f1(X0 + (X1 - X0) * t) + "," + f1(Yat(s, t) + (off || 0)) + " "; } return d; };
