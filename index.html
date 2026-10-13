@@ -1344,6 +1344,7 @@ function drawFlow() {
     const th = Math.PI * (-CURL[0] + (2 + 2 * CURL[0]) * t);
     return T + 0.38 * H - CURL[1] * H * Math.sin(th);
   };
+  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.28); return Math.sin(e * Math.PI / 2); };
   const Y = (i, x) => { const t = (x - X0) / (X1 - X0); return axis(x) + i.A * k * Math.sin(6.283 * t * i.f + i.ph) * Math.pow(env(t, i.a, i.b), 0.6); };
   const f1 = n => n.toFixed(1);
   let out = '<defs>' +
