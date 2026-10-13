@@ -48,7 +48,8 @@ function plateStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.
   const P=[[.585,40,'#4c5258'],[.62,26,'#ffffff'],[.655,48,'#6a7077'],[.695,30,'#ffffff'],[.73,56,'#3d4349'],[.775,26,'#ffffff'],[.81,44,'#767c83'],[.85,30,'#ffffff'],[.89,40,'#565c63']];
   for(const [u,w,col] of P)bar(u,w,col);
   const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;}
-function buttonStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');   // what a raised chrome button truly sees: dark room, the sun's box above-right, the pale sheet below
+function buttonStudio(flip){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');if(flip){g.translate(0,H);g.scale(1,-1);}   // flip = the mirror world: everything upside down, the sun included
+    // what a raised chrome button truly sees: dark room, the sun's box above-right, the pale sheet below
   const sky=g.createLinearGradient(0,0,0,H);
   sky.addColorStop(0,'#aeb3ba');sky.addColorStop(.3,'#4a4e55');sky.addColorStop(.47,'#16171b');sky.addColorStop(.53,'#0f1013');sky.addColorStop(.6,'#7c8187');sky.addColorStop(.75,'#d9dce0');sky.addColorStop(1,'#eef0f2');
   g.fillStyle=sky;g.fillRect(0,0,W,H);
@@ -59,9 +60,9 @@ function buttonStudio(){const W=2048,H=1024,c=document.createElement('canvas');c
   both(.0,.74,150,90,'#9ea3aa',6);        // a dimmer fill above-left, so the left rim isn't black
   both(.5,.36,170,34,'#8d9298',6);        // a faint bounce off the sheet below-right
   const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;}
-let btnEnv=null;const btnMats={};
+let btnEnv=null,btnEnvFlip=null;const btnMats={};
 function btnMat(role){if(Q.get('final')!=='1'||role==='dark')return mat(ROLE[role]);
-  if(!btnEnv)btnEnv=pm.fromEquirectangular(buttonStudio()).texture;
+  if(!btnEnv){btnEnv=pm.fromEquirectangular(buttonStudio(false)).texture;btnEnvFlip=pm.fromEquirectangular(buttonStudio(true)).texture;}
   return btnMats[role]||(btnMats[role]=(()=>{const m=mat(ROLE[role]).clone();m.envMap=btnEnv;m.envMapIntensity=num('benv',1.3);return m;})());}
 let plate=null,items=[],last='',page={W:0,H:0,sx:0,sy:0},tilt={x:0,y:0,tx:0,ty:0},drift=0,needs=true;
 function sun(){const s=document.querySelector('.sun-cta');if(!s)return[0,0];const r=s.getBoundingClientRect();return[r.left+r.width/2+scrollX,r.top+r.height/2+scrollY];}
@@ -82,7 +83,7 @@ function build(){
   for(let i=0;i<n.count;i++){const u=P.getX(i)/W+.5,v=P.getY(i)/H+.5;
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
-const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1'){plate.material=new THREE.MeshBasicMaterial({color:0xe4e7ea,transparent:true,opacity:num('pop',.62),depthWrite:true});}group.add(plate);
+const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1'){plate.material=new THREE.MeshBasicMaterial({color:0xe4e7ea,transparent:true,opacity:num('pop',.7),depthWrite:true});}group.add(plate);
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;
@@ -100,7 +101,7 @@ const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromE
       const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=PUSH?(T+bev-.8):topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;const oe=mat(ROLE[role]).envMap||null;mir.traverse(o=>{if(o.material){o.material=o.material.clone();if(o.material.envMap===btnEnv)o.material.envMap=oe;o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
+    let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();if(o.material.envMap===btnEnv){o.material.envMap=btnEnvFlip;o.material.envMapIntensity=num('menv',.8);}if(o.isMesh&&o.geometry&&o.geometry.groups&&o.geometry.groups.length>=2&&o.material.envMap===btnEnvFlip){const cap=inlayLight.clone();cap.side=THREE.DoubleSide;o.material=[cap,o.material];}o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
     const it={mesh:m,mir,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-1));e.addEventListener('pointerleave',()=>set(0));e.addEventListener('pointercancel',()=>set(0));
