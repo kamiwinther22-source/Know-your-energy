@@ -754,6 +754,11 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .connector-wrap::before{display:none;}
 .energy-ribbon svg{display:block;width:100%;height:auto;overflow:visible;}
 .form-col{isolation:isolate;}
+.flow-art{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:-1;opacity:0;transition:opacity .5s ease;}
+.flow-art.on{opacity:1;}
+.flow-art .fa-g{animation:fatw 4.6s ease-in-out infinite;}
+@keyframes fatw{0%,100%{opacity:.25;}50%{opacity:1;}}
+@media(prefers-reduced-motion:reduce){.flow-art .fa-g{animation:none;opacity:.8;}}
 .form-col>.form-panel{padding:20px 14px 0 0;}
 .form-col .row-id{grid-template-columns:1fr 0.9fr 1fr;}
 .form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
@@ -815,6 +820,10 @@ html:has(#resultsWrap[style*="block"]),body:has(#resultsWrap[style*="block"]){ba
 #listenBtn,#cardExpandListenBtn,.card-expand-listen{display:none !important;}
 
 </style>
+<script>(function(){var FIN=/[?&]look=final\b/.test(location.search);
+if(FIN||/[?&]look=base\b/.test(location.search)){if(FIN){var R=document.documentElement;R.classList.add('pre');var ps=document.createElement('style');ps.textContent='html,body{background:#eceff1 !important}html.pre body{opacity:0}body{transition:opacity .7s ease}';document.head.appendChild(ps);var rv=function(){setTimeout(function(){R.classList.remove('pre');},250);};new MutationObserver(function(){if(R.classList.contains('m3d')){rv();}}).observe(R,{attributes:true,attributeFilter:['class']});setTimeout(function(){R.classList.remove('pre');},7000);
+document.documentElement.classList.add('no-shadows','inlay-lt');document.addEventListener('DOMContentLoaded',function(){var f=document.querySelector('.free-reading-line');if(f)f.innerHTML='<span class="fr-a">first reading</span><span class="fr-b">free</span>';});}document.documentElement.classList.add('look-base');if(/[?&]shadows=0\b/.test(location.search))document.documentElement.classList.add('no-shadows');var b=document.createElement('link');b.rel='stylesheet';b.href='look-base.css';document.head.appendChild(b);if(/[?&]labels=below\b/.test(location.search)){document.documentElement.classList.add('labels-below');var sl=function(){document.querySelectorAll('.hero-continue-btn,.gen-btn,.price-row,.rel-chip').forEach(function(b){var t=Array.prototype.map.call(b.querySelectorAll('span'),function(s){return s.textContent.trim();}).filter(Boolean).join(' ')||b.textContent.replace(/\s+/g,' ').trim();if(t&&b.dataset.label!==t)b.dataset.label=t;});};document.addEventListener('DOMContentLoaded',function(){sl();new MutationObserver(sl).observe(document.body,{childList:true,subtree:true});});}
+if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMContentLoaded',function(){var m=document.createElement('script');m.type='module';m.src='metal3d.js';document.body.appendChild(m);if(FIN){var rf=document.createElement('script');rf.src='reflect.js';document.body.appendChild(rf);var cf=document.createElement('script');cf.src='confirm.js';document.body.appendChild(cf);var bs=document.createElement('script');bs.src='brushed-bg.js';document.body.appendChild(bs);}});return;}if(!/[?&]look=metal\b/.test(location.search))return;document.documentElement.classList.add('look-metal');var l=document.createElement('link');l.rel='stylesheet';l.href='look-metal.css';document.head.appendChild(l);document.addEventListener('DOMContentLoaded',function(){var s=document.createElement('script');s.src='look-metal.js';document.body.appendChild(s);var m=document.createElement('script');m.type='module';m.src='metal3d.js';document.body.appendChild(m);});})();</script>
 </head>
 <body>
 
@@ -960,6 +969,7 @@ html:has(#resultsWrap[style*="block"]),body:has(#resultsWrap[style*="block"]){ba
 
   <div class="bottom-grid" id="formFields">
     <div class="form-col">
+      <svg class="flow-art" id="flowArt" aria-hidden="true" focusable="false"></svg>
       <div class="form-panel">
         
         <input type="email" id="pEmail" style="display:none;" aria-hidden="true" tabindex="-1">
@@ -1284,6 +1294,7 @@ function setMode(rel) {
   p1Ttl.textContent = "Full Name at Birth";
   p2Section.classList.toggle("open", rel);
   relWrap.style.display = rel ? "flex" : "none";
+  if (!rel) { const fa = document.getElementById("flowArt"); if (fa) fa.classList.remove("on"); }
   document.querySelector(".submit-wrap").classList.toggle("under-p2", rel);
   const plaque = document.getElementById("metalPlaque");
   plaque.style.display = rel ? "flex" : "none";
@@ -1292,6 +1303,146 @@ function setMode(rel) {
     positionPlaque();
   }
   if (typeof saveDraft === "function") saveDraft();
+}
+
+const FLOW_PALETTES = {
+  chrome: ["#c0bbb4", "#ffffff", "#9c968d"],
+  teal:   ["#8fcfcf", "#eef9f8", "#9fb4c6"],
+  white:  ["#dfe6ee", "#ffffff", "#a9b3c4"],
+  silver: ["#8a8fa0", "#ffffff", "#c5cad4"],
+  lilac:  ["#8c82c8", "#f1edfb", "#d9c4b0"],
+  rose:   ["#c2323f", "#f7e3e5", "#9aa0ab"]
+};
+
+function drawFlow() {
+  const svg = document.getElementById("flowArt");
+  const formCol = document.querySelector(".form-col");
+  const p1Loc = document.querySelector("#p1Block .loc-field .line-field");
+  const p1Block = document.getElementById("p1Block");
+  const p2Lbl = document.querySelector("#p2Section .section-lbl");
+  const p2Box = document.querySelector("#p2Section > .f");
+  if (!svg || !formCol || !p1Loc || !p1Block || !p2Lbl || !p2Box) return;
+  const open = isRelational && p2Section.classList.contains("open");
+  const fc = formCol.getBoundingClientRect();
+  const r2 = p2Box.getBoundingClientRect();
+  if (!open || r2.height < 40) { svg.classList.remove("on"); return; }
+  const r1 = p1Block.getBoundingClientRect();
+  const T = p1Loc.getBoundingClientRect().bottom - fc.top + 8;
+  const B = p2Lbl.getBoundingClientRect().top - fc.top - 6;
+  const H = B - T;
+  if (H < 60) { svg.classList.remove("on"); return; }
+  const pal = FLOW_PALETTES[new URLSearchParams(location.search).get("flow")] || FLOW_PALETTES.chrome;
+  const f1 = n => n.toFixed(1);
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+  // A small, fine diagonal in the middle of the gap between the two blocks (lower left to upper right).
+  // Spans the page (a little space at each edge): lower left, through the gap, to upper right.
+  const xL = 14, xR = Math.min(fc.width, innerWidth - fc.left) - 14;
+  const cx = (xL + xR) / 2, cy = T + H * 0.5, Hy = H * 0.5;
+  const LEN = Math.hypot(xR - xL, 2 * Hy), ANG = -Math.atan2(2 * Hy, xR - xL), AMP = 27, CURL = 0.22;
+  const anchors = [];
+  for (let q = 0; q <= 12; q++) {
+    const t = q / 12, ux = LEN * (t - 0.5);
+    const uy = -AMP * Math.sin(Math.PI * (-CURL + (2 + 2 * CURL) * t));
+    anchors.push([cx + ux * Math.cos(ANG) - uy * Math.sin(ANG), cy + ux * Math.sin(ANG) + uy * Math.cos(ANG)]);
+  }
+  // smooth centreline (Catmull-Rom), then resample evenly along its length
+  const cr = (p0, p1, p2, p3, t) => { const t2 = t * t, t3 = t2 * t; return [0, 1].map(i => 0.5 * ((2 * p1[i]) + (-p0[i] + p2[i]) * t + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * t2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * t3)); };
+  const dense = [];
+  for (let i = 0; i < anchors.length - 1; i++) {
+    const p0 = anchors[Math.max(0, i - 1)], p1 = anchors[i], p2 = anchors[i + 1], p3 = anchors[Math.min(anchors.length - 1, i + 2)];
+    for (let q = 0; q < 30; q++) dense.push(cr(p0, p1, p2, p3, q / 30));
+  }
+  dense.push(anchors[anchors.length - 1]);
+  const cum = [0];
+  for (let i = 1; i < dense.length; i++) cum.push(cum[i - 1] + Math.hypot(dense[i][0] - dense[i - 1][0], dense[i][1] - dense[i - 1][1]));
+  const N = 240, total = cum[cum.length - 1], C = [], NR = [];
+  for (let n = 0; n <= N; n++) {
+    const d = total * n / N; let j = 1; while (j < cum.length - 1 && cum[j] < d) j++;
+    const u = (d - cum[j - 1]) / ((cum[j] - cum[j - 1]) || 1);
+    C.push([dense[j - 1][0] + (dense[j][0] - dense[j - 1][0]) * u, dense[j - 1][1] + (dense[j][1] - dense[j - 1][1]) * u]);
+  }
+  for (let n = 0; n <= N; n++) {
+    const a = C[Math.max(0, n - 1)], b = C[Math.min(N, n + 1)];
+    const dx = b[0] - a[0], dy = b[1] - a[1], m = Math.hypot(dx, dy) || 1;
+    NR.push([-dy / m, dx / m]);
+  }
+  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.4); return Math.sin(e * Math.PI / 2); };
+  const at = (s, n, off) => { const t = n / N; const o = (off || 0) + s.A * Math.sin(6.283 * t * s.f + s.ph) * Math.pow(env(t, s.a, s.b), 0.6); return [C[n][0] + NR[n][0] * o, C[n][1] + NR[n][1] * o]; };
+  const pl = a => "M" + a.map(q => f1(q[0]) + "," + f1(q[1])).join(" L");
+
+  let out = '<defs>' +
+    '<linearGradient id="fa1" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="' + pal[0] + '"/><stop offset=".5" stop-color="' + pal[1] + '"/><stop offset="1" stop-color="' + pal[2] + '"/></linearGradient>' +
+    '<linearGradient id="fa2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="' + pal[0] + '"/><stop offset="1" stop-color="#fff"/></linearGradient>' +
+    '<linearGradient id="fa3" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="' + pal[2] + '"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="' + pal[0] + '"/></linearGradient>' +
+    '<radialGradient id="fah"><stop offset="0" stop-color="' + pal[2] + '" stop-opacity=".38"/><stop offset=".45" stop-color="' + pal[2] + '" stop-opacity=".14"/><stop offset="1" stop-color="' + pal[2] + '" stop-opacity="0"/></radialGradient>' +
+    '<radialGradient id="fas"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
+    '<filter id="fab"><feGaussianBlur stdDeviation="1.6"/></filter>' +
+    '<linearGradient id="famg" gradientUnits="userSpaceOnUse" x1="' + f1(xL) + '" y1="0" x2="' + f1(xR) + '" y2="0"><stop offset="0" stop-color="#000"/><stop offset=".2" stop-color="#fff"/><stop offset=".8" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>' +
+    '<mask id="fam" maskUnits="userSpaceOnUse" x="0" y="0" width="' + f1(fc.width) + '" height="' + f1(fc.height) + '"><rect x="0" y="0" width="' + f1(fc.width) + '" height="' + f1(fc.height) + '" fill="url(#famg)"/></mask></defs><g mask="url(#fam)">';
+
+  // four fine twisting ribbons, each narrowing to a thread and widening again
+  const rs = [
+    { hm: 1.7, hp: 0.1, a: 0,   b: .9,  A: 11, f: 1.3, ph: 0.4, w: 17, m: 1.5, ps: 0.3, g: "fa1", o: .5,  ec: pal[2], blur: 1 },
+    { hm: 2.1, hp: 0.5, a: .06, b: 1,   A: 10, f: 1.7, ph: 2.6, w: 14, m: 1.8, ps: 1.7, g: "fa2", o: .55, ec: pal[2] },
+    { hm: 1.4, hp: 0.8, a: .02, b: .84, A: 12, f: 1.1, ph: 4.4, w: 11, m: 2.1, ps: 2.9, g: "fa3", o: .5,  ec: pal[2] },
+    { hm: 2.6, hp: 0.3, a: .16, b: .98, A: 8,  f: 2.1, ph: 1.3, w: 8,  m: 2.6, ps: 0.9, g: "fa1", o: .55, ec: pal[2] }
+  ];
+  const centers = rs.map(i => {
+    const Lp = [], Rp = [], Cc = [];
+    for (let n = 0; n <= N; n++) {
+      const t = n / N, c = at(i, n, 0);
+      const w = i.w * (0.08 + 0.92 * Math.abs(Math.sin(6.283 * t * i.m + i.ps))) * env(t, i.a, i.b);
+      Cc.push(c); Lp.push([c[0] + NR[n][0] * w / 2, c[1] + NR[n][1] * w / 2]); Rp.push([c[0] - NR[n][0] * w / 2, c[1] - NR[n][1] * w / 2]);
+    }
+    out += '<polygon points="' + Lp.concat(Rp.slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1] + 2.4)).join(" ") + '" fill="#4a4640" fill-opacity=".16" filter="url(#fab)"/>';
+    const CHR = ["#2c2d30", "#857e75", "#b9b3ab", "#ffffff", "#cdc8c1", "#6f6a62"];
+    const base = [0, .07, .3, .5, .64, .9, 1];
+    const edge = k => { const pts = []; for (let n = 0; n <= N; n++) { const t = n / N, sh = (k > 0 && k < 6) ? .1 * Math.sin(6.283 * (t * i.hm + i.hp)) : 0, f = Math.min(1, Math.max(0, base[k] + sh)); pts.push([Lp[n][0] + (Rp[n][0] - Lp[n][0]) * f, Lp[n][1] + (Rp[n][1] - Lp[n][1]) * f]); } return pts; };
+    const E = [0, 1, 2, 3, 4, 5, 6].map(edge);
+    for (let k = 0; k < 6; k++) {
+      out += '<polygon points="' + E[k].concat(E[k + 1].slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1])).join(" ") + '" fill="' + CHR[k] + '" fill-opacity=".88"/>';
+    }
+    return Cc;
+  });
+  // fine hairlines that drift apart and rejoin
+  for (let j = 0; j < 5; j++) {
+    const h = { a: rnd() * .2, b: .8 + rnd() * .2, A: 2.5 + rnd() * 5, f: .9 + rnd() * 1.1, ph: rnd() * 6.28 };
+    const pts = [];
+    for (let n = 0; n <= N; n++) { const t = n / N; if (t < h.a || t > h.b) continue; pts.push(at(h, n, 0)); }
+    const hw = .55 + rnd() * .45;
+    out += '<path d="' + pl(pts) + '" fill="none" stroke="#5b564f" stroke-width="' + f1(hw) + '" opacity=".78" stroke-linecap="round"/>' +
+           '<path d="' + pl(pts) + '" fill="none" stroke="#fff" stroke-width="' + f1(hw * .55) + '" opacity=".95" stroke-linecap="round" transform="translate(0 -.7)"/>';
+  }
+  // loose wisps that leave the main flow and drift away, like the purple strands in the reference
+  for (let j = 0; j < 4; j++) {
+    const a0 = .12 + rnd() * .5, w = { a: a0, b: Math.min(.98, a0 + .22 + rnd() * .2), A: 16 + rnd() * 14, f: .6 + rnd() * .6, ph: rnd() * 6.28 };
+    const pts = [];
+    for (let n = 0; n <= N; n++) { const t = n / N; if (t < w.a || t > w.b) continue; pts.push(at(w, n, (j % 2 ? 1 : -1) * 6)); }
+    out += '<path d="' + pl(pts) + '" fill="none" stroke="#6b665e" stroke-width=".6" opacity=".6" stroke-linecap="round"/>' +
+           '<path d="' + pl(pts) + '" fill="none" stroke="#fff" stroke-width=".4" opacity=".9" stroke-linecap="round" transform="translate(0 -.7)"/>';
+  }
+  // twinkles on the ribbon: bright core with a soft cool halo so they show on a pale page
+  const glint = (x, y, r, big) => {
+    out += '<g class="fa-g" style="animation-delay:-' + f1(rnd() * 4.6) + 's;animation-duration:' + f1(3.2 + rnd() * 3.4) + 's">' +
+           '<circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * (big ? 6 : 5)) + '" fill="url(#fah)"/>' +
+           '<circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * 3) + '" fill="url(#fas)"/>' +
+           '<circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * .6) + '" fill="#fff"/></g>';
+  };
+  for (let j = 0; j < 20; j++) {
+    const c = centers[Math.floor(rnd() * 4)], p = c[26 + Math.floor(rnd() * (N - 52))];
+    glint(p[0] + (rnd() - .5) * 14, p[1] + (rnd() - .5) * 14, .9 + rnd() * rnd() * 2.6, rnd() < .25);
+  }
+  // fine light dust scattered around the flow
+  for (let j = 0; j < 22; j++) {
+    const n = 14 + Math.floor(rnd() * (N - 28)), off = (rnd() - .5) * 2 * (22 + rnd() * 18);
+    glint(C[n][0] + NR[n][0] * off, C[n][1] + NR[n][1] * off, .45 + rnd() * .5, false);
+  }
+  out += '</g>';
+  svg.setAttribute("viewBox", "0 0 " + f1(fc.width) + " " + f1(fc.height));
+  svg.innerHTML = out;
+  svg.classList.add("on");
 }
 
 function positionPlaque() {
@@ -1354,6 +1505,13 @@ function alignP2Title() {
   p2Tag.style.top = tagCenter - tagRect.height / 2 + "px";
   p2Tag.style.left = p1Block.getBoundingClientRect().right - formColRect.left + 12 + "px";
 }
+
+if (window.ResizeObserver) {
+  const flowRO = new ResizeObserver(() => drawFlow());
+  flowRO.observe(document.querySelector(".form-col"));
+  flowRO.observe(p2Section);
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => drawFlow());
 
 togPill.addEventListener("click", () => setMode(!isRelational));
 

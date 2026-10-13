@@ -1,0 +1,7 @@
+/* ?look=final — the brushed-metal surface, behind everything, centred on the sun (see brushed-bg.js).
+   #brushBg is the CSS fallback (page-sized, scrolls with the page); #brushGL is the shaded surface (viewport-sized, fixed; the shader positions everything in page space).
+   Only the old plate is replaced; the reflections stay and the white point of light is gone. ?bg=old shows the old plate. */
+#brushBg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-2;pointer-events:none;}
+#brushGL{position:fixed;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block;}
+/* the solar system's reflection in the metal: clearly visible */
+html.look-base #orrRefl{z-index:1 !important;opacity:.9 !important;mix-blend-mode:multiply;}   /* z-index: always above the metal (the two scripts load in either order, and whichever came last used to cover the other) */   /* multiply: the mirror image darkens whatever it sits on, so it shows on bright rays and deep steel alike */
