@@ -754,6 +754,11 @@ body{background-color:#F6F6F6;background-image:linear-gradient(137.5deg,#F6F6F6 
 .connector-wrap::before{display:none;}
 .energy-ribbon svg{display:block;width:100%;height:auto;overflow:visible;}
 .form-col{isolation:isolate;}
+.flow-art{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:-1;opacity:0;transition:opacity .5s ease;}
+.flow-art.on{opacity:1;}
+.flow-art .fa-g{animation:fatw 4.6s ease-in-out infinite;}
+@keyframes fatw{0%,100%{opacity:.25;}50%{opacity:1;}}
+@media(prefers-reduced-motion:reduce){.flow-art .fa-g{animation:none;opacity:.8;}}
 .form-col>.form-panel{padding:20px 14px 0 0;}
 .form-col .row-id{grid-template-columns:1fr 0.9fr 1fr;}
 .form-col .row-id .line-field{padding-left:0.4rem;padding-right:0.3rem;}
@@ -964,6 +969,7 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
 
   <div class="bottom-grid" id="formFields">
     <div class="form-col">
+      <svg class="flow-art" id="flowArt" aria-hidden="true" focusable="false"></svg>
       <div class="form-panel">
         
         <input type="email" id="pEmail" style="display:none;" aria-hidden="true" tabindex="-1">
@@ -1288,6 +1294,7 @@ function setMode(rel) {
   p1Ttl.textContent = "Full Name at Birth";
   p2Section.classList.toggle("open", rel);
   relWrap.style.display = rel ? "flex" : "none";
+  if (!rel) { const fa = document.getElementById("flowArt"); if (fa) fa.classList.remove("on"); }
   document.querySelector(".submit-wrap").classList.toggle("under-p2", rel);
   const plaque = document.getElementById("metalPlaque");
   plaque.style.display = rel ? "flex" : "none";
@@ -1296,6 +1303,81 @@ function setMode(rel) {
     positionPlaque();
   }
   if (typeof saveDraft === "function") saveDraft();
+}
+
+const FLOW_PALETTES = {
+  teal:   ["#8fcfcf", "#eef9f8", "#9fb4c6"],
+  silver: ["#8a8fa0", "#ffffff", "#c5cad4"],
+  lilac:  ["#8c82c8", "#f1edfb", "#d9c4b0"],
+  rose:   ["#c2323f", "#f7e3e5", "#9aa0ab"]
+};
+
+function drawFlow() {
+  const svg = document.getElementById("flowArt");
+  const formCol = document.querySelector(".form-col");
+  const p1Loc = document.querySelector("#p1Block .loc-field .line-field");
+  const p1Block = document.getElementById("p1Block");
+  const p2Lbl = document.querySelector("#p2Section .section-lbl");
+  const p2Box = document.querySelector("#p2Section > .f");
+  if (!svg || !formCol || !p1Loc || !p1Block || !p2Lbl || !p2Box) return;
+  const open = isRelational && p2Section.classList.contains("open");
+  const fc = formCol.getBoundingClientRect();
+  const r2 = p2Box.getBoundingClientRect();
+  if (!open || r2.height < 40) { svg.classList.remove("on"); return; }
+  const r1 = p1Block.getBoundingClientRect();
+  const T = p1Loc.getBoundingClientRect().bottom - fc.top + 8;
+  const B = p2Lbl.getBoundingClientRect().top - fc.top - 6;
+  const H = B - T;
+  if (H < 60) { svg.classList.remove("on"); return; }
+  const pal = FLOW_PALETTES[new URLSearchParams(location.search).get("flow")] || FLOW_PALETTES.teal;
+  const X0 = r1.left - fc.left - 24;
+  const X1 = Math.min(r2.right + 10, innerWidth - 8) - fc.left;
+  const N = 170, k = H / 142;
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const axis = x => { const t = (x - X0) / (X1 - X0); return T + 0.55 * H - 0.24 * H * t + 0.27 * H * Math.sin(6.283 * t); };
+  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.28); return Math.sin(e * Math.PI / 2); };
+  const Y = (i, x) => { const t = (x - X0) / (X1 - X0); return axis(x) + i.A * k * Math.sin(6.283 * t * i.f + i.ph) * Math.pow(env(t, i.a, i.b), 0.6); };
+  const f1 = n => n.toFixed(1);
+  let out = '<defs>' +
+    '<linearGradient id="fa1" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="' + pal[0] + '"/><stop offset=".5" stop-color="' + pal[1] + '"/><stop offset="1" stop-color="' + pal[2] + '"/></linearGradient>' +
+    '<linearGradient id="fa2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="' + pal[0] + '"/><stop offset="1" stop-color="#fff"/></linearGradient>' +
+    '<linearGradient id="fa3" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="' + pal[2] + '"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="' + pal[0] + '"/></linearGradient>' +
+    '<radialGradient id="fas"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
+    '<filter id="fab"><feGaussianBlur stdDeviation="2.5"/></filter></defs>';
+  const rs = [
+    { a: 0,   b: .86, A: 11, f: 1.5, ph: 0.4, w: 39, m: 1.6, ps: 0.3, g: "fa1", o: .42, ec: pal[0], blur: 1 },
+    { a: .1,  b: 1,   A: 10, f: 1.9, ph: 2.6, w: 34, m: 1.9, ps: 1.7, g: "fa2", o: .5,  ec: pal[2] },
+    { a: .04, b: .78, A: 13, f: 1.2, ph: 4.4, w: 26, m: 2.3, ps: 2.9, g: "fa3", o: .45, ec: pal[0] },
+    { a: .22, b: .97, A: 8,  f: 2.3, ph: 1.3, w: 19, m: 2.7, ps: 0.9, g: "fa1", o: .5,  ec: pal[2] }
+  ];
+  const pl = a => "M" + a.map(q => f1(q[0]) + "," + f1(q[1])).join(" L");
+  const centers = rs.map(i => {
+    const L = [], R = [], C = [];
+    for (let n = 0; n <= N; n++) {
+      const x = X0 + (X1 - X0) * n / N, t = n / N, y = Y(i, x);
+      const w = i.w * k * (0.08 + 0.92 * Math.abs(Math.sin(6.283 * t * i.m + i.ps))) * env(t, i.a, i.b);
+      C.push([x, y]); L.push([x, y - w / 2]); R.push([x, y + w / 2]);
+    }
+    out += '<polygon points="' + L.concat(R.slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1])).join(" ") + '" fill="url(#' + i.g + ')" fill-opacity="' + i.o + '"' + (i.blur ? ' filter="url(#fab)"' : "") + '/>' +
+           '<path d="' + pl(L) + '" fill="none" stroke="#fff" stroke-width=".8" opacity=".85"/>' +
+           '<path d="' + pl(R) + '" fill="none" stroke="' + i.ec + '" stroke-width=".7" opacity=".7"/>';
+    return C;
+  });
+  for (let j = 0; j < 5; j++) {
+    const h = { a: rnd() * .2, b: .8 + rnd() * .2, A: 7 + rnd() * 15, f: .9 + rnd() * 1.1, ph: rnd() * 6.28 };
+    const pts = [];
+    for (let n = 0; n <= N; n++) { const t = n / N; if (t < h.a || t > h.b) continue; const x = X0 + (X1 - X0) * t; pts.push([x, Y(h, x)]); }
+    out += '<path d="' + pl(pts) + '" fill="none" stroke="' + [pal[0], "#fff", pal[2]][j % 3] + '" stroke-width="' + f1(.5 + rnd() * .4) + '" opacity="' + f1(.5 + rnd() * .3) + '" stroke-linecap="round"/>';
+  }
+  for (let j = 0; j < 16; j++) {
+    const c = centers[Math.floor(rnd() * 4)], p = c[34 + Math.floor(rnd() * (N - 68))];
+    const x = p[0] + (rnd() - .5) * 22, y = p[1] + (rnd() - .5) * 19, r = (.9 + rnd() * rnd() * 3.4);
+    out += '<g class="fa-g" style="animation-delay:-' + f1(rnd() * 4.6) + 's;animation-duration:' + f1(3.6 + rnd() * 3) + 's"><circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * 4) + '" fill="url(#fas)"/><circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * .6) + '" fill="#fff"/></g>';
+  }
+  svg.setAttribute("viewBox", "0 0 " + f1(fc.width) + " " + f1(fc.height));
+  svg.innerHTML = out;
+  svg.classList.add("on");
 }
 
 function positionPlaque() {
@@ -1358,6 +1440,13 @@ function alignP2Title() {
   p2Tag.style.top = tagCenter - tagRect.height / 2 + "px";
   p2Tag.style.left = p1Block.getBoundingClientRect().right - formColRect.left + 12 + "px";
 }
+
+if (window.ResizeObserver) {
+  const flowRO = new ResizeObserver(() => drawFlow());
+  flowRO.observe(document.querySelector(".form-col"));
+  flowRO.observe(p2Section);
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => drawFlow());
 
 togPill.addEventListener("click", () => setMode(!isRelational));
 
