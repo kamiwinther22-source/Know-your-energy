@@ -5,7 +5,7 @@
    and the sun drifts very slowly. Motion respects prefers-reduced-motion. URL options: cta=, chip=, price=, plate=, drift=0, full=1 (page-size canvas, for screenshots). */
 import * as THREE from 'three';
 const root=document.documentElement,Q=new URLSearchParams(location.search);
-if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'0',shade:'0',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'0',by:'0',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
+if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'1',shade:'.22',soft:'12',sunz:'1500',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'0',by:'0',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
 const num=(k,d)=>{const v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
 const TILT=12*Math.PI/180,FULL=Q.get('full')==='1'||Q.get('final')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAnimationFrame(t);t();});
