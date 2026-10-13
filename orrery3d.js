@@ -30,6 +30,7 @@ const eq=await new EXRLoader().setDataType(THREE.FloatType).loadAsync(`hdri/${EN
   eq.needsUpdate=true;}
 eq.mapping=THREE.EquirectangularReflectionMapping;eq.wrapS=THREE.RepeatWrapping;eq.offset.x=ENVROT;
 const pmrem=new THREE.PMREMGenerator(renderer);const ENV=pmrem.fromEquirectangular(eq).texture;scene.environment=ENV;
+if(/[?&]look=(metal|base|final)\b/.test(location.search))window.__eq=eq;   // lets the page-wide metal scene reflect the same room
 
 // --- organic cast-silver surface for the planets (fractal noise, no geometric shapes) ---
 function cast(seed,band){const W=512,H=256,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d'),im=g.createImageData(W,H);
@@ -74,11 +75,11 @@ var place=function(t){for(const p of planets){const a=THREE.MathUtils.degToRad(p
 function size(){const r=svg.getBoundingClientRect();const w=svg.clientWidth||svg.parentNode.clientWidth,h=svg.clientHeight||w*185/376;
   renderer.setPixelRatio(Math.min(4,(devicePixelRatio||1)*Math.max(1,r.width/(w||1))));renderer.setSize(w,h,false);}
 new ResizeObserver(size).observe(host);size();
-const still=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now();let first=true;
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&]still=1\b/.test(location.search)||window.__still===true,t0=performance.now();let first=true;
 function frame(now){place(still?0:(now-t0)/1000);
   if(first){first=false;for(const q of pCubes){q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);}}
   capture(cubeCam,sun);const q=pCubes[pi=(pi+1)%pCubes.length];q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);
-  renderer.render(scene,camera);
+  renderer.render(scene,camera);if(window.__reflHook)window.__reflHook(cv);   // lets the page mirror the solar system in the sheet beneath it
   if(svg.style.visibility!=='hidden'){svg.style.visibility='hidden';cv.style.visibility='visible';}   // swap only once the 3D version has actually drawn
   if(!still)requestAnimationFrame(frame);}
 requestAnimationFrame(frame);
