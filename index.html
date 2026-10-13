@@ -1428,7 +1428,7 @@ function drawFlow() {
     glint(p[0] + (rnd() - .5) * 14, p[1] + (rnd() - .5) * 14, .9 + rnd() * rnd() * 2.6, rnd() < .25);
   }
   // fine light dust scattered around the flow
-  for (let j = 0; j < 30; j++) {
+  for (let j = 0; j < 22; j++) {
     const n = 14 + Math.floor(rnd() * (N - 28)), off = (rnd() - .5) * 2 * (22 + rnd() * 18);
     glint(C[n][0] + NR[n][0] * off, C[n][1] + NR[n][1] * off, .45 + rnd() * .5, false);
   }
