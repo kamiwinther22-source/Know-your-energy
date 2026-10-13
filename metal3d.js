@@ -48,6 +48,21 @@ function plateStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.
   const P=[[.585,40,'#4c5258'],[.62,26,'#ffffff'],[.655,48,'#6a7077'],[.695,30,'#ffffff'],[.73,56,'#3d4349'],[.775,26,'#ffffff'],[.81,44,'#767c83'],[.85,30,'#ffffff'],[.89,40,'#565c63']];
   for(const [u,w,col] of P)bar(u,w,col);
   const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;}
+function buttonStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');   // what a raised chrome button truly sees: dark room, the sun's box above-right, the pale sheet below
+  const sky=g.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#aeb3ba');sky.addColorStop(.3,'#4a4e55');sky.addColorStop(.47,'#16171b');sky.addColorStop(.53,'#0f1013');sky.addColorStop(.6,'#7c8187');sky.addColorStop(.75,'#d9dce0');sky.addColorStop(1,'#eef0f2');
+  g.fillStyle=sky;g.fillRect(0,0,W,H);
+  const box=(u,v,w,h,col,soft)=>{const x=u*W,y=(1-v)*H;g.save();g.filter='blur('+(soft||3)+'px)';g.fillStyle=col;g.fillRect(x-w/2,y-h/2,w,h);g.restore();};
+  const both=(u,v,w,h,col,soft)=>{box(u,v,w,h,col,soft);box(u-1,v,w,h,col,soft);box(u+1,v,w,h,col,soft);};
+  both(.5,.8,230,150,'#ffffff',4);        // the sun: a bright, sharp-edged box above and to the right
+  both(.5,.8,120,70,'#ffffff',2);
+  both(.0,.74,150,90,'#9ea3aa',6);        // a dimmer fill above-left, so the left rim isn't black
+  both(.5,.36,170,34,'#8d9298',6);        // a faint bounce off the sheet below-right
+  const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;}
+let btnEnv=null;const btnMats={};
+function btnMat(role){if(Q.get('final')!=='1'||role==='dark')return mat(ROLE[role]);
+  if(!btnEnv)btnEnv=pm.fromEquirectangular(buttonStudio()).texture;
+  return btnMats[role]||(btnMats[role]=(()=>{const m=mat(ROLE[role]).clone();m.envMap=btnEnv;m.envMapIntensity=num('benv',1.3);return m;})());}
 let plate=null,items=[],last='',page={W:0,H:0,sx:0,sy:0},tilt={x:0,y:0,tx:0,ty:0},drift=0,needs=true;
 function sun(){const s=document.querySelector('.sun-cta');if(!s)return[0,0];const r=s.getBoundingClientRect();return[r.left+r.width/2+scrollX,r.top+r.height/2+scrollY];}
 const plateZ=(u,v)=>num('bx',26)*Math.pow(2*u,2)+num('by',70)*Math.pow(2*v,2)+num('bw',10)*Math.sin(6.283*(u*.8+v*1.2)+.6);
@@ -77,7 +92,7 @@ const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromE
     else{const sh=new THREE.Shape();sh.absellipse(0,0,w/2-bev,h/2-bev,Math.PI/2,Math.PI/2+Math.PI*2,false,0);
       geo=new THREE.ExtrudeGeometry(sh,{depth:T,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:22,curveSegments:120});}
     const role=e.classList.contains('active')?'dark':e.classList.contains('price-row')?'price':e.classList.contains('rel-chip')?'chip':'cta';
-    const dome=new THREE.Mesh(geo,mat(ROLE[role]));dome.castShadow=true;dome.receiveShadow=true;
+    const dome=new THREE.Mesh(geo,btnMat(role));dome.castShadow=true;dome.receiveShadow=true;
     const m=new THREE.Group();m.add(dome);
     if(INLAY&&role!=='dark'){   // the calm centre: flat, so the lettering never sits on a moving reflection
       const PUSH=Q.get('shape')==='push',R=PUSH?.8:.62,ish=new THREE.Shape();ish.absellipse(0,0,w/2*R,h/2*R,0,Math.PI*2,false,0);
@@ -85,7 +100,7 @@ const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromE
       const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=PUSH?(T+bev-.8):topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
+    let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;const oe=mat(ROLE[role]).envMap||null;mir.traverse(o=>{if(o.material){o.material=o.material.clone();if(o.material.envMap===btnEnv)o.material.envMap=oe;o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
     const it={mesh:m,mir,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-1));e.addEventListener('pointerleave',()=>set(0));e.addEventListener('pointercancel',()=>set(0));
