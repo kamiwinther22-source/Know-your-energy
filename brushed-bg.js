@@ -32,25 +32,26 @@
   'float vn(float x){float i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(h11(i),h11(i+1.),f)*2.-1.;}',
   'float vn2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h12(i),h12(i+vec2(1,0)),f.x),mix(h12(i+vec2(0,1)),h12(i+vec2(1,1)),f.x),f.y)*2.-1.;}',
   // Ward anisotropic lobe: narrow across the grooves (aT), wide along the reflection streak (aB)
-  'float ward(vec3 Lv,vec3 V,vec2 T,vec2 B,float aT,float aB){vec3 H=normalize(Lv+V);float ht=dot(H.xy,T),hb=dot(H.xy,B);return exp(-2.*((ht*ht)/(aT*aT)+(hb*hb)/(aB*aB))/(1.+H.z));}',
+  'float ward(vec3 Lv,vec3 V,vec2 T,vec2 B,float aT,float aB){vec3 H=normalize(Lv+V);float ht=dot(H.xy,T),hb=dot(H.xy,B);return exp(-2.*(pow(abs(ht)/aT,3.2)+(hb*hb)/(aB*aB))/(1.+H.z));}',
   // a studio light at infinity: azimuth (deg clockwise from the top of the screen) and elevation (deg above the sheet)
   'vec3 dir(float az,float el){float a=radians(az),e=radians(el);return vec3(sin(a)*cos(e),-cos(a)*cos(e),sin(e));}',
   'void main(){',
   ' vec2 f=vec2(gl_FragCoord.x,uRes.y*uDpr-gl_FragCoord.y)/uDpr;',
   ' vec2 d=f-uSun;float r=length(d);vec2 B=r>.001?d/r:vec2(1.,0.);vec2 T=vec2(-B.y,B.x);',   // T: along the grooves (a circle round the sun); B: across them (radial)
   ' vec3 P=vec3(f,0.);',
-  ' float D=1500.;vec3 Vp=vec3(uRes*.5+uView*D+vec2(uScroll*D*.30,uScroll*D*.22),D);vec3 V=normalize(Vp-P);',
+  ' float D=1500.;vec3 Vp=vec3(uRes*.5+uView*D+vec2(uScroll*D*.22,uScroll*D*.22),D);vec3 V=normalize(Vp-P);',
   // fine grooves: hair-thin concentric lines of slightly different roughness, plus slow uneven wear
   ' float g=vn(r*2.3)*.5+vn(r*6.1)*.22;',
   ' float wob=1.+.24*g;',
     ' float S=0.;',
-  ' S+=1.8*ward(dir(12.,52.),V,T,B,.09*wob,.60);',      // key light overhead: the vertical bright axis
-  ' S+=.9*ward(dir(-17.,40.),V,T,B,.08*wob,.55);\n S+=1.8*ward(dir(-56.,46.),V,T,B,.095*wob,.62);',    // second light upper-left: the diagonal bright axis
-  ' S+=.45*ward(dir(100.,30.),V,T,B,.20*wob,.75);',      // weak low fill from the right
-      ' S*=(1.+.08*g)*(.80+.20*exp(-r/1300.));',
+  ' S+=3.0*ward(dir(8.,50.),V,T,B,.050*wob,.70);',        // reflection 1: a narrow, crisp ray running near-vertically
+  ' S+=2.7*ward(dir(-56.,46.),V,T,B,.055*wob,.70);',      // reflection 2: a narrow, crisp ray on the diagonal
+  ' S+=.75*ward(dir(-22.,40.),V,T,B,.13*wob,.80);',       // a broad, dimmer sheet of reflected light, still crisp-edged
+  ' S+=.55*ward(dir(104.,30.),V,T,B,.14*wob,.85);',
+  ' S*=(1.+.10*g);',
   ' float low=vn2(f/90.)*.5+vn2(f/23.)*.25;',            // slow, uneven sheen, so it is not mathematically perfect
   // reflected sky: pale, cool, brighter toward the sun
-  ' float sky=.21+.03*low;',
+  ' float sky=.24+.03*low;',
   ' vec3 F0=vec3(.93,.94,.96);',
   ' vec3 c=F0*(vec3(sky*.98,sky,sky*1.03)+S*vec3(1.,1.,1.02)+.014*g);',
   ' c=(c*(2.51*c+.03))/(c*(2.43*c+.59)+.14);',
