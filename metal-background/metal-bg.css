@@ -1,10 +1,15 @@
 /* Brushed-metal background (phone-first). Pure CSS, no image files.
    Usage: add class "metal-bg" to <body> or any wrapper; put content inside it.
+   Or put class "metal-layer" on an absolutely positioned element sized by you.
    Move the highlight center per element with --metal-x / --metal-y. */
 
-.metal-bg {
+.metal-bg,
+.metal-layer {
   --metal-x: 50%;   /* horizontal position of the center point */
   --metal-y: 50%;   /* vertical position of the center point */
+}
+
+.metal-bg {
   position: relative;
   isolation: isolate;
   min-height: 100vh;
@@ -20,6 +25,10 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
+}
+
+.metal-bg::before,
+.metal-layer {
   background:
     /* fine concentric brushing grain, same center as the sheen */
     repeating-radial-gradient(

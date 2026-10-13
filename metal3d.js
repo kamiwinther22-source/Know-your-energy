@@ -7,7 +7,7 @@ import * as THREE from 'three';
 const root=document.documentElement,Q=new URLSearchParams(location.search);
 if(Q.get('look')==='final')for(const [k,v] of Object.entries({solar:'1',shape:'push',inlay:'light',shadows:'0',shade:'0',drift:'0',cam:'1500',mr:'.2',env:'3.0',exp:'2.0',bx:'0',by:'0',bw:'0',final:'1'}))if(!Q.has(k))Q.set(k,v);
 const num=(k,d)=>{const v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
-const TILT=12*Math.PI/180,FULL=Q.get('full')==='1'||Q.get('final')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TILT=12*Math.PI/180,FULL=Q.get('full')==='1'||Q.get('final')==='1',REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches,OLDBG=Q.get('bg')==='old';   // final look: the old polished sheet is replaced by the brushed-metal background (brushed-bg.js) unless ?bg=old
 await new Promise(r=>{let n=0;const t=()=>(window.__eq||++n>1200)?r():requestAnimationFrame(t);t();});
 if(!window.__eq)throw new Error('no environment');
 
@@ -86,8 +86,8 @@ function build(){
   for(let i=0;i<n.count;i++){const u=P.getX(i)/W+.5,v=P.getY(i)/H+.5;
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
-const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',.5);pmat.roughness=num('pr',.03);pmat.metalness=1;pmat.color.set(0xffffff);pmat.depthWrite=false;}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1')plate.renderOrder=-10;group.add(plate);
-  if(Q.get('final')==='1'){if(spec){group.remove(spec);spec.geometry.dispose();}spec=new THREE.Mesh(new THREE.PlaneGeometry(page.W,page.H,1,1),specMat);spec.position.set(0,0,num('gz',.6));spec.renderOrder=3;group.add(spec);}
+const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',.5);pmat.roughness=num('pr',.03);pmat.metalness=1;pmat.color.set(0xffffff);pmat.depthWrite=false;}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1')plate.renderOrder=-10;group.add(plate);plate.visible=OLDBG||Q.get('final')!=='1';
+  if(Q.get('final')==='1'){if(spec){group.remove(spec);spec.geometry.dispose();}spec=new THREE.Mesh(new THREE.PlaneGeometry(page.W,page.H,1,1),specMat);spec.position.set(0,0,num('gz',.6));spec.renderOrder=3;spec.visible=OLDBG;group.add(spec);}
 
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
@@ -106,7 +106,7 @@ const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromE
       const inl=new THREE.Mesh(ig,INLAY==='dark'?inlayDark:inlayLight);inl.position.z=PUSH?(T+bev-.8):topH*Math.sqrt(1-R*R)-1.0;inl.receiveShadow=true;m.add(inl);}
     const lx=cx-W/2,ly=-(cy-H/2),lz=plateZ((cx-W/2)/W,(H/2-cy)/H)+(DOME?0:bev+num('lift',10));
     m.position.set(lx,ly,lz);m.rotation.z=TILT;group.add(m);
-    let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.transparent=true;o.material.opacity=num('mop',.55);if(o.material.envMap===btnEnv){o.material.envMap=btnEnvFlip;o.material.envMapIntensity=num('menv',.8);}if(o.isMesh&&o.geometry&&o.geometry.groups&&o.geometry.groups.length>=2&&o.material.envMap===btnEnvFlip){const cap=inlayLight.clone();cap.side=THREE.DoubleSide;cap.transparent=true;cap.opacity=num('mop',.55);o.material=[cap,o.material];}o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;group.add(mir);}
+    let mir=null;if(Q.get('final')==='1'){mir=m.clone(true);mir.scale.z=-1;mir.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.transparent=true;o.material.opacity=num('mop',.55);if(o.material.envMap===btnEnv){o.material.envMap=btnEnvFlip;o.material.envMapIntensity=num('menv',.8);}if(o.isMesh&&o.geometry&&o.geometry.groups&&o.geometry.groups.length>=2&&o.material.envMap===btnEnvFlip){const cap=inlayLight.clone();cap.side=THREE.DoubleSide;cap.transparent=true;cap.opacity=num('mop',.55);o.material=[cap,o.material];}o.material.side=THREE.DoubleSide;}o.castShadow=false;o.receiveShadow=false;});mir.rotation.z=TILT;mir.position.set(lx,ly,-lz);mir.userData.h=h;mir.visible=OLDBG;group.add(mir);}
     const it={mesh:m,mir,el:e,z:lz,press:0,target:0,lx,ly,top:(Q.get('shape')==='push'?T+bev:topH)};items.push(it);
     if(!e._m3){e._m3=1;const set=v=>{const i=items.find(q=>q.el===e);if(i){i.target=v;needs=true;}};
       e.addEventListener('pointerenter',()=>set(-1));e.addEventListener('pointerleave',()=>set(0));e.addEventListener('pointercancel',()=>set(0));

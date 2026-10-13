@@ -1,0 +1,4 @@
+/* ?look=final — the brushed-metal background, behind everything, centred on the sun (see brushed-bg.js).
+   It is page-sized and scrolls with the page, so it stays centred on the sun. The old polished plate, its white point of light and its reflections are hidden; add ?bg=old to see them. */
+#brushBg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
+html.look-base #orrRefl{display:none !important;}
