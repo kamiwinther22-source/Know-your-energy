@@ -64,6 +64,9 @@ let btnEnv=null,btnEnvFlip=null;const btnMats={};
 function btnMat(role){if(Q.get('final')!=='1'||role==='dark')return mat(ROLE[role]);
   if(!btnEnv){btnEnv=pm.fromEquirectangular(buttonStudio(false)).texture;btnEnvFlip=pm.fromEquirectangular(buttonStudio(true)).texture;}
   return btnMats[role]||(btnMats[role]=(()=>{const m=mat(ROLE[role]).clone();m.envMap=btnEnv;m.envMapIntensity=num('benv',1.3);return m;})());}
+let spec=null;const specMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{uL:{value:new THREE.Vector3()},uS:{value:num('gshine',2600)},uI:{value:num('gint',1.0)}},
+  vertexShader:'varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
+  fragmentShader:'uniform vec3 uL;uniform float uS,uI;varying vec3 vW;void main(){vec3 V=normalize(cameraPosition-vW),L=normalize(uL-vW),H=normalize(V+L);float s=pow(max(H.z,0.),uS);float core=smoothstep(.45,.9,s);gl_FragColor=vec4(vec3(1.),clamp(s*uI*.9+core,0.,1.));}'});
 let plate=null,items=[],last='',page={W:0,H:0,sx:0,sy:0},tilt={x:0,y:0,tx:0,ty:0},drift=0,needs=true;
 function sun(){const s=document.querySelector('.sun-cta');if(!s)return[0,0];const r=s.getBoundingClientRect();return[r.left+r.width/2+scrollX,r.top+r.height/2+scrollY];}
 const plateZ=(u,v)=>num('bx',26)*Math.pow(2*u,2)+num('by',70)*Math.pow(2*v,2)+num('bw',10)*Math.sin(6.283*(u*.8+v*1.2)+.6);
@@ -84,6 +87,8 @@ function build(){
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
 const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.35);}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1'){plate.material=new THREE.MeshBasicMaterial({color:0xe4e7ea,transparent:true,opacity:num('pop',.7),depthWrite:true});}group.add(plate);
+  if(Q.get('final')==='1'){if(spec){group.remove(spec);spec.geometry.dispose();}
+    spec=new THREE.Mesh(new THREE.PlaneGeometry(page.W,page.H,1,1),specMat);spec.position.set(0,0,num('gz',.6));spec.renderOrder=3;group.add(spec);}
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
   els.forEach(e=>{
     const w=e.offsetWidth,h=e.offsetHeight,b=e.getBoundingClientRect(),cx=b.left+b.width/2+scrollX,cy=b.top+b.height/2+scrollY,bev=Math.min(16,h*.27),T=Q.get('shape')==='push'?10:6;
@@ -121,7 +126,7 @@ function frame(t){
   tilt.x+=(tilt.tx-tilt.x)*.06;tilt.y+=(tilt.ty-tilt.y)*.06;if(Math.abs(tilt.tx-tilt.x)>.0002||Math.abs(tilt.ty-tilt.y)>.0002)moving=true;
   group.rotation.set(tilt.x,tilt.y,0);
   const d=(drift&&!REDUCED)?Math.sin(t/9000)*1:0,sx=page.sx+d*70,sy=page.sy+Math.cos(t/11000)*(drift?1:0)*40;
-  sunLight.position.set(sx,-sy,num('sunz',650));sunLight.target.position.set(page.W/2,-page.H/2,0);sunLight.target.updateMatrixWorld();
+  sunLight.position.set(sx,-sy,num('sunz',650));specMat.uniforms.uL.value.copy(sunLight.position);sunLight.target.position.set(page.W/2,-page.H/2,0);sunLight.target.updateMatrixWorld();
   if(!FULL){const vw=innerWidth,vh=innerHeight,D=num('cam',1100),cy=-(scrollY+vh/2);   // the page plane maps 1:1 onto CSS pixels
     camera.fov=2*Math.atan(vh/2/D)*180/Math.PI;camera.aspect=vw/vh;camera.position.set(vw/2,cy,D);camera.lookAt(vw/2,cy,0);}
   else{camera.left=0;camera.right=page.W;camera.top=0;camera.bottom=-page.H;}
