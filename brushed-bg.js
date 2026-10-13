@@ -39,10 +39,10 @@
   ' vec2 f=vec2(gl_FragCoord.x,uRes.y*uDpr-gl_FragCoord.y)/uDpr;',
   ' vec2 d=f-uSun;float r=length(d);vec2 B=r>.001?d/r:vec2(1.,0.);vec2 T=vec2(-B.y,B.x);',   // T: along the grooves (a circle round the sun); B: across them (radial)
   ' vec3 P=vec3(f,0.);',
-  ' float D=1500.;vec3 Vp=vec3(uRes*.5+uView*D+vec2(uScroll*D*.20,uScroll*D*.22),D);vec3 V=normalize(Vp-P);',
+  ' float D=1500.;vec3 Vp=vec3(uRes*.5+uView*D+vec2(uScroll*D*.30,uScroll*D*.22),D);vec3 V=normalize(Vp-P);',
   // fine grooves: hair-thin concentric lines of slightly different roughness, plus slow uneven wear
-  ' float g=vn(r*1.7)*.55+vn(r*4.9)*.3+vn(r*.37)*.22;',
-  ' float wob=1.+.42*g;',
+  ' float g=vn(r*2.3)*.5+vn(r*6.1)*.22;',
+  ' float wob=1.+.24*g;',
   ' float cov=smoothstep(2.,26.,r);',   // right at the sun the grooves have no direction; it is covered by the sun itself
   ' float S=0.;',
   ' S+=2.2*ward(dir(12.,52.),V,T,B,.09*wob,.60);',      // key light overhead: the vertical bright axis
@@ -50,13 +50,15 @@
   ' S+=.45*ward(dir(100.,30.),V,T,B,.20*wob,.75);',      // weak low fill from the right
   ' vec3 Ls=normalize(vec3(uSun,330.)-P);',
   ' S+=1.7*ward(Ls,V,T,B,.15*wob,.21)*cov;',             // the sun itself: a hot, tight reflection that falls off with distance
-  ' S*=1.+.14*g;',
+  ' S*=(1.+.08*g)*(.40+.60*exp(-r/900.));',
   ' float low=vn2(f/90.)*.5+vn2(f/23.)*.25;',            // slow, uneven sheen, so it is not mathematically perfect
   // reflected sky: pale, cool, brighter toward the sun
-  ' float sky=.30+.08*exp(-r/420.)+.04*low;',
+  ' float sky=.17+.15*exp(-r/640.)+.03*low;',
   ' vec3 F0=vec3(.93,.94,.96);',
-  ' vec3 c=F0*(vec3(sky*.98,sky,sky*1.03)+S*vec3(1.,1.,1.02));',
-  ' c=(c*(2.51*c+.03))/(c*(2.43*c+.59)+.14);',          // filmic roll-off: highlights go to white without clipping flat
+  ' vec3 c=F0*(vec3(sky*.98,sky,sky*1.03)+S*vec3(1.,1.,1.02)+.014*g);',
+  ' c=(c*(2.51*c+.03))/(c*(2.43*c+.59)+.14);',
+  ' float lum=dot(c,vec3(.299,.587,.114));c*=mix(vec3(.89,.95,1.12),vec3(1.,.997,.988),smoothstep(.10,.78,lum));',
+  ' c=clamp(c,0.,1.);c=c*c*(3.-2.*c)*.22+c*.78;',          // filmic roll-off: highlights go to white without clipping flat
   ' c=pow(max(c,0.),vec3(1./2.2));',
   ' c+=(h12(gl_FragCoord.xy)-.5)/255.*1.6;',            // dither: no banding
   ' gl_FragColor=vec4(c,1.);',
