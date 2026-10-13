@@ -1335,9 +1335,10 @@ function drawFlow() {
   let seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
-  // A fine S-curve turned onto a ~28 degree diagonal (lower left to upper right), centred in the gap.
+  // A small, fine diagonal in the middle of the gap between the two blocks (lower left to upper right).
   const cx = (r1.left + r2.right) / 2 - fc.left, cy = T + H * 0.5;
-  const LEN = Math.min(214, (r2.right - r1.left) * 0.6), AMP = 15, ANG = -28 * Math.PI / 180, CURL = 0.2;
+  const SZ = parseFloat(new URLSearchParams(location.search).get("size")) || 1;
+  const LEN = Math.min(206 * SZ, (r2.right - r1.left) * 0.6), AMP = 14 * SZ, ANG = -31 * Math.PI / 180, CURL = 0.2;
   const anchors = [];
   for (let q = 0; q <= 10; q++) {
     const t = q / 10, ux = LEN * (t - 0.5);
@@ -1365,7 +1366,7 @@ function drawFlow() {
     const dx = b[0] - a[0], dy = b[1] - a[1], m = Math.hypot(dx, dy) || 1;
     NR.push([-dy / m, dx / m]);
   }
-  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.42); return Math.sin(e * Math.PI / 2); };
+  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.26); return Math.sin(e * Math.PI / 2); };
   const at = (s, n, off) => { const t = n / N; const o = (off || 0) + s.A * Math.sin(6.283 * t * s.f + s.ph) * Math.pow(env(t, s.a, s.b), 0.6); return [C[n][0] + NR[n][0] * o, C[n][1] + NR[n][1] * o]; };
   const pl = a => "M" + a.map(q => f1(q[0]) + "," + f1(q[1])).join(" L");
 
@@ -1378,12 +1379,11 @@ function drawFlow() {
 
   // four fine twisting ribbons, each narrowing to a thread and widening again
   const rs = [
-    { a: 0,   b: .88, A: 4,   f: 1.5, ph: 0.4, w: 10, m: 1.6, ps: 0.3, g: "fa1", o: .55, ec: pal[2], blur: 1 },
-    { a: .08, b: 1,   A: 4,   f: 1.9, ph: 2.6, w: 9, m: 1.9, ps: 1.7, g: "fa2", o: .6,  ec: pal[2] },
-    { a: .03, b: .8,  A: 4.5, f: 1.2, ph: 4.4, w: 7, m: 2.3, ps: 2.9, g: "fa3", o: .55, ec: pal[2] },
-    { a: .2,  b: .97, A: 3,   f: 2.3, ph: 1.3, w: 5, m: 2.7, ps: 0.9, g: "fa1", o: .6,  ec: pal[2] }
+    { a: 0,   b: .88, A: 3,   f: 1.5, ph: 0.4, w: 8, m: 1.6, ps: 0.3, g: "fa1", o: .55, ec: pal[2], blur: 1 },
+    { a: .08, b: 1,   A: 3,   f: 1.9, ph: 2.6, w: 7, m: 1.9, ps: 1.7, g: "fa2", o: .6,  ec: pal[2] },
+    { a: .03, b: .8,  A: 3.5, f: 1.2, ph: 4.4, w: 6, m: 2.3, ps: 2.9, g: "fa3", o: .55, ec: pal[2] },
+    { a: .2,  b: .97, A: 2.5, f: 2.3, ph: 1.3, w: 4, m: 2.7, ps: 0.9, g: "fa1", o: .6,  ec: pal[2] }
   ];
-  out += '<path d="' + pl(C) + '" fill="none" stroke="' + pal[2] + '" stroke-width="7" opacity=".16" stroke-linecap="round" filter="url(#fab)"/>';
   const centers = rs.map(i => {
     const Lp = [], Rp = [], Cc = [];
     for (let n = 0; n <= N; n++) {
@@ -1398,7 +1398,7 @@ function drawFlow() {
   });
   // fine hairlines that drift apart and rejoin
   for (let j = 0; j < 5; j++) {
-    const h = { a: rnd() * .2, b: .8 + rnd() * .2, A: 3 + rnd() * 7, f: .9 + rnd() * 1.1, ph: rnd() * 6.28 };
+    const h = { a: rnd() * .2, b: .8 + rnd() * .2, A: 2.5 + rnd() * 5, f: .9 + rnd() * 1.1, ph: rnd() * 6.28 };
     const pts = [];
     for (let n = 0; n <= N; n++) { const t = n / N; if (t < h.a || t > h.b) continue; pts.push(at(h, n, 0)); }
     out += '<path d="' + pl(pts) + '" fill="none" stroke="' + [pal[2], "#fff", pal[2]][j % 3] + '" stroke-width="' + f1(.35 + rnd() * .3) + '" opacity="' + f1(.55 + rnd() * .3) + '" stroke-linecap="round"/>';
