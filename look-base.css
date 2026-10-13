@@ -16,7 +16,7 @@ html.look-base .hero-continue-btn,html.look-base .gen-btn,html.look-base .price-
   border:none !important;border-radius:50% !important;padding:0 !important;display:flex !important;align-items:center;justify-content:center;transform:rotate(-12deg) !important;
   background:linear-gradient(28deg,#8c9096 0%,#c4c7cc 42%,#f3f4f5 78%,#ffffff 100%) !important;
   box-shadow:inset 0 2px 1px rgba(255,255,255,.95),inset 0 -4px 6px rgba(40,42,48,.28),-3px 12px 16px rgba(30,32,36,.30) !important;}
-html.look-base .hero-continue-btn,html.look-base .gen-btn{width:226px !important;height:82px !important;margin:22px auto !important;}
+html.look-base .hero-continue-btn,html.look-base .gen-btn{width:158px !important;height:56px !important;margin:14px auto !important;font-size:14px !important;}
 html.look-base .price-row{width:118px !important;height:62px !important;min-width:0 !important;}
 html.look-base .pricing-list{display:flex !important;justify-content:space-between !important;gap:0 !important;flex-wrap:nowrap !important;margin-top:20px;}
 html.look-base .price-label,html.look-base .price-amt{font-size:11px !important;letter-spacing:.05em !important;}
@@ -86,7 +86,7 @@ html.look-base.no-shadows .row-id .line-field{box-shadow:none !important;}
 html.look-base .hero-email-wrap .err{display:none !important;}
 html.look-base,html.look-base body{overflow-x:clip;}
 html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])),html.look-base.no-shadows:not(:has(#resultsWrap[style*="block"])) body{background:#eceff1 !important;}
-html.look-base .hero-continue-btn,html.look-base .gen-btn{margin-bottom:58px !important;}
+html.look-base .hero-continue-btn,html.look-base .gen-btn{margin-bottom:40px !important;}
 
 /* the solar system's reflection in the sheet, fading out downward */
 html.look-base #orrRefl{position:absolute;z-index:0;pointer-events:none;opacity:.42;-webkit-mask-image:linear-gradient(rgba(0,0,0,.9),rgba(0,0,0,0) 85%);mask-image:linear-gradient(rgba(0,0,0,.9),rgba(0,0,0,0) 85%);}
@@ -100,7 +100,7 @@ html.look-base .free-reading-line .fr-a{display:block;font-family:'Libre Baskerv
 html.look-base .free-reading-line .fr-b{display:block;font-family:'Libre Baskerville',Baskerville,serif;font-style:italic;font-weight:400;font-size:132px;line-height:.92;letter-spacing:-.02em;margin-top:2px;}
 html.look-base .free-reading-line .fr-b{font-size:124px;}
 html.look-base .hero-email-wrap .privacy-note:first-child{margin-bottom:0 !important;}
-html.look-base .hero-continue-btn{margin-top:6px !important;margin-bottom:46px !important;}
+html.look-base .hero-continue-btn{margin-top:6px !important;margin-bottom:34px !important;}
 html.look-base .free-reading-line .fr-a{font-size:28px;}
 html.look-base .free-reading-line .fr-b{font-size:112px;line-height:.9;}
 html.look-base .free-reading-line .fr-a{font-size:24px;}
