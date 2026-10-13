@@ -7,3 +7,4 @@
 html.look-base #orrRefl{z-index:1 !important;opacity:.9 !important;mix-blend-mode:multiply;}   /* z-index: always above the metal (the two scripts load in either order, and whichever came last used to cover the other) */   /* multiply: the mirror image darkens whatever it sits on, so it shows on bright rays and deep steel alike */
 /* the page never scrolls sideways: whatever is wider than the phone (the solar system, its reflection) is simply cut off at the edge */
 html.look-base,html.look-base body{overflow-x:clip;}
+#metalBg{overflow:hidden;}   /* clips the reflection (and anything else wider than the phone) at the screen edge */

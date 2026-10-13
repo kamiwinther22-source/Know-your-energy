@@ -7,6 +7,8 @@
   var body=document.body,root=document.documentElement;
   ['metal-background/metal-bg.css','look-brushed.css'].forEach(function(h){var l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l);});
   var bg=document.getElementById('metalBg');if(!bg){bg=document.createElement('div');bg.id='metalBg';bg.setAttribute('aria-hidden','true');body.insertBefore(bg,body.firstChild);}
+  function adoptRefl(){var r=document.getElementById('orrRefl');if(r&&r.parentNode!==bg)bg.appendChild(r);}   // same position, but clipped at the phone's edge (a reflection wider than the screen used to make the whole page scroll sideways)
+  adoptRefl();new MutationObserver(adoptRefl).observe(body,{childList:true});
   var L=document.createElement('div');L.id='brushBg';L.className='metal-layer';bg.insertBefore(L,bg.firstChild);   // CSS fallback
 
   var sun={x:195,y:300};   // the sun's centre in page coordinates (css px)
@@ -21,7 +23,7 @@
 
   /* the light and dark around the centre, taken from the reference (angle clockwise from the top: brightness 0.79 = darkest, 0.98 = brightest),
      then pushed to real contrast: white where the light runs, deeper steel where it doesn't */
-  var STOPS=[[0,.88],[30,.60],[62,.12],[95,.40],[122,.92],[150,.30],[172,.55],[196,1],[225,.62],[255,.22],[290,.78],[315,1],[340,.55],[360,.88]];   // angle clockwise from the top, 0 = deepest steel, 1 = brightest. Below the sun it runs from steel to bright across the width of the phone.
+  var STOPS=[[0,.88],[30,.60],[62,.12],[95,.40],[122,.90],[150,.88],[172,.80],[202,.40],[228,.52],[255,.20],[290,.78],[315,1],[340,.55],[360,.88]];   // angle clockwise from the top, 0 = deepest steel, 1 = brightest. Below the sun it runs from steel to bright across the width of the phone.
   function col(t){   // a real steel colour: cool blue-grey in the shadows, clean silver in the middle, near-white with the faintest warmth in the light
     var D=[124,136,155],M=[190,199,212],H=[250,249,247],a,b,u;
     if(t<.5){a=D;b=M;u=t/.5;}else{a=M;b=H;u=(t-.5)/.5;}
