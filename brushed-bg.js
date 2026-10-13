@@ -7,7 +7,6 @@
   var body=document.body,root=document.documentElement;
   ['metal-background/metal-bg.css','look-brushed.css'].forEach(function(h){var l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l);});
   var bg=document.getElementById('metalBg');if(!bg){bg=document.createElement('div');bg.id='metalBg';bg.setAttribute('aria-hidden','true');body.insertBefore(bg,body.firstChild);}
-  if(/[?&]refl=1\b/.test(location.search))root.classList.add('show-refl');   // reflections can't sit on this surface; ?refl=1 shows them for comparison
   var L=document.createElement('div');L.id='brushBg';L.className='metal-layer';bg.insertBefore(L,bg.firstChild);   // CSS fallback
 
   var sun={x:195,y:300};   // the sun's centre in page coordinates (css px)
