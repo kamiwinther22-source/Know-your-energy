@@ -64,9 +64,9 @@ let btnEnv=null,btnEnvFlip=null;const btnMats={};
 function btnMat(role){if(Q.get('final')!=='1'||role==='dark')return mat(ROLE[role]);
   if(!btnEnv){btnEnv=pm.fromEquirectangular(buttonStudio(false)).texture;btnEnvFlip=pm.fromEquirectangular(buttonStudio(true)).texture;}
   return btnMats[role]||(btnMats[role]=(()=>{const m=mat(ROLE[role]).clone();m.envMap=btnEnv;m.envMapIntensity=num('benv',1.3);return m;})());}
-let spec=null;const specMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{uL:{value:new THREE.Vector3()},uS:{value:num('gshine',2400)},uI:{value:num('gint',1.0)}},
+let spec=null;const specMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{uL:{value:new THREE.Vector3()},uS:{value:num('gshine',900)},uI:{value:num('gint',1.0)}},
   vertexShader:'varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
-  fragmentShader:'uniform vec3 uL;uniform float uS,uI;varying vec3 vW;void main(){vec2 d=vW.xy-uL.xy;float r=length(d);float a=atan(d.y,d.x);float t=.5+.25*cos(2.*(a-1.5708))+.25*cos(2.*(a+.52));float k=smoothstep(0.,60.,r);float dk=max(.6-t,0.)*k*1.5,br=max(t-.5,0.)*k*1.7;float p=exp(-r*r/(uS*.5));float pc=exp(-r*r/(uS*.04));vec3 c=mix(vec3(.5,.54,.6),vec3(1.),step(dk,br));float al=max(br,dk);gl_FragColor=vec4(mix(c,vec3(1.),clamp(p*uI+pc*2.,0.,1.)),clamp(al+p*uI*.9+pc*2.,0.,1.));}'});
+  fragmentShader:'uniform vec3 uL;uniform float uS,uI;varying vec3 vW;void main(){vec3 V=normalize(cameraPosition-vW),L=normalize(uL-vW),H=normalize(V+L);float s=pow(max(H.z,0.),uS);float core=smoothstep(.2,.55,s);gl_FragColor=vec4(vec3(1.),clamp(s*uI*1.4+core*1.4,0.,1.));}'});
 let plate=null,items=[],last='',page={W:0,H:0,sx:0,sy:0},tilt={x:0,y:0,tx:0,ty:0},drift=0,needs=true;
 function sun(){const s=document.querySelector('.sun-cta');if(!s)return[0,0];const r=s.getBoundingClientRect();return[r.left+r.width/2+scrollX,r.top+r.height/2+scrollY];}
 const plateZ=(u,v)=>num('bx',26)*Math.pow(2*u,2)+num('by',70)*Math.pow(2*v,2)+num('bw',10)*Math.sin(6.283*(u*.8+v*1.2)+.6);
