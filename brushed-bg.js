@@ -1,12 +1,10 @@
-/* ?look=final — the page's metal surface: real brushed metal, shaded per pixel, centred on the sun (.sun-cta).
-   The grooves run in circles around the sun (spun/turned metal). Light is not painted on: each pixel is lit with an anisotropic (Ward) reflection model,
-   so bright wedges appear exactly where a studio light's reflection runs along the grooves, and they slide as you scroll or tilt the phone.
+/* ?look=final — the page's metal surface: your reference image (a conic, spun-metal sheen with fine concentric brushing), centred on the sun (.sun-cta),
+   with stronger contrast. Light radiates only from the sun. It is fixed to the page: the top and the bottom are the same surface under the same light.
    Layers: a CSS conic gradient (metal-background/metal-bg.css) is the fallback underneath; this WebGL canvas sits on top of it, behind everything else.
    ?bg=old skips all of this and brings back the old polished sheet. */
 (function(){
   if(/[?&]bg=old\b/.test(location.search))return;
-  var body=document.body,root=document.documentElement,Q=new URLSearchParams(location.search);
-  var REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var body=document.body,root=document.documentElement;
   ['metal-background/metal-bg.css','look-brushed.css'].forEach(function(h){var l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l);});
   var bg=document.getElementById('metalBg');if(!bg){bg=document.createElement('div');bg.id='metalBg';bg.setAttribute('aria-hidden','true');body.insertBefore(bg,body.firstChild);}
   var L=document.createElement('div');L.id='brushBg';L.className='metal-layer';bg.insertBefore(L,bg.firstChild);   // CSS fallback
@@ -21,50 +19,40 @@
     draw();
   }
 
-  /* ---------- WebGL: the shaded surface ---------- */
-  var cv=null,gl=null,envTex=null,envReady=false,U={},view={x:0,y:0,tx:0,ty:0},base=null,raf=0,loop=0;
+  /* the sheen around the centre, taken from the reference (angle clockwise from the top: brightness 0.79 = darkest, 0.98 = brightest),
+     then pushed to real contrast: white where the light runs, deeper steel where it doesn't */
+  var STOPS=[[0,.965],[40,.85],[65,.79],[100,.895],[125,.975],[160,.915],[180,.97],[215,.925],[255,.865],[295,.95],[315,.98],[340,.91],[360,.965]];
+  function lut(){
+    var out=new Uint8Array(360*4),i,k;
+    for(i=0;i<360;i++){
+      for(k=0;k<STOPS.length-2&&STOPS[k+1][0]<=i;k++);
+      var a=STOPS[k],b=STOPS[k+1],u=(i-a[0])/(b[0]-a[0]);u=(1-Math.cos(Math.PI*Math.max(0,Math.min(1,u))))/2;
+      var v=a[1]+(b[1]-a[1])*u,t=Math.max(0,Math.min(1,(v-.79)/(.98-.79)));
+      t=t*t*(3-2*t);   // bright bands read as bright, dark as dark
+      out[i*4]=Math.round(255*(.47+.53*t));out[i*4+1]=Math.round(255*(.495+.505*t));out[i*4+2]=Math.round(255*(.55+.45*t));out[i*4+3]=255;
+    }
+    return out;
+  }
+
+  /* ---------- WebGL: the surface ---------- */
+  var cv=null,gl=null,U={},raf=0;
   var VS='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   var FS=[
   'precision highp float;',
-  'uniform vec2 uRes;uniform float uDpr;uniform vec2 uSun;uniform vec2 uView;uniform float uScroll;uniform sampler2D uEnv;uniform float uEnvOn;uniform float uEnvRot;',
+  'uniform vec2 uRes;uniform float uDpr;uniform vec2 uSun;uniform sampler2D uLut;',
   'float h11(float p){p=fract(p*.1031);p*=p+33.33;p*=p+p;return fract(p);}',
   'float h12(vec2 p){vec3 q=fract(vec3(p.xyx)*.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}',
   'float vn(float x){float i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(h11(i),h11(i+1.),f)*2.-1.;}',
-  'float vn2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h12(i),h12(i+vec2(1,0)),f.x),mix(h12(i+vec2(0,1)),h12(i+vec2(1,1)),f.x),f.y)*2.-1.;}',
-  // Ward anisotropic lobe: narrow across the grooves (aT), wide along the reflection streak (aB)
-  'float ward(vec3 Lv,vec3 V,vec2 T,vec2 B,float aT,float aB){vec3 H=normalize(Lv+V);float ht=dot(H.xy,T),hb=dot(H.xy,B);return exp(-2.*(pow(abs(ht)/aT,3.2)+(hb*hb)/(aB*aB))/(1.+H.z));}',
-  // the photographed room the solar system reflects (window.__eq), read as radiance: d is a direction (x right, y down, z toward the viewer)
-  'vec3 room(vec3 d){vec3 e=vec3(d.x,-d.y,d.z);float u=fract(atan(e.z,e.x)/6.2831853+.5+uEnvRot);float v=asin(clamp(e.y,-1.,1.))/3.14159265+.5;float t=min(texture2D(uEnv,vec2(u,v)).r,.995);return vec3(-log(1.-t)/.5);}',
-  // a studio light at infinity: azimuth (deg clockwise from the top of the screen) and elevation (deg above the sheet)
-  'vec3 dir(float az,float el){float a=radians(az),e=radians(el);return vec3(sin(a)*cos(e),-cos(a)*cos(e),sin(e));}',
   'void main(){',
   ' vec2 f=vec2(gl_FragCoord.x,uRes.y*uDpr-gl_FragCoord.y)/uDpr;',
-  ' vec2 d=f-uSun;float r=length(d);vec2 B=r>.001?d/r:vec2(1.,0.);vec2 T=vec2(-B.y,B.x);',   // T: along the grooves (a circle round the sun); B: across them (radial)
-  ' vec3 P=vec3(f,0.);',
-  ' vec3 V=normalize(vec3(uView*3.+vec2(uScroll*.38,uScroll*.20),1.));',
-  // fine grooves: hair-thin concentric lines of slightly different roughness, plus slow uneven wear
-  ' float g=vn(r*2.3)*.5+vn(r*6.1)*.22;',
-  ' float wob=1.+.24*g;',
-    ' float S=0.;',
-  // brushed metal reflects the room along the grooves' cross-section: the microscopic normals tilt across the grooves (toward B), so each pixel averages the room along an arc
-  ' vec3 env=vec3(0.);float ws=0.;',
-  ' for(int i=0;i<9;i++){float q=(float(i)-4.)/4.;float th=q*(.62*wob);vec3 Nn=normalize(vec3(B*sin(th),cos(th)));vec3 R=reflect(-V,Nn);float w=exp(-2.*q*q);env+=w*room(R);ws+=w;}',
-  ' env=uEnvOn>.5?env/ws:vec3(.55);',
-  // the ONLY light is the sun: a lamp straight above the centre of the grooves. Its reflection is bright where the line from the sun toward the viewer runs across the grooves, so one bright ray (both ends) crosses the sun and turns as the viewer or the page moves.
-  ' vec3 Ls=normalize(vec3(uSun,2200.)-P);',
-  ' S+=2.6*ward(Ls,V,T,B,.040*wob,.90);',
-  ' S*=(1.+.10*g);',
-  ' float low=vn2(f/90.)*.5+vn2(f/23.)*.25;',            // slow, uneven sheen, so it is not mathematically perfect
-  // reflected sky: pale, cool, brighter toward the sun
-  ' float sky=.24+.03*low;',
-  ' vec3 F0=vec3(.93,.94,.96);',
-  ' vec3 c=F0*(vec3(sky*.30)+env*.62*(1.+.05*g)+S*vec3(1.,1.,1.02)+.005*g);',
-  ' c=(c*(2.51*c+.03))/(c*(2.43*c+.59)+.14);',
-  ' float lum=dot(c,vec3(.299,.587,.114));c*=mix(vec3(.89,.95,1.12),vec3(1.,.997,.988),smoothstep(.10,.78,lum));',
-  ' c=clamp(c,0.,1.);c=c*c*(3.-2.*c)*.22+c*.78;',          // filmic roll-off: highlights go to white without clipping flat
-  ' c=pow(max(c,0.),vec3(1./2.2));',
-  ' c+=(h12(gl_FragCoord.xy)-.5)/255.*1.6;',            // dither: no banding
-  ' gl_FragColor=vec4(c,1.);',
+  ' vec2 d=f-uSun;float r=length(d);',
+  ' float a=atan(d.x,-d.y)/6.2831853;a=fract(a);',                 // 0..1, clockwise from the top
+  ' vec3 c=texture2D(uLut,vec2(a,.5)).rgb;',
+  ' float g=vn(r*2.3)*.5+vn(r*6.1)*.22;',                           // fine concentric brushing; shows most where the light is
+  ' float lit=smoothstep(.72,1.,dot(c,vec3(.333)));',
+  ' c*=1.+g*(.03+.075*lit);',
+  ' c+=(h12(gl_FragCoord.xy)-.5)/255.*1.6;',
+  ' gl_FragColor=vec4(clamp(c,0.,1.),1.);',
   '}'].join('\n');
 
   function initGL(){
@@ -77,56 +65,31 @@
     gl.useProgram(pr);
     var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
     var loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
-    ['uRes','uDpr','uSun','uView','uScroll','uEnv','uEnvOn','uEnvRot'].forEach(function(n){U[n]=gl.getUniformLocation(pr,n);});
-    bg.insertBefore(cv,L.nextSibling);   // above the CSS fallback, below the 3D buttons
-    envTex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,envTex);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([140,140,140,255]));
+    ['uRes','uDpr','uSun','uLut'].forEach(function(n){U[n]=gl.getUniformLocation(pr,n);});
+    var tx=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tx);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,360,1,0,gl.RGBA,gl.UNSIGNED_BYTE,lut());
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-    gl.uniform1i(U.uEnv,0);gl.uniform1f(U.uEnvOn,0);gl.uniform1f(U.uEnvRot,0);
+    gl.uniform1i(U.uLut,0);
+    bg.insertBefore(cv,L.nextSibling);   // above the CSS fallback, below the 3D buttons
     return true;
-  }
-  function size(){
-    var dpr=Math.min(2,devicePixelRatio||1),w=innerWidth,h=innerHeight;
-    cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);gl.viewport(0,0,cv.width,cv.height);
-    gl.uniform1f(U.uDpr,dpr);gl.uniform2f(U.uRes,w,h);
   }
   var lastW=0,lastH=0;
   function draw(){
     if(!gl)return;
-    if(innerWidth!==lastW||innerHeight!==lastH){lastW=innerWidth;lastH=innerHeight;size();}
-    var maxS=Math.max(1,root.scrollHeight-innerHeight);
-    gl.uniform2f(U.uSun,sun.x-scrollX,sun.y-scrollY);
-    gl.uniform2f(U.uView,view.x,view.y+.12);   // at rest the viewer looks from a little below, as a phone is held
-    gl.uniform1f(U.uScroll,REDUCED?0:(scrollY/maxS-.5));
+    if(innerWidth!==lastW||innerHeight!==lastH){
+      lastW=innerWidth;lastH=innerHeight;var dpr=Math.min(2,devicePixelRatio||1);
+      cv.width=Math.round(lastW*dpr);cv.height=Math.round(lastH*dpr);gl.viewport(0,0,cv.width,cv.height);
+      gl.uniform1f(U.uDpr,dpr);gl.uniform2f(U.uRes,lastW,lastH);
+    }
+    gl.uniform2f(U.uSun,sun.x-scrollX,sun.y-scrollY);   // fixed to the page: the sheen scrolls with the content
     gl.drawArrays(gl.TRIANGLES,0,3);
-  }
-  function loadRoom(tries){   // the room arrives a moment after load, from the solar system's own loader
-    var eq=window.__eq;
-    if(!eq||!eq.image||!eq.image.data){if(tries<1500)requestAnimationFrame(function(){loadRoom(tries+1);});return;}
-    var d=eq.image.data,w=eq.image.width,h=eq.image.height,ch=d.length/(w*h),out=new Uint8Array(w*h*4);
-    for(var i=0;i<w*h;i++){var k=i*ch,l=.2126*d[k]+.7152*d[k+1]+.0722*d[k+2],t=Math.min(255,Math.round(255*(1-Math.exp(-l*.5))));out[i*4]=out[i*4+1]=out[i*4+2]=t;out[i*4+3]=255;}   // radiance, squeezed into 8 bits (decoded in the shader)
-    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,envTex);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,out);
-    gl.uniform1f(U.uEnvOn,1);gl.uniform1f(U.uEnvRot,(eq.offset&&eq.offset.x)||0);envReady=true;draw();
   }
   function sched(){if(!raf)raf=requestAnimationFrame(function(){raf=0;layout();});}
   function sdraw(){if(!raf)raf=requestAnimationFrame(function(){raf=0;draw();});}
 
-  /* tilt the phone (or move the pointer on a desktop) and the viewer moves, so the highlights slide across the grooves */
-  function ease(){view.x+=(view.tx-view.x)*.12;view.y+=(view.ty-view.y)*.12;draw();
-    if(Math.abs(view.tx-view.x)>.0005||Math.abs(view.ty-view.y)>.0005)loop=requestAnimationFrame(ease);else loop=0;}
-  function kick(){if(!loop)loop=requestAnimationFrame(ease);}
-  if(!REDUCED){
-    addEventListener('deviceorientation',function(e){if(e.gamma==null||e.beta==null)return;
-      if(!base)base={g:e.gamma,b:e.beta};
-      view.tx=Math.max(-1,Math.min(1,(e.gamma-base.g)/35))*.32;view.ty=Math.max(-1,Math.min(1,(e.beta-base.b)/35))*.32;kick();},{passive:true});
-    addEventListener('pointermove',function(e){if(e.pointerType==='touch')return;
-      view.tx=(e.clientX/innerWidth-.5)*.5;view.ty=(e.clientY/innerHeight-.5)*.5;kick();},{passive:true});
-  }
-
-  var ok=false;try{ok=initGL();}catch(err){ok=false;if(window.console)console.warn('brushed-bg: WebGL unavailable, using the CSS metal',err);if(cv&&cv.parentNode)cv.parentNode.removeChild(cv);gl=null;}
-  layout();if(gl)loadRoom(0);
+  try{initGL();}catch(err){if(window.console)console.warn('brushed-bg: WebGL unavailable, using the CSS metal',err);if(cv&&cv.parentNode)cv.parentNode.removeChild(cv);gl=null;}
+  layout();
   addEventListener('resize',sched);addEventListener('load',sched);addEventListener('scroll',sdraw,{passive:true});
   new ResizeObserver(sched).observe(body);
   var sunEl=document.querySelector('.sun-cta');if(sunEl)new ResizeObserver(sched).observe(sunEl);
