@@ -1337,7 +1337,7 @@ function drawFlow() {
 
   // A small, fine diagonal in the middle of the gap between the two blocks (lower left to upper right).
   const cx = (r1.left + r2.right) / 2 - fc.left, cy = T + H * 0.5;
-  const SZ = parseFloat(new URLSearchParams(location.search).get("size")) || 1;
+  const SZ = parseFloat(new URLSearchParams(location.search).get("size")) || 1.1;
   const LEN = Math.min(206 * SZ, (r2.right - r1.left) * 0.6), AMP = 14 * SZ, ANG = -31 * Math.PI / 180, CURL = 0.2;
   const anchors = [];
   for (let q = 0; q <= 10; q++) {
