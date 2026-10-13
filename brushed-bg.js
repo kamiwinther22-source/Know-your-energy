@@ -17,7 +17,7 @@
     var r=s.getBoundingClientRect();if(!r.width)return;   // sun hidden (form step): keep the last position
     sun.x=r.left+r.width/2+scrollX;sun.y=r.top+r.height/2+scrollY;
     L.style.setProperty('--metal-x',sun.x.toFixed(1)+'px');L.style.setProperty('--metal-y',sun.y.toFixed(1)+'px');
-    L.style.height=Math.max(root.scrollHeight,innerHeight)+'px';
+    var ph=Math.max(root.scrollHeight,innerHeight)+'px';bg.style.height=ph;L.style.height=ph;   // the clipping layer must be as tall as the page, or it hides everything inside it
     draw();
   }
 
