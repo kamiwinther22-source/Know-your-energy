@@ -1,0 +1,47 @@
+/* Brushed-metal background (phone-first). Pure CSS, no image files.
+   Usage: add class "metal-bg" to <body> or any wrapper; put content inside it.
+   Move the highlight center per element with --metal-x / --metal-y. */
+
+.metal-bg {
+  --metal-x: 50%;   /* horizontal position of the center point */
+  --metal-y: 50%;   /* vertical position of the center point */
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #e8e8e7; /* fallback if conic-gradient is unsupported */
+}
+
+/* Fixed to the viewport via a pseudo-element: iOS Safari does not honor
+   background-attachment: fixed reliably. */
+.metal-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    /* fine concentric brushing grain, same center as the sheen */
+    repeating-radial-gradient(
+      circle at var(--metal-x) var(--metal-y),
+      rgba(255, 255, 255, 0) 0 1px,
+      rgba(0, 0, 0, 0.022) 1.5px 2px
+    ),
+    /* angular sheen: bright bands on the vertical and the diagonal axes */
+    conic-gradient(
+      from 0deg at var(--metal-x) var(--metal-y),
+      #f6f6f5   0deg,
+      #d9d9d8  40deg,
+      #c9c9c8  65deg,
+      #e4e4e3 100deg,
+      #f9f9f8 125deg,
+      #e9e9e8 160deg,
+      #f7f7f6 180deg,
+      #ececeb 215deg,
+      #dcdcdb 255deg,
+      #f2f2f1 295deg,
+      #fafaf9 315deg,
+      #e8e8e7 340deg,
+      #f6f6f5 360deg
+    );
+}
