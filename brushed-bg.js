@@ -22,38 +22,43 @@
   }
 
   /* ---------- WebGL: the shaded surface ---------- */
-  var cv=null,gl=null,U={},view={x:0,y:0,tx:0,ty:0},base=null,raf=0,loop=0;
+  var cv=null,gl=null,envTex=null,envReady=false,U={},view={x:0,y:0,tx:0,ty:0},base=null,raf=0,loop=0;
   var VS='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   var FS=[
   'precision highp float;',
-  'uniform vec2 uRes;uniform float uDpr;uniform vec2 uSun;uniform vec2 uView;uniform float uScroll;',
+  'uniform vec2 uRes;uniform float uDpr;uniform vec2 uSun;uniform vec2 uView;uniform float uScroll;uniform sampler2D uEnv;uniform float uEnvOn;uniform float uEnvRot;',
   'float h11(float p){p=fract(p*.1031);p*=p+33.33;p*=p+p;return fract(p);}',
   'float h12(vec2 p){vec3 q=fract(vec3(p.xyx)*.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}',
   'float vn(float x){float i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(h11(i),h11(i+1.),f)*2.-1.;}',
   'float vn2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h12(i),h12(i+vec2(1,0)),f.x),mix(h12(i+vec2(0,1)),h12(i+vec2(1,1)),f.x),f.y)*2.-1.;}',
   // Ward anisotropic lobe: narrow across the grooves (aT), wide along the reflection streak (aB)
   'float ward(vec3 Lv,vec3 V,vec2 T,vec2 B,float aT,float aB){vec3 H=normalize(Lv+V);float ht=dot(H.xy,T),hb=dot(H.xy,B);return exp(-2.*(pow(abs(ht)/aT,3.2)+(hb*hb)/(aB*aB))/(1.+H.z));}',
+  // the photographed room the solar system reflects (window.__eq), read as radiance: d is a direction (x right, y down, z toward the viewer)
+  'vec3 room(vec3 d){vec3 e=vec3(d.x,-d.y,d.z);float u=fract(atan(e.z,e.x)/6.2831853+.5+uEnvRot);float v=asin(clamp(e.y,-1.,1.))/3.14159265+.5;float t=min(texture2D(uEnv,vec2(u,v)).r,.995);return vec3(-log(1.-t)/.5);}',
   // a studio light at infinity: azimuth (deg clockwise from the top of the screen) and elevation (deg above the sheet)
   'vec3 dir(float az,float el){float a=radians(az),e=radians(el);return vec3(sin(a)*cos(e),-cos(a)*cos(e),sin(e));}',
   'void main(){',
   ' vec2 f=vec2(gl_FragCoord.x,uRes.y*uDpr-gl_FragCoord.y)/uDpr;',
   ' vec2 d=f-uSun;float r=length(d);vec2 B=r>.001?d/r:vec2(1.,0.);vec2 T=vec2(-B.y,B.x);',   // T: along the grooves (a circle round the sun); B: across them (radial)
   ' vec3 P=vec3(f,0.);',
-  ' float D=1500.;vec3 Vp=vec3(uRes*.5+uView*D+vec2(uScroll*D*.22,uScroll*D*.22),D);vec3 V=normalize(Vp-P);',
+  ' vec3 V=normalize(vec3(uView*3.+vec2(uScroll*.38,uScroll*.20),1.));',
   // fine grooves: hair-thin concentric lines of slightly different roughness, plus slow uneven wear
   ' float g=vn(r*2.3)*.5+vn(r*6.1)*.22;',
   ' float wob=1.+.24*g;',
     ' float S=0.;',
-  ' S+=3.0*ward(dir(8.,50.),V,T,B,.050*wob,.70);',        // reflection 1: a narrow, crisp ray running near-vertically
-  ' S+=2.7*ward(dir(-56.,46.),V,T,B,.055*wob,.70);',      // reflection 2: a narrow, crisp ray on the diagonal
-  ' S+=.75*ward(dir(-22.,40.),V,T,B,.13*wob,.80);',       // a broad, dimmer sheet of reflected light, still crisp-edged
-  ' S+=.55*ward(dir(104.,30.),V,T,B,.14*wob,.85);',
+  // brushed metal reflects the room along the grooves' cross-section: the microscopic normals tilt across the grooves (toward B), so each pixel averages the room along an arc
+  ' vec3 env=vec3(0.);float ws=0.;',
+  ' for(int i=0;i<9;i++){float q=(float(i)-4.)/4.;float th=q*(.62*wob);vec3 Nn=normalize(vec3(B*sin(th),cos(th)));vec3 R=reflect(-V,Nn);float w=exp(-2.*q*q);env+=w*room(R);ws+=w;}',
+  ' env=uEnvOn>.5?env/ws:vec3(.55);',
+  // the ONLY light is the sun: a lamp straight above the centre of the grooves. Its reflection is bright where the line from the sun toward the viewer runs across the grooves, so one bright ray (both ends) crosses the sun and turns as the viewer or the page moves.
+  ' vec3 Ls=normalize(vec3(uSun,2200.)-P);',
+  ' S+=2.6*ward(Ls,V,T,B,.040*wob,.90);',
   ' S*=(1.+.10*g);',
   ' float low=vn2(f/90.)*.5+vn2(f/23.)*.25;',            // slow, uneven sheen, so it is not mathematically perfect
   // reflected sky: pale, cool, brighter toward the sun
   ' float sky=.24+.03*low;',
   ' vec3 F0=vec3(.93,.94,.96);',
-  ' vec3 c=F0*(vec3(sky*.98,sky,sky*1.03)+S*vec3(1.,1.,1.02)+.014*g);',
+  ' vec3 c=F0*(vec3(sky*.30)+env*.62*(1.+.05*g)+S*vec3(1.,1.,1.02)+.005*g);',
   ' c=(c*(2.51*c+.03))/(c*(2.43*c+.59)+.14);',
   ' float lum=dot(c,vec3(.299,.587,.114));c*=mix(vec3(.89,.95,1.12),vec3(1.,.997,.988),smoothstep(.10,.78,lum));',
   ' c=clamp(c,0.,1.);c=c*c*(3.-2.*c)*.22+c*.78;',          // filmic roll-off: highlights go to white without clipping flat
@@ -72,8 +77,13 @@
     gl.useProgram(pr);
     var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
     var loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
-    ['uRes','uDpr','uSun','uView','uScroll'].forEach(function(n){U[n]=gl.getUniformLocation(pr,n);});
+    ['uRes','uDpr','uSun','uView','uScroll','uEnv','uEnvOn','uEnvRot'].forEach(function(n){U[n]=gl.getUniformLocation(pr,n);});
     bg.insertBefore(cv,L.nextSibling);   // above the CSS fallback, below the 3D buttons
+    envTex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,envTex);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([140,140,140,255]));
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    gl.uniform1i(U.uEnv,0);gl.uniform1f(U.uEnvOn,0);gl.uniform1f(U.uEnvRot,0);
     return true;
   }
   function size(){
@@ -91,6 +101,15 @@
     gl.uniform1f(U.uScroll,REDUCED?0:(scrollY/maxS-.5));
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
+  function loadRoom(tries){   // the room arrives a moment after load, from the solar system's own loader
+    var eq=window.__eq;
+    if(!eq||!eq.image||!eq.image.data){if(tries<1500)requestAnimationFrame(function(){loadRoom(tries+1);});return;}
+    var d=eq.image.data,w=eq.image.width,h=eq.image.height,ch=d.length/(w*h),out=new Uint8Array(w*h*4);
+    for(var i=0;i<w*h;i++){var k=i*ch,l=.2126*d[k]+.7152*d[k+1]+.0722*d[k+2],t=Math.min(255,Math.round(255*(1-Math.exp(-l*.5))));out[i*4]=out[i*4+1]=out[i*4+2]=t;out[i*4+3]=255;}   // radiance, squeezed into 8 bits (decoded in the shader)
+    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,envTex);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,out);
+    gl.uniform1f(U.uEnvOn,1);gl.uniform1f(U.uEnvRot,(eq.offset&&eq.offset.x)||0);envReady=true;draw();
+  }
   function sched(){if(!raf)raf=requestAnimationFrame(function(){raf=0;layout();});}
   function sdraw(){if(!raf)raf=requestAnimationFrame(function(){raf=0;draw();});}
 
@@ -107,7 +126,7 @@
   }
 
   var ok=false;try{ok=initGL();}catch(err){ok=false;if(window.console)console.warn('brushed-bg: WebGL unavailable, using the CSS metal',err);if(cv&&cv.parentNode)cv.parentNode.removeChild(cv);gl=null;}
-  layout();
+  layout();if(gl)loadRoom(0);
   addEventListener('resize',sched);addEventListener('load',sched);addEventListener('scroll',sdraw,{passive:true});
   new ResizeObserver(sched).observe(body);
   var sunEl=document.querySelector('.sun-cta');if(sunEl)new ResizeObserver(sched).observe(sunEl);
