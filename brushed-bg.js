@@ -1,4 +1,4 @@
-/* ?look=final — the page's metal surface: your reference image (a conic, spun-metal sheen with fine concentric brushing), centred on the sun (.sun-cta),
+/* ?look=final — the page's metal surface: your reference image (the light and dark radiating from one point; no lines, no grain), centred on the sun (.sun-cta),
    with stronger contrast. Light radiates only from the sun. It is fixed to the page: the top and the bottom are the same surface under the same light.
    Layers: a CSS conic gradient (metal-background/metal-bg.css) is the fallback underneath; this WebGL canvas sits on top of it, behind everything else.
    ?bg=old skips all of this and brings back the old polished sheet. */
@@ -7,6 +7,7 @@
   var body=document.body,root=document.documentElement;
   ['metal-background/metal-bg.css','look-brushed.css'].forEach(function(h){var l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l);});
   var bg=document.getElementById('metalBg');if(!bg){bg=document.createElement('div');bg.id='metalBg';bg.setAttribute('aria-hidden','true');body.insertBefore(bg,body.firstChild);}
+  if(/[?&]refl=1\b/.test(location.search))root.classList.add('show-refl');   // reflections can't sit on this surface; ?refl=1 shows them for comparison
   var L=document.createElement('div');L.id='brushBg';L.className='metal-layer';bg.insertBefore(L,bg.firstChild);   // CSS fallback
 
   var sun={x:195,y:300};   // the sun's centre in page coordinates (css px)
@@ -19,7 +20,7 @@
     draw();
   }
 
-  /* the sheen around the centre, taken from the reference (angle clockwise from the top: brightness 0.79 = darkest, 0.98 = brightest),
+  /* the light and dark around the centre, taken from the reference (angle clockwise from the top: brightness 0.79 = darkest, 0.98 = brightest),
      then pushed to real contrast: white where the light runs, deeper steel where it doesn't */
   var STOPS=[[0,.965],[40,.85],[65,.79],[100,.895],[125,.975],[160,.915],[180,.97],[215,.925],[255,.865],[295,.95],[315,.98],[340,.91],[360,.965]];
   function lut(){
@@ -48,9 +49,6 @@
   ' vec2 d=f-uSun;float r=length(d);',
   ' float a=atan(d.x,-d.y)/6.2831853;a=fract(a);',                 // 0..1, clockwise from the top
   ' vec3 c=texture2D(uLut,vec2(a,.5)).rgb;',
-  ' float g=vn(r*2.3)*.5+vn(r*6.1)*.22;',                           // fine concentric brushing; shows most where the light is
-  ' float lit=smoothstep(.72,1.,dot(c,vec3(.333)));',
-  ' c*=1.+g*(.03+.075*lit);',
   ' c+=(h12(gl_FragCoord.xy)-.5)/255.*1.6;',
   ' gl_FragColor=vec4(clamp(c,0.,1.),1.);',
   '}'].join('\n');

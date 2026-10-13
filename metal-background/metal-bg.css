@@ -1,4 +1,4 @@
-/* Brushed-metal background (phone-first). Pure CSS, no image files.
+/* Metal background (phone-first): light and dark radiating from one point. Pure CSS, no image files.
    Usage: add class "metal-bg" to <body> or any wrapper; put content inside it.
    Or put class "metal-layer" on an absolutely positioned element sized by you.
    Move the highlight center per element with --metal-x / --metal-y. */
@@ -30,12 +30,6 @@
 .metal-bg::before,
 .metal-layer {
   background:
-    /* fine concentric brushing grain, same center as the sheen */
-    repeating-radial-gradient(
-      circle at var(--metal-x) var(--metal-y),
-      rgba(255, 255, 255, 0) 0 1px,
-      rgba(0, 0, 0, 0.022) 1.5px 2px
-    ),
     /* angular sheen: bright bands on the vertical and the diagonal axes */
     conic-gradient(
       from 0deg at var(--metal-x) var(--metal-y),
