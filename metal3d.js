@@ -42,16 +42,11 @@ const sunLight=new THREE.SpotLight(0xfff0de,num('sun',0.002),0,1.35,1,0);   sunL
 sunLight.shadow.mapSize.set(2048,2048);sunLight.shadow.radius=num('soft',7);sunLight.shadow.bias=-0.0004;sunLight.shadow.normalBias=1.2;sunLight.shadow.camera.near=100;sunLight.shadow.camera.far=3200;
 scene.add(sunLight,sunLight.target);
 const group=new THREE.Group();scene.add(group);
-function plateStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');   // what a mirror-polished chrome sheet facing you sees: big hard-edged bright windows against mid silver
-  const sky=g.createLinearGradient(0,0,0,H);
-  sky.addColorStop(0,'#ffffff');sky.addColorStop(.3,'#dfe3e7');sky.addColorStop(.45,'#8f979f');sky.addColorStop(.55,'#8f979f');sky.addColorStop(.7,'#cfd3d8');sky.addColorStop(1,'#f4f5f7');
+function plateStudio(){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');   // what the sheet sees: one light, the sun, upper right. Bright toward it, deeper silver away from it. Nothing else.
+  const x0=.72*W,y0=(1-.72)*H,x1=.78*W,y1=(1-.28)*H;   // from the sun's side of the page to the far side
+  const sky=g.createLinearGradient(x0,y0,x1,y1);
+  sky.addColorStop(0,'#eef0f3');sky.addColorStop(.5,'#c3c9d0');sky.addColorStop(1,'#a3abb4');
   g.fillStyle=sky;g.fillRect(0,0,W,H);
-  const rect=(u,v,w,h,col)=>{const x=u*W,y=(1-v)*H,ww=w*W,hh=h*H;g.fillStyle=col;g.fillRect(x-ww/2,y-hh/2,ww,hh);};
-  for(const du of[-1,0,1]){   // wrap, so nothing ever shows a seam
-    rect(.742+du,.60,.030,.13,'#ffffff');      // a big bright window, upper right, crisp edges
-    rect(.768+du,.43,.026,.09,'#ffffff');      // a second window, lower left
-    rect(.724+du,.50,.0035,.22,'#ffffff');     // one hard white edge
-  }
   const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;return t;}
 function buttonStudio(flip){const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');if(flip){g.translate(0,H);g.scale(1,-1);}   // flip = the mirror world: everything upside down, the sun included
     // what a raised chrome button truly sees: dark room, the sun's box above-right, the pale sheet below
@@ -91,7 +86,7 @@ function build(){
   for(let i=0;i<n.count;i++){const u=P.getX(i)/W+.5,v=P.getY(i)/H+.5;
     const nx=k*Math.sin(6.283*(u*.55+v*.95)+.4)+k*.5*Math.sin(6.283*(u*1.3-v*.4)+1.7),ny=k*.8*Math.sin(6.283*(v*.7-u*.45)+2.1);
     const l=Math.hypot(nx,ny,1);n.setXYZ(i,nx/l,ny/l,1/l);}n.needsUpdate=true;}
-const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',1.15);pmat.roughness=num('pr',.03);pmat.metalness=1;pmat.color.set(0xffffff);pmat.depthWrite=false;}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1')plate.renderOrder=-10;group.add(plate);
+const pmat=mat(ROLE.plate).clone();if(Q.get('final')==='1'){pmat.envMap=pm.fromEquirectangular(plateStudio()).texture;pmat.envMapIntensity=num('penv',.5);pmat.roughness=num('pr',.03);pmat.metalness=1;pmat.color.set(0xffffff);pmat.depthWrite=false;}plate=new THREE.Mesh(g,pmat);if(Q.get('final')==='1')plate.renderOrder=-10;group.add(plate);
   if(Q.get('final')==='1'){if(spec){group.remove(spec);spec.geometry.dispose();}spec=new THREE.Mesh(new THREE.PlaneGeometry(page.W,page.H,1,1),specMat);spec.position.set(0,0,num('gz',.6));spec.renderOrder=3;group.add(spec);}
 
   const sh=new THREE.Mesh(g,new THREE.ShadowMaterial({opacity:num('shade',.26)}));sh.position.z=.6;sh.receiveShadow=true;plate.add(sh);   // shadow-only layer
