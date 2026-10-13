@@ -1338,8 +1338,8 @@ function drawFlow() {
   // A small, fine diagonal in the middle of the gap between the two blocks (lower left to upper right).
   // Spans the page (a little space at each edge): lower left, through the gap, to upper right.
   const xL = 14, xR = Math.min(fc.width, innerWidth - fc.left) - 14;
-  const cx = (xL + xR) / 2, cy = T + H * 0.5, Hy = H * 0.59;
-  const LEN = Math.hypot(xR - xL, 2 * Hy), ANG = -Math.atan2(2 * Hy, xR - xL), AMP = 15, CURL = 0.2;
+  const cx = (xL + xR) / 2, cy = T + H * 0.5, Hy = H * 0.5;
+  const LEN = Math.hypot(xR - xL, 2 * Hy), ANG = -Math.atan2(2 * Hy, xR - xL), AMP = 27, CURL = 0.22;
   const anchors = [];
   for (let q = 0; q <= 12; q++) {
     const t = q / 12, ux = LEN * (t - 0.5);
@@ -1367,7 +1367,7 @@ function drawFlow() {
     const dx = b[0] - a[0], dy = b[1] - a[1], m = Math.hypot(dx, dy) || 1;
     NR.push([-dy / m, dx / m]);
   }
-  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.26); return Math.sin(e * Math.PI / 2); };
+  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.4); return Math.sin(e * Math.PI / 2); };
   const at = (s, n, off) => { const t = n / N; const o = (off || 0) + s.A * Math.sin(6.283 * t * s.f + s.ph) * Math.pow(env(t, s.a, s.b), 0.6); return [C[n][0] + NR[n][0] * o, C[n][1] + NR[n][1] * o]; };
   const pl = a => "M" + a.map(q => f1(q[0]) + "," + f1(q[1])).join(" L");
 
@@ -1380,10 +1380,10 @@ function drawFlow() {
 
   // four fine twisting ribbons, each narrowing to a thread and widening again
   const rs = [
-    { a: 0,   b: .88, A: 3,   f: 1.5, ph: 0.4, w: 8, m: 1.6, ps: 0.3, g: "fa1", o: .55, ec: pal[2], blur: 1 },
-    { a: .08, b: 1,   A: 3,   f: 1.9, ph: 2.6, w: 7, m: 1.9, ps: 1.7, g: "fa2", o: .6,  ec: pal[2] },
-    { a: .03, b: .8,  A: 3.5, f: 1.2, ph: 4.4, w: 6, m: 2.3, ps: 2.9, g: "fa3", o: .55, ec: pal[2] },
-    { a: .2,  b: .97, A: 2.5, f: 2.3, ph: 1.3, w: 4, m: 2.7, ps: 0.9, g: "fa1", o: .6,  ec: pal[2] }
+    { a: 0,   b: .9,  A: 11, f: 1.3, ph: 0.4, w: 26, m: 1.5, ps: 0.3, g: "fa1", o: .5,  ec: pal[2], blur: 1 },
+    { a: .06, b: 1,   A: 10, f: 1.7, ph: 2.6, w: 22, m: 1.8, ps: 1.7, g: "fa2", o: .55, ec: pal[2] },
+    { a: .02, b: .84, A: 12, f: 1.1, ph: 4.4, w: 18, m: 2.1, ps: 2.9, g: "fa3", o: .5,  ec: pal[2] },
+    { a: .16, b: .98, A: 8,  f: 2.1, ph: 1.3, w: 12, m: 2.6, ps: 0.9, g: "fa1", o: .55, ec: pal[2] }
   ];
   const centers = rs.map(i => {
     const Lp = [], Rp = [], Cc = [];
@@ -1392,7 +1392,8 @@ function drawFlow() {
       const w = i.w * (0.08 + 0.92 * Math.abs(Math.sin(6.283 * t * i.m + i.ps))) * env(t, i.a, i.b);
       Cc.push(c); Lp.push([c[0] + NR[n][0] * w / 2, c[1] + NR[n][1] * w / 2]); Rp.push([c[0] - NR[n][0] * w / 2, c[1] - NR[n][1] * w / 2]);
     }
-    out += '<polygon points="' + Lp.concat(Rp.slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1])).join(" ") + '" fill="url(#' + i.g + ')" fill-opacity="' + i.o + '"' + (i.blur ? ' filter="url(#fab)"' : "") + '/>' +
+    out += '<polygon points="' + Lp.concat(Rp.slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1] + 2.2)).join(" ") + '" fill="' + pal[2] + '" fill-opacity=".2" filter="url(#fab)"/>' +
+           '<polygon points="' + Lp.concat(Rp.slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1])).join(" ") + '" fill="url(#' + i.g + ')" fill-opacity="' + i.o + '"' + (i.blur ? ' filter="url(#fab)"' : "") + '/>' +
            '<path d="' + pl(Lp) + '" fill="none" stroke="#fff" stroke-width=".5" opacity=".9"/>' +
            '<path d="' + pl(Rp) + '" fill="none" stroke="' + i.ec + '" stroke-width=".45" opacity=".75"/>';
     return Cc;
@@ -1402,12 +1403,12 @@ function drawFlow() {
     const h = { a: rnd() * .2, b: .8 + rnd() * .2, A: 2.5 + rnd() * 5, f: .9 + rnd() * 1.1, ph: rnd() * 6.28 };
     const pts = [];
     for (let n = 0; n <= N; n++) { const t = n / N; if (t < h.a || t > h.b) continue; pts.push(at(h, n, 0)); }
-    out += '<path d="' + pl(pts) + '" fill="none" stroke="' + [pal[2], "#fff", pal[2]][j % 3] + '" stroke-width="' + f1(.35 + rnd() * .3) + '" opacity="' + f1(.55 + rnd() * .3) + '" stroke-linecap="round"/>';
+    out += '<path d="' + pl(pts) + '" fill="none" stroke="' + [pal[2], "#fff", pal[2]][j % 3] + '" stroke-width="' + f1(.5 + rnd() * .4) + '" opacity="' + f1(.55 + rnd() * .3) + '" stroke-linecap="round"/>';
   }
   // tiny soft glints
-  for (let j = 0; j < 9; j++) {
+  for (let j = 0; j < 13; j++) {
     const c = centers[Math.floor(rnd() * 4)], p = c[30 + Math.floor(rnd() * (N - 60))];
-    const x = p[0] + (rnd() - .5) * 8, y = p[1] + (rnd() - .5) * 8, r = .7 + rnd() * rnd() * 2.0;
+    const x = p[0] + (rnd() - .5) * 14, y = p[1] + (rnd() - .5) * 14, r = .9 + rnd() * rnd() * 2.6;
     out += '<g class="fa-g" style="animation-delay:-' + f1(rnd() * 4.6) + 's;animation-duration:' + f1(3.6 + rnd() * 3) + 's"><circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * 4) + '" fill="url(#fas)"/><circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * .6) + '" fill="#fff"/></g>';
   }
   svg.setAttribute("viewBox", "0 0 " + f1(fc.width) + " " + f1(fc.height));
