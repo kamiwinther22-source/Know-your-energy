@@ -21,15 +21,18 @@
 
   /* the light and dark around the centre, taken from the reference (angle clockwise from the top: brightness 0.79 = darkest, 0.98 = brightest),
      then pushed to real contrast: white where the light runs, deeper steel where it doesn't */
-  var STOPS=[[0,.965],[40,.85],[65,.79],[100,.895],[125,.975],[160,.915],[180,.97],[215,.925],[255,.865],[295,.95],[315,.98],[340,.91],[360,.965]];
+  var STOPS=[[0,.88],[30,.60],[62,.12],[95,.40],[122,.92],[150,.30],[172,.55],[196,1],[225,.62],[255,.22],[290,.78],[315,1],[340,.55],[360,.88]];   // angle clockwise from the top, 0 = deepest steel, 1 = brightest. Below the sun it runs from steel to bright across the width of the phone.
+  function col(t){   // a real steel colour: cool blue-grey in the shadows, clean silver in the middle, near-white with the faintest warmth in the light
+    var D=[124,136,155],M=[190,199,212],H=[250,249,247],a,b,u;
+    if(t<.5){a=D;b=M;u=t/.5;}else{a=M;b=H;u=(t-.5)/.5;}
+    return [a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u];
+  }
   function lut(){
     var out=new Uint8Array(360*4),i,k;
     for(i=0;i<360;i++){
       for(k=0;k<STOPS.length-2&&STOPS[k+1][0]<=i;k++);
       var a=STOPS[k],b=STOPS[k+1],u=(i-a[0])/(b[0]-a[0]);u=(1-Math.cos(Math.PI*Math.max(0,Math.min(1,u))))/2;
-      var v=a[1]+(b[1]-a[1])*u,t=Math.max(0,Math.min(1,(v-.79)/(.98-.79)));
-      t=t*t*(3-2*t);   // bright bands read as bright, dark as dark
-      out[i*4]=Math.round(255*(.47+.53*t));out[i*4+1]=Math.round(255*(.495+.505*t));out[i*4+2]=Math.round(255*(.55+.45*t));out[i*4+3]=255;
+      var c=col(a[1]+(b[1]-a[1])*u);out[i*4]=Math.round(c[0]);out[i*4+1]=Math.round(c[1]);out[i*4+2]=Math.round(c[2]);out[i*4+3]=255;
     }
     return out;
   }
