@@ -1330,56 +1330,89 @@ function drawFlow() {
   const B = p2Lbl.getBoundingClientRect().top - fc.top - 6;
   const H = B - T;
   if (H < 60) { svg.classList.remove("on"); return; }
-  const pal = FLOW_PALETTES[new URLSearchParams(location.search).get("flow")] || FLOW_PALETTES.teal;
-  const cx = (r1.left + r2.right) / 2 - fc.left;
-  const hw = Math.min((r2.right - r1.left) / 2 + 14, innerWidth / 2 - 8);
-  const X0 = cx - hw, X1 = cx + hw;
-  const N = 170, k = H / 142;
+  const pal = FLOW_PALETTES[new URLSearchParams(location.search).get("flow")] || FLOW_PALETTES.white;
+  const f1 = n => n.toFixed(1);
   let seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const shape = new URLSearchParams(location.search).get("shape") || "a";
-  const SW = { a: [0.52, 0.068], b: [0.46, 0.058], c: [0.58, 0.08] }[shape] || [0.52, 0.068];
-  const axis = x => {
-    const t = (x - X0) / (X1 - X0);
-    return T + 0.4 * H - SW[0] * H * (t - 0.5) + SW[1] * H * Math.sin(6.283 * (t - 0.5));
-  };
-  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.28); return Math.sin(e * Math.PI / 2); };
-  const Y = (i, x) => { const t = (x - X0) / (X1 - X0); return axis(x) + i.A * k * Math.sin(6.283 * t * i.f + i.ph) * Math.pow(env(t, i.a, i.b), 0.6); };
-  const f1 = n => n.toFixed(1);
+
+  // Free space: a strip left of Person 2, a strip right of Person 1, and the gap between them.
+  const L0 = r1.left - fc.left - 20, L1 = r2.left - fc.left - 12;
+  const R0 = r1.right - fc.left + 10, R1 = Math.min(r2.right + 8, innerWidth - 8) - fc.left;
+  const xl = (L0 + L1) / 2, xr = (R0 + R1) / 2;
+  const below = Math.min(r2.height * 0.74, 112), above = Math.min(r1.height * 0.62, 108);
+  const anchors = [
+    [xl - 6, B + 6 + below],
+    [xl + 4, B + 6 + below * 0.46],
+    [xl + 30, B + 6 + below * 0.1],
+    [xl + (xr - xl) * 0.3, B - H * 0.12],
+    [(xl + xr) / 2, T + H * 0.5],
+    [xl + (xr - xl) * 0.7, T + H * 0.12],
+    [xr - 30, T - above * 0.1],
+    [xr - 4, T - above * 0.46],
+    [xr + 6, T - above]
+  ];
+  // smooth centreline (Catmull-Rom), then resample evenly along its length
+  const cr = (p0, p1, p2, p3, t) => { const t2 = t * t, t3 = t2 * t; return [0, 1].map(i => 0.5 * ((2 * p1[i]) + (-p0[i] + p2[i]) * t + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * t2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * t3)); };
+  const dense = [];
+  for (let i = 0; i < anchors.length - 1; i++) {
+    const p0 = anchors[Math.max(0, i - 1)], p1 = anchors[i], p2 = anchors[i + 1], p3 = anchors[Math.min(anchors.length - 1, i + 2)];
+    for (let q = 0; q < 30; q++) dense.push(cr(p0, p1, p2, p3, q / 30));
+  }
+  dense.push(anchors[anchors.length - 1]);
+  const cum = [0];
+  for (let i = 1; i < dense.length; i++) cum.push(cum[i - 1] + Math.hypot(dense[i][0] - dense[i - 1][0], dense[i][1] - dense[i - 1][1]));
+  const N = 240, total = cum[cum.length - 1], C = [], NR = [];
+  for (let n = 0; n <= N; n++) {
+    const d = total * n / N; let j = 1; while (j < cum.length - 1 && cum[j] < d) j++;
+    const u = (d - cum[j - 1]) / ((cum[j] - cum[j - 1]) || 1);
+    C.push([dense[j - 1][0] + (dense[j][0] - dense[j - 1][0]) * u, dense[j - 1][1] + (dense[j][1] - dense[j - 1][1]) * u]);
+  }
+  for (let n = 0; n <= N; n++) {
+    const a = C[Math.max(0, n - 1)], b = C[Math.min(N, n + 1)];
+    const dx = b[0] - a[0], dy = b[1] - a[1], m = Math.hypot(dx, dy) || 1;
+    NR.push([-dy / m, dx / m]);
+  }
+  const env = (t, a, b) => { if (t < a || t > b) return 0; const e = Math.min(1, Math.min(t - a, b - t) / 0.26); return Math.sin(e * Math.PI / 2); };
+  const at = (s, n, off) => { const t = n / N; const o = (off || 0) + s.A * Math.sin(6.283 * t * s.f + s.ph) * Math.pow(env(t, s.a, s.b), 0.6); return [C[n][0] + NR[n][0] * o, C[n][1] + NR[n][1] * o]; };
+  const pl = a => "M" + a.map(q => f1(q[0]) + "," + f1(q[1])).join(" L");
+
   let out = '<defs>' +
     '<linearGradient id="fa1" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="' + pal[0] + '"/><stop offset=".5" stop-color="' + pal[1] + '"/><stop offset="1" stop-color="' + pal[2] + '"/></linearGradient>' +
     '<linearGradient id="fa2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="' + pal[0] + '"/><stop offset="1" stop-color="#fff"/></linearGradient>' +
     '<linearGradient id="fa3" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="' + pal[2] + '"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="' + pal[0] + '"/></linearGradient>' +
     '<radialGradient id="fas"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
-    '<filter id="fab"><feGaussianBlur stdDeviation="2.5"/></filter></defs>';
+    '<filter id="fab"><feGaussianBlur stdDeviation="1.6"/></filter></defs>';
+
+  // four fine twisting ribbons, each narrowing to a thread and widening again
   const rs = [
-    { a: 0,   b: .86, A: 11, f: 1.5, ph: 0.4, w: 39, m: 1.6, ps: 0.3, g: "fa1", o: .42, ec: pal[0], blur: 1 },
-    { a: .1,  b: 1,   A: 10, f: 1.9, ph: 2.6, w: 34, m: 1.9, ps: 1.7, g: "fa2", o: .5,  ec: pal[2] },
-    { a: .04, b: .78, A: 13, f: 1.2, ph: 4.4, w: 26, m: 2.3, ps: 2.9, g: "fa3", o: .45, ec: pal[0] },
-    { a: .22, b: .97, A: 8,  f: 2.3, ph: 1.3, w: 19, m: 2.7, ps: 0.9, g: "fa1", o: .5,  ec: pal[2] }
+    { a: 0,   b: .88, A: 7, f: 1.5, ph: 0.4, w: 15, m: 1.6, ps: 0.3, g: "fa1", o: .5,  ec: pal[2], blur: 1 },
+    { a: .08, b: 1,   A: 6, f: 1.9, ph: 2.6, w: 13, m: 1.9, ps: 1.7, g: "fa2", o: .55, ec: pal[2] },
+    { a: .03, b: .8,  A: 8, f: 1.2, ph: 4.4, w: 11, m: 2.3, ps: 2.9, g: "fa3", o: .5,  ec: pal[2] },
+    { a: .2,  b: .97, A: 5, f: 2.3, ph: 1.3, w: 8,  m: 2.7, ps: 0.9, g: "fa1", o: .55, ec: pal[2] }
   ];
-  const pl = a => "M" + a.map(q => f1(q[0]) + "," + f1(q[1])).join(" L");
   const centers = rs.map(i => {
-    const L = [], R = [], C = [];
+    const Lp = [], Rp = [], Cc = [];
     for (let n = 0; n <= N; n++) {
-      const x = X0 + (X1 - X0) * n / N, t = n / N, y = Y(i, x);
-      const w = i.w * k * (0.08 + 0.92 * Math.abs(Math.sin(6.283 * t * i.m + i.ps))) * env(t, i.a, i.b);
-      C.push([x, y]); L.push([x, y - w / 2]); R.push([x, y + w / 2]);
+      const t = n / N, c = at(i, n, 0);
+      const w = i.w * (0.08 + 0.92 * Math.abs(Math.sin(6.283 * t * i.m + i.ps))) * env(t, i.a, i.b);
+      Cc.push(c); Lp.push([c[0] + NR[n][0] * w / 2, c[1] + NR[n][1] * w / 2]); Rp.push([c[0] - NR[n][0] * w / 2, c[1] - NR[n][1] * w / 2]);
     }
-    out += '<polygon points="' + L.concat(R.slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1])).join(" ") + '" fill="url(#' + i.g + ')" fill-opacity="' + i.o + '"' + (i.blur ? ' filter="url(#fab)"' : "") + '/>' +
-           '<path d="' + pl(L) + '" fill="none" stroke="#fff" stroke-width=".8" opacity=".85"/>' +
-           '<path d="' + pl(R) + '" fill="none" stroke="' + i.ec + '" stroke-width=".7" opacity=".7"/>';
-    return C;
+    out += '<polygon points="' + Lp.concat(Rp.slice().reverse()).map(q => f1(q[0]) + "," + f1(q[1])).join(" ") + '" fill="url(#' + i.g + ')" fill-opacity="' + i.o + '"' + (i.blur ? ' filter="url(#fab)"' : "") + '/>' +
+           '<path d="' + pl(Lp) + '" fill="none" stroke="#fff" stroke-width=".7" opacity=".9"/>' +
+           '<path d="' + pl(Rp) + '" fill="none" stroke="' + i.ec + '" stroke-width=".6" opacity=".75"/>';
+    return Cc;
   });
+  // fine hairlines that drift apart and rejoin
   for (let j = 0; j < 5; j++) {
-    const h = { a: rnd() * .2, b: .8 + rnd() * .2, A: 7 + rnd() * 15, f: .9 + rnd() * 1.1, ph: rnd() * 6.28 };
+    const h = { a: rnd() * .2, b: .8 + rnd() * .2, A: 5 + rnd() * 10, f: .9 + rnd() * 1.1, ph: rnd() * 6.28 };
     const pts = [];
-    for (let n = 0; n <= N; n++) { const t = n / N; if (t < h.a || t > h.b) continue; const x = X0 + (X1 - X0) * t; pts.push([x, Y(h, x)]); }
-    out += '<path d="' + pl(pts) + '" fill="none" stroke="' + [pal[0], "#fff", pal[2]][j % 3] + '" stroke-width="' + f1(.5 + rnd() * .4) + '" opacity="' + f1(.5 + rnd() * .3) + '" stroke-linecap="round"/>';
+    for (let n = 0; n <= N; n++) { const t = n / N; if (t < h.a || t > h.b) continue; pts.push(at(h, n, 0)); }
+    out += '<path d="' + pl(pts) + '" fill="none" stroke="' + [pal[2], "#fff", pal[2]][j % 3] + '" stroke-width="' + f1(.45 + rnd() * .35) + '" opacity="' + f1(.55 + rnd() * .3) + '" stroke-linecap="round"/>';
   }
-  for (let j = 0; j < 16; j++) {
-    const c = centers[Math.floor(rnd() * 4)], p = c[34 + Math.floor(rnd() * (N - 68))];
-    const x = p[0] + (rnd() - .5) * 22, y = p[1] + (rnd() - .5) * 19, r = (.9 + rnd() * rnd() * 3.4);
+  // tiny soft glints
+  for (let j = 0; j < 14; j++) {
+    const c = centers[Math.floor(rnd() * 4)], p = c[30 + Math.floor(rnd() * (N - 60))];
+    const x = p[0] + (rnd() - .5) * 12, y = p[1] + (rnd() - .5) * 12, r = .8 + rnd() * rnd() * 2.6;
     out += '<g class="fa-g" style="animation-delay:-' + f1(rnd() * 4.6) + 's;animation-duration:' + f1(3.6 + rnd() * 3) + 's"><circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * 4) + '" fill="url(#fas)"/><circle cx="' + f1(x) + '" cy="' + f1(y) + '" r="' + f1(r * .6) + '" fill="#fff"/></g>';
   }
   svg.setAttribute("viewBox", "0 0 " + f1(fc.width) + " " + f1(fc.height));
