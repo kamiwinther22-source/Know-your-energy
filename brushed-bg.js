@@ -43,17 +43,14 @@
   // fine grooves: hair-thin concentric lines of slightly different roughness, plus slow uneven wear
   ' float g=vn(r*2.3)*.5+vn(r*6.1)*.22;',
   ' float wob=1.+.24*g;',
-  ' float cov=smoothstep(2.,26.,r);',   // right at the sun the grooves have no direction; it is covered by the sun itself
-  ' float S=0.;',
-  ' S+=2.2*ward(dir(12.,52.),V,T,B,.09*wob,.60);',      // key light overhead: the vertical bright axis
-  ' S+=1.2*ward(dir(-17.,40.),V,T,B,.08*wob,.55);\n S+=2.1*ward(dir(-56.,46.),V,T,B,.095*wob,.62);',    // second light upper-left: the diagonal bright axis
+    ' float S=0.;',
+  ' S+=1.8*ward(dir(12.,52.),V,T,B,.09*wob,.60);',      // key light overhead: the vertical bright axis
+  ' S+=.9*ward(dir(-17.,40.),V,T,B,.08*wob,.55);\n S+=1.8*ward(dir(-56.,46.),V,T,B,.095*wob,.62);',    // second light upper-left: the diagonal bright axis
   ' S+=.45*ward(dir(100.,30.),V,T,B,.20*wob,.75);',      // weak low fill from the right
-  ' vec3 Ls=normalize(vec3(uSun,330.)-P);',
-  ' S+=1.7*ward(Ls,V,T,B,.15*wob,.21)*cov;',             // the sun itself: a hot, tight reflection that falls off with distance
-  ' S*=(1.+.08*g)*(.40+.60*exp(-r/900.));',
+      ' S*=(1.+.08*g)*(.80+.20*exp(-r/1300.));',
   ' float low=vn2(f/90.)*.5+vn2(f/23.)*.25;',            // slow, uneven sheen, so it is not mathematically perfect
   // reflected sky: pale, cool, brighter toward the sun
-  ' float sky=.17+.15*exp(-r/640.)+.03*low;',
+  ' float sky=.21+.03*low;',
   ' vec3 F0=vec3(.93,.94,.96);',
   ' vec3 c=F0*(vec3(sky*.98,sky,sky*1.03)+S*vec3(1.,1.,1.02)+.014*g);',
   ' c=(c*(2.51*c+.03))/(c*(2.43*c+.59)+.14);',
