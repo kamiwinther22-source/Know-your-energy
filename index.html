@@ -1335,9 +1335,9 @@ function drawFlow() {
   let seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
-  // A fine S-curve turned onto a ~45 degree diagonal (lower left to upper right), centred in the gap.
+  // A fine S-curve turned onto a ~28 degree diagonal (lower left to upper right), centred in the gap.
   const cx = (r1.left + r2.right) / 2 - fc.left, cy = T + H * 0.5;
-  const LEN = Math.min(166, H * 1.16), AMP = 15, ANG = -44 * Math.PI / 180, CURL = 0.2;
+  const LEN = Math.min(214, (r2.right - r1.left) * 0.6), AMP = 15, ANG = -28 * Math.PI / 180, CURL = 0.2;
   const anchors = [];
   for (let q = 0; q <= 10; q++) {
     const t = q / 10, ux = LEN * (t - 0.5);
