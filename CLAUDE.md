@@ -13,11 +13,12 @@ Everything below this section is older, unverified notes that the owner said wer
 8. **Use every rejection as information.** Keep a running log, find the pattern, and stop sending the same thing again. When she asks for ideas, bring researched options with pros and cons.
 9. **Nothing goes to the live site without her explicit yes.** The live site is the files on `main`.
 10. Keep usage low: short outputs, small reads, no big dumps.
+11. **Adjust along the scale.** When she says a shade is "too yellow" or "too brown", back off that one quality and keep going on the same scale. Never abandon the whole range.
 
 ## Specific rejections so far (each applies only to what was named)
 - The black-and-white page (a fallback she chose after earlier failures).
 - Metallic attempts, grey and silver.
-- Sky blue. Brown and taupe (as shown). Pastel pinks, purples, mint, coral (read as childish).
+- Sky blue. A surface that reads as brown or taupe (as shown); a creamy white with a touch of brown is fine. Pastel pinks, purples, mint, coral (read as childish).
 - Yellow and orange casts on white or cream. Pink or purple tints in mother-of-pearl or opal.
 - Soft gradients and flat, hard-edged white rectangles passed off as reflections.
 - Buttons: same shape, same material, not oversized (about 44-48px tall).
