@@ -1,3 +1,32 @@
+# OWNER'S WORKING RULES (her words; these override everything else in this file)
+
+Everything below this section is older, unverified notes that the owner said were taken out of context and over-generalized. Where anything conflicts with this section, this section wins. Do not use the older notes as instructions.
+
+## Standing rules (always, every thread)
+1. **Never fade, grey out or wash out anything.** Never lay a fade or wash over a surface and call it light or reflective. "Rich" means full-bodied color. "Light" means bright and clean, never faded.
+2. **Sleek, classy, elegant.** If you cannot honestly say anyone would describe it that way, do not show it.
+3. **Glossy, not matte.** Reflective light must be real reflection. Never a fake glow. When a color is rejected, keep the technique and change the color from her feedback.
+4. **Nothing childish.** No pastel nursery or "clown decoration" looks.
+5. **Show options before making any change.** She chooses. Do not make a change first.
+6. **One step at a time.** Do not move to the next thing unless she says to. Answer exactly what she asked and nothing else.
+7. **A dislike applies only to the thing she named, at the moment she named it.** Do not turn it into a wider rule unless she says so.
+8. **Use every rejection as information.** Keep a running log, find the pattern, and stop sending the same thing again. When she asks for ideas, bring researched options with pros and cons.
+9. **Nothing goes to the live site without her explicit yes.** The live site is the files on `main`.
+10. Keep usage low: short outputs, small reads, no big dumps.
+
+## Specific rejections so far (each applies only to what was named)
+- The black-and-white page (a fallback she chose after earlier failures).
+- Metallic attempts, grey and silver.
+- Sky blue. Brown and taupe (as shown). Pastel pinks, purples, mint, coral (read as childish).
+- Yellow and orange casts on white or cream. Pink or purple tints in mother-of-pearl or opal.
+- Soft gradients and flat, hard-edged white rectangles passed off as reflections.
+- Buttons: same shape, same material, not oversized (about 44-48px tall).
+
+## What she has said she wants
+A light, glossy enamel background that is rich and classy. White and cream shades are fine (there are hundreds of them). Real reflective light. Something like mother-of-pearl or opal, without cheap tints. The exact shade is not yet decided.
+
+---
+
 # Know Your Energy — design rules (from the owner; read before touching the front-page look)
 
 These are the owner's standing instructions. Do not re-ask, do not "try alternatives" to them.
