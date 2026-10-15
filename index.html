@@ -819,6 +819,7 @@ html:has(#resultsWrap[style*="block"]),body:has(#resultsWrap[style*="block"]){ba
 #hookStep>div[style*="292px"]>div{color:#FFFFFF !important;}
 #listenBtn,#cardExpandListenBtn,.card-expand-listen{display:none !important;}
 html,body{overflow-x:clip !important;}
+#p2Section.open{padding-top:4rem;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
 
 </style>
@@ -1503,7 +1504,7 @@ function alignP2Title() {
   const boxRect = p1LocBox.getBoundingClientRect();
   const tagRect = p2Tag.getBoundingClientRect();
   const boxCenter = boxRect.top + boxRect.height / 2;
-  const tagCenter = boxCenter - formColRect.top;
+  const tagCenter = boxCenter - formColRect.top + (parseFloat(getComputedStyle(document.getElementById("p2Section")).paddingTop) || 0);
   p2Tag.style.top = tagCenter - tagRect.height / 2 + "px";
   p2Tag.style.left = p1Block.getBoundingClientRect().right - formColRect.left + 12 + "px";
 }
