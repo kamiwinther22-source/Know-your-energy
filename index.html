@@ -3400,12 +3400,38 @@ function getRememberedPassEmail() {
 
 
 (function() {
+  setFormLocked(true);
+  const he = document.getElementById("heroEmail");
+  if (he) he.addEventListener("input", () => setFormLocked(true));
+})();
+
+(function() {
   const remembered = getRememberedPassEmail();
   if (remembered) {
     const heroEmail = document.getElementById("heroEmail");
     if (heroEmail) heroEmail.value = remembered;
   }
 })();
+
+// Set to true when a payment processor exists: someone whose free reading is used and who holds no pass then stays locked out of the form.
+const PAYMENTS_ENABLED = false;
+
+// The data-entry fields stay greyed out until an email has been accepted.
+function setFormLocked(locked) {
+  const fs = document.getElementById("formStep");
+  fs.classList.toggle("locked", locked);
+  fs.querySelectorAll("input, select, button").forEach(el => {
+    if (locked) {
+      if (!el.disabled) el.dataset.lockedByEmail = "1";
+      el.disabled = true;
+    } else if (el.dataset.lockedByEmail) {
+      el.disabled = false;
+      delete el.dataset.lockedByEmail;
+    }
+  });
+  const pill = document.getElementById("togPill");
+  if (pill) pill.style.pointerEvents = locked ? "none" : "";
+}
 
 async function revealForm() {
   const emailInput = document.getElementById("heroEmail");
@@ -3427,6 +3453,13 @@ async function revealForm() {
   const statusResult = await checkEmailStatus();
   cta.disabled = false;
   labelEl.innerHTML = originalLabel;
+  if (PAYMENTS_ENABLED && statusResult && statusResult.freeReadingUsed && !statusResult.active) {
+    setFormLocked(true);
+    errEl.textContent = "Your free reading has been used. Choose a pass to continue.";
+    errEl.style.display = "block";
+    return;
+  }
+  setFormLocked(false);
   const target = document.getElementById("formStep");
   target.scrollIntoView({
     behavior: "smooth",
