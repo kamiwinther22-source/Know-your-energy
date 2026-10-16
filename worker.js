@@ -408,6 +408,20 @@ function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
 }
 
+// Free-reading tracking. One record per email once their first reading has been delivered.
+// Flip PAYMENTS_ENABLED to true when a payment processor exists: an email whose free reading is used and that has
+// no active pass is then refused at /report (the page also greys out the form and shows the pass options).
+const PAYMENTS_ENABLED = false;
+
+function freeKey(email) {
+  return `free:${email.trim().toLowerCase()}`;
+}
+
+async function freeReadingUsed(env, email) {
+  if (!email) return false;
+  return !!(await env.PASSES.get(freeKey(email)));
+}
+
 function jobKey(jobId) {
   return `job:${jobId}`;
 }
@@ -429,13 +443,16 @@ function personSnapshot(p) {
 
 async function checkPassRecord(env, email) {
   if (!email) return {
-    active: false
+    active: false,
+    freeReadingUsed: false
   };
+  const used = await freeReadingUsed(env, email);
   if (UNLIMITED_EMAILS.includes(email.trim().toLowerCase())) {
     const raw = await env.PASSES.get(passKey(email));
     const record = raw ? JSON.parse(raw) : {};
     return {
       active: true,
+      freeReadingUsed: used,
       plan: "unlimited",
       expiresAt: Date.now() + UNLIMITED_DURATION_MS,
       p1: record.p1 || null,
@@ -444,14 +461,17 @@ async function checkPassRecord(env, email) {
   }
   const raw = await env.PASSES.get(passKey(email));
   if (!raw) return {
-    active: false
+    active: false,
+    freeReadingUsed: used
   };
   const record = JSON.parse(raw);
   if (record.expiresAt < Date.now()) return {
-    active: false
+    active: false,
+    freeReadingUsed: used
   };
   return {
     active: true,
+    freeReadingUsed: used,
     plan: record.plan,
     expiresAt: record.expiresAt,
     p1: record.p1 || null,
@@ -928,6 +948,21 @@ export default {
         error: "Invalid request body."
       }, 400);
     }
+    // who is asking: a pass holder, someone with their free reading still to use, or (once payments are on) someone who must buy
+    let askerStatus = null;
+    if (body.passEmail) {
+      try {
+        askerStatus = await checkPassRecord(env, body.passEmail);
+      } catch (e) {
+        askerStatus = null;
+      }
+      if (PAYMENTS_ENABLED && askerStatus && !askerStatus.active && askerStatus.freeReadingUsed) {
+        return jsonResponse({
+          error: "Your free reading has been used. Choose a pass to continue.",
+          code: "free_used"
+        }, 402);
+      }
+    }
     const jobId = crypto.randomUUID();
     await env.PASSES.put(jobKey(jobId), JSON.stringify({
       status: "pending"
@@ -964,6 +999,10 @@ export default {
         }
         if (body.passEmail) {
           ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
+          // the free reading counts as used once a reading has actually been delivered to someone without a pass
+          if (askerStatus && !askerStatus.active && report && !reportError) {
+            ctx.waitUntil(env.PASSES.put(freeKey(body.passEmail), String(Date.now())));
+          }
         }
         const payload = {
           p1: p1Data,

@@ -127,3 +127,7 @@ html.red .rel-row .glow-ring-sm .rel-chip{width:100% !important}
 html.red .row-id .line-field:nth-child(1){flex:1 1 0;min-width:0}html.red .row-id .line-field:nth-child(2){flex:.72 1 0;min-width:0}html.red .row-id .line-field:nth-child(3){flex:1 1 0;min-width:0}
 html.red #formStep .row-birth{grid-template-columns:minmax(0,1.7fr) minmax(0,2fr)}
 html.red #formStep .row-birth .row-time{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+
+/* the form stays greyed out until an email has been accepted */
+html.red #formStep.locked .form-col{opacity:.38;filter:grayscale(.85);pointer-events:none;cursor:not-allowed;user-select:none}
+html.red #formStep.locked .form-col *{cursor:not-allowed}
