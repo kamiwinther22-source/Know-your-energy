@@ -1,0 +1,129 @@
+/* The front page: garnet, Fraunces, silver hex buttons, cut-in dark fields. Default look (no ?look= in the URL).
+   Scoped to html.red; the results page keeps its own look. */
+html.red{--acc:#8c1034;background:#2a0510}
+html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#2a0510}
+html.red:not(:has(#resultsWrap[style*="block"])) body{
+  background:
+   radial-gradient(ellipse 520px 520px at 50% calc(100% - 120px),rgba(176,28,70,.75) 0,rgba(130,14,50,.38) 48%,rgba(130,14,50,0) 100%),
+   radial-gradient(ellipse 560px 460px at 55% 700px,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),
+   radial-gradient(ellipse 520px 300px at 18% 0%,rgba(255,255,255,.26) 0,rgba(255,255,255,.08) 55%,rgba(255,255,255,0) 100%),
+   radial-gradient(ellipse 620px 800px at 22% 85px,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%);
+  background-color:#2a0510;
+  padding:22px 20px 40px;
+}
+html.red #hookStep,html.red #formStep{font-family:'Fraunces',Georgia,serif;font-weight:700;color:#fff}
+html.red #hookStep *,html.red #formStep *{font-family:'Fraunces',Georgia,serif !important;font-weight:700;color:#fff !important;text-transform:none !important;letter-spacing:0 !important;font-style:normal !important}
+html.red .content{max-width:350px;width:100%}
+html.red #formStep{margin:0;padding:0}
+html.red #hookStep{display:block}
+
+/* first screen */
+html.red .r-h1{font-size:32px;line-height:1.05;font-weight:800;margin:4px 0 0;text-align:left}
+html.red .r-sys{margin-top:12px;font-size:17.5px;line-height:1.35;font-weight:800;white-space:nowrap}
+html.red .r-fcr{margin-top:4px;font-size:17.5px;line-height:1.35;font-weight:800}
+html.red .hero-illustration{position:relative;width:350px;max-width:none;height:164px;margin:6px 0 0;transform:none}
+html.red .hero-illustration svg{overflow:visible}
+html.red .r-free{margin-top:6px;text-align:center;font-size:44px;line-height:1;font-weight:800}
+html.red .r-b22{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:16px 0 0;padding:0;width:350px}
+html.red .r-b22 li{position:relative;padding-left:14px;font-size:14px;line-height:1.25;font-weight:700}
+html.red .r-b22 li:before{content:"";position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:#fff}
+html.red .hero-email-wrap{max-width:none;width:310px;margin:16px auto 0}
+html.red .field,html.red .line-field,html.red .line-field.hero-email-field{
+  background:linear-gradient(180deg,#14020a,#2a0612) !important;border:0 !important;border-radius:2px !important;
+  box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2 !important}
+html.red .line-field:focus-within{box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #fff,0 0 0 2px rgba(255,255,255,.55) !important}
+html.red .hero-email-field{height:40px}
+html.red .hero-email-field input{height:40px;padding:0 10px;font-size:17px;line-height:20px;background:transparent !important;border:0 !important;box-shadow:none !important;width:100%;color:#fff !important}
+html.red .line-field input,html.red .line-field select{background:transparent !important;border:0 !important;box-shadow:none !important;color:#fff !important;font-size:15px;line-height:20px;height:36px;padding:0 2px 0 6px;font-style:normal !important;-webkit-text-fill-color:#fff}
+html.red .line-field input::placeholder{color:#fff !important;opacity:1;-webkit-text-fill-color:#fff;font-style:normal}
+html.red .line-field select option{background:#2a0612;color:#fff}
+html.red .hero-email-wrap .err,html.red .err{text-align:center;margin-top:6px;font-size:15px}
+
+/* silver hex buttons: outer silver hex, inner dark hex */
+html.red .rb-wrap,html.red .glow-ring,html.red .glow-ring-sm{display:block;position:relative;background:none !important;padding:0 !important;overflow:visible !important;border-radius:0 !important;width:fit-content;filter:drop-shadow(0 3px 0 rgba(10,10,15,.6))}
+html.red .glow-ring::before,html.red .glow-ring-sm::before{display:none !important}
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
+  position:relative;isolation:isolate;display:flex !important;align-items:center;justify-content:center;border:0 !important;margin:0 !important;cursor:pointer;
+  background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#914b64 82%,#eef1f5 92%,#fff 100%) !important;
+  box-shadow:none !important;text-shadow:none !important;overflow:visible !important;color:#fff !important;font-weight:700;--c:25px;--d:18px;--vy:7px;--hx:14px;
+  clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% 50%,calc(100% - var(--c)) 100%,var(--c) 100%,0 50%);border-radius:0 !important}
+html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before{display:block !important;content:"";position:absolute;inset:var(--vy) var(--hx);z-index:-1;background:linear-gradient(#3a0716,#1c030c);
+  clip-path:polygon(var(--d) 0,calc(100% - var(--d)) 0,100% 50%,calc(100% - var(--d)) 100%,var(--d) 100%,0 50%)}
+html.red .rbtn,html.red .gen-btn{width:210px;height:50px;font-size:19px;padding:0}
+html.red .gen-btn{width:190px}
+html.red .rb-wrap{margin:14px auto 22px}
+html.red .rel-row{gap:3px !important;justify-content:center;margin:0 -4px 0 -5px !important;flex-wrap:nowrap}
+html.red .rel-chip{--c:9px;--d:8px;--vy:4px;--hx:7px;height:32px;font-size:13px !important;padding:0 !important;line-height:1}
+html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{width:116px}
+html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{width:88px}
+html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{width:80px}
+html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{width:66px}
+html.red .rel-chip.active::before{background:linear-gradient(#5a0f2b,#2c0516)}
+html.red .rel-chip:not(.active){opacity:.78}
+
+/* choose + toggle */
+html.red .r-choose{text-align:center;font-size:18px;line-height:1.3;margin:8px 0 0;font-weight:700}
+html.red .rel-picker{margin-top:0}
+html.red .toggle-row{gap:12px !important;margin:28px 0 14px !important;font-size:17px;font-weight:800;justify-content:center}
+html.red .tog-lbl{font-size:17px;font-weight:800;color:#fff !important}
+html.red .toggle-pill{width:34px !important;height:16px !important;border-radius:9px !important;background:linear-gradient(#c9d0d8,#f2f4f7) !important;border:0 !important;box-shadow:inset 0 2px 0 rgba(20,20,30,.3) !important;position:relative}
+html.red .toggle-pill::after{content:"" !important;position:absolute;top:2px !important;left:auto;right:2px;width:12px !important;height:12px !important;border-radius:50% !important;background:radial-gradient(circle at 35% 30%,#fff 0,#cfd5dc 30%,#20262d 52%,#8c1034 80%) !important;box-shadow:none !important;transform:none !important}
+html.red .toggle-pill:not(.on)::after{right:auto;left:2px}
+
+/* person blocks */
+html.red #formStep #p1Block,html.red #formStep #p2Section{width:310px;max-width:100%;margin:26px 0 0}
+html.red #formStep #p2Section{margin-top:0}
+html.red .form-panel .f{margin:0}
+html.red .person-tag,html.red #p2Section .person-tag{position:static !important;left:auto !important;font-size:28px;line-height:1.35;font-weight:800;margin:0 0 4px}
+html.red #p2Section .person-tag{text-align:right}
+html.red .section-lbl,html.red .row-birth label{font-size:17px;font-weight:800;margin:8px 0 3px;display:block}
+html.red .opt-lbl{font-weight:700;font-size:17px}
+html.red .row-id{display:flex !important;gap:8px;background:none !important;border:0 !important;box-shadow:none !important;margin:0}
+html.red .row-id .line-field{border-right:0 !important}
+html.red .row-id .line-field:nth-child(1){flex:0 0 108px}html.red .row-id .line-field:nth-child(2){flex:0 0 78px}html.red .row-id .line-field:nth-child(3){flex:0 0 108px}
+html.red #formStep .row-birth{display:grid;grid-template-columns:136px 1fr;column-gap:8px}
+html.red #formStep .row-birth .row-time{display:grid;grid-template-columns:80px 66px;column-gap:8px;margin:0;align-items:end}
+html.red .row-birth .row-time>div:first-child .line-field,html.red .row-birth .row-time .ampm-field{border-radius:2px !important}
+html.red .row-time .ampm-field{padding:0 !important}
+html.red .row-birth>.loc-field{grid-column:1 / -1;margin-top:0}
+html.red #p1Block .loc-field,html.red #formStep #p1Block .loc-field{width:230px}
+html.red #p2Section .loc-field{width:310px}
+html.red #p2Section.open{padding-top:152px}
+html.red .r-note{font-size:16px;line-height:1.3;text-align:center;width:340px;max-width:100%;margin:22px auto 0}
+html.red .r-note+.r-note{margin-top:12px}
+html.red .submit-wrap,html.red .submit-wrap.under-p2{justify-content:center !important;margin:22px 0 0 !important;width:auto}
+html.red .state-banner{font-size:16px;text-align:center;margin:0 0 10px}
+
+/* waiting screen on the red page */
+html.red:not(:has(#resultsWrap[style*="block"])) .loading,html.red:not(:has(#resultsWrap[style*="block"])) .loading *{color:#fff !important}
+html.red .hg-outline{stroke:#fff}
+html.red .hg-sand-top,html.red .hg-sand-bottom,html.red .hg-drop{fill:#fff}
+
+/* fixes from the first render */
+html.red .hero-continue-label,html.red .gen-btn{text-shadow:none !important;-webkit-text-stroke:0 !important}
+html.red .glow-ring .gen-btn,html.red .glow-ring-sm .rel-chip{z-index:auto !important}
+html.red .line-field{padding:0 !important;height:36px}
+html.red .hero-email-field{height:40px}
+html.red #formStep .row-time .ampm-field,html.red #formStep .row-time .ampm-field select{background:transparent !important}
+html.red #formStep .row-time .ampm-field{background:linear-gradient(180deg,#14020a,#2a0612) !important;border-left-width:0 !important;padding:0 !important}
+html.red .row-time .ampm-field select{padding:0 2px 0 6px;font-size:15px;width:100%;height:36px;-webkit-appearance:none;appearance:none}
+html.red .hero-illustration{transform:translateX(96px) translateY(10px) rotate(12deg) scale(1.55);transform-origin:50% 50%}
+html.red:not(:has(#resultsWrap[style*="block"])) .loading *{font-family:'Fraunces',Georgia,serif !important;letter-spacing:0 !important;text-transform:none !important;font-style:normal !important;font-weight:700}
+html.red:not(:has(#resultsWrap[style*="block"])) .loading-warn{background:rgba(42,6,18,.6) !important;border:1px solid rgba(255,255,255,.4) !important}
+html.red:not(:has(#resultsWrap[style*="block"])) .loading-txt{font-size:22px}
+
+/* narrow phones: nothing wider than the screen */
+html.red .r-b22{width:100%}
+html.red .hero-email-wrap{width:min(310px,100%)}
+html.red #formStep #p1Block,html.red #formStep #p2Section{width:min(310px,100%)}
+html.red #p2Section .loc-field,html.red #formStep #p1Block .loc-field{max-width:100%}
+html.red .r-note{width:100%}
+html.red .rel-row{width:calc(100% + 9px);gap:1% !important}
+html.red .rel-row .glow-ring-sm:nth-child(1){width:32%}
+html.red .rel-row .glow-ring-sm:nth-child(2){width:24.2%}
+html.red .rel-row .glow-ring-sm:nth-child(3){width:22%}
+html.red .rel-row .glow-ring-sm:nth-child(4){width:18.2%}
+html.red .rel-row .glow-ring-sm .rel-chip{width:100% !important}
+html.red .row-id .line-field:nth-child(1){flex:1 1 0;min-width:0}html.red .row-id .line-field:nth-child(2){flex:.72 1 0;min-width:0}html.red .row-id .line-field:nth-child(3){flex:1 1 0;min-width:0}
+html.red #formStep .row-birth{grid-template-columns:minmax(0,1.7fr) minmax(0,2fr)}
+html.red #formStep .row-birth .row-time{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
