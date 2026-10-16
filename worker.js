@@ -413,6 +413,77 @@ function passKey(email) {
 // no active pass is then refused at /report (the page also greys out the form and shows the pass options).
 const PAYMENTS_ENABLED = false;
 
+function seenKeyFor(email) {
+  return `seen:${email.trim().toLowerCase()}`;
+}
+
+async function listAll(env, prefix) {
+  const out = [];
+  let cursor;
+  do {
+    const page = await env.PASSES.list({
+      prefix,
+      cursor,
+      limit: 1000
+    });
+    out.push(...page.keys);
+    cursor = page.list_complete ? undefined : page.cursor;
+  } while (cursor);
+  return out;
+}
+
+function sameKey(a, b) {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return d === 0;
+}
+
+async function adminUsers(env) {
+  let [seen, free, passes, usageRaw] = await Promise.all([ listAll(env, "seen:"), listAll(env, "free:"), listAll(env, "pass:"), env.PASSES.get(USAGE_KV_KEY) ]);
+  const fam = k => UNLIMITED_EMAILS.includes(k.name.slice(k.name.indexOf(":") + 1));
+  seen = seen.filter(k => !fam(k));
+  free = free.filter(k => !fam(k));
+  const users = new Map;
+  const row = email => {
+    if (!users.has(email)) users.set(email, {
+      email,
+      firstSeen: null,
+      freeUsedAt: null,
+      pass: null
+    });
+    return users.get(email);
+  };
+  for (const k of seen) row(k.name.slice(5)).firstSeen = (k.metadata && k.metadata.t) || null;
+  for (const k of free) row(k.name.slice(5)).freeUsedAt = (k.metadata && k.metadata.t) || true;
+  for (const k of passes) {
+    const email = k.name.slice(5);
+    if (UNLIMITED_EMAILS.includes(email)) continue;
+    const raw = await env.PASSES.get(k.name);
+    if (!raw) continue;
+    try {
+      const rec = JSON.parse(raw);
+      row(email).pass = {
+        plan: rec.plan,
+        expiresAt: rec.expiresAt
+      };
+    } catch (e) {}
+  }
+  const list = [ ...users.values() ].sort((a, b) => (b.firstSeen || b.freeUsedAt || 0) - (a.firstSeen || a.freeUsedAt || 0));
+  const usage = usageRaw ? JSON.parse(usageRaw) : {
+    requests: 0
+  };
+  return {
+    totals: {
+      emailsEntered: seen.length,
+      freeReadingsUsed: free.length,
+      activePasses: list.filter(u => u.pass && u.pass.expiresAt > Date.now()).length,
+      readingsGenerated: usage.requests || 0
+    },
+    users: list
+  };
+}
+
 function freeKey(email) {
   return `free:${email.trim().toLowerCase()}`;
 }
@@ -426,19 +497,18 @@ function jobKey(jobId) {
   return `job:${jobId}`;
 }
 
-function personSnapshot(p) {
-  if (!p) return null;
-  const {first: first, mid: mid, last: last, dob: dob, time: time, city: city, state: state, country: country} = p;
-  return {
-    first: first,
-    mid: mid,
-    last: last,
-    dob: dob,
-    time: time,
-    city: city,
-    state: state,
-    country: country
-  };
+// Pass records hold the email's plan and expiry only. No names, birth dates or places are kept.
+// Older records that still carry saved birth details are cleaned the next time they are read.
+async function cleanPassRecord(env, key, record, remainingTtlSeconds) {
+  if (!record || (!record.p1 && !record.p2)) return record;
+  delete record.p1;
+  delete record.p2;
+  try {
+    await env.PASSES.put(key, JSON.stringify(record), remainingTtlSeconds > 0 ? {
+      expirationTtl: remainingTtlSeconds
+    } : undefined);
+  } catch (e) {}
+  return record;
 }
 
 async function checkPassRecord(env, email) {
@@ -447,19 +517,19 @@ async function checkPassRecord(env, email) {
     freeReadingUsed: false
   };
   const used = await freeReadingUsed(env, email);
+  const key = passKey(email);
+  const raw = await env.PASSES.get(key);
   if (UNLIMITED_EMAILS.includes(email.trim().toLowerCase())) {
-    const raw = await env.PASSES.get(passKey(email));
-    const record = raw ? JSON.parse(raw) : {};
+    if (raw) {
+      await cleanPassRecord(env, key, JSON.parse(raw), Math.ceil(UNLIMITED_DURATION_MS / 1e3));
+    }
     return {
       active: true,
       freeReadingUsed: used,
       plan: "unlimited",
-      expiresAt: Date.now() + UNLIMITED_DURATION_MS,
-      p1: record.p1 || null,
-      p2: record.p2 || null
+      expiresAt: Date.now() + UNLIMITED_DURATION_MS
     };
   }
-  const raw = await env.PASSES.get(passKey(email));
   if (!raw) return {
     active: false,
     freeReadingUsed: used
@@ -469,36 +539,13 @@ async function checkPassRecord(env, email) {
     active: false,
     freeReadingUsed: used
   };
+  await cleanPassRecord(env, key, record, Math.ceil((record.expiresAt - Date.now()) / 1e3));
   return {
     active: true,
     freeReadingUsed: used,
     plan: record.plan,
-    expiresAt: record.expiresAt,
-    p1: record.p1 || null,
-    p2: record.p2 || null
+    expiresAt: record.expiresAt
   };
-}
-
-async function refreshPassSnapshot(env, email, p1, p2) {
-  if (!email) return;
-  const key = passKey(email);
-  const raw = await env.PASSES.get(key);
-  const isUnlimited = UNLIMITED_EMAILS.includes(email.trim().toLowerCase());
-  if (!raw && !isUnlimited) return;
-  const record = raw ? JSON.parse(raw) : {
-    plan: "unlimited",
-    purchasedAt: Date.now()
-  };
-  if (!isUnlimited && record.expiresAt < Date.now()) return;
-  const expiresAt = isUnlimited ? Date.now() + UNLIMITED_DURATION_MS : record.expiresAt;
-  const remainingTtl = Math.ceil((expiresAt - Date.now()) / 1e3);
-  if (remainingTtl <= 0) return;
-  record.expiresAt = expiresAt;
-  record.p1 = personSnapshot(p1);
-  record.p2 = personSnapshot(p2);
-  await env.PASSES.put(key, JSON.stringify(record), {
-    expirationTtl: remainingTtl
-  });
 }
 
 const USAGE_KV_KEY = "usage:totals";
@@ -891,7 +938,40 @@ export default {
       }
       try {
         const result = await checkPassRecord(env, body.email);
+        if (body.email && /^[^\s@]+@[^\s@]+$/.test(String(body.email).trim())) {
+          const seenId = seenKeyFor(body.email);
+          if (!(await env.PASSES.get(seenId))) {
+            ctx.waitUntil(env.PASSES.put(seenId, String(Date.now()), {
+              metadata: {
+                t: Date.now()
+              }
+            }));
+          }
+        }
         return jsonResponse(result);
+      } catch (error) {
+        return jsonResponse({
+          error: error.message
+        }, 500);
+      }
+    }
+    if (url.pathname === "/admin/users") {
+      let body = {};
+      try {
+        body = await request.json();
+      } catch (e) {}
+      if (!env.ADMIN_KEY) {
+        return jsonResponse({
+          error: "The admin key has not been set on the worker."
+        }, 503);
+      }
+      if (!sameKey(String(body.key || ""), String(env.ADMIN_KEY))) {
+        return jsonResponse({
+          error: "Wrong key."
+        }, 401);
+      }
+      try {
+        return jsonResponse(await adminUsers(env));
       } catch (error) {
         return jsonResponse({
           error: error.message
@@ -998,10 +1078,13 @@ export default {
           }
         }
         if (body.passEmail) {
-          ctx.waitUntil(refreshPassSnapshot(env, body.passEmail, body.p1, body.p2));
           // the free reading counts as used once a reading has actually been delivered to someone without a pass
           if (askerStatus && !askerStatus.active && report && !reportError) {
-            ctx.waitUntil(env.PASSES.put(freeKey(body.passEmail), String(Date.now())));
+            ctx.waitUntil(env.PASSES.put(freeKey(body.passEmail), String(Date.now()), {
+              metadata: {
+                t: Date.now()
+              }
+            }));
           }
         }
         const payload = {
