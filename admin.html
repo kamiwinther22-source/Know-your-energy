@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Know Your Energy: people</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px 16px 40px;background:#1c0610;color:#fff;font:16px/1.4 Georgia,'Times New Roman',serif;font-weight:700}
+h1{font-size:26px;margin:0 0 14px}
+.key{display:flex;gap:8px;margin-bottom:16px}
+input{flex:1;min-width:0;height:42px;border:0;border-bottom:2px solid #d7dce2;background:#2a0612;color:#fff;font:inherit;padding:0 10px}
+button{height:42px;padding:0 16px;border:0;background:#fff;color:#1c0610;font:inherit;cursor:pointer}
+.tot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 16px}
+.tot div{background:#2a0612;padding:12px}
+.tot b{display:block;font-size:30px;line-height:1.1}
+.tabs{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.tabs button{height:34px;background:transparent;color:#fff;border:1px solid #fff}
+.tabs button.on{background:#fff;color:#1c0610}
+.u{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.25)}
+.u .e{overflow-wrap:anywhere}
+.u .d{text-align:right;white-space:nowrap}
+.u .s{grid-column:1 / -1;font-weight:400;opacity:.9}
+#msg{margin:10px 0;min-height:1.4em}
+</style>
+</head>
+<body>
+<h1>People using it</h1>
+<div class="key"><input id="k" type="password" placeholder="Admin key" autocomplete="current-password"><button id="go">Show</button></div>
+<div id="msg"></div>
+<div class="tot" id="tot" hidden></div>
+<div class="tabs" id="tabs" hidden><button data-r="1" class="on">Last 24 hours</button><button data-r="7">Last 7 days</button><button data-r="0">Everyone</button><button id="copy">Copy emails</button></div>
+<div id="list"></div>
+<script>
+const API="https://know-your-energy.kwdoanchor.workers.dev";
+let DATA=null,RANGE=1;
+const $=id=>document.getElementById(id);
+try{const s=localStorage.getItem("kye_admin");if(s){$("k").value=s;}}catch(e){}
+function when(t){if(!t||t===true)return "";const d=new Date(t);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});}
+function render(){
+  if(!DATA)return;
+  const cut=RANGE?Date.now()-RANGE*864e5:0;
+  const rows=DATA.users.filter(u=>(u.firstSeen||u.freeUsedAt||0)>=cut||(RANGE===0));
+  $("list").innerHTML=rows.length?rows.map(u=>{
+    const st=[];
+    if(u.freeUsedAt)st.push("free reading used "+(when(u.freeUsedAt)||""));else st.push("free reading not used yet");
+    if(u.pass)st.push("pass: "+u.pass.plan+(u.pass.expiresAt?" until "+new Date(u.pass.expiresAt).toLocaleDateString():""));
+    return `<div class="u"><div class="e"></div><div class="d">${when(u.firstSeen||u.freeUsedAt)}</div><div class="s">${st.join(" · ")}</div></div>`;
+  }).join(""):"<p>Nobody in this period.</p>";
+  [...$("list").querySelectorAll(".e")].forEach((el,i)=>{el.textContent=rows[i].email;});
+  $("tabs").querySelectorAll("[data-r]").forEach(b=>b.classList.toggle("on",+b.dataset.r===RANGE));
+  window.__rows=rows;
+}
+async function load(){
+  const key=$("k").value.trim();if(!key){$("msg").textContent="Enter the admin key.";return;}
+  $("msg").textContent="Loading…";
+  try{
+    const r=await fetch(API+"/admin/users",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({key})});
+    const j=await r.json();
+    if(!r.ok){$("msg").textContent=j.error||"Could not load.";return;}
+    try{localStorage.setItem("kye_admin",key);}catch(e){}
+    DATA=j;$("msg").textContent="";
+    const t=j.totals;
+    $("tot").innerHTML=`<div><b>${t.emailsEntered}</b>emails entered</div><div><b>${t.freeReadingsUsed}</b>free readings used</div><div><b>${t.activePasses}</b>active passes</div><div><b>${t.readingsGenerated}</b>readings generated</div>`;
+    $("tot").hidden=false;$("tabs").hidden=false;render();
+  }catch(e){$("msg").textContent="Could not reach the site's server.";}
+}
+$("go").onclick=load;
+$("k").addEventListener("keydown",e=>{if(e.key==="Enter")load();});
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-r]");if(b){RANGE=+b.dataset.r;render();}});
+$("copy").onclick=async()=>{const txt=(window.__rows||[]).map(u=>u.email).join("\n");try{await navigator.clipboard.writeText(txt);$("msg").textContent="Copied "+(window.__rows||[]).length+" emails.";}catch(e){$("msg").textContent="Could not copy.";}};
+if($("k").value)load();
+</script>
+</body>
+</html>
