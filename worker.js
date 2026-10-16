@@ -473,12 +473,18 @@ async function adminUsers(env) {
   const usage = usageRaw ? JSON.parse(usageRaw) : {
     requests: 0
   };
+  const within = (keys, ms) => keys.filter(k => k.metadata && k.metadata.t && k.metadata.t >= Date.now() - ms).length;
   return {
     totals: {
       emailsEntered: seen.length,
       freeReadingsUsed: free.length,
       activePasses: list.filter(u => u.pass && u.pass.expiresAt > Date.now()).length,
-      readingsGenerated: usage.requests || 0
+      readingsGenerated: usage.requests || 0,
+      newEmails24h: within(seen, 864e5),
+      newEmails7d: within(seen, 7 * 864e5),
+      newEmails30d: within(seen, 30 * 864e5),
+      readings24h: within(free, 864e5),
+      readings7d: within(free, 7 * 864e5)
     },
     users: list
   };
@@ -960,18 +966,12 @@ export default {
       try {
         body = await request.json();
       } catch (e) {}
-      if (!env.ADMIN_KEY) {
-        return jsonResponse({
-          error: "The admin key has not been set on the worker."
-        }, 503);
-      }
-      if (!sameKey(String(body.key || ""), String(env.ADMIN_KEY))) {
-        return jsonResponse({
-          error: "Wrong key."
-        }, 401);
-      }
+      // The counts are open to anyone. The list of email addresses is only returned with the right ADMIN_KEY (optional).
+      const withEmails = !!env.ADMIN_KEY && sameKey(String(body.key || ""), String(env.ADMIN_KEY));
       try {
-        return jsonResponse(await adminUsers(env));
+        const data = await adminUsers(env);
+        if (!withEmails) data.users = null;
+        return jsonResponse(data);
       } catch (error) {
         return jsonResponse({
           error: error.message
