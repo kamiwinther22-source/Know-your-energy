@@ -82,7 +82,7 @@ html.red .row-id{display:flex !important;gap:8px;background:none !important;bord
 html.red .row-id .line-field{border-right:0 !important}
 html.red .row-id .line-field:nth-child(1){flex:0 0 108px}html.red .row-id .line-field:nth-child(2){flex:0 0 78px}html.red .row-id .line-field:nth-child(3){flex:0 0 108px}
 html.red #formStep .row-birth{display:grid;grid-template-columns:136px 1fr;column-gap:8px}
-html.red #formStep .row-birth .row-time{display:grid;grid-template-columns:80px 72px;column-gap:6px;margin:0;align-items:end}
+html.red #formStep .row-birth .row-time{display:grid;grid-template-columns:80px 66px;column-gap:8px;margin:0;align-items:end}
 html.red .row-birth .row-time>div:first-child .line-field,html.red .row-birth .row-time .ampm-field{border-radius:2px !important}
 html.red .row-time .ampm-field{padding:0 !important}
 html.red .row-birth>.loc-field{grid-column:1 / -1;margin-top:0}
@@ -137,21 +137,7 @@ html.red #formStep.locked .line-field::after{content:"";position:absolute;right:
 html.red #formStep.locked .line-field input{-webkit-text-fill-color:#fff}
 html.red #formStep.locked .line-field input,html.red #formStep.locked .line-field select{padding-right:22px}
 
-/* Person 2's data entry sits at the right margin; AM and PM side by side */
+/* Person 2's data entry sits at the right margin */
 html.red #formStep #p2Section{margin-left:auto}
-html.red .ampm-seg{display:flex;gap:4px;height:36px;min-width:0}
-html.red .ampm-seg button{flex:1 1 0;min-width:0;height:36px;border:0;border-radius:2px;cursor:pointer;font-size:15px;padding:0;
- background:linear-gradient(180deg,#14020a,#2a0612);box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2}
-html.red .ampm-seg button.on{background:linear-gradient(180deg,#6b1636,#3a0716);box-shadow:inset 0 2px 0 rgba(0,0,0,.25),0 2px 0 #fff}
-html.red #formStep.locked .ampm-seg button{background:#0d0105;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2}
-
 html.red .submit-wrap{margin:22px 0 0 !important}
-
-/* AM / PM: one control with two choices (one box, the chosen half is lit) */
-html.red .ampm-seg{gap:0;overflow:hidden;border-radius:2px;background:linear-gradient(180deg,#14020a,#2a0612);box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2}
-html.red .ampm-seg button{background:transparent;box-shadow:none;border-radius:0}
-html.red .ampm-seg button+button{box-shadow:inset 1px 0 0 rgba(215,220,226,.55)}
-html.red .ampm-seg button.on{background:linear-gradient(180deg,#8a1d45,#5a0f2b);box-shadow:inset 0 2px 0 rgba(0,0,0,.25),inset 0 -2px 0 #fff}
-html.red .ampm-seg button.on+button,html.red .ampm-seg button+button.on{box-shadow:inset 0 2px 0 rgba(0,0,0,.25),inset 0 -2px 0 #fff}
-html.red #formStep.locked .ampm-seg{background:#0d0105}
-html.red #formStep.locked .ampm-seg button,html.red #formStep.locked .ampm-seg button.on{background:transparent;box-shadow:none}
+html.red .row-time .ampm-field select{padding-left:8px !important}

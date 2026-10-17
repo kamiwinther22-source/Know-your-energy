@@ -910,7 +910,7 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
             <div class="row-dob"><label for="p1d">DOB</label><div class="line-field"><input id="p1d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
             <div class="row-time">
               <div><label for="p1t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
-              <div class="ampm-seg" data-for="p1ap"><button type="button" data-v="AM" class="on">AM</button><button type="button" data-v="PM">PM</button></div><select id="p1ap" aria-label="AM or PM" style="display:none"><option value="AM">AM</option><option value="PM">PM</option></select>
+              <div class="line-field ampm-field"><select id="p1ap" aria-label="AM or PM"><option value="" selected>AM/PM</option><option value="AM">AM</option><option value="PM">PM</option></select></div>
             </div>
             <div class="loc-field"><label for="p1loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
           </div>
@@ -929,7 +929,7 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
               <div class="row-dob"><label for="p2d">DOB</label><div class="line-field"><input id="p2d" placeholder="MM/DD/YYYY" maxlength="10" inputmode="numeric" oninput="fmtDate(this)"></div></div>
               <div class="row-time">
                 <div><label for="p2t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
-                <div class="ampm-seg" data-for="p2ap"><button type="button" data-v="AM" class="on">AM</button><button type="button" data-v="PM">PM</button></div><select id="p2ap" aria-label="AM or PM" style="display:none"><option value="AM">AM</option><option value="PM">PM</option></select>
+                <div class="line-field ampm-field"><select id="p2ap" aria-label="AM or PM"><option value="" selected>AM/PM</option><option value="AM">AM</option><option value="PM">PM</option></select></div>
               </div>
               <div class="loc-field"><label for="p2loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
             </div>
@@ -3248,7 +3248,6 @@ function restoreDraft() {
       const el = document.getElementById(id);
       if (el && data[id]) el.value = data[id];
     });
-    syncAmPm();
     if (data.isRelational) setMode(true);
     if (data.relType) {
       relType = data.relType;
@@ -3312,7 +3311,6 @@ function resetToForm() {
   const remembered = getRememberedPassEmail();
   if (remembered) document.getElementById("pEmail").value = remembered;
   track("run_another");
-  syncAmPm();
   checkEmailStatus().then(st => {
     if (PAYMENTS_ENABLED && st && st.freeReadingUsed && !st.active) {
       setFormLocked(true);
@@ -3487,24 +3485,6 @@ function setFormLocked(locked) {
   if (pill) pill.style.pointerEvents = locked ? "none" : "";
 }
 
-function syncAmPm() {
-  document.querySelectorAll(".ampm-seg").forEach(seg => {
-    const v = document.getElementById(seg.dataset.for).value;
-    seg.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
-  });
-}
-
-document.querySelectorAll(".ampm-seg").forEach(seg => seg.addEventListener("click", e => {
-  const b = e.target.closest("button");
-  if (!b) return;
-  const sel = document.getElementById(seg.dataset.for);
-  sel.value = b.dataset.v;
-  sel.dispatchEvent(new Event("input", {
-    bubbles: true
-  }));
-  syncAmPm();
-}));
-
 async function revealForm() {
   const emailInput = document.getElementById("heroEmail");
   const email = (emailInput.value || "").trim();
@@ -3638,6 +3618,10 @@ async function generate() {
       showErr("Please enter first and last name, and date of birth for Person Two.");
       return;
     }
+  }
+  if (g("p1t") && !document.getElementById("p1ap").value || isRelational && g("p2t") && !document.getElementById("p2ap").value) {
+    showErr("Choose AM or PM for the time you entered.");
+    return;
   }
   const loc1 = parseLocation(g("p1loc"));
   const p1 = {
