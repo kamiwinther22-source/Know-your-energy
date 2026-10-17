@@ -413,6 +413,31 @@ function passKey(email) {
 // no active pass is then refused at /report (the page also greys out the form and shows the pass options).
 const PAYMENTS_ENABLED = false;
 
+// Anonymous counters for what people do after a reading. No email, no name, no birth details.
+const EVENT_NAMES = [ "run_another", "date_check", "save_print" ];
+
+async function eventTotals(env) {
+  const keys = await listAll(env, "evt:");
+  const now = Date.now();
+  const out = {};
+  EVENT_NAMES.forEach(n => out[n] = {
+    d1: 0,
+    d7: 0,
+    d30: 0,
+    total: 0
+  });
+  for (const k of keys) {
+    const m = k.metadata || {};
+    if (!out[m.name]) continue;
+    const age = now - new Date(m.d + "T00:00:00Z").getTime();
+    out[m.name].total += m.n || 0;
+    if (age < 2 * 864e5) out[m.name].d1 += m.n || 0;
+    if (age < 8 * 864e5) out[m.name].d7 += m.n || 0;
+    if (age < 31 * 864e5) out[m.name].d30 += m.n || 0;
+  }
+  return out;
+}
+
 function seenKeyFor(email) {
   return `seen:${email.trim().toLowerCase()}`;
 }
@@ -486,6 +511,7 @@ async function adminUsers(env) {
       readings24h: within(free, 864e5),
       readings7d: within(free, 7 * 864e5)
     },
+    events: await eventTotals(env),
     users: list
   };
 }
@@ -960,6 +986,33 @@ export default {
           error: error.message
         }, 500);
       }
+    }
+    if (url.pathname === "/event") {
+      let ev = {};
+      try {
+        ev = await request.json();
+      } catch (e) {}
+      if (!EVENT_NAMES.includes(ev.name)) {
+        return jsonResponse({
+          error: "Unknown event."
+        }, 400);
+      }
+      try {
+        const day = (new Date).toISOString().slice(0, 10);
+        const key = `evt:${ev.name}:${day}`;
+        const n = (parseInt(await env.PASSES.get(key), 10) || 0) + 1;
+        await env.PASSES.put(key, String(n), {
+          expirationTtl: 400 * 86400,
+          metadata: {
+            n: n,
+            d: day,
+            name: ev.name
+          }
+        });
+      } catch (e) {}
+      return jsonResponse({
+        ok: true
+      });
     }
     if (url.pathname === "/admin/users") {
       let body = {};

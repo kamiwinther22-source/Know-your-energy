@@ -504,7 +504,9 @@ body{
 .hd-mirror-type{padding:0 0.3rem;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--card-text);text-align:center;}
 
 .grid-nav-btn{align-self:center;justify-self:center;}
-.bottom-btns{display:flex;gap:0.7rem;justify-content:center;width:100%;margin:1.4rem auto 0;}
+.bottom-btns{display:flex;flex-wrap:wrap;gap:0.7rem;justify-content:center;width:100%;margin:1.4rem auto 0;}
+.ios-save-note{width:100%;max-width:420px;text-align:center;font-size:0.95rem;line-height:1.4;margin:0.2rem 0 0;}
+@media print{.ios-save-note{display:none!important;}}
 
 .main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;align-items:start;width:100%;max-width:460px;margin:0 auto;}
 
@@ -2976,25 +2978,6 @@ function topBtn(label, onclick, icon, gridPos, id) {
   return `<div class="${cls}"${style}${id ? ` id="${id}"` : ""} onclick="${onclick}">${icon || ""}<span>${label}</span></div>`;
 }
 
-async function shareReading() {
-  const shareData = {
-    title: "Know Your Energy",
-    text: "I just got my astrology, numerology, and Human Design reading combined — check it out.",
-    url: "https://know-your-energy.com"
-  };
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData);
-    } catch (e) {}
-    return;
-  }
-  try {
-    await navigator.clipboard.writeText(shareData.url);
-    alert("Link copied — paste it anywhere to share.");
-  } catch (e) {
-    alert(shareData.url);
-  }
-}
 
 function quadItem(nm, sys, rows, preHtml, wheelSvg, rowNum) {
   const idx = cardRegistry.push({
@@ -3090,7 +3073,29 @@ function maturityBand(age) {
   return "fully active";
 }
 
-function dateExplorerRows(chart, age) {
+function comingUpRows(chart, age, dob) {
+  const birthYear = Number(dob.split("/")[2]);
+  const next = (stages, label) => {
+    const s = stages.map(st => ({
+      n: st.n,
+      v: st.obj.value,
+      low: parseAgeRange(st.obj.ageRange).low
+    })).find(st => st.low > age);
+    return s ? `<div class="dprow"><p class="report-body">${label} ${s.n} (number ${escapeHtml(String(s.v))}) begins at age ${s.low}, around ${birthYear + s.low}.</p></div>` : "";
+  };
+  const pin = next([ 1, 2, 3, 4 ].map(n => ({
+    n: n,
+    obj: chart.pinnacles["pinnacle" + n]
+  })), "Next Pinnacle:");
+  const per = next([ 1, 2, 3 ].map(n => ({
+    n: n,
+    obj: chart.periodCycles["period" + n]
+  })), "Next Period:");
+  if (!pin && !per) return "";
+  return dpsec("Coming up") + pin + per;
+}
+
+function dateExplorerRows(chart, age, dob) {
   const pinn = activePinnacleChallenge(age, chart.pinnacles, chart.challengeNumbers);
   const period = activePeriodCycle(age, chart.periodCycles);
   let h = "";
@@ -3098,8 +3103,9 @@ function dateExplorerRows(chart, age) {
   h += arow("Essence (age " + age + ")", chart.essenceCycle.value, "essence", chart.essenceCycle.value);
   h += arow("Maturity", chart.maturity, "maturity", chart.maturity, `At age ${age}, this number's influence is ${maturityBand(age)} -- Maturity strengthens gradually rather than switching on at one exact date.`);
   h += `<div class="dprow"><div class="stage-range">${escapeHtml(period.obj.ageRange)}</div><div class="stage-pair">${pcCol("Period " + period.n, period.obj.value, "periodcycle", period.obj.value)}</div></div>`;
+  const upcoming = dob ? comingUpRows(chart, age, dob) : "";
   h += `<div class="dprow"><div class="stage-range">${escapeHtml(pinn.ageRange)}</div><div class="stage-pair">${pcCol("Pinnacle " + pinn.n, pinn.value, "pinnacle", pinn.value)}${pcCol("Challenge " + pinn.n, pinn.challengeValue, "challenge", pinn.challengeValue)}</div></div>`;
-  return h;
+  return h + upcoming;
 }
 
 async function onDateExplorerChange(inputEl) {
@@ -3117,17 +3123,32 @@ async function onDateExplorerChange(inputEl) {
     resultsEl.innerHTML = '<div class="dprow"><p class="report-body">That date is before this person was born.</p></div>';
     return;
   }
+  track("date_check");
   resultsEl.innerHTML = '<div class="dprow"><p class="report-body">Calculating…</p></div>';
   try {
     const {calculateFullChart: calculateFullChart} = await (import("./numerology-calculator.js"));
-    const chart = calculateFullChart({
-      first: person.first,
-      middle: person.mid,
-      last: person.last,
-      dob: person.dob,
-      currentDate: currentDate
-    });
-    resultsEl.innerHTML = dateExplorerRows(chart, chart.essenceCycle.currentAge);
+    const forPerson = p => {
+      const chart = calculateFullChart({
+        first: p.first,
+        middle: p.mid,
+        last: p.last,
+        dob: p.dob,
+        currentDate: currentDate
+      });
+      return dateExplorerRows(chart, chart.essenceCycle.currentAge, p.dob);
+    };
+    // two people: the same date is shown for both, one under the other
+    if (PEOPLE_FOR_DATE_EXPLORER.length === 2) {
+      const parts = PEOPLE_FOR_DATE_EXPLORER.map(p => {
+        if (getAgeAtDateClient(p.dob, currentDate) < 0) {
+          return dpsec(p.first) + '<div class="dprow"><p class="report-body">That date is before ' + escapeHtml(p.first) + ' was born.</p></div>';
+        }
+        return dpsec(p.first) + forPerson(p);
+      });
+      resultsEl.innerHTML = parts.join("");
+    } else {
+      resultsEl.innerHTML = forPerson(person);
+    }
   } catch (e) {
     resultsEl.innerHTML = '<div class="dprow"><p class="report-body">Could not calculate for that date.</p></div>';
   }
@@ -3260,10 +3281,11 @@ function render(p1, p2, r, reportErr, reportUsedFallback, pending, fallbackReaso
   const n1 = p1.first + (p1.last ? " " + p1.last : "");
   const namesForTitle = p2 ? p1.first + " & " + p2.first : n1;
   const cardNames = p2 ? p1.first + " & " + p2.first : p1.first;
-  let h = personRow(p1, 1, 0) + topBtn("Run Another Reading", "resetToForm()", BTN_ICON_REFRESH, "grid-column:1;grid-row:2;") + reportSlot(namesForTitle, cardNames, r, reportErr, 2, reportUsedFallback, pending, fallbackReason) + topBtn("Save / Print Reading", "window.print()", BTN_ICON_PRINT, "grid-column:3;grid-row:2;");
+  let h = personRow(p1, 1, 0) + topBtn("Run Another Reading", "resetToForm()", BTN_ICON_REFRESH, "grid-column:1;grid-row:2;") + reportSlot(namesForTitle, cardNames, r, reportErr, 2, reportUsedFallback, pending, fallbackReason) + topBtn("Save / Print Reading", "track('save_print');window.print()", BTN_ICON_PRINT, "grid-column:3;grid-row:2;");
   if (p2) h += personRow(p2, 3, 1);
   document.getElementById("mainGrid").innerHTML = h;
-  document.getElementById("bottomBtns").innerHTML = topBtn("Share", "shareReading()", BTN_ICON_SHARE) + topBtn("Listen", "toggleListen()", BTN_ICON_LISTEN, null, "listenBtn");
+  const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+  document.getElementById("bottomBtns").innerHTML = topBtn("Listen", "toggleListen()", BTN_ICON_LISTEN, null, "listenBtn") + (isApple ? '<p class="ios-save-note">To save a PDF on an iPad or iPhone: tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.</p>' : "");
   stopLoadingTimer();
   document.getElementById("loading").style.display = "none";
   document.getElementById("resultsWrap").style.display = "block";
@@ -3300,7 +3322,15 @@ function resetToForm() {
   document.getElementById("loading").style.display = "none";
   const remembered = getRememberedPassEmail();
   if (remembered) document.getElementById("pEmail").value = remembered;
-  checkEmailStatus();
+  track("run_another");
+  checkEmailStatus().then(st => {
+    if (PAYMENTS_ENABLED && st && st.freeReadingUsed && !st.active) {
+      setFormLocked(true);
+      const g = document.getElementById("gateErr");
+      g.textContent = "Your free reading has been used. Choose a pass to continue.";
+      g.style.display = "block";
+    }
+  });
 }
 
 function vd(d) {
@@ -3381,6 +3411,22 @@ function stopLoadingTimer() {
 }
 
 const W_API = "https://know-your-energy.kwdoanchor.workers.dev";
+
+// Anonymous counters (no email, name or birth details) so you can see which features get used.
+function track(name) {
+  try {
+    fetch(W_API + "/event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: name
+      }),
+      keepalive: true
+    }).catch(() => {});
+  } catch (e) {}
+}
 
 const REMEMBERED_EMAIL_KEY = "kye_passEmail";
 
