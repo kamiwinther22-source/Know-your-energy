@@ -5,10 +5,10 @@ html.red body{overflow-x:clip;max-width:100%}
 html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#2a0510}
 html.red:not(:has(#resultsWrap[style*="block"])) body{
   background:
-   radial-gradient(ellipse 520px 520px at 50% calc(100% - 120px),rgba(176,28,70,.75) 0,rgba(130,14,50,.38) 48%,rgba(130,14,50,0) 100%),
-   radial-gradient(ellipse 560px 460px at 55% 700px,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),
-   radial-gradient(ellipse 520px 300px at 18% 0%,rgba(255,255,255,.26) 0,rgba(255,255,255,.08) 55%,rgba(255,255,255,0) 100%),
-   radial-gradient(ellipse 620px 800px at 22% 85px,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%);
+   radial-gradient(ellipse 520px 62% at 50% 86%,rgba(176,28,70,.75) 0,rgba(130,14,50,.38) 48%,rgba(130,14,50,0) 100%),
+   radial-gradient(ellipse 560px 54% at 55% 83%,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),
+   radial-gradient(ellipse 520px 36% at 18% 0%,rgba(255,255,255,.26) 0,rgba(255,255,255,.08) 55%,rgba(255,255,255,0) 100%),
+   radial-gradient(ellipse 620px 95% at 22% 10%,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%);
   background-color:#2a0510;
   padding:22px 20px 40px;
 }
