@@ -24,10 +24,10 @@ html.red .r-fcr{margin-top:4px;font-size:17.5px;line-height:1.35;font-weight:800
 html.red .hero-illustration{position:relative;width:350px;max-width:none;height:164px;margin:6px 0 0;transform:none}
 html.red .hero-illustration svg{overflow:visible}
 html.red .r-free{margin-top:6px;text-align:center;font-size:44px;line-height:1;font-weight:800}
-html.red .r-b22{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:16px 0 0;padding:0;width:350px}
+html.red .r-b22{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:12px 0 0;padding:0;width:350px}
 html.red .r-b22 li{position:relative;padding-left:14px;font-size:14px;line-height:1.25;font-weight:700}
 html.red .r-b22 li:before{content:"";position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:#fff}
-html.red .hero-email-wrap{max-width:none;width:310px;margin:16px auto 0}
+html.red .hero-email-wrap{max-width:none;width:310px;margin:14px auto 0}
 html.red .field,html.red .line-field,html.red .line-field.hero-email-field{
   background:linear-gradient(180deg,#14020a,#2a0612) !important;border:0 !important;border-radius:2px !important;
   box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2 !important}
@@ -51,7 +51,7 @@ html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before{disp
   clip-path:polygon(var(--d) 0,calc(100% - var(--d)) 0,100% 50%,calc(100% - var(--d)) 100%,var(--d) 100%,0 50%)}
 html.red .rbtn,html.red .gen-btn{width:210px;height:50px;font-size:19px;padding:0}
 html.red .gen-btn{width:190px}
-html.red .rb-wrap{margin:14px auto 22px}
+html.red .rb-wrap{margin:12px auto 12px}
 html.red .rel-row{gap:3px !important;justify-content:center;margin:0 -4px 0 -5px !important;flex-wrap:nowrap}
 html.red .rel-chip{--c:9px;--d:8px;--vy:4px;--hx:7px;height:32px;font-size:13px !important;padding:0 !important;line-height:1}
 html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{width:116px}
@@ -108,6 +108,8 @@ html.red #formStep .row-time .ampm-field,html.red #formStep .row-time .ampm-fiel
 html.red #formStep .row-time .ampm-field{background:linear-gradient(180deg,#14020a,#2a0612) !important;border-left-width:0 !important;padding:0 !important}
 html.red .row-time .ampm-field select{padding:0 2px 0 6px;font-size:15px;width:100%;height:36px;-webkit-appearance:none;appearance:none}
 html.red .hero-illustration{transform:translateX(96px) translateY(10px) rotate(12deg) scale(1.55);transform-origin:50% 50%}
+html.red .hero-illustration{height:148px}
+html.red .r-free{margin-top:0}
 html.red:not(:has(#resultsWrap[style*="block"])) .loading *{font-family:'Fraunces',Georgia,serif !important;letter-spacing:0 !important;text-transform:none !important;font-style:normal !important;font-weight:700}
 html.red:not(:has(#resultsWrap[style*="block"])) .loading-warn{background:rgba(42,6,18,.6) !important;border:1px solid rgba(255,255,255,.4) !important}
 html.red:not(:has(#resultsWrap[style*="block"])) .loading-txt{font-size:22px}
@@ -129,5 +131,10 @@ html.red #formStep .row-birth{grid-template-columns:minmax(0,1.7fr) minmax(0,2fr
 html.red #formStep .row-birth .row-time{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
 
 /* the form stays greyed out until an email has been accepted */
-html.red #formStep.locked .form-col{opacity:.38;filter:grayscale(.85);pointer-events:none;cursor:not-allowed;user-select:none}
-html.red #formStep.locked .form-col *{cursor:not-allowed}
+/* locked: only the boxes change (darker, with a small padlock); nothing else on the page is dimmed */
+html.red #formStep .form-col{position:relative}
+html.red #lockCover{position:absolute;inset:0;z-index:6;cursor:not-allowed}
+html.red #formStep.locked .line-field{background:#0d0105 !important;position:relative}
+html.red #formStep.locked .line-field::after{content:"";position:absolute;right:7px;top:50%;width:13px;height:15px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 15'%3E%3Crect x='1' y='6' width='11' height='8' rx='1.5' fill='%23d7dce2'/%3E%3Cpath d='M3.5 6V4.5a3 3 0 0 1 6 0V6' fill='none' stroke='%23d7dce2' stroke-width='1.6'/%3E%3C/svg%3E")}
+html.red #formStep.locked .line-field input{-webkit-text-fill-color:#fff}
+html.red #formStep.locked .line-field input,html.red #formStep.locked .line-field select{padding-right:22px}
