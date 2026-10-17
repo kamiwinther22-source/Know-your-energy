@@ -3137,18 +3137,7 @@ async function onDateExplorerChange(inputEl) {
       });
       return dateExplorerRows(chart, chart.essenceCycle.currentAge, p.dob);
     };
-    // two people: the same date is shown for both, one under the other
-    if (PEOPLE_FOR_DATE_EXPLORER.length === 2) {
-      const parts = PEOPLE_FOR_DATE_EXPLORER.map(p => {
-        if (getAgeAtDateClient(p.dob, currentDate) < 0) {
-          return dpsec(p.first) + '<div class="dprow"><p class="report-body">That date is before ' + escapeHtml(p.first) + ' was born.</p></div>';
-        }
-        return dpsec(p.first) + forPerson(p);
-      });
-      resultsEl.innerHTML = parts.join("");
-    } else {
-      resultsEl.innerHTML = forPerson(person);
-    }
+    resultsEl.innerHTML = forPerson(person);
   } catch (e) {
     resultsEl.innerHTML = '<div class="dprow"><p class="report-body">Could not calculate for that date.</p></div>';
   }
