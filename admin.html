@@ -66,6 +66,9 @@ async function load(){
     DATA=j;$("msg").textContent="";
     const t=j.totals;
     $("tot").innerHTML=`<div><b>${t.newEmails24h}</b>new emails, last 24 hours</div><div><b>${t.newEmails7d}</b>new emails, last 7 days</div><div><b>${t.newEmails30d}</b>new emails, last 30 days</div><div><b>${t.emailsEntered}</b>emails entered, ever</div><div><b>${t.readings24h}</b>free readings, last 24 hours</div><div><b>${t.readings7d}</b>free readings, last 7 days</div><div><b>${t.freeReadingsUsed}</b>free readings, ever</div><div><b>${t.readingsGenerated}</b>readings generated, ever</div>`;
+    const ev=t.events||j.events;
+    if(ev){const L={run_another:"Run Another Reading",date_check:"Check a different date",save_print:"Save / Print"};
+      $("tot").innerHTML+=Object.keys(L).map(k=>`<div><b>${ev[k]?ev[k].d7:0}</b>${L[k]}, last 7 days (${ev[k]?ev[k].total:0} ever)</div>`).join("");}
     $("tot").hidden=false;$("tabs").hidden=!j.users;if(j.users)$("more").hidden=true;render();
   }catch(e){$("msg").textContent="Could not reach the site's server.";}
 }
