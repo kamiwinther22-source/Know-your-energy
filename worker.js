@@ -202,10 +202,8 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     countryCode: countryCode,
     state: state || ""
   });
-  if (result.location.source === "fallback-default" && hasRealCity) {
-    throw new Error(`Could not find "${city}" as a recognized city. Please check the spelling, or try the nearest larger city -- your chart depends on the exact birth location, so it can't be computed without a real match.`);
-  }
-  const hasRealLocation = hasRealCity && result.location.source !== "fallback-default";
+  const locationNotFound = result.location.source === "fallback-default" && hasRealCity;
+  const hasRealLocation = hasRealCity && !locationNotFound;
   if (!hasRealTime || !hasRealLocation) {
     const dayStart = computeAstrology({
       year: year,
@@ -257,6 +255,7 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     result.timeUnknown = !hasRealTime;
     result.locationUnknown = !hasRealLocation;
   }
+  if (locationNotFound) result.locationNotFound = city;
   return result;
 }
 
@@ -1132,7 +1131,8 @@ export default {
         }
         if (body.passEmail) {
           // the free reading counts as used once a reading has actually been delivered to someone without a pass
-          if (askerStatus && !askerStatus.active && report && !reportError) {
+          const chartsComplete = [ p1Data, p2Data ].filter(Boolean).every(pd => !pd.numerologyError && !pd.astrologyError && !(pd.astrology && pd.astrology.locationNotFound) && (!pd.humanDesignError || /required for Human Design/i.test(pd.humanDesignError)));
+          if (askerStatus && !askerStatus.active && report && !reportError && chartsComplete) {
             ctx.waitUntil(env.PASSES.put(freeKey(body.passEmail), String(Date.now()), {
               metadata: {
                 t: Date.now()

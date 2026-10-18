@@ -224,13 +224,47 @@ function normState(state) {
   return US_STATE_CODES[st] || st;
 }
 
+const COUNTRY_WORDS = new Set(["usa", "us", "u.s.", "u.s.a.", "united", "states", "america", "of"]);
+
+function tidy(s) {
+  return (s || "").toLowerCase().replace(/[.,;]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function tolerantMatch(rawQuery, cc, stateHint) {
+  const words = tidy(rawQuery).split(" ").filter(Boolean);
+  while (words.length > 1 && (COUNTRY_WORDS.has(words[words.length - 1]) || /^\d{4,6}(-\d{4})?$/.test(words[words.length - 1]))) {
+    words.pop();
+  }
+  for (let drop = 0; drop <= 3 && words.length - drop >= 1; drop++) {
+    const name = words.slice(0, words.length - drop).join(" ");
+    const tail = words.slice(words.length - drop).join(" ");
+    if (drop > 0 && !normState(tail) && !US_STATE_CODES[tail] && !Object.values(US_STATE_CODES).includes(tail) && !COUNTRY_WORDS.has(tail)) continue;
+    const hits = datasetMatches(name, cc);
+    if (hits.length === 0) continue;
+    const st = normState(tail) || normState(stateHint);
+    let pick = hits;
+    if (st) {
+      const stateHits = hits.filter((h) => h.admin1 && h.admin1.toLowerCase() === st);
+      if (stateHits.length > 0) pick = stateHits;
+    }
+    return pick.reduce((a, b) => (b.pop > a.pop ? b : a));
+  }
+  return null;
+}
+
 export function findCity(cityName, countryCode, state) {
   const q = (cityName || "").trim().toLowerCase();
   const cc = (countryCode || "US").toUpperCase();
   const st = normState(state);
   if (!q) return fallbackNewYork();
 
-  const hits = datasetMatches(q, cc);
+  let hits = datasetMatches(q, cc);
+  if (hits.length === 0) {
+    const loose = tolerantMatch(cityName, cc, state);
+    if (loose) {
+      return { name: loose.name, country: loose.country, lat: loose.lat, lng: loose.lng, source: "dataset" };
+    }
+  }
   if (hits.length > 0) {
     let pick = hits;
     if (st) {

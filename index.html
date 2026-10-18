@@ -2716,6 +2716,7 @@ function ar(astro, errMsg) {
     if (name) byName[name] = p;
   });
   let h = "";
+  if (astro.locationNotFound) h += `<p style="margin:0 0 .6rem;font-size:.85em;line-height:1.35">We could not find "${escapeHtml(astro.locationNotFound)}" in our city list, so the Ascendant and houses are left out. Check the spelling, or try the nearest larger city. If this was your free reading, it has not been used.</p>`;
   const emitPlanet = p => {
     const name = p.name, sign = p.sign;
     if (!name || !sign) return;
