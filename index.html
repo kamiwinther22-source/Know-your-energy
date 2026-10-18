@@ -12,6 +12,16 @@
 #formStep .row-birth{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);column-gap:.5rem;}
 #formStep .row-birth .row-time{grid-template-columns:1.5fr .8fr;}
 #formStep .line-field input,#formStep .line-field select{min-width:0;}
+.notime-row{grid-column:1 / -1;margin-top:.5rem}
+.chk{display:flex;align-items:center;gap:.5rem;cursor:pointer}
+.why{font-size:.8rem;margin-top:.3rem}
+.loc-field{position:relative}
+.loc-list{list-style:none;position:absolute;left:0;right:0;z-index:30;margin:0;padding:.2rem 0;background:#fff;border:1px solid #888}
+.loc-list[hidden],.tz-field[hidden]{display:none}
+.loc-list li{padding:.5rem .6rem;cursor:pointer}
+.loc-list li.on,.loc-list li:hover{background:#eee}
+.tz-toggle{background:none;border:0;padding:0;margin-top:.5rem;text-decoration:underline;cursor:pointer;font:inherit}
+.chk-box{display:none}
 #formStep .row-time .ampm-field{border-left-width:0 !important;background:transparent !important;padding-left:.3rem;padding-right:.2rem;}
 #formStep .row-time .ampm-field select{width:100%;padding:0;background:transparent !important;outline:none;-webkit-tap-highlight-color:transparent;}
 #formStep .submit-wrap.under-p2{width:auto;margin-right:14px;justify-content:flex-end;}
@@ -830,7 +840,7 @@ html,body{overflow-x:clip !important;}
 if(FIN||/[?&]look=base\b/.test(location.search)){if(FIN){var R=document.documentElement;R.classList.add('pre');var ps=document.createElement('style');ps.textContent='html,body{background:#eceff1 !important}html.pre body{opacity:0}body{transition:opacity .7s ease}';document.head.appendChild(ps);var rv=function(){setTimeout(function(){R.classList.remove('pre');},250);};new MutationObserver(function(){if(R.classList.contains('m3d')){rv();}}).observe(R,{attributes:true,attributeFilter:['class']});setTimeout(function(){R.classList.remove('pre');},7000);
 document.documentElement.classList.add('no-shadows','inlay-lt');document.addEventListener('DOMContentLoaded',function(){var f=document.querySelector('.free-reading-line');if(f)f.innerHTML='<span class="fr-a">first reading</span><span class="fr-b">free</span>';});}document.documentElement.classList.add('look-base');if(/[?&]shadows=0\b/.test(location.search))document.documentElement.classList.add('no-shadows');var b=document.createElement('link');b.rel='stylesheet';b.href='look-base.css';document.head.appendChild(b);if(/[?&]labels=below\b/.test(location.search)){document.documentElement.classList.add('labels-below');var sl=function(){document.querySelectorAll('.hero-continue-btn,.gen-btn,.price-row,.rel-chip').forEach(function(b){var t=Array.prototype.map.call(b.querySelectorAll('span'),function(s){return s.textContent.trim();}).filter(Boolean).join(' ')||b.textContent.replace(/\s+/g,' ').trim();if(t&&b.dataset.label!==t)b.dataset.label=t;});};document.addEventListener('DOMContentLoaded',function(){sl();new MutationObserver(sl).observe(document.body,{childList:true,subtree:true});});}
 if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMContentLoaded',function(){var m=document.createElement('script');m.type='module';m.src='metal3d.js';document.body.appendChild(m);if(FIN){var rf=document.createElement('script');rf.src='reflect.js';document.body.appendChild(rf);var cf=document.createElement('script');cf.src='confirm.js';document.body.appendChild(cf);var bs=document.createElement('script');bs.src='brushed-bg.js';document.body.appendChild(bs);}});return;}if(!/[?&]look=metal\b/.test(location.search))return;document.documentElement.classList.add('look-metal');var l=document.createElement('link');l.rel='stylesheet';l.href='look-metal.css';document.head.appendChild(l);document.addEventListener('DOMContentLoaded',function(){var s=document.createElement('script');s.src='look-metal.js';document.body.appendChild(s);var m=document.createElement('script');m.type='module';m.src='metal3d.js';document.body.appendChild(m);});})();</script>
-<link rel="stylesheet" href="red-look.css?v=20261017">
+<link rel="stylesheet" href="red-look.css?v=20261018">
 </head>
 <body>
 
@@ -912,7 +922,11 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
               <div><label for="p1t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
               <div class="line-field ampm-field"><select id="p1ap" aria-label="AM or PM"><option value="" selected>AM/PM</option><option value="AM">AM</option><option value="PM">PM</option></select></div>
             </div>
-            <div class="loc-field"><label for="p1loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1loc" placeholder="City, State, Country" autocomplete="off"></div></div>
+            <div class="notime-row"><label class="chk"><input type="checkbox" id="p1notime"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">I don't know my birth time</span></label><div class="why">Time sets your rising sign and your Human Design chart.</div></div>
+            <div class="loc-field"><label for="p1loc">Birth city <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1loc" placeholder="Start typing a city" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="p1locList"></div><ul class="loc-list" id="p1locList" role="listbox" hidden></ul><div class="why">Sets the exact moment of your birth and your rising sign.</div>
+              <button type="button" class="tz-toggle" id="p1tzToggle" aria-expanded="false" aria-controls="p1tzWrap">Don't know the city? Choose a time zone</button>
+              <div class="tz-field" id="p1tzWrap" hidden><div class="line-field"><select id="p1tz" aria-label="Birth time zone"><option value="" selected>Time zone</option><option value="America/New_York">Eastern</option><option value="America/Chicago">Central</option><option value="America/Denver">Mountain</option><option value="America/Phoenix">Arizona</option><option value="America/Los_Angeles">Pacific</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></select></div><div class="why">Close enough for most people. Outside the US, pick the nearest big city above.</div></div>
+            </div>
           </div>
         </div>
 
@@ -931,7 +945,11 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
                 <div><label for="p2t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
                 <div class="line-field ampm-field"><select id="p2ap" aria-label="AM or PM"><option value="" selected>AM/PM</option><option value="AM">AM</option><option value="PM">PM</option></select></div>
               </div>
-              <div class="loc-field"><label for="p2loc">Location <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2loc" placeholder="City, State, Country" autocomplete="off"></div></div>
+              <div class="notime-row"><label class="chk"><input type="checkbox" id="p2notime"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">I don't know my birth time</span></label><div class="why">Time sets your rising sign and your Human Design chart.</div></div>
+            <div class="loc-field"><label for="p2loc">Birth city <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2loc" placeholder="Start typing a city" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="p2locList"></div><ul class="loc-list" id="p2locList" role="listbox" hidden></ul><div class="why">Sets the exact moment of your birth and your rising sign.</div>
+              <button type="button" class="tz-toggle" id="p2tzToggle" aria-expanded="false" aria-controls="p2tzWrap">Don't know the city? Choose a time zone</button>
+              <div class="tz-field" id="p2tzWrap" hidden><div class="line-field"><select id="p2tz" aria-label="Birth time zone"><option value="" selected>Time zone</option><option value="America/New_York">Eastern</option><option value="America/Chicago">Central</option><option value="America/Denver">Mountain</option><option value="America/Phoenix">Arizona</option><option value="America/Los_Angeles">Pacific</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></select></div><div class="why">Close enough for most people. Outside the US, pick the nearest big city above.</div></div>
+            </div>
             </div>
           </div>
         </div>
@@ -3354,6 +3372,121 @@ function isUSState(s) {
   return US_STATE_NAMES.some(st => st.toLowerCase() === s.toLowerCase());
 }
 
+function pickedOrParsed(id) {
+  const el = document.getElementById(id);
+  try {
+    const pick = el.dataset.pick ? JSON.parse(el.dataset.pick) : null;
+    if (pick && pick.value === el.value) return {
+      city: pick.city,
+      state: pick.state,
+      country: pick.country
+    };
+  } catch (_) {}
+  return parseLocation(el.value.trim());
+}
+
+function setupBirthFields(n) {
+  const loc = document.getElementById(`p${n}loc`), list = document.getElementById(`p${n}locList`);
+  const time = document.getElementById(`p${n}t`), ap = document.getElementById(`p${n}ap`), no = document.getElementById(`p${n}notime`);
+  const tzBtn = document.getElementById(`p${n}tzToggle`), tzWrap = document.getElementById(`p${n}tzWrap`);
+  let items = [], active = -1, timer = null, ctl = null;
+  const close = () => {
+    list.hidden = true;
+    loc.setAttribute("aria-expanded", "false");
+    loc.removeAttribute("aria-activedescendant");
+    active = -1;
+  };
+  const choose = i => {
+    const it = items[i];
+    if (!it) return;
+    loc.value = it.label;
+    loc.dataset.pick = JSON.stringify({
+      value: it.label,
+      city: it.city,
+      state: it.state,
+      country: it.country
+    });
+    close();
+  };
+  const mark = () => {
+    [ ...list.children ].forEach((li, i) => li.classList.toggle("on", i === active));
+    if (active >= 0) loc.setAttribute("aria-activedescendant", list.children[active].id); else loc.removeAttribute("aria-activedescendant");
+  };
+  const show = () => {
+    list.innerHTML = "";
+    items.forEach((it, i) => {
+      const li = document.createElement("li");
+      li.id = `p${n}loc-o${i}`;
+      li.setAttribute("role", "option");
+      li.textContent = it.label;
+      li.addEventListener("mousedown", e => {
+        e.preventDefault();
+        choose(i);
+      });
+      list.appendChild(li);
+    });
+    list.hidden = items.length === 0;
+    loc.setAttribute("aria-expanded", items.length ? "true" : "false");
+    active = -1;
+  };
+  loc.addEventListener("input", () => {
+    delete loc.dataset.pick;
+    clearTimeout(timer);
+    const v = loc.value.trim();
+    if (v.length < 2) {
+      close();
+      return;
+    }
+    timer = setTimeout(async () => {
+      if (ctl) ctl.abort();
+      ctl = new AbortController;
+      try {
+        const res = await fetch(`${W_API}/places?q=${encodeURIComponent(v)}`, {
+          signal: ctl.signal
+        });
+        if (!res.ok) return;
+        items = await res.json();
+        if (document.activeElement === loc) show();
+      } catch (_) {}
+    }, 180);
+  });
+  loc.addEventListener("keydown", e => {
+    if (list.hidden) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      active = (active + 1) % items.length;
+      mark();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      active = (active - 1 + items.length) % items.length;
+      mark();
+    } else if (e.key === "Enter" && active >= 0) {
+      e.preventDefault();
+      choose(active);
+    } else if (e.key === "Escape") {
+      close();
+    }
+  });
+  loc.addEventListener("blur", () => setTimeout(close, 120));
+  no.addEventListener("change", () => {
+    if (no.checked) {
+      time.value = "";
+      ap.value = "";
+    }
+    time.disabled = ap.disabled = no.checked;
+    time.closest(".row-time").classList.toggle("is-off", no.checked);
+  });
+  tzBtn.addEventListener("click", () => {
+    const open = tzWrap.hidden;
+    tzWrap.hidden = !open;
+    tzBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+}
+
+setupBirthFields(1);
+
+setupBirthFields(2);
+
 function parseLocation(raw) {
   let parts = raw.split(",").map(s => s.trim()).filter(Boolean);
   if (parts.length === 1) {
@@ -3620,35 +3753,37 @@ async function generate() {
       return;
     }
   }
-  if (g("p1t") && !document.getElementById("p1ap").value || isRelational && g("p2t") && !document.getElementById("p2ap").value) {
+  if (g("p1t") && !document.getElementById("p1notime").checked && !document.getElementById("p1ap").value || isRelational && g("p2t") && !document.getElementById("p2notime").checked && !document.getElementById("p2ap").value) {
     showErr("Choose AM or PM for the time you entered.");
     return;
   }
-  const loc1 = parseLocation(g("p1loc"));
+  const loc1 = pickedOrParsed("p1loc");
   const p1 = {
     first: p1f,
     mid: g("p1m"),
     last: p1l,
     dob: d1,
-    time: g("p1t") ? g("p1t") + " " + document.getElementById("p1ap").value : "",
+    time: g("p1t") && !document.getElementById("p1notime").checked ? g("p1t") + " " + document.getElementById("p1ap").value : "",
     city: loc1.city,
     state: loc1.state,
     country: loc1.country,
-    location: g("p1loc")
+    location: g("p1loc"),
+    tz: document.getElementById("p1tz").value
   };
   let p2 = null;
   if (isRelational) {
-    const loc2 = parseLocation(g("p2loc"));
+    const loc2 = pickedOrParsed("p2loc");
     p2 = {
       first: g("p2f"),
       mid: g("p2m"),
       last: g("p2l"),
       dob: g("p2d"),
-      time: g("p2t") ? g("p2t") + " " + document.getElementById("p2ap").value : "",
+      time: g("p2t") && !document.getElementById("p2notime").checked ? g("p2t") + " " + document.getElementById("p2ap").value : "",
       city: loc2.city,
       state: loc2.state,
       country: loc2.country,
-      location: g("p2loc")
+      location: g("p2loc"),
+      tz: document.getElementById("p2tz").value
     };
   }
   genBtn.disabled = true;

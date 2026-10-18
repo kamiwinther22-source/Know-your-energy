@@ -252,6 +252,63 @@ function tolerantMatch(rawQuery, cc, stateHint) {
   return null;
 }
 
+const STATE_NAME_BY_CODE = Object.fromEntries(Object.entries(US_STATE_CODES).map(([name, code]) => [code, name.replace(/\b\w/g, (c) => c.toUpperCase())]));
+
+export function searchCities(rawQuery, limit = 7) {
+  if (!CITIES_DATA || CITIES_DATA.length === 0) return [];
+  if (lowerData === null) lowerData = "\n" + CITIES_DATA.toLowerCase();
+  const text = (rawQuery || "").toLowerCase().replace(/\s+/g, " ").trim();
+  if (text.length < 2) return [];
+  const comma = text.indexOf(",");
+  const namePart = (comma === -1 ? text : text.slice(0, comma)).trim();
+  const hint = (comma === -1 ? "" : text.slice(comma + 1)).replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
+  if (namePart.length < 2) return [];
+  const rows = [];
+  let i = lowerData.indexOf("\n" + namePart);
+  while (i !== -1 && rows.length < 6000) {
+    let end = lowerData.indexOf("\n", i + 1);
+    if (end === -1) end = lowerData.length;
+    const parts = CITIES_DATA.slice(i, end - 1).split("|");
+    if (parts.length >= 7) {
+      rows.push({
+        name: parts[0],
+        cc: parts[2],
+        admin1: parts[3],
+        lat: parseFloat(parts[4]),
+        lng: parseFloat(parts[5]),
+        pop: parseInt(parts[6], 10) || 0,
+      });
+    }
+    i = lowerData.indexOf("\n" + namePart, end);
+  }
+  let pool = rows;
+  if (hint) {
+    const code = normState(hint);
+    const narrowed = rows.filter((r) => {
+      const stName = (r.cc === "US" && STATE_NAME_BY_CODE[r.admin1.toLowerCase()]) || "";
+      return (r.cc === "US" && (r.admin1.toLowerCase() === code || stName.toLowerCase().startsWith(hint))) || r.cc.toLowerCase() === hint;
+    });
+    if (narrowed.length > 0) pool = narrowed;
+  }
+  pool.sort((a, b) => b.pop - a.pop);
+  const seen = new Set();
+  const out = [];
+  for (const r of pool) {
+    const key = `${r.name}|${r.cc}|${r.admin1}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      city: r.name,
+      country: r.cc,
+      state: r.cc === "US" ? r.admin1 : "",
+      stateName: r.cc === "US" ? STATE_NAME_BY_CODE[r.admin1.toLowerCase()] || r.admin1 : "",
+      pop: r.pop,
+    });
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
 export function findCity(cityName, countryCode, state) {
   const q = (cityName || "").trim().toLowerCase();
   const cc = (countryCode || "US").toUpperCase();
