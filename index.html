@@ -1230,7 +1230,7 @@ const FLOW_PALETTES = {
 function drawFlow() {
   const svg = document.getElementById("flowArt");
   const formCol = document.querySelector(".form-col");
-  const p1Loc = document.querySelector("#p1Block .loc-field .line-field");
+  const p1Loc = document.querySelector("#p1Block .loc-field");
   const p1Block = document.getElementById("p1Block");
   const p2Lbl = document.querySelector("#p2Section .section-lbl");
   const p2Box = document.querySelector("#p2Section > .f");
@@ -3480,6 +3480,7 @@ function setupBirthFields(n) {
     const open = tzWrap.hidden;
     tzWrap.hidden = !open;
     tzBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (typeof drawFlow === "function") drawFlow();
   });
 }
 
