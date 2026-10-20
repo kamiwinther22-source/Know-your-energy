@@ -1,6 +1,7 @@
 import { calculateFullChart } from "./numerology-calculator.js";
 
 import { computeAstrology } from "./astro-engine.js";
+import { searchCities } from "./cities.js";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -186,12 +187,23 @@ function normalizeCity(city, state, country) {
   };
 }
 
-function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
+const TZ_CITY = {
+  "America/New_York": "New York",
+  "America/Chicago": "Chicago",
+  "America/Denver": "Denver",
+  "America/Phoenix": "Phoenix",
+  "America/Los_Angeles": "Los Angeles",
+  "America/Anchorage": "Anchorage",
+  "Pacific/Honolulu": "Honolulu"
+};
+
+function getAstrologyLocal(dob, timeStr, ampm, city, state, country, tz) {
   const {year: year, month: month, day: day} = normalizeDOB(dob);
   const hasRealTime = !!(timeStr && timeStr.trim());
   const hasRealCity = !!(city && city.trim());
   const {hour: hour, minute: minute} = normalizeTime(timeStr, ampm);
-  const {cityName: cityName, countryCode: countryCode} = normalizeCity(city, state, country);
+  const useTzCity = !hasRealCity && tz && TZ_CITY[tz];
+  const {cityName: cityName, countryCode: countryCode} = normalizeCity(useTzCity ? TZ_CITY[tz] : city, useTzCity ? "" : state, useTzCity ? "US" : country);
   const result = computeAstrology({
     year: year,
     month: month,
@@ -202,10 +214,8 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     countryCode: countryCode,
     state: state || ""
   });
-  if (result.location.source === "fallback-default" && hasRealCity) {
-    throw new Error(`Could not find "${city}" as a recognized city. Please check the spelling, or try the nearest larger city -- your chart depends on the exact birth location, so it can't be computed without a real match.`);
-  }
-  const hasRealLocation = hasRealCity && result.location.source !== "fallback-default";
+  const locationNotFound = result.location.source === "fallback-default" && hasRealCity;
+  const hasRealLocation = hasRealCity && !locationNotFound;
   if (!hasRealTime || !hasRealLocation) {
     const dayStart = computeAstrology({
       year: year,
@@ -257,6 +267,7 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country) {
     result.timeUnknown = !hasRealTime;
     result.locationUnknown = !hasRealLocation;
   }
+  if (locationNotFound) result.locationNotFound = city;
   return result;
 }
 
@@ -308,19 +319,20 @@ async function resolveHDDatetime(env, dateStr, timeStr, timezone) {
   }
 }
 
-async function getHumanDesign(env, dob, timeStr, ampm, city, state) {
+async function getHumanDesign(env, dob, timeStr, ampm, city, state, tzFallback) {
   const {year: year, month: month, day: day} = normalizeDOB(dob);
   const {hour: hour, minute: minute} = normalizeTime(timeStr, ampm);
   const {cityName: cityName} = normalizeCity(city, state, null);
   const dateStr = `${year}-${pad(month)}-${pad(day)}`;
   const timeFormatted = `${pad(hour)}:${pad(minute)}`;
   let datetime = null;
-  const timezone = await getHDTimezone(env, cityName);
+  let timezone = city && city.trim() ? await getHDTimezone(env, cityName) : null;
+  if (!timezone && tzFallback && TZ_CITY[tzFallback]) timezone = tzFallback;
   if (timezone) {
     datetime = await resolveHDDatetime(env, dateStr, timeFormatted, timezone);
   }
   if (!datetime) {
-    throw new Error(`Could not resolve a timezone for "${cityName}". Human Design needs the exact UTC moment of birth, so the chart can't be safely computed without it.`);
+    throw new Error(`Could not resolve a timezone for "${cityName}". Human Design needs the exact UTC moment of birth. Choose a time zone under the city box, or pick the nearest larger city.`);
   }
   const chartCacheKey = `hdchart:${datetime}`;
   const cachedChart = await env.PASSES.get(chartCacheKey);
@@ -356,7 +368,7 @@ function todayAsMMDDYYYY() {
 }
 
 async function assemblePersonData(env, person) {
-  const {first: first, mid: mid, last: last, dob: dob, time: time, ampm: ampm, city: city, state: state, country: country} = person;
+  const {first: first, mid: mid, last: last, dob: dob, time: time, ampm: ampm, city: city, state: state, country: country, tz: tz} = person;
   let numerology = null, numerologyError = null;
   try {
     numerology = calculateFullChart({
@@ -371,21 +383,22 @@ async function assemblePersonData(env, person) {
   }
   let astrology = null, astrologyError = null;
   try {
-    astrology = getAstrologyLocal(dob, time, ampm, city, state, country);
+    astrology = getAstrologyLocal(dob, time, ampm, city, state, country, tz);
   } catch (e) {
     astrologyError = e.message;
   }
   let humanDesign = null, humanDesignError = null;
   const hasTime = time && time.trim().length > 0;
   const hasCity = city && city.trim().length > 0;
-  if (hasTime && hasCity) {
+  const hasZone = !!(tz && TZ_CITY[tz]);
+  if (hasTime && (hasCity || hasZone)) {
     try {
-      humanDesign = await getHumanDesign(env, dob, time, ampm, city, state);
+      humanDesign = await getHumanDesign(env, dob, time, ampm, city, state, tz);
     } catch (e) {
       humanDesignError = e.message;
     }
   } else {
-    humanDesignError = "Birth time and city are required for Human Design. Chart omitted.";
+    humanDesignError = "Birth time and either a birth city or a time zone are required for Human Design. Chart omitted.";
   }
   return {
     first: first,
@@ -1031,6 +1044,23 @@ export default {
         }, 500);
       }
     }
+    if (url.pathname === "/places") {
+      const q = url.searchParams.get("q") || "";
+      const names = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames([ "en" ], {
+        type: "region"
+      }) : null;
+      const list = searchCities(q, 7).map(r => ({
+        city: r.city,
+        state: r.state,
+        country: r.country,
+        label: r.country === "US" ? `${r.city}, ${r.stateName}` : `${r.city}, ${names ? names.of(r.country) : r.country}`
+      }));
+      const res = jsonResponse(list);
+      res.headers.set("Cache-Control", "private, max-age=3600");
+      res.headers.delete("Pragma");
+      res.headers.delete("Expires");
+      return res;
+    }
     if (url.pathname === "/chart-data") {
       let body;
       try {
@@ -1132,7 +1162,8 @@ export default {
         }
         if (body.passEmail) {
           // the free reading counts as used once a reading has actually been delivered to someone without a pass
-          if (askerStatus && !askerStatus.active && report && !reportError) {
+          const chartsComplete = [ p1Data, p2Data ].filter(Boolean).every(pd => !pd.numerologyError && !pd.astrologyError && !(pd.astrology && pd.astrology.locationNotFound) && (!pd.humanDesignError || /required for Human Design/i.test(pd.humanDesignError)));
+          if (askerStatus && !askerStatus.active && report && !reportError && chartsComplete) {
             ctx.waitUntil(env.PASSES.put(freeKey(body.passEmail), String(Date.now()), {
               metadata: {
                 t: Date.now()
