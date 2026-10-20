@@ -3331,10 +3331,10 @@ function resetToForm() {
   if (remembered) document.getElementById("pEmail").value = remembered;
   track("run_another");
   checkEmailStatus().then(st => {
-    if (PAYMENTS_ENABLED && st && st.freeReadingUsed && !st.active) {
+    if (st && st.freeReadingUsed && !st.active) {
       setFormLocked(true);
       const g = document.getElementById("gateErr");
-      g.textContent = "Your free reading has been used. Choose a pass to continue.";
+      g.textContent = "Your free reading has been used. A pass is needed for another reading, and passes are not available yet.";
       g.style.display = "block";
     }
   });
@@ -3582,7 +3582,8 @@ function getRememberedPassEmail() {
   }
 })();
 
-// Set to true when a payment processor exists: someone whose free reading is used and who holds no pass then stays locked out of the form.
+// Kept for when a payment processor exists. It does not control the free-reading lock: an email whose one free reading
+// is used, and that holds no pass, is always locked out of the form.
 const PAYMENTS_ENABLED = false;
 
 // The data-entry fields stay greyed out until an email has been accepted.
@@ -3640,9 +3641,9 @@ async function revealForm() {
   const statusResult = await checkEmailStatus();
   cta.disabled = false;
   labelEl.innerHTML = originalLabel;
-  if (PAYMENTS_ENABLED && statusResult && statusResult.freeReadingUsed && !statusResult.active) {
+  if (statusResult && statusResult.freeReadingUsed && !statusResult.active) {
     setFormLocked(true);
-    errEl.textContent = "Your free reading has been used. Choose a pass to continue.";
+    errEl.textContent = "Your free reading has been used. A pass is needed for another reading, and passes are not available yet.";
     errEl.style.display = "block";
     return;
   }
