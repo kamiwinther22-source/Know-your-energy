@@ -1,26 +1,21 @@
-# Know Your Energy — design rules (from the owner; read before touching the front-page look)
+# Know Your Energy: working notes
 
-These are the owner's standing instructions. Do not re-ask, do not "try alternatives" to them.
+## How to work with the owner (this comes first)
+- **What the owner says in the current message is the instruction.** It overrides anything written in this file, in earlier chats, in commit messages or in code comments. If they change their mind, follow the new words. Never quote an old rule back at them as a reason to push back.
+- Do exactly what they say. Don't add, don't subtract, don't reinterpret. If a request could mean two things, ask one short question before spending effort.
+- Design is reviewed as **pictures at phone width (about 390 px), whole pages, not strips**. For design work, show a picture and wait for approval before changing the site or writing real wording.
+- Say plainly what is done and what isn't. Don't oversell.
+- Their usage is limited. Don't tweak or redo something they rejected, and don't build ahead of a decision.
+- When the owner specifically asks for a change, merge it to `main` (that publishes the site). Don't merge anything they didn't ask for. Experiments go on a separate branch.
+- **There are no standing look rules.** The look of the front page and of the results page is undecided and is whatever the owner says now. Metallic styling is not wanted.
 
-## NEVER (absolute)
-- **No vertical stripes, bands, streaks, diagonal lines, ripples, folds or waves** anywhere in the background or on any element. Not as gradients, not as "reflections", not at all. They were rejected repeatedly ("lazy").
-- No page-wide wash, glow, haze, grey cloud, vignette, or pattern/grain/brushed texture over the page.
-- No dark / night-sky / black-and-white page. No grey page. No aged-paper, plaster, or tan-block look. No yellow/gold. No colour blocking or visible colour zones.
-- No panels, boxes, outlines, or line dividers (fields may be rectangles but not outlined).
-- Do not change layout, wording, fonts, or sizes unless asked. Do not change shapes the owner approved (tilted ovals for buttons).
-- Do not put lettering on moving reflections. No lit/bevelled/embossed text — text is flat solid ink.
-- Do not apply changes the owner has not asked for. When told to stop, stop.
+## What the site is
+- Static front end on GitHub Pages (`index.html`, `red-look.css`, `CNAME` = know-your-energy.com) plus a Cloudflare Worker (`worker.js`, KV namespace `PASSES`). A merge to `main` deploys both (`.github/workflows/deploy.yml`, which also builds the city list from GeoNames).
+- Charts: numerology (`numerology-calculator.js`), astrology (`astro-engine.js` with `circular-natal-horoscope-js`, city lookup in `cities.js`), Human Design (a paid API called from the Worker). The written reading comes from the Claude API; cost is about $0.13 per reading (see the Worker's `/usage` page).
+- Promises to visitors: birth details and readings are not kept on the server, no emails are sent to them, and an email address is their pass (unverified).
+- `PAYMENTS_ENABLED` is `false` (no payment processor yet). Three family emails are unlimited.
+- Testing is done with Playwright in Chromium against stubbed Worker calls. It cannot test real iPad/Safari, the Cloudflare dashboard, payments or real reports.
 
-## WHAT THE OWNER WANTS
-- A light, bright, metallic page that feels alive, with depth. Professional, sleek, classy, elegant, bold, unique.
-- Metal must look like metal because of **real reflection of light from where light would actually fall on THIS page's elements** — NOT a decorative pattern laid on the background. Think: raised chrome buttons reflect in the sheet beneath them; cut-in fields have a bright lower lip and dark upper edge; the sun (solar-system sun) is the single light source. The solar system (real 3D chrome lit by a photographed room) is the quality bar; it is NOT a placeholder and stays.
-- Buttons: tilted ovals in the same chrome as the solar system, pushable-looking, calm face for the words.
-- Copper (if used) is matte/dull and low-colour. A faint tint of tan inside the metal itself is fine; never tan zones.
-- All prices one size; Calculate centered; "your first reading is free" centered; tagline in the upper-left wedge (owner writes the words).
-- Fine, delicate, bright white twinkling ribbon between Person 1 and Person 2, lower-left to upper-right (not yet built).
-
-## HOW TO WORK WITH THE OWNER
-- Phone screens are the unit of review (about 390 wide). Show whole-page phone-sized renders, not cropped strips.
-- State plainly what is and isn't done; never oversell. The owner values being told when something is not metallic enough.
-- Keep it simple: the background is a small phone area. Do not over-engineer rooms/environments.
-- Branch for this work: `ccr-90bedd70-5wr4e0`; the look is opt-in via `?look=final` (also `?look=base`, `?look=metal`). The live site only changes when the owner says so.
+## Where things stand
+- Design explorations for the timing page, solar system, astrocartography globe and results page are on the branch `design-concepts` (read `design-concepts/README.md` there). That branch contains the owner's birth details and must not be merged into `main`.
+- Open: the timing page structure; the cycle wording (needs World Numerology and a second named site to be read first; blocked until `worldnumerology.com`, `www.worldnumerology.com` and `cafeastrology.com` are allowed in the cloud environment's network settings); free-reading limits, email checks and device limits (decided, not built); payment processor; astrocartography globe.
