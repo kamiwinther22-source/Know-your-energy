@@ -3011,7 +3011,7 @@ function reportSlot(names, cardNames, report, reportError, rowNum, usedFallback,
   const titleRaw = `${names} · Reading`;
   if (!report) {
     if (pending) {
-      return `<div class="panel-auto" id="readingSlot" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">Reading</div><div class="dprow report-pending"><svg class="hourglass" aria-hidden="true" viewBox="0 0 60 84" width="34" height="47"><path class="hg-outline" d="M8,4 H52 M8,80 H52 M8,4 C8,20 20,30 29,40 C20,50 8,60 8,80 M52,4 C52,20 40,30 31,40 C40,50 52,60 52,80" fill="none" stroke="#8A96EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><polygon class="hg-sand-top" fill="#8A96EE"/><polygon class="hg-sand-bottom" fill="#8A96EE"/><circle class="hg-drop" cx="30" cy="41" r="1.6" fill="#8A96EE"/></svg><p class="report-pending-txt">Generating your reading&hellip;</p></div></div></div>`;
+      return `<div class="panel-auto" id="readingSlot" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">Reading</div><div class="dprow report-pending"><svg class="hourglass" aria-hidden="true" viewBox="0 0 60 84" width="34" height="47"><path class="hg-outline" d="M8,4 H52 M8,80 H52 M8,4 C8,20 20,30 29,40 C20,50 8,60 8,80 M52,4 C52,20 40,30 31,40 C40,50 52,60 52,80" fill="none" stroke="#8A96EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><polygon class="hg-sand-top" fill="#8A96EE"/><polygon class="hg-sand-bottom" fill="#8A96EE"/><circle class="hg-drop" cx="30" cy="41" r="1.6" fill="#8A96EE"/></svg><p class="report-pending-txt">Generating your reading&hellip;</p><div class="loading-timer" id="readingTimer" style="margin:0.5rem 0 0">0:00</div></div></div></div>`;
     }
     if (!reportError) return "";
     return `<div class="panel-error" id="readingSlot" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now: ${escapeHtml(reportError)}</p></div></div></div>`;
@@ -3301,6 +3301,17 @@ function render(p1, p2, r, reportErr, reportUsedFallback, pending, fallbackReaso
   if (pending) {
     const slot = document.getElementById("readingSlot");
     if (slot) animateHourglass(slot);
+    const timerEl = document.getElementById("readingTimer");
+    if (timerEl) {
+      const t0 = loadingTimerStart || Date.now();
+      const tick = () => {
+        if (!timerEl.isConnected) return clearInterval(iv);
+        const secs = Math.floor((Date.now() - t0) / 1e3);
+        timerEl.textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
+      };
+      const iv = setInterval(tick, 250);
+      tick();
+    }
   }
   saveResult(p1, p2, r, reportErr, reportUsedFallback, fallbackReason);
 }
