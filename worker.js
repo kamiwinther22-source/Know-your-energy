@@ -3,6 +3,27 @@ import { calculateFullChart } from "./numerology-calculator.js";
 import { computeAstrology } from "./astro-engine.js";
 import { searchCities } from "./cities.js";
 
+// The two requests that cost money (writing a reading and fetching Human Design charts) are only accepted when the
+// browser says they come from our own web page. Browsers always send this header and a web page on another site cannot
+// change it. A program that is not a browser can fake it, so this stops other sites and casual misuse, not a determined person.
+const OUR_SITE_ORIGINS = [ "https://know-your-energy.com", "https://www.know-your-energy.com" ];
+
+function fromOurSite(request) {
+  return OUR_SITE_ORIGINS.includes(request.headers.get("Origin"));
+}
+
+function notFromOurSite() {
+  return new Response(JSON.stringify({
+    error: "Invalid request."
+  }), {
+    status: 403,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    }
+  });
+}
+
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -1069,6 +1090,7 @@ export default {
       return res;
     }
     if (url.pathname === "/chart-data") {
+      if (!fromOurSite(request)) return notFromOurSite();
       let body;
       try {
         body = await request.json();
@@ -1110,6 +1132,7 @@ export default {
         error: "Unknown endpoint"
       }, 404);
     }
+    if (!fromOurSite(request)) return notFromOurSite();
     let body;
     try {
       body = await request.json();
