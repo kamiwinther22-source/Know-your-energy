@@ -1,0 +1,182 @@
+{
+ "natal": {
+  "sun": "Scorpio 23°",
+  "moon": "Capricorn 15°",
+  "mercury": "Sagittarius 8°",
+  "venus": "Scorpio 6°",
+  "mars": "Leo 7°",
+  "jupiter": "Cancer 5°",
+  "saturn": "Leo 30°",
+  "uranus": "Scorpio 13°",
+  "neptune": "Sagittarius 15°",
+  "pluto": "Libra 16°",
+  "asc": "Gemini 23°"
+ },
+ "transit": {
+  "sun": "Libra 24°",
+  "moon": "Capricorn 14°",
+  "mercury": "Scorpio 19°",
+  "venus": "Scorpio 4°",
+  "mars": "Leo 11°",
+  "jupiter": "Leo 22°",
+  "saturn": "Aries 10°",
+  "uranus": "Gemini 5°",
+  "neptune": "Aries 2°",
+  "pluto": "Aquarius 3°"
+ },
+ "moonElong": 79.48129999999998,
+ "all": [
+  {
+   "t": "sun",
+   "n": "asc",
+   "name": "trine",
+   "ang": 120,
+   "orb": 1.43
+  },
+  {
+   "t": "moon",
+   "n": "moon",
+   "name": "conjunct",
+   "ang": 0,
+   "orb": 0.94
+  },
+  {
+   "t": "venus",
+   "n": "venus",
+   "name": "conjunct",
+   "ang": 0,
+   "orb": 1.6
+  },
+  {
+   "t": "jupiter",
+   "n": "sun",
+   "name": "square",
+   "ang": 90,
+   "orb": 0.18,
+   "start": "2026-10-05",
+   "end": "2026-11-04",
+   "exact": "2026-10-18"
+  },
+  {
+   "t": "jupiter",
+   "n": "asc",
+   "name": "sextile",
+   "ang": 60,
+   "orb": 0.54,
+   "start": "2026-10-05",
+   "end": "2026-11-10",
+   "exact": "2026-10-21"
+  },
+  {
+   "t": "saturn",
+   "n": "mercury",
+   "name": "trine",
+   "ang": 120,
+   "orb": 2.36,
+   "start": "2026-10-17",
+   "end": "2027-01-30",
+   "exact": "2026-12-10"
+  },
+  {
+   "t": "uranus",
+   "n": "mars",
+   "name": "sextile",
+   "ang": 60,
+   "orb": 1.93,
+   "start": "2026-07-22",
+   "end": "2026-11-01",
+   "exact": "2026-09-10"
+  }
+ ],
+ "slow": [
+  {
+   "t": "jupiter",
+   "n": "sun",
+   "name": "square",
+   "ang": 90,
+   "orb": 0.18,
+   "start": "2026-10-05",
+   "end": "2026-11-04",
+   "exact": "2026-10-18"
+  },
+  {
+   "t": "jupiter",
+   "n": "asc",
+   "name": "sextile",
+   "ang": 60,
+   "orb": 0.54,
+   "start": "2026-10-05",
+   "end": "2026-11-10",
+   "exact": "2026-10-21"
+  },
+  {
+   "t": "saturn",
+   "n": "mercury",
+   "name": "trine",
+   "ang": 120,
+   "orb": 2.36,
+   "start": "2026-10-17",
+   "end": "2027-01-30",
+   "exact": "2026-12-10"
+  },
+  {
+   "t": "uranus",
+   "n": "mars",
+   "name": "sextile",
+   "ang": 60,
+   "orb": 1.93,
+   "start": "2026-07-22",
+   "end": "2026-11-01",
+   "exact": "2026-09-10"
+  }
+ ],
+ "natalLon": {
+  "sun": 232.5442,
+  "moon": 284.765,
+  "mercury": 247.916,
+  "venus": 216.0987,
+  "mars": 127.0696,
+  "jupiter": 95.3687,
+  "saturn": 149.9041,
+  "uranus": 222.7602,
+  "neptune": 255.0074,
+  "pluto": 195.5205,
+  "asc": 82.9079
+ },
+ "transitLon": {
+  "sun": 204.3419,
+  "moon": 283.8232,
+  "mercury": 228.5475,
+  "venus": 214.4999,
+  "mars": 131.1208,
+  "jupiter": 142.365,
+  "saturn": 10.2807,
+  "uranus": 65.1437,
+  "neptune": 2.4162,
+  "pluto": 303.0692
+ },
+ "natalHouse": {
+  "sun": 6,
+  "moon": 8,
+  "mercury": 6,
+  "venus": 5,
+  "mars": 3,
+  "jupiter": 1,
+  "saturn": 4,
+  "uranus": 6,
+  "neptune": 6,
+  "pluto": 5
+ },
+ "transitHouse": {
+  "sun": 5,
+  "moon": 8,
+  "mercury": 6,
+  "venus": 5,
+  "mars": 3,
+  "jupiter": 3,
+  "saturn": 11,
+  "uranus": 12,
+  "neptune": 11,
+  "pluto": 9
+ }
+}

@@ -1,0 +1,136 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@font-face{font-family:'Fr';font-weight:400;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-400-normal.woff2)}
+@font-face{font-family:'Fr';font-weight:400;font-style:italic;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-400-italic.woff2)}
+@font-face{font-family:'Fr';font-weight:600;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-600-normal.woff2)}
+:root{--ink:#17182b;--mut:#6b6d84;--gar:#8c1034}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:390px;background:#fff}
+body{width:390px;padding:30px 20px 36px;background:#fff;color:var(--ink);font-family:'Fr',Georgia,serif;overflow-x:clip}
+.brand{text-align:center;font-size:11px;letter-spacing:.34em;color:var(--mut);font-weight:600}
+h1{text-align:center;font-weight:400;font-style:italic;font-size:31px;margin-top:10px}
+.rule{width:44px;height:2px;background:var(--gar);margin:14px auto 0;border-radius:1px}
+svg text{font-family:'Fr',Georgia,serif}
+.sec{margin-top:38px;font-size:11px;letter-spacing:.3em;color:var(--mut);font-weight:600;text-align:center}
+.sub{text-align:center;font-size:14.5px;color:var(--mut);margin-top:6px;font-style:italic}
+.tr{margin-top:18px}
+.tr h3{font-size:19px;font-weight:600;line-height:1.2}
+.tr h3 b{font-weight:600;color:var(--gar)}
+.tr .d{font-size:13.5px;color:var(--mut);margin-top:3px}
+.bar{position:relative;height:8px;border-radius:4px;background:#ebecf3;margin-top:9px}
+.bar i{position:absolute;top:0;bottom:0;border-radius:4px;background:#c7cbe3}
+.bar u{position:absolute;top:-4px;width:2px;height:16px;background:#8c1034}
+.bar s{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;background:#17182b;border:2px solid #fff;margin-left:-7px;box-shadow:0 1px 3px rgba(0,0,0,.3);text-decoration:none}
+.bar .l{position:absolute;top:14px;font-size:10.5px;color:var(--mut);white-space:nowrap}
+.moon{margin-top:18px;padding-bottom:14px;border-bottom:1px solid #eceef5}
+.note{margin-top:28px;text-align:center;font-size:12px;color:var(--mut);font-style:italic}
+
+.card{margin-top:26px}.card h3{font-size:21px;font-weight:600;line-height:1.2}.card h3 b{color:var(--gar);font-weight:600}
+.card .role{font-size:13.5px;color:var(--mut);margin-top:6px;font-style:italic;line-height:1.4}
+.card p{font-size:16.5px;line-height:1.55;margin-top:8px;color:#2a2b42}
+.card .until{font-size:13px;letter-spacing:.14em;color:var(--gar);margin-top:10px;font-weight:600}
+.key{display:flex;gap:18px;justify-content:center;font-size:12.5px;color:var(--mut);margin-top:8px}
+.key i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+</style></head><body><div id="a"></div><script>
+const p=__DATA__[0],TR=__TR__;
+const COL={1:'#d6453d',2:'#e98a2b',3:'#c2a100',4:'#4a9a3a',5:'#14a39a',6:'#2c7fd1',7:'#5b4fd1',8:'#a444b8',9:'#d4488a',11:'#6f7b8e',22:'#2b3347'};
+const red=n=>n===11?2:n===22?4:n===33?6:n;const col=n=>COL[n]||'#6f7b8e';
+const rng=r=>{const m=r.match(/(\d+|birth)\D+(\d+|onward)/);return [m[1]=='birth'?0:+m[1],m[2]=='onward'?99:+m[2]+1]};
+const pt=(r,a)=>[Math.cos(a)*r,Math.sin(a)*r];
+const arc=(r0,r1,a0,a1)=>{const [x0,y0]=pt(r1,a0),[x1,y1]=pt(r1,a1),[x2,y2]=pt(r0,a1),[x3,y3]=pt(r0,a0);return `M${x0},${y0}A${r1},${r1} 0 0 1 ${x1},${y1}L${x2},${y2}A${r0},${r0} 0 0 0 ${x3},${y3}Z`};
+// DIAL
+let s='';const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const nowM=9;
+p.calM.forEach((o,i)=>{const a0=-Math.PI/2+i*Math.PI/6+.014,a1=a0+Math.PI/6-.028;const cur=i===nowM;
+ s+=`<path d="${arc(116,168,a0,a1)}" fill="${col(o.pm)}" ${cur?'':'opacity=".42"'}/>`;
+ const [x,y]=pt(142,(a0+a1)/2);s+=`<text x="${x}" y="${y-3}" text-anchor="middle" font-size="10" fill="#fff" ${cur?'':'opacity=".9"'} letter-spacing=".5">${MN[i].toUpperCase()}</text><text x="${x}" y="${y+14}" text-anchor="middle" font-size="19" font-weight="600" fill="#fff">${o.pm}</text>`;});
+// current month outline
+{const i=nowM,a0=-Math.PI/2+i*Math.PI/6+.014,a1=a0+Math.PI/6-.028;s+=`<path d="${arc(114,170,a0,a1)}" fill="none" stroke="#17182b" stroke-width="3"/>`}
+// day ring: 9 slots by number
+const dayDates={};for(let k=0;k<9;k++){const d=17+k;const o=p.calD.find(x=>x.d===d);if(o){const n=red(o.pd);if(!dayDates[n])dayDates[n]={d,raw:o.pd}}}
+for(let n=1;n<=9;n++){const a0=-Math.PI/2+(n-1)*2*Math.PI/9+.02,a1=a0+2*Math.PI/9-.04;const t=dayDates[n]&&dayDates[n].d===17;
+ s+=`<path d="${arc(52,108,a0,a1)}" fill="${col(n)}" ${t?'':'opacity=".42"'}/>`;
+ const [x,y]=pt(82,(a0+a1)/2);const raw=dayDates[n]?dayDates[n].raw:n;
+ s+=`<text x="${x}" y="${y+(t?4:3)}" text-anchor="middle" font-size="${t?24:19}" font-weight="600" fill="#fff">${raw>9?raw:n}</text>`;
+ if(dayDates[n])s+=`<text x="${x}" y="${y+(t?20:17)}" text-anchor="middle" font-size="9.5" fill="#fff" opacity="${t?1:.9}">${t?'TODAY':'Oct '+dayDates[n].d}</text>`;
+ if(t)s+=`<path d="${arc(50,110,a0,a1)}" fill="none" stroke="#17182b" stroke-width="3"/>`;}
+s+=`<circle r="44" fill="#fff"/><text y="-6" text-anchor="middle" font-size="34" font-weight="600" fill="#17182b">17</text><text y="16" text-anchor="middle" font-size="11" letter-spacing="2.5" fill="#6b6d84">OCT</text>`;
+// TRANSITS
+const nice={sun:'Sun',moon:'Moon',mercury:'Mercury',venus:'Venus',mars:'Mars',asc:'Ascendant',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',pluto:'Pluto'};
+const asp={conjunct:'meets',sextile:'sextile',square:'square',trine:'trine',opposite:'opposite'};
+const fmt=d=>{const x=new Date(d+'T12:00:00');return MN[x.getMonth()]+' '+x.getDate()};
+const T0=new Date('2026-10-17T12:00:00');
+const trRow=f=>{const a=new Date(f.start+'T12:00:00'),b=new Date(f.end+'T12:00:00'),e=new Date(f.exact+'T12:00:00'),span=b-a,pc=x=>Math.max(0,Math.min(100,(x-a)/span*100));
+ return `<div class="tr"><h3>${nice[f.t]} <b>${asp[f.name]}</b> your ${nice[f.n]}</h3><div class="d">exact ${fmt(f.exact)}${f.exact===f.exact?'':''} · active ${fmt(f.start)} – ${fmt(f.end)}</div><div class="bar"><i style="left:0;right:0"></i><u style="left:${pc(e)}%"></u><s style="left:${pc(T0)}%"></s></div></div>`};
+const order=['saturn','jupiter','uranus','neptune','pluto'];
+const slow=TR.slow.slice().sort((a,b)=>order.indexOf(a.t)-order.indexOf(b.t));
+const moonA=TR.all.find(f=>f.t==='moon');
+// timeline vertical
+const Y0=2022,Y1=2037,PH=40,TOP=40,W=350,NOW=2026.79,bir=NOW-p.age;const Y=y=>TOP+(y-Y0)*PH,H=TOP+(Y1-Y0)*PH+8;
+const tint=(hex,a)=>{const n=parseInt(hex.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;const m=v=>Math.round(v*a+255*(1-a));return `rgb(${m(r)},${m(g)},${m(b)})`};
+const cols={yr:[36,60],pi:[102,60],ch:[168,60],pe:[234,60]};let t='';
+[['yr','YEAR'],['pi','PINNACLE'],['ch','CHALLENGE'],['pe','PERIOD']].forEach(([k,l])=>t+=`<text x="${cols[k][0]+30}" y="${TOP-10}" text-anchor="middle" font-size="9" letter-spacing="1.2" font-weight="600" fill="#6b6d84">${l}</text>`);
+t+=`<text x="${300+25}" y="${TOP-10}" text-anchor="middle" font-size="9" letter-spacing="1.2" font-weight="600" fill="#6b6d84">RETURNS</text>`;
+for(let y=Y0;y<Y1;y++){const d=p.years.find(o=>o.y===y),cur=y===2026,past=y<2026;
+ t+=`<text x="0" y="${Y(y)+PH/2+4}" font-size="${cur?13:11.5}" font-weight="${cur?600:400}" fill="${cur?'#8c1034':'#6b6d84'}">${cur?'now':y}</text><rect x="${cols.yr[0]+1}" y="${Y(y)+2}" width="58" height="${PH-4}" rx="9" fill="${cur?col(d.py):tint(col(d.py),.3)}" opacity="${past?.6:1}"/><text x="${cols.yr[0]+30}" y="${Y(y)+PH/2+7}" text-anchor="middle" font-size="19" font-weight="600" fill="${cur?'#fff':'#17182b'}" opacity="${past?.7:1}">${d.py}</text>`;}
+const pin=p.pin.map(o=>{const[a,b]=rng(o.r);return{a,b,v:o.v}});
+const bars=(l,k)=>l.forEach(o=>{const a=Math.max(Y0,bir+o.a),b=Math.min(Y1,bir+o.b);if(b<=a)return;const cur=bir+o.a<=NOW&&bir+o.b>NOW,x=cols[k][0],ya=Y(a),yb=Y(b);t+=`<rect x="${x+1}" y="${ya+2}" width="58" height="${yb-ya-4}" rx="11" fill="${cur?col(o.v):tint(col(o.v),.3)}" opacity="${b<NOW?.6:1}"/>`;if(yb-ya>30)t+=`<text x="${x+30}" y="${cur?Math.min(yb-18,Y(NOW)+32):(ya+yb)/2+7}" text-anchor="middle" font-size="23" font-weight="600" fill="${cur?'#fff':'#17182b'}" opacity="${b<NOW?.7:1}">${o.v}</text>`});
+bars(pin,'pi');bars(pin.map((o,i)=>({a:o.a,b:o.b,v:p.ch[i]})),'ch');bars(p.per.map(o=>{const[a,b]=rng(o.r);return{a,b,v:o.v}}),'pe');
+const nm={'Saturn return':['Saturn','return'],'Saturn opposition':['Saturn','opposite'],'Uranus opposition':['Uranus','opposite'],'Jupiter return':['Jupiter','return'],'Chiron return':['Chiron','return']};
+let lastY=-99;p.marks.filter(m=>m.age>1&&!/square|Nodal/.test(m.k)&&bir+m.age>=Y0&&bir+m.age<Y1).sort((a,b)=>a.age-b.age).forEach(m=>{const yr=bir+m.age;let y=Y(yr);if(y-lastY<38)y=lastY+38;lastY=y;const past=yr<NOW,[l1,l2]=nm[m.k];
+ t+=`<line x1="296" y1="${y}" x2="302" y2="${y}" stroke="#8c1034" stroke-width="2" opacity="${past?.45:1}"/><rect x="302" y="${y-17}" width="48" height="34" rx="10" fill="#8c1034" opacity="${past?.45:1}"/><text x="326" y="${y-2}" text-anchor="middle" font-size="10.5" fill="#fff">${l1}</text><text x="326" y="${y+11}" text-anchor="middle" font-size="10.5" fill="#fff">${l2}</text>`});
+const ny=Y(NOW);t=`<rect x="0" y="${ny-8}" width="${W}" height="16" rx="8" fill="#8c1034" opacity=".07"/><line x1="0" y1="${ny}" x2="${W}" y2="${ny}" stroke="#8c1034" stroke-width="2"/>`+t;
+
+// WHEEL
+const NL=TR.natalLon,TL=TR.transitLon,ASC=NL.asc;
+const phi=L=>Math.PI+((L-ASC)*Math.PI/180);
+const P2=(r,L)=>{const a=phi(L);return [Math.cos(a)*r,-Math.sin(a)*r]};
+const SG=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'].map(g=>g+'︎');
+const GL={sun:'☉',moon:'☽',mercury:'☿',mars:'♂',jupiter:'♃',saturn:'♄',uranus:'♅'};
+let w='';
+w+=`<circle r="165" fill="#fff" stroke="#d6d9e6"/><circle r="136" fill="#fafafd" stroke="#d6d9e6"/><circle r="72" fill="none" stroke="#eceef5"/>`;
+for(let i=0;i<12;i++){const [x1,y1]=P2(136,i*30),[x2,y2]=P2(165,i*30);w+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#d6d9e6"/>`;const [tx,ty]=P2(151,i*30+15);w+=`<text x="${tx}" y="${ty+6}" text-anchor="middle" font-size="17" fill="#8a8ca6">${SG[i]}</text>`}
+// ascendant mark
+{const [x1,y1]=P2(136,ASC),[x2,y2]=P2(165,ASC);w+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#17182b" stroke-width="2.5"/>`;}
+const nat=[['sun','Sun'],['moon','Moon'],['mercury','Mercury'],['mars','Mars']];
+const tra=[['moon','Moon'],['jupiter','Jupiter'],['saturn','Saturn'],['uranus','Uranus']];
+const keyNat={},keyTra={};
+const place=(items,L,r0,r1)=>{const out={};const sorted=items.slice().sort((a,b)=>L[a]-L[b]);let prev=-99,prevAlt=false;sorted.forEach(k=>{const gap=L[k]-prev;const alt=gap<22&&!prevAlt;out[k]=P2(alt?r1:r0,L[k]);prevAlt=alt;prev=L[k]});return out};
+const nn=place(['sun','moon','mercury','mars','asc'],NL,86,60);Object.assign(keyNat,nn);
+const tt=place(['moon','jupiter','saturn','uranus'],TL,128,108);Object.assign(keyTra,tt);
+// lines for active aspects
+const act=TR.all.filter(f=>['moon','jupiter','saturn','uranus'].includes(f.t)&&['sun','moon','mercury','mars','asc'].includes(f.n));
+act.forEach(f=>{const a=keyTra[f.t],b=keyNat[f.n];if(a&&b)w+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#8c1034" stroke-width="1.6" opacity=".55"/>`});
+const mark=(pos,g,name,c,fill)=>{const [x,y]=pos;return `<circle cx="${x}" cy="${y}" r="13" fill="${fill}" stroke="${c}" stroke-width="2"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="17" fill="${c}">${g}︎</text>`};
+nat.forEach(([k,n])=>w+=mark(keyNat[k],GL[k],n,'#17182b','#fff'));
+w+=`<circle cx="${keyNat.asc[0]}" cy="${keyNat.asc[1]}" r="13" fill="#fff" stroke="#17182b" stroke-width="2"/><text x="${keyNat.asc[0]}" y="${keyNat.asc[1]+5}" text-anchor="middle" font-size="12" font-weight="600" fill="#17182b">AC</text>`;
+tra.forEach(([k,n])=>w+=mark(keyTra[k],GL[k],n,'#fff','#8c1034'));
+// name labels
+const lab=(pos,t,c,dy)=>`<text x="${pos[0]}" y="${pos[1]+dy}" text-anchor="middle" font-size="9.5" font-weight="600" fill="${c}" letter-spacing=".4" stroke="#fff" stroke-width="3" paint-order="stroke">${t}</text>`;
+nat.forEach(([k,n])=>w+=lab(keyNat[k],n.toUpperCase(),'#17182b',(k==='mars'||k==='mercury'||k==='moon')?-19:26));tra.forEach(([k,n])=>w+=lab(keyTra[k],n.toUpperCase(),'#8c1034',-18));
+// CARDS (sample wording)
+const SIGN=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+const sgn=L=>SIGN[Math.floor(L/30)];
+const ord=n=>n+(['th','st','nd','rd'][(n%100>10&&n%100<14)?0:Math.min(n%10,4)>3?0:n%10]||'th');
+const cards=[
+ {h:`The Moon <b>meets</b> your own Moon`,role:`Your Moon (${sgn(NL.moon)}, ${ord(TR.natalHouse.moon)} house) is what makes you feel safe and what you need.`,body:`Today the real Moon is back where yours stood at birth. Your feelings sit closer to the surface than usual and you can tell quickly what you need. It is a good day to look after yourself and to say no to anything that drains you.`,until:'EXACT TODAY'},
+ {h:`Jupiter <b>squares</b> your Sun`,role:`Your Sun (${sgn(NL.sun)}, ${ord(TR.natalHouse.sun)} house) is your core drive and how you want to be seen. Jupiter is growth, and today it sits in your ${ord(TR.transitHouse.jupiter)} house.`,body:`Growth is pushing on you from an awkward angle. Opportunities arrive that ask more of you than you planned, and so does the urge to overdo it: too many yeses, too much spending, big promises. What you choose to take on now grows. What you accept without choosing costs you.`,until:'EXACT OCT 18 · ACTIVE UNTIL NOV 4'},
+ {h:`Jupiter <b>supports</b> your Ascendant`,role:`Your Ascendant (${sgn(NL.asc)}) is how people meet you first.`,body:`Doors open socially. You are received well, and people are more willing to help or introduce you. Say yes to invitations that put you in front of new people.`,until:'EXACT OCT 21 · ACTIVE UNTIL NOV 10'},
+ {h:`Saturn <b>supports</b> your Mercury`,role:`Your Mercury (${sgn(NL.mercury)}, ${ord(TR.natalHouse.mercury)} house) is how you think, learn and speak. Saturn is structure, and today it is in your ${ord(TR.transitHouse.saturn)} house.`,body:`A steady stretch for study, writing, planning and serious conversations. What you work out now holds up, so this is a good time to commit to a plan in writing. It runs for months, and its strongest point is December.`,until:'EXACT DEC 10 · ACTIVE UNTIL JAN 30'},
+ {h:`Uranus <b>supports</b> your Mars`,role:`Your Mars (${sgn(NL.mars)}, ${ord(TR.natalHouse.mars)} house) is how you act and what drives you. Uranus is change.`,body:`For months you have had easy fuel to break a habit or try a new way of acting. That window is closing: it ends in early November, so anything you meant to change in how you go after things, change it now.`,until:'PEAKED SEP 10 · ENDS NOV 1'}];
+
+document.getElementById('a').innerHTML=`
+<div class="brand">KNOW YOUR ENERGY</div><h1>Saturday, October 17</h1><div class="rule"></div>
+<div class="sec" style="margin-top:30px">YOUR NUMBERS</div>
+<svg width="350" height="350" viewBox="-175 -175 350 350" style="display:block;margin:14px auto 0">${s}</svg>
+<div class="sub">Outer ring: the months of this year. Inner ring: the nine day-numbers. Outlined is now.</div>
+<div class="sub" style="margin-top:28px;font-style:normal;letter-spacing:.2em;font-size:11px;font-weight:600">YOUR BASE · BORN 11/14/1977</div>
+<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;margin:10px auto 0">${t}</svg>
+<div style="height:1px;background:#e3e5ef;margin:46px 0 0"></div>
+<div class="sec" style="margin-top:34px">THE SKY TODAY</div><div class="sub">Today's planets (red) against your birth chart (white)</div>
+<svg width="350" height="350" viewBox="-175 -175 350 350" style="display:block;margin:16px auto 0">${w}</svg>
+<div class="key"><span><i style="background:#8c1034"></i>Planets today</span><span><i style="background:#fff;border:2px solid #17182b"></i>Your birth chart</span></div>
+<div class="sub" style="margin-top:8px">Lines join the planets that are touching right now. Your Ascendant is on the left.</div>
+${cards.map(c=>`<div class="card"><h3>${c.h}</h3><div class="role">${c.role}</div><p>${c.body}</p><div class="until">${c.until}</div></div>`).join('')}
+<div class="note">Sample wording and sample colours. Real wording comes after the design is chosen.</div>`;
+</script></body></html>

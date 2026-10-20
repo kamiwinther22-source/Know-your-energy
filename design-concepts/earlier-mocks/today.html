@@ -1,0 +1,157 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@font-face{font-family:'FrauncesK';font-weight:700;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-700-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:390px;background:#2a0510}
+body{width:390px;padding:22px 20px 60px;color:#fff;font-family:'FrauncesK',Georgia,serif;font-weight:700;overflow-x:clip;
+ background:
+  radial-gradient(ellipse 520px 520px at 50% calc(100% - 120px),rgba(176,28,70,.75) 0,rgba(130,14,50,.38) 48%,rgba(130,14,50,0) 100%),
+  radial-gradient(ellipse 560px 460px at 55% 700px,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),
+  radial-gradient(ellipse 520px 300px at 18% 0%,rgba(255,255,255,.26) 0,rgba(255,255,255,.08) 55%,rgba(255,255,255,0) 100%),
+  radial-gradient(ellipse 620px 800px at 22% 85px,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%);background-color:#2a0510}
+.brand{font-size:24px;line-height:1.1}
+/* silver hex tabs */
+.tabs{display:flex;gap:4px;margin:14px -4px 0}
+.hex{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;height:34px;font-size:14px;color:#fff;
+ background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#914b64 82%,#eef1f5 92%,#fff 100%);
+ clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%);filter:none;flex:1}
+.hex:before{content:"";position:absolute;inset:4px 8px;z-index:-1;background:linear-gradient(#3a0716,#1c030c);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%)}
+.hex.on:before{background:#fff}.hex.on{color:#2a0510}
+.tabs .hex{flex:1 1 0}
+.datehead{margin-top:26px;display:flex;align-items:flex-end;justify-content:space-between}
+.datehead h1{font-size:31px;line-height:1.05}
+.datehead .who{font-size:16px;margin-top:6px}
+.arrows{display:flex;gap:6px;padding-bottom:4px}
+.arrows .hex{flex:0 0 44px;height:34px}
+/* dial */
+.dial{display:block;margin:6px auto 0;width:350px;height:350px;overflow:visible}
+.sum{display:flex;justify-content:space-between;margin:-2px 14px 0}
+.sum div{text-align:center}
+.sum b{display:block;font-size:50px;line-height:1}
+.sum span{font-size:13px;letter-spacing:.14em}
+/* week */
+.lab{font-size:13px;letter-spacing:.14em;margin:34px 0 10px}
+.week{display:flex;gap:6px}
+.wd{flex:1;text-align:center;padding:8px 0 10px;background:rgba(255,255,255,.1);border-radius:3px}
+.wd i{display:block;font-style:normal;font-size:12px;letter-spacing:.1em}
+.wd u{display:block;text-decoration:none;font-size:17px;margin:2px 0 6px}
+.wd b{display:block;font-size:24px;line-height:1}
+.wd.on{background:#fff;color:#2a0510}
+/* sections */
+.sec{margin-top:40px}
+.pair{display:grid;grid-template-columns:1.55fr 1fr;gap:0;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin-top:10px}
+.pair>div{padding:14px 14px 16px}
+.pair>div+div{background:rgba(255,255,255,.08);box-shadow:inset 1px 0 0 rgba(255,255,255,.35)}
+.num{font-size:76px;line-height:.9;display:inline-block;vertical-align:top}
+.ttl{font-size:25px;line-height:1.1}
+.sub{font-size:14px;margin-top:6px}
+.yr{display:flex;gap:14px;align-items:flex-start}
+.ess .num{font-size:52px}
+.ess .ttl{font-size:17px;margin-top:6px}
+.lead{font-size:18px;line-height:1.5;margin-top:16px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.cols h4{font-size:13px;letter-spacing:.14em;margin-bottom:8px}
+.cols li{list-style:none;position:relative;padding-left:14px;font-size:16px;line-height:1.35;margin-bottom:7px}
+.cols li:before{content:"";position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%;background:#fff}
+.btnrow{display:flex;margin-top:20px}
+.btnrow .hex{flex:0 0 300px;height:46px;font-size:17px}
+.btnrow .hex:before{inset:6px 12px}
+.mini{display:flex;gap:14px;align-items:flex-start;margin-top:10px}
+.mini .num{font-size:60px}
+.mini .ttl{font-size:22px;margin-top:4px}
+/* timeline */
+.tl{margin-top:6px}
+.tl h5{font-size:13px;letter-spacing:.14em;margin:16px 0 6px}
+.track{position:relative;height:46px;display:flex;gap:3px}
+.seg{position:relative;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(255,255,255,.14);border-radius:2px}
+.seg small{position:absolute;bottom:-18px;left:0;font-size:12px;color:#fff}
+.seg.on{background:#fff;color:#2a0510}
+.nowline{position:absolute;top:-6px;bottom:0;width:2px;background:#fff;box-shadow:0 0 8px #fff}
+.nowdot{position:absolute;top:-16px;width:12px;height:12px;border-radius:50%;background:#fff;margin-left:-5px;box-shadow:0 0 10px #fff}
+.nowtag{position:absolute;top:-34px;font-size:13px;white-space:nowrap}
+.ch{display:flex;gap:3px;margin-top:22px}
+.ch .seg{height:34px;font-size:17px}
+.foot{margin-top:50px;font-size:14px;text-align:center}
+</style></head><body>
+<div class="brand">Know Your Energy</div>
+<div class="tabs"><div class="hex">Reading</div><div class="hex on">Today</div><div class="hex">Calendar</div><div class="hex">Charts</div></div>
+
+<div class="datehead"><div><h1>Saturday,<br>October 17</h1><div class="who">Alex Morgan</div></div><div class="arrows"><div class="hex" id="prev"></div><div class="hex" id="next"></div></div></div>
+
+<svg class="dial" id="dial" viewBox="0 0 350 350"></svg>
+<div class="sum"><div><b>5</b><span>YEAR</span></div><div><b>6</b><span>MONTH</span></div><div><b>5</b><span>DAY</span></div></div>
+
+<div class="lab">THIS WEEK, DAY BY DAY</div>
+<div class="week" id="week"></div>
+
+<div class="sec">
+ <div class="lab" style="margin:0">THE YEAR, WITH YOUR ESSENCE</div>
+ <div class="pair">
+  <div><div class="yr"><span class="num">5</span><div><div class="ttl">Change</div><div class="sub">Personal Year 2026</div></div></div></div>
+  <div class="ess"><div class="sub" style="margin:0 0 4px;font-size:12px;letter-spacing:.14em">ESSENCE</div><span class="num">11</span><div class="ttl">Intuition</div><div class="sub" style="font-size:12px">birthday to birthday</div></div>
+ </div>
+ <p class="lead">This is the middle of the nine-year cycle and its pivot. What no longer works breaks open, plans change at short notice, and the year rewards flexibility over holding on.</p>
+ <div class="cols">
+  <div><h4>WHAT WORKS</h4><ul><li>Stay flexible</li><li>Try the new thing</li><li>Keep options open</li></ul></div>
+  <div><h4>WATCH FOR</h4><ul><li>Impulsive choices</li><li>Fear of commitment</li><li>Burning bridges</li></ul></div>
+ </div>
+ <p class="lead" style="margin-top:18px">Your Essence of 11 is the mood and mindset you bring to a year of change: a heightened sensitivity to what is shifting and a pull to trust your read of it.</p>
+ <div class="btnrow"><div class="hex">Read the full description</div></div>
+</div>
+
+<div class="sec">
+ <div class="lab" style="margin:0">THIS MONTH, OCTOBER</div>
+ <div class="mini"><span class="num">6</span><div><div class="ttl">Responsibility<br>and Home</div></div></div>
+ <p class="lead">Inside a year of change, October pulls you back toward the people who depend on you. Family and home matters take up time.</p>
+ <div class="btnrow"><div class="hex">Read more</div></div>
+</div>
+
+<div class="sec">
+ <div class="lab" style="margin:0">TODAY, SATURDAY THE 17TH</div>
+ <div class="mini"><span class="num">5</span><div><div class="ttl">Movement</div></div></div>
+ <p class="lead">A day for variety and short notice. Expect plans to shift and keep your afternoon loose.</p>
+ <div class="btnrow"><div class="hex">Read more</div></div>
+</div>
+
+<div class="sec">
+ <div class="lab" style="margin:0">YOUR LONGER CHAPTERS, AT AGE 36</div>
+ <div class="tl" id="tl"></div>
+</div>
+<div class="foot">Sample text and test person. Design only.</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg',svg=document.getElementById('dial'),C=175;
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e};
+const red=n=>{while(n>9)n=String(n).split('').reduce((a,b)=>a+ +b,0);return n};
+el('defs',{}).innerHTML='<linearGradient id="sl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#aeb7c0"/><stop offset=".5" stop-color="#fff"/><stop offset=".75" stop-color="#8f98a2"/><stop offset="1" stop-color="#fff"/></linearGradient><filter id="gl" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="5"/></filter>';
+const rings=[{r:136,nr:15,act:5,lab:'YEAR',all:true},{r:96,nr:14,act:6,lab:'MONTH',all:false},{r:58,nr:12,act:5,lab:'DAY',all:false}];
+rings.forEach(R=>{el('circle',{cx:C,cy:C,r:R.r,fill:'none',stroke:'url(#sl)','stroke-width':1.4});
+ for(let k=1;k<=9;k++){const a=(-90+(k-1)*40)*Math.PI/180,x=C+R.r*Math.cos(a),y=C+R.r*Math.sin(a),on=k===R.act;
+  if(on){el('circle',{cx:x,cy:y,r:R.nr+7,fill:'#fff',opacity:.55,filter:'url(#gl)'});}
+  if(!on&&!R.all){el('circle',{cx:x,cy:y,r:4,fill:'#d7dce2'});continue;}
+  el('circle',{cx:x,cy:y,r:R.nr,fill:on?'#fff':'#3a0716',stroke:on?'#fff':'#d7dce2','stroke-width':on?0:1.1});
+  const t=el('text',{x:x,y:y+.5,'text-anchor':'middle','dominant-baseline':'central','font-size':on?R.nr+2:R.nr-1,fill:on?'#2a0510':'#fff','font-family':'FrauncesK'});t.textContent=k;}});
+// essence marker: a hexagon outside the year ring at its reduced position
+{const k=red(11),a=(-90+(k-1)*40)*Math.PI/180,r=172,x=C+r*Math.cos(a),y=C+r*Math.sin(a);
+ const hex=[0,1,2,3,4,5].map(i=>{const b=(i*60-30)*Math.PI/180;return(x+15*Math.cos(b)).toFixed(1)+','+(y+15*Math.sin(b)).toFixed(1)}).join(' ');
+ el('polygon',{points:hex,fill:'#3a0716',stroke:'url(#sl)','stroke-width':1.6});
+ const t=el('text',{x:x,y:y+.5,'text-anchor':'middle','dominant-baseline':'central','font-size':13,fill:'#fff','font-family':'FrauncesK'});t.textContent='11';
+ const l=el('text',{x:x,y:y-22,'text-anchor':'middle','font-size':10,fill:'#fff','font-family':'FrauncesK','letter-spacing':'1.2'});l.textContent='ESSENCE';}
+el('text',{x:C,y:C-2,'text-anchor':'middle','dominant-baseline':'central','font-size':30,fill:'#fff','font-family':'FrauncesK'}).textContent='17';
+el('text',{x:C,y:C+22,'text-anchor':'middle','font-size':11,fill:'#fff','font-family':'FrauncesK','letter-spacing':'1.6'}).textContent='OCT';
+// arrows on hex buttons
+document.getElementById('prev').innerHTML='<svg width="18" height="18" viewBox="0 0 18 18" style="position:relative"><path d="M11 3 5 9l6 6" fill="none" stroke="#fff" stroke-width="2.4"/></svg>';
+document.getElementById('next').innerHTML='<svg width="18" height="18" viewBox="0 0 18 18" style="position:relative"><path d="M7 3l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.4"/></svg>';
+// week
+const W=[['W',14,2],['T',15,3],['F',16,22],['S',17,5],['S',18,6],['M',19,7],['T',20,8]];
+document.getElementById('week').innerHTML=W.map(([w,d,p])=>`<div class="wd${d===17?' on':''}"><i>${w}</i><u>${d}</u><b>${p}</b></div>`).join('');
+// timeline
+const age=36,MAX=90;
+const track=(segs,cls)=>`<div class="track">${segs.map(([a,b,v,t])=>{const w=(Math.min(b,MAX)-a+1)/ (MAX+1)*100;return `<div class="seg${age>=a&&age<=b?' on':''}" style="flex:0 0 calc(${w}% - 3px)">${v}<small>${t}</small></div>`}).join('')}</div>`;
+const per=[[0,32,8,'0'],[33,59,5,'33'],[60,90,1,'60']],pin=[[0,31,4,'0'],[32,40,6,'32'],[41,49,1,'41'],[50,90,9,'50']],ch=[[0,31,3],[32,40,4],[41,49,1],[50,90,7]];
+const pos=(age+0.5)/(MAX+1)*100;
+document.getElementById('tl').innerHTML=
+ `<h5>PERIODS</h5><div style="position:relative">${track(per)}<div class="nowline" style="left:${pos}%"></div><div class="nowdot" style="left:${pos}%"></div><div class="nowtag" style="left:calc(${pos}% - 20px)">AGE 36</div></div>`+
+ `<h5 style="margin-top:34px">PINNACLES</h5><div style="position:relative">${track(pin)}<div class="nowline" style="left:${pos}%"></div></div>`+
+ `<h5 style="margin-top:34px">CHALLENGES</h5><div class="ch">${ch.map(([a,b,v])=>{const w=(Math.min(b,MAX)-a+1)/(MAX+1)*100;return `<div class="seg${age>=a&&age<=b?' on':''}" style="flex:0 0 calc(${w}% - 3px)">${v}</div>`}).join('')}</div>`;
+</script></body></html>

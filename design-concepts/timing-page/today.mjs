@@ -1,0 +1,31 @@
+import pkg from "./node_modules/circular-natal-horoscope-js/dist/index.js";
+import fs from "fs";
+const {Origin,Horoscope}=pkg;
+const WH=[25,17,21,51,42,3,27,24,2,23,8,20,16,35,45,12,15,52,39,53,62,56,31,33,7,4,29,59,40,64,47,6,46,18,48,57,32,50,28,44,1,43,14,34,9,5,26,11,10,58,38,54,61,60,41,19,13,49,30,55,37,63,22,36];
+const gateOf=l=>{const x=(((l-358.25)%360)+360)%360;const i=Math.floor(x/5.625);const line=Math.floor((x-i*5.625)/0.9375)+1;return [WH[i],line]};
+const mk=(y,m,d,h,mi)=>new Horoscope({origin:new Origin({year:y,month:m,date:d,hour:h,minute:mi,latitude:42.5,longitude:-96.4}),houseSystem:"whole-sign",zodiac:"tropical",aspectPoints:[],aspectWithPoints:[],aspectTypes:[],customOrbs:{},language:"en"});
+const K=["sun","moon","mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto"];
+const lon=(h)=>{const o={};K.forEach(k=>o[k]=h.CelestialBodies[k].ChartPosition.Ecliptic.DecimalDegrees);o.nnode=h.CelestialPoints.northnode.ChartPosition.Ecliptic.DecimalDegrees;o.snode=(o.nnode+180)%360;o.earth=(o.sun+180)%360;return o};
+const birth=lon(mk(1977,10,14,18,46));
+// design moment: sun 88 degrees before natal sun; search day by day then refine
+const tgt=(birth.sun-88+360)%360;
+const diff=(a,b)=>((a-b+540)%360)-180;
+let best=null;for(let d=80;d<=100;d+=0.25){const t=new Date(Date.UTC(1977,10,15,0,46)-d*86400000);const L=lon(mk(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate(),t.getUTCHours()-5<0?t.getUTCHours()+19:t.getUTCHours()-5,t.getUTCMinutes()));/*lib uses local; approximate*/const e=Math.abs(diff(L.sun,tgt));if(!best||e<best.e)best={e,d,t,L}}
+console.log('design offset days',best.d,'sun err',best.e.toFixed(2));
+const design=best.L;
+const today=lon(mk(2026,9,19,12,0));
+const fmt=l=>{const g=gateOf(l);return g[0]+'.'+g[1]};
+const NAMES={sun:'Sun',earth:'Earth',moon:'Moon',nnode:'North Node',snode:'South Node',mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',pluto:'Pluto'};
+const ORDER=['sun','earth','moon','nnode','snode','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto'];
+const row=(L)=>ORDER.map(k=>`${NAMES[k]} ${fmt(L[k])}`).join(', ');
+console.log('PERSONALITY',row(birth));console.log('DESIGN',row(design));console.log('TODAY',row(today));
+const natalGates=new Set([...ORDER.map(k=>gateOf(birth[k])[0]),...ORDER.map(k=>gateOf(design[k])[0])]);
+const todayGates=new Map();ORDER.forEach(k=>{const g=gateOf(today[k])[0];if(!todayGates.has(g))todayGates.set(g,[]);todayGates.get(g).push(NAMES[k])});
+const CH=[[64,47],[61,24],[63,4],[17,62],[43,23],[11,56],[16,48],[20,57],[20,34],[32,54],[28,38],[18,58],[20,10],[31,7],[8,1],[33,13],[10,34],[15,5],[2,14],[46,29],[10,57],[57,34],[50,27],[45,21],[59,6],[42,53],[3,60],[9,52],[26,44],[25,51],[40,37],[35,36],[12,22],[49,19],[55,39],[30,41]];
+const defined=CH.filter(([a,b])=>natalGates.has(a)&&natalGates.has(b));
+console.log('NATAL gates',[...natalGates].sort((a,b)=>a-b).join(','));
+console.log('NATAL channels',defined.map(c=>c.join('-')).join(' '));
+console.log('TRANSIT completes',CH.filter(([a,b])=>!(natalGates.has(a)&&natalGates.has(b))&&((natalGates.has(a)&&todayGates.has(b))||(natalGates.has(b)&&todayGates.has(a)))).map(([a,b])=>{const nat=natalGates.has(a)?a:b,tr=nat===a?b:a;return `${nat}(yours)+${tr}(${todayGates.get(tr).join('/')}) = ${a}-${b}`}).join('\n'));
+console.log('TRANSIT reinforces natal gates',[...todayGates.keys()].filter(g=>natalGates.has(g)).map(g=>`${g}:${todayGates.get(g).join('/')}`).join(', '));
+console.log('moon',today.moon.toFixed(1),'sun',today.sun.toFixed(1));
+fs.writeFileSync('today.json',JSON.stringify({birth,design,today}));

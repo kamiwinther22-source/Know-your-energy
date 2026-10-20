@@ -1,0 +1,826 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+:root{--bg:#fdfcfc;--ink:#14090d;--acc:#8c1034;}
+body[data-t="B"]{--bg:#fafcfc;--ink:#04171a;--acc:#00656b;}
+body[data-t="C"]{--bg:#fcfbfe;--ink:#150a20;--acc:#4a1272;}
+*{box-sizing:border-box;margin:0;padding:0}html{width:390px}
+body{overflow:clip;width:390px;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;padding:22px 20px 40px;position:relative}
+h1{font-family:'Bitstream Charter',serif;font-weight:400;font-size:26px;text-align:center;letter-spacing:.2px}
+.tagwrap{position:relative;height:196px;margin-top:22px}.tag{font-size:15px;line-height:34px;white-space:nowrap}
+.tag b{font-weight:600;font-size:17px;color:var(--acc);letter-spacing:.3px}
+.solar{position:absolute;right:-78px;top:104px;width:250px;height:120px}
+.free{margin-top:50px;text-align:center;font-family:'Bitstream Charter',serif;font-style:italic;font-size:36px;line-height:1.12;color:var(--acc)}
+.key{margin-top:30px;text-align:center;font-size:12.5px;font-weight:700}
+.field{display:block;height:24px;border-radius:2px;background:linear-gradient(#c9d0d8 0,#e6eaef 45%,#f8f9fb 100%);box-shadow:inset 0 2px 0 rgba(20,20,30,.28),0 1.5px 0 #fff;font-size:11px;font-style:italic;color:#4c5560;padding:5px 7px;line-height:14px}
+.em{margin:8px auto 0;width:300px;height:26px}
+.note{text-align:center;font-size:12px;font-weight:600;margin-top:8px}
+.btn{filter:drop-shadow(0 3px 0 rgba(10,10,15,.6));display:block}
+.face{position:relative;width:100%;height:100%;background:linear-gradient(180deg,#ffffff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,color-mix(in srgb,var(--acc) 60%,#9aa3ad) 82%,#eef1f5 92%,#ffffff 100%)}
+.in{position:absolute;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:700;letter-spacing:3px;font-size:12px;text-transform:uppercase;color:var(--ink);background:linear-gradient(180deg,#ffffff,#e9edf2)}
+.sm{font-size:9.5px}.sm .in{font-size:8.5px;letter-spacing:1px}
+.cont{margin:18px auto 0;width:210px;height:50px}
+.tog{margin:28px auto 0;display:flex;justify-content:center;align-items:center;gap:8px;font-size:9.5px;font-weight:700;letter-spacing:.8px}
+.tog i{display:block;width:34px;height:16px;border-radius:9px;background:linear-gradient(#c9d0d8,#f2f4f7);box-shadow:inset 0 2px 0 rgba(20,20,30,.3);position:relative}
+.tog i:after{content:"";position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0,#cfd5dc 30%,#20262d 52%,var(--acc) 80%)}
+.tabs{display:flex;gap:6px;margin:14px 0 0;height:34px}
+.tabs .btn{height:28px}
+.p{margin-top:26px}
+.p h3{font-family:'Bitstream Charter',serif;font-weight:400;font-size:18px;margin-bottom:4px}
+.lab{font-size:9px;font-weight:800;letter-spacing:.8px;margin:8px 0 3px}
+.lab small{font-weight:500;font-size:9px;letter-spacing:0}
+.row{display:flex;gap:6px}
+.p2{margin-left:auto;width:310px;margin-top:40px}
+.calc{margin:24px 0 0 76px;width:190px;height:50px}
+.pass{margin-top:26px;text-align:center}
+.pass h4{font-family:'Bitstream Charter',serif;font-style:italic;font-weight:700;font-size:15px}
+.pass p{font-size:9.5px;line-height:14px;margin:8px 8px 0;font-weight:500}
+.xprices{display:flex;gap:2px;justify-content:center;margin-top:16px}
+.prices .btn{height:28px}
+
+body.bg2,body.bg3{color:#fff}
+body.bg2{background:#004a52}
+body.bg3{background:#06101a}
+body.bg2 .tag b,body.bg3 .tag b,body.bg2 .free,body.bg3 .free{color:#fff}
+body.bg2 .in,body.bg3 .in{color:#04171a}
+.ring{position:absolute;z-index:0;pointer-events:none}
+body>*:not(.ring){position:relative;z-index:1}
+body>.solar{position:absolute}
+
+body.pol1{--acc:#8c1034;--bg:#e9edf2;color:#14090d;
+ background:
+  radial-gradient(ellipse 560px 520px at 14% 3%,#ffffff 0,#ffffff 12%,rgba(255,255,255,0) 62%),
+  radial-gradient(ellipse 620px 760px at 108% 100%,rgba(140,16,52,.62) 0,rgba(140,16,52,.18) 38%,rgba(140,16,52,0) 70%),
+  radial-gradient(ellipse 700px 900px at 18% 8%,#f7f9fb 0,#e7ebf0 34%,#c8d0da 62%,#a7b2c1 100%)}
+body.pol2{--acc:#8c1034;color:#fff;
+ background:
+  radial-gradient(ellipse 520px 520px at 50% calc(100% - 120px),rgba(176,28,70,.75) 0,rgba(130,14,50,.38) 48%,rgba(130,14,50,0) 100%),
+  radial-gradient(ellipse 560px 460px at 55% 700px,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),
+  radial-gradient(ellipse 520px 300px at 18% 0%,rgba(255,255,255,.26) 0,rgba(255,255,255,.08) 55%,rgba(255,255,255,0) 100%),
+  radial-gradient(ellipse 620px 800px at 22% 85px,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%)}
+body.pol3{--acc:#5b1a8b;color:#fff;
+ background:
+  radial-gradient(ellipse 560px 420px at 12% 2%,rgba(210,222,245,.55) 0,rgba(210,222,245,.14) 45%,rgba(210,222,245,0) 100%),
+  radial-gradient(ellipse 620px 760px at 106% 100%,rgba(91,26,139,.7) 0,rgba(91,26,139,0) 62%),
+  radial-gradient(ellipse 700px 900px at 20% 6%,#2a3550 0,#10172a 40%,#06080f 100%)}
+body.pol2 .tag b,body.pol3 .tag b,body.pol2 .free,body.pol3 .free{color:#fff}
+body.pol2 .in,body.pol3 .in{color:#14090d}
+body.pol2 .solar g,body.pol3 .solar g{stroke:#e3e8ee}
+
+.pass p{font-size:11px;line-height:15px;margin:6px 0 0;font-weight:600;letter-spacing:.3px}
+.discs{display:flex;align-items:flex-end;justify-content:center;gap:22px;margin-top:22px}
+.dw{display:flex;flex-direction:column;align-items:center;gap:9px}
+.disc{position:relative;border-radius:50%;filter:drop-shadow(0 3px 0 rgba(10,10,15,.6));
+ background:conic-gradient(from 210deg,#ffffff,#aeb7c0 12%,#14181d 26%,#8d96a0 38%,#ffffff 52%,color-mix(in srgb,var(--acc) 65%,#9aa3ad) 70%,#eef1f5 86%,#ffffff)}
+.disc .pr{position:absolute;inset:16%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bitstream Charter',serif;font-weight:700;color:#14090d;background:linear-gradient(180deg,#ffffff,#e9edf2)}
+.dl{font-size:9px;font-weight:800;letter-spacing:1.4px}
+
+.key{font-size:13.5px;margin-top:26px}
+.note{font-size:12.5px;line-height:17px;font-weight:600;margin:8px auto 0;width:300px;text-wrap:balance}
+.entry{margin-top:28px;text-align:center}
+.entry .e1{font-family:'Bitstream Charter',serif;font-size:27px;line-height:1.1;font-weight:700}
+.entry .e2{font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-top:7px}
+.entry .e3{font-size:13.5px;line-height:19px;font-weight:500;width:310px;margin:9px auto 0;text-wrap:balance}
+.entry .e3 b,.pass .s b{font-weight:800}
+.entry .e4{font-family:'Bitstream Charter',serif;font-style:italic;font-size:15.5px;font-weight:700;margin-top:11px}
+.pass{margin-top:34px;text-align:center}
+.pass .q{font-family:'Bitstream Charter',serif;font-style:italic;font-size:27px;line-height:1.1;font-weight:400}
+.pass .s{font-size:13.5px;line-height:19px;font-weight:500;width:310px;margin:11px auto 0;text-wrap:balance}
+.pass .never{font-size:13.5px;font-weight:800;letter-spacing:.4px;margin-top:10px}
+.pass .lbl{font-size:9.5px;font-weight:800;letter-spacing:2.2px;margin-top:20px}
+.discs{margin-top:14px}
+
+/* first screen: original proportions restored, ends at Continue */
+.hero{display:flex;flex-direction:column;justify-content:space-between;min-height:calc(100svh - 22px)}
+h1{font-size:38px;line-height:1.1}
+.tagwrap{position:relative;height:362px;margin-top:6px}
+.tag{font-size:20px;line-height:52px}
+.tag b{font-size:22px;font-weight:600}
+.solar{right:auto;left:59px;top:196px;width:412px;height:214px}
+.free{margin-top:0;font-size:55px;line-height:1.1}
+.key{margin-top:0}
+.cont{margin:12px auto 34px}
+
+@font-face{font-family:'JostK';font-weight:400;src:url(../fonts/node_modules/@fontsource/jost/files/jost-latin-400-normal.woff2)}
+@font-face{font-family:'JostK';font-weight:600;src:url(../fonts/node_modules/@fontsource/jost/files/jost-latin-600-normal.woff2)}
+@font-face{font-family:'CormK';font-weight:500;src:url(../fonts/node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2)}
+@font-face{font-family:'SerifK';font-weight:400;src:url(../fonts/node_modules/@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2)}
+@font-face{font-family:'SerifK';font-weight:600;src:url(../fonts/node_modules/@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2)}
+/* one style per role, no italics */
+body[data-f] *{font-style:normal!important;font-family:var(--fb)!important}
+body[data-f] h1,body[data-f] .free{font-family:var(--fh)!important;font-weight:var(--hw)!important}
+body[data-f] h1{font-size:calc(38px*var(--hs))!important}
+body[data-f] .free{font-size:calc(55px*var(--hs))!important}
+body[data-f] .tag b{font-size:20px!important;font-weight:600!important}
+body[data-f] .key,body[data-f] .note{font-weight:600!important}
+body[data-f="1"]{--fb:'JostK';--fh:'JostK';--hw:400;--hs:1}
+body[data-f="2"]{--fb:'JostK';--fh:'CormK';--hw:500;--hs:1.16}
+body[data-f="3"]{--fb:'SerifK';--fh:'SerifK';--hw:400;--hs:.94}
+
+@font-face{font-family:'DMK';font-weight:400;src:url(../fonts/node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2)}
+@font-face{font-family:'DMK';font-weight:700;src:url(../fonts/node_modules/@fontsource/dm-sans/files/dm-sans-latin-700-normal.woff2)}
+@font-face{font-family:'BarlowK';font-weight:700;src:url(../fonts/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2)}
+body[data-f="4"]{--fb:'DMK';--fh:'BarlowK';--hw:700;--hs:1}
+body[data-f="4"] :is(h1,.free,.e1,.q,h3,.in){font-family:'BarlowK'!important;text-transform:uppercase;font-weight:700!important;letter-spacing:.6px}
+body[data-f="4"] h1{font-size:46px!important;line-height:1}
+body[data-f="4"] .free{font-size:66px!important;line-height:.94!important;letter-spacing:.8px}
+body[data-f="4"] .e1{font-size:38px!important;line-height:1}
+body[data-f="4"] .q{font-size:38px!important;line-height:1}
+body[data-f="4"] h3{font-size:24px!important}
+body[data-f="4"] .in{font-size:17px!important;letter-spacing:1.6px}
+body[data-f="4"] .sm .in{font-size:12px!important;letter-spacing:1px}
+body[data-f="4"] .disc .pr{font-size:30px}
+body[data-f="4"] .tag b{font-weight:700!important}
+
+@font-face{font-family:'SyneK';font-weight:800;src:url(../fonts/node_modules/@fontsource/syne/files/syne-latin-800-normal.woff2)}
+@font-face{font-family:'FrauncesK';font-weight:700;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-700-normal.woff2)}
+@font-face{font-family:'UnbK';font-weight:700;src:url(../fonts/node_modules/@fontsource/unbounded/files/unbounded-latin-700-normal.woff2)}
+@font-face{font-family:'BricK';font-weight:400;src:url(../fonts/node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-400-normal.woff2)}
+@font-face{font-family:'BricK';font-weight:700;src:url(../fonts/node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-700-normal.woff2)}
+@font-face{font-family:'BricK';font-weight:800;src:url(../fonts/node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-800-normal.woff2)}
+body[data-f="5"],body[data-f="6"],body[data-f="7"],body[data-f="8"]{--fb:'DMK'}
+body[data-f="8"]{--fb:'BricK'}
+body[data-f="5"] :is(h1,.free,.in){font-family:'SyneK'!important;font-weight:800!important}
+body[data-f="6"] :is(h1,.free,.in){font-family:'FrauncesK'!important;font-weight:700!important}
+body[data-f="7"] :is(h1,.free,.in){font-family:'UnbK'!important;font-weight:700!important}
+body[data-f="8"] :is(h1,.free,.in){font-family:'BricK'!important;font-weight:800!important}
+body[data-f="5"] h1{font-size:33px!important} body[data-f="5"] .free{font-size:50px!important;line-height:1!important}
+body[data-f="6"] h1{font-size:36px!important} body[data-f="6"] .free{font-size:56px!important;line-height:1!important}
+body[data-f="7"] h1{font-size:27px!important} body[data-f="7"] .free{font-size:40px!important;line-height:1.08!important}
+body[data-f="8"] h1{font-size:38px!important} body[data-f="8"] .free{font-size:58px!important;line-height:.98!important}
+body[data-f="5"] .in,body[data-f="6"] .in,body[data-f="7"] .in,body[data-f="8"] .in{font-size:13px!important;letter-spacing:1.6px}
+body[data-f="5"] .free,body[data-f="6"] .free,body[data-f="7"] .free,body[data-f="8"] .free{text-transform:none}
+
+body[data-f="5"] :is(.e1,.q,h3){font-family:'SyneK'!important;font-weight:800!important}
+body[data-f="6"] :is(.e1,.q,h3){font-family:'FrauncesK'!important;font-weight:700!important}
+body[data-f="7"] :is(.e1,.q,h3){font-family:'UnbK'!important;font-weight:700!important}
+body[data-f="8"] :is(.e1,.q,h3){font-family:'BricK'!important;font-weight:800!important}
+body[data-f] :is(.e1,.q){font-size:30px!important;line-height:1.08!important}
+body[data-f="7"] :is(.e1,.q){font-size:22px!important}
+body[data-f] h3{font-size:21px!important}
+body[data-f="7"] h3{font-size:16px!important}
+body[data-f] .disc .pr{font-family:inherit!important}
+
+body[data-f] .sm .in{font-size:8.5px!important;letter-spacing:.8px!important}
+body[data-f="7"] .sm .in{font-size:7.5px!important;letter-spacing:.4px!important}
+
+body[data-f="5"] .tag,body[data-f="5"] .tag b{font-family:'SyneK'!important;font-weight:800!important;font-size:13.5px!important}
+body[data-f="6"] .tag,body[data-f="6"] .tag b{font-family:'FrauncesK'!important;font-weight:700!important;font-size:21px!important}
+body[data-f="7"] .tag,body[data-f="7"] .tag b{font-family:'UnbK'!important;font-weight:700!important;font-size:13.5px!important}
+body[data-f="8"] .tag,body[data-f="8"] .tag b{font-family:'BricK'!important;font-weight:800!important;font-size:21px!important}
+body[data-f] .tag{font-weight:inherit}
+
+/* strict system, option 4: one family, 2 weights (400/800), sentence case, no tracking, sizes 58/30/22/14/12 */
+body[data-f="9"]{--fb:'BricK'}
+body[data-f="9"] *{font-family:'BricK'!important;letter-spacing:0!important;text-transform:none!important;font-style:normal!important;font-weight:400!important;font-size:14px;line-height:1.35}
+body[data-f="9"] :is(b,.key,.note,.never,.dl,.pr,.in,.lab,.tog,.e2,.lbl,.tag b,h1,.free,.e1,.q,h3,.e3 b){font-weight:800!important}
+body[data-f="9"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl,.tabs .in,.sm .in){font-size:12px!important}
+body[data-f="9"] .lab small{font-weight:400!important}
+body[data-f="9"] :is(.in){font-size:14px!important}
+body[data-f="9"] .sm .in{font-size:11px!important}
+body[data-f="9"] h1,body[data-f="9"] .e1,body[data-f="9"] .q{font-size:30px!important;line-height:1.08!important}
+body[data-f="9"] .free{font-size:58px!important;line-height:.98!important}
+body[data-f="9"] h3{font-size:22px!important}
+body[data-f="9"] .pr{font-size:22px!important}
+body[data-f="9"] .tag{font-size:21px!important;line-height:52px}
+body[data-f="9"] .tag b{font-size:21px!important}
+body[data-f="9"] :is(.field,.em){color:#14090d!important;font-size:12px!important}
+body[data-f="9"] .tabs{height:34px}
+
+body[data-f="9"] .in,body[data-f="9"] .sm .in,body[data-f="9"] .tabs .in,body[data-f="9"] .disc .pr,body[data-f="9"] .dl,body[data-f="9"] .lbl{letter-spacing:0!important}
+
+/* all text white; pale surfaces behind text become dark so white stays full-contrast */
+body[data-f="9"] *{color:#fff!important}
+body[data-f="9"] .in,body[data-f="9"] .disc .pr{background:linear-gradient(180deg,#3a0716,#1c030c)!important}
+body[data-f="9"] .field{background:linear-gradient(180deg,#14020a,#2a0612)!important;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2!important}
+
+body[data-f="9"] :is(.field,.em){color:#fff!important}
+
+/* bigger and one strong weight: no thin text anywhere */
+body[data-f="9"] *{font-weight:700!important;font-size:17px}
+body[data-f="9"] :is(h1,.free,.e1,.q,h3){font-weight:800!important}
+body[data-f="9"] .lab small{font-weight:700!important}
+body[data-f="9"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:15px!important}
+body[data-f="9"] h1,body[data-f="9"] .e1,body[data-f="9"] .q{font-size:34px!important}
+body[data-f="9"] .free{font-size:62px!important}
+body[data-f="9"] h3{font-size:26px!important}
+body[data-f="9"] .tag,body[data-f="9"] .tag b{font-size:23px!important}
+body[data-f="9"] .key,body[data-f="9"] .note{font-size:17px!important}
+body[data-f="9"] .in{font-size:17px!important}
+body[data-f="9"] .sm .in{font-size:12.5px!important}
+body[data-f="9"] .field,body[data-f="9"] .em{font-size:15px!important;height:32px!important;line-height:20px!important;padding:6px 8px!important}
+body[data-f="9"] .em{height:36px!important}
+body[data-f="9"] .pr{font-size:24px!important}
+body[data-f="9"] .e3,body[data-f="9"] .e3 b,body[data-f="9"] .pass .s,body[data-f="9"] .pass .never,body[data-f="9"] .e4{font-size:17px!important;line-height:1.35!important}
+
+body[data-f="9"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+body[data-f="9"] *{font-size:19px}
+body[data-f="9"] :is(h1,.e1,.q){font-size:34px!important}
+body[data-f="9"] .free{font-size:62px!important}
+body[data-f="9"] h3{font-size:28px!important}
+body[data-f="9"] .tag,body[data-f="9"] .tag b{font-size:23px!important}
+body[data-f="9"] :is(.key,.note,.e3,.e3 b,.pass .s,.pass .s b,.pass .never,.e4,.in){font-size:19px!important}
+body[data-f="9"] .sm .in{font-size:13px!important}
+body[data-f="9"] .field,body[data-f="9"] .em{font-size:16px!important;height:34px!important}
+body[data-f="9"] .em{height:38px!important}
+body[data-f="9"] .tagwrap{height:340px!important;margin-top:14px!important}
+body[data-f="9"] h1{margin-bottom:8px}
+body[data-f="9"] .solar{top:176px!important}
+body[data-f="9"] .p2{margin-top:92px!important}
+
+body[data-f="9"] .solar{left:96px!important;top:190px!important}
+body[data-f="9"] .key{font-size:17.5px!important}
+
+body[data-f="9"] .tabs{height:auto!important;flex-wrap:wrap;justify-content:center;gap:10px 12px!important;margin-top:18px!important}
+body[data-f="9"] .tabs .btn{height:40px!important}
+body[data-f="9"] .tabs .in,body[data-f="9"] .sm .in{font-size:17px!important}
+
+html body[data-f="9"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+html body[data-f="9"] .tog{gap:12px}
+
+body[data-f="9"][data-f="9"][data-f="9"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+
+html body[data-f="9"] .field,html body[data-f="9"] .em{font-size:17px!important;height:36px!important}
+html body[data-f="9"] .em{height:40px!important}
+html body[data-f="9"] .key{margin-top:16px!important}
+body[data-f="10"]{--fb:'SyneK'}
+body[data-f="10"] *{font-family:'SyneK'!important;letter-spacing:0!important;text-transform:none!important;font-style:normal!important;font-weight:400!important;font-size:14px;line-height:1.35}
+body[data-f="10"] :is(b,.key,.note,.never,.dl,.pr,.in,.lab,.tog,.e2,.lbl,.tag b,h1,.free,.e1,.q,h3,.e3 b){font-weight:800!important}
+body[data-f="10"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl,.tabs .in,.sm .in){font-size:12px!important}
+body[data-f="10"] .lab small{font-weight:400!important}
+body[data-f="10"] :is(.in){font-size:14px!important}
+body[data-f="10"] .sm .in{font-size:11px!important}
+body[data-f="10"] h1,body[data-f="10"] .e1,body[data-f="10"] .q{font-size:30px!important;line-height:1.08!important}
+body[data-f="10"] .free{font-size:58px!important;line-height:.98!important}
+body[data-f="10"] h3{font-size:22px!important}
+body[data-f="10"] .pr{font-size:22px!important}
+body[data-f="10"] .tag{font-size:21px!important;line-height:52px}
+body[data-f="10"] .tag b{font-size:21px!important}
+body[data-f="10"] :is(.field,.em){color:#14090d!important;font-size:12px!important}
+body[data-f="10"] .tabs{height:34px}
+body[data-f="10"] .in,body[data-f="10"] .sm .in,body[data-f="10"] .tabs .in,body[data-f="10"] .disc .pr,body[data-f="10"] .dl,body[data-f="10"] .lbl{letter-spacing:0!important}
+body[data-f="10"] *{color:#fff!important}
+body[data-f="10"] .in,body[data-f="10"] .disc .pr{background:linear-gradient(180deg,#3a0716,#1c030c)!important}
+body[data-f="10"] .field{background:linear-gradient(180deg,#14020a,#2a0612)!important;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2!important}
+body[data-f="10"] :is(.field,.em){color:#fff!important}
+body[data-f="10"] *{font-weight:700!important;font-size:17px}
+body[data-f="10"] :is(h1,.free,.e1,.q,h3){font-weight:800!important}
+body[data-f="10"] .lab small{font-weight:700!important}
+body[data-f="10"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:15px!important}
+body[data-f="10"] h1,body[data-f="10"] .e1,body[data-f="10"] .q{font-size:34px!important}
+body[data-f="10"] .free{font-size:62px!important}
+body[data-f="10"] h3{font-size:26px!important}
+body[data-f="10"] .tag,body[data-f="10"] .tag b{font-size:23px!important}
+body[data-f="10"] .key,body[data-f="10"] .note{font-size:17px!important}
+body[data-f="10"] .in{font-size:17px!important}
+body[data-f="10"] .sm .in{font-size:12.5px!important}
+body[data-f="10"] .field,body[data-f="10"] .em{font-size:15px!important;height:32px!important;line-height:20px!important;padding:6px 8px!important}
+body[data-f="10"] .em{height:36px!important}
+body[data-f="10"] .pr{font-size:24px!important}
+body[data-f="10"] .e3,body[data-f="10"] .e3 b,body[data-f="10"] .pass .s,body[data-f="10"] .pass .never,body[data-f="10"] .e4{font-size:17px!important;line-height:1.35!important}
+body[data-f="10"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+body[data-f="10"] *{font-size:19px}
+body[data-f="10"] :is(h1,.e1,.q){font-size:34px!important}
+body[data-f="10"] .free{font-size:62px!important}
+body[data-f="10"] h3{font-size:28px!important}
+body[data-f="10"] .tag,body[data-f="10"] .tag b{font-size:23px!important}
+body[data-f="10"] :is(.key,.note,.e3,.e3 b,.pass .s,.pass .s b,.pass .never,.e4,.in){font-size:19px!important}
+body[data-f="10"] .sm .in{font-size:13px!important}
+body[data-f="10"] .field,body[data-f="10"] .em{font-size:16px!important;height:34px!important}
+body[data-f="10"] .em{height:38px!important}
+body[data-f="10"] .tagwrap{height:340px!important;margin-top:14px!important}
+body[data-f="10"] h1{margin-bottom:8px}
+body[data-f="10"] .solar{top:176px!important}
+body[data-f="10"] .p2{margin-top:92px!important}
+body[data-f="10"] .solar{left:96px!important;top:190px!important}
+body[data-f="10"] .key{font-size:17.5px!important}
+body[data-f="10"] .tabs{height:auto!important;flex-wrap:wrap;justify-content:center;gap:10px 12px!important;margin-top:18px!important}
+body[data-f="10"] .tabs .btn{height:40px!important}
+body[data-f="10"] .tabs .in,body[data-f="10"] .sm .in{font-size:17px!important}
+html body[data-f="10"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+html body[data-f="10"] .tog{gap:12px}
+body[data-f="10"][data-f="10"][data-f="10"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+html body[data-f="10"] .field,html body[data-f="10"] .em{font-size:17px!important;height:36px!important}
+html body[data-f="10"] .em{height:40px!important}
+html body[data-f="10"] .key{margin-top:16px!important}
+body[data-f="11"]{--fb:'FrauncesK'}
+body[data-f="11"] *{font-family:'FrauncesK'!important;letter-spacing:0!important;text-transform:none!important;font-style:normal!important;font-weight:400!important;font-size:14px;line-height:1.35}
+body[data-f="11"] :is(b,.key,.note,.never,.dl,.pr,.in,.lab,.tog,.e2,.lbl,.tag b,h1,.free,.e1,.q,h3,.e3 b){font-weight:800!important}
+body[data-f="11"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl,.tabs .in,.sm .in){font-size:12px!important}
+body[data-f="11"] .lab small{font-weight:400!important}
+body[data-f="11"] :is(.in){font-size:14px!important}
+body[data-f="11"] .sm .in{font-size:11px!important}
+body[data-f="11"] h1,body[data-f="11"] .e1,body[data-f="11"] .q{font-size:30px!important;line-height:1.08!important}
+body[data-f="11"] .free{font-size:58px!important;line-height:.98!important}
+body[data-f="11"] h3{font-size:22px!important}
+body[data-f="11"] .pr{font-size:22px!important}
+body[data-f="11"] .tag{font-size:21px!important;line-height:52px}
+body[data-f="11"] .tag b{font-size:21px!important}
+body[data-f="11"] :is(.field,.em){color:#14090d!important;font-size:12px!important}
+body[data-f="11"] .tabs{height:34px}
+body[data-f="11"] .in,body[data-f="11"] .sm .in,body[data-f="11"] .tabs .in,body[data-f="11"] .disc .pr,body[data-f="11"] .dl,body[data-f="11"] .lbl{letter-spacing:0!important}
+body[data-f="11"] *{color:#fff!important}
+body[data-f="11"] .in,body[data-f="11"] .disc .pr{background:linear-gradient(180deg,#3a0716,#1c030c)!important}
+body[data-f="11"] .field{background:linear-gradient(180deg,#14020a,#2a0612)!important;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2!important}
+body[data-f="11"] :is(.field,.em){color:#fff!important}
+body[data-f="11"] *{font-weight:700!important;font-size:17px}
+body[data-f="11"] :is(h1,.free,.e1,.q,h3){font-weight:800!important}
+body[data-f="11"] .lab small{font-weight:700!important}
+body[data-f="11"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:15px!important}
+body[data-f="11"] h1,body[data-f="11"] .e1,body[data-f="11"] .q{font-size:34px!important}
+body[data-f="11"] .free{font-size:62px!important}
+body[data-f="11"] h3{font-size:26px!important}
+body[data-f="11"] .tag,body[data-f="11"] .tag b{font-size:23px!important}
+body[data-f="11"] .key,body[data-f="11"] .note{font-size:17px!important}
+body[data-f="11"] .in{font-size:17px!important}
+body[data-f="11"] .sm .in{font-size:12.5px!important}
+body[data-f="11"] .field,body[data-f="11"] .em{font-size:15px!important;height:32px!important;line-height:20px!important;padding:6px 8px!important}
+body[data-f="11"] .em{height:36px!important}
+body[data-f="11"] .pr{font-size:24px!important}
+body[data-f="11"] .e3,body[data-f="11"] .e3 b,body[data-f="11"] .pass .s,body[data-f="11"] .pass .never,body[data-f="11"] .e4{font-size:17px!important;line-height:1.35!important}
+body[data-f="11"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+body[data-f="11"] *{font-size:19px}
+body[data-f="11"] :is(h1,.e1,.q){font-size:34px!important}
+body[data-f="11"] .free{font-size:62px!important}
+body[data-f="11"] h3{font-size:28px!important}
+body[data-f="11"] .tag,body[data-f="11"] .tag b{font-size:23px!important}
+body[data-f="11"] :is(.key,.note,.e3,.e3 b,.pass .s,.pass .s b,.pass .never,.e4,.in){font-size:19px!important}
+body[data-f="11"] .sm .in{font-size:13px!important}
+body[data-f="11"] .field,body[data-f="11"] .em{font-size:16px!important;height:34px!important}
+body[data-f="11"] .em{height:38px!important}
+body[data-f="11"] .tagwrap{height:340px!important;margin-top:14px!important}
+body[data-f="11"] h1{margin-bottom:8px}
+body[data-f="11"] .solar{top:176px!important}
+body[data-f="11"] .p2{margin-top:92px!important}
+body[data-f="11"] .solar{left:96px!important;top:190px!important}
+body[data-f="11"] .key{font-size:17.5px!important}
+body[data-f="11"] .tabs{height:auto!important;flex-wrap:wrap;justify-content:center;gap:10px 12px!important;margin-top:18px!important}
+body[data-f="11"] .tabs .btn{height:40px!important}
+body[data-f="11"] .tabs .in,body[data-f="11"] .sm .in{font-size:17px!important}
+html body[data-f="11"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+html body[data-f="11"] .tog{gap:12px}
+body[data-f="11"][data-f="11"][data-f="11"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+html body[data-f="11"] .field,html body[data-f="11"] .em{font-size:17px!important;height:36px!important}
+html body[data-f="11"] .em{height:40px!important}
+html body[data-f="11"] .key{margin-top:16px!important}
+body[data-f="12"]{--fb:'UnbK'}
+body[data-f="12"] *{font-family:'UnbK'!important;letter-spacing:0!important;text-transform:none!important;font-style:normal!important;font-weight:400!important;font-size:14px;line-height:1.35}
+body[data-f="12"] :is(b,.key,.note,.never,.dl,.pr,.in,.lab,.tog,.e2,.lbl,.tag b,h1,.free,.e1,.q,h3,.e3 b){font-weight:800!important}
+body[data-f="12"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl,.tabs .in,.sm .in){font-size:12px!important}
+body[data-f="12"] .lab small{font-weight:400!important}
+body[data-f="12"] :is(.in){font-size:14px!important}
+body[data-f="12"] .sm .in{font-size:11px!important}
+body[data-f="12"] h1,body[data-f="12"] .e1,body[data-f="12"] .q{font-size:30px!important;line-height:1.08!important}
+body[data-f="12"] .free{font-size:58px!important;line-height:.98!important}
+body[data-f="12"] h3{font-size:22px!important}
+body[data-f="12"] .pr{font-size:22px!important}
+body[data-f="12"] .tag{font-size:21px!important;line-height:52px}
+body[data-f="12"] .tag b{font-size:21px!important}
+body[data-f="12"] :is(.field,.em){color:#14090d!important;font-size:12px!important}
+body[data-f="12"] .tabs{height:34px}
+body[data-f="12"] .in,body[data-f="12"] .sm .in,body[data-f="12"] .tabs .in,body[data-f="12"] .disc .pr,body[data-f="12"] .dl,body[data-f="12"] .lbl{letter-spacing:0!important}
+body[data-f="12"] *{color:#fff!important}
+body[data-f="12"] .in,body[data-f="12"] .disc .pr{background:linear-gradient(180deg,#3a0716,#1c030c)!important}
+body[data-f="12"] .field{background:linear-gradient(180deg,#14020a,#2a0612)!important;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2!important}
+body[data-f="12"] :is(.field,.em){color:#fff!important}
+body[data-f="12"] *{font-weight:700!important;font-size:17px}
+body[data-f="12"] :is(h1,.free,.e1,.q,h3){font-weight:800!important}
+body[data-f="12"] .lab small{font-weight:700!important}
+body[data-f="12"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:15px!important}
+body[data-f="12"] h1,body[data-f="12"] .e1,body[data-f="12"] .q{font-size:34px!important}
+body[data-f="12"] .free{font-size:62px!important}
+body[data-f="12"] h3{font-size:26px!important}
+body[data-f="12"] .tag,body[data-f="12"] .tag b{font-size:23px!important}
+body[data-f="12"] .key,body[data-f="12"] .note{font-size:17px!important}
+body[data-f="12"] .in{font-size:17px!important}
+body[data-f="12"] .sm .in{font-size:12.5px!important}
+body[data-f="12"] .field,body[data-f="12"] .em{font-size:15px!important;height:32px!important;line-height:20px!important;padding:6px 8px!important}
+body[data-f="12"] .em{height:36px!important}
+body[data-f="12"] .pr{font-size:24px!important}
+body[data-f="12"] .e3,body[data-f="12"] .e3 b,body[data-f="12"] .pass .s,body[data-f="12"] .pass .never,body[data-f="12"] .e4{font-size:17px!important;line-height:1.35!important}
+body[data-f="12"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+body[data-f="12"] *{font-size:19px}
+body[data-f="12"] :is(h1,.e1,.q){font-size:34px!important}
+body[data-f="12"] .free{font-size:62px!important}
+body[data-f="12"] h3{font-size:28px!important}
+body[data-f="12"] .tag,body[data-f="12"] .tag b{font-size:23px!important}
+body[data-f="12"] :is(.key,.note,.e3,.e3 b,.pass .s,.pass .s b,.pass .never,.e4,.in){font-size:19px!important}
+body[data-f="12"] .sm .in{font-size:13px!important}
+body[data-f="12"] .field,body[data-f="12"] .em{font-size:16px!important;height:34px!important}
+body[data-f="12"] .em{height:38px!important}
+body[data-f="12"] .tagwrap{height:340px!important;margin-top:14px!important}
+body[data-f="12"] h1{margin-bottom:8px}
+body[data-f="12"] .solar{top:176px!important}
+body[data-f="12"] .p2{margin-top:92px!important}
+body[data-f="12"] .solar{left:96px!important;top:190px!important}
+body[data-f="12"] .key{font-size:17.5px!important}
+body[data-f="12"] .tabs{height:auto!important;flex-wrap:wrap;justify-content:center;gap:10px 12px!important;margin-top:18px!important}
+body[data-f="12"] .tabs .btn{height:40px!important}
+body[data-f="12"] .tabs .in,body[data-f="12"] .sm .in{font-size:17px!important}
+html body[data-f="12"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+html body[data-f="12"] .tog{gap:12px}
+body[data-f="12"][data-f="12"][data-f="12"] :is(.lab,.lab small,.tog,.e2,.lbl,.dl){font-size:17px!important}
+html body[data-f="12"] .field,html body[data-f="12"] .em{font-size:17px!important;height:36px!important}
+html body[data-f="12"] .em{height:40px!important}
+html body[data-f="12"] .key{margin-top:16px!important}
+html body[data-f="10"] .tag,html body[data-f="10"] .tag b{font-size:15px!important}
+html body[data-f="11"] .tag,html body[data-f="11"] .tag b{font-size:24px!important}
+html body[data-f="12"] .tag,html body[data-f="12"] .tag b{font-size:13px!important}
+html body[data-f="10"] h1,html body[data-f="12"] h1{font-size:28px!important}
+html body[data-f="10"] .free{font-size:50px!important}html body[data-f="12"] .free{font-size:42px!important}
+html body[data-f="12"] :is(.e1,.q){font-size:24px!important}html body[data-f="10"] :is(.e1,.q){font-size:28px!important}
+
+html body[data-f] .lab{white-space:nowrap}
+
+html,body{overflow-x:clip!important;max-width:390px}
+body{position:relative}
+.solar{overflow:hidden}
+
+html body[data-f] .tabs{flex-wrap:nowrap!important;justify-content:flex-start!important;gap:4px!important;margin-top:14px!important;height:34px!important}
+html body[data-f] .tabs .btn{height:32px!important;flex:0 0 auto}
+html body[data-f] .tabs .in,html body[data-f] .sm .in{font-size:12px!important}
+html body[data-f="11"] .tabs .in,html body[data-f="11"] .sm .in{font-size:11.5px!important}
+
+html body[data-f] .tabs{justify-content:center!important}
+
+.pass{margin-top:72px;text-align:center}
+.pass .s{margin:10px auto 0!important;width:310px;font-size:19px;line-height:1.35}
+.pass .ur,.never2{font-size:19px;line-height:1.35;color:#fff}
+.pass .ur{margin-top:18px}
+.pbtns{display:flex;justify-content:center;gap:8px;margin-top:26px}
+.never2{text-align:center;margin-top:30px}
+html body[data-f] .pbtns .in{font-size:15px!important;line-height:1.15!important;text-align:center}
+html body[data-f] .ur,html body[data-f] .never2{font-size:19px!important;font-weight:700!important;color:#fff!important}
+
+.never2{margin-bottom:70px}
+
+html body[data-f] #e1s{font-size:25px!important;line-height:1.15!important;font-weight:800!important}
+html body[data-f] .e3b{margin-top:10px!important}
+html body[data-f] .e3,html body[data-f] .e4{width:340px!important;font-size:19px!important;line-height:1.35!important;font-weight:700!important}
+html body[data-f] .e4{margin-top:12px!important;margin-left:auto;margin-right:auto}
+html body[data-f] .e3{margin-top:10px!important;margin-left:auto;margin-right:auto}
+
+html body[data-f] .tabs .in,html body[data-f] .sm .in{font-size:13px!important}
+html body[data-f] .tabs{gap:3px!important}
+
+html body[data-f] .pbtns{display:block!important;width:310px;margin:26px auto 0!important;gap:0}
+html body[data-f] .prow{display:flex;align-items:center;height:80px}
+html body[data-f] .orb{flex:0 0 120px;overflow:visible}
+html body[data-f] .pl{flex:1;font-size:25px!important;font-weight:800!important;color:#fff!important;text-align:left}
+html body[data-f] .pp{font-size:25px!important;font-weight:800!important;color:#fff!important;text-align:right;flex:0 0 64px;margin-right:4px}
+
+html body[data-f] .row>div:nth-child(1){flex:0 0 138px!important}
+html body[data-f] .row>div:nth-child(2){flex:0 0 88px!important}
+html body[data-f] .row>div:nth-child(3){flex:0 0 76px!important}
+html body[data-f] .row>div .field{padding-left:6px!important;padding-right:4px!important;white-space:nowrap}
+
+html body[data-f] .row>div{min-width:0!important}
+html body[data-f] .row>div .lab{overflow:visible}
+
+html body[data-f] .tpnote{text-wrap:balance;width:330px;margin:22px auto 0;text-align:center;font-size:17px!important;line-height:1.35;font-weight:700!important;color:#fff!important}
+html body[data-f] .calc{margin-top:22px!important}
+html body[data-f] .field{background:linear-gradient(#14020a,#2a0612)!important;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2!important}
+
+html body[data-f] #e1s{font-size:25px!important;white-space:normal}
+html body[data-f] .entry{margin-top:22px!important}
+html body[data-f] .p{margin-top:34px!important}
+html body[data-f] .p2{margin-top:108px!important}
+html body[data-f] .tpnote+.tpnote{margin-top:16px!important}
+
+html body[data-f] .entry .e3{width:352px!important;line-height:1.28!important;margin-top:6px!important;text-wrap:balance}
+html body[data-f] .entry .e3b{margin-top:0!important}
+html body[data-f] .spk{display:flex;justify-content:center;margin:10px 0 8px}
+html body[data-f] #e1s{line-height:1.12!important}
+html body[data-f] .entry{margin-top:18px!important}
+html body[data-f] .p{margin-top:26px!important}
+
+html body[data-f] #e1s{font-size:17.5px!important;white-space:nowrap!important}
+
+html body[data-f] .big3{font-size:38px!important;line-height:1.05!important;font-weight:800!important;margin-top:20px;text-align:center;color:#fff!important}
+html body[data-f] .entry .and1{margin-top:6px!important;width:352px!important;font-size:19px!important}
+html body[data-f] .entry .choose{margin-top:26px!important;margin-left:0!important;margin-right:0!important;width:350px!important;font-size:17.5px!important;text-wrap:initial;white-space:nowrap;text-align:center}
+html body[data-f] .entry .nocc{margin-top:0!important;width:352px!important;font-size:19px!important;text-wrap:initial}
+html body[data-f] .spk{margin:22px 0 18px!important}
+
+html body[data-f] .dia{display:block;margin:6px auto 0}
+html body[data-f] .dlabels{display:flex;justify-content:space-between;width:350px;margin:-6px auto 0;position:absolute}
+html body[data-f] .entry{position:relative}
+html body[data-f] .dlabels span{width:116px;text-align:center;font-size:15.5px!important;font-weight:800!important;color:#fff!important;white-space:nowrap}
+html body[data-f] .entry .and1{margin-top:44px!important}
+html body[data-f] .entry .choose{margin-top:34px!important}
+html body[data-f] .entry .nocc{margin-top:20px!important}
+
+html body[data-f] .dlabels{display:none!important}
+html body[data-f] .entry .and1{margin-top:20px!important}
+
+html body[data-f] svg.dia text{font-size:14px!important;font-weight:800!important;fill:#fff!important}
+html body[data-f] .entry .and1{margin-top:4px!important}
+
+html body[data-f] .hero{display:block!important;min-height:0!important}
+html body[data-f] .h1l{text-align:left!important;font-size:36px!important;line-height:1.05!important;margin-top:4px}
+html body[data-f] .tagl{width:215px;margin-top:20px;font-size:19px!important;line-height:34px!important;font-weight:700!important;color:#fff!important}
+html body[data-f] .tagl b{font-size:19px!important}
+html body[data-f] .swwrap{display:flex;justify-content:flex-end;margin-top:6px}
+html body[data-f] .swirl{display:block}
+html body[data-f] .l3{margin-top:12px;font-size:40px!important;line-height:1.05!important;font-weight:800!important;text-align:left}
+html body[data-f] .l3s{margin-top:6px;font-size:21px!important;line-height:1.28!important;font-weight:700!important;text-align:left}
+html body[data-f] .freer{margin-top:34px;font-size:60px!important;line-height:.98!important;font-weight:800!important;text-align:right}
+html body[data-f] .nocc2{margin-top:12px;font-size:19px!important;line-height:1.3!important;font-weight:700!important;text-align:right}
+html body[data-f] .hero .key{text-align:left!important;margin-top:34px!important;width:330px}
+html body[data-f] .hero .em{margin:12px 0 0!important}
+html body[data-f] .hero .note{text-align:left!important;margin:10px 0 0!important;width:330px!important}
+html body[data-f] .hero .cont{margin:22px auto 30px 0!important}
+html body[data-f] .chooseline{text-align:center;font-size:18px!important;font-weight:700!important;line-height:1.3;margin-top:8px;color:#fff!important}
+
+html body[data-f] .tagl{width:250px!important;line-height:30px!important;font-size:18px!important;margin-top:14px!important}
+html body[data-f] .tagl b{font-size:18px!important}
+html body[data-f] .swirl{overflow:visible!important;margin-right:6px}
+html body[data-f] .swwrap{margin-top:0!important}
+html body[data-f] .freer{margin-top:24px!important;font-size:56px!important}
+
+html body[data-f] .swwrap{justify-content:center!important;margin-top:4px!important}
+html body[data-f] svg.swirl text{font-size:15px!important;font-weight:800!important;fill:#fff!important}
+
+html body[data-f] .l3{margin-top:28px!important}
+html body[data-f] .swwrap{margin-top:30px!important}
+
+html body[data-f] .h1l{font-size:32px!important}
+html body[data-f] .l3{margin-top:14px!important;font-size:34px!important}
+html body[data-f] .l3s{font-size:18px!important;margin-top:4px!important}
+html body[data-f] .l3s br{display:none}
+html body[data-f] .swwrap{margin-top:6px!important}
+html body[data-f] .swirl{width:300px!important;height:224px!important}
+html body[data-f] .freer{margin-top:8px!important;font-size:46px!important;line-height:1!important}
+html body[data-f] .nocc2{margin-top:8px!important;font-size:17px!important}
+html body[data-f] .nocc2 br{display:none}
+html body[data-f] .hero .key{margin-top:16px!important;font-size:16px!important}
+html body[data-f] .hero .em{margin-top:8px!important}
+
+html body[data-f] .swwrap{display:block!important}
+html body[data-f] .rbwrap{position:relative;width:350px;height:262px;margin:0 auto}
+html body[data-f] .rbimg{width:350px;height:262px;display:block}
+html body[data-f] .rl{position:absolute;font-size:15px!important;font-weight:800!important;color:#fff!important;white-space:nowrap}
+html body[data-f] .r1{left:4px;top:34px}
+html body[data-f] .r2{right:4px;top:34px}
+html body[data-f] .r3{left:50%;transform:translateX(-50%);bottom:-4px}
+
+html body[data-f] .rbwrap{width:350px!important;height:330px!important}
+html body[data-f] .rbimg{width:350px!important;height:330px!important}
+
+html body[data-f] .freer{text-align:left!important;margin-top:10px!important;font-size:44px!important;line-height:1!important}
+html body[data-f] .l3{margin-top:12px!important;font-size:30px!important}
+html body[data-f] .l3s{font-size:17px!important}
+html body[data-f] .swwrap{margin-top:0!important}
+html body[data-f] .rbwrap,html body[data-f] .rbimg{height:300px!important}
+html body[data-f] .nocc2{text-align:center!important;margin-top:0!important;font-size:16px!important}
+html body[data-f] .hero .key{font-size:14px!important;margin-top:12px!important;text-align:left!important;width:340px}
+html body[data-f] .hero .note{font-size:13px!important;line-height:1.25!important;margin-top:6px!important}
+html body[data-f] .hero .note br{display:none}
+html body[data-f] .hero .cont{margin:14px auto 22px!important}
+
+html body[data-f] .rbwrap{width:350px!important;height:330px!important}
+html body[data-f] .rbimg{width:350px!important;height:330px!important}
+html body[data-f] .rl{position:absolute;font-size:16px!important;font-weight:800!important;color:#fff!important;white-space:nowrap;text-shadow:0 1px 3px rgba(20,0,8,.95),0 0 9px rgba(20,0,8,.8),0 0 16px rgba(20,0,8,.55)}
+html body[data-f] .r1{right:10px;top:34px}
+html body[data-f] .r2{right:14px;bottom:30px}
+html body[data-f] .r3{left:12px;top:170px}
+
+html body[data-f] .rl{left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important}
+html body[data-f] .rl.r1{right:12px!important;top:36px!important}
+html body[data-f] .rl.r2{right:16px!important;bottom:34px!important}
+html body[data-f] .rl.r3{left:14px!important;top:168px!important}
+
+html body[data-f] .swwrap{display:block!important;margin-top:8px!important}
+html body[data-f] .solwrap{position:relative;height:190px;overflow:visible}
+html body[data-f] .solar2{position:absolute;left:59px;top:-8px;width:412px;height:214px;overflow:visible}
+
+html body[data-f] .hero{display:block!important;min-height:0!important}
+html body[data-f] .h1l{font-size:32px!important;margin-top:4px!important}
+html body[data-f] .sys{margin-top:12px;font-size:17.5px!important;font-weight:800!important;color:#fff!important;white-space:nowrap;text-align:left}
+html body[data-f] .fcr{margin-top:4px;font-size:17.5px!important;font-weight:800!important;color:#fff!important;text-align:left}
+html body[data-f] .swwrap{margin-top:6px!important}
+html body[data-f] .solwrap{height:164px!important}
+html body[data-f] .freec{margin-top:6px!important;text-align:center!important;font-size:44px!important;line-height:1!important;font-weight:800!important;color:#fff!important}
+html body[data-f] .b22{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:16px 0 0;padding:0;width:350px}
+html body[data-f] .b22 li{position:relative;padding-left:14px;font-size:14px!important;line-height:1.25!important;font-weight:700!important;color:#fff!important}
+html body[data-f] .b22 li:before{content:"";position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:#fff}
+html body[data-f] .hero .em{display:block;width:310px!important;margin:16px auto 0!important}
+html body[data-f] .hero .cont{margin:14px auto 22px!important}
+
+html body[data-f] .prow{height:64px!important}
+html body[data-f] .pbtns{margin-top:6px!important}
+html body[data-f] .pass .ur{margin-top:10px!important}
+html body[data-f] .never2{margin-top:16px!important;margin-bottom:40px!important}
+html body[data-f] .tpnote{font-size:16px!important;line-height:1.3!important;width:340px!important}
+html body[data-f] .tpnote+.tpnote{margin-top:12px!important}
+html body[data-f] .p2 .row>div:nth-child(3){flex:0 0 66px!important}
+html body[data-f] .p2 .row>div:nth-child(2){flex:0 0 84px!important}
+html body[data-f] .p2 .row>div:nth-child(1){flex:0 0 132px!important}
+
+html body[data-f] .row{gap:8px!important}
+html body[data-f] .p2 .row>div:nth-child(1){flex:0 0 128px!important}
+html body[data-f] .p2 .row>div:nth-child(2){flex:0 0 84px!important}
+html body[data-f] .p2 .row>div:nth-child(3){flex:0 0 62px!important}
+html body[data-f] .p .row>div:nth-child(1){flex:0 0 128px!important}
+html body[data-f] .p .row>div:nth-child(2){flex:0 0 84px!important}
+html body[data-f] .p .row>div:nth-child(3){flex:0 0 62px!important}
+
+html body[data-f] .row .field{font-size:15px!important;padding-left:6px!important;padding-right:2px!important}
+html body[data-f] .p .row>div:nth-child(1),html body[data-f] .p2 .row>div:nth-child(1){flex:0 0 136px!important}
+html body[data-f] .p .row>div:nth-child(2),html body[data-f] .p2 .row>div:nth-child(2){flex:0 0 80px!important}
+html body[data-f] .p .row>div:nth-child(3),html body[data-f] .p2 .row>div:nth-child(3){flex:0 0 66px!important}
+
+html body[data-f] .p2{margin-top:152px!important}
+</style></head>
+<body data-t="A">
+<section class="hero">
+<h1 class="h1l">Know Your Energy</h1>
+<div class="sys">Astrology-Numerology-Human Design</div>
+<div class="fcr">FULL charts and combined reading</div>
+<div class="swwrap"><div class="solwrap"><svg class="solar2" viewBox="0 0 250 130">
+ <defs>
+  <radialGradient id="sph" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".18" stop-color="#e4e8ed"/><stop offset=".45" stop-color="#8c949e"/><stop offset=".62" stop-color="#14181d"/><stop offset=".82" stop-color="#c9d0d8"/><stop offset="1" stop-color="#dfe4ea"/></radialGradient>
+  <radialGradient id="mn" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#aeb6bf"/><stop offset=".7" stop-color="#1a1f25"/><stop offset="1" stop-color="#c9d0d8"/></radialGradient>
+ </defs>
+ <g fill="none" stroke="#f2f4f7" stroke-width="1.3">
+  <ellipse cx="150" cy="55" rx="140" ry="44" transform="rotate(8 150 55)"/>
+  <ellipse cx="150" cy="55" rx="118" ry="36" transform="rotate(8 150 55)" opacity=".85"/>
+  <ellipse cx="150" cy="55" rx="96" ry="28" transform="rotate(8 150 55)" opacity=".7"/>
+ </g>
+ <circle cx="148" cy="48" r="34" fill="url(#sph)"/>
+ <circle cx="62" cy="48" r="7" fill="url(#mn)"/><circle cx="82" cy="54" r="6" fill="url(#mn)"/><circle cx="68" cy="68" r="5" fill="url(#mn)"/>
+</svg></div></div>
+<div class="freec">first reading<br>is free.</div>
+<ul class="b22"><li>No Credit Card - Full try before you buy</li><li>Email is simply your pass</li><li>Email will not be shared</li><li>You will not receive emails from us</li></ul>
+<span class="field em">Email</span>
+<div class="btn cont" data-s="1"><span>Continue</span></div>
+</section>
+
+<div class="chooseline">Choose either individual or relational<br>for your free try</div>
+
+<div class="tog">INDIVIDUAL <i></i> RELATIONAL</div>
+<div class="tabs">
+ <div class="btn sm" data-s="1" style="width:168px"><span>PARENT · CHILD</span></div>
+ <div class="btn sm" data-s="1" style="width:168px"><span>ROMANTIC</span></div>
+ <div class="btn sm" data-s="1" style="width:168px"><span>FRIENDS</span></div>
+ <div class="btn sm" data-s="1" style="width:168px"><span>OTHER</span></div>
+</div>
+<div class="p">
+ <h3>Person 1</h3>
+ <div class="lab">FULL NAME AT BIRTH</div>
+ <div class="row" style="width:310px"><span class="field" style="flex:1">First</span><span class="field" style="flex:.7">Mid</span><span class="field" style="flex:1">Last</span></div>
+ <div class="row" style="width:310px"><div style="flex:1.15"><div class="lab">DOB</div><span class="field">MM/DD/YYYY</span></div><div style="flex:1.55"><div class="lab">TIME <small>(optional)</small></div><span class="field">HH:MM</span></div><div style="flex:.5"><div class="lab">&nbsp;</div><span class="field">AM/PM</span></div></div>
+ <div class="lab">LOCATION <small>(optional)</small></div><span class="field" style="width:230px">City, State, Country</span>
+</div>
+<div class="p p2">
+ <h3 style="text-align:right">Person 2</h3>
+ <div class="lab">FULL NAME AT BIRTH</div>
+ <div class="row" style="width:310px"><span class="field" style="flex:1">First</span><span class="field" style="flex:.7">Mid</span><span class="field" style="flex:1">Last</span></div>
+ <div class="row" style="width:310px"><div style="flex:1.15"><div class="lab">DOB</div><span class="field">MM/DD/YYYY</span></div><div style="flex:1.55"><div class="lab">TIME <small>(optional)</small></div><span class="field">HH:MM</span></div><div style="flex:.5"><div class="lab">&nbsp;</div><span class="field">AM/PM</span></div></div>
+ <div class="lab">LOCATION <small>(optional)</small></div><span class="field" style="width:310px">City, State, Country</span>
+</div>
+<p class="tpnote">Time and place of birth are necessary for a full reading. Without them, you will still receive the results of the parts of the reading that do not depend on them.</p>
+<p class="tpnote">You will have the opportunity to save and/or print a PDF of the results. Please do not close the page until you have done so, because we do not save your results.</p>
+<div class="btn calc" data-s="1"><span>Calculate</span></div>
+<div class="pass">
+ <div class="q">Did you enjoy your reading?</div>
+ <p class="s">Learn about all of the dynamics in your personal orbit.</p>
+ <div class="ur">Unlimited readings for</div>
+</div>
+<div class="pbtns">
+<div class="prow"><svg class="orb" width="120" height="78" viewBox="0 0 120 78"><defs><radialGradient id="sph2" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".18" stop-color="#e4e8ed"/><stop offset=".45" stop-color="#8c949e"/><stop offset=".62" stop-color="#14181d"/><stop offset=".84" stop-color="#b9c0c8"/><stop offset="1" stop-color="#f0f2f5"/></radialGradient></defs><ellipse cx="60" cy="39" rx="30" ry="14" fill="none" stroke="#fff" stroke-width="1.1" transform="rotate(-12 60 39)"/><circle cx="84.4" cy="43.0" r="2.6" fill="#fff"/><circle cx="60" cy="39" r="13" fill="url(#sph2)"/></svg><div class="pl">1 day</div><div class="pp">$5</div></div>
+<div class="prow"><svg class="orb" width="120" height="78" viewBox="0 0 120 78"><ellipse cx="60" cy="39" rx="30" ry="14" fill="none" stroke="#fff" stroke-width="1.1" transform="rotate(-12 60 39)"/><ellipse cx="60" cy="39" rx="42" ry="19" fill="none" stroke="#fff" stroke-width="0.9500000000000001" transform="rotate(-12 60 39)"/><circle cx="94.0" cy="44.3" r="2.6" fill="#fff"/><circle cx="60" cy="39" r="13" fill="url(#sph2)"/></svg><div class="pl">1 month</div><div class="pp">$22</div></div>
+<div class="prow"><svg class="orb" width="120" height="78" viewBox="0 0 120 78"><ellipse cx="60" cy="39" rx="30" ry="14" fill="none" stroke="#fff" stroke-width="1.1" transform="rotate(-12 60 39)"/><ellipse cx="60" cy="39" rx="42" ry="19" fill="none" stroke="#fff" stroke-width="0.9500000000000001" transform="rotate(-12 60 39)"/><ellipse cx="60" cy="39" rx="54" ry="24" fill="none" stroke="#fff" stroke-width="0.8" transform="rotate(-12 60 39)"/><circle cx="103.7" cy="45.5" r="2.6" fill="#fff"/><circle cx="60" cy="39" r="13" fill="url(#sph2)"/></svg><div class="pl">3 months</div><div class="pp">$33</div></div>
+</div>
+<p class="never2">You will never be auto-charged.</p>
+<script>
+(function(){const f=new URLSearchParams(location.search).get('f');
+ const W={'9':[114,86,78,64],'11':[116,88,80,66]}[f]||[112,84,76,62];
+ document.querySelectorAll('.tabs .btn').forEach((e,i)=>{e.style.width=W[i]+'px';e.dataset.notch='9';});})();
+</script>
+<script>
+const v=new URLSearchParams(location.search).get('v')||'A';
+document.body.dataset.t=v;document.body.dataset.f=new URLSearchParams(location.search).get('f')||'';
+function lens(w,h,ox,oy){const n=60,pts=[],k=h/2;
+ const hh=t=>k*Math.pow(1-Math.pow(Math.abs(t),2.3),0.85);
+ for(let i=0;i<=n;i++){const t=i/n*2-1;pts.push([ox+(t+1)/2*w,oy+k-hh(t)]);}
+ for(let i=n;i>=0;i--){const t=i/n*2-1;pts.push([ox+(t+1)/2*w,oy+k+hh(t)]);}
+ return 'polygon('+pts.map(p=>p[0].toFixed(1)+'px '+p[1].toFixed(1)+'px').join(',')+')';}
+document.querySelectorAll('[data-s]').forEach(el=>{
+ if(v==='A'&&el.classList.contains('sm')){el.style.width=(parseFloat(el.style.width)*1.2)+'px';el.style.flexShrink=0;}
+ const w=parseFloat(el.style.width)||el.getBoundingClientRect().width,h=el.getBoundingClientRect().height;
+ const txt=el.textContent;const two=txt.includes('|');el.innerHTML='';
+ const f=document.createElement('div');f.className='face';el.appendChild(f);
+ const i=document.createElement('div');i.className='in';if(two){i.innerHTML=txt.split('|').join('<br>');}else{i.textContent=txt;}f.appendChild(i);
+ const big=h>40,vy=big?7:4,hx=big?(v==='A'?22:14):(v==='A'?12:7);
+ const iw=w-2*hx,ih=h-2*vy;
+ Object.assign(i.style,{left:hx+'px',top:vy+'px',width:iw+'px',height:ih+'px'});
+ if(v==='A'){f.style.clipPath=lens(w,h,0,0);i.style.clipPath=lens(iw,ih,0,0);}
+ if(v==='B'){const c=el.dataset.notch?+el.dataset.notch:Math.round(h*.5),d=el.dataset.notch?Math.round(c*.85):Math.round(ih*.5);f.style.clipPath=`polygon(${c}px 0,calc(100% - ${c}px) 0,100% 50%,calc(100% - ${c}px) 100%,${c}px 100%,0 50%)`;i.style.clipPath=`polygon(${d}px 0,calc(100% - ${d}px) 0,100% 50%,calc(100% - ${d}px) 100%,${d}px 100%,0 50%)`;}
+ if(v==='C'){f.style.borderRadius=(h*.55)+'px 3px '+(h*.55)+'px 3px';f.style.overflow='hidden';i.style.borderRadius=(ih*.5)+'px 2px '+(ih*.5)+'px 2px';}
+});
+
+const bg=new URLSearchParams(location.search).get('bg')||'1';
+document.body.classList.add('pol'+bg);
+function ringSVG(onDark){
+ const sh=onDark?'rgba(0,0,0,.55)':'rgba(0,0,0,0)';
+ return `<svg class="ring" style="left:0;top:0" width="390" height="${document.body.scrollHeight}" viewBox="0 0 390 ${document.body.scrollHeight}">
+ <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+ <stop offset="0" stop-color="#ffffff"/><stop offset=".22" stop-color="#aeb7c0"/><stop offset=".42" stop-color="#10161b"/><stop offset=".6" stop-color="#7f8993"/><stop offset=".8" stop-color="#00656b"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+ <circle cx="452" cy="790" r="150" fill="none" stroke="${sh}" stroke-width="28" transform="translate(-12,16)"/>
+ <circle cx="452" cy="790" r="150" fill="none" stroke="url(#rg)" stroke-width="28"/>
+ <circle cx="-56" cy="975" r="104" fill="none" stroke="${sh}" stroke-width="22" transform="translate(12,14)"/>
+ <circle cx="-56" cy="975" r="104" fill="none" stroke="url(#rg)" stroke-width="22"/></svg>`;}
+if(false){document.body.insertAdjacentHTML('afterbegin',ringSVG(bg==='3'));}
+
+
+
+
+
+if(['9','10','11','12'].includes(document.body.dataset.f)){
+ const keep=/^(DOB|AM)$/;
+ const fix=(n,low)=>{let t=n.textContent;if(!t.trim()||keep.test(t.trim()))return;
+  if(/Astrology/i.test(t))return;
+  if(low){n.textContent=t.toLowerCase();return;}
+  const lead=t.match(/^\s*/)[0];const core=t.trim();
+  n.textContent=lead+core.charAt(0).toUpperCase()+core.slice(1).toLowerCase()+t.slice(lead.length+core.length);};
+ document.querySelectorAll('.tag b').forEach(el=>el.childNodes.forEach(n=>n.nodeType===3&&fix(n,true)));
+ document.querySelectorAll('.lab,.tog,.dl,.lbl,.in').forEach(el=>el.childNodes.forEach(n=>n.nodeType===3&&fix(n,false)));
+}
+
+
+document.querySelectorAll('.pbtns .btn').forEach(el=>{
+ const w=102,h=56;el.style.width=w+'px';el.style.height=h+'px';el.style.filter='none';
+ const f=el.querySelector('.face'),i=el.querySelector('.in');
+ f.style.clipPath='none';f.style.borderRadius='50%';
+ f.style.background='linear-gradient(180deg,#ffffff 0%,#b9c0c8 32%,#7b838c 52%,#d8dde3 78%,#ffffff 100%)';
+ Object.assign(i.style,{left:'1.5px',top:'1.5px',width:(w-3)+'px',height:(h-3)+'px',clipPath:'none',borderRadius:'50%',
+  background:'linear-gradient(180deg,#34061a,#1c030c)',boxShadow:'inset 0 0 0 4px #1c030c, inset 0 0 0 5px rgba(228,232,236,.9)'});
+});
+document.fonts.ready.then(function(){requestAnimationFrame(function(){
+ const bb=document.body.getBoundingClientRect(),H=document.body.scrollHeight,P='#ffffff',N=140;
+ const env=(u,p)=>Math.pow(Math.sin(Math.PI*u),p);
+ // one braided energy line along any centerline; strands cross, taper, sit in a carved groove
+ const braid=(center,amp,cyc,wmax,gw,starR)=>{
+  const pts=[];for(let i=0;i<=N;i++)pts.push(center(i/N));
+  const nor=pts.map((p,i)=>{const q=pts[Math.min(N,i+1)],r=pts[Math.max(0,i-1)];let tx=q[0]-r[0],ty=q[1]-r[1];const m=Math.hypot(tx,ty)||1;return [-ty/m,tx/m];});
+  const off=(sg,i)=>{const u=i/N;return sg*amp*env(u,.8)*Math.sin(2*Math.PI*cyc*u);};
+  const poly=(sg,hwf)=>{let up='',dn=[];for(let i=0;i<=N;i++){const u=i/N,o=off(sg,i),hw=hwf(u),px=pts[i][0]+nor[i][0]*o,py=pts[i][1]+nor[i][1]*o;up+=(i?'L':'M')+(px+nor[i][0]*hw).toFixed(1)+' '+(py+nor[i][1]*hw).toFixed(1)+' ';dn.push((px-nor[i][0]*hw).toFixed(1)+' '+(py-nor[i][1]*hw).toFixed(1));}return up+dn.reverse().map(t=>'L'+t+' ').join('')+'Z';};
+  let groove='',halo='',core='',hot='';
+  [1,-1].forEach(sg=>{const g=poly(sg,u=>gw*env(u,.9)+.2),c=poly(sg,u=>wmax*env(u,.6)+.1),h=poly(sg,u=>wmax*.45*env(u,.6)+.05);
+   groove+=`<path d="${g}" fill="#fff" opacity=".22" transform="translate(.8,1.1)"/><path d="${g}" fill="#000" opacity=".5" transform="translate(-.5,-.7)"/><path d="${g}" fill="#12020a" opacity=".8"/>`;
+   halo+=`<path d="${c}" fill="#ffffff"/>`;core+=`<path d="${c}" fill="${P}"/>`;hot+=`<path d="${h}" fill="#fff"/>`;});
+  let fl='';
+  for(let j=1;j<2*cyc;j++){const i=Math.round(N*j/(2*cyc)),p=pts[i],r=starR,R=r*2.3,w=r*.16;
+   fl+=`<circle cx="${p[0]}" cy="${p[1]}" r="${r*3.6}" fill="url(#fl)"/><path d="M ${p[0]} ${p[1]-R} L ${p[0]+w} ${p[1]-w} L ${p[0]+R} ${p[1]} L ${p[0]+w} ${p[1]+w} L ${p[0]} ${p[1]+R} L ${p[0]-w} ${p[1]+w} L ${p[0]-R} ${p[1]} L ${p[0]-w} ${p[1]-w} Z" fill="#fff"/><circle cx="${p[0]}" cy="${p[1]}" r="${r*.32}" fill="#fff"/>`;}
+  return groove+`<g filter="url(#hl)" opacity=".85">${halo}</g>`+core+hot+fl;};
+ let EK=0;
+ const energy=(center,sc,spk,nS)=>{sc=sc||1;
+  const pts=[];for(let i=0;i<=N;i++)pts.push(center(i/N));
+  const nor=pts.map((p,i)=>{const q=pts[Math.min(N,i+1)],r=pts[Math.max(0,i-1)];let tx=q[0]-r[0],ty=q[1]-r[1];const m=Math.hypot(tx,ty)||1;return [-ty/m,tx/m];});
+  let defs='<defs><radialGradient id="flw'+(EK)+'"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".4" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
+  const strand=(amp,cyc,ph,u0,u1,sp)=>{sp=sp||0;const i0=Math.round(u0*N),i1=Math.round(u1*N);let d='',a=null,z=null;
+   for(let i=i0;i<=i1;i++){const t=(i-i0)/(i1-i0),o=amp*Math.pow(Math.sin(Math.PI*t),.6)*Math.sin(2*Math.PI*cyc*t+ph)+sp*Math.pow(Math.abs(2*t-1),1.5),x=pts[i][0]+nor[i][0]*o,y=pts[i][1]+nor[i][1]*o;d+=(i>i0?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';if(i===i0)a=[x,y];z=[x,y];}
+   const id='sg'+(EK++);defs+=`<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${a[0]}" y1="${a[1]}" x2="${z[0]}" y2="${z[1]}"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".25" stop-color="#fff" stop-opacity="1"/><stop offset=".75" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
+   return {d,id};};
+  const S=[[12,2,0,0,1,.9,5],[12,2,Math.PI,0,1,.9,-5],[19,1.3,.8,.04,.9,.6,8],[15,1.7,2.4,.12,.97,.55,-8],[23,1.1,4.0,.0,.8,.5,11],[9,2.6,1.2,.2,1,.5,-11],[21,1.4,5.2,.1,.85,.5,3],[14,1.9,3.3,.3,1,.5,-3]].slice(0,nS||8).map(a=>({...strand(a[0]*sc,a[1],a[2],a[3],a[4],a[6]*sc),w:a[5]}));
+  const core=strand(0,1,0,.02,.98);
+  let body='';
+  body+=`<g filter="url(#hot)" opacity=".45">`+S.map(s=>`<path d="${s.d}" fill="none" stroke="url(#${s.id})" stroke-width="${s.w*3.2}" stroke-linecap="round"/>`).join('')+`</g>`;
+  body+=S.map(s=>`<path d="${s.d}" fill="none" stroke="url(#${s.id})" stroke-width="${s.w}" stroke-linecap="round"/>`).join('');
+  body+=`<g filter="url(#hot)"><path d="${core.d}" fill="none" stroke="url(#${core.id})" stroke-width="2.6" stroke-linecap="round"/></g><path d="${core.d}" fill="none" stroke="url(#${core.id})" stroke-width="1.1" stroke-linecap="round"/>`;
+  [.3,.5,.7].forEach(u=>{const p=pts[Math.round(N*u)],R=8*Math.max(.55,sc),w=1.1*Math.max(.6,sc);body+=`<circle cx="${p[0]}" cy="${p[1]}" r="12" fill="url(#flw0)"/><path d="M ${p[0]} ${p[1]-R} L ${p[0]+w} ${p[1]-w} L ${p[0]+R} ${p[1]} L ${p[0]+w} ${p[1]+w} L ${p[0]} ${p[1]+R} L ${p[0]-w} ${p[1]+w} L ${p[0]-R} ${p[1]} L ${p[0]-w} ${p[1]-w} Z" fill="#fff"/>`;});
+  if(spk!==false)[[.12,12,1],[.22,-15,.9],[.34,17,1.1],[.44,-18,.9],[.56,19,1],[.66,-16,1.1],[.77,15,.9],[.88,-14,1]].forEach(([u,d,r])=>{const i=Math.round(N*u),x=pts[i][0]+nor[i][0]*d,y=pts[i][1]+nor[i][1]*d;body+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r*2.6}" fill="url(#flw0)" opacity=".6"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r*.8}" fill="#fff"/>`;});
+  return defs+'</defs>'+body;};
+ const lin=(x0,y0,x1,y1)=>u=>[x0+(x1-x0)*u,y0+(y1-y0)*u];
+ // ribbon between the two people: one long natural S through the open channel
+ const loc=[...document.querySelector('.p').querySelectorAll('.field')].pop().getBoundingClientRect(),r2=document.querySelector('.p2').getBoundingClientRect();
+ const yE=loc.top-bb.top+2,yS=r2.top-bb.top+14,yM=(yS+yE)/2;
+ const g2=r2.top-bb.top-18;const W=[[24,g2+46],[44,g2+34],[70,g2+20],[112,g2+8],[165,g2-8],[225,g2-18],[288,g2-28],[326,g2-38],[352,g2-52],[366,g2-72],[372,g2-94]];
+ const cr=(p0,p1,p2,p3,t)=>{const t2=t*t,t3=t2*t;return [0.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),0.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)];};
+ const raw=[];for(let i=0;i<W.length-1;i++){const p0=W[Math.max(0,i-1)],p1=W[i],p2=W[i+1],p3=W[Math.min(W.length-1,i+2)];for(let j=0;j<30;j++)raw.push(cr(p0,p1,p2,p3,j/30));}raw.push(W[W.length-1]);
+ const cum=[0];for(let i=1;i<raw.length;i++)cum.push(cum[i-1]+Math.hypot(raw[i][0]-raw[i-1][0],raw[i][1]-raw[i-1][1]));
+ const tot=cum[cum.length-1];
+ const rib=u=>{const d=tot*u;let k=1;while(k<cum.length-1&&cum[k]<d)k++;const f=(d-cum[k-1])/((cum[k]-cum[k-1])||1);return [raw[k-1][0]+(raw[k][0]-raw[k-1][0])*f,raw[k-1][1]+(raw[k][1]-raw[k-1][1])*f];};
+ let el='<g id="enr">'+energy(rib)+'</g>';
+ // frame around the whole purchase section: four separate lines in the same style
+ const q=document.querySelector('.pass .q').getBoundingClientRect(),nv=document.querySelector('.never2').getBoundingClientRect();
+ const y1=q.top-bb.top-28,y2=nv.bottom-bb.top+28;
+ el+=energy(lin(34,y1,356,y1),.5,false,4)+energy(lin(34,y2,356,y2),.5,false,4);
+ el+=energy(lin(13,y1+20,13,y2-20),.4,false,4)+energy(lin(377,y1+20,377,y2-20),.4,false,4);
+ document.body.insertAdjacentHTML('afterbegin',`<svg style="position:absolute;left:0;top:0;z-index:1;pointer-events:none" width="390" height="${H}" viewBox="0 0 390 ${H}"><defs><filter id="au" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="8"/></filter><filter id="hot" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.6"/></filter><filter id="hl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.6"/></filter><radialGradient id="fl"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" stop-color="#ffffff" stop-opacity=".45"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>${el}</svg>`);
+
+ (function(){
+  const g=document.getElementById('enr');if(!g)return;
+  const bb2=document.body.getBoundingClientRect();
+  const p1=document.querySelector('.p'),p2=document.querySelector('.p2');
+  const top=[...p1.querySelectorAll('.field')].pop().getBoundingClientRect().bottom-bb2.top;
+  const bot=p2.querySelector('h3').getBoundingClientRect().top-bb2.top;
+  const tx=195,ty=(top+bot)/2;
+  const b=g.getBBox();const cx=b.x+b.width/2,cy=b.y+b.height/2;
+  const sc=Math.min(0.9,(bot-top-34)/b.height,330/b.width);
+  g.setAttribute('transform','translate('+tx+' '+ty+') scale('+sc.toFixed(3)+') translate('+(-cx)+' '+(-cy)+')');
+ })();
+});});
+</script>
+</body></html>

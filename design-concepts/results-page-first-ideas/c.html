@@ -1,0 +1,151 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@font-face{font-family:'FrauncesK';font-weight:700;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-700-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:390px;background:#2a0510}
+body{width:390px;min-height:844px;padding:22px 20px 40px;color:#fff;font-family:'FrauncesK',Georgia,serif;font-weight:700;overflow-x:clip;
+ background:
+  radial-gradient(ellipse 520px 520px at 50% calc(100% - 120px),rgba(176,28,70,.75) 0,rgba(130,14,50,.38) 48%,rgba(130,14,50,0) 100%),
+  radial-gradient(ellipse 560px 460px at 55% 700px,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),
+  radial-gradient(ellipse 520px 300px at 18% 0%,rgba(255,255,255,.26) 0,rgba(255,255,255,.08) 55%,rgba(255,255,255,0) 100%),
+  radial-gradient(ellipse 620px 800px at 22% 85px,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%);background-color:#2a0510}
+.brand{font-size:24px;line-height:1.1}
+.hex{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;height:34px;font-size:14px;white-space:nowrap;color:#fff;
+ background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#914b64 82%,#eef1f5 92%,#fff 100%);
+ clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%);flex:1 1 0}
+.hex:before{content:"";position:absolute;inset:4px 8px;z-index:-1;background:linear-gradient(#3a0716,#1c030c);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%)}
+.hex.on:before{background:#fff}.hex.on{color:#2a0510}
+.tabs{display:flex;gap:4px;margin:14px -4px 0}.tabs .hex{font-size:11px;flex:1 1 auto;padding:0 2px}
+.who{font-size:30px;line-height:1.05;margin-top:22px}
+.sub{font-size:15px;margin-top:6px}
+.lab{font-size:13px;letter-spacing:.14em;margin:26px 0 10px}
+svg{display:block;overflow:visible}
+.legend{display:flex;gap:18px;margin-top:6px;font-size:15px;align-items:center}
+.legend i{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:-4px;margin-right:6px;text-align:center;font-style:normal;font-size:11px;line-height:18px}
+.l-a{background:#fff;color:#2a0510}.l-s{background:#3a0716;box-shadow:0 0 0 2px #fff;color:#fff}
+.rows{margin-top:6px}
+.rows div{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;font-size:17px;border-bottom:1px solid rgba(255,255,255,.22)}
+.rows b{font-size:22px}
+.asp{font-size:17px;line-height:1.35;margin-top:10px;display:flex;gap:10px}
+.asp i{font-style:normal;flex:0 0 78px;font-size:15px}
+.read{font-size:18px;line-height:1.5;margin-top:10px}
+.btnrow{display:flex;margin-top:18px}.btnrow .hex{flex:0 0 280px;height:46px;font-size:17px}.btnrow .hex:before{inset:6px 12px}
+.chips{display:flex;gap:4px;margin:12px -4px 0}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.th{padding:8px 6px 8px;text-align:center}
+.th svg{width:100%;height:auto;margin:0 auto}
+.th div{font-size:12px;margin-top:4px}
+.today{display:flex;justify-content:space-between;margin-top:6px}
+.today div{text-align:center;flex:1}.today b{display:block;font-size:34px;line-height:1}.today span{font-size:12px;letter-spacing:.12em}
+.note{font-size:13px;margin-top:22px;text-align:center}
+</style></head><body>
+<div id="root"></div>
+<script>
+const D=__DATA__;
+const A=D[0],S=D[1];
+const NS='http://www.w3.org/2000/svg';
+const q=new URLSearchParams(location.search).get('v')||'A1';
+const red=n=>{while(n>9)n=String(n).split('').reduce((a,b)=>a+ +b,0);return n};
+const rad=d=>d*Math.PI/180;
+const SIGN=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+const PL={sun:'☉',moon:'☽',mercury:'☿',venus:'♀',mars:'♂',jupiter:'♃',saturn:'♄',uranus:'♅',neptune:'♆',pluto:'♇'};
+const GF="font-family=\"DejaVu Sans,sans-serif\"";
+const defs=`<defs><linearGradient id="sl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#aeb7c0"/><stop offset=".5" stop-color="#fff"/><stop offset=".75" stop-color="#8f98a2"/><stop offset="1" stop-color="#fff"/></linearGradient><filter id="gl" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4"/></filter></defs>`;
+const P=(c,r,a)=>[c+r*Math.cos(rad(a)),c+r*Math.sin(rad(a))];
+function sector(cx,cy,r1,r2,a1,a2){const [x1,y1]=[cx+r2*Math.cos(rad(a1)),cy+r2*Math.sin(rad(a1))],[x2,y2]=[cx+r2*Math.cos(rad(a2)),cy+r2*Math.sin(rad(a2))],[x3,y3]=[cx+r1*Math.cos(rad(a2)),cy+r1*Math.sin(rad(a2))],[x4,y4]=[cx+r1*Math.cos(rad(a1)),cy+r1*Math.sin(rad(a1))];const lg=(a2-a1)>180?1:0;return `M${x1} ${y1}A${r2} ${r2} 0 ${lg} 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 ${lg} 0 ${x4} ${y4}Z`}
+const tabs=(on)=>`<div class="tabs">${['Astrology','Numerology','Human Design','Reading'].map((t,i)=>`<div class="hex${i===on?' on':''}">${t}</div>`).join('')}</div>`;
+// ---------- numerology time dial for two people ----------
+function bigDial(){const C=175;let o=defs;
+ const ring=(r)=>`<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="url(#sl)" stroke-width="1.4"/>`;
+ const rings=[{r:150,key:'py',lab:'YEAR'},{r:104,key:'pm',lab:'MONTH'},{r:60,key:'pd',lab:'DAY'}];
+ rings.forEach(R=>{o+=ring(R.r);for(let k=1;k<=9;k++){const [x,y]=P(C,R.r,-90+(k-1)*40);o+=`<circle cx="${x}" cy="${y}" r="4" fill="#d7dce2"/>`;}
+  const a=red(A.num[R.key]),s=red(S.num[R.key]);
+  const angA=-90+(a-1)*40,angS=-90+(s-1)*40;
+  let d=((angS-angA)%360+360)%360;let a1=angA;if(d>180){a1=angS;d=360-d}
+  if(a!==s){const [x1,y1]=P(C,R.r,a1),[x2,y2]=P(C,R.r,a1+d);o+=`<path d="M${x1} ${y1}A${R.r} ${R.r} 0 0 1 ${x2} ${y2}" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".85"/>`;}
+  [[A,a,true],[S,s,false]].forEach(([p,k,solid])=>{const [x,y]=P(C,R.r,-90+(k-1)*40);if(solid)o+=`<circle cx="${x}" cy="${y}" r="20" fill="#fff" opacity=".5" filter="url(#gl)"/>`;o+=`<circle cx="${x}" cy="${y}" r="15" fill="${solid?'#fff':'#3a0716'}" stroke="#fff" stroke-width="2.2"/><text x="${x}" y="${y+.5}" text-anchor="middle" dominant-baseline="central" font-size="17" fill="${solid?'#2a0510':'#fff'}" font-family="FrauncesK">${p.num[R.key]}</text>`;});
+  // the ring's name, set into the top of the ring
+  o+=`<rect x="${C-28}" y="${C-R.r-8}" width="56" height="16" fill="#8c1034" opacity="0"/><text x="${C}" y="${C-R.r+22}" text-anchor="middle" font-size="11" fill="#fff" letter-spacing="2" font-family="FrauncesK">${R.lab}</text>`;
+ });
+ // Essence sits on the year ring, in its own hexagon, so it is never separate from the year
+ [[A],[S]].forEach(([p])=>{const k=red(p.num.ess),[x,y]=P(C,150,-90+(k-1)*40);const hx=[0,1,2,3,4,5].map(i=>{const b=rad(i*60-30);return (x+13*Math.cos(b)).toFixed(1)+','+(y+13*Math.sin(b)).toFixed(1)}).join(' ');o+=`<polygon points="${hx}" fill="#3a0716" stroke="url(#sl)" stroke-width="1.8"/><text x="${x}" y="${y+.5}" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#fff" font-family="FrauncesK">${p.num.ess}</text>`});
+ o+=`<text x="${C}" y="${C-2}" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#fff" font-family="FrauncesK">17</text><text x="${C}" y="${C+16}" text-anchor="middle" font-size="10" fill="#fff" font-family="FrauncesK" letter-spacing="1.5">OCT</text>`;
+ return `<svg width="350" height="350" viewBox="0 0 350 350">${o}</svg>`}
+function lifeBars(){const MAX=90;
+ const per=p=>[[0,+p.num.per.period1.ageRange.split('–')[1],p.num.per.period1.value],[+p.num.per.period2.ageRange.split('–')[0],+p.num.per.period2.ageRange.split('–')[1],p.num.per.period2.value],[+p.num.per.period3.ageRange.split('–')[0],MAX,p.num.per.period3.value]];
+ const pin=p=>[1,2,3,4].map(n=>{const r=p.num.pin['pinnacle'+n].ageRange.split('–');return [r[0]==='birth'?0:+r[0],r[1]==='onward'?MAX:+r[1],p.num.pin['pinnacle'+n].value]});
+ const row=(p,segs,solid)=>`<div style="display:flex;align-items:center;gap:8px;margin-top:6px"><i style="flex:0 0 22px;height:22px;border-radius:50%;text-align:center;font-style:normal;font-size:12px;line-height:22px;${solid?'background:#fff;color:#2a0510':'background:#3a0716;box-shadow:0 0 0 2px #fff;color:#fff'}">${p.name[0]}</i><div style="flex:1;display:flex;gap:3px">${segs.map(([a,b,v])=>{const w=(Math.min(b,MAX)-a+1)/(MAX+1)*100,on=p.num.age>=a&&p.num.age<=b;return `<div style="flex:0 0 calc(${w}% - 3px);height:30px;display:flex;align-items:center;justify-content:center;font-size:17px;border-radius:2px;${on?'background:#fff;color:#2a0510':'background:rgba(255,255,255,.16)'}">${v}</div>`}).join('')}</div></div>`;
+ return `<div class="lab" style="margin:22px 0 0">PERIODS</div>${row(A,per(A),true)}${row(S,per(S),false)}<div class="lab" style="margin:18px 0 0">PINNACLES</div>${row(A,pin(A),true)}${row(S,pin(S),false)}`}
+// ---------- astrology bi-wheel ----------
+function aspects(){const T=[[0,'conjunction',6],[60,'sextile',4],[90,'square',6],[120,'trine',6],[180,'opposition',6]];const out=[];
+ const PERS=['sun','moon','mercury','venus','mars'];for(const ka of PERS)for(const kb of PERS){let d=Math.abs(A.pos[ka]-S.pos[kb])%360;if(d>180)d=360-d;for(const [ang,nm,orb] of T){const o=Math.abs(d-ang);if(o<=orb)out.push({ka,kb,nm,orb:o});}}
+ out.sort((a,b)=>a.orb-b.orb);return out}
+function biWheel(){const C=175;let o=defs;const rot=A.asc;const ang=l=>180+(l-rot);
+ const pt=(r,l)=>{const a=rad(ang(l));return [C+r*Math.cos(a),C-r*Math.sin(a)]};
+ o+=`<circle cx="${C}" cy="${C}" r="168" fill="none" stroke="url(#sl)" stroke-width="1.4"/><circle cx="${C}" cy="${C}" r="140" fill="none" stroke="url(#sl)" stroke-width="1.4"/>`;
+ for(let i=0;i<12;i++){const l0=i*30;const [x1,y1]=pt(168,l0),[x2,y2]=pt(140,l0);o+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#d7dce2" stroke-width="1"/>`;const [gx,gy]=pt(154,l0+15);o+=`<text x="${gx}" y="${gy}" text-anchor="middle" dominant-baseline="central" font-size="15" fill="#fff" ${GF}>${SIGN[i]}︎</text>`}
+ // Sam's ring (outer), Alex's ring (inner)
+ o+=`<circle cx="${C}" cy="${C}" r="108" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1"/><circle cx="${C}" cy="${C}" r="78" fill="none" stroke="url(#sl)" stroke-width="1.4"/>`;
+ const place=(p,r,solid)=>{Object.keys(PL).forEach(k=>{const [x,y]=pt(r,p.pos[k]);o+=`<circle cx="${x}" cy="${y}" r="10.5" fill="${solid?'#fff':'#3a0716'}" stroke="#fff" stroke-width="1.6"/><text x="${x}" y="${y+.5}" text-anchor="middle" dominant-baseline="central" font-size="13" fill="${solid?'#2a0510':'#fff'}" ${GF}>${PL[k]}︎</text>`})};
+ // aspect chords on the inner circle
+ aspects().slice(0,10).forEach((a,i)=>{const [x1,y1]=pt(76,A.pos[a.ka]),[x2,y2]=pt(76,S.pos[a.kb]);o+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="${i<4?2.4:1.2}" opacity="${i<4?.95:.5}" stroke-linecap="round"/>`});
+ place(S,124,false);place(A,92,true);
+ return `<svg width="350" height="350" viewBox="0 0 350 350">${o}</svg>`}
+// ---------- human design composite ----------
+const HD={Head:[[-20,-118],[20,-118],[0,-150]],Ajna:[[-20,-108],[20,-108],[0,-76]],Throat:[[-20,-56],[20,-56],[20,-18],[-20,-18]],G:[[0,-4],[26,22],[0,48],[-26,22]],Heart:[[48,10],[78,10],[63,36]],Spleen:[[-96,0],[-62,28],[-96,56]],Solar:[[96,56],[62,84],[96,112]],Sacral:[[-20,62],[20,62],[20,102],[-20,102]],Root:[[-20,120],[20,120],[20,160],[-20,160]]};
+const CEN={Head:[0,-130],Ajna:[0,-96],Throat:[0,-37],G:[0,22],Heart:[63,20],Spleen:[-86,28],Solar:[86,84],Sacral:[0,82],Root:[0,140]};
+const defA=['Throat','G','Sacral','Root'],defS=['Head','Ajna','Throat','Heart','Spleen'];
+function composite(){const Cx=175,Cy=200;let o=defs;const pts=n=>HD[n].map(p=>(Cx+p[0])+','+(Cy+p[1])).join(' ');
+ // channels
+ const ch=(a,b,w,op,dash)=>{const [x1,y1]=[Cx+CEN[a][0],Cy+CEN[a][1]],[x2,y2]=[Cx+CEN[b][0],Cy+CEN[b][1]];return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="${w}" opacity="${op}" ${dash?'stroke-dasharray="6 5"':''} stroke-linecap="round"/>`};
+ o+=ch('Head','Ajna',2,.9)+ch('Ajna','Throat',2,.9)+ch('Throat','G',2,.9)+ch('G','Sacral',2,.9)+ch('Sacral','Root',2,.9);
+ o+=`<line x1="${Cx+63}" y1="${Cy+20}" x2="${Cx}" y2="${Cy+22}" stroke="#fff" stroke-width="9" opacity=".5" filter="url(#gl)"/>`+ch('G','Heart',3.2,1);
+ o+=ch('Spleen','Throat',2,.9,true);
+ Object.keys(HD).forEach(n=>{const a=defA.includes(n),s=defS.includes(n);let fill='none',st='#d7dce2';
+  if(a&&s){fill='url(#both)'}else if(a)fill='#fff';else if(s)fill='#ffb3c8';else fill='#3a0716';
+  o+=`<polygon points="${pts(n)}" fill="${fill==='url(#both)'?'#fff':fill}" stroke="${a&&s?'#ffb3c8':st}" stroke-width="${a&&s?4:1.4}" stroke-linejoin="round"/>`;});
+ // label the completed channel
+ o+=`<text x="${Cx+120}" y="${Cy+4}" text-anchor="start" font-size="12" fill="#fff" font-family="FrauncesK">25 - 51</text>`;
+ return `<svg width="350" height="400" viewBox="0 0 350 400">${o}</svg>`}
+// ---------- mini charts for the thumbnail strip ----------
+function miniAstro(p){const C=50;let o='';const rot=p.asc;const pt=(r,l)=>{const a=rad(180+(l-rot));return [C+r*Math.cos(a),C-r*Math.sin(a)]};o+=`<circle cx="${C}" cy="${C}" r="46" fill="none" stroke="#d7dce2" stroke-width="1.5"/><circle cx="${C}" cy="${C}" r="33" fill="none" stroke="#d7dce2" stroke-width="1.5"/>`;for(let i=0;i<12;i++){const [x1,y1]=pt(46,i*30),[x2,y2]=pt(33,i*30);o+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#d7dce2" stroke-width="1"/>`}Object.keys(PL).forEach(k=>{const [x,y]=pt(24,p.pos[k]);o+=`<circle cx="${x}" cy="${y}" r="3.4" fill="#fff"/>`});return `<svg viewBox="0 0 100 100">${o}</svg>`}
+function miniDial(p){const C=50;let o='';[44,30,17].forEach((r,i)=>{o+=`<circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="#d7dce2" stroke-width="1.4"/>`;const k=red(p.num[['py','pm','pd'][i]]);const [x,y]=P(C,r,-90+(k-1)*40);o+=`<circle cx="${x}" cy="${y}" r="6" fill="#fff"/><text x="${x}" y="${y+.5}" text-anchor="middle" dominant-baseline="central" font-size="7.5" fill="#2a0510" font-family="FrauncesK">${p.num[['py','pm','pd'][i]]}</text>`});return `<svg viewBox="0 0 100 100">${o}</svg>`}
+function miniBody(p,def){let o='';const s=.3,Cx=50,Cy=52;Object.keys(HD).forEach(n=>{const pts=HD[n].map(a=>(Cx+a[0]*s)+','+(Cy+(a[1]+10)*s*1.0)).join(' ');o+=`<polygon points="${pts}" fill="${def.includes(n)?'#fff':'#3a0716'}" stroke="#d7dce2" stroke-width="1"/>`});return `<svg viewBox="0 0 100 100">${o}</svg>`}
+function build(){
+ const asp=aspects(),nm=k=>k[0].toUpperCase()+k.slice(1);
+ const SG=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+ let h='';
+ if(q==='A1'||q==='A2'){
+  h+=`<div class="brand">Know Your Energy</div>${tabs(1)}<div class="who">Alex &amp; Sam</div><div class="sub">Saturday, October 17: your cycles together</div>`;
+  if(q==='A1'){h+=`<div style="margin-top:10px">${bigDial()}</div><div class="legend"><span><i class="l-a">A</i>Alex</span><span><i class="l-s">S</i>Sam</span><span style="font-size:13px">hexagons: Essence</span></div>${lifeBars()}`;}
+  else{
+   h+=`<div class="lab" style="margin-top:34px">TODAY, SIDE BY SIDE</div><div class="rows">
+    <div><span>Year (Essence)</span><b>5 (11) &middot; 6 (4)</b></div><div><span>Month</span><b>6 &middot; 7</b></div><div><span>Day</span><b>5 &middot; 6</b></div></div>
+    <div class="lab">THE SIX CHARTS</div><div class="chips"><div class="hex">Astrology</div><div class="hex">Numerology</div><div class="hex">Human Design</div></div>
+    <div class="lab">THE READING</div><p class="read">Alex and Sam meet at a moment where one is deep in a year of change and the other in a year of responsibility. That difference shapes how each of you hears the other this month&hellip;</p><div class="btnrow"><div class="hex">Open the full reading</div></div>`;}
+ }
+ if(q==='B1'){
+  h+=`<div class="brand">Know Your Energy</div>${tabs(0)}<div class="who">Alex &amp; Sam</div><div class="sub">Astrology: the two charts on one wheel</div><div style="margin-top:14px">${biWheel()}</div><div class="legend"><span><i class="l-a">A</i>Alex (inner)</span><span><i class="l-s">S</i>Sam (outer)</span></div><div class="lab">WHERE YOUR CHARTS TOUCH</div>`;
+  asp.slice(0,4).forEach(a=>{h+=`<div class="asp"><i>${a.nm}</i><span>Alex's ${nm(a.ka)} and Sam's ${nm(a.kb)}</span></div>`});
+ }
+ if(q==='B2'){
+  h+=`<div class="brand">Know Your Energy</div>${tabs(2)}<div class="who">Alex &amp; Sam</div><div class="sub">Human Design: both bodygraphs together</div><div style="margin-top:6px">${composite()}</div><div class="legend" style="margin-top:-6px"><span><i class="l-a">&nbsp;</i>Alex</span><span><i style="background:#ffb3c8">&nbsp;</i>Sam</span><span><i style="background:#fff;box-shadow:0 0 0 3px #ffb3c8">&nbsp;</i>Both</span></div>
+   <div class="lab">WHAT YOU COMPLETE TOGETHER</div><div class="asp"><i>Channel</i><span>25 - 51 is only whole when the two of you are together</span></div><div class="asp"><i>Shared</i><span>Throat is defined in both of you</span></div>`;
+ }
+ if(q==='C'){
+  h+=`<div class="brand">Know Your Energy</div><div class="who">Alex &amp; Sam</div><div class="sub">Your reading</div>
+   <p class="read" style="margin-top:14px">Alex moves toward people through action and variety; Sam moves toward them through care and steadiness. Most of what the two of you notice in each other comes from that difference in pace&hellip;</p>
+   <p class="read" style="margin-top:12px">Where it helps: Alex brings movement into Sam's careful world, and Sam gives Alex a place to land. Where it strains&hellip;</p>
+   <div class="btnrow"><div class="hex">Read all of it</div></div>
+   <div class="lab">THE SIX CHARTS</div>
+   <div class="thumbs">
+    <div class="th">${miniAstro(A)}<div>Alex, Astrology</div></div><div class="th">${miniDial(A)}<div>Alex, Numerology</div></div><div class="th">${miniBody(A,defA)}<div>Alex, Human Design</div></div>
+    <div class="th">${miniAstro(S)}<div>Sam, Astrology</div></div><div class="th">${miniDial(S)}<div>Sam, Numerology</div></div><div class="th">${miniBody(S,defS)}<div>Sam, Human Design</div></div>
+   </div>
+   <div class="lab">RIGHT NOW</div><div class="today"><div><b>5</b><span>ALEX YEAR</span></div><div><b>6</b><span>ALEX MONTH</span></div><div><b>6</b><span>SAM YEAR</span></div><div><b>7</b><span>SAM MONTH</span></div></div><div class="btnrow"><div class="hex">Open the time dial</div></div>`;
+ }
+ h+=`<div class="note">Test people and sample wording. Design only.</div>`;
+ document.getElementById('root').innerHTML=h;
+}
+build();
+</script></body></html>

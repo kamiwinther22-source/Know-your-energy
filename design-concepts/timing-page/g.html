@@ -1,0 +1,75 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@font-face{font-family:'FrauncesK';font-weight:700;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-700-normal.woff2)}
+:root{--ink:#1a2236;--mut:#56607a;--bg:#f3f5fa;--a:#1b3d9c;--s:#e2492f}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:390px;background:var(--bg)}
+body{width:390px;min-height:844px;padding:20px 16px 28px;color:var(--ink);font-family:'FrauncesK',Georgia,serif;font-weight:700;background:var(--bg);overflow-x:clip}
+h1{font-size:22px;line-height:1.1}h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:16px 0 8px}
+.s{font-size:14px;color:var(--mut);margin-top:4px;line-height:1.35}
+.note{font-size:12px;color:var(--mut);margin-top:16px;text-align:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.col{border-radius:14px;padding:12px 12px 10px;color:#fff}
+.col.a{background:var(--a)}.col.s{background:var(--s)}
+.col h3{font-size:18px;margin-bottom:6px}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-top:1px solid rgba(255,255,255,.28);font-size:13.5px}
+.row b{font-size:26px;line-height:1}.row em{font-style:normal;opacity:.92}
+.row.new{background:rgba(255,255,255,.18);margin:0 -12px;padding:7px 12px}
+.badge{display:inline-block;font-size:10.5px;background:#fff;color:#1a2236;border-radius:8px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.datebar{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.datebar b{font-size:30px;line-height:1}.datebar span{font-size:13px;color:var(--mut)}
+.pill{background:#1a2236;color:#fff;border-radius:18px;padding:7px 14px;font-size:14px}
+.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 6px 20px rgba(40,55,100,.12);margin-top:12px}
+.big{display:flex;align-items:center;gap:14px;margin-top:10px}
+.big i{font-style:normal;width:64px;height:64px;border-radius:50%;color:#fff;text-align:center;line-height:64px;font-size:34px}
+.dots{display:flex;gap:7px;justify-content:center;margin-top:16px}.dots u{width:8px;height:8px;border-radius:50%;background:#c3c9d8}.dots u.on{background:#1a2236;width:22px;border-radius:5px}
+.prog{height:12px;border-radius:6px;background:#e3e7f1;margin-top:6px;overflow:hidden}.prog i{display:block;height:100%}
+.feed{display:flex;gap:12px;align-items:center;background:#fff;border-radius:16px;padding:12px;margin-top:9px;box-shadow:0 4px 14px rgba(40,55,100,.10)}
+.feed .n{flex:0 0 74px;text-align:center}.feed .n b{display:block;font-size:30px;line-height:1}.feed .n span{font-size:11.5px;color:var(--mut)}
+.feed .t{flex:1;font-size:15.5px;line-height:1.25}.feed .who{width:10px;align-self:stretch;border-radius:5px}
+svg text{font-family:'FrauncesK',Georgia,serif;font-weight:700}
+</style></head><body><div id="app"></div>
+<script>
+const D=__DATA__,A=D[0],S=D[1],V=new URLSearchParams(location.search).get('v')||'1a';
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const rng=r=>{const m=r.match(/(\d+|birth)\D+(\d+|onward)/);return [m[1]=='birth'?0:+m[1],m[2]=='onward'?99:+m[2]+1]};
+const col=(p)=>p===A?'a':'s';
+function column(p,sc,prev){const r=(lab,v,pv)=>`<div class="row ${pv!==undefined&&pv!==v?'new':''}"><em>${lab}${pv!==undefined&&pv!==v?'<span class="badge">changed</span>':''}</em><b>${v}</b></div>`;const pa=prev?prev:{};
+ return `<div class="col ${col(p)}"><h3>${p.name}</h3>${r('Year',sc.py,pa.py)}${r('Essence',sc.ess,pa.ess)}${r('Month',sc.pm,pa.pm)}${r('Day',sc.pd,pa.pd)}${r('Pinnacle',sc.pin[curIdx(p,sc.age)],prev?prev.pin[curIdx(p,prev.age)]:undefined)}${r('Period',sc.per[curPer(p,sc.age)],prev?prev.per[curPer(p,prev.age)]:undefined)}</div>`}
+const curIdx=(p,age)=>p.pin.findIndex(o=>{const[a,b]=rng(o.r);return age>=a&&age<b});
+const curPer=(p,age)=>p.per.findIndex(o=>{const[a,b]=rng(o.r);return age>=a&&age<b});
+function scrub(idx,date){
+ // timeline 2026-2036
+ const W=358,y0=2026,y1=2036,x=y=>(y-y0)/(y1-y0)*W;let s='';
+ s+=`<rect x="0" y="22" width="${W}" height="8" rx="4" fill="#d7ddea"/>`;
+ [[A,'#1b3d9c',6],[S,'#e2492f',16]].forEach(([p,c,dy])=>{ev(p).forEach(e=>{if(e.y>=y0&&e.y<=y1)s+=`<circle cx="${x(e.y+.4)}" cy="${26+dy-3}" r="5.5" fill="${c}"/>`})});
+ for(let y=2026;y<=2036;y+=2)s+=`<text x="${x(y)}" y="62" text-anchor="${y==2026?'start':y==2036?'end':'middle'}" font-size="12" fill="#56607a">${y}</text>`;
+ const hx=x(date);
+ s+=`<line x1="${hx}" y1="6" x2="${hx}" y2="50" stroke="#1a2236" stroke-width="3"/><circle cx="${hx}" cy="26" r="13" fill="#1a2236"/><circle cx="${hx}" cy="26" r="5" fill="#fff"/>`;
+ return `<svg width="358" height="70" viewBox="0 0 358 70">${s}</svg>`}
+function ev(p){const e=[];p.marks.filter(m=>m.age>1&&!/square|Nodal/.test(m.k)).forEach(m=>e.push({y:Math.round(p.born+m.age),k:m.k}));p.pin.forEach((o,i)=>{if(i)e.push({y:p.born+rng(o.r)[0],k:'New Pinnacle'})});p.per.forEach((o,i)=>{if(i)e.push({y:p.born+rng(o.r)[0],k:'New Period'})});return e}
+const app=document.getElementById('app');
+if(V=='1a'||V=='1b'){const i=V=='1a'?0:1;const dt=V=='1a'?[2026.79,'Oct 17, 2026','Today']:[2028.79,'Oct 17, 2028','2 years ahead'];
+ app.innerHTML=`<h1>Pick any date</h1><p class="s">Slide the dark dot along the line. Everything for both of you changes to that date. Dots on the line are turning points.</p>
+ <div class="datebar"><b>${dt[1]}</b><span class="pill">${dt[2]}</span></div>
+ <div class="two">${column(A,A.scr[i],V=='1b'?A.scr[0]:null)}${column(S,S.scr[i],V=='1b'?S.scr[0]:null)}</div>
+ <h2>Slide to change the date</h2><div>${scrub(i,dt[0])}</div>
+ <div style="display:flex;gap:16px;font-size:13px;color:#56607a;margin-top:4px"><span><b style="color:#1b3d9c">●</b> Alex's turning points</span><span><b style="color:#e2492f">●</b> Sam's</span></div>
+ <p class="note">Test people. Design only.${V=='1b'?' White rows changed since today.':''}</p>`}
+if(V.startsWith('2')){const pg=+V[1];const cards=[
+ ()=>`<h1>This year</h1><p class="s">The number for each of you, and the next three years.</p>${[A,S].map(p=>`<div class="card"><h3 style="color:var(--${p===A?'a':'s'});font-size:19px">${p.name}</h3><div class="big"><i style="background:var(--${p===A?'a':'s'})">${p.py}</i><div style="font-size:15px;line-height:1.3">this year<br><span style="color:var(--mut);font-size:13px">Essence ${p.ess}</span></div></div><div style="display:flex;gap:8px;margin-top:12px">${p.years.slice(9,12).map(y=>`<div style="flex:1;text-align:center;background:#eef1f8;border-radius:12px;padding:8px 0"><div style="font-size:12px;color:var(--mut)">${y.y}</div><div style="font-size:24px">${y.py}</div><div style="font-size:11px;color:var(--mut)">Essence ${y.ess}</div></div>`).join('')}</div></div>`).join('')}`,
+ ()=>`<h1>Where you are in life</h1><p class="s">How far through your current stretch, and what comes next.</p>${[A,S].map(p=>{const i=curIdx(p,p.age),[a,b]=rng(p.pin[i].r),pr=(p.age-a)/(b-a);return `<div class="card"><h3 style="color:var(--${p===A?'a':'s'});font-size:19px">${p.name}</h3><div style="font-size:15px;margin-top:8px">Pinnacle <b style="font-size:24px">${p.pin[i].v}</b> → next <b style="font-size:24px">${p.pin[i+1].v}</b></div><div class="prog"><i style="width:${Math.round(pr*100)}%;background:var(--${p===A?'a':'s'})"></i></div><div style="font-size:12.5px;color:var(--mut);margin-top:4px">${Math.round(b-p.age)} ${Math.round(b-p.age)==1?'year':'years'} until it changes (age ${b})</div>${(()=>{const j=curPer(p,p.age),[c,d]=rng(p.per[j].r);return `<div style="font-size:15px;margin-top:14px">Period <b style="font-size:24px">${p.per[j].v}</b>${p.per[j+1]?` → next <b style="font-size:24px">${p.per[j+1].v}</b>`:''}</div><div class="prog"><i style="width:${Math.round((p.age-c)/(d-c)*100)}%;background:var(--${p===A?'a':'s'})"></i></div><div style="font-size:12.5px;color:var(--mut);margin-top:4px">${d>=99?'final stretch':Math.round(d-p.age)+' years until it changes (age '+d+')'}</div>`})()}</div>`}).join('')}`,
+ ()=>`<h1>Big turning points</h1><p class="s">The next ones coming for each of you, nearest first.</p>${[A,S].map(p=>{const up=ev(p).filter(e=>e.y>=2026).sort((a,b)=>a.y-b.y).slice(0,3);return `<div class="card"><h3 style="color:var(--${p===A?'a':'s'});font-size:19px">${p.name}</h3>${up.map(e=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #e3e7f1;font-size:16px"><span>${e.k}</span><span style="font-size:22px">${e.y}</span></div>`).join('')}</div>`}).join('')}`];
+ app.innerHTML=cards[pg]()+`<div class="dots">${[0,1,2].map(i=>`<u class="${i===pg?'on':''}"></u>`).join('')}</div><p class="note">Swipe sideways for the next card. Test people.</p>`}
+if(V=='3'){const now=new Date(Date.UTC(2026,9,17));const dd=d=>Math.round((d-now)/86400000);let items=[];
+ const nov=new Date(Date.UTC(2026,10,1)),jan=new Date(Date.UTC(2027,0,1));
+ [A,S].forEach(p=>{items.push({d:dd(nov),w:p,t:`Month changes from ${p.calM[9].pm} to ${p.calM[10].pm}`});items.push({d:dd(jan),w:p,t:`New Year number: ${p.calM[0]?get(p,2027):''}`})});
+ function get(p,y){return p.years.find(o=>o.y===y).py}
+ const bd=(p,m,d)=>{let t=new Date(Date.UTC(2026,m,d));if(t<now)t=new Date(Date.UTC(2027,m,d));return t};
+ items.push({d:dd(bd(S,2,4)),w:S,t:`Birthday: Essence changes ${S.ess} → ${S.years.find(o=>o.y===2027).ess}`});
+ items.push({d:dd(bd(A,7,14)),w:A,t:`Birthday: Essence changes ${A.ess} → ${A.years.find(o=>o.y===2027).ess}`});
+ const up=[A,S].map(p=>ev(p).filter(e=>e.y>=2027).sort((a,b)=>a.y-b.y)[0]);
+ up.forEach((e,i)=>{const p=[A,S][i];items.push({d:Math.round((e.y-2026.79)*365),w:p,t:e.k+' ('+e.y+')',far:true})});
+ items=items.filter(o=>!/(\d+) → \1$/.test(o.t));items.sort((a,b)=>a.d-b.d);
+ app.innerHTML=`<h1>What changes next</h1><p class="s">Everything coming up for both of you, nearest first. The number is how many days away.</p>${items.map(o=>`<div class="feed"><div class="who" style="background:var(--${o.w===A?'a':'s'})"></div><div class="n"><b>${o.far?Math.round(o.d/365)+'y':o.d}</b><span>${o.far?'years away':'days away'}</span></div><div class="t"><span style="color:var(--${o.w===A?'a':'s'})">${o.w.name}</span><br>${o.t}</div></div>`).join('')}<p class="note">Test people. Design only.</p>`}
+</script></body></html>

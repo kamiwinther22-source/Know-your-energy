@@ -1,0 +1,74 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@font-face{font-family:'FrauncesK';font-weight:700;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-700-normal.woff2)}
+:root{--ink:#1a2236;--mut:#56607a;--bg:#f3f5fa}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:390px;background:var(--bg)}
+body{width:390px;padding:20px 16px 36px;color:var(--ink);font-family:'FrauncesK',Georgia,serif;font-weight:700;background:var(--bg);overflow-x:clip}
+h1{font-size:23px;line-height:1.1}h2{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:20px 0 8px}
+p.s{font-size:14px;color:var(--mut);margin-top:4px;line-height:1.35}
+.note{font-size:12.5px;color:var(--mut);margin-top:20px;text-align:center}
+.ret{display:flex;gap:10px;align-items:center;padding:6px 0;font-size:14.5px;line-height:1.2}
+.ret .g{flex:0 0 26px;height:26px;border-radius:50%;background:#e8702a;color:#fff;text-align:center;line-height:26px;font-size:14px}
+.ret .g.n{background:#f2a679;width:18px;height:18px;line-height:18px;font-size:10px;margin:0 4px}
+.ret .w{flex:1}.ret .y{flex:0 0 auto;text-align:right;color:var(--mut);font-size:13px}
+.ret.past{opacity:.45}.ret.next .y{color:#e8702a}
+.keyrow{display:flex;gap:4px;margin-top:10px}.keyrow i{flex:1;height:26px;border-radius:6px;color:#fff;font-style:normal;text-align:center;line-height:26px;font-size:15px}
+svg text{font-family:'FrauncesK',Georgia,serif;font-weight:700}
+</style></head><body><div id="app"></div>
+<script>
+const D=__DATA__,V=new URLSearchParams(location.search).get('v')||'1';
+const COL={1:'#d6453d',2:'#e98a2b',3:'#c2a100',4:'#4a9a3a',5:'#14a39a',6:'#2c7fd1',7:'#5b4fd1',8:'#a444b8',9:'#d4488a',11:'#6f7b8e',22:'#2b3347',33:'#7a5a3a'};
+const col=n=>COL[n]||'#6f7b8e';
+const SG=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+const MAX=92,NOWY=2026.79;
+const rng=r=>{const m=r.match(/(\d+|birth)\D+(\d+|onward)/);return [m[1]=='birth'?0:+m[1],m[2]=='onward'?MAX:+m[2]+1]};
+const pt=(r,a)=>[Math.cos(a)*r,Math.sin(a)*r];
+function arc(r0,r1,a0,a1){const [x0,y0]=pt(r1,a0),[x1,y1]=pt(r1,a1),[x2,y2]=pt(r0,a1),[x3,y3]=pt(r0,a0);return `M${x0},${y0}A${r1},${r1} 0 0 1 ${x1},${y1}L${x2},${y2}A${r0},${r0} 0 0 0 ${x3},${y3}Z`}
+const hex=(cx,cy,r,f)=>`<polygon points="${[0,1,2,3,4,5].map(i=>{const a=Math.PI/3*i;return (cx+Math.cos(a)*r).toFixed(1)+','+(cy+Math.sin(a)*r).toFixed(1)}).join(' ')}" fill="${f}"/>`;
+function mini(p){
+ const nowM=10,nowD=17;let s='';
+ const ring=(list,r0,r1,key,lab,nowI,fs)=>{const n=list.length,step=2*Math.PI/n;list.forEach((o,i)=>{const a0=-Math.PI/2+i*step+.012,a1=a0+step-.024;const now=i===nowI;
+   s+=`<path d="${arc(r0,r1,a0,a1)}" fill="${col(o[key])}" ${now?'stroke="#1a2236" stroke-width="3"':''}/>`;const [x,y]=pt((r0+r1)/2,(a0+a1)/2);
+   if(lab){s+=`<text x="${x}" y="${y-3}" text-anchor="middle" font-size="9.5" fill="#fff" opacity=".9">${o.m}</text><text x="${x}" y="${y+12}" text-anchor="middle" font-size="16" fill="#fff">${o[key]}</text>`}
+   else s+=`<text x="${x}" y="${y+4.5}" text-anchor="middle" font-size="${fs||12.5}" fill="#fff">${o[key]}</text>`;});};
+ ring(p.calD,118,152,'pd',false,nowD-1,13);
+ ring(p.calM,66,112,'pm',true,nowM-1);
+ [1,5,10,15,20,25,30].forEach(d=>{const a=-Math.PI/2+(d-.5)*2*Math.PI/31;const [x,y]=pt(163,a);s+=`<text x="${x}" y="${y+3.5}" text-anchor="middle" font-size="10" fill="#56607a">${d}</text>`});
+ s+=`<circle r="60" fill="#fff"/><text y="-24" text-anchor="middle" font-size="10" fill="#56607a" letter-spacing="1.2">THIS YEAR</text>`;
+ s+=`<rect x="-44" y="-16" width="46" height="46" rx="10" fill="${col(p.py)}"/><text x="-21" y="18" text-anchor="middle" font-size="30" fill="#fff">${p.py}</text>`;
+ s+=hex(26,7,24,col(p.ess)).replace('/>',' />')+`<text x="26" y="14" text-anchor="middle" font-size="19" fill="#fff">${p.ess}</text><text x="26" y="46" text-anchor="middle" font-size="9" fill="#56607a" letter-spacing="1">ESSENCE</text>`;
+ return `<svg width="358" height="358" viewBox="-179 -179 358 358">${s}</svg>`}
+function retList(p){
+ const ev=p.marks.filter(m=>m.age>1&&!/square/.test(m.k)).sort((a,b)=>a.age-b.age);
+ let nextDone=false;
+ return ev.map(m=>{const yr=Math.round(p.born+m.age);const past=m.age<p.age;let cls=past?'past':'';let tag=past?'passed':'in '+Math.max(1,Math.round(m.age-p.age))+' yrs';if(!past&&!nextDone&&!/Nodal/.test(m.k)){cls='next';nextDone=true}
+  const big=!/Nodal/.test(m.k),gl={Saturn:'♄',Jupiter:'♃',Uranus:'♅',Chiron:'⚷'}[m.k.split(' ')[0]];
+  return `<div class="ret ${cls}">${big?`<span class="g">${gl}︎</span>`:`<span class="g n">☊</span>`}<span class="w">${m.k}</span><span class="y">age ${Math.round(m.age)} · ${yr}<br>${tag}</span></div>`}).join('')}
+function grid(){
+ const y0=2022,y1=2037,W=358,x=y=>(y-y0)/(y1-y0)*W;let s='',yy=20;const rowH=22;
+ D.forEach(p=>{const birth=NOWY-p.age,A=a=>x(birth+a);
+  s+=`<text x="0" y="${yy+16}" font-size="19" fill="#1a2236">${p.name}</text>`;yy+=28;
+  const label=t=>{s+=`<text x="0" y="${yy+11}" font-size="12.5" fill="#56607a">${t}</text>`;yy+=17};
+  label('Year · Essence');
+  p.years.forEach(Y=>{if(Y.y<y0||Y.y>=y1)return;const cw=W/(y1-y0),cx=x(Y.y)+cw/2,hy=yy+rowH+1;
+   s+=`<rect x="${x(Y.y)+1}" y="${yy}" width="${cw-2}" height="${rowH-3}" rx="3" fill="${col(Y.py)}"/><text x="${cx}" y="${yy+15}" text-anchor="middle" font-size="14" fill="#fff">${Y.py}</text>`;
+   s+=`<polygon points="${cx-6},${hy} ${cx+6},${hy} ${cx+11},${hy+9} ${cx+6},${hy+18} ${cx-6},${hy+18} ${cx-11},${hy+9}" fill="${col(Y.ess)}"/><text x="${cx}" y="${hy+13}" text-anchor="middle" font-size="12" fill="#fff">${Y.ess}</text>`});yy+=rowH+24;
+  const band=(list,tc)=>{list.forEach(o=>{const a=A(o.a),b=A(o.b),l=Math.max(0,a),r=Math.min(W,b);if(r<=l)return;s+=`<rect x="${l+.5}" y="${yy}" width="${r-l-1}" height="${rowH-3}" rx="3" fill="${col(o.v)}"/>`;if(r-l>16)s+=`<text x="${(l+r)/2}" y="${yy+14}" text-anchor="middle" font-size="12.5" fill="#fff">${o.v}</text>`});yy+=rowH};
+  const pin=p.pin.map(o=>{const[a,b]=rng(o.r);return{a,b,v:o.v}});
+  label('Pinnacle');band(pin.map(o=>({a:o.a,b:o.b,v:o.v})));
+  label('Challenge');band(pin.map((o,i)=>({a:o.a,b:o.b,v:p.ch[i]})));
+  label('Period');band(p.per.map(o=>{const[a,b]=rng(o.r);return{a,b,v:o.v}}));
+  label('Returns and turning points');
+  p.marks.filter(m=>m.age>1&&!/square/.test(m.k)).forEach(m=>{const cx=A(m.age);if(cx<8||cx>W-8)return;const big=!/Nodal/.test(m.k),gl={Saturn:'♄',Jupiter:'♃',Uranus:'♅',Chiron:'⚷'}[m.k.split(' ')[0]];
+   s+=big?`<circle cx="${cx}" cy="${yy+10}" r="10" fill="#e8702a"/><text x="${cx}" y="${yy+15}" text-anchor="middle" font-size="13" fill="#fff">${gl}︎</text><text x="${cx}" y="${yy+31}" text-anchor="middle" font-size="10" fill="#56607a">${Math.round(birth+m.age)}</text>`:`<circle cx="${cx}" cy="${yy+10}" r="4" fill="#f2a679"/>`});yy+=46;});
+ for(let yr=2024;yr<=2036;yr+=2)s+=`<text x="${x(yr)}" y="${yy+12}" text-anchor="middle" font-size="12" fill="#56607a">${yr}</text>`;
+ const H=yy+20,nx=x(NOWY);
+ s=`<text x="${nx}" y="10" text-anchor="middle" font-size="12" fill="#1a2236">now</text><rect x="${nx-7}" y="14" width="14" height="${yy-14}" fill="#1a2236" opacity=".10" rx="7"/><line x1="${nx}" y1="14" x2="${nx}" y2="${yy}" stroke="#1a2236" stroke-width="2"/>`+s;
+ return `<svg width="358" height="${H}" viewBox="0 0 358 ${H}">${s}</svg>`}
+const app=document.getElementById('app');
+const key=`<div class="keyrow">${[1,2,3,4,5,6,7,8,9,11,22].map(n=>`<i style="background:${col(n)}">${n}</i>`).join('')}</div>`;
+if(V=='1')app.innerHTML=`<h1>This month, this year</h1><p class="s">Outer ring: each day of the month. Next ring: each month of the year. Centre: the Year and its Essence. Every number keeps its own colour everywhere. Dark outline is today.</p>${key}<h2>Alex</h2>${mini(D[0])}<h2>Sam</h2>${mini(D[1])}<p class="note">Test people. Design only.</p>`;
+if(V=='2')app.innerHTML=`<h1>The long grid</h1><p class="s">Years, Pinnacles, Challenges and Periods for both people on the same calendar. Orange circles are the returns, with the year each one lands.</p><div style="margin-top:10px">${grid()}</div><p class="note">Test people. Design only.</p>`;
+if(V=='3')app.innerHTML=`<h1>When the returns land</h1><p class="s">Every return and turning point, with the age and the year. Next one is marked in orange.</p>${D.map(p=>`<h2>${p.name}</h2>${retList(p)}`).join('')}<p class="note">Test people. Design only. Ages and years are approximate.</p>`;
+</script></body></html>

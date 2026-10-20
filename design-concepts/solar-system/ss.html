@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@font-face{font-family:'Fr';font-weight:400;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-400-normal.woff2)}
+@font-face{font-family:'Fr';font-weight:400;font-style:italic;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-400-italic.woff2)}
+@font-face{font-family:'Fr';font-weight:600;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-600-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:390px;background:#fff}
+body{width:390px;padding:28px 14px 30px;background:#fff;color:#17182b;font-family:'Fr',Georgia,serif;overflow-x:clip}
+.brand{text-align:center;font-size:11px;letter-spacing:.34em;color:#6b6d84;font-weight:600}
+h1{text-align:center;font-weight:400;font-style:italic;font-size:27px;margin-top:10px;line-height:1.15}
+.rule{width:44px;height:2px;background:#8c1034;margin:12px auto 0}
+.sub{text-align:center;font-size:14px;color:#6b6d84;font-style:italic;margin-top:6px}
+.blk{margin-top:34px}
+.cap{text-align:center;font-size:11px;letter-spacing:.28em;color:#6b6d84;font-weight:600;margin-top:4px}
+svg text{font-family:'Fr',Georgia,serif}
+.note{margin-top:24px;text-align:center;font-size:12px;color:#6b6d84;font-style:italic}
+</style></head><body><div id="a"></div><script>
+const S=__SS__;
+const COLS={mercury:['#ffffff','#b9bec9','#5b6272'],venus:['#fff4e6','#e6c9a8','#9a7a58'],earth:['#d8ecff','#3f86d9','#143a7a'],mars:['#ffd1bd','#c4543a','#6b1f10'],jupiter:['#fff1e2','#d9a679','#7b4f31'],saturn:['#fff7e8','#d8c39a','#8a7550'],uranus:['#e2fbfb','#6fc4c8','#2a6a70'],neptune:['#d9ddff','#4455c4','#171f6b']};
+const SZ={mercury:5,venus:7.5,earth:8,mars:6,jupiter:14,saturn:12,uranus:9,neptune:9};
+const NM={mercury:'Mercury',venus:'Venus',earth:'Earth',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune'};
+const sc=a=>26+30*Math.log(a/0.3);
+function map(m,earthText){
+ const precess=(2000-(parseInt(m.label.slice(-4))))*-0.01397; // degrees to add to longitudes (J2000 -> date)
+ let defs='<filter id="sh" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#2a2d55" flood-opacity=".3"/></filter>';
+ Object.entries(COLS).forEach(([k,c])=>defs+=`<radialGradient id="g${k}" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="${c[0]}"/><stop offset=".5" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></radialGradient>`);
+ defs+=`<radialGradient id="gsun" cx=".36" cy=".3" r=".9"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#e7eaf0"/><stop offset=".5" stop-color="#8b93a4"/><stop offset=".62" stop-color="#2d3140"/><stop offset=".8" stop-color="#b9c0cd"/><stop offset="1" stop-color="#5b6272"/></radialGradient><radialGradient id="glow"><stop offset="0" stop-color="#c8cff0" stop-opacity=".55"/><stop offset="1" stop-color="#c8cff0" stop-opacity="0"/></radialGradient>`;
+ let s='';
+ // orbits
+ Object.keys(COLS).forEach(k=>{const a=m.planets[k].a;s+=`<circle r="${sc(a)}" fill="none" stroke="#dfe1ec" stroke-width="1"/>`});
+ // aries direction
+ s+=`<line x1="0" y1="0" x2="176" y2="0" stroke="#e7d3d9" stroke-width="1" stroke-dasharray="2 4"/><text x="176" y="15" text-anchor="end" font-size="9.5" letter-spacing="1.4" fill="#a8909a">TOWARD ARIES</text>`;
+ s+=`<circle r="26" fill="url(#glow)"/><circle r="11" fill="url(#gsun)" filter="url(#sh)"/>`;
+ // planets
+ const items=Object.keys(COLS).map(k=>{const p=m.planets[k];const lon=(p.lon+precess)*Math.PI/180;const r=sc(p.r);return {k,x:Math.cos(lon)*r,y:-Math.sin(lon)*r}});
+ items.forEach(({k,x,y})=>{const r=SZ[k];
+  if(k==='saturn')s+=`<ellipse cx="${x}" cy="${y}" rx="${r*1.9}" ry="${r*.6}" fill="none" stroke="#cdb98d" stroke-width="2.4" transform="rotate(-18 ${x} ${y})" opacity=".9"/>`;
+  if(k==='earth')s+=`<circle cx="${x}" cy="${y}" r="${r+7}" fill="none" stroke="#8c1034" stroke-width="1.6"/>`;
+  s+=`<circle cx="${x}" cy="${y}" r="${r}" fill="url(#g${k})" filter="url(#sh)"/>`;
+  if(k==='saturn')s+=`<path d="M${x-r*1.9*Math.cos(-.314)},${y-r*1.9*Math.sin(-.314)} " fill="none"/>`;
+  const dx=x,dy=y,L=Math.hypot(dx,dy)||1;const dirn=(k==='uranus'||k==='neptune'||k==='saturn')?-1:1;const off=(k==='earth')?(r+20):(r+13);const lx=x+dirn*dx/L*off,ly=y+dirn*dy/L*off;
+  s+=`<text x="${lx}" y="${ly+3.5}" text-anchor="middle" font-size="${k==='earth'?12:10.5}" font-weight="${k==='earth'?600:400}" fill="${k==='earth'?'#8c1034':'#4a4c66'}" stroke="#fff" stroke-width="3" paint-order="stroke">${k==='earth'?'EARTH · YOU':NM[k].toUpperCase()}</text>`});
+ return `<svg width="362" height="362" viewBox="-181 -181 362 362" style="display:block;margin:12px auto 0"><defs>${defs}</defs>${s}</svg>`}
+document.getElementById('a').innerHTML=`<div class="brand">KNOW YOUR ENERGY</div><h1>Where the planets really were</h1><div class="rule"></div>
+<div class="blk"><div class="cap">THE MOMENT YOU WERE BORN</div><div class="sub">${S.birth.label}</div>${map(S.birth)}</div>
+<div class="blk"><div class="cap">TODAY</div><div class="sub">${S.today.label}</div>${map(S.today)}</div>
+<div class="note">The solar system from above. Orbits are drawn on a compressed scale so the inner planets fit on the page.</div>`;
+</script></body></html>

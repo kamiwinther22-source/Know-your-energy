@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@font-face{font-family:'FrauncesK';font-weight:700;src:url(../fonts/node_modules/@fontsource/fraunces/files/fraunces-latin-700-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:390px;background:#fff}
+body{width:390px;padding:22px 14px 26px;background:#fff;color:#1c1f3a;font-family:'FrauncesK',Georgia,serif;font-weight:700;overflow-x:clip}
+h1{font-family:Georgia,serif;font-weight:400;color:#1c2ca9;font-size:30px;text-align:center}
+.sub{text-align:center;font-size:15px;color:#5a5f80;margin-top:6px;line-height:1.3}
+.card{background:#f6f1e0;border:1px solid #1c2ca9;border-radius:12px;margin-top:16px;padding:10px 0 8px}
+svg text{font-family:'FrauncesK',Georgia,serif;font-weight:700}
+</style></head><body><div id="a"></div><script>
+const D=__DATA__;
+const COL={1:'#c9483d',2:'#d9822b',3:'#b99a12',4:'#4a9040',5:'#17958c',6:'#2f78c4',7:'#5a4fc4',8:'#9b46ae',9:'#cc4584',11:'#6f7b8e',22:'#2b3347',33:'#7a5a3a'};
+const col=n=>COL[n]||'#6f7b8e';
+const tint=(hex,a)=>{const n=parseInt(hex.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;const m=v=>Math.round(v*a+246*(1-a));return `rgb(${m(r)},${m(g)},${m(b)})`};
+const rng=r=>{const m=r.match(/(\d+|birth)\D+(\d+|onward)/);return [m[1]=='birth'?0:+m[1],m[2]=='onward'?99:+m[2]+1]};
+const Y0=2022,Y1=2037,W=362,x0=0,cw=W/(Y1-Y0),X=y=>(y-Y0)*cw;
+const NOW=2026.79,INK='#1c1f3a';
+let s='',yy=26;
+// top axis
+for(let y=Y0+1;y<Y1;y+=2)s+=`<text x="${X(y)+cw/2}" y="14" text-anchor="middle" font-size="11.5" fill="#5a5f80">${y}</text>`;
+const RH=24;
+D.forEach((p,pi)=>{const bir=NOW-p.age,acc=pi?'#cf3b24':'#1b3d9c';
+ s+=`<rect x="0" y="${yy}" width="${W}" height="4" rx="2" fill="${acc}"/><text x="2" y="${yy+24}" font-size="19" fill="${acc}">${p.name.toUpperCase()}</text>`;yy+=30;
+ const lab=(t)=>{s+=`<text x="2" y="${yy+9}" font-size="10" fill="#5a5f80" letter-spacing=".8">${t}</text>`;yy+=12};
+ const cell=(x,w,y,h,n,cur,past,round=4)=>`<rect x="${x+1}" y="${y}" width="${w-2}" height="${h}" rx="${round}" fill="${cur?col(n):tint(col(n),.34)}" opacity="${past?.55:1}"/><text x="${x+w/2}" y="${y+h/2+5}" text-anchor="middle" font-size="${h>22?15:14}" fill="${cur?'#fff':INK}" opacity="${past?.6:1}">${n}</text>`;
+ lab('YEAR');
+ p.years.forEach(Y=>{if(Y.y<Y0||Y.y>=Y1)return;const cur=Y.y===2026;s+=cell(X(Y.y),cw,yy,RH,Y.py,cur,Y.y<2026)});yy+=RH+6;
+ lab('ESSENCE');
+ p.years.forEach(Y=>{if(Y.y<Y0||Y.y>=Y1)return;const cur=Y.y===2026,cx=X(Y.y)+cw/2,past=Y.y<2026;
+  s+=`<polygon points="${cx-6.5},${yy} ${cx+6.5},${yy} ${cx+11.5},${yy+RH/2} ${cx+6.5},${yy+RH} ${cx-6.5},${yy+RH} ${cx-11.5},${yy+RH/2}" fill="${cur?col(Y.ess):tint(col(Y.ess),.34)}" opacity="${past?.55:1}"/><text x="${cx}" y="${yy+RH/2+5}" text-anchor="middle" font-size="13.5" fill="${cur?'#fff':INK}" opacity="${past?.6:1}">${Y.ess}</text>`});yy+=RH+6;
+ const pin=p.pin.map(o=>{const[a,b]=rng(o.r);return{a,b,v:o.v}});
+ const bars=(list,h,solid)=>{list.forEach(o=>{const a=Math.max(Y0,bir+o.a),b=Math.min(Y1,bir+o.b);if(b<=a)return;const cur=bir+o.a<=NOW&&bir+o.b>NOW;const xa=X(a),xb=X(b);
+   s+=`<rect x="${xa+1}" y="${yy}" width="${xb-xa-2}" height="${h}" rx="6" fill="${cur?col(o.v):tint(col(o.v),.34)}" opacity="${b<NOW?.55:1}"/>`;
+   if(xb-xa>20){const tx=Math.max(xa+14,Math.min((xa+xb)/2,xb-14));s+=`<text x="${(cur&&xa<X(NOW)&&xb>X(NOW))?(X(NOW)+xb)/2:(xa+xb)/2}" y="${yy+h/2+5.5}" text-anchor="middle" font-size="15" fill="${cur?'#fff':INK}" opacity="${b<NOW?.6:1}">${o.v}</text>`}});yy+=h+6};
+ lab('PINNACLE');bars(pin,RH);
+ lab('CHALLENGE');bars(pin.map((o,i)=>({a:o.a,b:o.b,v:p.ch[i]})),RH);
+ lab('PERIOD');bars(p.per.map(o=>{const[a,b]=rng(o.r);return{a,b,v:o.v}}),RH);
+ lab('RETURNS');
+ const big=p.marks.filter(m=>m.age>1&&!/square|Nodal/.test(m.k)&&bir+m.age>=Y0&&bir+m.age<Y1).sort((a,b)=>a.age-b.age);
+ const nm={'Saturn return':'Saturn return','Saturn opposition':'Saturn opp.','Uranus opposition':'Uranus opp.','Jupiter return':'Jupiter return','Chiron return':'Chiron return'};
+ const taken=[[],[],[]];big.forEach((m,i)=>{const yr=bir+m.age,cx=X(yr);const t=nm[m.k]||m.k;const w=t.length*6.6+14,x=Math.min(W-w,Math.max(0,cx-w/2));let lv=0;while(lv<2&&taken[lv].some(([a,b])=>x<b+4&&x+w>a-4))lv++;taken[lv].push([x,x+w]);
+  const past=yr<NOW;s+=`<line x1="${cx}" y1="${yy}" x2="${cx}" y2="${yy+6+lv*24}" stroke="#8c1034" stroke-width="2" opacity="${past?.45:1}"/><rect x="${x}" y="${yy+6+lv*24}" width="${w}" height="20" rx="10" fill="#8c1034" opacity="${past?.45:1}"/><text x="${x+w/2}" y="${yy+20+lv*24}" text-anchor="middle" font-size="11.5" fill="#fff">${t}</text>`});
+ yy+=80+6;
+});
+const H=yy+4,nx=X(NOW);
+s=`<rect x="${nx-8}" y="20" width="16" height="${H-24}" rx="8" fill="#1c2ca9" opacity=".08"/><line x1="${nx}" y1="22" x2="${nx}" y2="${H-6}" stroke="#1c2ca9" stroke-width="2.5"/>`+s+`<rect x="${nx-22}" y="${H-20}" width="44" height="22" rx="11" fill="#1c2ca9"/><text x="${nx}" y="${H-5}" text-anchor="middle" font-size="12.5" fill="#fff">NOW</text>`;
+document.getElementById('a').innerHTML=`<h1>Your story</h1><div class="sub">Left to right, from the past into what's coming. Today is the solid colour.</div><div class="card"><svg width="${W}" height="${H+6}" viewBox="0 0 ${W} ${H+6}">${s}</svg></div>`;
+</script></body></html>

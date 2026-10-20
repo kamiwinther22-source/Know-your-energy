@@ -1,0 +1,188 @@
+<title>Know Your Energy Prototype</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&display=swap">
+<style>
+/* Layout concept: the results page is the base. Charts sit in their real positions (three across the top, reading in the middle, three along the bottom for two people). Clear entry panels move over the middle, one question at a time; Calculate fills the charts; any panel opens full page. */
+:root{--bg:#14122a;--card:#1d1a3a;--s1:#272350;--s2:#322c63;--lit:#cdbdff;--lit2:#ffffff;--ink:#ffffff;
+--btnf:linear-gradient(#fff,#b8c0c9 30%,#e6eaef 60%,#fff);--btni:#120d26;--btnt:#ffffff;--field:#0d0a1c;--line:#cfc6ee;--ctl:#0b0a14;--ctlt:#ffffff}
+html,body{height:100%}
+body{margin:0;background:#0b0a12;display:flex;justify-content:center;font-family:'Fraunces',Georgia,serif;font-weight:700}
+#app{position:relative;width:100%;max-width:430px;height:100%;background:var(--bg);color:var(--ink);overflow:hidden;display:flex;flex-direction:column;transition:background .3s}
+#app[data-g=garnet]{--bg:#5a0c26;--card:#6d1331;--s1:#7e1b3d;--s2:#912549;--lit:#ffd3e0;--lit2:#fff;--ink:#fff;--field:#3a0618;--line:#ffd3e0}
+#app[data-g=ivory]{--bg:#f3efe6;--card:#e8e2d3;--s1:#dcd4c0;--s2:#cdc3aa;--lit:#5b2fd0;--lit2:#1b1630;--ink:#1b1630;--btnf:linear-gradient(#5a5470,#2a2540 50%,#5a5470);--btni:#1b1630;--btnt:#fff;--field:#ffffff;--line:#1b1630}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+.ctl{flex:0 0 38px;display:flex;align-items:center;gap:6px;padding:0 max(10px,env(safe-area-inset-left,0px));background:var(--ctl);color:var(--ctlt);font-size:12px;position:relative;z-index:30}
+.ctl b{font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-right:4px}
+.ctl button{border:1px solid #fff;background:transparent;color:#fff;border-radius:14px;height:24px;padding:0 9px;font-size:12px;cursor:pointer}
+.ctl button[aria-pressed=true]{background:#fff;color:#0b0a14}
+.ctl .sp{flex:1}
+.hdr{flex:0 0 auto;font-size:24px;line-height:1.1;padding:12px max(16px,env(safe-area-inset-left,0px)) 8px}
+#stage{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:0 max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;min-height:0}
+.botwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.7,.2,1)}
+.rel .botwrap{grid-template-rows:1fr}
+.botwrap>.row{overflow:hidden}
+.card{background:var(--card);border:0;border-radius:8px;padding:8px 8px 10px;display:flex;flex-direction:column;gap:5px;text-align:left;cursor:default;min-width:0}
+.card.live{cursor:pointer}
+.card svg{width:100%;height:auto;aspect-ratio:1;display:block}
+.cl{font-size:13px;line-height:1.1}
+.cv{font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#read{flex:1;min-height:0;position:relative;background:var(--card);border-radius:8px;overflow:hidden}
+.pn{position:absolute;inset:0;padding:16px 18px;display:flex;flex-direction:column;justify-content:center;gap:12px;overflow-y:auto;opacity:0;transform:translateY(44px);transition:opacity .3s ease,transform .38s cubic-bezier(.2,.7,.2,1)}
+.pn.in{opacity:1;transform:none}
+.pn.out{opacity:0;transform:translateY(-38px);transition-duration:.22s}
+.big{font-size:30px;line-height:1.08}
+.p{font-size:19px;line-height:1.3}
+.lab{font-size:13px}
+.fg{display:grid;gap:4px;min-width:0}
+.fld{width:100%;height:40px;border:0;border-bottom:2px solid var(--line);background:var(--field);color:var(--ink);font:inherit;font-size:16px;padding:0 12px;border-radius:2px;outline:none}
+.fld::placeholder{color:var(--ink);opacity:.7}
+.fld:focus{box-shadow:0 0 0 2px var(--lit)}
+.fld.bad{box-shadow:0 0 0 2px var(--lit)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{position:relative;width:210px;height:48px;border:0;background:none;padding:0;margin:4px auto 0;cursor:pointer;filter:drop-shadow(0 3px 0 rgba(0,0,0,.35));flex:0 0 auto}
+.btn i,.btn span{position:absolute;display:flex;align-items:center;justify-content:center;clip-path:polygon(9% 0,91% 0,100% 50%,91% 100%,9% 100%,0 50%)}
+.btn i{inset:0;background:var(--btnf)}
+.btn span{inset:4px 8px;background:var(--btni);color:var(--btnt);font-size:18px}
+.btn.w{width:100%}
+.lnk{background:none;border:0;text-decoration:underline;font-size:15px;cursor:pointer;align-self:center;padding:4px}
+.hg{position:absolute;left:50%;top:50%;width:64px;margin:-48px 0 0 -32px;text-align:center;font-size:14px}
+.hg svg{width:64px;height:84px;display:block}
+.hg .t,.hg .b{transform-box:fill-box;animation:none}
+.hg .t{transform-origin:50% 100%;animation:drain 2.4s linear infinite}
+.hg .b{transform-origin:50% 100%;animation:fillup 2.4s linear infinite}
+@keyframes drain{from{transform:scaleY(1)}to{transform:scaleY(.05)}}
+@keyframes fillup{from{transform:scaleY(.05)}to{transform:scaleY(1)}}
+.lit{opacity:0;transition:opacity .5s ease var(--d,0ms)}
+.on .lit{opacity:1}
+.rd{position:absolute;inset:0;padding:14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity .4s}
+.rd.in{opacity:1}
+.rlab{font-size:13px}
+.rtxt{font-size:16px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:9;-webkit-box-orient:vertical;overflow:hidden}
+.rmore{margin-top:auto;font-size:14px;text-decoration:underline}
+.full{position:absolute;z-index:20;background:var(--bg);color:var(--ink);overflow:hidden;border-radius:8px;transition:top .38s cubic-bezier(.2,.7,.2,1),left .38s cubic-bezier(.2,.7,.2,1),width .38s cubic-bezier(.2,.7,.2,1),height .38s cubic-bezier(.2,.7,.2,1),border-radius .38s}
+.full.open{border-radius:0}
+.fin{position:absolute;inset:0;overflow-y:auto;padding:14px max(16px,env(safe-area-inset-left,0px)) 30px;opacity:0;transition:opacity .25s .18s}
+.open .fin{opacity:1}
+.back{background:none;border:0;font-size:18px;padding:4px 0;cursor:pointer}
+.fin h2{font-size:30px;margin:6px 0 10px;line-height:1.05}
+.fin svg.big{width:100%;max-width:330px;display:block;margin:0 auto 10px;aspect-ratio:1;height:auto}
+.rows{display:grid;gap:0}
+.rows div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:16px;border-bottom:0}
+.rows div:nth-child(odd){background:var(--card);margin:0 -8px;padding-left:8px;padding-right:8px}
+.note{font-size:14px;line-height:1.3;margin:10px 0}
+.abc{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin:10px 0}
+.abc div{background:var(--card);border-radius:4px;padding:4px 0;text-align:center;font-size:12px;line-height:1.25}
+.abc div b{display:block;font-size:14px}
+.abc div.hit{background:var(--lit);color:var(--bg)}
+.sk{height:11px;border-radius:6px;background:var(--s2);margin:12px 0}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
+</style>
+<div id="app" data-g="ink">
+<div class="ctl"><b>Prototype</b>
+<button data-g="ink" aria-pressed="true">Ink</button><button data-g="garnet" aria-pressed="false">Garnet</button><button data-g="ivory" aria-pressed="false">Ivory</button><span class="sp"></span><button id="restart">Restart</button></div>
+<div class="hdr">Know Your Energy</div>
+<div id="stage"></div>
+</div>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg',D=Math.PI/180;
+const SIGNS=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+const GLY=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+const CUT=[[1,20,'Aquarius'],[2,19,'Pisces'],[3,21,'Aries'],[4,20,'Taurus'],[5,21,'Gemini'],[6,21,'Cancer'],[7,23,'Leo'],[8,23,'Virgo'],[9,23,'Libra'],[10,23,'Scorpio'],[11,22,'Sagittarius'],[12,22,'Capricorn']];
+function sunSign(m,d){let s='Capricorn';for(const[c,e,n]of CUT)if(m>c||(m===c&&d>=e))s=n;return s}
+function ds(n){return String(n).split('').reduce((a,b)=>a+ +b,0)}
+function red(n,keep){while(n>9&&!(keep&&(n===11||n===22||n===33)))n=ds(n);return n}
+const LETTERS={1:'AJS',2:'BKT',3:'CLU',4:'DMV',5:'ENW',6:'FOX',7:'GPY',8:'HQZ',9:'IR'};
+function compute(p){const m=p.dob.split('-');if(m.length<3)return null;const y=+m[0],mo=+m[1],d=+m[2];
+ const lp=red(red(mo,1)+red(d,1)+red(y,1),1),py=red(red(mo)+red(d)+red(new Date().getFullYear()));
+ return{sun:sunSign(mo,d),lp,py,mo,d,y,seed:(y*31+mo*17+d*7)%9973}}
+function rnd(seed){let s=seed||1;return()=>{s=(s*9301+49297)%233280;return s/233280}}
+function pt(cx,cy,r,a){return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+function sec(cx,cy,r1,r2,a1,a2){const[x1,y1]=pt(cx,cy,r2,a1),[x2,y2]=pt(cx,cy,r2,a2),[x3,y3]=pt(cx,cy,r1,a2),[x4,y4]=pt(cx,cy,r1,a1);const lg=(a2-a1)>Math.PI?1:0;
+ return`M${x1.toFixed(2)} ${y1.toFixed(2)}A${r2} ${r2} 0 ${lg} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}L${x3.toFixed(2)} ${y3.toFixed(2)}A${r1} ${r1} 0 ${lg} 0 ${x4.toFixed(2)} ${y4.toFixed(2)}Z`}
+function astroSVG(c,big){let o='';for(let i=0;i<12;i++)o+=`<path d="${sec(50,50,31,47,(i*30-90)*D+.012,((i+1)*30-90)*D-.012)}" fill="${i%2?'var(--s2)':'var(--s1)'}"/>`;
+ o+='<circle cx="50" cy="50" r="28" fill="var(--s1)" opacity=".55"/>';
+ if(big)for(let i=0;i<12;i++){const[x,y]=pt(50,50,43,((i+.5)*30-90)*D);o+=`<text x="${x}" y="${y}" font-size="5" text-anchor="middle" dominant-baseline="central" fill="var(--ink)">${GLY[i]}︎</text>`}
+ if(c){const r=rnd(c.seed),idx=SIGNS.indexOf(c.sun),a0=(idx*30+(c.d%30)*0.9-90)*D,P=[[a0,3.3,'var(--lit2)']];
+  for(let i=0;i<8;i++)P.push([(r()*360-90)*D,2.1,'var(--lit)']);
+  let L='';for(let i=1;i<P.length-1;i+=2){const[x1,y1]=pt(50,50,29,P[i][0]),[x2,y2]=pt(50,50,29,P[i+1][0]);L+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--lit)" stroke-width=".5" opacity=".8"/>`}
+  o+=`<g class="lit" style="--d:700ms">${L}</g>`;
+  P.forEach((q,i)=>{const[x,y]=pt(50,50,big?35:39,q[0]);o+=`<circle class="lit" style="--d:${i*90}ms" cx="${x}" cy="${y}" r="${big?q[1]*1.1:q[1]}" fill="${q[2]}"/>`})}
+ return`<svg viewBox="0 0 100 100" class="${big?'big':''}" aria-hidden="true">${o}</svg>`}
+function numSVG(c,big){const B=[[41,48,3],[34,40,4],[27,33,1],[20,26,9],[13,19,12]];let o='';const r=c?rnd(c.seed+5):null;
+ B.forEach(([r1,r2,n],bi)=>{const hot=c?Math.floor(r()*n):-1;for(let i=0;i<n;i++){const a1=(i/n*360-90)*D+.015,a2=((i+1)/n*360-90)*D-.015;o+=`<path d="${sec(50,50,r1,r2,a1,a2)}" fill="${i%2?'var(--s2)':'var(--s1)'}"/>`;if(i===hot)o+=`<path class="lit" style="--d:${bi*140}ms" d="${sec(50,50,r1,r2,a1,a2)}" fill="var(--lit)"/>`}});
+ o+='<circle cx="50" cy="50" r="11" fill="var(--s1)"/>';
+ if(c){const a=(r()*360-90)*D,[x,y]=pt(50,50,50,a);o+=`<g class="lit" style="--d:800ms"><line x1="50" y1="50" x2="${x}" y2="${y}" stroke="var(--lit2)" stroke-width="1.1"/><circle cx="50" cy="50" r="9" fill="var(--lit2)"/><text x="50" y="50.5" font-size="11" text-anchor="middle" dominant-baseline="central" fill="var(--bg)">${c.lp}</text></g>`}
+ return`<svg viewBox="0 0 100 100" class="${big?'big':''}" aria-hidden="true">${o}</svg>`}
+const POLY=[[[-14,-118],[14,-118],[0,-98]],[[-14,-90],[14,-90],[0,-70]],[[-14,-60],[14,-60],[14,-40],[-14,-40]],[[0,-28],[16,-12],[0,4],[-16,-12]],[[22,-8],[40,-8],[31,8]],[[-44,-30],[-24,-6],[-44,14]],[[44,16],[24,40],[44,64]],[[-14,30],[14,30],[14,54],[-14,54]],[[-14,76],[14,76],[14,100],[-14,100]]];
+function hdSVG(c,big){let o='';const r=c?rnd(c.seed+11):null,lit=new Set();if(c)while(lit.size<10)lit.add(Math.floor(r()*64));
+ for(let i=0;i<64;i++){const d=sec(50,50,39,48,(i*360/64-90)*D+.012,((i+1)*360/64-90)*D-.012);o+=`<path d="${d}" fill="${i%2?'var(--s2)':'var(--s1)'}"/>`;if(lit.has(i))o+=`<path class="lit" style="--d:${(i%7)*90}ms" d="${d}" fill="var(--lit)"/>`}
+ const S=.29,def=c?[2,3,7,8]:[];
+ if(c)[[0,-40,0,-28],[0,4,0,30],[0,54,0,76]].forEach(l=>o+=`<line class="lit" style="--d:500ms" x1="${50+l[0]*S}" y1="${50+l[1]*S+3}" x2="${50+l[2]*S}" y2="${50+l[3]*S+3}" stroke="var(--lit)" stroke-width="1.4"/>`);
+ POLY.forEach((p,i)=>{const pts=p.map(a=>(50+a[0]*S).toFixed(1)+','+(50+a[1]*S+3).toFixed(1)).join(' ');o+=`<polygon points="${pts}" fill="var(--s2)"/>`;if(def.includes(i))o+=`<polygon class="lit" style="--d:${400+i*80}ms" points="${pts}" fill="var(--lit2)"/>`});
+ return`<svg viewBox="0 0 100 100" class="${big?'big':''}" aria-hidden="true">${o}</svg>`}
+const SYS=[{k:'astro',t:'Astrology',f:astroSVG},{k:'num',t:'Numerology',f:numSVG},{k:'hd',t:'Human Design',f:hdSVG}];
+let ST;
+function lines(c,k){if(!c)return['—','—'];
+ if(k==='astro')return[`Sun · ${c.sun}`,'Moon · —'];
+ if(k==='num')return[`Life Path · ${c.lp}`,`Year · ${c.py}`];
+ return['Type · —','Profile · —']}
+function cardHTML(pi,s){return`<button class="card" data-p="${pi}" data-k="${s.k}" disabled><div class="cl">${s.t}</div>${s.f(null,false)}<div class="cv">—</div><div class="cv">—</div></button>`}
+function init(){ST={mode:null,step:-1,p:[{name:'',dob:'',time:'',loc:''},{name:'',dob:'',time:'',loc:''}],c:[null,null],done:false,busy:false};
+ $('#stage').className='';
+ $('#stage').innerHTML=`<div class="row" id="top">${SYS.map(s=>cardHTML(0,s)).join('')}</div><div id="read"></div><div class="botwrap"><div class="row" id="bot">${SYS.map(s=>cardHTML(1,s)).join('')}</div></div>`;
+ $$('.full').forEach(e=>e.remove());
+ $$('.card').forEach(b=>b.addEventListener('click',()=>openFull(b)));
+ go('intro')}
+function steps(){return['intro','free','email','mode','p1'].concat(ST.mode==='rel'?['p2']:[])}
+function btn(txt,id,cls){return`<button class="btn ${cls||''}" id="${id}"><i></i><span>${txt}</span></button>`}
+function fields(i){return`<div class="fg"><div class="lab">Full name at birth</div><input class="fld" id="n${i}" autocomplete="off" placeholder="Full name at birth" value="${ST.p[i].name}"></div>
+<div class="two"><div class="fg"><div class="lab">Date of birth</div><input class="fld" id="d${i}" type="date" value="${ST.p[i].dob}"></div><div class="fg"><div class="lab">Time</div><input class="fld" id="t${i}" type="time" value="${ST.p[i].time}"></div></div>
+<div class="fg"><div class="lab">Location</div><input class="fld" id="l${i}" autocomplete="off" placeholder="City, country" value="${ST.p[i].loc}"></div>`}
+const SAMPLE=[{name:'Alex Morgan',dob:'1990-08-14',time:'09:30',loc:'Denver, USA'},{name:'Sam Rivera',dob:'1988-03-02',time:'17:10',loc:'Austin, USA'}];
+const PANELS={
+intro:()=>`<div class="big">Astrology. Numerology. Human Design.</div><div class="p">Full charts and one combined reading.</div>${btn('Continue','nx')}`,
+free:()=>`<div class="big">Your first reading is free.</div><div class="p">The whole reading, not a preview. No credit card. Your email is only your pass: never shared, and we will not write to you.</div>${btn('Continue','nx')}`,
+email:()=>`<div class="p">Your email tells us if you have had your free reading or hold a pass.</div><input class="fld" id="em" type="email" placeholder="Email" autocomplete="off">${btn('Continue','nx')}`,
+mode:()=>`<div class="p">Choose one for your free try.</div>${btn('Individual','m1','w')}${btn('Relational','m2','w')}`,
+p1:()=>`<div class="p">${ST.mode==='rel'?'Person 1':'Your details'}</div>${fields(0)}<button class="lnk" id="smp">Use sample person</button>${btn(ST.mode==='rel'?'Next':'Calculate','nx')}`,
+p2:()=>`<div class="p">Person 2</div>${fields(1)}<button class="lnk" id="smp">Use sample person</button>${btn('Calculate','nx')}`};
+function go(id){const rd=$('#read'),old=$('.pn',rd),mk=()=>{const d=document.createElement('div');d.className='pn';d.dataset.id=id;d.innerHTML=PANELS[id]();rd.appendChild(d);wire(d,id);requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add('in')))};
+ ST.busy=true;if(old){old.classList.remove('in');old.classList.add('out');setTimeout(()=>{old.remove();mk();ST.busy=false},230)}else{mk();ST.busy=false}}
+function save(i){ST.p[i]={name:$('#n'+i).value,dob:$('#d'+i).value,time:$('#t'+i).value,loc:$('#l'+i).value}}
+function wire(d,id){const nx=$('#nx',d);
+ if(id==='mode'){$('#m1',d).onclick=()=>{ST.mode='ind';go('p1')};$('#m2',d).onclick=()=>{ST.mode='rel';$('#stage').classList.add('rel');go('p1')};return}
+ const i=id==='p2'?1:0;
+ if(id==='p1'||id==='p2'){$('#smp',d).onclick=()=>{const s=SAMPLE[i];$('#n'+i).value=s.name;$('#d'+i).value=s.dob;$('#t'+i).value=s.time;$('#l'+i).value=s.loc};
+  nx.onclick=()=>{if(ST.busy)return;save(i);if(!ST.p[i].dob){$('#d'+i).classList.add('bad');return}
+   if(id==='p1'&&ST.mode==='rel'){go('p2')}else calculate()};return}
+ nx.onclick=()=>{if(ST.busy)return;if(id==='email'){const e=$('#em').value;if(e.indexOf('@')<1){$('#em').classList.add('bad');return}}go(steps()[steps().indexOf(id)+1])}}
+function setCard(pi,s,c){const card=$(`.card[data-p="${pi}"][data-k="${s.k}"]`),L=lines(c,s.k);card.innerHTML=`<div class="cl">${s.t}</div>${s.f(c,false)}<div class="cv">${L[0]}</div><div class="cv">${L[1]}</div>`;
+ card.disabled=false;card.classList.add('live')}
+function calculate(){const rd=$('#read'),old=$('.pn',rd);ST.busy=true;old.classList.remove('in');old.classList.add('out');
+ ST.c=[compute(ST.p[0]),ST.mode==='rel'?compute(ST.p[1]):null];
+ setTimeout(()=>{old.remove();rd.insertAdjacentHTML('beforeend',`<div class="hg" id="hg"><svg viewBox="0 0 64 84"><path d="M8 4h48M8 80h48M12 4c0 22 20 30 20 38 0 8-20 16-20 38M52 4c0 22-20 30-20 38 0 8 20 16 20 38" fill="none" stroke="var(--ink)" stroke-width="3"/><path class="t" d="M16 8h32c-2 14-12 22-16 28-4-6-14-14-16-28z" fill="var(--lit)"/><path class="b" d="M32 50c8 12 14 22 16 30H16c2-8 8-18 16-30z" fill="var(--lit)"/></svg>Writing</div>`);
+  [0,1].forEach(pi=>{if(!ST.c[pi])return;SYS.forEach((s,k)=>setTimeout(()=>{setCard(pi,s,ST.c[pi]);const card=$(`.card[data-p="${pi}"][data-k="${s.k}"]`);requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('on')))},450+k*380))});
+  setTimeout(showReading,3200);ST.busy=false},240)}
+function readText(){const a=ST.c[0],b=ST.c[1],nm=i=>ST.p[i].name.split(' ')[0]||'You';
+ if(b)return`${nm(0)} has the Sun in ${a.sun} and Life Path ${a.lp}. ${nm(1)} has the Sun in ${b.sun} and Life Path ${b.lp}. The written reading of how the two charts meet appears here, section by section, as it arrives.`;
+ return`The Sun is in ${a.sun}. Life Path ${a.lp}, Personal Year ${a.py}. The written reading appears here, section by section, as it arrives.`}
+function showReading(){const rd=$('#read');$('#hg')?.remove();rd.insertAdjacentHTML('beforeend',`<div class="rd" id="rd"><div class="rlab">Your reading</div><div class="rtxt">${readText()}</div><div class="sk" style="width:92%"></div><div class="sk" style="width:84%"></div><div class="sk" style="width:90%"></div><div class="rmore">Open full reading ›</div></div>`);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>$('#rd').classList.add('in')));$('#rd').onclick=()=>openFull($('#rd'),true);ST.done=true}
+function listFor(k,c,i){if(k==='astro')return[['Sun',c?c.sun:'—'],['Moon','—'],['Mercury','—'],['Venus','—'],['Mars','—'],['Ascendant','—']];
+ if(k==='num')return[['Life Path',c?c.lp:'—'],['Personal Year',c?c.py:'—'],['Essence cycle','—'],['Pinnacles','—'],['Periods','—']];
+ return[['Type','—'],['Profile','—'],['Authority','—'],['Defined centers','—'],['Incarnation Cross','—']]}
+function abcHTML(i){const cnt={};(ST.p[i].name||'').toUpperCase().replace(/[^A-Z]/g,'').split('').forEach(ch=>cnt[ch]=1);
+ return`<div class="abc">${[1,2,3,4,5,6,7,8,9].map(n=>`<div class="${LETTERS[n].split('').some(l=>cnt[l])?'hit':''}"><b>${n}</b>${LETTERS[n].split('').join('<br>')}</div>`).join('')}</div>`}
+function openFull(el,isRead){if(!ST.done&&isRead!==true)return;const app=$('#app'),ar=app.getBoundingClientRect(),r=el.getBoundingClientRect();
+ let h='';const pi=+(el.dataset.p||0),k=el.dataset.k,c=ST.c[pi],who=ST.mode==='rel'?(pi?'Person 2':'Person 1'):'';
+ if(isRead){h=`<button class="back" id="bk">‹ Back</button><h2>Your reading</h2><div class="note">${readText()}</div>${'<div class="sk" style="width:94%"></div><div class="sk" style="width:86%"></div><div class="sk" style="width:92%"></div><div class="sk" style="width:70%"></div><div style="height:18px"></div>'.repeat(4)}`}
+ else{const s=SYS.find(x=>x.k===k);h=`<button class="back" id="bk">‹ Back</button><h2>${s.t}${who?' · '+who:''}</h2>${s.f(c,true).replace('<svg','<svg').replace('class="big"','class="big on"')}${k==='num'?abcHTML(pi):''}<div class="rows">${listFor(k,c,pi).map(([a,b])=>`<div><span>${a}</span><span>${b}</span></div>`).join('')}</div><div class="note">Each row opens into its description in the real page. Only Sun, Life Path and Personal Year are calculated in this prototype.</div>`}
+ const f=document.createElement('div');f.className='full';f.style.cssText=`top:${r.top-ar.top}px;left:${r.left-ar.left}px;width:${r.width}px;height:${r.height}px`;f.innerHTML=`<div class="fin">${h}</div>`;app.appendChild(f);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{f.classList.add('open');f.style.top='38px';f.style.left='0';f.style.width='100%';f.style.height='calc(100% - 38px)'}));
+ $('#bk',f).onclick=()=>{const rr=el.getBoundingClientRect();f.classList.remove('open');f.style.top=(rr.top-ar.top)+'px';f.style.left=(rr.left-ar.left)+'px';f.style.width=rr.width+'px';f.style.height=rr.height+'px';setTimeout(()=>f.remove(),400)}}
+$$('.ctl [data-g]').forEach(b=>b.onclick=()=>{$('#app').dataset.g=b.dataset.g;$$('.ctl [data-g]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+$('#restart').onclick=init;init();
+</script>
