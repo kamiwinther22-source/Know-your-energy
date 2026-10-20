@@ -422,8 +422,9 @@ function passKey(email) {
 }
 
 // Free-reading tracking. One record per email once their first reading has been delivered.
-// Flip PAYMENTS_ENABLED to true when a payment processor exists: an email whose free reading is used and that has
-// no active pass is then refused at /report (the page also greys out the form and shows the pass options).
+// The one-free-reading limit is always enforced at /report: an email that is not on the unlimited list, has no active
+// pass and has already had its free reading is refused. (The page also locks the form for such an email.)
+// PAYMENTS_ENABLED is kept for when a payment processor exists; it does not control the free-reading limit.
 const PAYMENTS_ENABLED = false;
 
 // Anonymous counters for what people do after a reading. No email, no name, no birth details.
@@ -531,6 +532,12 @@ async function adminUsers(env) {
 
 function freeKey(email) {
   return `free:${email.trim().toLowerCase()}`;
+}
+
+// Marks that a free reading is being written right now for this email, so a second one cannot be started in parallel.
+// It is removed when the reading finishes or fails, and expires by itself after 10 minutes if the Worker is cut off.
+function claimKeyFor(email) {
+  return `claim:${email.trim().toLowerCase()}`;
 }
 
 async function freeReadingUsed(env, email) {
@@ -1111,20 +1118,41 @@ export default {
         error: "Invalid request body."
       }, 400);
     }
-    // who is asking: a pass holder, someone with their free reading still to use, or (once payments are on) someone who must buy
-    let askerStatus = null;
-    if (body.passEmail) {
-      try {
-        askerStatus = await checkPassRecord(env, body.passEmail);
-      } catch (e) {
-        askerStatus = null;
-      }
-      if (PAYMENTS_ENABLED && askerStatus && !askerStatus.active && askerStatus.freeReadingUsed) {
+    // who is asking: a pass holder (including the unlimited family emails) or someone with their one free reading still to use
+    const passEmail = typeof body.passEmail === "string" ? body.passEmail.trim() : "";
+    if (!/^[^\s@]+@[^\s@]+$/.test(passEmail)) {
+      return jsonResponse({
+        error: "An email address is needed to run a reading.",
+        code: "email_needed"
+      }, 400);
+    }
+    let askerStatus;
+    try {
+      askerStatus = await checkPassRecord(env, passEmail);
+    } catch (e) {
+      // if the check cannot be made, no reading is written: failing open would let a free reading through unchecked
+      return jsonResponse({
+        error: "Your email could not be checked just now. Please try again in a moment."
+      }, 503);
+    }
+    let claimKey = null;
+    if (!askerStatus.active) {
+      if (askerStatus.freeReadingUsed) {
         return jsonResponse({
-          error: "Your free reading has been used. Choose a pass to continue.",
+          error: "Your free reading has been used. A pass is needed for another reading, and passes are not available yet.",
           code: "free_used"
         }, 402);
       }
+      if (await env.PASSES.get(claimKeyFor(passEmail))) {
+        return jsonResponse({
+          error: "A reading for this email is already being written. Please wait for it to finish.",
+          code: "reading_in_progress"
+        }, 429);
+      }
+      claimKey = claimKeyFor(passEmail);
+      await env.PASSES.put(claimKey, String(Date.now()), {
+        expirationTtl: 600
+      });
     }
     const jobId = crypto.randomUUID();
     await env.PASSES.put(jobKey(jobId), JSON.stringify({
@@ -1160,15 +1188,16 @@ export default {
             console.error(`[report] generation threw at +${Date.now() - reportStart}ms jobId=${jobId}: ${error.message}`);
           }
         }
-        if (body.passEmail) {
-          // the free reading counts as used once a reading has actually been delivered to someone without a pass
-          const chartsComplete = [ p1Data, p2Data ].filter(Boolean).every(pd => !pd.numerologyError && !pd.astrologyError && !(pd.astrology && pd.astrology.locationNotFound) && (!pd.humanDesignError || /required for Human Design/i.test(pd.humanDesignError)));
-          if (askerStatus && !askerStatus.active && report && !reportError && chartsComplete) {
-            ctx.waitUntil(env.PASSES.put(freeKey(body.passEmail), String(Date.now()), {
+        // the free reading counts as used once a reading has actually been delivered to someone without a pass
+        if (!askerStatus.active && report && !reportError) {
+          try {
+            await env.PASSES.put(freeKey(passEmail), String(Date.now()), {
               metadata: {
                 t: Date.now()
               }
-            }));
+            });
+          } catch (e) {
+            console.error(`[report] could not save the free-reading record: ${e.message}`);
           }
         }
         const payload = {
@@ -1193,6 +1222,14 @@ export default {
         };
       }
       clearInterval(heartbeat);
+      // the reading has either been delivered (the free record above is already saved) or failed (the email may try again)
+      if (claimKey) {
+        try {
+          await env.PASSES.delete(claimKey);
+        } catch (e) {
+          console.error(`[report] could not remove the in-progress mark; it expires by itself: ${e.message}`);
+        }
+      }
       await env.PASSES.put(jobKey(jobId), JSON.stringify(kvRecord), {
         expirationTtl: 3600
       });
