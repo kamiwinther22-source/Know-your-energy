@@ -49,3 +49,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - The Map is a globe (astrocartography: drag to rotate, easy zoom, follow a line, cities appear as you zoom). Call it the Globe. It is not a card that goes with the charts, and not a flat map. The owner wants to be shown the possible ways the whole site can work (what they see after entering details, one view or choices), because they do not know the possibilities.
 - Nobody said the Globe needs a whole screen of its own: that was the assistant's addition. It can be something that expands.
 
+## LOCKED RULE (owner, in capitals)
+- **No locked features, ever.** "I AM NOT GOING TO HAVE LOCKED FEATURES. THIS IS ALL OR NOTHING. I AM NOT DOING BUSINESS IN THAT WAY. DO NOT SUGGEST IT AGAIN." No blurred previews, teasers, tiers or partial access, in any option or mock-up. The assistant had suggested blurred previews with a pass offer on top; that is dead and must not return.
