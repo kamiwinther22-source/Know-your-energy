@@ -47,4 +47,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - Fan screen, buttons: "I don't like where you put the buttons, it looks sloppy." Then "I do not like those buttons." Then: "I do not want the buttons in the middle of the 2 individuals' charts. And I don't agree with the web page even working like that for them to even be buttons." Today, Timeline, Map and Run another / Save or print must not be buttons or button-like tiles on the results page, and not between the two people's charts.
 - Rule from the owner: never show an example that leaves out where the other features (Today, Timeline, Map, pass) go. Slow down, be thoughtful and precise.
 - The Map is a globe (astrocartography: drag to rotate, easy zoom, follow a line, cities appear as you zoom). Call it the Globe. It is not a card that goes with the charts, and not a flat map. The owner wants to be shown the possible ways the whole site can work (what they see after entering details, one view or choices), because they do not know the possibilities.
+- Nobody said the Globe needs a whole screen of its own: that was the assistant's addition. It can be something that expands.
 
