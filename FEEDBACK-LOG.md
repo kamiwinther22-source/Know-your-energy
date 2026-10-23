@@ -59,4 +59,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - Owner: the three compact layouts (row per person, mirrored, two columns) were not liked: "I don't know if I like the format of any of these because you're still doing time like that." Read every comment before building; building without reading wastes their usage.
 - Direction (owner, "almost certain"): one results page that includes everything they can look at: the charts, the reading, the Timeline, the one Globe and the pass. Not separate pages. The three flow pictures (separate pages, timeline first, one continuous page) led to this.
 - Owner: "Show me the options." Do not ask questions in place of showing options.
+- Results page, size: all the results they can look at must fit on ONE phone screen. The point of the fan is that the charts do not take up the whole screen. Never make the reading a wide card that is just the people's names stretched across the whole screen: keep the reading card small.
 
