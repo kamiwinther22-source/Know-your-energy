@@ -946,6 +946,27 @@ export default {
         }, 500);
       }
     }
+    if (url.pathname === "/hd-sky-test") {
+      // TEMPORARY: shows the raw Human Design API answer for the current moment (the sky, no personal data). Cached 10 minutes. Remove after the check.
+      try {
+        const nowIso = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+        const slot = nowIso.slice(0, 15);
+        const cacheKey = `hdsky:${slot}`;
+        const cached = await env.PASSES.get(cacheKey);
+        if (cached !== null) return jsonResponse({ ok: true, datetime: nowIso, cached: true, raw: JSON.parse(cached) });
+        const res = await fetch("https://api.humandesignhub.app/v2/simple-bodygraph", {
+          method: "POST",
+          headers: { "X-API-KEY": env.HumanDesign_key, "Content-Type": "application/json" },
+          body: JSON.stringify({ datetime: nowIso })
+        });
+        const text = await res.text();
+        if (!res.ok) return jsonResponse({ ok: false, status: res.status, body: text.slice(0, 500) }, 502);
+        await env.PASSES.put(cacheKey, text, { expirationTtl: 900 });
+        return jsonResponse({ ok: true, datetime: nowIso, cached: false, raw: JSON.parse(text) });
+      } catch (error) {
+        return jsonResponse({ ok: false, error: error.message }, 500);
+      }
+    }
     if (url.pathname === "/usage") {
       const raw = await env.PASSES.get(USAGE_KV_KEY);
       const t = raw ? JSON.parse(raw) : {
