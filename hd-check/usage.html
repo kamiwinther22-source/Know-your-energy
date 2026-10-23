@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow"><title>Usage</title>
+<style>body{font-family:-apple-system,sans-serif;background:#0a1530;color:#f0c94c;padding:2rem;max-width:600px;margin:0 auto;}
+h1{font-size:1.2rem;} h2{font-size:1rem;margin-top:2rem;} table{width:100%;border-collapse:collapse;margin-top:1rem;}
+td{padding:0.4rem 0;border-bottom:1px solid rgba(240,201,76,0.2);} td:last-child{text-align:right;font-weight:700;}
+.note{font-size:0.75rem;opacity:0.7;margin-top:1.5rem;}</style></head><body>
+<h1>Claude API usage — running total</h1>
+<table>
+<tr><td>Readings generated</td><td>319</td></tr>
+<tr><td>Input tokens</td><td>854,934</td></tr>
+<tr><td>Output tokens</td><td>2,715,423</td></tr>
+<tr><td>Cache write tokens</td><td>673,022</td></tr>
+<tr><td>Cache read tokens</td><td>248,318</td></tr>
+<tr><td>Estimated total cost</td><td>$30.60</td></tr>
+<tr><td>Estimated cost per reading</td><td>$0.0959</td></tr>
+</table>
+<h2>By reading type</h2>
+<table><tr><td>Individual</td><td>52 readings · $6.36 · $0.1223/reading</td></tr><tr><td>Relational</td><td>53 readings · $7.00 · $0.1320/reading</td></tr><tr><td>HD-only test</td><td>11 readings · $0.95 · $0.0862/reading</td></tr></table>
+<h2>Recent requests (last 20, kept 90 days)</h2>
+<table><tr><td>2026-10-21 01:29 · Relational</td><td>2,823 in / 14,190 out · $0.1533</td></tr><tr><td>2026-10-20 07:45 · Individual</td><td>1,265 in / 8,316 out · $0.0915</td></tr><tr><td>2026-10-16 17:31 · Individual</td><td>1,229 in / 10,764 out · $0.1159</td></tr><tr><td>2026-10-08 08:43 · Relational</td><td>2,924 in / 15,198 out · $0.1636</td></tr><tr><td>2026-10-05 19:31 · Relational</td><td>2,939 in / 10,334 out · $0.1150</td></tr><tr><td>2026-10-04 06:39 · Relational</td><td>2,837 in / 13,112 out · $0.1426</td></tr><tr><td>2026-10-04 06:09 · Individual</td><td>1,335 in / 16,157 out · $0.1700</td></tr><tr><td>2026-10-03 11:51 · Individual</td><td>1,240 in / 11,728 out · $0.1256</td></tr><tr><td>2026-10-03 11:51 · Individual</td><td>1,208 in / 10,874 out · $0.1116</td></tr><tr><td>2026-10-02 13:44 · Individual</td><td>1,336 in / 7,357 out · $0.0820</td></tr><tr><td>2026-10-02 13:24 · Individual</td><td>1,229 in / 10,527 out · $0.1135</td></tr><tr><td>2026-09-30 15:00 · Individual</td><td>1,278 in / 9,965 out · $0.1080</td></tr><tr><td>2026-09-29 13:59 · Relational</td><td>1,925 in / 11,145 out · $0.1211</td></tr><tr><td>2026-09-29 13:53 · Relational</td><td>1,963 in / 9,322 out · $0.1029</td></tr><tr><td>2026-09-29 04:37 · Relational</td><td>1,892 in / 16,765 out · $0.1719</td></tr><tr><td>2026-09-29 04:32 · Relational</td><td>1,891 in / 12,688 out · $0.1365</td></tr><tr><td>2026-09-26 15:58 · Individual</td><td>1,223 in / 12,705 out · $0.1300</td></tr><tr><td>2026-09-26 15:56 · Individual</td><td>366 in / 4,556 out · $0.0521</td></tr><tr><td>2026-09-26 11:34 · Relational</td><td>2,648 in / 11,514 out · $0.1262</td></tr><tr><td>2026-09-26 10:42 · Individual</td><td>1,233 in / 12,774 out · $0.1360</td></tr></table>
+<p class="note">Estimate uses Claude Sonnet 5 pricing ($2/$10 per million input/output tokens — made permanent 2026-08-10, not an introductory rate) — update the rates in worker.js if pricing changes. Output tokens include thinking -- Claude's API doesn't report thinking and final text as separate numbers.</p>
+</body></html>
