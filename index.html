@@ -25,6 +25,11 @@
 #formStep .row-time .ampm-field{border-left-width:0 !important;background:transparent !important;padding-left:.3rem;padding-right:.2rem;}
 #formStep .row-time .ampm-field select{width:100%;padding:0;background:transparent !important;outline:none;-webkit-tap-highlight-color:transparent;}
 #formStep .submit-wrap.under-p2{width:auto;margin-right:14px;justify-content:flex-end;}
+
+.device-note{grid-column:1/-1;text-align:center;margin:1.1rem auto 0;max-width:22rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;line-height:1.5;color:#000000;}
+.device-note p{margin:0.15rem 0;}
+.util-link{background:none;border:0;padding:0.5rem 0.7rem;margin:0 0.2rem;font:inherit;font-weight:700;text-decoration:underline;color:#1C2CA9;cursor:pointer;min-height:44px;min-width:44px;}
+.util-msg{min-height:1.2em;font-style:italic;}
 </style>
 <meta name="description" content="Your unique design described by three separate systems — astrology, numerology, and Human Design — from just your name and birth details.">
 <meta name="theme-color" content="#F7F3EA">
@@ -3292,7 +3297,7 @@ function render(p1, p2, r, reportErr, reportUsedFallback, pending, fallbackReaso
   if (p2) h += personRow(p2, 3, 1);
   document.getElementById("mainGrid").innerHTML = h;
   const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
-  document.getElementById("bottomBtns").innerHTML = topBtn("Listen", "toggleListen()", BTN_ICON_LISTEN, null, "listenBtn") + (isApple ? '<p class="ios-save-note">To save a PDF on an iPad or iPhone: tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.</p>' : "");
+  document.getElementById("bottomBtns").innerHTML = topBtn("Listen", "toggleListen()", BTN_ICON_LISTEN, null, "listenBtn") + (isApple ? '<p class="ios-save-note">To save a PDF on an iPad or iPhone: tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on this device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="forgetBtn" onclick="forgetMyDetails()">Forget my details</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div>';
   stopLoadingTimer();
   document.getElementById("loading").style.display = "none";
   document.getElementById("resultsWrap").style.display = "block";
@@ -3317,6 +3322,36 @@ function fillReading(p1, p2, r, reportErr, reportUsedFallback, fallbackReason) {
   const slot = document.getElementById("readingSlot");
   if (slot) slot.outerHTML = html || `<div id="readingSlot" style="grid-column:2;grid-row:2;"></div>`;
   saveResult(p1, p2, r, reportErr, reportUsedFallback, fallbackReason);
+}
+
+async function shareSite() {
+  const url = location.origin + "/";
+  const msg = document.getElementById("shareMsg");
+  track("share_site");
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: "Know Your Energy", text: "Astrology, numerology and Human Design in one reading.", url: url });
+      return;
+    }
+  } catch (e) {
+    if (e && e.name === "AbortError") return;
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    if (msg) msg.textContent = "Link copied. It holds nothing you entered.";
+  } catch (_) {
+    if (msg) msg.textContent = url;
+  }
+}
+
+function forgetMyDetails() {
+  DRAFT_FIELD_IDS.forEach(id => {
+    if (id === "pEmail") return;
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  track("forget_details");
+  resetToForm();
 }
 
 function resetToForm() {
