@@ -51,3 +51,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 
 ## LOCKED RULE (owner, in capitals)
 - **No locked features, ever.** "I AM NOT GOING TO HAVE LOCKED FEATURES. THIS IS ALL OR NOTHING. I AM NOT DOING BUSINESS IN THAT WAY. DO NOT SUGGEST IT AGAIN." No blurred previews, teasers, tiers or partial access, in any option or mock-up. The assistant had suggested blurred previews with a pass offer on top; that is dead and must not return.
+- Globe: do NOT include cities (no city dots or labels on the globe). The owner's words: "Do not include cities!!!" This overrides the older note that cities appear as you zoom.
+
