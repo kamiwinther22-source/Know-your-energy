@@ -11,6 +11,7 @@ Read this before any design work. Add to it every time the owner reacts. Each en
 - **Pinnacle and Challenge as two separately labelled columns.**
 - **Core numbers in a second column beside Life Path and Maturity** to make the numerology chart more compact.
 - **Playing-card idea:** the owner suggested arranging the panels like playing cards. After seeing it: "that is basically what already exists, it's just an overlap."
+- **Playing cards, second reaction:** after the spine and triptych pictures: "Did you not read my suggestion??" Then "When did you make them like a fan?" and "That's not what it looks like when people are playing cards and holding them in their hands." Then: "A fan is what I meant. You did not make a fan." So the owner DID mean a fan (a hand of cards held and fanned out). The assistant's earlier picture was not a fan: three cards tilted only 7 degrees, side by side on one baseline, not spreading from a shared point. Do not describe the fan as the assistant's invention or as dead. The fan stays the direction; the next version must be a true fan: cards pivoting from one point at the bottom, spreading in an arc, overlapping, with the front card clear.
 - **Show several different options at once** so a direction can be judged. One at a time does not work.
 
 ## Dislikes (never do these again)
@@ -37,3 +38,16 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - Tapping a number shows its own definition for that position.
 - The results page has to work for two people and leave places for Today, Timeline, Map and a pass offer. Today and Timeline are per person.
 - Results page is glanceable chart data; the written reading is separate.
+
+## Later reactions (fan screen)
+- Fan of three panels per person, with the reading, Today and Timeline as cards: the fan is right. It must take little space because other features go on the page. Remove the foggy colour over the names on the reading card.
+- "I don't care whether any of this info is real. Stop saying it's not." Never say data or text is a stand-in or not real.
+- "I don't like how this is colored. I do not like this basic average just blue." Plain all-blue on the fan is out for this screen.
+- Fan screen, overlap: "Of course there's overlap and not everything can be seen. I understand that." Never mention the overlap again.
+- Fan screen, buttons: "I don't like where you put the buttons, it looks sloppy." Then "I do not like those buttons." Then: "I do not want the buttons in the middle of the 2 individuals' charts. And I don't agree with the web page even working like that for them to even be buttons." Today, Timeline, Map and Run another / Save or print must not be buttons or button-like tiles on the results page, and not between the two people's charts.
+- Rule from the owner: never show an example that leaves out where the other features (Today, Timeline, Map, pass) go. Slow down, be thoughtful and precise.
+- The Map is a globe (astrocartography: drag to rotate, easy zoom, follow a line, cities appear as you zoom). Call it the Globe. It is not a card that goes with the charts, and not a flat map. The owner wants to be shown the possible ways the whole site can work (what they see after entering details, one view or choices), because they do not know the possibilities.
+- Nobody said the Globe needs a whole screen of its own: that was the assistant's addition. It can be something that expands.
+
+## LOCKED RULE (owner, in capitals)
+- **No locked features, ever.** "I AM NOT GOING TO HAVE LOCKED FEATURES. THIS IS ALL OR NOTHING. I AM NOT DOING BUSINESS IN THAT WAY. DO NOT SUGGEST IT AGAIN." No blurred previews, teasers, tiers or partial access, in any option or mock-up. The assistant had suggested blurred previews with a pass offer on top; that is dead and must not return.
