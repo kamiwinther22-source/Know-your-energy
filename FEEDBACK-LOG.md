@@ -52,4 +52,6 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 ## LOCKED RULE (owner, in capitals)
 - **No locked features, ever.** "I AM NOT GOING TO HAVE LOCKED FEATURES. THIS IS ALL OR NOTHING. I AM NOT DOING BUSINESS IN THAT WAY. DO NOT SUGGEST IT AGAIN." No blurred previews, teasers, tiers or partial access, in any option or mock-up. The assistant had suggested blurred previews with a pass offer on top; that is dead and must not return.
 - Globe: do NOT include cities (no city dots or labels on the globe). The owner's words: "Do not include cities!!!" This overrides the older note that cities appear as you zoom.
+- Fan, purpose: "The reason for putting the charts in a fan is to create more space on the screen. Not to stretch out the reading completely unnecessarily and turn it into a scroll stack. They could stay as they are if that were what I wanted." The page must be compact, about one phone screen, with the other features fitting in the space the fan frees. Rejected: two stacked hands with three full-width bands under them (a long scroll stack).
+- Globe: do not build the globe now. Use a plain circle where the Globe goes. Focus on the main task, which is how the page works and where everything fits.
 
