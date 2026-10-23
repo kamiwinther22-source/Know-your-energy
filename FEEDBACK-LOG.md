@@ -79,4 +79,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - FADED COLOUR is a standing rule: no pale tints, no glows, no haze, nothing washed out. Found and removed: a blue drop-shadow glow behind the names on the Reading card (`filter: drop-shadow` on `.report-preview`) and pale tinted rows inside cards. Cards are plain white with full-strength ink.
 - PASS INFO: "I don't like the passes info being like that." Not yet clear which part (the wording, the tiers, or how it is laid out inside the card).
 - Owner: could not see any difference between the two colour examples (they differed only in ink shade). Options must differ in what the eye sees first (edge material, a bright blue block), not in a slight tone.
+- GREEN, owner clarifying: "I meant don't colour the site green. I didn't mean take every green out of where I have intentionally put it." The no-green rule is about the site's own colour theme (page, cards, edges, buttons). The real charts keep every colour they have (Human Design boxes, astrology symbols, numerology). Never recolour or strip chart colours. Read each comment in context; do not widen it.
 
