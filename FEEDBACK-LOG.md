@@ -43,3 +43,7 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - Fan of three panels per person, with the reading, Today and Timeline as cards: the fan is right. It must take little space because other features go on the page. Remove the foggy colour over the names on the reading card.
 - "I don't care whether any of this info is real. Stop saying it's not." Never say data or text is a stand-in or not real.
 - "I don't like how this is colored. I do not like this basic average just blue." Plain all-blue on the fan is out for this screen.
+- Fan screen, overlap: "Of course there's overlap and not everything can be seen. I understand that." Never mention the overlap again.
+- Fan screen, buttons: "I don't like where you put the buttons, it looks sloppy." Then "I do not like those buttons." Then: "I do not want the buttons in the middle of the 2 individuals' charts. And I don't agree with the web page even working like that for them to even be buttons." Today, Timeline, Map and Run another / Save or print must not be buttons or button-like tiles on the results page, and not between the two people's charts.
+- Rule from the owner: never show an example that leaves out where the other features (Today, Timeline, Map, pass) go. Slow down, be thoughtful and precise.
+
