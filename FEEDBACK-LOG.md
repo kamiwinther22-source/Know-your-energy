@@ -68,4 +68,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - UTILITY BUTTONS: get them away from the features. Print and/or save belongs in the full-page expanded area (the opened reading), NOT on the main results page.
 - PASS must not shout: "Why would I want people to pay me to scream at them louder than their charts?" The passes (all tiers) go on ONE panel styled exactly like the chart panels: same condensed type, same blue labels with underlines, same size of type. Not big serif prices, not louder than the charts.
 - TIME WHEEL (the month/day rings): "Don't do that with the time wheel. It's not even 1/3 of their cycles. It doesn't get that kind of space." Never give the rings a large spot, thumbnail or feature position.
+- Pass wording must fit the results page: by the time they see it they have already had their free reading. Never write "no credit card to try" or "your first reading is free" there; those belong before a reading is run. Use the visitor's point in the flow.
 
