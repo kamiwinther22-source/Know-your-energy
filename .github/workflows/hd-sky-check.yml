@@ -1,0 +1,35 @@
+name: HD sky check (temporary) run 2
+
+on:
+  push:
+    branches:
+      - ccr-c80b634d-wnm7jj
+    paths:
+      - .github/workflows/hd-sky-check.yml
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the sky test and the usage page
+        run: |
+          mkdir -p hd-check
+          for i in $(seq 1 20); do
+            code=$(curl -s -o hd-check/sky.json -w "%{http_code}" https://know-your-energy.kwdoanchor.workers.dev/hd-sky-test || true)
+            echo "attempt $i -> $code"
+            if [ "$code" = "200" ] || [ "$code" = "502" ] || [ "$code" = "500" ]; then break; fi
+            sleep 20
+          done
+          echo "$code" > hd-check/sky.status
+          curl -s -o hd-check/usage.html https://know-your-energy.kwdoanchor.workers.dev/usage || true
+      - name: Save the results to this branch
+        run: |
+          git config user.name "hd-sky-check"
+          git config user.email "hd-sky-check@users.noreply.github.com"
+          git add hd-check
+          git commit -m "HD sky check result" || echo "nothing to commit"
+          git push

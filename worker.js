@@ -949,7 +949,7 @@ export default {
     if (url.pathname === "/hd-sky-test") {
       // TEMPORARY: shows the raw Human Design API answer for the current moment (the sky, no personal data). Cached 10 minutes. Remove after the check.
       try {
-        const nowIso = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+        const nowIso = new Date().toISOString().slice(0, 16) + "+00:00";
         const slot = nowIso.slice(0, 15);
         const cacheKey = `hdsky:${slot}`;
         const cached = await env.PASSES.get(cacheKey);
