@@ -78,4 +78,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - LAYOUT: "The cards are too spread out. Why wouldn't you put the Globe in the middle?" Fans are tight (cards overlapping closely, like a held hand). The Globe sits in the middle of the page, between the two hands, with Reading and Pass at its sides.
 - FADED COLOUR is a standing rule: no pale tints, no glows, no haze, nothing washed out. Found and removed: a blue drop-shadow glow behind the names on the Reading card (`filter: drop-shadow` on `.report-preview`) and pale tinted rows inside cards. Cards are plain white with full-strength ink.
 - PASS INFO: "I don't like the passes info being like that." Not yet clear which part (the wording, the tiers, or how it is laid out inside the card).
+- Owner: could not see any difference between the two colour examples (they differed only in ink shade). Options must differ in what the eye sees first (edge material, a bright blue block), not in a slight tone.
 
