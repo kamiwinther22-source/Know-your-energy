@@ -11,6 +11,7 @@ Read this before any design work. Add to it every time the owner reacts. Each en
 - **Pinnacle and Challenge as two separately labelled columns.**
 - **Core numbers in a second column beside Life Path and Maturity** to make the numerology chart more compact.
 - **Playing-card idea:** the owner suggested arranging the panels like playing cards. After seeing it: "that is basically what already exists, it's just an overlap."
+- **Playing cards, second reaction:** after the spine and triptych pictures: "Did you not read my suggestion??" (the suggestion was playing cards). Then "When did you make them like a fan?" and "That's not what it looks like when people are playing cards and holding them in their hands." The owner never asked for a fan. The tilted, widely spaced fan was the assistant's own addition and is not what a held hand looks like. A held hand is cards tightly overlapped, the front card whole, the others showing mostly their corner, held from below. The fan with wide spacing is dead.
 - **Show several different options at once** so a direction can be judged. One at a time does not work.
 
 ## Dislikes (never do these again)
