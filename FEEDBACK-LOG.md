@@ -133,3 +133,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - **Timeline chart, readability (owner: "How about dont go to the extreme making them unreadable?").** Applies to the Timeline chart only. Year and Essence stay the wide main columns; Pinnacle, Challenge and Period stay narrower but must be readable (48 px wide, larger numbers and headings). Every strip's number must stay visible while the chart scrolls, including Period. Fixed in the mock: clipping removed so the numbers stay in view.
 
 - COLOUR, owner (Timeline picture): "there's no world in which I would ever choose burnt orange as a color ever." The code #a34c00 (saved as number 1, "brown") is what shows as burnt orange in the Timeline. Burnt orange is DEAD for every number. Number 1 needs a new colour from the owner; do not reuse #a34c00 or anything like it.
+
+- COLOUR, owner (correction to the line above): burnt orange is ruled out entirely, as a colour anywhere on the site, not only for the numbers. Never use it in any design, chart, border, text or accent.
