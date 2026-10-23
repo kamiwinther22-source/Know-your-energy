@@ -38,3 +38,8 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - Tapping a number shows its own definition for that position.
 - The results page has to work for two people and leave places for Today, Timeline, Map and a pass offer. Today and Timeline are per person.
 - Results page is glanceable chart data; the written reading is separate.
+
+## Later reactions (fan screen)
+- Fan of three panels per person, with the reading, Today and Timeline as cards: the fan is right. It must take little space because other features go on the page. Remove the foggy colour over the names on the reading card.
+- "I don't care whether any of this info is real. Stop saying it's not." Never say data or text is a stand-in or not real.
+- "I don't like how this is colored. I do not like this basic average just blue." Plain all-blue on the fan is out for this screen.
