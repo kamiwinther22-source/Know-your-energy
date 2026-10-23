@@ -89,4 +89,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - Owner: "Minimal is not the goal. Nothingness is not equal to elegant." Colour must be rich and present, not a bare white page with a trim. Taking the front page (liked for depth) as the model: a lit, deep page background. Shown: sapphire/indigo, amethyst, cobalt to deep blue. Watch the earlier dislike of dark pages ("too dark", "suffocating").
 - DEAD: lit deep page backgrounds (sapphire/indigo, amethyst, cobalt to deep blue), all three. Owner: "No."
 - Colour placements rejected so far on the results page: blocks behind hands, title band, per-card coloured edges, one sheen on edges, colour in type and rules, bright lit page background, white page with trim only. Nothing has been placed in a way the owner accepted. Stop guessing placements; ask the owner for a reference (a site, an object, a picture) or a single concrete instruction.
+- FEELING, owner: "Know Your Energy could not possibly appear less energetic." The page must feel energetic and alive: movement, radiance, vitality, while staying sleek, classy and elegant (not childish, not primary colours, not minimal).
 
