@@ -285,3 +285,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - OWNER (24 Oct): cannot change the cloud environment's network settings (no Edit button; it does not work on a cell phone). Never tell the owner to change settings again. Work with what exists in the session and the repo.
 
 - CHROME KNOT v2 SHOWN (24 Oct): same knot lit with the repo's photographed room (warehouse.exr) slightly blurred (sigma 0.03) so it is calmer, neutral cool tint. It reads as real chrome: deep darks, bright detail, mid tones, 3D depth. Lesson: hand-built rooms were the cause of every flat or blobby result; a real photographed room, blurred a little, gives chrome. Next: use this same room for the BACKGROUND surface (a curved sheet) so it is made of the same believable metal. Owner has not reacted yet.
+
+- OWNER (24 Oct): "Why are you making that instead of my webpage?" The knot was the assistant's response to the owner's earlier demand to prove it can make metal; it is finished. Back to the web page: build the page BACKGROUND as a curved chrome sheet lit by the same blurred photographed room (not hand-made rooms).
