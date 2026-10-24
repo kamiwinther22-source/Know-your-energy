@@ -1,3 +1,15 @@
+# PRE-FLIGHT CHECK (read before building ANY visual; the owner's usage is limited)
+Before rendering, write down which of these the planned picture could break, and fix the plan first. Any "yes" means do not build.
+1. Is any part blue, teal, azure or sky coloured as a tint? (Blue is not metal; sky-like backdrops are dead.)
+2. Any circle, oval or radial glow of light? (Banned: fake light.)
+3. Any soft wash, haze, fog or grey shading standing in for light? (Faded shading is not reflective light.)
+4. Any repeating folds, ripples, stripes or streaks? (Banned; copies the camera pattern.)
+5. Fake gold or yellow standing in for it? Flat colour zones or bands? Dark ground?
+6. Is all bright light from the sun's direction (upper right), as real crisp reflection?
+7. Is it one large smooth form with bright edges, like the four references?
+8. Is it a background shown ALONE, whole page at 390 px, before any button or field?
+9. Am I asking a question I could answer by showing something? Am I building before the owner replied?
+
 # Owner feedback log (results page design)
 
 Read this before any design work. Add to it every time the owner reacts. Each entry says which screen the comment was about. Do not stretch a comment beyond that screen. Never re-offer something marked DEAD.
@@ -181,3 +193,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - OWNER (24 Oct), PRIORITY: "The background is not irrelevant. The background is why what should have been making money months ago has me still in the same conversations today. It is almost the entire problem and needs almost complete focus. Changing buttons and data entry fields is not hard and is not the real challenge; those have been fine most of the time. The background is what dulls, dumbs, cheapens or averages out the entire project." From now on: BACKGROUND FIRST AND ALONE (whole page at 390 px, nothing else on it), judged against the references and the metallic, light, cool, full-colour, sun-lit rules. Buttons and fields come after.
 
 - BACKGROUND STUDIES (24 Oct, assistant only, NOT shown): rendered the page ground alone as one polished chrome sheet with a single large S-ridge (no repeating pattern). Result 1 (grey studio): the only render so far that echoes the references: one S-curve with crisp white edge light, but too grey. Results 2 to 4 (cool sky reflected in the sheet): failed, producing flat painted bands or a large oval blob that does not read as metal. Not sent. Lesson: colour in chrome must come from smooth reflected gradients, not flat zones; a single ridge face reflects one flat colour.
+
+- OWNER (24 Oct), angry: "You have to keep my feedback at your immediate [recall] before creating anything because this entire bit is now wasted usage." The assistant rendered teal/azure sky-coloured chrome and an oval glow after being told blue is not metal, sky backdrops are dead and circle light is banned, then ended with a question. A PRE-FLIGHT CHECK now sits at the top of this file; run it before every build.
