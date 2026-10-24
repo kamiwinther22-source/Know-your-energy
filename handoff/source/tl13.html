@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Fraunces:opsz,wght@9..144,800&display=swap');
+html,body{margin:0;background:#fff;width:390px}
+body{font-family:'Fraunces',Georgia,serif;color:#0a1a4d;padding:18px 10px;box-sizing:border-box}
+.ttl{font-family:'Alex Brush',cursive;font-size:44px;text-align:center;margin:0 0 10px;line-height:1}
+.frame{border-radius:18px;padding:4px;background:#9aa6bd;position:relative}
+.in{background:#fff;border-radius:14px;overflow:hidden;position:relative}
+.hdr{display:grid;grid-template-columns:30px 1fr 1fr 48px 48px 48px;column-gap:5px;padding:7px 8px 5px;border-bottom:1px solid #c9d3e4}.hdr div:nth-child(n+4){writing-mode:vertical-rl;transform:rotate(180deg);font-size:10px;letter-spacing:.06em;height:74px;display:flex;align-items:center;justify-content:center}.hdr div{line-height:1.15;font-family:Arial;font-weight:800;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#0a1a4d;text-align:center}.ytick{position:absolute;left:0;width:30px;font-family:Arial;font-weight:700;font-size:10px;color:#0a1a4d;text-align:right;transform:translateY(-6px)}.scroll{height:590px;overflow-y:scroll;scrollbar-width:none;position:relative}
+.cols{position:relative;display:grid;grid-template-columns:30px 1fr 1fr 48px 48px 48px;column-gap:5px;padding:0 8px}
+.col{position:relative}
+.col:nth-child(2) .seg,.col:nth-child(3) .seg{font-size:30px}.col:nth-child(n+4) .seg{font-size:21px;border-radius:8px}.seg{position:absolute;left:0;right:0;border-radius:10px;display:flex;justify-content:center;align-items:flex-start;font-weight:800;font-size:26px;color:#fff;}
+.seg span{position:sticky;top:285px;padding-top:0}
+.nowline{position:absolute;left:0;right:0;height:3px;background:#0a1a4d;z-index:4}
+.fadeT,.fadeB{position:absolute;left:0;right:0;height:34px;pointer-events:none;z-index:5}
+.fadeT{top:0;background:linear-gradient(#fff,rgba(255,255,255,0))}
+.fadeB{bottom:0;background:linear-gradient(rgba(255,255,255,0),#fff)}
+.swrow{display:flex;gap:4px;margin-top:10px}.sw{flex:1;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}</style></head><body><div id="app"></div>
+<script>
+const D={"rows": [{"age": 0, "year": 1990, "py": 5, "es": 1}, {"age": 1, "year": 1991, "py": 6, "es": 3}, {"age": 2, "year": 1992, "py": 7, "es": 3}, {"age": 3, "year": 1993, "py": 8, "es": 3}, {"age": 4, "year": 1994, "py": 9, "es": 5}, {"age": 5, "year": 1995, "py": 1, "es": 5}, {"age": 6, "year": 1996, "py": 11, "es": 5}, {"age": 7, "year": 1997, "py": 3, "es": 5}, {"age": 8, "year": 1998, "py": 4, "es": 5}, {"age": 9, "year": 1999, "py": 5, "es": 6}, {"age": 10, "year": 2000, "py": 6, "es": 6}, {"age": 11, "year": 2001, "py": 7, "es": 6}, {"age": 12, "year": 2002, "py": 8, "es": 6}, {"age": 13, "year": 2003, "py": 9, "es": 6}, {"age": 14, "year": 2004, "py": 1, "es": 6}, {"age": 15, "year": 2005, "py": 11, "es": 1}, {"age": 16, "year": 2006, "py": 3, "es": 3}, {"age": 17, "year": 2007, "py": 4, "es": 3}, {"age": 18, "year": 2008, "py": 5, "es": 7}, {"age": 19, "year": 2009, "py": 6, "es": 9}, {"age": 20, "year": 2010, "py": 7, "es": 9}, {"age": 21, "year": 2011, "py": 8, "es": 9}, {"age": 22, "year": 2012, "py": 9, "es": 1}, {"age": 23, "year": 2013, "py": 1, "es": 1}, {"age": 24, "year": 2014, "py": 11, "es": 11}, {"age": 25, "year": 2015, "py": 3, "es": 11}, {"age": 26, "year": 2016, "py": 4, "es": 11}, {"age": 27, "year": 2017, "py": 5, "es": 6}, {"age": 28, "year": 2018, "py": 6, "es": 6}, {"age": 29, "year": 2019, "py": 7, "es": 6}, {"age": 30, "year": 2020, "py": 8, "es": 1}, {"age": 31, "year": 2021, "py": 9, "es": 3}, {"age": 32, "year": 2022, "py": 1, "es": 3}, {"age": 33, "year": 2023, "py": 11, "es": 3}, {"age": 34, "year": 2024, "py": 3, "es": 5}, {"age": 35, "year": 2025, "py": 4, "es": 5}, {"age": 36, "year": 2026, "py": 5, "es": 6}, {"age": 37, "year": 2027, "py": 6, "es": 5}, {"age": 38, "year": 2028, "py": 7, "es": 5}, {"age": 39, "year": 2029, "py": 8, "es": 6}, {"age": 40, "year": 2030, "py": 9, "es": 6}, {"age": 41, "year": 2031, "py": 1, "es": 6}, {"age": 42, "year": 2032, "py": 11, "es": 6}, {"age": 43, "year": 2033, "py": 3, "es": 6}, {"age": 44, "year": 2034, "py": 4, "es": 6}, {"age": 45, "year": 2035, "py": 5, "es": 1}, {"age": 46, "year": 2036, "py": 6, "es": 3}, {"age": 47, "year": 2037, "py": 7, "es": 3}, {"age": 48, "year": 2038, "py": 8, "es": 3}, {"age": 49, "year": 2039, "py": 9, "es": 5}, {"age": 50, "year": 2040, "py": 1, "es": 5}, {"age": 51, "year": 2041, "py": 11, "es": 5}, {"age": 52, "year": 2042, "py": 3, "es": 5}, {"age": 53, "year": 2043, "py": 4, "es": 5}, {"age": 54, "year": 2044, "py": 5, "es": 6}, {"age": 55, "year": 2045, "py": 6, "es": 1}, {"age": 56, "year": 2046, "py": 7, "es": 1}, {"age": 57, "year": 2047, "py": 8, "es": 1}, {"age": 58, "year": 2048, "py": 9, "es": 1}, {"age": 59, "year": 2049, "py": 1, "es": 11}, {"age": 60, "year": 2050, "py": 11, "es": 6}, {"age": 61, "year": 2051, "py": 3, "es": 8}, {"age": 62, "year": 2052, "py": 4, "es": 8}, {"age": 63, "year": 2053, "py": 5, "es": 8}, {"age": 64, "year": 2054, "py": 6, "es": 5}, {"age": 65, "year": 2055, "py": 7, "es": 5}, {"age": 66, "year": 2056, "py": 8, "es": 5}, {"age": 67, "year": 2057, "py": 9, "es": 5}, {"age": 68, "year": 2058, "py": 1, "es": 5}, {"age": 69, "year": 2059, "py": 11, "es": 6}, {"age": 70, "year": 2060, "py": 3, "es": 6}, {"age": 71, "year": 2061, "py": 4, "es": 6}, {"age": 72, "year": 2062, "py": 5, "es": 6}, {"age": 73, "year": 2063, "py": 6, "es": 7}, {"age": 74, "year": 2064, "py": 7, "es": 6}, {"age": 75, "year": 2065, "py": 8, "es": 1}], "pin": {"pinnacle1": {"value": 4, "ageRange": "birth\u201331"}, "pinnacle2": {"value": 6, "ageRange": "32\u201340"}, "pinnacle3": {"value": 1, "ageRange": "41\u201349"}, "pinnacle4": {"value": 9, "ageRange": "50\u2013onward"}}, "ch": {"challenge1": 3, "challenge2": 4, "challenge3": 1, "challenge4": 7}, "per": {"period1": {"value": 8, "ageRange": "birth\u201332"}, "period2": {"value": 5, "ageRange": "33\u201359"}, "period3": {"value": 1, "ageRange": "60\u2013onward"}}, "maturity": 3, "now": {"age": 36}};
+const PX=72;const TOT=75*PX; // px per year
+const birth=new Date(1990,7,14),now=new Date(2026,9,23);
+const yrsFrom=d=>(d-birth)/(365.25*86400000);
+const COL={1:["#ff9c1a","#ff9c1a","#1a1200"],2:["#94b2ff","#94b2ff","#1a1200"],3:["#fefe8b","#fefe8b","#1a1200"],4:["#616161","#616161","#fff"],5:["#41a476","#41a476","#fff"],6:["#ffa3ff","#ffa3ff","#1a1200"],7:["#a345bf","#a345bf","#fff"],8:["#935734","#935734","#fff"],9:["#d10000","#d10000","#fff"],0:["#ffffff","#ffffff","#0a1a4d"]};COL[11]=COL[2];COL[22]=COL[4];COL[33]=COL[6];
+const seg=(top,h,n)=>{const c=COL[n]||COL[8];const tall=h>300;return '<div class="seg" style="top:'+(TOT-(+top)-(+h)).toFixed(1)+'px;height:'+h+'px;'+(tall?'':'align-items:center;')+'background:'+c[0]+';'+(n==2||n==0?'box-shadow:inset 0 0 0 2px #0a1a4d;':'')+'color:'+c[2]+'"><span'+(tall?'':' style="position:static"')+'>'+n+'</span></div>'};
+const topOf=y=>yrsFrom(new Date(y))*PX;
+const BIRTH_YEAR=1990;
+let yearCol='',essCol='',pinCol='',chCol='',perCol='';
+// Year: calendar years from birth to age 75
+const END=birth.getFullYear()+75;
+for(let y=BIRTH_YEAR;y<=END;y++){
+ const a=Math.max(new Date(y,0,1),birth),b=new Date(y+1,0,1);
+ const row=D.rows.find(r=>r.year===y);if(!row)continue;
+ const t=yrsFrom(a)*PX,h=(yrsFrom(b)-yrsFrom(a))*PX;
+ yearCol+=seg(t.toFixed(1),(h-3).toFixed(1),row.py);
+}
+// Essence: birthday to birthday
+D.rows.forEach(r=>{const t=r.age*PX;essCol+=seg(t.toFixed(1),(PX-3).toFixed(1),r.es)});
+const bar=(arr,valFn,keyFn)=>{let out='';Object.keys(arr).forEach(k=>{const m=(arr[k].ageRange||"").replace("birth","0").replace("onward","75").split("–");const a=+m[0],b=Math.min(+m[1]+1,75);out+=seg((a*PX).toFixed(1),((b-a)*PX-3).toFixed(1),valFn(k))});return out};
+pinCol=bar(D.pin,k=>D.pin[k].value);
+chCol=bar(D.pin,k=>D.ch["challenge"+k.slice(-1)]);
+perCol=bar(D.per,k=>D.per[k].value);
+// Period col: periods
+const total=75*PX;let ticks='';for(let y=BIRTH_YEAR+1;y<=END;y++){ticks+='<div class="ytick" style="top:'+(TOT-yrsFrom(new Date(y,0,1))*PX).toFixed(1)+'px">'+y+'</div>'}
+const nowTop=TOT-yrsFrom(now)*PX;
+document.getElementById("app").innerHTML='<div class="ttl">Alex</div><div class="frame"><div class="in"><div class="hdr"><div></div><div>Personal Year</div><div>Essence</div><div>Pinnacle</div><div>Challenge</div><div>Period</div></div><div class="scroll" id="sc"><div class="cols" style="height:'+total+'px"><div class="col">'+ticks+'</div><div class="col">'+yearCol+'</div><div class="col">'+essCol+'</div><div class="col">'+pinCol+'</div><div class="col">'+chCol+'</div><div class="col">'+perCol+'</div><div class="nowline" style="top:'+nowTop+'px"></div></div></div></div></div>';
+document.getElementById("sc").scrollTop=nowTop-285;
+</script></body></html>
