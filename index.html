@@ -3327,7 +3327,37 @@ function fillReading(p1, p2, r, reportErr, reportUsedFallback, fallbackReason) {
 }
 
 // Save / print that works in every browser. Browsers that can print do; the rest (and anyone who asks) get the reading as a file.
-function readingFileHtml() {
+async function offlineFontCss() {
+  // the fonts the page uses, copied into the file itself so it never needs the internet
+  let out = "";
+  const links = [ ...document.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis"]') ];
+  for (const l of links) {
+    try {
+      const css = await (await fetch(l.href, { signal: AbortSignal.timeout(15000) })).text();
+      const blocks = css.split("/* ").slice(1).filter(b => /^latin \*\//.test(b));
+      for (const b of blocks) {
+        let rule = b.replace(/^latin \*\/\s*/, "");
+        const m = rule.match(/url\((https:[^)]+)\)/);
+        if (!m) continue;
+        const buf = await (await fetch(m[1], { signal: AbortSignal.timeout(15000) })).arrayBuffer();
+        let bin = "";
+        const bytes = new Uint8Array(buf);
+        for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
+        out += rule.replace(m[1], "data:font/woff2;base64," + btoa(bin)) + "\n";
+      }
+    } catch (_) {}
+  }
+  return out;
+}
+
+let offlineFontPromise = null;
+function prefetchOfflineFonts() {
+  if (!offlineFontPromise) offlineFontPromise = offlineFontCss();
+  return offlineFontPromise;
+}
+setTimeout(prefetchOfflineFonts, 4000);
+
+async function readingFileHtml() {
   const wrap = document.getElementById("resultsWrap");
   if (!wrap) return null;
   let css = "";
@@ -3338,11 +3368,11 @@ function readingFileHtml() {
       css += rule.cssText.replace(/@media\s+print/g, "@media all") + "\n";
     }
   }
-  const fonts = [...document.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis"]')].map(l => l.outerHTML).join("");
+  const fonts = await Promise.race([ prefetchOfflineFonts(), new Promise(r => setTimeout(() => r(""), 3000)) ]);
   const copy = wrap.cloneNode(true);
   copy.querySelectorAll("script,canvas,button,.bottom-btns,.grid-nav-btn").forEach(e => e.remove());
   copy.style.display = "block";
-  return "<!doctype html><html class=\"" + document.documentElement.className + "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Know Your Energy reading</title>" + fonts + "<style>" + css + "body{display:block!important;padding:1rem!important;min-height:0!important;background:#fff!important}</style></head><body class=\"" + document.body.className + "\">" + copy.outerHTML + "</body></html>";
+  return "<!doctype html><html class=\"" + document.documentElement.className + "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Know Your Energy reading</title><style>" + fonts + css + "body{display:block!important;padding:1rem!important;min-height:0!important;background:#fff!important}</style></head><body class=\"" + document.body.className + "\">" + copy.outerHTML + "</body></html>";
 }
 
 function readingFileName() {
@@ -3352,7 +3382,7 @@ function readingFileName() {
 
 async function downloadReadingFile(askShare) {
   const msg = document.getElementById("shareMsg");
-  const html = readingFileHtml();
+  const html = await readingFileHtml();
   if (!html) {
     if (msg) msg.textContent = "Run a reading first.";
     return;
