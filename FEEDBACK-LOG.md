@@ -8,7 +8,7 @@ Before rendering, write down which of these the planned picture could break, and
 6. Is all bright light from the sun's direction (upper right), as real crisp reflection?
 7. Is it one large smooth form with bright edges, like the four references?
 8. Is it a background shown ALONE, whole page at 390 px, before any button or field?
-9. Am I asking a question I could answer by showing something? Am I building before the owner replied?
+9. Am I building before the owner replied?
 
 # Owner feedback log (results page design)
 
@@ -195,3 +195,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - BACKGROUND STUDIES (24 Oct, assistant only, NOT shown): rendered the page ground alone as one polished chrome sheet with a single large S-ridge (no repeating pattern). Result 1 (grey studio): the only render so far that echoes the references: one S-curve with crisp white edge light, but too grey. Results 2 to 4 (cool sky reflected in the sheet): failed, producing flat painted bands or a large oval blob that does not read as metal. Not sent. Lesson: colour in chrome must come from smooth reflected gradients, not flat zones; a single ridge face reflects one flat colour.
 
 - OWNER (24 Oct), angry: "You have to keep my feedback at your immediate [recall] before creating anything because this entire bit is now wasted usage." The assistant rendered teal/azure sky-coloured chrome and an oval glow after being told blue is not metal, sky backdrops are dead and circle light is banned, then ended with a question. A PRE-FLIGHT CHECK now sits at the top of this file; run it before every build.
+
+- OWNER (24 Oct): the assistant's pre-flight item "do not ask a question I could answer by showing something" was WRONG and was never the owner's rule: "You are supposed to ask me what direction to go in. But not after creating things that would have been avoided if you were paying attention and following a structured way of completing this project." CORRECT PROCESS: follow a structured order. Run the pre-flight against the owner's recorded feedback FIRST, then ASK the owner which direction to go BEFORE creating, and only then build what they chose. Do not build first and ask afterwards. Earlier entries that say "do not ask, show options" apply to showing options when direction is already settled; they do not remove the owner's wish to be asked about direction.
