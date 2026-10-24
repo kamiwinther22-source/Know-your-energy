@@ -24,7 +24,9 @@
 - Say plainly what is done and what isn't. Don't oversell.
 - Their usage is limited. Don't tweak or redo something they rejected, and don't build ahead of a decision.
 - When the owner specifically asks for a change, merge it to `main` (that publishes the site). Don't merge anything they didn't ask for. Experiments go on a separate branch.
-- **There are no standing look rules.** The look of the front page and of the results page is undecided and is whatever the owner says now. Metallic styling is not wanted.
+- **There are no standing look rules.** The look of the front page and of the results page is undecided and is whatever the owner says now.
+- **METALLIC IS WANTED (this corrects an earlier wrong line that said it was not).** The owner has asked for a metallic-looking page for months. The solar-system picture was the closest anything got, because the real rendering techniques (3D geometry, environment reflections, specular highlights; see `metal3d.js`, `hdri/`, `?look=metal`) were not used elsewhere. Flat gradients faked as metal and the ceramic attempt failed. Preferred: a site made of **light, cool, metallic colours that are full, not flat and not faded**. Light colours can be full. Dark was only ever a default out of exhaustion. It needs real design effort and small accents, not minimal or bare called elegant. Stripes are still banned: shine comes from real polished surfaces and specular highlights.
+- **Colour talk.** Do not name colours only by primary or secondary names; that reads as banning whole colours. There are millions of colours. The owner's map: red and orange read as eastern esoteric; dark blue and purple read as western esoteric. Over-used and to avoid: deep jewel shades, soft glowing cool gradients, and the opposite tan and cream look. Never read a dislike of one use of a colour as a ban on the colour.
 
 ## What the site is
 - Static front end on GitHub Pages (`index.html`, `red-look.css`, `CNAME` = know-your-energy.com) plus a Cloudflare Worker (`worker.js`, KV namespace `PASSES`). A merge to `main` deploys both (`.github/workflows/deploy.yml`, which also builds the city list from GeoNames).
