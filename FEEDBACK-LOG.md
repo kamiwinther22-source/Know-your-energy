@@ -281,3 +281,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - OWNER (24 Oct), on the standalone chrome knot proof: "Very weak and poor attempt." The knot (chrome2) is not good enough as proof of metal: reads as pale grey-blue plastic-like with blobby flat white highlights. Better standard needed before any background: deeper blacks, richer gradients, sharper small highlights, more reflective detail.
 
 - OWNER (24 Oct): the chrome knot "is not very good at all. I have seen you do better. It is not the bar to reach; it is not close. I see a flat grey and white drawn object, not a 3D reflecting object." The knot is NOT the quality bar. The bar is the owner's earlier experience of the assistant's best work (the chrome solar system sun: deep black, bright white, many reflected details, true depth).
+
+- OWNER (24 Oct): cannot change the cloud environment's network settings (no Edit button; it does not work on a cell phone). Never tell the owner to change settings again. Work with what exists in the session and the repo.
