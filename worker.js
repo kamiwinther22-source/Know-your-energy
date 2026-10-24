@@ -991,6 +991,24 @@ export default {
         }
       });
     }
+    // city suggestions are a GET, so they must be answered before the POST-only rule below
+    if (url.pathname === "/places") {
+      const q = url.searchParams.get("q") || "";
+      const names = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames([ "en" ], {
+        type: "region"
+      }) : null;
+      const list = searchCities(q, 7).map(r => ({
+        city: r.city,
+        state: r.state,
+        country: r.country,
+        label: r.country === "US" ? `${r.city}, ${r.stateName}` : `${r.city}, ${names ? names.of(r.country) : r.country}`
+      }));
+      const res = jsonResponse(list);
+      res.headers.set("Cache-Control", "private, max-age=3600");
+      res.headers.delete("Pragma");
+      res.headers.delete("Expires");
+      return res;
+    }
     if (request.method !== "POST") {
       return new Response("Method Not Allowed", {
         status: 405,
@@ -1071,23 +1089,6 @@ export default {
           error: error.message
         }, 500);
       }
-    }
-    if (url.pathname === "/places") {
-      const q = url.searchParams.get("q") || "";
-      const names = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames([ "en" ], {
-        type: "region"
-      }) : null;
-      const list = searchCities(q, 7).map(r => ({
-        city: r.city,
-        state: r.state,
-        country: r.country,
-        label: r.country === "US" ? `${r.city}, ${r.stateName}` : `${r.city}, ${names ? names.of(r.country) : r.country}`
-      }));
-      const res = jsonResponse(list);
-      res.headers.set("Cache-Control", "private, max-age=3600");
-      res.headers.delete("Pragma");
-      res.headers.delete("Expires");
-      return res;
     }
     if (url.pathname === "/chart-data") {
       if (!fromOurSite(request)) return notFromOurSite();
