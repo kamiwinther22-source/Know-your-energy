@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=390">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#06080c;
+ /* sun is upper right: lit edges are top and right, shaded edges bottom and left */
+ --hi:#ffffff;--lo:#59616e;--deep:#242a33;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#cfd5dd}
+body{width:390px;margin:0 auto;padding:18px 16px 40px;font-family:'Fraunces',serif;color:var(--ink);
+ background:linear-gradient(180deg,#ffffff 0%,#f4f7fb 68%,#cbd3de 69.4%,#222831 69.8%,#586270 71.5%,#aeb8c6 86%,#eef2f7 100%);
+ min-height:1384px;position:relative}
+
+/* RAIL: a thin metal bar; bright line on the sun side, dark line on the other */
+.rail{height:6px;border-radius:3px;margin:14px 0;background:linear-gradient(180deg,#fff 0 2px,#c4ccd7 2px 3px,#6a7482 3px 5px,#2a3039 5px 6px);box-shadow:-2px 2px 0 rgba(30,38,50,.35)}
+/* PLATE (card): thick rim, sun side bright */
+.plate{position:relative;border-radius:14px;padding:16px;margin:16px 0;
+ background:linear-gradient(165deg,#ffffff 0%,#eef2f7 45%,#c9d1dc 46%,#f4f7fb 100%);
+ border:3px solid transparent;
+ background-clip:padding-box;
+ box-shadow:
+  inset 2px -2px 0 #fff, inset -2px 2px 0 rgba(90,100,115,.45),
+  -5px 6px 0 rgba(36,42,51,.42),-6px 8px 10px rgba(36,42,51,.25)}
+.plate::before{content:"";position:absolute;inset:-3px;border-radius:17px;z-index:-1;
+ background:conic-gradient(from 45deg at 50% 50%,#ffffff 0deg,#cfd6e0 40deg,#3a414c 95deg,#9aa4b2 150deg,#242a33 200deg,#8d97a5 250deg,#e8edf3 300deg,#ffffff 360deg)}
+h1{font-weight:800;font-size:34px;line-height:1;letter-spacing:.2px;
+ /* lettering: highlight on the sun side, dark on the far side, both hard */
+ text-shadow:1px -1px 0 #fff,-1px 1px 0 rgba(40,48,60,.55)}
+p{font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;line-height:1.35;text-shadow:1px -1px 0 rgba(255,255,255,.9)}
+label{display:block;font-weight:700;font-size:15px;margin:12px 0 6px;text-shadow:1px -1px 0 #fff}
+/* FIELD: a channel cut into the plate; walls facing the sun (left, bottom) catch light, the upper-right walls are dark */
+.field{height:40px;border-radius:8px;padding:0 12px;display:flex;align-items:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#3a424e;
+ background:linear-gradient(180deg,#8e99a8 0%,#c5cdd8 22%,#e7ecf3 23%,#f7f9fc 100%);
+ box-shadow:inset -2px 2px 0 #2a313b, inset 2px -2px 0 #ffffff, inset 0 3px 3px rgba(20,26,34,.35), 1px -1px 0 #fff, -1px 1px 0 rgba(60,70,84,.5)}
+/* BUTTON: a raised metal part. Chrome face with a hard horizon, ring rim lit from upper right, short hard shadow to the lower left */
+.btn{position:relative;width:200px;height:52px;margin:18px auto;border-radius:26px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#05070a;
+ background:
+  linear-gradient(180deg,#ffffff 0%,#f6f8fb 52%,#d5dbe4 70%,#232932 72%,#59636f 74%,#b7c0cc 88%,#f1f4f8 100%);
+ box-shadow:inset 0 0 0 2px rgba(255,255,255,.6), -4px 5px 0 #3b434f, -5px 7px 6px rgba(20,26,34,.35);
+ text-shadow:1px -1px 0 #fff;border:3px solid transparent;background-clip:padding-box}
+.btn::before{content:"";position:absolute;inset:-3px;border-radius:29px;z-index:-1;background:conic-gradient(from 40deg,#fff 0deg,#cfd6df 50deg,#1e242c 110deg,#8794a3 170deg,#2b323c 215deg,#aeb8c5 270deg,#fff 330deg,#fff 360deg)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.tog{display:flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Sans';font-weight:700;margin:6px 0}
+.sw{width:46px;height:24px;border-radius:12px;position:relative;background:linear-gradient(180deg,#7e8998 0%,#cfd6e0 40%,#fff 100%);box-shadow:inset -2px 2px 0 #2a313b,inset 2px -2px 0 #fff,1px -1px 0 #fff}
+.sw::after{content:"";position:absolute;left:3px;top:2px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 70% 25%,#fff 0 12%,#cdd4de 14%,#4a525e 62%,#1d232b 100%);box-shadow:-2px 2px 0 rgba(30,36,46,.5)}
+</style></head><body>
+<h1>Know Your Energy</h1>
+<div class="rail"></div>
+<div class="plate">
+ <p>Astrology-Numerology-Human Design<br>FULL charts and combined reading</p>
+</div>
+<label>Email</label><div class="field">name@example.com</div>
+<div class="btn">Continue</div>
+<div class="rail"></div>
+<div class="tog"><span>Individual</span><span class="sw"></span><span>Relational</span></div>
+<label>Full Name at Birth</label>
+<div class="row"><div class="field">First</div><div class="field">Mid</div><div class="field">Last</div></div>
+<label>Birth city (optional)</label><div class="field">Start typing a city</div>
+<div class="btn">Calculate</div>
+</body></html>
