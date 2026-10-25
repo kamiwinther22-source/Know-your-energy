@@ -7,15 +7,24 @@ import {EXRLoader} from './vendor/loaders/EXRLoader.js';
   const root=document.documentElement,body=document.body;
   const cv=document.createElement('canvas');cv.id='pmBg';cv.setAttribute('aria-hidden','true');body.insertBefore(cv,body.firstChild);
   const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;renderer.outputColorSpace=THREE.SRGBColorSpace;
   const eq=await new EXRLoader().setDataType(THREE.FloatType).loadAsync('hdri/warehouse.exr');
   {const SAT=.15,d=eq.image.data,n=eq.image.width*eq.image.height,ch=d.length/n;   // silver, not tinted: pull the room's colour most of the way to neutral
    for(let i=0;i<n;i++){const k=i*ch,l=.2126*d[k]+.7152*d[k+1]+.0722*d[k+2];for(let c=0;c<3;c++)d[k+c]=l+(d[k+c]-l)*SAT;}eq.needsUpdate=true;}
   eq.mapping=THREE.EquirectangularReflectionMapping;
-  const pm=new THREE.PMREMGenerator(renderer);const env=pm.fromEquirectangular(eq).texture;
+  const pm=new THREE.PMREMGenerator(renderer);
+  const envScene=new THREE.Scene();
+  {const g=new THREE.SphereGeometry(500,48,24),pos=g.attributes.position,col=new Float32Array(pos.count*3);   // light above, darker below: no room, no photo
+   for(let i=0;i<pos.count;i++){const t=(pos.getY(i)/500+1)/2,c=.20+.80*Math.pow(t,1.5);col[i*3]=c;col[i*3+1]=c;col[i*3+2]=c*1.01;}
+   g.setAttribute('color',new THREE.BufferAttribute(col,3));
+   envScene.add(new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide,toneMapped:false})));}
+  const SUNDIR=new THREE.Vector3(.22,.22,.95).normalize();   // the sun: upper right
+  const disc=new THREE.Mesh(new THREE.SphereGeometry(6,32,16),new THREE.MeshBasicMaterial({color:new THREE.Color(60,58,54),toneMapped:false}));
+  disc.position.copy(SUNDIR).multiplyScalar(100);envScene.add(disc);   // a sun with a real size: its reflection has a hard edge
+  const env=pm.fromScene(envScene,0,.1,1000).texture;
   const scene=new THREE.Scene();scene.environment=env;
-  const mat=new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.10});
-  const sun=new THREE.PointLight(0xffffff,4,0,0);scene.add(sun);   // the sun: placed where the big chrome sphere really is on the page; the only light; the glints are its specular reflection
+  const mat=new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.03});
+  const sun=new THREE.PointLight(0xffffff,2.5,0,0);scene.add(sun);   // the sun: placed where the big chrome sphere really is on the page; the only light; the glints are its specular reflection
   let mesh=null,camera=null,raf=0;
   const CELL=2;
   function visible(el,rc){
@@ -45,7 +54,8 @@ import {EXRLoader} from './vendor/loaders/EXRLoader.js';
     for(let j=0;j<gh;j++)for(let i=0;i<gw;i++){
       const k=j*gw+i,x=i*CELL,y=j*CELL;
       const dx=x-PADX,dy=y-PADY;let z=A*(Math.sin(TAU*dx/1100+1.1)*Math.sin(TAU*dy/1500+.4)+.6*Math.sin(TAU*(dx/900+dy/1300)+2.2));
-      z+=.25*(GH/2-j*CELL)-pk[k*4]/255*4+bs[k*4]/255*2+bw[k*4]/255*6;
+      z+=5.5*(Math.sin(TAU*dx/230+.7)*Math.sin(TAU*dy/270+1.9)+.7*Math.sin(TAU*(dx/190-dy/240)+.3));
+      z+=.12*(GH/2-j*CELL)-pk[k*4]/255*4+bs[k*4]/255*2+bw[k*4]/255*6;
       p.setXYZ(k,i*CELL-GW/2,GH/2-j*CELL,z);}
     p.needsUpdate=true;geo.computeVertexNormals();
     if(mesh){scene.remove(mesh);mesh.geometry.dispose();}
