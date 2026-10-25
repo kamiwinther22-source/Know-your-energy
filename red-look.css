@@ -174,8 +174,8 @@ html.red .row-birth .notime-row label.chk{display:flex;font-size:15px;margin:0}
 
 /* ===== Lit front page: the sun is the light source (upper right of the page). Scoped to the front page only; the results page keeps its own look. =====
    background: front-bg.jpg is the light falling off from the sun across the whole page (see the comments below for how each piece follows it). */
-html.red,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#3fc3c1 !important}
-html.red:not(:has(#resultsWrap[style*="block"])) body{background:url(front-bg.jpg) 50% 0/1170px auto no-repeat,#3fc3c1 !important}
+html.red,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#0f7e8a !important}
+html.red:not(:has(#resultsWrap[style*="block"])) body{background:url(front-bg.jpg) 50% 0/1170px auto no-repeat,#0f7e8a !important}
 /* one light: upper right */
 /* fields: carved into the surface. Same jade as the page around them (the surface shows through), slightly shaded inside.
    Light is upper right, so the top and right inner walls are in shadow and the lower-left edge catches a thin lit lip. */
@@ -250,17 +250,3 @@ html.red:not(:has(#resultsWrap[style*="block"])) .r-b22 li{padding-left:22px;fon
 html.red:not(:has(#resultsWrap[style*="block"])) .r-b22 li:before{top:.3em;left:2px;width:13px;height:13px;border-radius:50%;transform:none;
  background:radial-gradient(circle at 68% 28%,#ffffff 0,#eef3f6 18%,#aab6c0 48%,#55626d 80%,#26343e 100%);
  box-shadow:-1.5px 2px 2px rgba(0,22,32,.6),inset -1px -1px 2px rgba(10,30,40,.35);filter:none}
-
-
-/* ===== LIGHT PAGE, BLACK TEXT: pure black letters on a light aqua page, no shadow or outline. Every line measured at 7:1 or better. ===== */
-html.red:not(:has(#resultsWrap[style*="block"])) #hookStep,html.red:not(:has(#resultsWrap[style*="block"])) #formStep{color:#000}
-html.red:not(:has(#resultsWrap[style*="block"])) #hookStep *:not(.sun-cta):not(.sun-cta *):not(.rbtn):not(.rbtn *),html.red:not(:has(#resultsWrap[style*="block"])) #formStep *:not(.gen-btn):not(.gen-btn *):not(.rel-chip):not(.rel-chip *){color:#000 !important;-webkit-text-fill-color:#000 !important;text-shadow:none !important}
-html.red:not(:has(#resultsWrap[style*="block"])) .tog-lbl,html.red:not(:has(#resultsWrap[style*="block"])) .r-b22 li{color:#000 !important;-webkit-text-fill-color:#000 !important;text-shadow:none !important}
-/* carved fields on a light page: light inside, shaded top and right walls, lit lower-left lip */
-html.red:not(:has(#resultsWrap[style*="block"])) .field,html.red:not(:has(#resultsWrap[style*="block"])) .line-field,html.red:not(:has(#resultsWrap[style*="block"])) .line-field.hero-email-field,html.red:not(:has(#resultsWrap[style*="block"])) #formStep .row-time .ampm-field{background:linear-gradient(180deg,rgba(0,70,80,.12),rgba(255,255,255,.24)) !important}
-html.red:not(:has(#resultsWrap[style*="block"])) #formStep.locked .line-field{background:linear-gradient(180deg,rgba(0,70,80,.18),rgba(255,255,255,.16)) !important}
-html.red:not(:has(#resultsWrap[style*="block"])) .line-field input::placeholder,html.red:not(:has(#resultsWrap[style*="block"])) .hero-email-field input::placeholder{color:#000 !important;-webkit-text-fill-color:#000 !important;opacity:1 !important}
-html.red:not(:has(#resultsWrap[style*="block"])) #formStep.locked .line-field input,html.red:not(:has(#resultsWrap[style*="block"])) #formStep.locked .line-field select,html.red:not(:has(#resultsWrap[style*="block"])) #formStep .row-time .ampm-field select{color:#000 !important;-webkit-text-fill-color:#000 !important;opacity:1 !important}
-html.red:not(:has(#resultsWrap[style*="block"])) .line-field select option{background:#e8fbf9 !important;color:#000 !important}
-html.red:not(:has(#resultsWrap[style*="block"])) #formStep.locked .line-field::after{background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 15'%3E%3Crect x='1' y='6' width='11' height='8' rx='1.5' fill='%23000'/%3E%3Cpath d='M3.5 6V4.5a3 3 0 0 1 6 0V6' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") !important}
-html.red:not(:has(#resultsWrap[style*="block"])) .chk input:checked+.chk-box::after{border-color:#000 !important}
