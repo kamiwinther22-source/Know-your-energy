@@ -45,12 +45,12 @@ import {EXRLoader} from './vendor/loaders/EXRLoader.js';
     for(let j=0;j<gh;j++)for(let i=0;i<gw;i++){
       const k=j*gw+i,x=i*CELL,y=j*CELL;
       const dx=x-PADX,dy=y-PADY;let z=A*(Math.sin(TAU*dx/1100+1.1)*Math.sin(TAU*dy/1500+.4)+.6*Math.sin(TAU*(dx/900+dy/1300)+2.2));
-      z+=-pk[k*4]/255*4+bs[k*4]/255*2+bw[k*4]/255*6;
+      z+=.25*(GH/2-j*CELL)-pk[k*4]/255*4+bs[k*4]/255*2+bw[k*4]/255*6;
       p.setXYZ(k,i*CELL-GW/2,GH/2-j*CELL,z);}
     p.needsUpdate=true;geo.computeVertexNormals();
     if(mesh){scene.remove(mesh);mesh.geometry.dispose();}
-    mesh=new THREE.Mesh(geo,mat);mesh.rotation.x=.25;scene.add(mesh);
-    camera=new THREE.OrthographicCamera(-W/2,W/2,H/2,-H/2,1,4000);camera.position.z=2000;
+    mesh=new THREE.Mesh(geo,mat);scene.add(mesh);
+    camera=new THREE.OrthographicCamera(-W/2,W/2,H/2,-H/2,1,6000);camera.position.z=3000;
     renderer.render(scene,camera);
   }
   const queue=()=>{if(!raf)raf=setTimeout(render,150);};
