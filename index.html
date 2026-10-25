@@ -3414,7 +3414,8 @@ function savePrintReading() {
   track("save_print");
   const ua = navigator.userAgent;
   const iosOther = (/iPad|iPhone|iPod/.test(ua) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) && /CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(ua);
-  if (!iosOther && typeof window.print === "function") {
+  const android = /Android/.test(ua);
+  if (!iosOther && !android && typeof window.print === "function") {
     try {
       window.print();
       return;
