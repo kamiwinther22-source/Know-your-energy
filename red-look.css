@@ -235,3 +235,11 @@ html.red:not(:has(#resultsWrap[style*="block"])) .rel-chip:not(.active){text-sha
 html.red:not(:has(#resultsWrap[style*="block"])) .gen-btn *,html.red:not(:has(#resultsWrap[style*="block"])) .rbtn *,html.red:not(:has(#resultsWrap[style*="block"])) .rel-chip *{text-shadow:-.5px .5px 0 rgba(255,255,255,.7) !important;color:#0f161b !important;-webkit-text-fill-color:#0f161b !important;filter:none !important}
 html.red:not(:has(#resultsWrap[style*="block"])) .hero-continue-btn::before,html.red:not(:has(#resultsWrap[style*="block"])) .gen-btn::before{border-radius:50% 50% 5px 5px/100% 100% 5px 5px !important}
 
+
+/* ===== Title and tagline stacked into the upper-left corner, following the diagonal (wide at the top, narrowing down) =====
+   The corner is the part of the page farthest from the sun's light, so the text sits on the deepest colour and never competes with a glare.
+   Wording and order are unchanged; only the line breaks and sizes change. The solar system moves down and right to leave the corner clear. */
+html.red:not(:has(#resultsWrap[style*="block"])) .r-h1{font-size:36px;line-height:1.05}
+html.red:not(:has(#resultsWrap[style*="block"])) .r-sys{white-space:normal;width:226px;margin-top:10px;line-height:1.3}
+html.red:not(:has(#resultsWrap[style*="block"])) .r-fcr{width:152px;margin-top:6px;font-size:16px;line-height:1.3}
+html.red:not(:has(#resultsWrap[style*="block"])) .hero-illustration{transform:translateX(120px) translateY(-8px) rotate(12deg) scale(1.5)}
