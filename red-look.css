@@ -174,8 +174,8 @@ html.red .row-birth .notime-row label.chk{display:flex;font-size:15px;margin:0}
 
 /* ===== Lit front page: the sun is the light source (upper right of the page). Scoped to the front page only; the results page keeps its own look. =====
    background: front-bg.jpg is the light falling off from the sun across the whole page (see the comments below for how each piece follows it). */
-html.red,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#084e59 !important}
-html.red:not(:has(#resultsWrap[style*="block"])) body{background:url(front-bg.jpg) 50% 0/1170px auto no-repeat,#084e59 !important}
+html.red,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#0f7e8a !important}
+html.red:not(:has(#resultsWrap[style*="block"])) body{background:url(front-bg.jpg) 50% 0/1170px auto no-repeat,#0f7e8a !important}
 /* one light: upper right */
 /* fields: carved into the surface. Same jade as the page around them (the surface shows through), slightly shaded inside.
    Light is upper right, so the top and right inner walls are in shadow and the lower-left edge catches a thin lit lip. */
