@@ -15,7 +15,7 @@ import {EXRLoader} from './vendor/loaders/EXRLoader.js';
   const pm=new THREE.PMREMGenerator(renderer);const env=pm.fromEquirectangular(eq).texture;
   const scene=new THREE.Scene();scene.environment=env;
   const mat=new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.10});
-  const sun=new THREE.DirectionalLight(0xffffff,3.4);sun.position.set(220,220,950);scene.add(sun);   // the sun (the big chrome sphere, upper right of the page): the only light; the glints are its specular reflection
+  const sun=new THREE.PointLight(0xffffff,4,0,0);scene.add(sun);   // the sun: placed where the big chrome sphere really is on the page; the only light; the glints are its specular reflection
   let mesh=null,camera=null,raf=0;
   const CELL=2;
   function visible(el,rc){
@@ -51,6 +51,9 @@ import {EXRLoader} from './vendor/loaders/EXRLoader.js';
     if(mesh){scene.remove(mesh);mesh.geometry.dispose();}
     mesh=new THREE.Mesh(geo,mat);scene.add(mesh);
     camera=new THREE.OrthographicCamera(-W/2,W/2,H/2,-H/2,1,6000);camera.position.z=3000;
+    {const ill=document.getElementById('heroIllustration')||document.querySelector('#hookStep canvas');let sxp=294,syp=200;
+     if(ill){const ir=ill.getBoundingClientRect();if(ir.width>100){sxp=ir.left+sx+ir.width*.507;syp=ir.top+sy+ir.height*.43;}}
+     sun.position.set(sxp-W/2,H/2-syp,260);}
     renderer.render(scene,camera);
   }
   const queue=()=>{if(!raf)raf=setTimeout(render,150);};
