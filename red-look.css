@@ -247,5 +247,5 @@ html.red:not(:has(#resultsWrap[style*="block"])) .hero-illustration{transform:tr
 /* ===== The four selling points: larger, bolder, each marked with a polished silver bead (the same chrome as the planets, lit from the upper right) ===== */
 html.red:not(:has(#resultsWrap[style*="block"])) .r-b22{gap:16px 12px}
 html.red:not(:has(#resultsWrap[style*="block"])) .r-b22 li{padding-left:32px;font-size:15.2px;line-height:1.22;font-weight:800;text-shadow:0 1px 1px rgba(0,40,52,.6)}
-html.red:not(:has(#resultsWrap[style*="block"])) .r-b22 li:before{top:-.15em;left:-2px;width:29px;height:29px;border-radius:0;transform:none;box-shadow:none;
+html.red:not(:has(#resultsWrap[style*="block"])) .r-b22 li:before{top:-.2em;left:-3px;width:31px;height:31px;border-radius:0;transform:none;box-shadow:none;
  background:url(diamond.png) no-repeat center/contain;filter:none}
