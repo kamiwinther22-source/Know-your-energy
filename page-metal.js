@@ -15,7 +15,7 @@ import {EXRLoader} from './vendor/loaders/EXRLoader.js';
   const pm=new THREE.PMREMGenerator(renderer);const env=pm.fromEquirectangular(eq).texture;
   const scene=new THREE.Scene();scene.environment=env;
   const mat=new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.10});
-  const sun=new THREE.DirectionalLight(0xffffff,3.4);sun.position.set(520,-430,730);scene.add(sun);   // one real light: the glints are its specular reflection where the sheet's curve faces it
+  const sun=new THREE.DirectionalLight(0xffffff,3.4);sun.position.set(220,220,950);scene.add(sun);   // the sun (the big chrome sphere, upper right of the page): the only light; the glints are its specular reflection
   let mesh=null,camera=null,raf=0;
   const CELL=2;
   function visible(el,rc){
