@@ -49,7 +49,7 @@ function cast(seed,band){const W=512,H=256,c=document.createElement('canvas');c.
 // --- objects ---
 const outer=new THREE.Group();outer.position.set(cx,-cy,0);outer.rotation.z=THREE.MathUtils.degToRad(-ROT);scene.add(outer);
 const plane=new THREE.Group();plane.rotation.x=-TILT;outer.add(plane);
-const sunMat=new THREE.MeshStandardMaterial({color:0xfff7ec,metalness:1,roughness:0,envMapIntensity:parseFloat(Q.get('sunI')||'1.6')});
+const sunMat=new THREE.MeshStandardMaterial({color:0xfff7ec,metalness:1,roughness:0,envMapIntensity:parseFloat(Q.get('sunI')||'1.25')});
 // the sun is the light: the chrome keeps its reflections, and light is added on top of them in the shader.
 // A hot specular glint toward the light (upper right, the same direction the whole page is lit from), a rim of light that
 // brightens toward the silhouette (strongest on the lit side, so the sun no longer ends in a black outline), and a broad soft sheen.
@@ -64,11 +64,11 @@ sun.position.set(cx,-cy,0);sun.castShadow=true;scene.add(sun);
 // real light at the sun's centre: planets and rings catch a glint on the side that faces it
 const sunLight=new THREE.PointLight(0xfff4e4,parseFloat(Q.get('sunL')||'7'),0,0);sunLight.position.copy(sun.position);scene.add(sunLight);
 // corona: light spilling out past the sun's edge, behind everything
-const corona=(()=>{const S=512,c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d'),edge=S/2*R_SUN/(R_SUN*5.2/2);   // edge = the sun's silhouette in this texture
+const corona=(()=>{const S=512,c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d'),edge=S/2*R_SUN/(R_SUN*3.1/2);   // edge = the sun's silhouette in this texture
   const gr=g.createRadialGradient(S/2,S/2,edge*0.9,S/2,S/2,S/2);
   gr.addColorStop(0,'rgba(255,246,226,.72)');gr.addColorStop(.12,'rgba(255,240,214,.36)');gr.addColorStop(.45,'rgba(255,236,206,.10)');gr.addColorStop(1,'rgba(255,236,206,0)');
   g.fillStyle=gr;g.fillRect(0,0,S,S);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
-  const m=new THREE.Mesh(new THREE.PlaneGeometry(R_SUN*5.2,R_SUN*5.2),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false}));
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(R_SUN*3.1,R_SUN*3.1),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false}));
   m.position.set(cx,-cy,-70);m.renderOrder=-1;return m;})();
 scene.add(corona);
 const ringMat=new THREE.MeshStandardMaterial({color:new THREE.Color(Q.get('ring')||'#dfe2e7'),metalness:1,roughness:0.04,envMapIntensity:parseFloat(Q.get('ringI')||'1.25')});
