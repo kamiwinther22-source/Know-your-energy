@@ -1,0 +1,18 @@
+/* ?look=pagemetal — see page-metal.js. Opt-in only; the default page is untouched. */
+html.pagemetal.red:not(:has(#resultsWrap[style*="block"])),
+html.pagemetal.red:not(:has(#resultsWrap[style*="block"])) body{background:#a9abae !important;overflow-x:clip;}
+html.pagemetal #pmBg{position:absolute;left:0;top:0;pointer-events:none;z-index:0;}
+html.pagemetal:has(#resultsWrap[style*="block"]) #pmBg{display:none;}
+html.pagemetal.red #hookStep,html.pagemetal.red #formStep{position:relative;z-index:1;}
+html.pagemetal.red #hookStep *:not(canvas),html.pagemetal.red #formStep *:not(canvas){color:#0c0e13 !important;-webkit-text-fill-color:#0c0e13 !important;text-shadow:none !important;}
+html.pagemetal.red #hookStep .hl,html.pagemetal.red #hookStep [class*="hl-"]{background:none !important;}
+html.pagemetal.red .line-field,html.pagemetal.red .field,html.pagemetal.red .line-field.hero-email-field,
+html.pagemetal.red #formStep.locked .line-field,html.pagemetal.red .row-time.is-off .line-field{background:transparent !important;box-shadow:none !important;}
+html.pagemetal.red ::placeholder{color:#3b414c !important;-webkit-text-fill-color:#3b414c !important;opacity:1;}
+html.pagemetal.red #formStep.locked .line-field::after{filter:brightness(.12);}
+html.pagemetal.red .chk-box{background:transparent !important;box-shadow:inset 0 0 0 2px #0c0e13 !important;}
+html.pagemetal.red .rbtn,html.pagemetal.red .gen-btn,html.pagemetal.red .rel-chip{background:none !important;box-shadow:none !important;filter:none !important;}
+html.pagemetal.red .rbtn::before,html.pagemetal.red .gen-btn::before,html.pagemetal.red .rel-chip::before,
+html.pagemetal.red .rbtn::after,html.pagemetal.red .gen-btn::after,html.pagemetal.red .rel-chip::after{display:none !important;}
+html.pagemetal.red .rbtn svg,html.pagemetal.red .gen-btn svg{display:none !important;}
+html.pagemetal.red *:has(> .rbtn),html.pagemetal.red *:has(> .gen-btn),html.pagemetal.red .rbtn *,html.pagemetal.red .gen-btn *{filter:none !important;text-shadow:none !important;}
