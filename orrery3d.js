@@ -49,12 +49,32 @@ function cast(seed,band){const W=512,H=256,c=document.createElement('canvas');c.
 // --- objects ---
 const outer=new THREE.Group();outer.position.set(cx,-cy,0);outer.rotation.z=THREE.MathUtils.degToRad(-ROT);scene.add(outer);
 const plane=new THREE.Group();plane.rotation.x=-TILT;outer.add(plane);
-const sun=new THREE.Mesh(new THREE.SphereGeometry(R_SUN,160,120),new THREE.MeshStandardMaterial({color:0xfff7ec,metalness:1,roughness:0,envMapIntensity:parseFloat(Q.get('sunI')||'1.6')}));
+const sunMat=new THREE.MeshStandardMaterial({color:0xfff7ec,metalness:1,roughness:0,envMapIntensity:parseFloat(Q.get('sunI')||'1.6')});
+// the sun is the light: the chrome keeps its reflections, and light is added on top of them in the shader.
+// A hot specular glint toward the light (upper right, the same direction the whole page is lit from), a rim of light that
+// brightens toward the silhouette (strongest on the lit side, so the sun no longer ends in a black outline), and a broad soft sheen.
+sunMat.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
+  {vec3 Vn=normalize(vViewPosition);float nv=clamp(dot(normal,Vn),0.0,1.0);
+   vec3 Ld=normalize(vec3(0.52,0.58,0.62));vec3 Hh=normalize(Ld+Vn);float nh=max(dot(normal,Hh),0.0);
+   float lit=0.12+0.88*clamp(dot(normalize(normal.xy+1e-4),normalize(vec2(0.67,0.74)))*0.5+0.5,0.0,1.0);
+   float rim=pow(1.0-nv,2.4)*lit;
+   totalEmissiveRadiance+=vec3(1.0,0.97,0.9)*(rim*1.15+pow(nh,140.0)*22.0+pow(nh,24.0)*0.10);}`);};
+const sun=new THREE.Mesh(new THREE.SphereGeometry(R_SUN,160,120),sunMat);
 sun.position.set(cx,-cy,0);sun.castShadow=true;scene.add(sun);
-const ringMat=new THREE.MeshStandardMaterial({color:new THREE.Color(Q.get('ring')||'#dfe2e7'),metalness:1,roughness:0,envMapIntensity:parseFloat(Q.get('ringI')||'1.25')});
+// real light at the sun's centre: planets and rings catch a glint on the side that faces it
+const sunLight=new THREE.PointLight(0xfff4e4,parseFloat(Q.get('sunL')||'7'),0,0);sunLight.position.copy(sun.position);scene.add(sunLight);
+// corona: light spilling out past the sun's edge, behind everything
+const corona=(()=>{const S=512,c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d'),edge=S/2*R_SUN/(R_SUN*5.2/2);   // edge = the sun's silhouette in this texture
+  const gr=g.createRadialGradient(S/2,S/2,edge*0.9,S/2,S/2,S/2);
+  gr.addColorStop(0,'rgba(255,246,226,.72)');gr.addColorStop(.12,'rgba(255,240,214,.36)');gr.addColorStop(.45,'rgba(255,236,206,.10)');gr.addColorStop(1,'rgba(255,236,206,0)');
+  g.fillStyle=gr;g.fillRect(0,0,S,S);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(R_SUN*5.2,R_SUN*5.2),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false}));
+  m.position.set(cx,-cy,-70);m.renderOrder=-1;return m;})();
+scene.add(corona);
+const ringMat=new THREE.MeshStandardMaterial({color:new THREE.Color(Q.get('ring')||'#dfe2e7'),metalness:1,roughness:0.04,envMapIntensity:parseFloat(Q.get('ringI')||'1.25')});
 for(const rx of RING_RX)plane.add(new THREE.Mesh(new THREE.TorusGeometry(rx,1.65,24,400),ringMat));
 const planets=SPECS.map(([ri,a0,pr],i)=>{
-  const m=new THREE.Mesh(new THREE.SphereGeometry(pr,128,96),new THREE.MeshStandardMaterial({color:0xcfccc6,metalness:1,roughness:0}));
+  const m=new THREE.Mesh(new THREE.SphereGeometry(pr,128,96),new THREE.MeshStandardMaterial({color:0xcfccc6,metalness:1,roughness:0.04}));
   m.castShadow=true;plane.add(m);return {m,ri,a0};});
 // contact shadows on the ring plane (the "table")
 const nW=new THREE.Vector3(0,0,1).applyQuaternion(plane.getWorldQuaternion(new THREE.Quaternion()));
@@ -67,7 +87,7 @@ const cubeRT=new THREE.WebGLCubeRenderTarget(256,{type:THREE.HalfFloatType,gener
 const cubeCam=new THREE.CubeCamera(1,6000,cubeRT);cubeCam.position.copy(sun.position);scene.add(cubeCam);sun.material.envMap=cubeRT.texture;
 const pCubes=planets.map(p=>{const rt=new THREE.WebGLCubeRenderTarget(96,{type:THREE.HalfFloatType,generateMipmaps:false,minFilter:THREE.LinearFilter});
   const cc=new THREE.CubeCamera(1,6000,rt);scene.add(cc);p.m.material.envMap=rt.texture;return {p,cc};});
-function capture(cc,hide){hide.visible=false;catcher.visible=false;scene.background=eq;cc.update(renderer,scene);scene.background=null;hide.visible=true;catcher.visible=true;}
+function capture(cc,hide){hide.visible=false;catcher.visible=false;corona.visible=false;scene.background=eq;cc.update(renderer,scene);scene.background=null;hide.visible=true;catcher.visible=true;corona.visible=true;}
 let pi=0;
 var place=function(t){for(const p of planets){const a=THREE.MathUtils.degToRad(p.a0+360*t/PERIOD),rx=RING_RX[p.ri];
   p.m.position.set(rx*Math.cos(a),-rx*Math.sin(a),0);}}
