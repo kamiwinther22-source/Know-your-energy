@@ -171,3 +171,8 @@ html.red .tz-field[hidden]{display:none}
 html.red .row-time.is-off .line-field{background:#0d0105 !important}
 html.red #formStep #p2Section .loc-field,html.red #formStep #p1Block .loc-field{width:min(310px,100%)}
 html.red .row-birth .notime-row label.chk{display:flex;font-size:15px;margin:0}
+
+/* form boxes take the page background; autofill no longer paints them light */
+html.red .field,html.red .line-field,html.red .line-field.hero-email-field,html.red #formStep .row-time .ampm-field,html.red .chk-box{background:transparent !important;box-shadow:0 1.5px 0 #d7dce2 !important}
+html.red .line-field:focus-within{box-shadow:0 1.5px 0 #fff,0 0 0 2px rgba(255,255,255,.55) !important}
+html.red .line-field input:-webkit-autofill,html.red .line-field input:-webkit-autofill:hover,html.red .line-field input:-webkit-autofill:focus,html.red .line-field input:-webkit-autofill:active{-webkit-text-fill-color:#fff !important;caret-color:#fff;transition:background-color 99999s ease-in-out 0s !important;box-shadow:none !important;-webkit-box-shadow:none !important}
