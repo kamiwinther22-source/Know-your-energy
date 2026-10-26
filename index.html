@@ -853,7 +853,7 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
 .chart-frame .ce-wrap{position:relative;width:min(358px,calc(100vw - 24px));margin:0 auto}
 .chart-frame .ce-body{position:relative;z-index:2;padding:64px clamp(40px,14vw,58px) 78px}
 .chart-frame .ce-frame{position:absolute;left:0;top:0;z-index:1;pointer-events:none}
-.chart-frame .ce-wrap *{color:#0b0b10 !important}
+.chart-frame .ce-wrap *:not(.glyph):not(.glyph *):not(g[style*="color"]):not(g[style*="color"] *){color:#0b0b10 !important}
 .chart-frame .card-expand-title{font:400 30px 'Alex Brush',cursive !important;text-align:center;text-transform:none !important;letter-spacing:0 !important;margin:0 0 26px !important;white-space:nowrap;max-width:none}
 .chart-frame .date-explorer{background:transparent !important;border-left:0 !important;padding:0 !important;margin:0 0 22px}
 .chart-frame .date-explorer-head{display:flex;justify-content:space-between;align-items:baseline}
