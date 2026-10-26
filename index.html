@@ -2944,11 +2944,9 @@ function hdr(hd, errMsg) {
   if (hd.profile) core.push(arow("Profile", hd.profile, "hdprofile", normalizeHDProfile(hd.profile)));
   if (hd.authority) core.push(arow("Authority", hd.authority, "hdauthority", normalizeHDAuthority(hd.authority)));
   if (core.length) {
-    h += dpsec("Core");
     h += core.join("");
   }
   if (hd.incarnation_cross) {
-    h += dpsec("Cross");
     h += arow("Incarnation Cross", hd.incarnation_cross, "hdcross");
   }
   if (hd.gates && hd.gates.length) {
