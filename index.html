@@ -43,7 +43,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23000'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%234655D6'%3EK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=Libre+Baskerville:ital@1&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=Libre+Baskerville:ital@1&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
 <style>
 @layer base{
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -887,6 +887,16 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
 .chart-astro .dprv{font-size:23px !important;line-height:1.2;text-align:left !important;white-space:normal}
 .chart-astro .glyph{font-size:1.15em;margin-right:6px}
 .chart-astro .dpsec{margin:48px 0 18px !important}
+.chart-hd .card-expand-title{font-size:25px !important}
+.chart-hd .dprow{margin:0 0 24px !important}
+.chart-hd .dprv{font-size:30px !important}
+.chart-hd .dpsec{margin:44px 0 16px !important}
+.chart-hd .gates-grid{display:flex !important;flex-wrap:wrap;gap:10px !important;padding:6px 0 10px !important}
+.chart-hd .gate-chip{background:#fff !important;border:1.5px solid #0b0b10 !important;border-radius:0 !important;font:800 17px 'Barlow Condensed',sans-serif !important;padding:8px 14px !important;min-width:52px;border-radius:3px !important;box-shadow:none !important}
+.chart-hd .gate-chip.active,.chart-hd .gate-chip[aria-pressed="true"]{background:#8c1034 !important;color:#fff !important}
+.chart-hd .gate-def,.chart-hd .gate-def *{font-weight:500 !important}
+.chart-hd .gate-def{font:500 15px/1.58 'Fraunces',Georgia,serif !important;border-left:2px solid #8c1034 !important;background:none !important;padding:6px 0 10px 14px !important;margin:6px 0 12px !important}
+.chart-hd .dprow:has(.gates-grid){border-bottom:0 !important}
 .chart-frame .wheel-wrap{width:100%;max-width:300px;aspect-ratio:1/1;margin:10px auto 44px}
 .chart-frame .wheel-wrap [stroke="#1C2CA9"]{stroke:#0b0b10}
 .chart-frame .wheel-wrap [fill="#1C2CA9"]{fill:#0b0b10}
@@ -4193,9 +4203,10 @@ function drawChartFrame() {
 let chartFrameObserver = null;
 function setChartFrame(title) {
   const ex = document.getElementById("cardExpand");
-  const on = /Numerology|Astrology/i.test(title || "");
+  const on = /Numerology|Astrology|Human Design/i.test(title || "");
   ex.classList.toggle("chart-frame", on);
   ex.classList.toggle("chart-astro", on && /Astrology/i.test(title));
+  ex.classList.toggle("chart-hd", on && /Human Design/i.test(title));
   const wrap = ex.querySelector(".ce-wrap");
   if (!on || !wrap) return;
   ex.querySelectorAll(".dprow").forEach(r => r.classList.toggle("kar", /karmic/i.test(r.textContent)));
