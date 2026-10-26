@@ -881,6 +881,14 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
 .chart-frame .dpdef{font:500 15px/1.58 'Fraunces',Georgia,serif !important;font-style:normal !important;padding:6px 0 10px 14px !important;margin:2px 0 12px !important;border-left:2px solid #8c1034;background:none !important}
 .chart-frame .dpdef p{margin:0 0 9px;font:500 15px/1.58 'Fraunces',Georgia,serif !important}
 .chart-frame .dpdef p:first-child{font-weight:700;font-size:16.5px !important}
+.chart-astro .dprv{font-size:15px !important;line-height:1.15;white-space:nowrap}
+.chart-astro .dpr{align-items:center !important;gap:10px !important}
+.chart-astro .dprl,.chart-astro .dprl.term{font-size:13px !important;letter-spacing:.06em !important}
+.chart-astro .glyph{font-size:1.1em;margin-right:6px}
+.chart-frame .wheel-wrap{width:100%;max-width:260px;aspect-ratio:1/1;margin:6px auto 22px}
+.chart-frame .wheel-wrap [stroke="#1C2CA9"]{stroke:#0b0b10}
+.chart-frame .wheel-wrap [fill="#1C2CA9"]{fill:#0b0b10}
+.chart-frame .wheel-wrap svg text{fill:#0b0b10 !important}
 </style>
 
 <style id="fanCss">
@@ -4183,8 +4191,9 @@ function drawChartFrame() {
 let chartFrameObserver = null;
 function setChartFrame(title) {
   const ex = document.getElementById("cardExpand");
-  const on = /Numerology/i.test(title || "");
+  const on = /Numerology|Astrology/i.test(title || "");
   ex.classList.toggle("chart-frame", on);
+  ex.classList.toggle("chart-astro", on && /Astrology/i.test(title));
   const wrap = ex.querySelector(".ce-wrap");
   if (!on || !wrap) return;
   ex.querySelectorAll(".dprow").forEach(r => r.classList.toggle("kar", /karmic/i.test(r.textContent)));
