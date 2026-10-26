@@ -43,7 +43,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23000'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%234655D6'%3EK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=Libre+Baskerville:ital@1&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
 <style>
 @layer base{
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -846,6 +846,43 @@ if(FIN||/[?&]look=base\b/.test(location.search)){if(FIN){var R=document.document
 document.documentElement.classList.add('no-shadows','inlay-lt');document.addEventListener('DOMContentLoaded',function(){var f=document.querySelector('.free-reading-line');if(f)f.innerHTML='<span class="fr-a">first reading</span><span class="fr-b">free</span>';});}document.documentElement.classList.add('look-base');if(/[?&]shadows=0\b/.test(location.search))document.documentElement.classList.add('no-shadows');var b=document.createElement('link');b.rel='stylesheet';b.href='look-base.css';document.head.appendChild(b);if(/[?&]labels=below\b/.test(location.search)){document.documentElement.classList.add('labels-below');var sl=function(){document.querySelectorAll('.hero-continue-btn,.gen-btn,.price-row,.rel-chip').forEach(function(b){var t=Array.prototype.map.call(b.querySelectorAll('span'),function(s){return s.textContent.trim();}).filter(Boolean).join(' ')||b.textContent.replace(/\s+/g,' ').trim();if(t&&b.dataset.label!==t)b.dataset.label=t;});};document.addEventListener('DOMContentLoaded',function(){sl();new MutationObserver(sl).observe(document.body,{childList:true,subtree:true});});}
 if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMContentLoaded',function(){var m=document.createElement('script');m.type='module';m.src='metal3d.js';document.body.appendChild(m);if(FIN){var rf=document.createElement('script');rf.src='reflect.js';document.body.appendChild(rf);var cf=document.createElement('script');cf.src='confirm.js';document.body.appendChild(cf);var bs=document.createElement('script');bs.src='brushed-bg.js';document.body.appendChild(bs);}});return;}if(!/[?&]look=metal\b/.test(location.search))return;document.documentElement.classList.add('look-metal');var l=document.createElement('link');l.rel='stylesheet';l.href='look-metal.css';document.head.appendChild(l);document.addEventListener('DOMContentLoaded',function(){var s=document.createElement('script');s.src='look-metal.js';document.body.appendChild(s);var m=document.createElement('script');m.type='module';m.src='metal3d.js';document.body.appendChild(m);});})();</script>
 <link rel="stylesheet" href="red-look.css?v=20261018">
+<style id="chartFrameCss">
+/* Numerology chart: opens in an angled silver frame (the front page's cut corners and silver rim) around a white sheet. */
+.card-expand.chart-frame{background:rgba(20,3,9,.88) !important;background-image:none !important;box-shadow:none !important;padding:16px 12px 40px !important}
+.chart-frame .card-expand-close{position:fixed;top:8px;right:10px;color:#fff;z-index:6}
+.chart-frame .ce-wrap{position:relative;width:min(358px,calc(100vw - 24px));margin:0 auto}
+.chart-frame .ce-body{position:relative;z-index:2;padding:64px clamp(40px,14vw,58px) 78px}
+.chart-frame .ce-frame{position:absolute;left:0;top:0;z-index:1;pointer-events:none}
+.chart-frame .ce-wrap *{color:#0b0b10 !important}
+.chart-frame .card-expand-title{font:400 30px 'Alex Brush',cursive !important;text-align:center;text-transform:none !important;letter-spacing:0 !important;margin:0 0 26px !important;white-space:nowrap;max-width:none}
+.chart-frame .date-explorer{background:transparent !important;border-left:0 !important;padding:0 !important;margin:0 0 22px}
+.chart-frame .date-explorer-head{display:flex;justify-content:space-between;align-items:baseline}
+.chart-frame .date-explorer-input{border-bottom:1px solid #0b0b10 !important}
+.chart-frame .dpsec{font:400 25px 'Alex Brush',cursive !important;color:#8c1034 !important;text-transform:none !important;letter-spacing:0 !important;display:flex !important;align-items:center;white-space:nowrap;margin:34px 0 8px !important;padding:0 !important;background:none !important;border:0 !important}
+.chart-frame .ce-wrap .dpsec{color:#8c1034 !important}
+.chart-frame .dpsec::before{content:'';flex:none;width:13px;height:13px;margin-right:11px;background:#8c1034;clip-path:polygon(26% 0,74% 0,100% 50%,74% 100%,26% 100%,0 50%)}
+.chart-frame .dprow{background:transparent !important;border-bottom:1px solid #0b0b10;padding:0 !important;margin:0 0 14px}
+.chart-frame .dprow:has(.stage-pair){border-bottom:0 !important;margin-bottom:6px !important}
+.chart-frame .dpr{display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;gap:0 !important;justify-content:space-between;align-items:baseline;padding:6px 0 2px !important;margin-left:0 !important}
+.chart-frame .dprl,.chart-frame .dprl.term{font:800 14.5px 'Barlow Condensed',sans-serif !important;letter-spacing:.12em !important;text-transform:uppercase !important;white-space:nowrap;border-bottom:0 !important;align-self:auto !important;background:none !important;margin:0 !important;padding:0 !important}
+.chart-frame .dprl.term::after{border-color:#0b0b10 !important}
+.chart-frame .dprv{font:italic 900 40px 'Playfair Display',serif !important;line-height:1;text-align:right !important;align-self:auto !important}
+.chart-frame .stage-pair{display:grid !important;grid-template-columns:1fr 1fr;column-gap:20px}
+.chart-frame .stage-range{font:700 11px 'Barlow Condensed',sans-serif !important;padding:0 !important}
+.chart-frame .pc-col{border-bottom:1px solid #0b0b10;margin-bottom:12px}
+.chart-frame .pc-col .dprv{font-size:26px !important}
+.chart-frame .pc-col .dprl{font-size:11.5px !important;letter-spacing:.08em !important}
+.chart-frame .stage-pair .dpsec{font:800 12px 'Barlow Condensed',sans-serif !important;text-transform:uppercase !important;letter-spacing:.1em !important;white-space:normal !important;margin:0 0 6px !important;display:block !important}
+.chart-frame .stage-pair .dpsec::before{display:none !important}
+.chart-frame .birthdate-row{display:block !important}
+.chart-frame .birthdate-row .pc-col{display:block;margin-bottom:14px}
+.chart-frame .birthdate-row .pc-col .dprv{font-size:40px !important}
+.chart-frame .dprow.kar .dprv{font-size:28px !important;white-space:nowrap}
+.chart-frame .dpdef{font:500 15px/1.58 'Fraunces',Georgia,serif !important;font-style:normal !important;padding:6px 0 10px 14px !important;margin:2px 0 12px !important;border-left:2px solid #8c1034;background:none !important}
+.chart-frame .dpdef p{margin:0 0 9px;font:500 15px/1.58 'Fraunces',Georgia,serif !important}
+.chart-frame .dpdef p:first-child{font-weight:700;font-size:16.5px !important}
+</style>
+
 </head>
 <body>
 
@@ -1031,8 +1068,10 @@ animateHourglass(document.getElementById("loading"));
 <div class="card-expand" id="cardExpand">
   <button type="button" class="card-expand-close" id="cardExpandClose">&#10005;</button>
   <div class="card-expand-listen side-btn" id="cardExpandListenBtn" onclick="toggleModalListen()"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 9 9 9 13 5 13 19 9 15 5 15 5 9"/><path d="M17 8a5 5 0 010 8M20 5a9 9 0 010 14"/></svg><span>Listen</span></div>
-  <div class="card-expand-title" id="cardExpandTitle"></div>
-  <div class="card-expand-body" id="cardExpandBody"></div>
+  <div class="ce-wrap"><div class="ce-body">
+    <div class="card-expand-title" id="cardExpandTitle"></div>
+    <div class="card-expand-body" id="cardExpandBody"></div>
+  </div></div>
 </div>
 
 <script>
@@ -4031,6 +4070,52 @@ async function generate() {
   fillReading(p1, p2, result.report, result.reportError, result.reportUsedFallback, result.reportFallbackReason);
 }
 
+const CHART_CHROME = [[0, "#ffffff"], [.08, "#e7ebf0"], [.2, "#b9c1ca"], [.34, "#7f8892"], [.46, "#a7b0ba"], [.58, "#e9edf1"], [.66, "#ffffff"], [.76, "#c9d0d8"], [.9, "#8a939d"], [1, "#5f6872"]];
+function chartChromeAt(t) {
+  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  for (let i = 1; i < CHART_CHROME.length; i++) {
+    if (t <= CHART_CHROME[i][0]) {
+      const [t0, c0] = CHART_CHROME[i - 1], [t1, c1] = CHART_CHROME[i], u = (t - t0) / (t1 - t0), A = hex(c0), B = hex(c1);
+      return "rgb(" + A.map((v, k) => Math.round(v + (B[k] - v) * u)).join(",") + ")";
+    }
+  }
+  return CHART_CHROME[CHART_CHROME.length - 1][1];
+}
+function drawChartFrame() {
+  const ex = document.getElementById("cardExpand");
+  const wrap = ex && ex.querySelector(".ce-wrap");
+  if (!wrap || !ex.classList.contains("chart-frame")) return;
+  const W = Math.round(wrap.clientWidth), H = Math.round(wrap.clientHeight);
+  if (!W || !H) return;
+  const BAND = 34, C = 46;
+  const oct = (inset, c) => { const a = inset, b = W - inset, t = inset, u = H - inset; return "M" + (a + c) + "," + t + " L" + (b - c) + "," + t + " L" + b + "," + (t + c) + " L" + b + "," + (u - c) + " L" + (b - c) + "," + u + " L" + (a + c) + "," + u + " L" + a + "," + (u - c) + " L" + a + "," + (t + c) + " Z"; };
+  const outer = oct(4, C), inner = oct(4 + BAND, C - 0.586 * BAND), key = oct(4 + BAND + 10, C - 0.586 * (BAND + 10));
+  let rings = "";
+  for (let k = 0; k < BAND; k += 0.75) rings += '<path d="' + oct(4 + k, C - 0.586 * k) + '" fill="none" stroke="' + chartChromeAt(k / BAND) + '" stroke-width="1.6" stroke-linejoin="miter"/>';
+  const svg = '<svg class="ce-frame" xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '"><defs><linearGradient id="ceLt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity=".35"/></linearGradient><filter id="ceSh" x="-5%" y="-3%" width="110%" height="106%"><feDropShadow dx="0" dy="9" stdDeviation="9" flood-color="#000" flood-opacity=".5"/></filter></defs>'
+    + '<g filter="url(#ceSh)"><path d="' + outer + '" fill="#c9d0d8"/>' + rings + '</g>'
+    + '<path d="' + outer + " " + inner + '" fill="url(#ceLt)" fill-rule="evenodd"/>'
+    + '<path d="' + inner + '" transform="translate(0,2)" fill="none" stroke="#f4f6f8" stroke-width="2" opacity=".9"/>'
+    + '<path d="' + inner + '" fill="#ffffff" stroke="rgba(20,20,26,.8)" stroke-width="2.5"/>'
+    + '<path d="' + key + '" fill="none" stroke="#6f7782" stroke-width="1" opacity=".9"/></svg>';
+  const old = wrap.querySelector(".ce-frame");
+  if (old) old.remove();
+  wrap.insertAdjacentHTML("afterbegin", svg);
+}
+let chartFrameObserver = null;
+function setChartFrame(title) {
+  const ex = document.getElementById("cardExpand");
+  const on = /Numerology/i.test(title || "");
+  ex.classList.toggle("chart-frame", on);
+  const wrap = ex.querySelector(".ce-wrap");
+  if (!on || !wrap) return;
+  ex.querySelectorAll(".dprow").forEach(r => r.classList.toggle("kar", /karmic/i.test(r.textContent)));
+  if (!chartFrameObserver && typeof ResizeObserver === "function") chartFrameObserver = new ResizeObserver(() => drawChartFrame());
+  if (chartFrameObserver) { chartFrameObserver.disconnect(); chartFrameObserver.observe(wrap); }
+  drawChartFrame();
+  setTimeout(drawChartFrame, 400);
+}
+
 document.addEventListener("click", e => {
   const insideExpand = e.target.closest("#cardExpandBody");
   if (insideExpand) {
@@ -4080,6 +4165,7 @@ document.addEventListener("click", e => {
       document.getElementById("cardExpandBody").innerHTML = (entry.preHtml || "") + entry.rows;
       document.getElementById("cardExpandListenBtn").hidden = !entry.isReading;
       document.getElementById("cardExpand").classList.add("open");
+      setChartFrame(entry.title);
     }
   }
 });
