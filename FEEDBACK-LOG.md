@@ -195,3 +195,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - OWNER (28 Oct): on the silver with extra tonal range (rich2): "I do not like the pattern of the last one"; "that is the wrong direction". The small swirling folds pattern is out for silver. The better tonal range (bright whites, cool deep shadows) was not criticised, only the pattern.
 
 - OWNER DEFINITION (28 Oct): "RICH" colour = acrylic paint versus a crayon. Rich/acrylic: dense pigment, opaque, smooth, even, full chroma, clean. Dead/crayon: chalky, waxy, milky, translucent, low pigment, greyed, patchy. Applies to whites too: a rich white is clean, opaque titanium-white; a faded white is chalky or grey-cast. Not dark, not neon. The silver/gold renders looked dead because they were milky and grey-veiled, with colourless light.
+
+- OWNER STANDING RULE (28 Oct): ALWAYS rich colour (acrylic, not crayon); NEVER faded. Applies to every colour and every screen. The owner does not mind which colour as long as it is rich.
