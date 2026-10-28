@@ -185,3 +185,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - CORRECTION (owner, 28 Oct): the owner NEVER said they dislike wet or glossy. What they said about the last render: it was supposed to be metallic and was not; it looked like bubbles; it was neither metal nor fabric. That is a complaint that it did not read as the real material, not a ban on gloss. The earlier entry in this log saying glossy, wet or plastic highlights are dead is WRONG and must be ignored. Never add a rule the owner did not state; quote what they said.
 
 - OWNER (28 Oct): "Do not show me examples that are the individual reading. I want the relational reading only." From now on every example picture (front page, results page, opened charts) is the RELATIONAL reading with two people, never the individual reading.
+
+- OWNER (28 Oct): prefers SILVER over gold, but ONLY silver and NOT grey. The "green-gold" attempt showed no visible green and read as pale yellow; a green tint on gold was not wanted. Silver is made of near-white highlights against crisp deep shadows with little mid-grey between.
