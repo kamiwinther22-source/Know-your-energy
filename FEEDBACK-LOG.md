@@ -1,5 +1,18 @@
 # Owner feedback log (results page design)
 
+# THE LOOK, IN THE OWNER'S WORDS (read first; every option is judged against these)
+Exact quotes from this log. Nothing here is the assistant's wording.
+- A metallic page is the goal, and the page itself is the metal. On a picture that failed: "trying too hard to be different with no actual reason behind it other than a version of the sky, and there's no look of metallic at all. You stripped the one metallic thing, made it white, put a dash of it on buttons, otherwise flat black data entry fields on a busy flat coloured background of mixed flat sky colours."
+- Real metal, not tinted: "the blue background that you're making does not resemble metal, probably partially because what metal is blue?"
+- Reflective light is required, from the sun's direction only (the chrome sun on the front page). It may be several metals. Not flat grey, not faded shading, no circle of fake light ("Don't do that circle fake light.").
+- Light, cool, full colours: light colours can be full. Dark was only a default out of exhaustion.
+- Not minimal: "Minimal is not the goal. Nothingness is not equal to elegant."
+- Feeling: "I want sleek, classy, elegant." And: "Know Your Energy could not possibly appear less energetic."
+- Must not look like other sites: "This is the stereotypical look that I want to avoid."
+- 28 Oct: wants a UNIQUE look. Art may change; the words and how the page works stay. Use design principles, not specifics, because the goal is unique.
+- The solar system is the closest thing to metallic so far. Leave its look alone unless told.
+
+
 Read this before any design work. Add to it every time the owner reacts. Each entry says which screen the comment was about. Do not stretch a comment beyond that screen. Never re-offer something marked DEAD.
 
 ## Likes (steer toward these)
