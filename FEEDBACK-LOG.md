@@ -187,3 +187,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - OWNER (28 Oct): "Do not show me examples that are the individual reading. I want the relational reading only." From now on every example picture (front page, results page, opened charts) is the RELATIONAL reading with two people, never the individual reading.
 
 - OWNER (28 Oct): prefers SILVER over gold, but ONLY silver and NOT grey. The "green-gold" attempt showed no visible green and read as pale yellow; a green tint on gold was not wanted. Silver is made of near-white highlights against crisp deep shadows with little mid-grey between.
+
+- OWNER (28 Oct): the owner can sometimes see pictures the assistant only views while checking its own work (not only pictures sent as files), but is unsure when. So their reactions may refer to pictures the assistant did not send. Rule for the assistant: when a reaction does not match a sent picture, say so and ask which picture. Owner comment "the lines are too sharp, not the shine" referred to the first liquid-silver render (crisp outlines between reflections); two softened attempts came out blurry and grey-white and were not sent.
