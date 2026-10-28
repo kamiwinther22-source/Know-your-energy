@@ -205,3 +205,5 @@ Buttons: silver all the way through, NO colour inside. Data entry spaces: carved
 Process: no multiple-choice questions; do not narrate the next step; do not keep making after the owner has been shown something; after two failed tries move on; quote only what the owner said; never add rules the owner did not state.
 
 - OWNER (28 Oct): NO coloured stage/field behind the chart cards on the landing screen ("it ruins any possible background choice"). The cards sit directly on the background. The emerald and garnet stages in Landing-emerald/Landing-garnet are out.
+
+- OWNER (28 Oct): a plain paragraph of reading text under the cards looks like the entire reading from the charts. The landing example of the couple dynamics must not read as a paragraph of the whole reading; it must read as a sample. (Method not yet given by the owner.)
