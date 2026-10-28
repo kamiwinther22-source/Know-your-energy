@@ -1,6 +1,7 @@
 # Know Your Energy: working notes
 
 ## How to work with the owner (this comes first)
+- **CENTRAL POINT (owner, 28 Oct): the site must be bold-unique while also being sleek-classy-elegant. Anything created needs to fit this description.** Judge every option against it first. Everything else in this file is subordinate to it.
 - **Read `FEEDBACK-LOG.md` first and update it every time the owner reacts.** It is the running record of what they like, dislike and have ruled out. The owner should never have to repeat feedback.
 - **The design goal that outranks everything else: the site must NOT look like every other astrology, numerology or Human Design site or app.** Structure and layout have to be different, not only colour or finish. Every design choice is judged against this first. Working out what "different" means is the assistant's job.
 - **Show real options and let the owner choose.** The owner does not know what the possibilities are. Show several genuinely different, finished-looking options (screenshots of the real page with real data, never rough sketches or stand-ins), then let them pick. Do not narrow to one option for them and do not hand back a menu of small variations.

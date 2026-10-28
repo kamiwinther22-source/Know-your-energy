@@ -1,8 +1,9 @@
 # Owner feedback log (results page design)
 
 # THE LOOK, IN THE OWNER'S WORDS (read first; every option is judged against these)
-Exact quotes from this log. Nothing here is the assistant's wording.
-- A metallic page is the goal, and the page itself is the metal. On a picture that failed: "trying too hard to be different with no actual reason behind it other than a version of the sky, and there's no look of metallic at all. You stripped the one metallic thing, made it white, put a dash of it on buttons, otherwise flat black data entry fields on a busy flat coloured background of mixed flat sky colours."
+**CENTRAL POINT (owner, 28 Oct): the site must be bold-unique while also being sleek-classy-elegant. Anything created needs to fit this description.** Everything below is subordinate to it. Metal was the assistant's over-reading of the central point: the owner corrected it.
+The quotes below are from this log; nothing in them is the assistant's wording.
+- Metallic, from the owner's reaction to a picture that failed: "trying too hard to be different with no actual reason behind it other than a version of the sky, and there's no look of metallic at all. You stripped the one metallic thing, made it white, put a dash of it on buttons, otherwise flat black data entry fields on a busy flat coloured background of mixed flat sky colours."
 - Real metal, not tinted: "the blue background that you're making does not resemble metal, probably partially because what metal is blue?"
 - Reflective light is required, from the sun's direction only (the chrome sun on the front page). It may be several metals. Not flat grey, not faded shading, no circle of fake light ("Don't do that circle fake light.").
 - Light, cool, full colours: light colours can be full. Dark was only a default out of exhaustion.
