@@ -486,7 +486,7 @@ body{
 }
 .dprl.term.open::after{transform:rotate(-135deg);}
 .dprl.term:hover{border-bottom-color:var(--card-accent);}
-.dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:var(--card-mid);font-style:italic;font-weight:400;}
+.dpdef{padding:0 0.4rem 0.3rem;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.4;color:#000;font-style:italic;font-weight:500;}
 .dpdef p{margin:0 0 0.5em;}
 .dpdef p:last-child{margin-bottom:0;}
 .dpdef p:first-child{font-weight:700;font-style:normal;}
@@ -571,7 +571,7 @@ body{
 
 .gate-chip{border:1px solid var(--card-a1);border-bottom:1.5px dotted var(--card-accent);border-radius:3px;color:var(--card-text);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.48rem;padding:0.14rem 0;cursor:pointer;text-align:center;background:var(--card-stripe-odd);box-shadow:0 1px 3px -1px rgba(15,23,88,0.35);}
 .gate-chip:hover,.gate-chip.active{border-color:var(--card-accent);color:var(--card-accent);background:var(--card-a4);}
-.gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:var(--card-mid);font-style:italic;font-weight:400;}
+.gate-def{margin:0 0.4rem 0.3rem;padding:0.26rem 0.4rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.42rem;line-height:1.35;color:#000;font-style:italic;font-weight:500;}
 .gate-def-print{display:none;}
 .date-explorer{margin:0 0.3rem 0.4rem;padding:0.4rem 0.6rem;background:var(--card-a4);border-left:2px solid var(--card-accent);border-radius:2px;}
 .date-explorer-head{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;flex-wrap:wrap;}
@@ -881,6 +881,9 @@ if(FIN||/[?&]refl=1\b/.test(location.search))document.addEventListener('DOMConte
 .chart-frame .dpdef{font:500 15px/1.58 'Fraunces',Georgia,serif !important;font-style:normal !important;padding:6px 0 10px 14px !important;margin:2px 0 12px !important;border-left:2px solid #8c1034;background:none !important}
 .chart-frame .dpdef p{margin:0 0 9px;font:500 15px/1.58 'Fraunces',Georgia,serif !important}
 .chart-frame .dpdef p:first-child{font-weight:700;font-size:16.5px !important}
+.chart-frame .dprv{min-width:0}
+.chart-frame .dprow.cross .dpr{flex-direction:column !important;align-items:flex-start !important;gap:6px !important}
+.chart-frame .dprow.cross .dprv{text-align:left !important;font-size:26px !important;line-height:1.15;white-space:normal !important;overflow-wrap:break-word}
 .chart-astro .dprow{margin:0 0 26px !important}
 .chart-astro .dpr{flex-direction:column !important;align-items:flex-start !important;gap:6px !important;padding:8px 0 10px !important}
 .chart-astro .dprl,.chart-astro .dprl.term{font-size:14px !important;letter-spacing:.1em !important}
@@ -2387,7 +2390,7 @@ function arow(l, v, defKey, defNum, note, altNum) {
   } else if (specific) parts.push(`<p>${specific}</p>`);
   const def = parts.length ? parts.join("") : null;
   const lbl = def ? `<span class="dprl term" data-def="${defKey}">${l}</span>` : `<span class="dprl">${l}</span>`;
-  return `<div class="dprow"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def ? `<div class="dpdef" hidden>${def}</div>` : ""}</div>`;
+  return `<div class="dprow${defKey === "hdcross" ? " cross" : ""}"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(v)}</span></div>${def ? `<div class="dpdef" hidden>${def}</div>` : ""}</div>`;
 }
 
 function normalizeHDType(s) {
