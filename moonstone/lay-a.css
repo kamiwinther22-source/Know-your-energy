@@ -1,0 +1,5 @@
+/* A: the words themselves form the wedge (top-left); solar system bleeds off the right; headline with "free." as the hero; form returns to the middle */
+html.red #hookStep{display:block !important;position:relative;height:calc(100svh - 22px);min-height:0}
+html.red #hookStep .hero-illustration{position:absolute !important;left:96px;top:210px;margin:0 !important;transform:rotate(22deg) scale(1.55) !important}
+html.red #hookStep .r-free{position:absolute;left:0;top:372px;margin:0 !important;padding:0 !important;text-align:left !important;z-index:2}
+html.red #hookStep .hero-email-wrap{position:absolute !important;left:0;width:350px;bottom:44px;margin:0 !important;z-index:2}

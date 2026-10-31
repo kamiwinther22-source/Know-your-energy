@@ -25,19 +25,18 @@ void main(){
   // screen position in css px (390 wide): used to place the light on purpose, in the margins where no content sits
   vec2 px=vec2(gl_FragCoord.x/R.x*390.,(1.-gl_FragCoord.y/R.y)*844.);
   // ---- adularescence: one soft pale-blue sheen that follows the surface, kept to the upper-right corner
-  vec3 Hs=normalize(vec3(.405,.078,.911));
+  vec3 Hs=normalize(vec3(0.3916,-0.1150,0.9129));
   float cs=dot(N,Hs);
-  float band=exp(-pow((1.-cs)/.016,2.));
+  float band=exp(-pow((1.-cs)/.011,2.));
   band*=.88+.24*fbm(vec3(p*7.,3.));
-  vec3 sc=mix(vec3(.80,.88,1.0),vec3(.62,.77,1.0),clamp(band*1.4,0.,1.));
-  c=mix(c,sc,clamp(band,0.,1.)*.34);
+  vec3 sc=mix(vec3(.74,.84,1.0),vec3(.52,.70,1.0),clamp(band*1.4,0.,1.));
+  c=mix(c,sc,clamp(band,0.,1.)*.46);
   // ---- polish: slim glints at the rings' own angle (22 deg), placed on purpose in empty corners
   float ca=cos(.384),sa=sin(.384);
   vec2 d1=px-vec2(352.,38.);vec2 q1=vec2(d1.x*ca+d1.y*sa,-d1.x*sa+d1.y*ca);
   vec2 d2=px-vec2(354.,790.);vec2 q2=vec2(d2.x*ca+d2.y*sa,-d2.x*sa+d2.y*ca);
   vec2 d3=px-vec2(14.,338.);vec2 q3=vec2(d3.x*ca+d3.y*sa,-d3.x*sa+d3.y*ca);
   float pk=max(rbox(q1,vec2(0.),vec2(52.,18.),18.,24.),max(rbox(q2,vec2(0.),vec2(44.,15.),15.,20.),rbox(q3,vec2(0.),vec2(38.,13.),13.,18.)));
-  c*=1.-.035*pk;
   float g=max(rbox(q1,vec2(0.),vec2(24.,3.2),3.2,1.6),max(rbox(q2,vec2(0.),vec2(17.,2.6),2.6,1.4),rbox(q3,vec2(0.),vec2(13.,2.2),2.2,1.2)));
   c+=vec3(1.)*g*.85;
   c=min(c,vec3(1.));
