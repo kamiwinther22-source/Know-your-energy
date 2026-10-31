@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Moonstone swatch (live)</title>
+<style>
+html,body{margin:0;background:#cfd3de}
+body{height:400vh}
+canvas{position:fixed;inset:0;width:100vw;height:100vh;display:block}
+</style></head>
+<body><canvas id="c"></canvas>
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 R;      // canvas pixels
+uniform vec2 L;      // light/tilt, each -1..1
+float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float vn(vec3 x){
+  vec3 i=floor(x),f=fract(x);f=f*f*f*(f*(f*6.-15.)+10.);
+  return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+             mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*vn(p);p=p*2.03+vec3(1.7,9.2,3.1);a*=.5;}return s;}
+float H(vec2 p){
+  float d=dot(p/vec2(.95,.82),p/vec2(.95,.82));
+  return .42*exp(-d*1.5)+.012*fbm(vec3(p*.9,3.));
+}
+float body(vec3 q){ // milky cloud density, domain-warped, no periodic functions
+  vec3 w=vec3(fbm(q*1.1+4.),fbm(q*1.1+9.),fbm(q*1.1+14.))-.5;
+  return fbm(q*1.6+w*1.4);
+}
+void main(){
+  vec2 p=(gl_FragCoord.xy-.5*R)/R.y;
+  float e=.002;
+  float h0=H(p);
+  float dx=H(p+vec2(e,0.))-H(p-vec2(e,0.));
+  float dy=H(p+vec2(0.,e))-H(p-vec2(0.,e));
+  vec3 N=normalize(vec3(-dx/(2.*e)*.8,-dy/(2.*e)*.8,1.));
+  vec3 V=vec3(0.,0.,1.);
+  vec3 Ld=normalize(vec3(L.x*.85,L.y*.85,.62));
+  // ---- subsurface march (refracted view ray), light moves through the stone
+  vec3 T=refract(-V,N,1./1.53);
+  vec3 col=vec3(0.);
+  float trans=1.;
+  vec3 Hh=normalize(Ld+V);
+  float blueAcc=0.;
+  float cloudAcc=0.;
+  const int STEPS=9;
+  for(int i=0;i<STEPS;i++){
+    float t=(float(i)+.5)/float(STEPS);
+    float depth=t*.55;
+    vec3 pos=vec3(p,0.)+T*(depth/max(T.z,.2));
+    pos.z=depth*1.2;
+    float dens=smoothstep(.30,.80,body(pos*1.0));
+    float s=dens*.14;
+    // milky in-scatter lit from the side the light is on
+    float lit=.55+.45*clamp(dot(normalize(vec3(-N.xy*.6,1.)),Ld)*1.1+.35,0.,1.);
+    cloudAcc+=trans*s*lit;
+    // adularescence: sheet of twinned lamellae; lamella normal drifts slowly in depth
+    vec3 ln=normalize(vec3(N.xy*1.4,0.)+vec3((fbm(pos*vec3(.9,.9,1.4)+2.)-.5)*2.6,
+                           (fbm(pos*vec3(.9,.9,1.4)+8.)-.5)*2.6,1.));
+    float align=max(dot(ln,Hh),0.);
+    float sheet=pow(align,16.)*smoothstep(.30,.70,fbm(pos*vec3(1.2,1.2,2.2)+11.));
+    blueAcc+=trans*sheet*0.8;
+    trans*=exp(-s*.9);
+  }
+  vec3 milk=vec3(.87,.88,.92);
+  // deep-stone shading: faint lilac-grey pockets and cool/warm drift
+  float pockets=smoothstep(.45,.85,fbm(vec3(p*1.3,5.)+vec3(L*.15,0.)));
+  float warm=smoothstep(.5,.9,fbm(vec3(p*.9,21.)));
+  vec3 base=milk*(.78+.22*clamp(cloudAcc*2.6,0.,1.4));
+  base=mix(base,vec3(.66,.68,.78),pockets*.20);
+  base+=vec3(.025,.010,-.020)*warm;
+  // rim: thicker/greyer toward edge of the cut
+  float rim=smoothstep(.25,1.2,dot(p/vec2(.95,.82),p/vec2(.95,.82)));
+  base*=1.-.16*rim;
+  base*=.86+.14*clamp(dot(N,Ld)*1.4,0.,1.)+.06*(cloudAcc*2.0-.5);
+  // blue sheen colours: deep blue edge -> mid -> pale core
+  float b=1.-exp(-blueAcc*1.5);b=min(b,.82);
+  vec3 deep=vec3(.16,.32,.92),mid=vec3(.46,.68,1.),pale=vec3(.82,.92,1.);
+  vec3 bc=mix(deep,mid,smoothstep(.1,.5,b));bc=mix(bc,pale,smoothstep(.6,.95,b)*.55);
+  vec3 c=mix(base,bc,b*.88);
+  c=c/(1.+.10*c)*1.08;
+  // ---- polished surface: Fresnel + soft-box and window reflections
+  vec3 Rr=reflect(-V,N);
+  float F=.04+.96*pow(1.-max(dot(N,V),0.),5.);
+  vec2 g=Rr.xy-Ld.xy*.55;
+  vec2 e1=vec2(g.x*cos(.6)+g.y*sin(.6),-g.x*sin(.6)+g.y*cos(.6));
+  float box=(1.-smoothstep(.55,1.,length(e1/vec2(.020,.075))))*.95;
+  vec2 g2=Rr.xy+Ld.xy*.40;
+  float fill=(1.-smoothstep(.5,1.,length(g2/vec2(.015,.05))))*.28;
+float sky=.00+.05*smoothstep(-.2,.9,Rr.y);     // dim room gradient in the reflection
+  float spec=(box+fill)*(.55+.45*F*8.)+sky*(.4+F*3.);
+  c=c+vec3(1.,1.,1.02)*spec*.8*(1.-.35*c);
+  c*=1.-.06*rim;
+  // dither (no banding)
+  c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
+  gl_FragColor=vec4(clamp(c,0.,1.),1.);
+}
+</script>
+<script>
+const cv=document.getElementById('c');
+const gl=cv.getContext('webgl',{antialias:false,preserveDrawingBuffer:true});
+function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;}
+const pr=gl.createProgram();
+gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,document.getElementById('fs').textContent));
+gl.linkProgram(pr);gl.useProgram(pr);
+const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const uR=gl.getUniformLocation(pr,'R'),uL=gl.getUniformLocation(pr,'L');
+const q=new URLSearchParams(location.search);
+const fixed=q.has('lx');
+let tilt=[0,0],ptr=[0,0],scr=0,tx=0,ty=0;
+function size(){const d=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*d;cv.height=innerHeight*d;gl.viewport(0,0,cv.width,cv.height);}
+addEventListener('resize',size);size();
+addEventListener('pointermove',e=>{ptr=[(e.clientX/innerWidth-.5)*2,(e.clientY/innerHeight-.5)*2];});
+addEventListener('deviceorientation',e=>{if(e.gamma==null)return;tilt=[Math.max(-1,Math.min(1,e.gamma/35)),Math.max(-1,Math.min(1,(e.beta-45)/35))];});
+addEventListener('click',()=>{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().catch(()=>{});});
+function frame(t){
+  scr=scrollY/Math.max(1,document.body.scrollHeight-innerHeight);
+  let lx,ly;
+  if(fixed){lx=+q.get('lx');ly=+q.get('ly');}
+  else{
+    lx=tilt[0]+ptr[0]*.8+Math.sin(t/5200)*.18+(scr-.5)*.0;
+    ly=tilt[1]+ptr[1]*.8+Math.cos(t/6100)*.14+(scr-.5)*1.6;
+  }
+  tx+=(lx-tx)*.12;ty+=(ly-ty)*.12;
+  gl.uniform2f(uR,cv.width,cv.height);gl.uniform2f(uL,fixed?lx:tx,fixed?ly:ty);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+  if(!fixed)requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script></body></html>
