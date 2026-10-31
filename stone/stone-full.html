@@ -60,11 +60,13 @@ void main(){
     }
     // fine grain (irregular, low contrast) so the interior reads as crystal not haze
     float grain=vn(vec3(p*vec2(310.,70.),2.))*.5+vn(vec3(p*vec2(160.,38.),7.))*.5;
-    // one off-white. Only its lightness varies a little (no hue shifts).
-    float lm=smoothstep(.35,.80,fbm(vec3(p*1.5,4.)));
-    vec3 body=vec3(.918,.908,.888)*(.975+.045*lm)*(.992+.008*grain);
+    // a family of whites that follow the stone's shape (no random patches)
+    float lit=clamp(dot(N,normalize(vec3(-.45,.55,.7)))*1.1+.35,0.,1.);
+    float drift=smoothstep(-.35,.45,p.x*.9-p.y*.5+(N.x-N.y)*1.4);
+    vec3 warmW=vec3(.930,.920,.898),coolW=vec3(.912,.920,.932);
+    vec3 body=mix(warmW,coolW,drift)*(.885+.09*lit)*(.992+.008*grain);
     blue*=1.-smoothstep(.0,1.,1.-length(p-vec2(-.14,.915))/.16);
-    float bl=min(1.-exp(-blue*2.0),.34);
+    float bl=min(1.-exp(-blue*2.0),.42);
     vec3 deep=vec3(.52,.66,.93),lite=vec3(.78,.88,1.);
     vec3 bc=mix(deep,lite,smoothstep(.15,.85,bl));
     vec3 c=mix(body,bc,bl*.85)+vec3(.95,.97,1.)*silver;
