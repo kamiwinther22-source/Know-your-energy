@@ -218,3 +218,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - OWNER (31 Oct), on the trefoil knot in option B: the knot itself is annoying "because it has no meaning." Every picture, object and mark must mean something (the three systems, or what the site does). No decorative art that stands for nothing.
 
 - CORRECTION (31 Oct): the previous entry overstated this. The owner did NOT say decoration is banned. The owner said you would not make something with no meaning the central focus point (the knot was the focus of option B). Decoration is allowed; whatever is the focus of a screen must mean something.
+
+- OWNER, PROCESS RULE (31 Oct): "never again try a method that you already know fails and go directly to what does work." Before spending a render, reason out which method is known to work (for metal: curved or domed reflective surfaces, as the chrome glyphs had; flat facets under studio light give flat tones and read as paper) and do that one. Faceted flat-shaded planes, noise-sculpted sheets, blurred-room backdrops and tinted metal are known failures.
