@@ -1,0 +1,20 @@
+/* Moonstone look: preview override loaded on top of red-look.css. Not wired into the site. */
+html.red,html.red body,
+html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{
+  background:#ebe9e4 url(/moonstone/moonstone.png) center/cover no-repeat fixed !important}
+html.red body,html.red body *{color:#14171f !important;-webkit-text-fill-color:#14171f !important}
+html.red .r-b22 li:before{background:#14171f !important}
+html.red .field,html.red .line-field,html.red .line-field.hero-email-field,html.red #formStep.locked .line-field{
+  background:rgba(255,255,255,.55) !important;border-radius:8px !important;
+  box-shadow:inset 0 1px 3px rgba(60,60,70,.25),0 1px 0 rgba(255,255,255,.9) !important}
+html.red .line-field input::placeholder{color:#3b3f48 !important;-webkit-text-fill-color:#3b3f48 !important}
+html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before{background:linear-gradient(#fcfcfb,#e3e3df) !important}
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
+  background:linear-gradient(180deg,#ffffff 0%,#c3cad2 8%,#5b6169 15%,#8f98a2 19%,#e3e7ec 50%,#aab2bc 82%,#eef1f5 92%,#ffffff 100%) !important}
+html.red #formStep .row-time .ampm-field,html.red .row-birth .row-time .ampm-field{
+  background:rgba(255,255,255,.55) !important;border-radius:8px !important;
+  box-shadow:inset 0 1px 3px rgba(60,60,70,.25),0 1px 0 rgba(255,255,255,.9) !important}
+html.red .row-time .ampm-field select,html.red .row-time .ampm-field select option{color:#3b3f48 !important;-webkit-text-fill-color:#3b3f48 !important;background:transparent !important}
+html.red .chk-box{background:rgba(255,255,255,.55) !important;border-radius:6px !important;
+  box-shadow:inset 0 1px 3px rgba(60,60,70,.3),0 1px 0 rgba(255,255,255,.9) !important}
+html.red .toggle-pill::after{background:radial-gradient(circle at 35% 30%,#fff 0,#dfe4ea 35%,#8d97a1 75%,#6a737d 100%) !important}

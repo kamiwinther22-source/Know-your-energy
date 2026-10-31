@@ -22,22 +22,23 @@ void main(){
   float drift=smoothstep(-.35,.45,p.x*.9-p.y*.5+(N.x-N.y)*1.4);
   vec3 warmW=vec3(.935,.925,.900),coolW=vec3(.915,.925,.940);
   vec3 c=mix(warmW,coolW,drift)*(.90+.09*lit);
-  // ---- adularescence: one bounded pale-blue sheen that follows the surface
-  vec3 Hs=normalize(vec3(.42,.30,.85));
+  // screen position in css px (390 wide): used to place the light on purpose, in the margins where no content sits
+  vec2 px=vec2(gl_FragCoord.x/R.x*390.,(1.-gl_FragCoord.y/R.y)*844.);
+  // ---- adularescence: one soft pale-blue sheen that follows the surface, kept to the upper-right corner
+  vec3 Hs=normalize(vec3(.405,.078,.911));
   float cs=dot(N,Hs);
-  float band=exp(-pow((cs-.925)/.036,2.));
-  float fine=.88+.24*fbm(vec3(p*7.,3.));                // faint fine texture inside the sheen only
-  band*=fine;
-  vec3 sc=mix(vec3(.80,.88,1.0),vec3(.60,.76,1.0),clamp(band*1.4,0.,1.));
+  float band=exp(-pow((1.-cs)/.016,2.));
+  band*=.88+.24*fbm(vec3(p*7.,3.));
+  vec3 sc=mix(vec3(.80,.88,1.0),vec3(.62,.77,1.0),clamp(band*1.4,0.,1.));
   c=mix(c,sc,clamp(band,0.,1.)*.34);
-  // ---- polish: soft-edged window reflection, set against a slightly darker white
+  // ---- polish: the light source is placed so the glints land in empty space (top-right corner, bottom-right edge)
   vec3 r=reflect(-V,N);
-  float h1=rbox(r.xy,vec2(-.26,.30),vec2(.24,.20),.16,.12);
-  float h2=rbox(r.xy,vec2(.20,-.16),vec2(.14,.12),.10,.10);
-  c*=1.-.06*max(h1,h2);
-  float g1=rbox(r.xy,vec2(-.26,.30),vec2(.115,.085),.05,.040);
-  float g2=rbox(r.xy,vec2(.20,-.16),vec2(.055,.04),.03,.035);
-  c+=vec3(1.)*(g1*.62+g2*.34);
+  float h1=rbox(r.xy,vec2(.613,.468),vec2(.12,.09),.07,.07);
+  float h2=rbox(r.xy,vec2(.628,-.461),vec2(.08,.06),.05,.06);
+  c*=1.-.05*max(h1,h2);
+  float g1=rbox(r.xy,vec2(.613,.468),vec2(.05,.034),.02,.022);
+  float g2=rbox(r.xy,vec2(.628,-.461),vec2(.028,.02),.014,.018);
+  c+=vec3(1.)*(g1*.62+g2*.36);
   c=min(c,vec3(1.));
   c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
   gl_FragColor=vec4(clamp(c,0.,1.),1.);
