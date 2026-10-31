@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>html,body{margin:0;background:#888}canvas{display:block;width:100vw;height:100vh}</style></head><body><canvas id="c"></canvas>
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 R;uniform vec3 uF0;uniform vec3 uDark;uniform vec2 uL;
+float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+// the surface: one rounded plate that fills the screen, curving away at the edges
+float H(vec2 p){float d=dot(p/vec2(.62,1.12),p/vec2(.62,1.12));return 1.7*(1.-pow(min(d,1.7)/1.7,1.25));}
+// the room: dark, with one big soft light you place, a smaller fill, and a dim ceiling
+vec3 room(vec3 r){
+  vec3 L1=normalize(vec3(uL.x,uL.y,.62));
+  float sky=smoothstep(-.55,.60,r.y+.25*r.x);               // bright overhead room, dark floor, soft horizon
+  float base=mix(.55,1.18,sky);
+  float box=exp((dot(r,L1)-1.)/.024)*3.4;                    // the light you point: a defined, softly edged hot spot
+  float rim=exp((dot(r,normalize(vec3(.7,-.5,.5)))-1.)/.05)*.9;
+  return uDark*base+vec3(1.)*(box+rim);}
+void main(){
+  vec2 p=(gl_FragCoord.xy-.5*R)/R.x;vec2 e=vec2(.0014,0.);
+  vec3 N=normalize(vec3(-(H(p+e.xy)-H(p-e.xy))/(2.*e.x),-(H(p+e.yx)-H(p-e.yx))/(2.*e.x),1.));
+  vec3 r=reflect(vec3(0.,0.,-1.),N);
+  vec3 c=uF0*room(r);
+  c=1.-exp(-c*1.25);
+  c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
+  gl_FragColor=vec4(clamp(c,0.,1.),1.);
+}
+</script>
+<script>
+const cv=document.getElementById('c');const gl=cv.getContext('webgl',{preserveDrawingBuffer:true});const q=new URLSearchParams(location.search);
+cv.width=780;cv.height=1688;gl.viewport(0,0,780,1688);
+const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;};
+const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,document.getElementById('fs').textContent));gl.linkProgram(pr);gl.useProgram(pr);
+const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const M={silver:{f0:[.97,.975,.985],dark:[.93,.95,1.0]},gold:{f0:[1.0,.84,.47],dark:[1.0,.78,.44]}}[q.get('m')||'silver'];
+gl.uniform2f(gl.getUniformLocation(pr,'R'),780,1688);gl.uniform3fv(gl.getUniformLocation(pr,'uF0'),M.f0);gl.uniform3fv(gl.getUniformLocation(pr,'uDark'),M.dark);
+gl.uniform2f(gl.getUniformLocation(pr,'uL'),+(q.get('lx')||-.55),+(q.get('ly')||.55));
+gl.drawArrays(gl.TRIANGLES,0,3);document.body.setAttribute('data-ready','1');
+</script></body></html>
