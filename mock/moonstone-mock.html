@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Moonstone theme mock</title>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,800;1,9..144,500&family=Playfair+Display:ital,wght@1,900&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12151d;--ink2:#2a2f3c}
+*{box-sizing:border-box}
+html,body{margin:0;max-width:390px;overflow-x:hidden}
+body{position:relative;width:390px;overflow-x:hidden;font-family:'Fraunces',Georgia,serif;color:var(--ink);background:#d9dce8}
+#bg{position:absolute;left:0;top:0;width:390px;z-index:0}
+main{position:relative;z-index:1;padding:26px 22px 40px}
+h1{font-weight:800;font-size:38px;line-height:1.08;margin:0 0 10px}
+.sub{font-weight:700;font-size:19px;line-height:1.35;margin:0}
+#orrery{display:block;width:390px;height:236px;margin:14px -22px 6px}
+.free{font-weight:800;font-size:56px;line-height:.98;text-align:center;margin:22px 0 18px}
+.bul{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;font-weight:700;font-size:16.5px;line-height:1.25;margin:0 0 22px;padding:0;list-style:none}
+.bul li{padding-left:16px;position:relative}.bul li:before{content:"";position:absolute;left:1px;top:.5em;width:6px;height:6px;border-radius:50%;background:var(--ink)}
+/* recessed fields cut into the stone */
+.field{display:block;width:100%;height:46px;border-radius:12px;border:0;padding:0 16px;font:700 18px 'Fraunces',serif;color:var(--ink);
+ background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,.62));
+ box-shadow:inset 0 2px 5px rgba(60,70,100,.32),inset 0 -1px 0 rgba(255,255,255,.9),0 1px 0 rgba(255,255,255,.85)}
+.field::placeholder{color:#3b4152}.row .field{padding:0 10px;font-size:15px}
+/* silver octagon / hex frames */
+.hex{position:relative;display:inline-block;padding:7px 28px;min-width:190px;text-align:center;font:700 25px 'Fraunces',serif;color:var(--ink);
+ background:linear-gradient(160deg,#fbfcfe 0%,#b4bdca 30%,#f3f6fa 52%,#8d97a6 78%,#dfe5ee 100%);
+ clip-path:polygon(22px 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,22px 100%,0 50%);filter:drop-shadow(0 6px 8px rgba(40,50,80,.28))}
+.hex .in{display:block;padding:11px 12px;margin:0 1px;background:radial-gradient(120% 140% at 30% 20%,#ffffff 0%,#eef2fa 55%,#d6def0 100%);
+ clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%)}
+.hexwrap{filter:drop-shadow(0 6px 7px rgba(40,50,80,.30))}
+.hexwrap .hex{filter:none}
+.tabs{display:flex;gap:2px;margin:16px -14px 8px;justify-content:center;white-space:nowrap}
+.tabs .hexwrap .hex{min-width:0;padding:4px 6px;font-size:12px}
+.tabs .in{padding:8px 4px;white-space:nowrap}
+.tabs .off .in{background:radial-gradient(120% 140% at 30% 20%,#f6f8fd,#dfe5f2)}
+.tog{display:inline-block;width:68px;height:34px;border-radius:17px;vertical-align:middle;margin:0 12px;position:relative;
+ background:linear-gradient(180deg,#c6cde0,#eef1f8);box-shadow:inset 0 3px 6px rgba(50,60,90,.4),0 1px 0 #fff}
+.tog:after{content:"";position:absolute;right:4px;top:3px;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#9ea8ba 70%,#6e788a);box-shadow:0 2px 4px rgba(30,40,70,.45)}
+.center{text-align:center}
+h2{font-weight:800;font-size:26px;line-height:1.2;text-align:center;margin:30px 0 14px}
+.who{font-weight:800;font-size:44px;margin:30px 0 14px;line-height:1}
+.lab{font-weight:800;font-size:22px;margin:16px 0 8px}
+.row{display:flex;gap:14px}.row>*{flex:1}
+.note{font-weight:600;font-size:16.5px;line-height:1.3;margin:8px 0}
+.chk{display:flex;align-items:center;gap:14px;font-weight:700;font-size:19px;margin:16px 0 4px}
+.chk i{width:28px;height:28px;border-radius:7px;background:linear-gradient(180deg,rgba(255,255,255,.4),rgba(255,255,255,.7));box-shadow:inset 0 2px 4px rgba(60,70,100,.35),0 1px 0 #fff}
+a.l{color:var(--ink);font-weight:700;font-size:19px;text-decoration:underline}
+.pad{height:18px}
+
+/* ----- results page ----- */
+.script{font-family:'Alex Brush',cursive;font-weight:400}
+.rtitle{text-align:center;font-size:46px;margin:14px 0 6px}
+.name{font-size:56px;margin:8px 0 4px;line-height:1}
+.fan{position:relative;height:292px;margin:0 -22px}
+.card{position:absolute;top:10px;width:158px;height:262px;
+ clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px);
+ background:linear-gradient(150deg,#fdfeff 0%,#aab4c3 26%,#eef2f8 48%,#8792a2 76%,#dce3ed 100%)}
+.cardwrap{position:absolute;top:0;filter:drop-shadow(0 10px 12px rgba(40,50,80,.34))}
+.card .face{position:absolute;inset:9px;background:#fff;
+ clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);padding:12px 10px;overflow:hidden;box-shadow:inset 0 0 0 1.5px #3a3f4a}
+.card .ct{font:700 9px 'Barlow Condensed';letter-spacing:.5px;text-transform:uppercase;text-align:center;margin-bottom:5px}
+.card img{display:block;width:118px;margin:2px auto 6px}
+.k{font:700 10px 'Barlow Condensed';letter-spacing:.7px;text-transform:uppercase;margin-top:5px;border-bottom:1px solid #333;padding-bottom:1px}
+.v{font:900 italic 12px 'Playfair Display';margin:2px 0 3px;line-height:1.1;white-space:nowrap}
+.nr{white-space:nowrap;display:flex;justify-content:space-between;align-items:baseline;font:700 9.5px 'Barlow Condensed';letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid #333;padding:7px 0 1px}
+.nr b{font:italic 900 19px 'Playfair Display';letter-spacing:0}
+.sect{font:700 10px 'Barlow Condensed';letter-spacing:.7px;text-transform:uppercase;color:#46506e;margin-top:8px}
+.mid{display:flex;align-items:center;justify-content:space-between;margin:6px -16px 0}
+.reading{position:relative;width:151px;height:218px;filter:drop-shadow(0 10px 12px rgba(40,50,80,.32))}
+.reading .o{position:absolute;inset:0;background:linear-gradient(150deg,#fdfeff 0%,#aab4c3 26%,#eef2f8 48%,#8792a2 76%,#dce3ed 100%);
+ clip-path:polygon(22px 0,calc(100% - 22px) 0,100% 22px,100% calc(100% - 22px),calc(100% - 22px) 100%,22px 100%,0 calc(100% - 22px),0 22px)}
+.reading .f{position:absolute;inset:9px;background:#fff;box-shadow:inset 0 0 0 1.5px #3a3f4a;
+ clip-path:polygon(15px 0,calc(100% - 15px) 0,100% 15px,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 calc(100% - 15px),0 15px);padding:14px 14px}
+.reading .f h5{margin:0 0 6px;font:700 11px 'Barlow Condensed';letter-spacing:.8px;border-bottom:1.5px solid #222;padding-bottom:6px}
+.reading .f p{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;margin:0;font:700 19px/1.3 'Barlow Condensed';letter-spacing:1.5px}
+.small .hex{min-width:0;padding:5px 8px;font:700 14px/1.2 'Fraunces';letter-spacing:.8px}
+.small .hex .in{padding:9px 8px;min-width:78px}
+.foot{text-align:center;font:500 17px 'DM Sans';margin-top:34px;line-height:1.4}
+.foot a{display:inline-block;margin:10px 14px;color:var(--ink);font-weight:700;text-decoration:underline}
+
+/* ----- opened chart frame ----- */
+.shell{position:fixed;inset:0;z-index:2}
+.big{position:absolute;left:22px;right:22px;top:20px;bottom:24px;filter:drop-shadow(0 14px 18px rgba(30,40,70,.35))}
+.big .o{position:absolute;inset:0;background:linear-gradient(155deg,#ffffff 0%,#b9c2d0 18%,#f2f5fa 36%,#9aa4b3 62%,#eef2f8 82%,#aeb8c6 100%);
+ clip-path:polygon(34px 0,calc(100% - 34px) 0,100% 34px,100% calc(100% - 34px),calc(100% - 34px) 100%,34px 100%,0 calc(100% - 34px),0 34px)}
+.big .i{position:absolute;inset:18px;background:#2d313b;clip-path:polygon(24px 0,calc(100% - 24px) 0,100% 24px,100% calc(100% - 24px),calc(100% - 24px) 100%,24px 100%,0 calc(100% - 24px),0 24px)}
+.big .w{position:absolute;inset:22px;background:#fff;overflow:auto;clip-path:polygon(21px 0,calc(100% - 21px) 0,100% 21px,100% calc(100% - 21px),calc(100% - 21px) 100%,21px 100%,0 calc(100% - 21px),0 21px);padding:14px 20px 40px}
+.big .w::-webkit-scrollbar{width:0}
+.thumb{position:absolute;right:26px;top:150px;width:5px;height:92px;border-radius:3px;background:linear-gradient(90deg,#7d8798,#c3cad7);z-index:3}
+.x{position:absolute;right:30px;top:30px;font:300 30px/1 'DM Sans';z-index:3;color:var(--ink)}
+.ctitle{font-family:'Pinyon Script',cursive;font-size:33px;text-align:center;margin:8px 0 14px}
+.big img{display:block;width:100%;margin:0 auto 12px}
+.br{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.5px solid #222;padding:14px 0 6px}
+.br span{font:700 14px 'Barlow Condensed';letter-spacing:1.6px;text-transform:uppercase}
+.br b{font:900 italic 25px 'Playfair Display'}
+.rd{font:500 16px/1.55 'DM Sans';margin:0 0 12px}
+.rd.h{font:700 14px 'Barlow Condensed';letter-spacing:1.6px;text-transform:uppercase;margin:18px 0 8px;padding-top:12px;border-top:1.5px solid #222}
+.mid2{display:flex;align-items:center;justify-content:space-between;margin:26px -10px 0;gap:6px}
+.rc{position:relative;width:104px;height:166px;filter:drop-shadow(0 8px 10px rgba(40,50,80,.3));flex:none}
+.rc .o{position:absolute;inset:0;background:linear-gradient(150deg,#fdfeff 0%,#aab4c3 26%,#eef2f8 48%,#8792a2 76%,#dce3ed 100%);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}
+.rc .f{position:absolute;inset:6px;background:#fff;box-shadow:inset 0 0 0 1.2px #3a3f4a;text-align:center;padding:10px 6px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px)}
+.rc h5{margin:0 0 6px;font:700 9px 'Barlow Condensed';letter-spacing:1px;border-bottom:1.2px solid #222;padding-bottom:4px;text-align:left}
+.sc{font-family:'Alex Brush',cursive;font-size:23px;line-height:1.05;margin-top:12px}
+.rc small{display:block;font:700 8px 'Barlow Condensed';letter-spacing:.8px;text-transform:uppercase;margin-top:10px;color:#46506e}
+.tl{font:700 9.5px 'Barlow Condensed';letter-spacing:.8px;text-transform:uppercase;color:#46506e;border-top:1px solid #46506e;margin-top:6px;padding-top:4px}
+.gl{text-align:center;flex:1}.gl img{width:92px;height:92px;object-fit:cover;border-radius:50%;display:block;margin:0 auto}
+</style></head>
+<body>
+<canvas id="bg"></canvas>
+<main id="root"></main>
+
+<script id="bgfs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 R;uniform float HV;uniform vec2 L;
+float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float vn(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*f*(f*(f*6.-15.)+10.);
+ return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+            mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*vn(p);p=p*2.03+vec3(1.7,9.2,3.1);a*=.5;}return s;}
+float H(vec2 p){float d=dot(p/vec2(.95,.82),p/vec2(.95,.82));return .42*exp(-d*1.5)+.012*fbm(vec3(p*.9,3.));}
+float body(vec3 q){vec3 w=vec3(fbm(q*1.1+4.),fbm(q*1.1+9.),fbm(q*1.1+14.))-.5;return fbm(q*1.6+w*1.4);}
+void main(){
+  float y=R.y-gl_FragCoord.y;                       // top of page = 0
+  float m=mod(y,2.*HV);float py=m<HV?m:2.*HV-m;     // mirrored tiling: continuous stone down the page
+  vec2 p=(vec2(gl_FragCoord.x,py)-.5*vec2(R.x,HV))/HV;
+  float e=.002;float dx=H(p+vec2(e,0.))-H(p-vec2(e,0.));float dy=H(p+vec2(0.,e))-H(p-vec2(0.,e));
+  vec3 N=normalize(vec3(-dx/(2.*e)*.8,-dy/(2.*e)*.8,1.));vec3 V=vec3(0.,0.,1.);
+  vec3 Ld=normalize(vec3(L.x*.85,L.y*.85,.62));
+  vec3 T=refract(-V,N,1./1.53);vec3 Hh=normalize(Ld+V);
+  float trans=1.,blueAcc=0.,cloudAcc=0.;
+  for(int i=0;i<9;i++){
+    float t=(float(i)+.5)/9.;float depth=t*.55;
+    vec3 pos=vec3(p,0.)+T*(depth/max(T.z,.2));pos.z=depth*1.2;
+    float dens=smoothstep(.30,.80,body(pos));float s=dens*.14;
+    float lit=.55+.45*clamp(dot(normalize(vec3(-N.xy*.6,1.)),Ld)*1.1+.35,0.,1.);
+    cloudAcc+=trans*s*lit;
+    vec3 ln=normalize(vec3(N.xy*1.4,0.)+vec3((fbm(pos*vec3(.9,.9,1.4)+2.)-.5)*2.6,(fbm(pos*vec3(.9,.9,1.4)+8.)-.5)*2.6,1.));
+    float sheet=pow(max(dot(ln,Hh),0.),16.)*smoothstep(.30,.70,fbm(pos*vec3(1.2,1.2,2.2)+11.));
+    blueAcc+=trans*sheet*1.0;trans*=exp(-s*.9);
+  }
+  vec3 milk=vec3(.972,.974,.98);
+  float pockets=smoothstep(.45,.85,fbm(vec3(p*1.3,5.)+vec3(L*.15,0.)));
+  float warm=smoothstep(.5,.9,fbm(vec3(p*.9,21.)));
+  vec3 base=milk*(.74+.26*clamp(cloudAcc*2.8,0.,1.4));
+  base=mix(base,vec3(.70,.71,.75),pockets*.30);
+  base+=vec3(.016,.006,-.012)*warm;
+  float rim=smoothstep(.25,1.2,dot(p/vec2(.95,.82),p/vec2(.95,.82)));
+  base*=1.-.12*rim;
+  base*=.88+.12*clamp(dot(N,Ld)*1.4,0.,1.)+.05*(cloudAcc*2.0-.5);
+  float lobe=exp(-(pow((p.x+.24)/.34,2.)+pow((p.y-.10)/.26,2.)));float b=1.-exp(-blueAcc*1.9*(.03+.97*lobe*lobe));b=min(b,.88);
+  vec3 deep=vec3(.16,.32,.92),mid=vec3(.46,.68,1.),pale=vec3(.82,.92,1.);
+  vec3 bc=mix(deep,mid,smoothstep(.1,.5,b));bc=mix(bc,pale,smoothstep(.6,.95,b)*.55);
+  vec3 c=mix(base,bc,b*.86);
+  vec3 Rr=reflect(-V,N);
+  vec2 g=Rr.xy-Ld.xy*.55;vec2 e1=vec2(g.x*cos(.6)+g.y*sin(.6),-g.x*sin(.6)+g.y*cos(.6));
+  float box=(1.-smoothstep(.55,1.,length(e1/vec2(.020,.075))))*.95;
+  c+=vec3(1.)*box*.5*(1.-.35*c);
+  c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
+  gl_FragColor=vec4(clamp(c,0.,1.),1.);
+}
+</script>
+
+<script id="orfs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 R;uniform vec2 L;
+float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float vn(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*f*(f*(f*6.-15.)+10.);
+ return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+            mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<4;i++){s+=a*vn(p);p=p*2.03+vec3(1.7,9.2,3.1);a*=.5;}return s;}
+vec3 Ld;vec3 L2;
+mat3 rx(float a){float c=cos(a),s=sin(a);return mat3(1,0,0,0,c,s,0,-s,c);}
+mat3 rz(float a){float c=cos(a),s=sin(a);return mat3(c,s,0,-s,c,0,0,0,1);}
+mat3 M;
+float ring(vec3 q,float a){float e=.55;float b=a*sqrt(1.-e*e);vec2 c=q.xy+vec2(a*e,0.);
+  float d=(length(c/vec2(a,b))-1.)*b;return length(vec2(d,q.z))-.03;}
+vec3 sph2(float a){float e=.55;float b=a*sqrt(1.-e*e);return vec3(-a*e+a*cos(a*0.),0.,0.);}
+vec3 P1,P2;
+float map(vec3 p,out float id){
+  vec3 q=M*p;float d=length(q)-.78;id=0.;
+  float r=ring(q,1.05);if(r<d){d=r;id=1.;}
+  r=ring(q,1.5);if(r<d){d=r;id=1.;}
+  r=ring(q,1.95);if(r<d){d=r;id=1.;}
+  r=ring(q,2.4);if(r<d){d=r;id=1.;}
+  r=ring(q,2.85);if(r<d){d=r;id=1.;}
+  r=length(q-P1)-.1;if(r<d){d=r;id=2.;}
+  r=length(q-P2)-.07;if(r<d){d=r;id=2.;}
+  return d;}
+float mp(vec3 p){float i;return map(p,i);}
+vec3 env(vec3 r){
+  float up=r.y*.5+.5;vec3 c=mix(vec3(.50,.55,.67),vec3(.96,.97,1.),smoothstep(.0,1.,up));
+  c+=vec3(1.)*smoothstep(.90,.985,dot(r,Ld))*.9+vec3(1.)*smoothstep(.93,.99,dot(r,L2))*.35;
+  c*=.94+.06*vn(r*3.);c=c*.92+.12;return c;}
+void main(){
+  Ld=normalize(vec3(L.x*.9,-L.y*.9+.2,.7));L2=normalize(vec3(-Ld.x*.8,-Ld.y*.5+.1,.8));
+  M=rx(-1.12)*rz(.10);                                    // tilt of orbit plane (object->view inverse used below)
+  M=mat3(1.)*M;
+  P1=vec3(-1.5*.55+1.5*.9,.0,0.);P2=vec3(-1.95*.55+1.95*.78,1.95*.84*.62,0.);
+  P1=vec3(-1.5*.55+1.5*cos(.45),1.5*.835*sin(.45),0.);
+  P2=vec3(-2.4*.55+2.4*cos(-.35),2.4*.835*sin(-.35),0.);
+  vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
+  vec3 ro=vec3(-.3,0.,7.),rd=normalize(vec3(uv*vec2(1.,1.)*.62+vec2(.10,.0),-1.));
+  float t=3.,id=0.;bool hit=false;
+  for(int i=0;i<90;i++){vec3 p=ro+rd*t;float d=map(p,id);if(d<.0015){hit=true;break;}t+=d*.9;if(t>14.)break;}
+  vec4 outc=vec4(0.);
+  if(hit){
+    vec3 p=ro+rd*t;float e=.003;float dd;
+    vec3 n=normalize(vec3(mp(p+vec3(e,0,0))-mp(p-vec3(e,0,0)),mp(p+vec3(0,e,0))-mp(p-vec3(0,e,0)),mp(p+vec3(0,0,e))-mp(p-vec3(0,0,e))));
+    vec3 V=-rd;vec3 r=reflect(rd,n);float F=.04+.96*pow(1.-max(dot(n,V),0.),5.);
+    float ao=1.;for(int k=1;k<5;k++){float h=float(k)*.07;ao-=(h-mp(p+n*h))*.6/float(k+1)*1.0;}ao=clamp(ao,.45,1.);
+    vec3 col;
+    if(id<.5||id>1.5){ // moonstone sphere
+      vec3 q=M*p;
+      float cl=smoothstep(.3,.8,fbm(q*2.0+3.));
+      vec3 base=vec3(.93,.945,.98)*(.84+.16*cl);
+      float dif=clamp(dot(n,Ld)*.8+.35,0.,1.);base*=.8+.22*dif;
+      vec3 Hh=normalize(Ld+V);
+      vec3 ln=normalize(vec3(n.xy*1.2+(vec2(fbm(q*1.6+2.),fbm(q*1.6+8.))-.5)*1.8,1.));
+      float sh=pow(max(dot(ln,Hh),0.),10.)*smoothstep(.25,.75,fbm(q*2.2+11.));
+      float b=min(1.-exp(-sh*2.2),.85);
+      vec3 bc=mix(vec3(.18,.36,.93),vec3(.55,.76,1.),smoothstep(.1,.7,b));
+      col=mix(base,bc,b*.85);
+      col+=env(r)*(F*1.1+.05);col*=ao;
+      float s1=dot(r,Ld);col+=vec3(1.)*smoothstep(.985,.998,s1)*.6;
+    } else { // silver wire
+      col=env(r)*vec3(.95,.97,1.)*(.80+.30*F);
+    }
+    outc=vec4(clamp(col,0.,1.),1.);
+  }
+  gl_FragColor=vec4(outc.rgb*outc.a,outc.a);
+}
+</script>
+<script>
+const q=new URLSearchParams(location.search);const PAGE=q.get('page')||'front';
+const wheelA='wheel-astro.png',wheelH='wheel-hd.png';
+const hexBtn=(t,cls='')=>`<span class="hexwrap ${cls}"><span class="hex"><span class="in">${t}</span></span></span>`;
+const person=(n,right)=>`
+<div class="who" ${right?'style="text-align:right"':''}>Person ${n}</div>
+<div class="lab">Full Name at Birth</div>
+<div class="row"><input class="field" placeholder="First"><input class="field" placeholder="Mid"><input class="field" placeholder="Last"></div>
+<div class="row" style="margin-top:16px"><div style="flex:1.1"><div class="lab" style="margin-top:0">DOB</div><input class="field" placeholder="MM/DD/YYYY"></div>
+<div style="flex:1.3"><div class="lab" style="margin-top:0">Time (optional)</div><div class="row" style="gap:8px"><input class="field" placeholder="HH:MM"><input class="field" placeholder="AM/PM"></div></div></div>
+<div class="chk"><i></i>I don't know my birth time</div>
+<div class="note">Time sets your rising sign and your Human Design chart.</div>
+<div class="lab">Birth city (optional)</div><input class="field" placeholder="Start typing a city">
+<div class="note">Sets the exact moment of your birth and your rising sign.</div>
+<a class="l">Don't know the city? Choose a time zone</a>`;
+const front=`
+<h1>Know Your Energy</h1>
+<p class="sub">Astrology-Numerology-Human Design<br>FULL charts and combined reading</p>
+<canvas id="orrery"></canvas>
+<div class="free">first reading<br>is free.</div>
+<ul class="bul"><li>No Credit Card - try before you buy</li><li>Email is your pass</li><li>Email will not be shared</li><li>You will not receive emails from us</li></ul>
+<input class="field" placeholder="name@example.com" style="margin-bottom:22px">
+<div class="center">${hexBtn('Continue')}</div>
+<h2>Choose either individual or relational</h2>
+<div class="center" style="font-weight:800;font-size:25px">Individual<span class="tog"></span>Relational</div>
+<div class="tabs">${hexBtn('Parent · Child')}${hexBtn('Romantic','off')}${hexBtn('Friends','off')}${hexBtn('Other','off')}</div>
+${person(1)}
+${person(2,true)}
+<div class="center" style="margin-top:28px">${hexBtn('Calculate')}</div>
+<p class="center" style="font-weight:700;font-size:18px;line-height:1.35;margin:26px 0 12px">Birth time and place are needed for a full reading. Without them you still get every part that does not depend on them.</p>
+<p class="center" style="font-weight:700;font-size:18px;line-height:1.35;margin:0">Save or print your results before you close the page. We do not keep them.</p>`;
+const results=`
+<div class="script rtitle">Know Your Energy</div>
+<div class="script name">Kami</div>
+<div class="fan">
+ <div class="cardwrap" style="left:30px;transform:rotate(-5deg)"><div class="card"><div class="face">
+  <div class="ct">Kami · Astrology</div><img src="${wheelA}">
+  <div class="k">☉ Sun ⌄</div><div class="v">Scorpio · House 6</div>
+  <div class="k">House 6 ⌄</div><div class="v">Work &amp; Health</div></div></div></div>
+ <div class="cardwrap" style="left:116px;transform:rotate(-.5deg)"><div class="card"><div class="face">
+  <div class="ct">Kami · Numerology</div>
+  <div class="nr">Life Path ⌄<b>22</b></div><div class="nr">Maturity ⌄<b>1</b></div>
+  <div class="sect">Internal state</div><div class="nr">Essence (age 48) ⌄<b>5</b></div>
+  <div class="sect">Circumstances</div><div class="nr">Personal year ⌄<b>8</b></div><div class="nr">Personal month ⌄<b>9</b></div></div></div></div>
+ <div class="cardwrap" style="left:200px;transform:rotate(4.5deg)"><div class="card"><div class="face">
+  <div class="ct">Kami · Human Design</div><img src="${wheelH}">
+  <div class="k">Type ⌄</div><div class="v">Manifesting Generator</div>
+  <div class="k">Profile ⌄</div><div class="v">4/1</div></div></div></div>
+</div>
+<div class="mid"><span class="small">${hexBtn('Run<br>another<br>reading')}</span>
+ <div class="reading"><div class="o"></div><div class="f"><h5>READING</h5><p>GENERATING<br>YOUR<br>READING...</p></div></div>
+ <span class="small">${hexBtn('Save /<br>Print<br>reading')}</span></div>
+<div class="mid2"><div class="rc"><div class="o"></div><div class="f"><h5>READING</h5><div class="sc">Kami &amp;<br>Jason</div><small>tap to read</small></div></div>
+<div class="gl"><img src="globe.png"><div class="sc" style="font-size:25px">Globe</div></div>
+<div class="rc"><div class="o"></div><div class="f"><h5 style="color:#46506e">TIMELINE</h5><div class="sc" style="font-size:25px">Oct 24</div><div class="tl">Numerology</div><div class="tl">Astrology</div><div class="tl">Human Design</div></div></div></div>
+<p class="center" style="font:500 14px 'DM Sans';margin:20px 0 0;opacity:.8">The second person's set repeats this layout below.</p>
+<div class="foot">Your details are kept on this device only.<br><a>Share the site</a><a>Download my reading</a><br><a>Forget my details</a></div>`;
+const chart=`
+<div class="shell"><div class="big"><div class="o"></div><div class="i"></div><div class="w">
+ <div class="ctitle">Kami · Astrology</div><img src="${wheelA}">
+ <div class="br"><span>Sun ⌄</span><b>Scorpio · House 6</b></div>
+ <div class="br"><span>House 6 ⌄</span><b>Work &amp; Health</b></div>
+ <div class="br"><span>Moon ⌄</span><b>Capricorn · House 7</b></div>
+ <div class="rd h">Reading</div>
+ <p class="rd">Sample text only, standing in for the generated reading. Here the reading sits inside the same frame, under the chart and its labelled rows, and scrolls within the frame.</p>
+ <p class="rd">Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only.</p>
+ <p class="rd">Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only.</p>
+</div></div><div class="x">✕</div><div class="thumb"></div></div>`;
+document.getElementById('root').innerHTML={front,results,chart}[PAGE];
+if(PAGE==='chart'){document.getElementById('root').style.minHeight='100vh';}
+
+function mk(canvas,fsId,opts){
+  const gl=canvas.getContext('webgl',{antialias:false,preserveDrawingBuffer:true,premultipliedAlpha:true,alpha:true});
+  const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;};
+  const pr=gl.createProgram();
+  gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+  gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,document.getElementById(fsId).textContent));
+  gl.linkProgram(pr);gl.useProgram(pr);
+  const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const al=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+  gl.viewport(0,0,canvas.width,canvas.height);
+  gl.uniform2f(gl.getUniformLocation(pr,'R'),canvas.width,canvas.height);
+  gl.uniform2f(gl.getUniformLocation(pr,'L'),opts.lx,opts.ly);
+  const hv=gl.getUniformLocation(pr,'HV');if(hv)gl.uniform1f(hv,opts.hv);
+  gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+}
+document.fonts.ready.then(()=>setTimeout(()=>{
+  const bg=document.getElementById('bg');
+  const H=Math.max(document.documentElement.scrollHeight,844);
+  bg.style.height=H+'px';bg.width=390;bg.height=H;
+  mk(bg,'bgfs',{lx:-.5,ly:-.6,hv:844});
+  const o=document.getElementById('orrery');
+  if(o){o.width=1170;o.height=708;mk(o,'orfs',{lx:-.5,ly:-.6});}
+  document.body.setAttribute('data-ready','1');
+},400));
+</script></body></html>
