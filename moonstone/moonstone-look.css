@@ -22,3 +22,6 @@ html.red .toggle-pill::after{background:radial-gradient(circle at 35% 30%,#fff 0
 html.red #hookStep{display:flex !important;flex-direction:column;min-height:calc(100svh - 22px)}
 html.red #hookStep .r-b22{margin-top:auto !important;margin-bottom:auto !important}
 html.red #hookStep .hero-email-wrap{margin-bottom:46px !important}
+/* solar system: left side slanted up, as it used to be */
+html.red .hero-illustration{transform:translateX(96px) translateY(34px) rotate(22deg) scale(1.55) !important}
+html.red #hookStep .r-free{padding-top:16px}
