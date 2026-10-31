@@ -60,13 +60,13 @@ void main(){
     }
     // fine grain (irregular, low contrast) so the interior reads as crystal not haze
     float grain=vn(vec3(p*vec2(310.,70.),2.))*.5+vn(vec3(p*vec2(160.,38.),7.))*.5;
-    vec3 body=vec3(.925,.905,.885)*(.985+.015*grain);
-    body=mix(body,vec3(.80,.80,.82),clamp(cloud,0.,1.)*.50);
-    float wm=smoothstep(.45,.75,fbm(vec3(p*2.2,4.)));body=mix(body,vec3(.95,.90,.84),wm*.35);
-    float dif=clamp(dot(N,Ld)*.7+.45,0.,1.);body*=.61+.34*dif;
-    body*=.88+.14*smoothstep(-.4,.5,(-p.x+p.y)*1.1);
+    vec3 body=vec3(.972,.958,.945)*(.985+.015*grain);
+    body=mix(body,vec3(.90,.90,.93),clamp(cloud,0.,1.)*.45);
+    float wm=smoothstep(.45,.75,fbm(vec3(p*2.2,4.)));body=mix(body,vec3(.995,.945,.90),wm*.45);
+    float dif=clamp(dot(N,Ld)*.7+.45,0.,1.);body*=.76+.26*dif;
+    body*=.93+.09*smoothstep(-.4,.5,(-p.x+p.y)*1.1);
     // thin edge: glassy, takes on the surface colour and a darker total-internal-reflection ring
-    body*=1.-.20*smoothstep(.55,1.,d);
+    body*=1.-.09*smoothstep(.6,1.,d);
     float rim=smoothstep(.72,1.,d);
     body=mix(body,bgc*.88,rim*rim*.38);
     body*=1.-.22*smoothstep(.88,.985,d)*(1.-smoothstep(.985,1.,d));
