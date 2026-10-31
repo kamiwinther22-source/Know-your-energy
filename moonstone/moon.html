@@ -35,10 +35,12 @@ void main(){
   vec3 r=reflect(-V,N);
   float h1=rbox(r.xy,vec2(.613,.468),vec2(.12,.09),.07,.07);
   float h2=rbox(r.xy,vec2(.628,-.461),vec2(.08,.06),.05,.06);
-  c*=1.-.05*max(h1,h2);
-  float g1=rbox(r.xy,vec2(.613,.468),vec2(.05,.034),.02,.022);
-  float g2=rbox(r.xy,vec2(.628,-.461),vec2(.028,.02),.014,.018);
-  c+=vec3(1.)*(g1*.62+g2*.36);
+  float h3=rbox(r.xy,vec2(-.787,.123),vec2(.10,.08),.06,.06);
+  c*=1.-.05*max(max(h1,h2),h3);
+  float g1=rbox(r.xy,vec2(.613,.468),vec2(.040,.027),.016,.018);
+  float g2=rbox(r.xy,vec2(.628,-.461),vec2(.022,.016),.011,.014);
+  float g3=rbox(r.xy,vec2(-.787,.123),vec2(.026,.019),.012,.014);
+  c+=vec3(1.)*(g1*.62+g2*.36+g3*.5);
   c=min(c,vec3(1.));
   c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
   gl_FragColor=vec4(clamp(c,0.,1.),1.);
