@@ -1,0 +1,57 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>html,body{margin:0;background:#e8e7e2}canvas{display:block;width:100vw;height:100vh}</style></head><body><canvas id="c"></canvas>
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 R;
+float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float vn(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*f*(f*(f*6.-15.)+10.);
+ return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+            mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<4;i++){s+=a*vn(p);p=p*2.03+vec3(1.7,9.2,3.1);a*=.5;}return s;}
+float H(vec2 p){float d=dot(p/vec2(.80,1.45),p/vec2(.80,1.45));return .36*(1.-pow(min(d,1.),.8));}
+float rbox(vec2 r,vec2 c,vec2 h,float rad,float soft){
+  vec2 q=abs(r-c)-h+rad;float d=length(max(q,0.))+min(max(q.x,q.y),0.)-rad;return 1.-smoothstep(-soft,soft,d);}
+void main(){
+  vec2 p=(gl_FragCoord.xy-.5*R)/R.x;
+  vec2 e=vec2(.0012,0.);
+  vec3 N=normalize(vec3(-(H(p+e.xy)-H(p-e.xy))/(2.*e.x),-(H(p+e.yx)-H(p-e.yx))/(2.*e.x),1.));
+  vec3 V=vec3(0.,0.,1.);
+  vec3 Ld=normalize(vec3(-.45,.55,.70));
+  // ---- body: a family of off-whites that follows the stone's curvature (smooth, no noise)
+  float lit=clamp(dot(N,Ld)*1.05+.38,0.,1.);
+  float drift=smoothstep(-.35,.45,p.x*.9-p.y*.5+(N.x-N.y)*1.4);
+  vec3 warmW=vec3(.935,.925,.900),coolW=vec3(.915,.925,.940);
+  vec3 c=mix(warmW,coolW,drift)*(.90+.09*lit);
+  // ---- adularescence: one bounded pale-blue sheen that follows the surface
+  vec3 Hs=normalize(vec3(.42,.30,.85));
+  float cs=dot(N,Hs);
+  float band=exp(-pow((cs-.925)/.036,2.));
+  float fine=.88+.24*fbm(vec3(p*7.,3.));                // faint fine texture inside the sheen only
+  band*=fine;
+  vec3 sc=mix(vec3(.80,.88,1.0),vec3(.60,.76,1.0),clamp(band*1.4,0.,1.));
+  c=mix(c,sc,clamp(band,0.,1.)*.34);
+  // ---- polish: soft-edged window reflection, set against a slightly darker white
+  vec3 r=reflect(-V,N);
+  float h1=rbox(r.xy,vec2(-.26,.30),vec2(.24,.20),.16,.12);
+  float h2=rbox(r.xy,vec2(.20,-.16),vec2(.14,.12),.10,.10);
+  c*=1.-.06*max(h1,h2);
+  float g1=rbox(r.xy,vec2(-.26,.30),vec2(.115,.085),.05,.040);
+  float g2=rbox(r.xy,vec2(.20,-.16),vec2(.055,.04),.03,.035);
+  c+=vec3(1.)*(g1*.62+g2*.34);
+  c=min(c,vec3(1.));
+  c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
+  gl_FragColor=vec4(clamp(c,0.,1.),1.);
+}
+</script>
+<script>
+const cv=document.getElementById('c');const gl=cv.getContext('webgl',{preserveDrawingBuffer:true});
+const S=+(new URLSearchParams(location.search).get('s')||4);
+cv.width=innerWidth*S;cv.height=innerHeight*S;gl.viewport(0,0,cv.width,cv.height);
+const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;};
+const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,document.getElementById('fs').textContent));gl.linkProgram(pr);gl.useProgram(pr);
+const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+gl.uniform2f(gl.getUniformLocation(pr,'R'),cv.width,cv.height);
+gl.drawArrays(gl.TRIANGLES,0,3);document.body.setAttribute('data-ready','1');
+</script></body></html>
