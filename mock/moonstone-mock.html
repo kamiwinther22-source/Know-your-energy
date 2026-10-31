@@ -298,7 +298,7 @@ const chart=`
  <p class="rd">Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only.</p>
  <p class="rd">Sample text only. Sample text only. Sample text only. Sample text only. Sample text only. Sample text only.</p>
 </div></div><div class="x">✕</div><div class="thumb"></div></div>`;
-document.getElementById('root').innerHTML={front,results,chart}[PAGE];
+document.getElementById('root').innerHTML=({front,results,chart}[PAGE]||'');
 if(PAGE==='chart'){document.getElementById('root').style.minHeight='100vh';}
 
 function mk(canvas,fsId,opts){
