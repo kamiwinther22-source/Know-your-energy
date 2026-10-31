@@ -1,0 +1,7 @@
+/* WORLD 3: sea-glass. a green-grey moonstone (GIA lists green as a body colour) with a teal flash; the button is saturated teal glass */
+html.red,html.red body,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background:#e9ede9 url(/moonstone/stone-teal.png) center/cover no-repeat fixed !important}
+html.red body #hookStep .acc{color:#0d6a66 !important;-webkit-text-fill-color:#0d6a66 !important}
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
+  background:radial-gradient(70% 55% at 50% 0%,rgba(255,255,255,.66) 0%,rgba(255,255,255,0) 70%),linear-gradient(180deg,#49bcae 0%,#118077 62%,#0c625c 100%) !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6),inset 0 -8px 12px rgba(4,60,56,.38),0 16px 26px -10px rgba(10,96,88,.6) !important}
+html.red .rbtn,html.red .rbtn *,html.red .gen-btn,html.red .gen-btn *,html.red .rel-chip,html.red .rel-chip *{color:#fff !important;-webkit-text-fill-color:#fff !important;text-shadow:0 1px 2px rgba(0,60,56,.55) !important}

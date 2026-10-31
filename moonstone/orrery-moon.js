@@ -47,8 +47,9 @@ function cast(seed,band){const W=512,H=256,c=document.createElement('canvas');c.
     const k=(y*W+x)*4,b=Math.max(0,Math.min(255,128+v*170));im.data[k]=im.data[k+1]=im.data[k+2]=b;im.data[k+3]=255;}
   g.putImageData(im,0,0);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.NoColorSpace;t.wrapS=THREE.RepeatWrapping;t.anisotropy=8;return t;}
 
+const FL=(window.__flash||[.30,.52,1.0]).map(x=>x.toFixed(3)),BODY=window.__body||0xe8e6e1;
 function moonMat(strength){
-  const m=new THREE.MeshPhysicalMaterial({color:0xe8e6e1,metalness:0,roughness:.16,clearcoat:1,clearcoatRoughness:.04,envMapIntensity:.85,ior:1.52,specularIntensity:1});
+  const m=new THREE.MeshPhysicalMaterial({color:BODY,metalness:0,roughness:.16,clearcoat:1,clearcoatRoughness:.04,envMapIntensity:.85,ior:1.52,specularIntensity:1});
   m.onBeforeCompile=(sh)=>{sh.fragmentShader=sh.fragmentShader.replace('#include <opaque_fragment>',`
     vec3 Ls=normalize(vec3(.58,.42,.70));
     float dd=max(dot(normal,Ls),0.);
@@ -56,7 +57,7 @@ function moonMat(strength){
     vec3 vp=vViewPosition*.05;
     float bl=.5+.5*sin(vp.x*7.+sin(vp.y*5.))*sin(vp.y*6.+sin(vp.x*4.));
     band*=.62+.38*bl;
-    outgoingLight=mix(outgoingLight,vec3(.30,.52,1.0),min(band*${strength.toFixed(2)},.92));
+    outgoingLight=mix(outgoingLight,vec3(${FL[0]},${FL[1]},${FL[2]}),min(band*${strength.toFixed(2)},.92));
     #include <opaque_fragment>`);};
   return m;}
 // --- objects ---

@@ -1,0 +1,10 @@
+/* WORLD 2: platinum. no blue at all; warm ivory on the left drifting to cool platinum on the right; graphite steel type; the button is a white pill with a black chrome arrow disc */
+html.red,html.red body,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background:#ecebe6 url(/moonstone/stone-platinum.png) center/cover no-repeat fixed !important}
+html.red body #hookStep .acc{color:#1b2230 !important;-webkit-text-fill-color:#1b2230 !important}
+html.red body #hookStep .r-free .b{background:linear-gradient(165deg,#7b8698 0%,#1b2230 36%,#0d121b 62%,#566175 100%) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important;color:transparent !important}
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
+  background:linear-gradient(180deg,#ffffff 0%,#f1f3f6 60%,#e2e6ec 100%) !important;justify-content:flex-start !important;padding-left:36px !important;padding-right:64px !important;
+  box-shadow:inset 0 0 0 1.5px #1c2230,inset 0 2px 0 #fff,0 14px 24px -12px rgba(16,22,36,.55) !important}
+html.red .rbtn::after,html.red .gen-btn::after{content:"\2192";position:absolute;right:6px;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;
+  background:radial-gradient(circle at 34% 26%,#667286 0%,#1d2431 52%,#0b0f17 100%);color:#fff;-webkit-text-fill-color:#fff;display:flex;align-items:center;justify-content:center;font:400 22px/1 'Fraunces',serif;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4),0 3px 7px rgba(0,0,0,.4)}
