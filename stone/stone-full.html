@@ -75,6 +75,9 @@ void main(){
     vec3 ev=env(r);float el=dot(ev,vec3(.33));
     c*=mix(vec3(.91,.92,.99),vec3(1.),smoothstep(.25,.85,el));
     
+    float h1=rbox(r.xy,vec2(-.26,.30),vec2(.26,.23),.20,.17);
+    float h2=rbox(r.xy,vec2(.20,-.16),vec2(.17,.15),.15,.15);
+    c=mix(c,c*vec3(.70,.68,.90),max(h1,h2)*.80);
     c+=ev*(F*1.0+.05)*vec3(.98,.99,1.);
     c+=vec3(1.,1.,1.02)*boxes(r)*(.55+.45*F*6.)*.95;
     float edgeLit=smoothstep(.965,.995,d)*smoothstep(-.1,.7,(-p.x+p.y)*1.4);c+=vec3(1.)*edgeLit*.30;
