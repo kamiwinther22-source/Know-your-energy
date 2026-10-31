@@ -216,3 +216,5 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 - OWNER (31 Oct): "anything drawn so large it doesn't fit on the screen, I find incredibly fucking annoying." NEVER draw art, marks or objects larger than the screen or cropped by its edge, on any screen. This rules out the "huge cropped marks" in the whole-site theme proposal, and the cropped knot in option B. Everything must be fully visible.
 
 - OWNER (31 Oct), on the trefoil knot in option B: the knot itself is annoying "because it has no meaning." Every picture, object and mark must mean something (the three systems, or what the site does). No decorative art that stands for nothing.
+
+- CORRECTION (31 Oct): the previous entry overstated this. The owner did NOT say decoration is banned. The owner said you would not make something with no meaning the central focus point (the knot was the focus of option B). Decoration is allowed; whatever is the focus of a screen must mean something.
