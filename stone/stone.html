@@ -18,11 +18,13 @@ float rbox(vec2 r,vec2 c,vec2 h,float rad,float soft){
   vec2 q=abs(r-c)-h+rad;float d=length(max(q,0.))+min(max(q.x,q.y),0.)-rad;return 1.-smoothstep(-soft,soft,d);}
 vec3 env(vec3 r){
   float up=clamp(r.y*.5+.5,0.,1.);
-  vec3 c=mix(vec3(.42,.43,.47),vec3(.93,.94,.97),smoothstep(.1,.9,up));
-  c+=vec3(1.)*rbox(r.xy,vec2(-.30,.40),vec2(.20,.13),.06,.025)*1.15;
-  c+=vec3(1.)*rbox(r.xy,vec2(.48,.05),vec2(.035,.22),.03,.02)*.55;
-  c+=vec3(.9,.95,1.)*rbox(r.xy,vec2(.10,-.55),vec2(.30,.04),.03,.03)*.28;
+  vec3 c=mix(vec3(.30,.33,.42),vec3(.86,.90,.98),smoothstep(.15,.85,up));
+  c*=.85+.3*vn(vec3(r.xy*4.,1.));
   return c;}
+float boxes(vec3 r){
+  float b=rbox(r.xy,vec2(-.26,.30),vec2(.10,.075),.04,.008)*.85;
+  b+=rbox(r.xy,vec2(.20,-.16),vec2(.05,.035),.02,.012)*.30;
+  return b;}
 void main(){
   vec2 p=(gl_FragCoord.xy-.5*R)/R.x;            // units of screen width, y up
   vec3 bgc=vec3(.905,.906,.915);
@@ -58,20 +60,23 @@ void main(){
     }
     // fine grain (irregular, low contrast) so the interior reads as crystal not haze
     float grain=vn(vec3(p*vec2(310.,70.),2.))*.5+vn(vec3(p*vec2(160.,38.),7.))*.5;
-    vec3 body=vec3(.90,.88,.865)*(.965+.035*grain);
+    vec3 body=vec3(.925,.905,.885)*(.985+.015*grain);
     body=mix(body,vec3(.80,.80,.82),clamp(cloud,0.,1.)*.38);
-    float dif=clamp(dot(N,Ld)*.7+.45,0.,1.);body*=.74+.24*dif;
+    float dif=clamp(dot(N,Ld)*.7+.45,0.,1.);body*=.61+.34*dif;
+    body*=.88+.14*smoothstep(-.4,.5,(-p.x+p.y)*1.1);
     // thin edge: glassy, takes on the surface colour and a darker total-internal-reflection ring
     float rim=smoothstep(.72,1.,d);
     body=mix(body,bgc*.88,rim*rim*.38);
     body*=1.-.22*smoothstep(.88,.985,d)*(1.-smoothstep(.985,1.,d));
-    float bl=min(1.-exp(-blue*2.0),.92);
-    vec3 deep=vec3(.14,.30,.93),lite=vec3(.58,.78,1.);
+    float bl=min(1.-exp(-blue*2.4),.96);
+    vec3 deep=vec3(.06,.22,.95),lite=vec3(.48,.68,1.);
     vec3 bc=mix(deep,lite,smoothstep(.15,.85,bl));
-    vec3 c=mix(body,bc,bl*.92)+vec3(.95,.97,1.)*silver;
+    vec3 c=mix(body,bc,bl*.90)+bc*bl*.08+vec3(.95,.97,1.)*silver;
     // polished surface
     vec3 r=reflect(-V,N);float F=.045+.955*pow(1.-max(dot(N,V),0.),5.);
-    c+=env(r)*(F*.85+.035)*vec3(.98,.99,1.);
+    c+=env(r)*(F*1.0+.05)*vec3(.98,.99,1.);
+    c+=vec3(1.,1.,1.02)*boxes(r)*(.55+.45*F*6.)*.95;
+    float edgeLit=smoothstep(.965,.995,d)*smoothstep(-.1,.7,(-p.x+p.y)*1.4);c+=vec3(1.)*edgeLit*.30;
     col=mix(col,c,a);
   }
   col+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
