@@ -8,12 +8,12 @@ float vn(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*f*(f*(f*6.-15.)+10.);
  return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
             mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
 float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*vn(p);p=p*2.03+vec3(1.7,9.2,3.1);a*=.5;}return s;}
-const vec2 AB=vec2(.43,.92);          // stone half-size (in screen widths)
-const float NN=2.7;                   // superellipse exponent: soft rounded rectangle
+const vec2 AB=vec2(.482,1.058);          // stone half-size (in screen widths)
+const float NN=3.0;                   // superellipse exponent: soft rounded rectangle
 float sdE(vec2 p){ // approximate signed distance to the stone outline
   vec2 q=abs(p)/AB; float d=pow(pow(q.x,NN)+pow(q.y,NN),1./NN); return (d-1.)*.33;}
 float dd(vec2 p){vec2 q=abs(p)/AB;return pow(pow(q.x,NN)+pow(q.y,NN),1./NN);}
-float Hh(vec2 p){float d=min(dd(p),1.);float u=1.-d*d;return .30*pow(max(u,0.),.62);}
+float Hh(vec2 p){float d=min(dd(p),1.);float u=1.-d*d;return .34*pow(max(u,0.),.62);}
 float rbox(vec2 r,vec2 c,vec2 h,float rad,float soft){
   vec2 q=abs(r-c)-h+rad;float d=length(max(q,0.))+min(max(q.x,q.y),0.)-rad;return 1.-smoothstep(-soft,soft,d);}
 vec3 env(vec3 r){
@@ -31,7 +31,7 @@ void main(){
   bgc*=1.-.06*smoothstep(.3,1.3,length(p*vec2(1.,.6)));
   float sd=sdE(p);
   // shadow on the flat surface: tight contact + soft cast to lower right
-  float sh=exp(-max(sd,0.)*90.)*.14+exp(-max(sdE(p-vec2(.03,-.045)),0.)*16.)*.12;
+  float sh=exp(-max(sd,0.)*120.)*.16+exp(-max(sdE(p-vec2(.012,-.016)),0.)*40.)*.12;
   vec3 col=bgc*(1.-sh);
   float a=1.-smoothstep(-.0012,.0012,sd);
   if(a>0.){
