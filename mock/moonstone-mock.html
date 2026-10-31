@@ -106,7 +106,7 @@ a.l{color:var(--ink);font-weight:700;font-size:19px;text-decoration:underline}
 .gl{text-align:center;flex:1}.gl img{width:92px;height:92px;object-fit:cover;border-radius:50%;display:block;margin:0 auto}
 </style></head>
 <body>
-<canvas id="bg"></canvas>
+<canvas id="bg"></canvas><div id="fixedbg" style="display:none;position:fixed;inset:0;z-index:0;background:url(../moonstone-swatch.png) center/100% 100% no-repeat"></div>
 <main id="root"></main>
 
 <script id="bgfs" type="x-shader/x-fragment">
@@ -321,7 +321,7 @@ document.fonts.ready.then(()=>setTimeout(()=>{
   const bg=document.getElementById('bg');
   const H=Math.max(document.documentElement.scrollHeight,844);
   bg.style.height=H+'px';bg.width=390;bg.height=H;
-  mk(bg,'bgfs',{lx:-.5,ly:-.6,hv:844});
+  if(q.has('bgimg')){bg.style.display='none';document.getElementById('fixedbg').style.display='block';}else mk(bg,'bgfs',{lx:-.5,ly:-.6,hv:844});
   const o=document.getElementById('orrery');
   if(o){o.width=1170;o.height=708;mk(o,'orfs',{lx:-.5,ly:-.6});}
   document.body.setAttribute('data-ready','1');
