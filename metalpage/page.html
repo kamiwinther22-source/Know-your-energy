@@ -1,0 +1,92 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,800;1,9..144,500&family=DM+Sans:wght@500;700&family=Alex+Brush&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:390px;height:844px;overflow:hidden;background:#aab0b9;font-family:'DM Sans',sans-serif;color:#10141b}
+#c{position:absolute;left:0;top:0;width:390px;height:844px}
+.wm{position:absolute;left:44px;top:34px;font-family:'Alex Brush',cursive;font-size:56px;line-height:.92}
+.sys{position:absolute;left:46px;top:150px;font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.fcr{position:absolute;left:46px;top:170px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:15px}
+.fcr b{font-style:normal;font-weight:800;letter-spacing:.06em}
+.hl{position:absolute;left:42px;top:360px;font-family:'Fraunces',serif}
+.hl .a{display:block;font-style:italic;font-weight:500;font-size:23px}
+.hl .b{display:block;font-weight:800;font-size:150px;line-height:.82;letter-spacing:-.045em;margin-left:-5px;padding-right:.06em}
+.pro{position:absolute;left:46px;top:606px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.field{position:absolute;left:44px;right:44px;top:630px;height:48px;border-radius:999px;background:rgba(255,255,255,.7);border:1.5px solid #10141b;padding:0 22px;display:flex;align-items:center;font-weight:700;font-size:16px}
+.field span{opacity:.55}
+.key{position:absolute;left:46px;top:690px;width:290px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.5px;line-height:1.3}
+.btn{position:absolute;left:46px;width:298px;top:734px;height:52px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;letter-spacing:.02em;color:#1a1204}
+</style></head><body>
+<canvas id="c" width="780" height="1688"></canvas>
+<div class="wm">Know Your<br>Energy</div>
+<div class="sys">Astrology · Numerology · Human Design</div><div class="fcr"><b>FULL</b> charts and combined reading</div>
+<div class="hl"><span class="a">first reading is</span><span class="b">free.</span></div>
+<div class="pro"><b>No credit card</b> — try before you buy</div><div class="field"><span>Email</span></div>
+<div class="key">Email is your <b>key</b> that will not be shared nor solicited</div>
+<div class="btn">Continue&nbsp;→</div>
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 R;uniform sampler2D uM;uniform sampler2D uH;uniform vec3 uL1;uniform vec3 uL2;
+float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float H(vec2 p){float d=dot(p/vec2(.62,1.12),p/vec2(.62,1.12));return 1.7*(1.-pow(min(d,1.7)/1.7,1.25));}
+vec3 room(vec3 r){
+  float sky=smoothstep(-.55,.60,r.y+.25*r.x);
+  float base=mix(1.0,1.35,sky);
+  float k1=exp((dot(r,uL1)-1.)/.012)*3.0;
+  float k2=exp((dot(r,uL2)-1.)/.016)*2.0;
+  return vec3(base)+vec3(k1+k2);}
+void main(){
+  vec2 uv=gl_FragCoord.xy/R;vec2 p=(gl_FragCoord.xy-.5*R)/R.x;vec2 e=vec2(.0014,0.);
+  vec3 N=normalize(vec3(-(H(p+e.xy)-H(p-e.xy))/(2.*e.x),-(H(p+e.yx)-H(p-e.yx))/(2.*e.x),1.));
+  float m=texture2D(uM,uv).r;
+  vec2 px=1./R;
+  float hx=texture2D(uH,uv+vec2(px.x*2.,0.)).r-texture2D(uH,uv-vec2(px.x*2.,0.)).r;
+  float hy=texture2D(uH,uv+vec2(0.,px.y*2.)).r-texture2D(uH,uv-vec2(0.,px.y*2.)).r;
+  vec3 Ng=normalize(N+vec3(-hx*9.,-hy*9.,0.));
+  vec3 rs=reflect(vec3(0.,0.,-1.),N);
+  vec3 rg=reflect(vec3(0.,0.,-1.),Ng);
+  vec3 silver=vec3(.97,.975,.985)*room(rs);
+  vec3 gold=vec3(1.0,.82,.42)*room(rg)*1.1;
+  float gm=smoothstep(.35,.65,m);
+  vec3 c=mix(silver,gold,gm);
+  c=1.-exp(-c*1.25);
+  c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
+  gl_FragColor=vec4(clamp(c,0.,1.),1.);
+}
+</script>
+<script>
+(async()=>{
+await document.fonts.load('800 100px Fraunces');
+const W=780,Hh=1688,S=2;
+function layer(draw,blur){const c=document.createElement('canvas');c.width=W;c.height=Hh;const x=c.getContext('2d');x.scale(S,S);x.fillStyle='#000';x.fillRect(0,0,390,844);x.strokeStyle='#fff';x.fillStyle='#fff';x.lineJoin='miter';
+ if(blur){x.filter='blur('+blur+'px)';}draw(x);return c;}
+const oct=(x,i,c)=>{x.beginPath();const X=i,Y=i,w=390-2*i,h=844-2*i;x.moveTo(X+c,Y);x.lineTo(X+w-c,Y);x.lineTo(X+w,Y+c);x.lineTo(X+w,Y+h-c);x.lineTo(X+w-c,Y+h);x.lineTo(X+c,Y+h);x.lineTo(X,Y+h-c);x.lineTo(X,Y+c);x.closePath();};
+const rr=(x,a,b,w,h,r)=>{x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();};
+const goldShapes=(x)=>{
+ x.lineWidth=5;oct(x,12,44);x.stroke();
+ x.save();x.translate(296,292);x.rotate(22*Math.PI/180);x.lineWidth=2.6;[40,68,98,130].forEach(r=>{x.beginPath();x.ellipse(0,0,r,r*.38,0,0,Math.PI*2);x.stroke();});
+  x.beginPath();x.arc(0,0,13,0,7);x.fill();x.beginPath();x.arc(-68,0,5,0,7);x.fill();x.beginPath();x.arc(130,0,6,0,7);x.fill();x.restore();
+ rr(x,46,734,298,52,26);x.fill();};
+const mask=layer(goldShapes,0);
+const h1=layer(goldShapes,5),h2=layer((x)=>{rr(x,46,734,298,52,26);x.fill();x.lineWidth=5;oct(x,12,44);x.stroke();},14);
+const hc=document.createElement('canvas');hc.width=W;hc.height=Hh;const hx=hc.getContext('2d');hx.drawImage(h1,0,0);hx.globalCompositeOperation='lighter';hx.globalAlpha=.7;hx.drawImage(h2,0,0);
+// ---- aim the lights: pick the spot on screen where the glint must land, solve for the light direction
+const Hf=(x,y)=>{const d=(x/.62)**2+(y/1.12)**2;return 1.7*(1-Math.pow(Math.min(d,1.7)/1.7,1.25));};
+function aim(px,py){const x=(px-195)/390,y=(422-py)/390,e=.0014;const dx=(Hf(x+e,y)-Hf(x-e,y))/(2*e),dy=(Hf(x,y+e)-Hf(x,y-e))/(2*e);
+ let n=[-dx,-dy,1];const l=Math.hypot(...n);n=n.map(v=>v/l);const I=[0,0,-1],d=n[2]*-1;return [I[0]-2*d*n[0],I[1]-2*d*n[1],I[2]-2*d*n[2]];}
+const L1=aim(+(new URLSearchParams(location.search).get('x1')||330),+(new URLSearchParams(location.search).get('y1')||64));
+const L2=aim(+(new URLSearchParams(location.search).get('x2')||366),+(new URLSearchParams(location.search).get('y2')||470));
+const cv=document.getElementById('c');const gl=cv.getContext('webgl',{preserveDrawingBuffer:true});gl.viewport(0,0,W,Hh);
+const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;};
+const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,document.getElementById('fs').textContent));gl.linkProgram(pr);gl.useProgram(pr);
+const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+function tex(c,unit){const t=gl.createTexture();gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,c);
+ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);}
+tex(mask,0);tex(hc,1);
+gl.uniform1i(gl.getUniformLocation(pr,'uM'),0);gl.uniform1i(gl.getUniformLocation(pr,'uH'),1);
+gl.uniform2f(gl.getUniformLocation(pr,'R'),W,Hh);gl.uniform3fv(gl.getUniformLocation(pr,'uL1'),L1);gl.uniform3fv(gl.getUniformLocation(pr,'uL2'),L2);
+gl.drawArrays(gl.TRIANGLES,0,3);document.body.setAttribute('data-ready','1');
+})();
+</script></body></html>
