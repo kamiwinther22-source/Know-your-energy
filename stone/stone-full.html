@@ -60,24 +60,21 @@ void main(){
     }
     // fine grain (irregular, low contrast) so the interior reads as crystal not haze
     float grain=vn(vec3(p*vec2(310.,70.),2.))*.5+vn(vec3(p*vec2(160.,38.),7.))*.5;
-    // clean pearl body: colour drifts between cream, soft peach and cool white. No darkening anywhere.
-    vec3 body=vec3(.925,.940,.962);
-    float wm=smoothstep(.40,.78,fbm(vec3(p*1.6,4.)));body=mix(body,vec3(.905,.955,.965),wm*.60);
-    float cm=smoothstep(.45,.80,fbm(vec3(p*1.3,13.)));body=mix(body,vec3(.880,.920,.990),cm*.65);
-    body=mix(body,vec3(.930,.950,.985),clamp(cloud,0.,1.)*.5);
+    // one off-white. Only its lightness varies a little (no hue shifts).
+    float lm=smoothstep(.35,.80,fbm(vec3(p*1.5,4.)));
+    vec3 body=vec3(.918,.908,.888)*(.975+.045*lm)*(.992+.008*grain);
     blue*=1.-smoothstep(.0,1.,1.-length(p-vec2(-.14,.915))/.16);
-    float bl=min(1.-exp(-blue*2.0),.62);
-    vec3 deep=vec3(.30,.46,.92),lite=vec3(.74,.85,1.);
+    float bl=min(1.-exp(-blue*2.0),.34);
+    vec3 deep=vec3(.52,.66,.93),lite=vec3(.78,.88,1.);
     vec3 bc=mix(deep,lite,smoothstep(.15,.85,bl));
     vec3 c=mix(body,bc,bl*.85)+vec3(.95,.97,1.)*silver;
     // polished surface
     vec3 r=reflect(-V,N);float F=.045+.955*pow(1.-max(dot(N,V),0.),5.);
     vec3 ev=env(r);float el=dot(ev,vec3(.33));
-    c*=mix(vec3(.90,.94,1.0),vec3(1.),smoothstep(.25,.85,el));
     
     float h1=rbox(r.xy,vec2(-.26,.30),vec2(.26,.23),.20,.17);
     float h2=rbox(r.xy,vec2(.20,-.16),vec2(.17,.15),.15,.15);
-    c=mix(c,c*vec3(.56,.68,.90),max(h1,h2)*.82);
+    c=mix(c,c*vec3(.84,.835,.82),max(h1,h2)*.85);
     c+=ev*(F*1.0+.05)*vec3(.98,.99,1.);
     c+=vec3(1.,1.,1.02)*boxes(r)*(.55+.45*F*6.)*.95;
     float edgeLit=smoothstep(.965,.995,d)*smoothstep(-.1,.7,(-p.x+p.y)*1.4);c+=vec3(1.)*edgeLit*.30;
