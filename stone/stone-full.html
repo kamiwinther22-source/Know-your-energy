@@ -22,8 +22,8 @@ vec3 env(vec3 r){
   c*=.85+.3*vn(vec3(r.xy*4.,1.));
   return c;}
 float boxes(vec3 r){
-  float b=rbox(r.xy,vec2(-.26,.30),vec2(.10,.075),.04,.008)*.85;
-  b+=rbox(r.xy,vec2(.20,-.16),vec2(.05,.035),.02,.012)*.30;
+  float b=rbox(r.xy,vec2(-.26,.30),vec2(.10,.075),.04,.008)*.95;
+  b+=rbox(r.xy,vec2(.20,-.16),vec2(.05,.035),.02,.012)*.40;
   return b;}
 void main(){
   vec2 p=(gl_FragCoord.xy-.5*R)/R.x;            // units of screen width, y up
@@ -60,10 +60,10 @@ void main(){
     }
     // fine grain (irregular, low contrast) so the interior reads as crystal not haze
     float grain=vn(vec3(p*vec2(310.,70.),2.))*.5+vn(vec3(p*vec2(160.,38.),7.))*.5;
-    vec3 body=vec3(.972,.958,.945)*(.985+.015*grain);
+    vec3 body=vec3(.955,.94,.925)*(.985+.015*grain);
     body=mix(body,vec3(.90,.90,.93),clamp(cloud,0.,1.)*.45);
     float wm=smoothstep(.45,.75,fbm(vec3(p*2.2,4.)));body=mix(body,vec3(.995,.945,.90),wm*.45);
-    float dif=clamp(dot(N,Ld)*.7+.45,0.,1.);body*=.76+.26*dif;
+    float dif=clamp(dot(N,Ld)*.7+.45,0.,1.);body*=.72+.24*dif;
     body*=.93+.09*smoothstep(-.4,.5,(-p.x+p.y)*1.1);
     // thin edge: glassy, takes on the surface colour and a darker total-internal-reflection ring
     body*=1.-.09*smoothstep(.6,1.,d);
@@ -77,7 +77,9 @@ void main(){
     vec3 c=mix(body,bc,bl*.85)+vec3(.95,.97,1.)*silver;
     // polished surface
     vec3 r=reflect(-V,N);float F=.045+.955*pow(1.-max(dot(N,V),0.),5.);
-    c+=env(r)*(F*1.0+.05)*vec3(.98,.99,1.);
+    vec3 ev=env(r);float el=dot(ev,vec3(.33));
+    c*=.90+.10*smoothstep(.25,.9,el);
+    c+=ev*(F*1.0+.05)*vec3(.98,.99,1.);
     c+=vec3(1.,1.,1.02)*boxes(r)*(.55+.45*F*6.)*.95;
     float edgeLit=smoothstep(.965,.995,d)*smoothstep(-.1,.7,(-p.x+p.y)*1.4);c+=vec3(1.)*edgeLit*.30;
     col=mix(col,c,a);
