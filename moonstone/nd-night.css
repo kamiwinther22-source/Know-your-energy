@@ -1,0 +1,17 @@
+/* NIGHT: dark graphite page, the moonstone sphere is the hero, huge and cropped; ivory type; conic silver-ring button */
+html.red,html.red body,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background:radial-gradient(120% 70% at 80% 62%,#1c2130 0%,#0d1018 55%,#07080d 100%) !important}
+html.red body,html.red body *{color:#f1ede4 !important;-webkit-text-fill-color:#f1ede4 !important}
+html.red #hookStep .wm{left:2px;top:4px;font-size:64px}
+html.red #hookStep .sm{left:6px;top:78px;color:#9fb4d8 !important;-webkit-text-fill-color:#9fb4d8 !important}
+html.red #hookStep .hero-illustration{position:absolute !important;left:-20px;top:220px;margin:0 !important;transform:rotate(22deg) scale(2.35) !important}
+html.red #hookStep .r-free{left:4px;top:120px}
+html.red #hookStep .r-free .b{background:linear-gradient(170deg,#ffffff 0%,#cdd7ea 45%,#8da6d6 100%) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important;color:transparent !important}
+html.red .field,html.red .line-field,html.red .line-field.hero-email-field,html.red #formStep.locked .line-field{background:rgba(255,255,255,.06) !important;border-radius:999px !important;box-shadow:inset 0 0 0 1px rgba(207,219,240,.45) !important}
+html.red .line-field input::placeholder{color:#a9b4c8 !important;-webkit-text-fill-color:#a9b4c8 !important}
+html.red .hero-email-field input{padding-left:20px !important}
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{border:2.5px solid transparent !important;
+  background:linear-gradient(#f5f2ea,#e9e5da) padding-box,conic-gradient(from 210deg,#ffffff,#6f86b0,#ffffff,#b9c8e4,#ffffff,#7b90b8,#ffffff) border-box !important;
+  box-shadow:0 0 26px -2px rgba(150,180,235,.5),0 14px 24px -12px rgba(0,0,0,.8) !important}
+html.red .rbtn,html.red .rbtn *,html.red .gen-btn,html.red .gen-btn *{color:#10131b !important;-webkit-text-fill-color:#10131b !important}
+html.red #hookStep .k-above .acc{color:#9fb4d8 !important;-webkit-text-fill-color:#9fb4d8 !important}
+html.red #hookStep .k-below .acc{color:#9fb4d8 !important;-webkit-text-fill-color:#9fb4d8 !important}

@@ -1,0 +1,20 @@
+/* PAPER: flat warm paper, no stone behind. Giant vertical wordmark down the left, small sphere as an ornament, brass accent, black lacquer button with brass rim */
+html.red,html.red body,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background:#f4efe4 !important}
+html.red body,html.red body *{color:#16181f !important;-webkit-text-fill-color:#16181f !important}
+html.red #hookStep .wm{left:-6px;top:410px;font-size:112px;transform:rotate(-90deg);transform-origin:0 0;width:max-content}
+html.red #hookStep .sm{left:104px;top:10px;color:#8a5a22 !important;-webkit-text-fill-color:#8a5a22 !important}
+html.red #hookStep .sm2{top:30px;font-size:15px;letter-spacing:0 !important;text-transform:none !important;font-style:italic;font-weight:500}
+html.red #hookStep .hero-illustration{position:absolute !important;left:90px;top:44px;margin:0 !important;transform:rotate(22deg) scale(.95) !important}
+html.red #hookStep .r-free{left:96px;top:330px}
+html.red #hookStep .r-free .a{font-size:26px}
+html.red #hookStep .r-free .b{font-size:104px;background:linear-gradient(170deg,#c9944a 0%,#8a5a22 55%,#5d3a12 100%) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important;color:transparent !important}
+html.red #hookStep .hero-email-wrap{left:96px;width:262px}
+html.red #hookStep .k-above{text-align:left;font-size:10.5px !important;letter-spacing:.12em !important}
+html.red #hookStep .k-below{text-align:left;font-size:13.5px;margin-left:0}
+html.red .field,html.red .line-field,html.red .line-field.hero-email-field,html.red #formStep.locked .line-field{background:transparent !important;border-radius:0 !important;box-shadow:0 1.5px 0 #16181f !important}
+html.red .line-field input::placeholder{color:#6b6458 !important;-webkit-text-fill-color:#6b6458 !important}
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{border:2px solid transparent !important;
+  background:radial-gradient(80% 60% at 50% 0%,rgba(255,255,255,.22),rgba(255,255,255,0) 70%),linear-gradient(#242730,#0c0d12) padding-box,linear-gradient(160deg,#e8c98f,#9a6a2c 50%,#e8c98f) border-box !important;
+  box-shadow:0 14px 22px -12px rgba(40,26,8,.55) !important}
+html.red .rbtn,html.red .rbtn *,html.red .gen-btn,html.red .gen-btn *{color:#f3e7cc !important;-webkit-text-fill-color:#f3e7cc !important}
+html.red #hookStep .k-above .acc,html.red #hookStep .k-below .acc{color:#8a5a22 !important;-webkit-text-fill-color:#8a5a22 !important}
