@@ -20,8 +20,8 @@ void main(){
   // ---- body: a family of off-whites that follows the stone's curvature (smooth, no noise)
   float lit=clamp(dot(N,Ld)*1.05+.38,0.,1.);
   float drift=smoothstep(-.35,.45,p.x*.9-p.y*.5+(N.x-N.y)*1.4);
-  vec3 warmW=vec3(.935,.925,.900),coolW=vec3(.915,.925,.940);
-  vec3 c=mix(warmW,coolW,drift)*(.90+.09*lit);
+  vec3 warmW=vec3(.950,.940,.915),coolW=vec3(.935,.943,.955);
+  vec3 c=mix(warmW,coolW,drift)*(.955+.045*lit);
   // screen position in css px (390 wide): used to place the light on purpose, in the margins where no content sits
   vec2 px=vec2(gl_FragCoord.x/R.x*390.,(1.-gl_FragCoord.y/R.y)*844.);
   // ---- adularescence: one soft pale-blue sheen that follows the surface, kept to the upper-right corner
