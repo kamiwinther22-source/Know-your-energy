@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,800;1,9..144,500&family=DM+Sans:wght@500;700&family=Alex+Brush&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:390px;height:844px;overflow:hidden;background:#aab0b9;font-family:'DM Sans',sans-serif;color:#10141b}
+html,body{width:390px;height:844px;overflow:hidden;background:#aab0b9;font-family:'DM Sans',sans-serif;color:#10141b;border:1.5px solid #10141b;border-radius:999px;background:rgba(255,254,250,.7);box-shadow:0 10px 18px -10px rgba(60,48,20,.45)}
 #c{position:absolute;left:0;top:0;width:390px;height:844px}
 .wm{position:absolute;left:44px;top:34px;font-family:'Alex Brush',cursive;font-size:56px;line-height:.92}
 .sys{position:absolute;left:46px;top:150px;font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
@@ -15,9 +15,12 @@ html,body{width:390px;height:844px;overflow:hidden;background:#aab0b9;font-famil
 .field{position:absolute;left:44px;right:44px;top:630px;height:48px;border-radius:999px;background:rgba(255,255,255,.7);border:1.5px solid #10141b;padding:0 22px;display:flex;align-items:center;font-weight:700;font-size:16px}
 .field span{opacity:.55}
 .key{position:absolute;left:46px;top:690px;width:290px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.5px;line-height:1.3}
-.btn{position:absolute;left:46px;width:298px;top:734px;height:52px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;letter-spacing:.02em;color:#10141b}
+.btn{position:absolute;left:46px;width:298px;top:734px;height:52px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;letter-spacing:.02em;color:#10141b;border:1.5px solid #10141b;border-radius:999px;background:rgba(255,254,250,.75);box-shadow:0 10px 18px -10px rgba(60,48,20,.45)}
 </style></head><body>
 <canvas id="c" width="780" height="1688"></canvas>
+<svg id="ink" style="position:absolute;left:0;top:0;width:390px;height:844px;pointer-events:none" viewBox="0 0 390 844" fill="none" stroke="#10141b">
+<path d="M56 12H334L378 56V788L334 832H56L12 788V56Z" stroke-width="1.6"/>
+<g transform="translate(296 292) rotate(22)" stroke-width="1.3"><ellipse rx="40" ry="15.2"/><ellipse rx="68" ry="25.8"/><ellipse rx="98" ry="37.2"/><ellipse rx="130" ry="49.4"/><circle r="13" fill="#10141b" stroke="none"/><circle cx="-68" r="5" fill="#10141b" stroke="none"/><circle cx="130" r="6" fill="#10141b" stroke="none"/></g></svg>
 <div class="wm">Know Your<br>Energy</div>
 <div class="sys">Astrology · Numerology · Human Design</div><div class="fcr"><b>FULL</b> charts and combined reading</div>
 <div class="hl"><span class="a">first reading is</span><span class="b">free.</span></div>
@@ -57,6 +60,7 @@ void main(){
   vec3 c=mix(silver,gold,gm);
   c=1.-exp(-c*1.35);
   float L=dot(c,vec3(.299,.587,.114));
+  L=clamp((L-.75)*1.75+.80,0.,1.);
   vec3 lo=vec3(.77,.74,.67),mid=vec3(.950,.930,.885),hi=vec3(1.0,.995,.975);
   c=L<.80?mix(lo,mid,smoothstep(.42,.80,L)):mix(mid,hi,smoothstep(.80,1.,L));
   c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
@@ -75,10 +79,10 @@ const goldShapes=(x)=>{
  x.lineWidth=5;oct(x,12,44);x.stroke();
  x.save();x.translate(296,292);x.rotate(22*Math.PI/180);x.lineWidth=2.6;[40,68,98,130].forEach(r=>{x.beginPath();x.ellipse(0,0,r,r*.38,0,0,Math.PI*2);x.stroke();});
   x.beginPath();x.arc(0,0,13,0,7);x.fill();x.beginPath();x.arc(-68,0,5,0,7);x.fill();x.beginPath();x.arc(130,0,6,0,7);x.fill();x.restore();
- rr(x,46,734,298,52,26);x.fill();};
+};
 const FULL=new URLSearchParams(location.search).get('full');if(FULL)document.querySelectorAll('body>div').forEach(e=>e.style.display='none');
 const mask=layer(FULL?(x=>{x.fillRect(0,0,390,844)}):goldShapes,0);
-const h1=layer(FULL?(()=>{}):goldShapes,5),h2=layer(FULL?(()=>{}):(x)=>{rr(x,46,734,298,52,26);x.fill();x.lineWidth=5;oct(x,12,44);x.stroke();},14);
+const h1=layer(FULL?(()=>{}):goldShapes,5),h2=layer(FULL?(()=>{}):(x)=>{x.lineWidth=5;oct(x,12,44);x.stroke();},14);
 const hc=document.createElement('canvas');hc.width=W;hc.height=Hh;const hx=hc.getContext('2d');hx.drawImage(h1,0,0);hx.globalCompositeOperation='lighter';hx.globalAlpha=.7;hx.drawImage(h2,0,0);
 // ---- aim the lights: pick the spot on screen where the glint must land, solve for the light direction
 const Hf=(x,y)=>{const d=(x/.62)**2+(y/1.12)**2;return 1.7*(1-Math.pow(Math.min(d,1.7)/1.7,1.25));};
