@@ -35,6 +35,12 @@ vec3 room(vec3 r){
   float k1=exp((dot(r,uL1)-1.)/.012)*3.0;
   float k2=exp((dot(r,uL2)-1.)/.016)*2.0;
   return vec3(base)+vec3(k1+k2);}
+vec3 roomG(vec3 r){
+  float sky=smoothstep(-.40,.50,r.y+.25*r.x);
+  float base=mix(.10,1.05,sky);
+  float k1=exp((dot(r,uL1)-1.)/.020)*3.4;
+  float k2=exp((dot(r,uL2)-1.)/.025)*2.2;
+  return vec3(base)+vec3(k1+k2);}
 void main(){
   vec2 uv=gl_FragCoord.xy/R;vec2 p=(gl_FragCoord.xy-.5*R)/R.x;vec2 e=vec2(.0014,0.);
   vec3 N=normalize(vec3(-(H(p+e.xy)-H(p-e.xy))/(2.*e.x),-(H(p+e.yx)-H(p-e.yx))/(2.*e.x),1.));
@@ -46,10 +52,10 @@ void main(){
   vec3 rs=reflect(vec3(0.,0.,-1.),N);
   vec3 rg=reflect(vec3(0.,0.,-1.),Ng);
   vec3 silver=vec3(.97,.975,.985)*room(rs);
-  vec3 gold=vec3(1.0,.82,.42)*room(rg)*1.1;
+  vec3 gold=vec3(1.0,.76,.36)*roomG(rg);
   float gm=smoothstep(.35,.65,m);
   vec3 c=mix(silver,gold,gm);
-  c=1.-exp(-c*1.25);
+  c=1.-exp(-c*1.35);
   c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
   gl_FragColor=vec4(clamp(c,0.,1.),1.);
 }
@@ -67,8 +73,9 @@ const goldShapes=(x)=>{
  x.save();x.translate(296,292);x.rotate(22*Math.PI/180);x.lineWidth=2.6;[40,68,98,130].forEach(r=>{x.beginPath();x.ellipse(0,0,r,r*.38,0,0,Math.PI*2);x.stroke();});
   x.beginPath();x.arc(0,0,13,0,7);x.fill();x.beginPath();x.arc(-68,0,5,0,7);x.fill();x.beginPath();x.arc(130,0,6,0,7);x.fill();x.restore();
  rr(x,46,734,298,52,26);x.fill();};
-const mask=layer(goldShapes,0);
-const h1=layer(goldShapes,5),h2=layer((x)=>{rr(x,46,734,298,52,26);x.fill();x.lineWidth=5;oct(x,12,44);x.stroke();},14);
+const FULL=new URLSearchParams(location.search).get('full');if(FULL)document.querySelectorAll('body>div').forEach(e=>e.style.display='none');
+const mask=layer(FULL?(x=>{x.fillRect(0,0,390,844)}):goldShapes,0);
+const h1=layer(FULL?(()=>{}):goldShapes,5),h2=layer(FULL?(()=>{}):(x)=>{rr(x,46,734,298,52,26);x.fill();x.lineWidth=5;oct(x,12,44);x.stroke();},14);
 const hc=document.createElement('canvas');hc.width=W;hc.height=Hh;const hx=hc.getContext('2d');hx.drawImage(h1,0,0);hx.globalCompositeOperation='lighter';hx.globalAlpha=.7;hx.drawImage(h2,0,0);
 // ---- aim the lights: pick the spot on screen where the glint must land, solve for the light direction
 const Hf=(x,y)=>{const d=(x/.62)**2+(y/1.12)**2;return 1.7*(1-Math.pow(Math.min(d,1.7)/1.7,1.25));};
