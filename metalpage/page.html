@@ -15,12 +15,9 @@ html,body{width:390px;height:844px;overflow:hidden;background:#aab0b9;font-famil
 .field{position:absolute;left:44px;right:44px;top:630px;height:48px;border-radius:999px;background:rgba(255,255,255,.7);border:1.5px solid #10141b;padding:0 22px;display:flex;align-items:center;font-weight:700;font-size:16px}
 .field span{opacity:.55}
 .key{position:absolute;left:46px;top:690px;width:290px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.5px;line-height:1.3}
-.btn{position:absolute;left:46px;width:298px;top:734px;height:52px;border-radius:999px;border:1.5px solid #10141b;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;letter-spacing:.02em;color:#10141b}
+.btn{position:absolute;left:46px;width:298px;top:734px;height:52px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;letter-spacing:.02em;color:#10141b}
 </style></head><body>
 <canvas id="c" width="780" height="1688"></canvas>
-<svg id="ink" style="position:absolute;left:0;top:0;width:390px;height:844px;pointer-events:none" viewBox="0 0 390 844" fill="none" stroke="#10141b">
-<path d="M56 12H334L378 56V788L334 832H56L12 788V56Z" stroke-width="1.6"/>
-<g transform="translate(296 292) rotate(22)" stroke-width="1.3"><ellipse rx="40" ry="15.2"/><ellipse rx="68" ry="25.8"/><ellipse rx="98" ry="37.2"/><ellipse rx="130" ry="49.4"/><circle r="13" fill="#10141b" stroke="none"/><circle cx="-68" r="5" fill="#10141b" stroke="none"/><circle cx="130" r="6" fill="#10141b" stroke="none"/></g></svg>
 <div class="wm">Know Your<br>Energy</div>
 <div class="sys">Astrology · Numerology · Human Design</div><div class="fcr"><b>FULL</b> charts and combined reading</div>
 <div class="hl"><span class="a">first reading is</span><span class="b">free.</span></div>
@@ -34,7 +31,7 @@ float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*
 float H(vec2 p){float d=dot(p/vec2(.62,1.12),p/vec2(.62,1.12));return 1.7*(1.-pow(min(d,1.7)/1.7,1.25));}
 vec3 room(vec3 r){
   float sky=smoothstep(-.55,.60,r.y+.25*r.x);
-  float base=mix(1.22,1.42,sky);
+  float base=mix(1.0,1.35,sky);
   float k1=exp((dot(r,uL1)-1.)/.012)*3.0;
   float k2=exp((dot(r,uL2)-1.)/.016)*2.0;
   return vec3(base)+vec3(k1+k2);}
@@ -54,11 +51,14 @@ void main(){
   vec3 Ng=normalize(N+vec3(-hx*9.,-hy*9.,0.));
   vec3 rs=reflect(vec3(0.,0.,-1.),N);
   vec3 rg=reflect(vec3(0.,0.,-1.),Ng);
-  vec3 silver=vec3(1.34)*room(rs);
-  vec3 gold=vec3(1.34)*room(rg);
+  vec3 silver=vec3(.97,.975,.985)*room(rs);
+  vec3 gold=vec3(.97,.975,.99)*roomG(rg);
   float gm=smoothstep(.35,.65,m);
   vec3 c=mix(silver,gold,gm);
-  c=1.-exp(-c*1.75);c*=vec3(1.0,.98,.935);
+  c=1.-exp(-c*1.35);
+  float L=dot(c,vec3(.299,.587,.114));
+  vec3 lo=vec3(.77,.74,.67),mid=vec3(.950,.930,.885),hi=vec3(1.0,.995,.975);
+  c=L<.80?mix(lo,mid,smoothstep(.42,.80,L)):mix(mid,hi,smoothstep(.80,1.,L));
   c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
   gl_FragColor=vec4(clamp(c,0.,1.),1.);
 }
