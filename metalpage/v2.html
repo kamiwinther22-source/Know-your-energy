@@ -40,16 +40,17 @@ uniform vec2 R;uniform sampler2D uI;uniform sampler2D uH;uniform vec3 uL1;unifor
 float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
 float sdPlate(vec2 q){ // css px, plate centred at (195,422)
   q=abs(q-vec2(195.,422.));
-  float d1=max(q.x-181.,q.y-408.);
-  float d2=(q.x+q.y-(181.+408.-46.))*.70711;
+  float d1=max(q.x-189.,q.y-416.);
+  float d2=(q.x+q.y-(189.+416.-40.))*.70711;
   return max(d1,d2);}
-float bevel(float sd){float t=clamp(-sd/13.,0.,1.);return 13.*sqrt(max(1.-(1.-t)*(1.-t),0.));}
+float bevel(float sd){float t=clamp(-sd/9.,0.,1.);return 9.*sqrt(max(1.-(1.-t)*(1.-t),0.));}
 float dome(vec2 p){float d=dot(p/vec2(.62,1.12),p/vec2(.62,1.12));return 1.7*(1.-pow(min(d,1.7)/1.7,1.25));}
 vec2 px2uv(vec2 px){return vec2(px.x/390.,1.-px.y/844.);}
 float bump(vec2 px){return texture2D(uH,px2uv(px)).r*5.;}
 float Ht(vec2 px){vec2 p=(px-vec2(195.,422.))/390.;p.y=-p.y;return dome(p)+(bevel(sdPlate(px))+bump(px))/390.;}
-float roomBase(vec3 r){float sky=smoothstep(-.30,.42,r.y+.25*r.x);return mix(.80,1.45,sky);}
-float roomK(vec3 r){return exp((dot(r,uL1)-1.)/.010)*3.4+exp((dot(r,uL2)-1.)/.014)*2.4+exp((dot(r,uL1)-1.)/.060)*1.1;}
+float roomBase(vec3 r){float sky=smoothstep(-.30,.42,r.y+.25*r.x);return mix(.86,1.45,sky);}
+float rb(vec2 q,vec2 h,float rad){vec2 d=abs(q)-h+rad;return 1.-smoothstep(-.004,.004,length(max(d,0.))+min(max(d.x,d.y),0.)-rad);}
+float roomK(vec3 r){return rb(r.xy-uL1.xy*.9-vec2(.02,.0),vec2(.13,.075),.03)*2.6+rb(r.xy-uL2.xy*.8,vec2(.05,.035),.015)*1.6+ exp((dot(r,uL1)-1.)/.010)*3.4+exp((dot(r,uL2)-1.)/.014)*2.4+exp((dot(r,uL1)-1.)/.060)*1.1;}
 void main(){
   vec2 px=vec2(gl_FragCoord.x/R.x*390.,(1.-gl_FragCoord.y/R.y)*844.);
   float sd=sdPlate(px);
@@ -64,9 +65,8 @@ void main(){
     vec3 r=reflect(vec3(0.,0.,-1.),N);
     vec4 id=texture2D(uI,px2uv(px));
     float base=roomBase(r),k=roomK(r);
-    vec3 surf=vec3(2.30,2.24,2.06)*(vec3(base)+vec3(k));
+    vec3 surf=vec3(2.62,2.64,2.68)*(vec3(base)+vec3(k));
     surf=1.-exp(-surf*1.35);
-    float lm=dot(surf,vec3(.33));surf*=mix(vec3(1.,.955,.885),vec3(1.,.99,.955),smoothstep(.80,.97,lm));
     // soft shadow cast by the raised shapes onto the surface
     float cs=texture2D(uH,px2uv(px-vec2(4.,5.))).r;float own=texture2D(uH,px2uv(px)).r;
     surf*=1.-.16*cs*(1.-smoothstep(.25,.6,own));
