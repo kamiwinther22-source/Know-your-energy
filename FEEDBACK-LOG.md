@@ -183,3 +183,9 @@ Each item applies to what was on screen when it was said.
 - Type: two fonts only. Accent some words with colour. Buttons: no dark centres; not a flat sticker; should not be the same on every page.
 - Results page: likes the silver frames around the charts; wants the reading to sit inside the frame and scroll there online (print/save stays words + charts only). Person 1 / Person 2 are off-centre on purpose.
 - Process: show finished results with every problem the assistant names already fixed; show pictures as a visitor sees them (phone-sized, not scaled-down sheets); show the real page with the real solar system, not stand-ins; do not narrow to one skeleton; "different" means structure, stone, colour, type and button all change, not words moved around. Ended the session saying the output was not genuinely new or creative and they will not do it again.
+
+## Settled list (checked against every picture before sending), 2 Nov
+Goal words (owner's): unique, bold, classy, elegant, sleek. Needs real shine. Must be at least equal in quality to the current site (real rendering, not flat drawings or gradients).
+Ruled out: grey anywhere; window-shaped reflections; stripes; gemstone/jewel looks; yellow gold; anything that reads as paper; moonstone as a requirement; pink/peach/lilac/purple tints; whole-screen effects; the assistant listing flaws in what it shows (just fix them).
+Keep: big type with "free." as the hero; colour used well, one hue at a time; the cut-corner frame shape; the real rendered solar system slanted left-side-up; the owner's exact words/copy; Continue near the bottom with nothing below the fold after it; two typefaces only; shine tied to the surface and placed on purpose.
+Current state: metalpage/v2.html (bevelled plate on a thin dark margin, real 3D solar system, raised black "free." with a blue full stop, light that moves with tilt). Do not restore older versions; change only what the owner's latest message is about.
