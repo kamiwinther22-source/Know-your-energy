@@ -3,7 +3,7 @@
 <script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:390px;height:844px;overflow:hidden;background:#080c18;font-family:'DM Sans',sans-serif;color:#0e1219}
+html,body{width:390px;height:844px;overflow:hidden;background:#080c18;--a:#1f45e6;font-family:'DM Sans',sans-serif;color:#0e1219}
 #c{position:absolute;left:0;top:0;width:390px;height:844px;z-index:0}
 #clip{position:absolute;left:26px;top:26px;width:338px;height:792px;overflow:hidden;z-index:1;pointer-events:none}
 #sys{position:absolute;left:-12px;top:154px;width:564px;height:277px;transform-origin:282px 120px;transform:rotate(22deg)}
@@ -12,15 +12,15 @@ html,body{width:390px;height:844px;overflow:hidden;background:#080c18;font-famil
 .wm{left:46px;top:38px;font-family:'Alex Brush',cursive;font-size:56px;line-height:.92}
 .sys1{left:48px;top:152px;font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
 .fcr{left:48px;top:172px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:15px}
-.fcr b{font-style:normal;font-weight:800;letter-spacing:.06em;color:#1f45e6}
+.fcr b{font-style:normal;font-weight:800;letter-spacing:.06em;color:var(--a,#1f45e6)}
 .fr{left:46px;top:362px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:23px}
-.rule{left:48px;top:596px;width:64px;height:2px;background:#1f45e6;z-index:2}
+.rule{left:48px;top:596px;width:64px;height:2px;background:var(--a,#1f45e6);z-index:2}
 .pro{left:48px;top:608px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
 .field{left:46px;right:46px;top:632px;height:46px;border-radius:999px;background:rgba(255,255,255,.72);border:1.5px solid #0e1219;padding:0 22px;display:flex;align-items:center;font-weight:700;font-size:16px}
 .field span{opacity:.55}
 .key{left:48px;top:690px;width:290px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.5px;line-height:1.3}
-.key b{font-style:normal;font-weight:800;color:#1f45e6}
-.btn{left:46px;width:298px;top:738px;height:50px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;letter-spacing:.02em;color:#0e1219;border-radius:999px;border:1.5px solid #1f45e6}
+.key b{font-style:normal;font-weight:800;color:var(--a,#1f45e6)}
+.btn{left:46px;width:298px;top:738px;height:50px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;letter-spacing:.02em;color:#0e1219;border-radius:999px;border:1.5px solid var(--a,#1f45e6)}
 </style></head><body>
 <canvas id="c" width="780" height="1688"></canvas>
 <div id="clip"><div id="sys"></div></div>
@@ -36,7 +36,7 @@ html,body{width:390px;height:844px;overflow:hidden;background:#080c18;font-famil
 
 <script id="fs" type="x-shader/x-fragment">
 precision highp float;
-uniform vec2 R;uniform sampler2D uI;uniform sampler2D uH;uniform vec3 uL1;uniform vec3 uL2;
+uniform vec2 R;uniform sampler2D uI;uniform sampler2D uH;uniform vec3 uL1;uniform vec3 uL2;uniform vec3 uGround;uniform vec3 uWord;uniform vec3 uStop;
 float hash(vec3 p){p=fract(p*0.3183099+vec3(.1,.2,.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
 float sdPlate(vec2 q){ // css px, plate centred at (195,422)
   q=abs(q-vec2(195.,422.));
@@ -56,7 +56,7 @@ void main(){
   float sd=sdPlate(px);
   // ---- ground: deep ink with the plate's soft shadow
   float sh=exp(-max(sdPlate(px-vec2(5.,14.)),0.)/20.)*.62;
-  vec3 col=vec3(.030,.045,.098)*(1.-sh)+vec3(.02,.03,.07)*smoothstep(500.,900.,px.y)*.0;
+  vec3 col=uGround*(1.-sh)+vec3(.02,.03,.07)*smoothstep(500.,900.,px.y)*.0;
   if(sd<.9){
     float e=.7;
     float hx=Ht(px+vec2(e,0.))-Ht(px-vec2(e,0.));
@@ -72,9 +72,9 @@ void main(){
     surf*=1.-.16*cs*(1.-smoothstep(.25,.6,own));
     vec3 c=surf;
     // raised polished black (the word)
-    if(id.r>.5){c=vec3(.030,.034,.044)+vec3(.12)*(base-.9)+vec3(.9)*k*.30;}
+    if(id.r>.5){c=uWord*(.6+.8*(base-.9))+vec3(.12)*(base-.9)*step(max(uWord.r,max(uWord.g,uWord.b)),.1)+vec3(.9)*k*.30;}
     // the full stop: one deep blue
-    if(id.g>.5){c=vec3(.07,.17,.80)*(.55+.6*(base-.9))+vec3(.55,.70,1.)*k*.30;}
+    if(id.g>.5){c=uStop*(.55+.6*(base-.9))+vec3(.9)*k*.30;}
     c+=(hash(vec3(gl_FragCoord.xy,1.))-.5)/255.;
     float a=1.-smoothstep(-.7,.7,sd);
     col=mix(col,clamp(c,0.,1.),a);
@@ -113,6 +113,10 @@ function tex(c,unit){const t=gl.createTexture();gl.activeTexture(gl.TEXTURE0+uni
  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);}
 tex(ci,0);tex(hb,1);
 gl.uniform1i(gl.getUniformLocation(pr,'uI'),0);gl.uniform1i(gl.getUniformLocation(pr,'uH'),1);gl.uniform2f(gl.getUniformLocation(pr,'R'),W,Hh);
+const hx3=(h)=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);
+const GR=Q.get('g')||'#080c18',WD=Q.get('w')||'#080a0e',ST=Q.get('s')||'#1237cc',AC=Q.get('a')||'#1f45e6';
+gl.uniform3fv(gl.getUniformLocation(pr,'uGround'),hx3(GR));gl.uniform3fv(gl.getUniformLocation(pr,'uWord'),hx3(WD));gl.uniform3fv(gl.getUniformLocation(pr,'uStop'),hx3(ST));
+document.body.style.setProperty('--a',AC);document.body.style.background=GR;
 const u1=gl.getUniformLocation(pr,'uL1'),u2=gl.getUniformLocation(pr,'uL2');
 function draw(tx,ty){const L1=aim(330+tx*90,64+ty*90),L2=aim(366+tx*30,470+ty*120);gl.uniform3fv(u1,L1);gl.uniform3fv(u2,L2);gl.drawArrays(gl.TRIANGLES,0,3);}
 draw(0,0);document.body.dataset.plate='1';
