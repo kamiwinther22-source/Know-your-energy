@@ -48,8 +48,8 @@ float dome(vec2 p){float d=dot(p/vec2(.62,1.12),p/vec2(.62,1.12));return 1.7*(1.
 vec2 px2uv(vec2 px){return vec2(px.x/390.,1.-px.y/844.);}
 float bump(vec2 px){return texture2D(uH,px2uv(px)).r*5.;}
 float Ht(vec2 px){vec2 p=(px-vec2(195.,422.))/390.;p.y=-p.y;return dome(p)+(bevel(sdPlate(px))+bump(px))/390.;}
-float roomBase(vec3 r){float sky=smoothstep(-.55,.60,r.y+.25*r.x);return mix(1.0,1.35,sky);}
-float roomK(vec3 r){return exp((dot(r,uL1)-1.)/.012)*3.0+exp((dot(r,uL2)-1.)/.016)*2.0;}
+float roomBase(vec3 r){float sky=smoothstep(-.30,.42,r.y+.25*r.x);return mix(.80,1.45,sky);}
+float roomK(vec3 r){return exp((dot(r,uL1)-1.)/.010)*3.4+exp((dot(r,uL2)-1.)/.014)*2.4+exp((dot(r,uL1)-1.)/.060)*1.1;}
 void main(){
   vec2 px=vec2(gl_FragCoord.x/R.x*390.,(1.-gl_FragCoord.y/R.y)*844.);
   float sd=sdPlate(px);
@@ -65,7 +65,8 @@ void main(){
     vec4 id=texture2D(uI,px2uv(px));
     float base=roomBase(r),k=roomK(r);
     vec3 surf=vec3(2.30,2.24,2.06)*(vec3(base)+vec3(k));
-    surf=1.-exp(-surf*1.35);surf*=vec3(1.0,.99,.955);
+    surf=1.-exp(-surf*1.35);
+    float lm=dot(surf,vec3(.33));surf*=mix(vec3(1.,.955,.885),vec3(1.,.99,.955),smoothstep(.80,.97,lm));
     // soft shadow cast by the raised shapes onto the surface
     float cs=texture2D(uH,px2uv(px-vec2(4.,5.))).r;float own=texture2D(uH,px2uv(px)).r;
     surf*=1.-.16*cs*(1.-smoothstep(.25,.6,own));
