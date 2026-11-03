@@ -22,3 +22,15 @@ Every item is checked against the actual picture at 390 px and a close-up crop. 
 - Text: every word readable at 390 px; nothing cut off; spacing correct.
 - Not like other astrology, numerology or Human Design sites.
 - Compared with the written target in A.1, not with the last failure.
+
+## D. The owner's comments (this list grows; every new version is checked against all of it)
+Each time the owner says what they don't like, it is added here as a requirement and carried into every later version, not only the next one. A new version that repeats any earlier complaint is a FAIL.
+- 3 Nov 2026: Nothing grey (the three sample pages read as "three grey pages").
+- 3 Nov 2026: Porcelain must read as porcelain: white body, visible glaze gloss. Never grey.
+- 3 Nov 2026: Light, cool metallic is for metal only. Each material keeps its own true character.
+- 3 Nov 2026: Gloss must be visible on the surface itself, not only on one small object.
+- 3 Nov 2026: A material must actually be built (not carving and 3D shapes with a flat colour on them).
+- 3 Nov 2026: Show things as they would be used on the actual website, not abstract samples.
+- 3 Nov 2026: The page surface (background material) is the primary task, not an afterthought.
+- 3 Nov 2026: No sticker-like elements; nothing in a different material just placed on top of the page.
+- 3 Nov 2026: The page must not be dark grey or any grey sheet with a sheen; it must read as a metallic website.
