@@ -1,0 +1,29 @@
+<!doctype html><meta charset=utf-8><style>body{margin:0;background:#888;display:flex;gap:0}canvas{display:block}</style><body>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {EXRLoader} from 'three/addons/loaders/EXRLoader.js';
+const W=390,H=620;
+const exr=await new EXRLoader().loadAsync('./hdri/warehouse.exr');
+exr.mapping=THREE.EquirectangularReflectionMapping;
+const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});r.setSize(W*3,H);r.setPixelRatio(1);
+r.toneMapping=THREE.ACESFilmicToneMapping;r.setScissorTest(true);document.body.appendChild(r.domElement);
+const pm=new THREE.PMREMGenerator(r);const env=pm.fromEquirectangular(exr).texture;
+function build(i,cfg){
+ const s=new THREE.Scene();s.background=new THREE.Color(cfg.bg);s.environment=env;s.environmentIntensity=cfg.envI;
+ const c=new THREE.PerspectiveCamera(35,W/H,.1,100);c.position.set(0,0,15.5);
+ const mat=()=>new THREE.MeshPhysicalMaterial(cfg.m);
+ const plate=new THREE.Mesh(new THREE.BoxGeometry(11,16,.5),new THREE.MeshPhysicalMaterial(cfg.p));plate.position.z=-1.2;plate.rotation.set(-.12,.18,0);s.add(plate);
+ const sph=new THREE.Mesh(new THREE.SphereGeometry(1.5,96,64),mat());sph.position.set(-.6,1.5,0);s.add(sph);
+ const tor=new THREE.Mesh(new THREE.TorusGeometry(2.2,.22,48,160),mat());tor.position.copy(sph.position);tor.rotation.x=1.25;s.add(tor);
+ const btn=new THREE.Mesh(new THREE.CapsuleGeometry(.5,2.2,16,48),mat());btn.rotation.z=Math.PI/2;btn.position.set(0,-2.2,.6);s.add(btn);
+ const btn2=btn.clone();btn2.position.y=-3.4;s.add(btn2);
+ const l=new THREE.DirectionalLight(0xffffff,cfg.key);l.position.set(-4,6,6);s.add(l);
+ return {s,c};
+}
+const A=build(0,{p:{color:'#3a0716',metalness:1,roughness:.4,clearcoat:.2},bg:'#1a0510',envI:.55,key:.4,m:{color:'#5a0d24',metalness:1,roughness:.22,clearcoat:.3}});
+const B=build(1,{p:{color:'#e2dfe8',metalness:.2,roughness:.85},bg:'#e9e6f0',envI:.9,key:.2,m:{color:'#d9d4e0',metalness:.25,roughness:.75,clearcoat:0}});
+const C=build(2,{p:{color:'#dfeaf8',metalness:1,roughness:.38,clearcoat:1,clearcoatRoughness:.08},bg:'#cfdcee',envI:1.5,key:1.0,m:{color:'#bcd0ee',metalness:1,roughness:.12,clearcoat:1,clearcoatRoughness:.04,iridescence:.35,iridescenceIOR:1.4}});
+[A,B,C].forEach((x,i)=>{r.setViewport(i*W,0,W,H);r.setScissor(i*W,0,W,H);r.render(x.s,x.c)});
+document.title='done';
+</script>
