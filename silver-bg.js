@@ -14,13 +14,13 @@ var cv=document.createElement('canvas');cv.id='silverBg';document.body.insertBef
 var gl=cv.getContext('webgl',{antialias:false,preserveDrawingBuffer:false});if(!gl)return;
 var Q=new URLSearchParams(location.search),num=function(k,d){var v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
 var vs='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
-var fs='precision highp float;uniform vec2 R;uniform float K,SC,KEY,SEED;\n'+
+var fs='precision highp float;uniform vec2 R;uniform float K,SC,KEY,SEED,LO,HI;\n'+
 'float hash(vec2 p){p=fract(p*vec2(123.34,456.21)+SEED);p+=dot(p,p+45.32);return fract(p.x*p.y);}\n'+
 'float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*f*(f*(f*6.-15.)+10.);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}\n'+
 'float H(vec2 p){vec2 w=vec2(vn(p*.7+3.1),vn(p*.7+9.7))-.5;p+=w*1.6;return vn(p)*1.0+vn(p*2.1+5.)*.32;}\n'+
 'vec3 env(vec3 r){vec3 s=normalize(vec3(.55,.62,.56));\n'+
-'  float up=r.y;vec3 c=mix(vec3(.34,.35,.37),vec3(.86,.88,.91),smoothstep(-.3,.9,up));\n'+
-'  c*=mix(.78,1.,smoothstep(-.9,.4,r.x));\n'+                       /* dark to the left, away from the sun */
+'  float up=r.y;vec3 c=mix(vec3(LO),vec3(HI),smoothstep(-.3,.9,up));\n'+
+'  c*=mix(.5,1.,smoothstep(-.9,.4,r.x));\n'+                       /* dark to the left, away from the sun */
 '  float d=acos(clamp(dot(r,s),-1.,1.));\n'+
 '  c+=KEY*vec3(1.,.99,.97)*(1.-smoothstep(.20,.30,d));\n'+         /* the key light: one large softbox on the sun side */
 '  c+=KEY*2.2*vec3(1.)*(1.-smoothstep(.05,.075,d));\n'+            /* its hot core */
@@ -39,7 +39,7 @@ var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_
 var a=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
 var U=function(n){return gl.getUniformLocation(pr,n);};
 function draw(){var d=Math.min(2,devicePixelRatio||1),w=Math.round(innerWidth*d),h=Math.round(innerHeight*d);cv.width=w;cv.height=h;gl.viewport(0,0,w,h);
- gl.uniform2f(U('R'),w,h);gl.uniform1f(U('K'),num('k',.8));gl.uniform1f(U('SC'),num('sc',.75));gl.uniform1f(U('KEY'),num('key',3.0));gl.uniform1f(U('SEED'),num('seed',.37));
+ gl.uniform2f(U('R'),w,h);gl.uniform1f(U('K'),num('k',1.1));gl.uniform1f(U('SC'),num('sc',.9));gl.uniform1f(U('KEY'),num('key',4));gl.uniform1f(U('LO'),num('lo',.05));gl.uniform1f(U('HI'),num('hi',.8));gl.uniform1f(U('SEED'),num('seed',.37));
  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);window.__silver=1;}
 draw();addEventListener('resize',draw);
 })();
