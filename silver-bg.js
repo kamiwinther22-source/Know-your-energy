@@ -24,39 +24,55 @@ var gl=cv.getContext('webgl',{antialias:false});if(!gl)return;document.documentE
 var Q=new URLSearchParams(location.search),num=function(k,d){var v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
 var NB=16;
 var vs='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
-var fs='precision highp float;uniform vec2 R;uniform float K,SC,KEY,SEED,LO,HI,BASE,DPR,RK,LH,PW,SH;uniform vec2 SUN;uniform vec4 HR;uniform sampler2D T;\n'+
-'uniform int N;uniform vec4 BX['+NB+'];uniform vec4 BC['+NB+'];\n'+      /* BX = x,y,w,h in css px; BC = reflection colour (rgb) and height (a) */
-'float hash(vec2 p){p=fract(p*vec2(123.34,456.21)+SEED);p+=dot(p,p+45.32);return fract(p.x*p.y);}\n'+
-'float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*f*(f*(f*6.-15.)+10.);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}\n'+
-'float H(vec2 p){vec2 w=vec2(vn(p*.7+3.1),vn(p*.7+9.7))-.5;p+=w*1.6;return vn(p)*1.0+vn(p*2.1+5.)*.32;}\n'+
-'float sdb(vec2 p,vec4 b,float hex){vec2 c=b.xy+b.zw*.5,hs=b.zw*.5,a=abs(p-c);float bx=max(a.x-hs.x,a.y-hs.y);if(hex>.5){float cc=min(25.,hs.y);vec2 A=vec2(hs.x-cc,hs.y);vec2 nn=normalize(vec2(hs.y,cc));bx=max(bx,dot(a-A,nn));}return bx;}\n'+
-'void main(){vec2 uv=gl_FragCoord.xy/R;vec2 p=vec2(uv.x*R.x/R.y,uv.y)*SC;float e=.002*SC;\n'+
-'  float h=H(p),hx=H(p+vec2(e,0.))-h,hy=H(p+vec2(0.,e))-h;vec3 n=normalize(vec3(-hx/e*K,-hy/e*K,1.));\n'+
-'  vec3 v=vec3(0.,0.,1.);vec3 r=2.*dot(n,v)*n-v;\n'+
-'  float c=clamp(dot(n,v),0.,1.);vec3 F0=vec3(.972,.960,.915);vec3 F=F0+(1.-F0)*pow(1.-c,5.);\n'+
-'  vec2 cs=vec2(gl_FragCoord.x,R.y-gl_FragCoord.y)/DPR;\n'+
-/* the sun: a point light just above the page at the sphere */
-'  vec3 tl=vec3(SUN-cs,LH);vec3 Ld=normalize(vec3(tl.x,-tl.y,tl.z));float dl=length(tl.xy);\n'+
-'  float al=clamp(dot(r,Ld),0.,1.);float sp=exp((al-1.)*PW)*3.2+exp((al-1.)*PW*.18)*.7+exp((al-1.)*2.5)*.12;\n'+
-'  float att=1./(1.+pow(dl/(R.y/DPR*.5),2.));\n'+
-/* shadows: march from this point toward the sun; anything standing up on the way blocks it, softer the higher the ray is */
-'  float occ=0.;\n'+
-'  for(int s=1;s<10;s++){float t=float(s)/10.;vec2 q=mix(cs,SUN,t);float z=LH*t;\n'+
-'    for(int i=0;i<'+NB+';i++){if(i>=N)break;float bh=abs(BC[i].a);if(z<bh){float d=sdb(q,BX[i],BC[i].a<0.?1.:0.);occ=max(occ,1.-smoothstep(-1.,1.5+z*SH,d));}}}\n'+
-/* the metal: dark where it reflects the far, unlit room; bright where the sun's light is thrown back */
-'  float up=clamp(r.y*.5+.5,0.,1.);vec3 envc=mix(vec3(LO),vec3(HI),smoothstep(.15,.95,up))*mix(.45,1.,att);\n'+
-'  vec3 col=F*envc*(1.-.45*occ)+F*KEY*sp*att*(1.-occ);\n'+
-/* a reflection of each standing thing in the metal below it */
-'  for(int i=0;i<'+NB+';i++){if(i>=N)break;vec4 b=BX[i];float rl=min(abs(BC[i].a)*2.2,34.);float cch=BC[i].a<0.?min(25.,b.w*.5):0.;float dy=cs.y-(b.y+b.w);\n'+
-'    if(dy>0.&&dy<rl){float inx=smoothstep(b.x+cch-1.,b.x+cch+3.,cs.x)*(1.-smoothstep(b.x+b.z-cch-3.,b.x+b.z-cch+1.,cs.x));float k=pow(1.-dy/rl,1.6)*.6*inx;col=mix(col,BC[i].rgb*(.55+.45*sp),k);}}\n'+
+var fs=[
+'precision highp float;uniform vec2 R;uniform float K,SC,KEY,SEED,LO,HI,BASE,DPR,RK,LH,LR,KD,NS;uniform vec2 SUN;uniform vec4 HR;uniform sampler2D T;',
+'uniform int N;uniform vec4 BX[16];uniform vec4 BC[16];',      /* BX = x,y,w,h (css px, y down); BC = colour rgb, height (negative = hex outline) */
+'float hash(vec2 p){p=fract(p*vec2(123.34,456.21)+SEED);p+=dot(p,p+45.32);return fract(p.x*p.y);}',
+'float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*f*(f*(f*6.-15.)+10.);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}',
+'float H(vec2 p){vec2 w=vec2(vn(p*.7+3.1),vn(p*.7+9.7))-.5;p+=w*1.6;return vn(p)*1.0+vn(p*2.1+5.)*.32;}',
+/* ray against one convex slab of space; used for every face of every standing thing */
+'void pl(vec3 o,vec3 rd,vec3 n,float d,inout float tn,inout float tf,inout vec3 nn){float den=dot(n,rd),num=d-dot(n,o);',
+'  if(abs(den)<1e-6){if(num<0.)tf=-1e9;return;}float t=num/den;if(den<0.){if(t>tn){tn=t;nn=n;}}else tf=min(tf,t);}',
+'float hitObj(vec4 b,float ha,vec3 ro,vec3 rd,out vec3 nn){float h=abs(ha);vec2 hs=b.zw*.5;vec3 o=ro-vec3(b.xy+hs,0.);',
+'  float tn=-1e9,tf=1e9;nn=vec3(0.,0.,1.);',
+'  pl(o,rd,vec3(1,0,0),hs.x,tn,tf,nn);pl(o,rd,vec3(-1,0,0),hs.x,tn,tf,nn);pl(o,rd,vec3(0,1,0),hs.y,tn,tf,nn);pl(o,rd,vec3(0,-1,0),hs.y,tn,tf,nn);',
+'  pl(o,rd,vec3(0,0,1),h,tn,tf,nn);pl(o,rd,vec3(0,0,-1),0.,tn,tf,nn);',
+'  if(ha<0.){float cc=min(25.,hs.y);vec2 q=normalize(vec2(hs.y,cc));float d=dot(vec2(hs.x-cc,hs.y),q);',
+'    pl(o,rd,vec3(q.x,q.y,0.),d,tn,tf,nn);pl(o,rd,vec3(-q.x,q.y,0.),d,tn,tf,nn);pl(o,rd,vec3(q.x,-q.y,0.),d,tn,tf,nn);pl(o,rd,vec3(-q.x,-q.y,0.),d,tn,tf,nn);}',
+'  if(tn<tf&&tn>1e-3&&tf>0.)return tn;return -1.;}',
+'float hitSph(vec3 ro,vec3 rd,vec3 c,float r){vec3 oc=ro-c;float b=dot(oc,rd),cc=dot(oc,oc)-r*r,d=b*b-cc;if(d<0.)return -1.;float t=-b-sqrt(d);return t>1e-3?t:-1.;}',
+'bool blocked(vec3 P,vec3 Q){vec3 d=Q-P;float L=length(d);vec3 rd=d/L,nn;for(int i=0;i<16;i++){if(i>=N)break;float t=hitObj(BX[i],BC[i].a,P,rd,nn);if(t>0.&&t<L)return true;}return false;}',
+/* what a ray sees when it leaves the sheet: the standing things, the sun's light, or the dim far room, brighter on the sun's side */
+'vec3 world(vec3 P,vec3 rd,vec3 LP){float best=1e9;vec3 balb=vec3(-1.);vec3 bn=vec3(0.,0.,1.);vec3 nn;',
+'  for(int i=0;i<16;i++){if(i>=N)break;float t=hitObj(BX[i],BC[i].a,P,rd,nn);if(t>0.&&t<best){best=t;balb=BC[i].rgb;bn=nn;}}',
+'  float ts=hitSph(P,rd,LP,LR);',
+'  if(ts>0.&&ts<best){float fc=clamp(dot(-rd,normalize(P+rd*ts-LP)),0.,1.);return vec3(KEY*1.5*(.12+.88*pow(fc,2.2)));}',
+'  if(balb.x>=0.){vec3 Q=P+rd*best;vec3 ld=normalize(LP-Q);float dd=length(LP-Q);float e=KEY*.5*LR*LR/(dd*dd);',
+'    float df=max(dot(bn,ld),0.);float sp=exp((dot(reflect(rd,bn),ld)-1.)*40.);if(blocked(Q+bn*.6,LP))df*=.15;',
+'    vec3 al=balb;return al*(.14+KD*.25*e*df*8.)+vec3(KEY*.5*sp*min(e*60.,1.));}',
+'  vec2 sd=normalize(SUN-P.xy+1e-3);float f=dot(normalize(rd.xy+1e-4),sd)*.5+.5;',
+'  return mix(vec3(LO),vec3(HI),pow(clamp(rd.z,0.,1.),.6))*mix(.5,1.,f);}',
+'void main(){vec2 cs=vec2(gl_FragCoord.x,R.y-gl_FragCoord.y)/DPR;vec2 p=vec2(cs.x/(R.y/DPR),1.-cs.y/(R.y/DPR))*SC;float e=.002*SC;',
+'  float h=H(p),hx=H(p+vec2(e,0.))-h,hy=H(p+vec2(0.,e))-h;vec2 sl=vec2(-hx,hy)/e*K;sl=sl/(1.+length(sl)*1.5);vec3 n=normalize(vec3(sl,1.));',     /* image y is down, so the slope in y flips */
+'  vec3 v=vec3(0.,0.,1.);vec3 r=2.*dot(n,v)*n-v;float c=clamp(dot(n,v),0.,1.);',
+'  vec3 F0=vec3(.972,.960,.915);vec3 F=F0+(1.-F0)*pow(1.-c,5.);',
+'  vec3 P=vec3(cs,0.);vec3 LP=vec3(SUN,LH);',
+'  vec3 refl=world(P+vec3(0.,0.,.01),normalize(r),LP);',
+/* the sun as an area light: its light on the satin of the sheet, with soft shadows from everything that stands up */
+'  float rot=hash(gl_FragCoord.xy)*6.2831;vec3 tl=normalize(LP-P);vec3 ax=normalize(cross(tl,vec3(0.,0.,1.)));vec3 ay=cross(ax,tl);float lit=0.;',
+'  for(int s=0;s<12;s++){float fr=(float(s)+.5)/12.,ph=rot+float(s)*2.39996;vec3 Q=LP+(ax*cos(ph)+ay*sin(ph))*LR*sqrt(fr);',
+'    vec3 ld=normalize(Q-P);float cs2=max(ld.z,0.);if(cs2>0.&&!blocked(P+vec3(0.,0.,.4),Q))lit+=cs2;}lit/=12.;',
+'  float dd=length(LP-P);float E=KEY*.5*LR*LR/(dd*dd);',
+'  vec3 col=F*refl+vec3(.62,.63,.65)*KD*E*lit*8.;',
 /* the sun and its rings, mirrored */
-'  float dist=cs.y-BASE;\n'+
-'  if(dist>0.){vec2 m=vec2(cs.x,BASE-dist)+n.xy*(18.+dist*.12);float bl=.35+dist*.012;vec4 acc=vec4(0.);\n'+
-'    for(int i=0;i<8;i++){float a=float(i)*.785398;vec2 q=m+vec2(cos(a),sin(a))*bl*(i<4?.5:1.);vec2 u2=(q-HR.xy)/HR.zw;\n'+
-'      if(u2.x>0.&&u2.x<1.&&u2.y>0.&&u2.y<1.)acc+=texture2D(T,u2);}\n'+
-'    acc/=8.;float fade=RK*exp(-dist/105.)*(.55+.45*c);col=col*(1.-acc.a*fade)+acc.rgb*fade*1.1;}\n'+
-'  col=(col*(2.51*col+.03))/(col*(2.43*col+.59)+.14);\n'+
-'  gl_FragColor=vec4(pow(clamp(col,0.,1.),vec3(1./2.2)),1.);}';
+'  float dist=cs.y-BASE;',
+'  if(dist>0.){vec2 m=vec2(cs.x,BASE-dist)+n.xy*(18.+dist*.12);float bl=.35+dist*.012;vec4 acc=vec4(0.);',
+'    for(int i=0;i<8;i++){float a=float(i)*.785398;vec2 q=m+vec2(cos(a),sin(a))*bl*(i<4?.5:1.);vec2 u2=(q-HR.xy)/HR.zw;',
+'      if(u2.x>0.&&u2.x<1.&&u2.y>0.&&u2.y<1.)acc+=texture2D(T,u2);}',
+'    acc/=8.;float fade=RK*exp(-dist/105.)*(.55+.45*c);col=col*(1.-acc.a*fade)+acc.rgb*fade*1.1;}',
+'  col=(col*(2.51*col+.03))/(col*(2.43*col+.59)+.14);',
+'  gl_FragColor=vec4(pow(clamp(col,0.,1.),vec3(1./2.2)),1.);}'
+].join('\n');
 function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.log(gl.getShaderInfoLog(o));}return o;}
 var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
 var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
@@ -73,9 +89,9 @@ function things(){var bx=[],bc=[],vh=innerHeight;
   var n=Math.min(NB,bx.length/4);return {n:n,bx:new Float32Array(bx.slice(0,n*4).concat(new Array(NB*4-n*4).fill(0))),bc:new Float32Array(bc.slice(0,n*4).concat(new Array(NB*4-n*4).fill(0)))};}
 function draw(){var d=Math.min(1.5,devicePixelRatio||1),w=Math.round(innerWidth*d),h=Math.round(innerHeight*d);
  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}gl.viewport(0,0,w,h);
- gl.uniform2f(U('R'),w,h);gl.uniform1f(U('K'),num('k',2.3));gl.uniform1f(U('SC'),num('sc',.9));gl.uniform1f(U('KEY'),num('key',4));
- gl.uniform1f(U('LO'),num('lo',.14));gl.uniform1f(U('HI'),num('hi',.85));gl.uniform1f(U('SEED'),num('seed',.37));gl.uniform1f(U('PW'),num('pw',160));gl.uniform1f(U('SH'),num('sh',.7));
- gl.uniform1f(U('DPR'),d);gl.uniform1f(U('LH'),num('lh',90));gl.uniform1f(U('RK'),have?num('refl',1.0):0);gl.uniform1i(U('T'),0);
+ gl.uniform2f(U('R'),w,h);gl.uniform1f(U('K'),num('k',1.8));gl.uniform1f(U('SC'),num('sc',.9));gl.uniform1f(U('KEY'),num('key',6));
+ gl.uniform1f(U('LO'),num('lo',.14));gl.uniform1f(U('HI'),num('hi',.55));gl.uniform1f(U('SEED'),num('seed',.55));gl.uniform1f(U('LR'),num('lr',70));gl.uniform1f(U('KD'),num('kd',.4));
+ gl.uniform1f(U('DPR'),d);gl.uniform1f(U('LH'),num('lh',140));gl.uniform1f(U('RK'),have?num('refl',1.0):0);gl.uniform1i(U('T'),0);
  host=host||document.getElementById('heroIllustration');var hr=host?host.getBoundingClientRect():{left:0,top:0,width:1,height:1};
  gl.uniform4f(U('HR'),hr.left,hr.top,hr.width,hr.height);gl.uniform2f(U('SUN'),hr.left+hr.width*num('sx',.479),hr.top+hr.height*num('sy',.54));gl.uniform1f(U('BASE'),hr.top+hr.height*num('base',.79));
  var th=things();gl.uniform1i(U('N'),th.n);gl.uniform4fv(U('BX[0]'),th.bx);gl.uniform4fv(U('BC[0]'),th.bc);
