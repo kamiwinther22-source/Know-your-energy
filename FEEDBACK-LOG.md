@@ -3,7 +3,6 @@
 Read this before any design work. Add to it every time the owner reacts. Each entry says which screen the comment was about. Do not stretch a comment beyond that screen. Never re-offer something marked DEAD.
 
 ## Likes (steer toward these)
-- **Numerology chart in blue, black and silver** (black-blue glass balls in chrome rings, silver hex title bars with a dark plate): the colour combination liked best.
 - **The first (front) page's depth, shine and polished look.** The owner chose it as best because it was the first thing with depth and shine. They did NOT say they like red.
 - **Charts visible** on the results page, with the labelled words beside them (Type, Profile, Authority, Cross; Sun, Moon and planets with signs; the numbers with their one-word labels). The words make it glanceable; the charts are part of it.
 - **Three vertical columns, one per system, each with its chart on top and key words below** (the live page's idea) and a lighter page than near-black.
@@ -51,7 +50,7 @@ Plain vertical stack of panels; even grid of tiles; arches and curved cards; swi
 
 ## LOCKED RULE (owner, in capitals)
 - **No locked features, ever.** "I AM NOT GOING TO HAVE LOCKED FEATURES. THIS IS ALL OR NOTHING. I AM NOT DOING BUSINESS IN THAT WAY. DO NOT SUGGEST IT AGAIN." No blurred previews, teasers, tiers or partial access, in any option or mock-up. The assistant had suggested blurred previews with a pass offer on top; that is dead and must not return.
-- Globe: do NOT include cities (no city dots or labels on the globe). The owner's words: "Do not include cities!!!" This overrides the older note that cities appear as you zoom.
+- Globe: do NOT include cities (no city dots or labels on the globe). The owner's words: "Do include cities on the map but not listed in the report which would be choosing specific cities to highlight and they likely would not be the cities thay they were most interested in creating noise. 
 - Fan, purpose: "The reason for putting the charts in a fan is to create more space on the screen. Not to stretch out the reading completely unnecessarily and turn it into a scroll stack. They could stay as they are if that were what I wanted." The page must be compact, about one phone screen, with the other features fitting in the space the fan frees. Rejected: two stacked hands with three full-width bands under them (a long scroll stack).
 - Globe: do not build the globe now. Use a plain circle where the Globe goes. Focus on the main task, which is how the page works and where everything fits.
 - Today/Timeline, owner's words: "Stop doing the numerology days like everyone else does. That isn't what I want. I approved a timeline that shows the numerology cycles and I don't know why you would be creating anything other than that." The Year / Month / Day row of numbers is dead. The Timeline is the approved vertical timeline from the `design-concepts` timing page (columns Year, Pinnacle, Challenge, Period, Returns, with a "now" line; above it the month ring of 12 with the day ring of 9 inside). Do not invent another version of Today or Timeline.
