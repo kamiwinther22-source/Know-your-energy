@@ -46,10 +46,10 @@ html.red .rb-wrap,html.red .glow-ring,html.red .glow-ring-sm{display:block;posit
 html.red .glow-ring::before,html.red .glow-ring-sm::before{display:none !important}
 html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
   position:relative;isolation:isolate;display:flex !important;align-items:center;justify-content:center;border:0 !important;margin:0 !important;cursor:pointer;
-  background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#914b64 82%,#eef1f5 92%,#fff 100%) !important;
+  background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#8a9099 82%,#eef1f5 92%,#fff 100%) !important;
   box-shadow:none !important;text-shadow:none !important;overflow:visible !important;color:#fff !important;font-weight:700;--c:25px;--d:18px;--vy:7px;--hx:14px;
   clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% 50%,calc(100% - var(--c)) 100%,var(--c) 100%,0 50%);border-radius:0 !important}
-html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before{display:block !important;content:"";position:absolute;inset:var(--vy) var(--hx);z-index:-1;background:linear-gradient(#3a0716,#1c030c);
+html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before{display:block !important;content:"";position:absolute;inset:var(--vy) var(--hx);z-index:-1;background:linear-gradient(#2b2f35,#101216);
   clip-path:polygon(var(--d) 0,calc(100% - var(--d)) 0,100% 50%,calc(100% - var(--d)) 100%,var(--d) 100%,0 50%)}
 html.red .rbtn,html.red .gen-btn{width:210px;height:50px;font-size:19px;padding:0}
 html.red .gen-btn{width:190px}
@@ -60,7 +60,7 @@ html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{width:116px}
 html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{width:88px}
 html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{width:80px}
 html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{width:66px}
-html.red .rel-chip.active::before{background:linear-gradient(#5a0f2b,#2c0516)}
+html.red .rel-chip.active::before{background:linear-gradient(#3b4048,#1b1e23)}
 html.red .rel-chip:not(.active){opacity:.78}
 
 /* choose + toggle */
