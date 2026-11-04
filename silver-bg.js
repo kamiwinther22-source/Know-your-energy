@@ -46,7 +46,7 @@ var fs=[
 'vec3 world(vec3 P,vec3 rd,vec3 LP){float best=1e9;vec3 balb=vec3(-1.);vec3 bn=vec3(0.,0.,1.);vec3 nn;',
 '  for(int i=0;i<16;i++){if(i>=N)break;float t=hitObj(BX[i],BC[i].a,P,rd,nn);if(t>0.&&t<best){best=t;balb=BC[i].rgb;bn=nn;}}',
 '  float ts=hitSph(P,rd,LP,LR);',
-'  if(ts>0.&&ts<best){float fc=clamp(dot(-rd,normalize(P+rd*ts-LP)),0.,1.);return vec3(KEY*1.5*(.12+.88*pow(fc,2.2)));}',
+'  if(ts>0.&&ts<best){float fc=clamp(dot(-rd,normalize(P+rd*ts-LP)),0.,1.);return vec3(KEY*.42*(.1+.9*pow(fc,2.6)));}',
 '  if(balb.x>=0.){vec3 Q=P+rd*best;vec3 ld=normalize(LP-Q);float dd=length(LP-Q);float e=KEY*.5*LR*LR/(dd*dd);',
 '    float df=max(dot(bn,ld),0.);float sp=exp((dot(reflect(rd,bn),ld)-1.)*40.);if(blocked(Q+bn*.6,LP))df*=.15;',
 '    vec3 al=balb;return al*(.14+KD*.25*e*df*8.)+vec3(KEY*.5*sp*min(e*60.,1.));}',
@@ -82,7 +82,7 @@ var tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.texParameteri(gl
 gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([0,0,0,0]));
 var host=null,have=false,lastKey='';
 /* what stands up on the page: [selector, height in px, reflected colour] */
-var THINGS=[['.hero-continue-btn',-16,[.80,.82,.86]],['.gen-btn',-16,[.80,.82,.86]],['.rel-chip',-10,[.80,.82,.86]],['.hero-email-field',7,[.07,.06,.07]],['.line-field',7,[.07,.06,.07]]];
+var THINGS=[['.hero-continue-btn',-16,[.80,.82,.86]],['.gen-btn',-16,[.80,.82,.86]],['.rel-chip',-10,[.80,.82,.86]]];
 function things(){var bx=[],bc=[],vh=innerHeight;
   THINGS.forEach(function(t){document.querySelectorAll(t[0]).forEach(function(el){if(bx.length>=NB*4)return;var r=el.getBoundingClientRect();
     if(r.width<4||r.height<4||r.bottom<-40||r.top>vh+40)return;bx.push(r.left,r.top,r.width,r.height);bc.push(t[2][0],t[2][1],t[2][2],t[1]);});});
