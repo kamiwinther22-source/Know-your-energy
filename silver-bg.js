@@ -46,22 +46,22 @@ var fs=[
 'vec3 world(vec3 P,vec3 rd,vec3 LP){float best=1e9;vec3 balb=vec3(-1.);vec3 bn=vec3(0.,0.,1.);vec3 nn;',
 '  for(int i=0;i<16;i++){if(i>=N)break;float t=hitObj(BX[i],BC[i].a,P,rd,nn);if(t>0.&&t<best){best=t;balb=BC[i].rgb;bn=nn;}}',
 '  float ts=hitSph(P,rd,LP,LR);',
-'  if(ts>0.&&ts<best){float fc=clamp(dot(-rd,normalize(P+rd*ts-LP)),0.,1.);return vec3(KEY*.42*(.1+.9*pow(fc,2.6)));}',
+'  if(ts>0.&&ts<best)return vec3(KEY*1.6);',
 '  if(balb.x>=0.){vec3 Q=P+rd*best;vec3 ld=normalize(LP-Q);float dd=length(LP-Q);float e=KEY*.5*LR*LR/(dd*dd);',
 '    float df=max(dot(bn,ld),0.);float sp=exp((dot(reflect(rd,bn),ld)-1.)*40.);if(blocked(Q+bn*.6,LP))df*=.15;',
 '    vec3 al=balb;return al*(.14+KD*.25*e*df*8.)+vec3(KEY*.5*sp*min(e*60.,1.));}',
 '  vec2 sd=normalize(SUN-P.xy+1e-3);float f=dot(normalize(rd.xy+1e-4),sd)*.5+.5;',
 '  return mix(vec3(LO),vec3(HI),pow(clamp(rd.z,0.,1.),.6))*mix(.5,1.,f);}',
 'void main(){vec2 cs=vec2(gl_FragCoord.x,R.y-gl_FragCoord.y)/DPR;vec2 p=vec2(cs.x/(R.y/DPR),1.-cs.y/(R.y/DPR))*SC;float e=.002*SC;',
-'  float h=H(p),hx=H(p+vec2(e,0.))-h,hy=H(p+vec2(0.,e))-h;vec2 sl=vec2(-hx,hy)/e*K;sl=sl/(1.+length(sl)*1.5);vec3 n=normalize(vec3(sl,1.));',     /* image y is down, so the slope in y flips */
+'  float h=H(p),hx=H(p+vec2(e,0.))-h,hy=H(p+vec2(0.,e))-h;vec3 n=normalize(vec3(-hx/e*K,hy/e*K,1.));',     /* image y is down, so the slope in y flips */
 '  vec3 v=vec3(0.,0.,1.);vec3 r=2.*dot(n,v)*n-v;float c=clamp(dot(n,v),0.,1.);',
 '  vec3 F0=vec3(.972,.960,.915);vec3 F=F0+(1.-F0)*pow(1.-c,5.);',
 '  vec3 P=vec3(cs,0.);vec3 LP=vec3(SUN,LH);',
 '  vec3 refl=world(P+vec3(0.,0.,.01),normalize(r),LP);',
 /* the sun as an area light: its light on the satin of the sheet, with soft shadows from everything that stands up */
 '  float rot=hash(gl_FragCoord.xy)*6.2831;vec3 tl=normalize(LP-P);vec3 ax=normalize(cross(tl,vec3(0.,0.,1.)));vec3 ay=cross(ax,tl);float lit=0.;',
-'  for(int s=0;s<12;s++){float fr=(float(s)+.5)/12.,ph=rot+float(s)*2.39996;vec3 Q=LP+(ax*cos(ph)+ay*sin(ph))*LR*sqrt(fr);',
-'    vec3 ld=normalize(Q-P);float cs2=max(ld.z,0.);if(cs2>0.&&!blocked(P+vec3(0.,0.,.4),Q))lit+=cs2;}lit/=12.;',
+'  for(int s=0;s<8;s++){float fr=(float(s)+.5)/8.,ph=rot+float(s)*2.39996;vec3 Q=LP+(ax*cos(ph)+ay*sin(ph))*LR*sqrt(fr);',
+'    vec3 ld=normalize(Q-P);float cs2=max(ld.z,0.);if(cs2>0.&&!blocked(P+vec3(0.,0.,.4),Q))lit+=cs2;}lit/=8.;',
 '  float dd=length(LP-P);float E=KEY*.5*LR*LR/(dd*dd);',
 '  vec3 col=F*refl+vec3(.62,.63,.65)*KD*E*lit*8.;',
 /* the sun and its rings, mirrored */
@@ -82,16 +82,16 @@ var tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.texParameteri(gl
 gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([0,0,0,0]));
 var host=null,have=false,lastKey='';
 /* what stands up on the page: [selector, height in px, reflected colour] */
-var THINGS=[['.hero-continue-btn',-16,[.80,.82,.86]],['.gen-btn',-16,[.80,.82,.86]],['.rel-chip',-10,[.80,.82,.86]]];
+var THINGS=[['.hero-continue-btn',-16,[.80,.82,.86]],['.gen-btn',-16,[.80,.82,.86]],['.rel-chip',-10,[.80,.82,.86]],['.hero-email-field',7,[.07,.06,.07]],['.line-field',7,[.07,.06,.07]]];
 function things(){var bx=[],bc=[],vh=innerHeight;
   THINGS.forEach(function(t){document.querySelectorAll(t[0]).forEach(function(el){if(bx.length>=NB*4)return;var r=el.getBoundingClientRect();
     if(r.width<4||r.height<4||r.bottom<-40||r.top>vh+40)return;bx.push(r.left,r.top,r.width,r.height);bc.push(t[2][0],t[2][1],t[2][2],t[1]);});});
   var n=Math.min(NB,bx.length/4);return {n:n,bx:new Float32Array(bx.slice(0,n*4).concat(new Array(NB*4-n*4).fill(0))),bc:new Float32Array(bc.slice(0,n*4).concat(new Array(NB*4-n*4).fill(0)))};}
 function draw(){var d=Math.min(1.5,devicePixelRatio||1),w=Math.round(innerWidth*d),h=Math.round(innerHeight*d);
  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}gl.viewport(0,0,w,h);
- gl.uniform2f(U('R'),w,h);gl.uniform1f(U('K'),num('k',1.8));gl.uniform1f(U('SC'),num('sc',.9));gl.uniform1f(U('KEY'),num('key',6));
- gl.uniform1f(U('LO'),num('lo',.14));gl.uniform1f(U('HI'),num('hi',.55));gl.uniform1f(U('SEED'),num('seed',.55));gl.uniform1f(U('LR'),num('lr',70));gl.uniform1f(U('KD'),num('kd',.4));
- gl.uniform1f(U('DPR'),d);gl.uniform1f(U('LH'),num('lh',140));gl.uniform1f(U('RK'),have?num('refl',1.0):0);gl.uniform1i(U('T'),0);
+ gl.uniform2f(U('R'),w,h);gl.uniform1f(U('K'),num('k',1.2));gl.uniform1f(U('SC'),num('sc',.9));gl.uniform1f(U('KEY'),num('key',16));
+ gl.uniform1f(U('LO'),num('lo',.3));gl.uniform1f(U('HI'),num('hi',.7));gl.uniform1f(U('SEED'),num('seed',.37));gl.uniform1f(U('LR'),num('lr',48));gl.uniform1f(U('KD'),num('kd',1.0));
+ gl.uniform1f(U('DPR'),d);gl.uniform1f(U('LH'),num('lh',130));gl.uniform1f(U('RK'),have?num('refl',1.0):0);gl.uniform1i(U('T'),0);
  host=host||document.getElementById('heroIllustration');var hr=host?host.getBoundingClientRect():{left:0,top:0,width:1,height:1};
  gl.uniform4f(U('HR'),hr.left,hr.top,hr.width,hr.height);gl.uniform2f(U('SUN'),hr.left+hr.width*num('sx',.479),hr.top+hr.height*num('sy',.54));gl.uniform1f(U('BASE'),hr.top+hr.height*num('base',.79));
  var th=things();gl.uniform1i(U('N'),th.n);gl.uniform4fv(U('BX[0]'),th.bx);gl.uniform4fv(U('BC[0]'),th.bc);
