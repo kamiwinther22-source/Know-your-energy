@@ -179,3 +179,13 @@ html.red .line-field input:-webkit-autofill,html.red .line-field input:-webkit-a
 
 /* button faces are polished steel with ink lettering (no red, no flat black) */
 html.red .rbtn,html.red .gen-btn,html.red .rel-chip,html.red .rbtn *,html.red .gen-btn *,html.red .rel-chip *,html.red #hookStep .rbtn,html.red #hookStep .rbtn *,html.red #hookStep .hero-continue-btn,html.red #hookStep .hero-continue-btn *,html.red #formStep .rbtn *,html.red #formStep .gen-btn,html.red #formStep .gen-btn *,html.red #formStep .rel-chip,html.red #formStep .rel-chip *,html.red .hero-continue-label{color:#12161c !important;-webkit-text-fill-color:#12161c;text-shadow:none !important}
+
+/* one button for the whole site: the front page's silver hex rim and polished steel face, ink lettering */
+html.red .fan-actions>.side-btn{
+  height:50px;flex:0 0 110px;border:0 !important;border-radius:0 !important;box-shadow:none !important;color:#12161c !important;
+  background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#8a9099 82%,#eef1f5 92%,#fff 100%) !important;
+  clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,18px 100%,0 50%) !important}
+html.red .fan-actions>.side-btn::before{inset:6px 11px;background:linear-gradient(180deg,#fbfcfd 0%,#dfe4ea 42%,#b4bcc6 52%,#d6dbe1 78%,#f1f3f6 100%);
+  clip-path:polygon(13px 0,calc(100% - 13px) 0,100% 50%,calc(100% - 13px) 100%,13px 100%,0 50%) !important}
+html.red .fan-actions>.side-btn span,html.red .fan-actions>.side-btn *{color:#12161c !important}
+html.red .chart-hd .gate-chip.active,html.red .chart-hd .gate-chip[aria-pressed="true"]{background:linear-gradient(180deg,#e2e6eb 0%,#aeb6c0 46%,#8b949f 54%,#b9c0c9 100%) !important;color:#12161c !important}
