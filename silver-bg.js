@@ -10,9 +10,17 @@ st.textContent='html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:h
  'html.red:not(:has(#resultsWrap[style*="block"])) body{background:transparent !important}'+
  '#silverBg{position:fixed;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block}'+
  'html.red:has(#resultsWrap[style*="block"]) #silverBg{display:none}';
+var NR=':not(:has(#resultsWrap[style*="block"]))',INK='#12161c';
+/* on the silver page the lettering is dark ink; the dark cut-in fields keep their own light lettering */
+st.textContent+='html.red.silver'+NR+' #hookStep *,html.red.silver'+NR+' .form-panel *,html.red.silver'+NR+' #formFields *{color:'+INK+' !important;-webkit-text-fill-color:'+INK+';text-shadow:none !important}'+
+ 'html.red.silver'+NR+' .line-field:not(.hero-email-field) *{color:#fff !important;-webkit-text-fill-color:#fff}'+
+ 'html.red.silver'+NR+' .line-field:not(.hero-email-field) input::placeholder{color:#fff !important;-webkit-text-fill-color:#fff}'+
+ 'html.red.silver'+NR+' .hero-email-field input::placeholder{color:'+INK+' !important;-webkit-text-fill-color:'+INK+'}'+
+ 'html.red.silver'+NR+' .rbtn *,html.red.silver'+NR+' .gen-btn *,html.red.silver'+NR+' .rel-chip *{color:'+INK+' !important;-webkit-text-fill-color:'+INK+'}';
+st.textContent+='html.red.silver'+NR+' .r-b22 li:before{background:'+INK+' !important}';
 document.head.appendChild(st);
 var cv=document.createElement('canvas');cv.id='silverBg';document.body.insertBefore(cv,document.body.firstChild);
-var gl=cv.getContext('webgl',{antialias:false});if(!gl)return;
+var gl=cv.getContext('webgl',{antialias:false});if(!gl)return;document.documentElement.classList.add('silver');
 var Q=new URLSearchParams(location.search),num=function(k,d){var v=parseFloat(Q.get(k));return isNaN(v)?d:v;};
 var NB=16;
 var vs='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
