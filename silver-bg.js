@@ -13,7 +13,8 @@ st.textContent='html.red'+NR+',html.red'+NR+' body{background:#b9bcc1 !important
  'html.red.silver'+NR+' .line-field:not(.hero-email-field) input::placeholder{color:#fff !important;-webkit-text-fill-color:#fff}'+
  'html.red.silver'+NR+' .hero-email-field input::placeholder{color:'+INK+' !important;-webkit-text-fill-color:'+INK+'}'+
  'html.red.silver'+NR+' .rbtn *,html.red.silver'+NR+' .gen-btn *,html.red.silver'+NR+' .rel-chip *{color:'+INK+' !important;-webkit-text-fill-color:'+INK+'}'+
- 'html.red.silver'+NR+' .r-b22 li:before{background:'+INK+' !important}';
+ 'html.red.silver'+NR+' .r-b22 li:before{background:'+INK+' !important}'+
+ 'html.red.silver'+NR+' .line-field.hero-email-field{box-shadow:none !important;border:0 !important}';
 document.head.appendChild(st);
 var cv=document.createElement('canvas');cv.id='silverBg';document.body.insertBefore(cv,document.body.firstChild);
 var gl=cv.getContext('webgl');if(!gl)return;html.classList.add('silver');
