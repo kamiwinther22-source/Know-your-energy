@@ -15,6 +15,8 @@ Each line is attached to what was on screen when it was said. Update this file e
 - Different from the usual wellness / astrology / numerology sites.
 - Show only checked, honestly better work. Do not act without agreement. Do not read the old notes.
 
+## FIRM RULE: NO BLUE WEBSITE. The owner has said it many times. This is not a dislike of one shade; do not build any blue page.
+
 ## READ THIS FIRST: dislikes are specific, not family bans
 Every colour dislike below is about ONE specific shade or ONE specific use that was on screen. None of them bans a whole colour family. Do not turn "that blue is cheap" into "no blue", "pink/purple pearl looked like a toy" into "no pink or purple", "too much orange" into "no orange", or "I doubt you'd use yellow well" into "no yellow". Only ever rule out what was actually said. The owner wants a wide range of colours shown, not four or five.
 
