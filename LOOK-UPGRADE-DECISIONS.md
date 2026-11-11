@@ -69,6 +69,9 @@ Hue (which colour), lightness (light/dark), strength (vivid vs pale/grey), richn
 - Reaction to the white-marble + onyx page: words on the rocks are hard to see (stone behind text must be calm); blurry and faded anything is disliked; white rock turned grey (as the owner predicted); the coloured stones are pretty but were not prominent enough to make the page; the four relational buttons (Parent-Child, Romantic, Friends, Other) must be EQUAL size and clearly pushable, because forgetting to choose them affects the reading a lot.
 - Method now: recolour a real calm stone scan with a strong colour ramp (page grade, deeper navy grade for buttons/sun/rings, pale grade for fields) and render at 3x so it is sharp on the owner's phone.
 
+- DEAD METHOD (owner: 'that strategy is not going to work no matter what color'): a pre-rendered stone picture used as the page background with the live page laid over it. Text and buttons come out soft/blurry and the veining reads as cracks. Do not retry it in any colour.
+- Process failure to avoid: I said I would build three non-blue stone pages and delivered one failed pink page, then changed plan without saying so. Do what is said, or say plainly that it was not done.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
