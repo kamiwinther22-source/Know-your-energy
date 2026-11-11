@@ -64,6 +64,9 @@ Hue (which colour), lightness (light/dark), strength (vivid vs pale/grey), richn
 - The owner wants to compare totally different options in order to guide the direction.
 - Real method now working: a path-traced 3D render (Blender via the bpy Python package) of a real photographed stone slab with fields carved in, lit by the sun's position; the solar system re-made in the same stone in three.js.
 
+- Reaction to the white-marble + onyx page: words on the rocks are hard to see (stone behind text must be calm); blurry and faded anything is disliked; white rock turned grey (as the owner predicted); the coloured stones are pretty but were not prominent enough to make the page; the four relational buttons (Parent-Child, Romantic, Friends, Other) must be EQUAL size and clearly pushable, because forgetting to choose them affects the reading a lot.
+- Method now: recolour a real calm stone scan with a strong colour ramp (page grade, deeper navy grade for buttons/sun/rings, pale grade for fields) and render at 3x so it is sharp on the owner's phone.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
