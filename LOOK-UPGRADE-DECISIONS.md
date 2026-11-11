@@ -39,6 +39,7 @@ Each line is attached to what was on screen when it was said. Update this file e
 - The refraction test (label doubled, red/blue colour fringes on the text) looks like a broken printer. Do not put text or fine detail under the glass, and do not use offset colour fringes.
 - Wanted colour direction: light, icy, cool, not grey, not dark blue, not faded (100% no to anything faded). Show a wide range of options, not the same automatic colours. Silver is allowed again (owner's latest words); diamonds may be set in where they make sense. Not plain: more sparkle, never cartoon techniques.
 - Lighter means lighter colours, not pulled-out see-through colour. Range 2 (full-strength but mid-tone) was not light enough; range 1 (pale) was faded.
+- Range 3 (light, max-chroma blues) also read as faded. Flat chips cannot show 'light but not faded' for blue: lightness has to come from light on the surface, not from pale paint.
 - Agreed next step: a one-button, one-entry-field test proving light bends through glass (real refraction), before building anything else.
 
 ## Where things stand
