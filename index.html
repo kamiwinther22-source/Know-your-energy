@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know Your Energy — Astrology, Numerology &amp; Human Design</title>
 <style id="form-fixes">
+#formStep .toggle-row{position:relative;z-index:7;}
 #formStep #p1Block,#formStep #p2Section{width:82%;}
 #formStep #p1Block .loc-field{width:73%;}
 #formStep #p2Section .person-tag{left:calc(60% + 24px) !important;}
@@ -3900,8 +3901,7 @@ function setFormLocked(locked) {
       delete el.dataset.lockedByEmail;
     }
   });
-  const pill = document.getElementById("togPill");
-  if (pill) pill.style.pointerEvents = locked ? "none" : "";
+  // The Individual / Relational toggle stays usable while the fields are locked, so both layouts can be seen before an email is entered.
 }
 
 async function revealForm() {

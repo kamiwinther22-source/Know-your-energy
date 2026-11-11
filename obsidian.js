@@ -20,14 +20,18 @@ try{
   const shot=(w,h,objs)=>{renderer.setPixelRatio(1);renderer.setSize(Math.round(w*PR),Math.round(h*PR),false);
     const D=700,cam=new THREE.PerspectiveCamera(THREE.MathUtils.radToDeg(2*Math.atan(h/2/D)),w/h,10,2000);cam.position.z=D;
     scene.clear();objs.forEach(o=>scene.add(o));renderer.setClearColor(0,0);renderer.clear();renderer.render(scene,cam);return renderer.domElement.toDataURL('image/png');};
-  const hex=(w,h,c,b)=>{const s=new THREE.Shape(),x=w/2,y=h/2;s.moveTo(-x+c,-y);s.lineTo(x-c,-y);s.lineTo(x,0);s.lineTo(x-c,y);s.lineTo(-x+c,y);s.lineTo(-x,0);s.closePath();
+  const hex=(w,h,c,b,col)=>{const s=new THREE.Shape(),x=w/2,y=h/2;s.moveTo(-x+c,-y);s.lineTo(x-c,-y);s.lineTo(x,0);s.lineTo(x-c,y);s.lineTo(-x+c,y);s.lineTo(-x,0);s.closePath();
     const g=new THREE.ExtrudeGeometry(s,{depth:1,bevelEnabled:true,bevelThickness:b,bevelSize:b,bevelOffset:-b,bevelSegments:6,steps:1});g.translate(0,0,-(1+b));
     const nm=dome.clone();nm.needsUpdate=true;nm.repeat.set(1/w,1/h);nm.offset.set(.5,.5);
-    const face=new THREE.MeshStandardMaterial({color:PINK,metalness:1,roughness:.16,envMapIntensity:1.5,normalMap:nm});   // top face: soft enough that the label stays clear
-    return new THREE.Mesh(g,[face,edge]);};
+    const face=new THREE.MeshStandardMaterial({color:col||PINK,metalness:1,roughness:.16,envMapIntensity:1.5,normalMap:nm});   // top face: soft enough that the label stays clear
+    const ed=col?new THREE.MeshStandardMaterial({color:col,metalness:1,roughness:.04,envMapIntensity:1.6}):edge;
+    return new THREE.Mesh(g,[face,ed]);};
   const css=[];
   for(const [sel,w,h] of [['.rbtn',210,50],['.gen-btn',190,50]])
     css.push(`html.red.obsidian.metal-ready ${sel}{background-image:url(${shot(w,h,[hex(w,h,25,8)])}) !important}`);
+  // the four relationship chips: the selected one in the bright metal, the others in a deeper tone of the same metal, all at full strength
+  [116,88,80,66].forEach((w,i)=>{const q=`html.red.obsidian.metal-ready .rel-row .glow-ring-sm:nth-child(${i+1}) .rel-chip`;
+    css.push(`${q}{background-image:url(${shot(w,32,[hex(w,32,9,4,'#9c4a63')])}) !important}`,`${q}.active{background-image:url(${shot(w,32,[hex(w,32,9,4)])}) !important}`);});
   const knob=shot(12,12,[new THREE.Mesh(new THREE.SphereGeometry(6,48,32),new THREE.MeshStandardMaterial({color:PINK,metalness:1,roughness:.05,envMapIntensity:1.6}))]);
   css.push(`html.red.obsidian{--kye-knob:url(${knob})}`);
   const st=document.createElement('style');st.textContent=css.join('\n');document.head.appendChild(st);

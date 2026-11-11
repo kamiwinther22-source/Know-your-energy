@@ -20,8 +20,9 @@ html.red.obsidian .rbtn,html.red.obsidian .gen-btn,html.red.obsidian .rel-chip{b
 html.red.obsidian .rbtn::before,html.red.obsidian .gen-btn::before,html.red.obsidian .rel-chip::before{background:linear-gradient(180deg,#fff6f8 0%,#fbe3e9 42%,#f0c3cf 52%,#f8dbe3 78%,#fff3f6 100%)}
 html.red.obsidian .rel-chip.active::before{background:linear-gradient(180deg,#f6cbd6 0%,#e0a0b3 46%,#c98398 54%,#e3aabb 100%)}
 html.red.obsidian #hookStep .rbtn,html.red.obsidian #hookStep .rbtn *,html.red.obsidian #formStep .gen-btn,html.red.obsidian #formStep .gen-btn *,html.red.obsidian #formStep .rel-chip,html.red.obsidian #formStep .rel-chip *{color:#2a0f1c !important}
-html.red.obsidian.metal-ready .rbtn,html.red.obsidian.metal-ready .gen-btn{clip-path:none;background-color:transparent !important;background-repeat:no-repeat !important;background-position:center !important;background-size:100% 100% !important}
-html.red.obsidian.metal-ready .rbtn::before,html.red.obsidian.metal-ready .gen-btn::before{display:none !important}
+html.red.obsidian .rel-chip:not(.active){opacity:1}
+html.red.obsidian.metal-ready .rbtn,html.red.obsidian.metal-ready .gen-btn,html.red.obsidian.metal-ready .rel-chip{clip-path:none;background-color:transparent !important;background-repeat:no-repeat !important;background-position:center !important;background-size:100% 100% !important}
+html.red.obsidian.metal-ready .rbtn::before,html.red.obsidian.metal-ready .gen-btn::before,html.red.obsidian.metal-ready .rel-chip::before{display:none !important}
 
 /* toggle */
 html.red.obsidian .toggle-pill{background:#030304 !important;box-shadow:0 0 0 1.5px #f1a9bd !important}
@@ -31,3 +32,4 @@ html.red.obsidian.metal-ready .toggle-pill::after{background:var(--kye-knob) cen
 /* AM/PM: the whole label fits beside the padlock, at full strength */
 html.red.obsidian #formStep .row-time .ampm-field select{color:#fff !important;-webkit-text-fill-color:#fff;opacity:1 !important;font-size:12.5px !important;padding-left:3px !important;letter-spacing:0}
 html.red.obsidian #formStep.locked .row-time .ampm-field select{padding-right:19px !important}
+html.red.obsidian #formStep .rel-chip:not(.active),html.red.obsidian #formStep .rel-chip:not(.active) *{color:#fff !important;-webkit-text-fill-color:#fff}
