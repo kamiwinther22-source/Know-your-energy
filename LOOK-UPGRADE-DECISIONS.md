@@ -21,8 +21,13 @@ Each line is attached to what was on screen when it was said. Update this file e
 - Citron / lemon (too loud), racing green + vermilion, black and ivory, white and clear.
 - Hard-line regions as separate pieces of the page.
 
+- Pearl, and anything pink, purple or pastel: it read like a kid's toy.
+
+## The feel (owner's words)
+- The feel of the whole site is fine jewelry, diamonds, the expensive feel of diamonds. Not cheap, not plastic.
+
 ## Where things stand
-- Pearl preview: sphere, rings and buttons read as real glossy pearl; page behind is pale pastel and too soft.
+- Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
 - Opal preview: dead (dark, heat-map flashes, teal rings).
 - Previews are made from a scratch copy of the site outside the repo; the live site and `main` are untouched.
