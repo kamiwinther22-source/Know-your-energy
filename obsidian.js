@@ -1,15 +1,12 @@
-/* ?skin=obsidian — the buttons and the toggle knob as real pink metal: cut 3D shapes rendered once, at load, under the same photographed room
-   that lights the solar system (hdri/warehouse.exr), then handed to the page as images. Nothing keeps running afterwards. */
+/* ?skin=obsidian — the buttons and the toggle knob as real pink metal: cut 3D shapes rendered once, at load, under the same studio light
+   as the solar system (studio-env.js), then handed to the page as images. Nothing keeps running afterwards. */
 import * as THREE from 'three';
-import {EXRLoader} from './vendor/loaders/EXRLoader.js';
+import {studio} from './studio-env.js';
 const PINK='#f2a3b9',PR=3;
 try{
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.outputColorSpace=THREE.SRGBColorSpace;
-  const eq=await new EXRLoader().setDataType(THREE.FloatType).loadAsync('hdri/warehouse.exr');
-  {const d=eq.image.data,n=eq.image.width*eq.image.height,ch=d.length/n;   // the room in neutral light: all colour comes from the metal itself
-    for(let i=0;i<n;i++){const k=i*ch,l=.2126*d[k]+.7152*d[k+1]+.0722*d[k+2];d[k]=d[k+1]=d[k+2]=l;}eq.needsUpdate=true;}
-  eq.mapping=THREE.EquirectangularReflectionMapping;
+  const eq=studio();eq.mapping=THREE.EquirectangularReflectionMapping;   // the same jewelry-studio light that the solar system sits in
   const pm=new THREE.PMREMGenerator(renderer),env=pm.fromEquirectangular(eq).texture;
   const scene=new THREE.Scene();scene.environment=env;
   // a gentle cushion on the top face (as a normal map) so it carries a moving sweep of the room like the sphere does, instead of one flat tone
@@ -32,7 +29,7 @@ try{
   // the four relationship chips: the selected one in the bright metal, the others in a deeper tone of the same metal, all at full strength
   [116,88,80,66].forEach((w,i)=>{const q=`html.red.obsidian.metal-ready .rel-row .glow-ring-sm:nth-child(${i+1}) .rel-chip`;
     css.push(`${q}{background-image:url(${shot(w,32,[hex(w,32,9,4,'#9c4a63')])}) !important}`,`${q}.active{background-image:url(${shot(w,32,[hex(w,32,9,4)])}) !important}`);});
-  const knob=shot(12,12,[new THREE.Mesh(new THREE.SphereGeometry(6,48,32),new THREE.MeshStandardMaterial({color:PINK,metalness:1,roughness:.05,envMapIntensity:1.6}))]);
+  const knob=shot(22,22,[new THREE.Mesh(new THREE.SphereGeometry(11,64,48),new THREE.MeshStandardMaterial({color:PINK,metalness:1,roughness:.05,envMapIntensity:1.6}))]);
   css.push(`html.red.obsidian{--kye-knob:url(${knob})}`);
   const st=document.createElement('style');st.textContent=css.join('\n');document.head.appendChild(st);
   document.documentElement.classList.add('metal-ready');

@@ -18,8 +18,8 @@ const cv=renderer.domElement;cv.style.cssText='position:absolute;left:0;top:0;wi
 const camera=new THREE.OrthographicCamera(-8,368,-20,-205,-2000,2000);camera.position.z=1000;
 const scene=new THREE.Scene();
 // --- the real room the silver reflects ---
-const eq=await new EXRLoader().setDataType(THREE.FloatType).loadAsync(`hdri/${ENVNAME}.exr`);
-{ // silver, not tinted: pull the room's colour most of the way to neutral
+const eq=SK.studio?(await import('./studio-env.js')).studio():await new EXRLoader().setDataType(THREE.FloatType).loadAsync(`hdri/${ENVNAME}.exr`);
+if(!SK.studio){ // silver, not tinted: pull the room's colour most of the way to neutral
   const SAT=SK.sat!=null?SK.sat:parseFloat(Q.get('sat')||'0.15'),d=eq.image.data,n=eq.image.width*eq.image.height,ch=d.length/n;
   for(let i=0;i<n;i++){const k=i*ch,l=.2126*d[k]+.7152*d[k+1]+.0722*d[k+2];for(let c=0;c<3;c++)d[k+c]=l+(d[k+c]-l)*SAT;}
   const BL=parseInt(Q.get('blur')||'2'),w=eq.image.width,h=eq.image.height,tmp=new Float32Array(d.length);
@@ -28,7 +28,7 @@ const eq=await new EXRLoader().setDataType(THREE.FloatType).loadAsync(`hdri/${EN
       for(let k=-BL;k<=BL;k++){const xx=pass?x:((x+k)%w+w)%w,yy=pass?Math.min(h-1,Math.max(0,y+k)):y,j=(yy*w+xx)*ch;r+=src[j];g+=src[j+1];b+=src[j+2];c++;}
       const o=(y*w+x)*ch;dst[o]=r/c;dst[o+1]=g/c;dst[o+2]=b/c;if(ch>3)dst[o+3]=src[o+3];}}
   eq.needsUpdate=true;}
-eq.mapping=THREE.EquirectangularReflectionMapping;eq.wrapS=THREE.RepeatWrapping;eq.offset.x=ENVROT;
+eq.mapping=THREE.EquirectangularReflectionMapping;eq.wrapS=THREE.RepeatWrapping;eq.offset.x=SK.studio?0:ENVROT;
 const pmrem=new THREE.PMREMGenerator(renderer);const ENV=pmrem.fromEquirectangular(eq).texture;scene.environment=ENV;
 if(/[?&]look=(metal|base|final)\b/.test(location.search))window.__eq=eq;   // lets the page-wide metal scene reflect the same room
 
