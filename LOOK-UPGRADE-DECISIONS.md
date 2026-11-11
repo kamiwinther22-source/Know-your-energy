@@ -40,6 +40,7 @@ Each line is attached to what was on screen when it was said. Update this file e
 - Wanted colour direction: light, icy, cool, not grey, not dark blue, not faded (100% no to anything faded). Show a wide range of options, not the same automatic colours. Silver is allowed again (owner's latest words); diamonds may be set in where they make sense. Not plain: more sparkle, never cartoon techniques.
 - Lighter means lighter colours, not pulled-out see-through colour. Range 2 (full-strength but mid-tone) was not light enough; range 1 (pale) was faded.
 - Range 3 (light, max-chroma blues) also read as faded. Flat chips cannot show 'light but not faded' for blue: lightness has to come from light on the surface, not from pale paint.
+- Buttons: shiny silver only, matching the solar system's silver (sharp reflective light), fancy and glamorous. NO diamonds or stones on the buttons (read as stickers). NO line through the middle of a button. Diamonds only where placed with intention elsewhere. The solar system does not have to stay as dark as it is. Page needs depth and a material feel. Cartoon-style work is rejected.
 - Agreed next step: a one-button, one-entry-field test proving light bends through glass (real refraction), before building anything else.
 
 ## Where things stand
