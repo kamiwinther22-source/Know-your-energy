@@ -50,6 +50,8 @@ Every colour dislike below is about ONE specific shade or ONE specific use that 
 - Yellow: owner doubts it can be done acceptably. Treat as out.
 - Agreed next step: a one-button, one-entry-field test proving light bends through glass (real refraction), before building anything else.
 
+- That specific green stone page (yellow-leaning mid-green, mottled with noise): 'Teenage Mutant Ninja Turtles and vomit'. Dead. This is about that shade and that mottled blotching, not about green as a family.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
