@@ -77,6 +77,9 @@ Hue (which colour), lightness (light/dark), strength (vivid vs pale/grey), richn
 - Readability must be judged by the owner's eyes at real size; contrast numbers alone were not enough (stone variation behind text is what hurts).
 - Current best construction: live WebGL surface on the real page (carved fields, raised hexagon buttons, sun as the light, solar system in the same material); the open problem is stone that is both structured (looks like rock) and calm enough to read on.
 
+- DEAD: colour-block / banded-strata strategy (flat coloured bands with crisp edges between them). Owner: 'I am not at all interested in that strategy.' Do not retry in any form.
+- Process: show the GENERAL LOOK first and get a reaction BEFORE building it out in the real page.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
