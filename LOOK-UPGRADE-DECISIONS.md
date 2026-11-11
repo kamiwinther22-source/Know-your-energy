@@ -36,6 +36,7 @@ Each line is attached to what was on screen when it was said. Update this file e
 - Colour feedback on the coral/pink diamond page and the cream pearl page: not appealing, flat and dull, possibly too much orange. The owner cannot name what is wrong beyond that; the way colour, shading and light were applied reads cheap and low effort.
 - Diamonds, glamour, shine, sparkle: real light must visibly pass through the objects. Dark speckles/grit on a surface is the opposite of shine. Nothing may look like a clown party. It should feel fragile, expensive and make you want to touch it.
 - Cream / beige / taupe reads as old paper: not wanted.
+- The refraction test (label doubled, red/blue colour fringes on the text) looks like a broken printer. Do not put text or fine detail under the glass, and do not use offset colour fringes.
 - Agreed next step: a one-button, one-entry-field test proving light bends through glass (real refraction), before building anything else.
 
 ## Where things stand
