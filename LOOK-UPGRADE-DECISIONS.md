@@ -37,6 +37,7 @@ Each line is attached to what was on screen when it was said. Update this file e
 - Diamonds, glamour, shine, sparkle: real light must visibly pass through the objects. Dark speckles/grit on a surface is the opposite of shine. Nothing may look like a clown party. It should feel fragile, expensive and make you want to touch it.
 - Cream / beige / taupe reads as old paper: not wanted.
 - The refraction test (label doubled, red/blue colour fringes on the text) looks like a broken printer. Do not put text or fine detail under the glass, and do not use offset colour fringes.
+- Wanted colour direction: light, icy, cool, not grey, not dark blue, not faded (100% no to anything faded). Show a wide range of options, not the same automatic colours. Silver is allowed again (owner's latest words); diamonds may be set in where they make sense. Not plain: more sparkle, never cartoon techniques.
 - Agreed next step: a one-button, one-entry-field test proving light bends through glass (real refraction), before building anything else.
 
 ## Where things stand
