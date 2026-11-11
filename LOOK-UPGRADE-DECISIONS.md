@@ -26,8 +26,16 @@ Each line is attached to what was on screen when it was said. Update this file e
 ## The feel (owner's words)
 - The feel of the whole site is fine jewelry, diamonds, the expensive feel of diamonds. Not cheap, not plastic.
 
+## Later decisions (owner's words)
+- Scope: work ONLY on the background, the buttons and where people enter information. The solar system is fine as it is; do not spend time on it.
+- Pearl is wanted, and a pearl is creamy white. Not pink, not purple. Pearl was never ruled out by the owner; it was dropped by mistake.
+- No blue. The owner reads the pale blue as grey.
+- The page must feel like a substance you could touch, lit by real reflecting light, not a flat surface with drawn marks. Use real skills, not shortcuts.
+- Light comes from the sun in the solar system (owner's idea). Never default to the top-left corner.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
 - Opal preview: dead (dark, heat-map flashes, teal rings).
 - Previews are made from a scratch copy of the site outside the repo; the live site and `main` are untouched.
+- Pearl real-render preview (3D heightfield, sun as the point light): creamy and bright with real depth, but the shaded edges come out as heavy brown outlines and the buttons show no convincing lustre. Not good enough to show yet.
