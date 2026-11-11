@@ -33,6 +33,10 @@ Each line is attached to what was on screen when it was said. Update this file e
 - The page must feel like a substance you could touch, lit by real reflecting light, not a flat surface with drawn marks. Use real skills, not shortcuts.
 - Light comes from the sun in the solar system (owner's idea). Never default to the top-left corner.
 
+- Colour feedback on the coral/pink diamond page and the cream pearl page: not appealing, flat and dull, possibly too much orange. The owner cannot name what is wrong beyond that; the way colour, shading and light were applied reads cheap and low effort.
+- Diamonds, glamour, shine, sparkle: real light must visibly pass through the objects. Dark speckles/grit on a surface is the opposite of shine. Nothing may look like a clown party. It should feel fragile, expensive and make you want to touch it.
+- Agreed next step: a one-button, one-entry-field test proving light bends through glass (real refraction), before building anything else.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
