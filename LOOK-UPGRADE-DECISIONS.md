@@ -56,6 +56,14 @@ Every colour dislike below is about ONE specific shade or ONE specific use that 
 Hue (which colour), lightness (light/dark), strength (vivid vs pale/grey), richness (dense like acrylic vs thin like crayon: deeper, more saturated shadows). 'Faded' = low strength and/or flat. 'Light' can be strong and rich. Before building with a colour, say it back in these four parts and get a yes.
 - Solar system and buttons stay SILVER unless a stone version can be done really well. The owner's problem is flat and lifeless, not any single colour. 'Stone' to the owner suggests grey/pewter, not costume jewelry.
 
+## Material decisions (owner's words, latest)
+- The buttons and the solar system must match or coordinate with the material the page is built from. No metal on rock: one material family or the other (stone OR silver), never both.
+- The entry fields (where people type) must be calm and plain, never busy.
+- ALWAYS show the entire page structure at once (full length with Person 2), or show nothing. Never pieces or close-ups.
+- Owner is drawn to Onyx015 or Marble021 (real photographed stone, ambientCG, public domain). Fear: pale stone looks dull and shadowed; wants light HITTING it, and something to accent so it is not a black-and-white newspaper page.
+- The owner wants to compare totally different options in order to guide the direction.
+- Real method now working: a path-traced 3D render (Blender via the bpy Python package) of a real photographed stone slab with fields carved in, lit by the sun's position; the solar system re-made in the same stone in three.js.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
