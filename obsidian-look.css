@@ -1,0 +1,33 @@
+/* ?skin=obsidian — the front page on polished black stone with pink metal. Layout is the red page's, untouched: only colour and material change.
+   Stone: a real photographed slab (ambientCG Marble002, CC0). Metal on the buttons and toggle is rendered by obsidian.js under the same room light as the solar system. */
+html.red.obsidian{--acc:#f1a9bd;background:#030304}
+html.red.obsidian:not(:has(#resultsWrap[style*="block"])),html.red.obsidian:not(:has(#resultsWrap[style*="block"])) body{background-color:#030304}
+html.red.obsidian:not(:has(#resultsWrap[style*="block"])) body{background:#030304 url(stone/obsidian.jpg) top center/max(100%,390px) auto repeat-y}
+html.red.obsidian .r-b22 li:before{background:#f1a9bd}
+
+/* fields: a fine pink metal line on the stone */
+html.red.obsidian .field,html.red.obsidian .line-field,html.red.obsidian .line-field.hero-email-field,html.red.obsidian #formStep .row-time .ampm-field,html.red.obsidian .chk-box,
+html.red.obsidian #formStep.locked .line-field,html.red.obsidian .row-time.is-off .line-field{background:transparent !important;box-shadow:0 1.5px 0 #f1a9bd !important}
+html.red.obsidian .line-field:focus-within{box-shadow:0 1.5px 0 #fff,0 0 0 2px rgba(255,255,255,.9) !important}
+html.red.obsidian .line-field select option{background:#0a0a0b;color:#fff}
+html.red.obsidian .loc-list{background:#0a0a0b;box-shadow:0 0 0 1px #f1a9bd}
+html.red.obsidian .loc-list li.on,html.red.obsidian .loc-list li:hover{background:#4a1a28}
+html.red.obsidian:not(:has(#resultsWrap[style*="block"])) .loading-warn{background:#0a0a0b !important;border:1px solid #f1a9bd !important}
+
+/* buttons: until obsidian.js has rendered the real metal, a plain pink-metal face in the same shape */
+html.red.obsidian .rb-wrap,html.red.obsidian .glow-ring,html.red.obsidian .glow-ring-sm{filter:none}
+html.red.obsidian .rbtn,html.red.obsidian .gen-btn,html.red.obsidian .rel-chip{background:linear-gradient(180deg,#ffe9ef 0%,#f6c2d0 10%,#3a0f1d 16%,#c97f95 21%,#fbdfe6 50%,#c98398 82%,#fdeef2 93%,#fff 100%) !important}
+html.red.obsidian .rbtn::before,html.red.obsidian .gen-btn::before,html.red.obsidian .rel-chip::before{background:linear-gradient(180deg,#fff6f8 0%,#fbe3e9 42%,#f0c3cf 52%,#f8dbe3 78%,#fff3f6 100%)}
+html.red.obsidian .rel-chip.active::before{background:linear-gradient(180deg,#f6cbd6 0%,#e0a0b3 46%,#c98398 54%,#e3aabb 100%)}
+html.red.obsidian #hookStep .rbtn,html.red.obsidian #hookStep .rbtn *,html.red.obsidian #formStep .gen-btn,html.red.obsidian #formStep .gen-btn *,html.red.obsidian #formStep .rel-chip,html.red.obsidian #formStep .rel-chip *{color:#2a0f1c !important}
+html.red.obsidian.metal-ready .rbtn,html.red.obsidian.metal-ready .gen-btn{clip-path:none;background-color:transparent !important;background-repeat:no-repeat !important;background-position:center !important;background-size:100% 100% !important}
+html.red.obsidian.metal-ready .rbtn::before,html.red.obsidian.metal-ready .gen-btn::before{display:none !important}
+
+/* toggle */
+html.red.obsidian .toggle-pill{background:#030304 !important;box-shadow:0 0 0 1.5px #f1a9bd !important}
+html.red.obsidian .toggle-pill::after{background:#f1a9bd !important}
+html.red.obsidian.metal-ready .toggle-pill::after{background:var(--kye-knob) center/100% 100% no-repeat !important}
+
+/* AM/PM: the whole label fits beside the padlock, at full strength */
+html.red.obsidian #formStep .row-time .ampm-field select{color:#fff !important;-webkit-text-fill-color:#fff;opacity:1 !important;font-size:12.5px !important;padding-left:3px !important;letter-spacing:0}
+html.red.obsidian #formStep.locked .row-time .ampm-field select{padding-right:19px !important}
