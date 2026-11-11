@@ -80,6 +80,8 @@ Hue (which colour), lightness (light/dark), strength (vivid vs pale/grey), richn
 - DEAD: colour-block / banded-strata strategy (flat coloured bands with crisp edges between them). Owner: 'I am not at all interested in that strategy.' Do not retry in any form.
 - Process: show the GENERAL LOOK first and get a reaction BEFORE building it out in the real page.
 
+- DEAD: Onyx015 as the page stone ('consider this stone dead. We're not using this stone'). Also never outline text. Grainy is rejected; the owner wants polished, shiny, sparkling stone.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
