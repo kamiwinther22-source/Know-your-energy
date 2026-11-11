@@ -52,6 +52,10 @@ Every colour dislike below is about ONE specific shade or ONE specific use that 
 
 - That specific green stone page (yellow-leaning mid-green, mottled with noise): 'Teenage Mutant Ninja Turtles and vomit'. Dead. This is about that shade and that mottled blotching, not about green as a family.
 
+## Shared colour language (agreed)
+Hue (which colour), lightness (light/dark), strength (vivid vs pale/grey), richness (dense like acrylic vs thin like crayon: deeper, more saturated shadows). 'Faded' = low strength and/or flat. 'Light' can be strong and rich. Before building with a colour, say it back in these four parts and get a yes.
+- Solar system and buttons stay SILVER unless a stone version can be done really well. The owner's problem is flat and lifeless, not any single colour. 'Stone' to the owner suggests grey/pewter, not costume jewelry.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
