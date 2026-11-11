@@ -72,6 +72,11 @@ Hue (which colour), lightness (light/dark), strength (vivid vs pale/grey), richn
 - DEAD METHOD (owner: 'that strategy is not going to work no matter what color'): a pre-rendered stone picture used as the page background with the live page laid over it. Text and buttons come out soft/blurry and the veining reads as cracks. Do not retry it in any colour.
 - Process failure to avoid: I said I would build three non-blue stone pages and delivered one failed pink page, then changed plan without saying so. Do what is said, or say plainly that it was not done.
 
+- Sparkle as scattered white pixel dots on the buttons 'looks like error'. Dead. Sparkle must come from crisp, bright highlights on edges and facets that move with the light, never random dots.
+- Blurred or smeared 'calm patches' behind text = frosted/blurry, rejected. Readability must come from a genuinely calm surface, not blur.
+- Readability must be judged by the owner's eyes at real size; contrast numbers alone were not enough (stone variation behind text is what hurts).
+- Current best construction: live WebGL surface on the real page (carved fields, raised hexagon buttons, sun as the light, solar system in the same material); the open problem is stone that is both structured (looks like rock) and calm enough to read on.
+
 ## Where things stand
 - Pearl preview: dead (pink/purple, kid's toy).
 - Diamond preview: failed (reads as pale pink plastic; needs real refraction).
