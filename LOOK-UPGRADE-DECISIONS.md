@@ -44,6 +44,7 @@ Each line is attached to what was on screen when it was said. Update this file e
 - Buttons: no double rim. The feel is feminine glamour, not techie, not warehouse metal. (The live chrome reflects a photographed warehouse interior, which is likely why it reads industrial.)
 - A button alone is no use: always show the whole page, full length. Only do changes certain to beat the live page; no experiments.
 - Buttons: keep the HEXAGON. It is the shape the owner likes best of everything seen. No oval, no rectangle, no reshaping. Only the finish/material/light changes.
+- Yellow: owner doubts it can be done acceptably. Treat as out.
 - Agreed next step: a one-button, one-entry-field test proving light bends through glass (real refraction), before building anything else.
 
 ## Where things stand
