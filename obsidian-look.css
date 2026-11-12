@@ -76,36 +76,36 @@ html.red.obsidian .why{display:none}
 html.red.obsidian .flow-art{display:none}
 html.red.obsidian .person-tag,html.red.obsidian #p2Section .person-tag{font-size:26px}
 html.red.obsidian #formStep .row-birth input,html.red.obsidian #formStep .row-birth select,html.red.obsidian #formStep .row-birth .line-field{min-width:0}
-/* two people: side by side, one to the left and one to the right, on one screen, joined by a fine braid of pink metal */
-html.red.obsidian .form-panel:has(#p2Section.open){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:22px;align-items:start}
-html.red.obsidian .form-panel:has(#p2Section.open)>*{grid-column:1 / -1}
-html.red.obsidian .form-panel:has(#p2Section.open)>#p1Block{grid-column:1;width:auto !important;margin-top:18px}
-html.red.obsidian .form-panel:has(#p2Section.open)>#p2Section{grid-column:2;width:auto !important;margin:18px 0 0 !important;padding-top:0 !important;position:relative}
-html.red.obsidian #p2Section.open::before{content:"";position:absolute;left:-20px;top:6px;bottom:0;width:18px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='56' viewBox='0 0 18 56'%3E%3Cpath d='M3 0C3 14 15 14 15 28S3 42 3 56' fill='none' stroke='%23f1a9bd' stroke-width='1.3'/%3E%3Cpath d='M15 0C15 14 3 14 3 28S15 42 15 56' fill='none' stroke='%23b8476c' stroke-width='1.3'/%3E%3Cpath d='M9 10.5l2.6 3.5L9 17.500l-2.600-3.500zM9 38.500l2.600 3.500L9 45.500l-2.600-3.500z' fill='%23fff'/%3E%3C/svg%3E") 0 0/18px 56px repeat-y}
-html.red.obsidian .form-panel:has(#p2Section.open) .row-id{flex-direction:column;gap:6px}
-html.red.obsidian .form-panel:has(#p2Section.open) .row-id .line-field{flex:0 0 auto !important;width:100%}
-html.red.obsidian .form-panel:has(#p2Section.open) #formStep .row-birth,html.red.obsidian #formStep .form-panel:has(#p2Section.open) .row-birth{grid-template-columns:minmax(0,1fr)}
-html.red.obsidian #formStep .form-panel:has(#p2Section.open) .row-birth .row-time{grid-template-columns:minmax(0,1fr) 62px;column-gap:6px !important}
-html.red.obsidian #formStep.locked .form-panel:has(#p2Section.open) .line-field::after{display:none}
-html.red.obsidian #formStep.locked .form-panel:has(#p2Section.open) .line-field :is(input,select){padding-right:4px}
-html.red.obsidian #formStep .form-panel:has(#p2Section.open) .line-field :is(input,select){font-size:14px}
-html.red.obsidian #formStep .form-panel:has(#p2Section.open) .ampm-field select{padding:0 2px 0 6px !important}
-html.red.obsidian .form-panel:has(#p2Section.open) :is(.section-lbl,.row-birth label:not(.chk)),html.red.obsidian .form-panel:has(#p2Section.open) .opt-lbl{font-size:14px;margin:6px 0 3px}
-html.red.obsidian .form-panel:has(#p2Section.open) .opt-lbl{margin:0}
-html.red.obsidian #formStep .form-panel:has(#p2Section.open) .loc-field{width:100% !important}
-html.red.obsidian .form-panel:has(#p2Section.open) .notime-row{margin-top:8px}
-html.red.obsidian .form-panel:has(#p2Section.open) .row-birth .notime-row label.chk{font-size:13px;gap:7px;align-items:flex-start}
-html.red.obsidian .form-panel:has(#p2Section.open) .tz-toggle{font-size:13px;margin-top:8px;line-height:1.25}
-html.red.obsidian #formStep .submit-wrap.under-p2{width:auto;margin:22px 0 0 !important;justify-content:center !important}
-/* one person: full width, labels level, nothing clipped */
-html.red.obsidian #formStep .form-panel:not(:has(#p2Section.open))>#p1Block{width:100% !important}
-html.red.obsidian #formStep .form-panel:not(:has(#p2Section.open)) #p1Block .loc-field{width:100% !important}
-html.red.obsidian .form-panel:not(:has(#p2Section.open)) .row-id .line-field:nth-child(1),html.red.obsidian .form-panel:not(:has(#p2Section.open)) .row-id .line-field:nth-child(3){flex:1.35 1 0}
-html.red.obsidian .form-panel:not(:has(#p2Section.open)) .row-id .line-field:nth-child(2){flex:1 1 0}
-html.red.obsidian #formStep .form-panel:not(:has(#p2Section.open)) .row-birth{grid-template-columns:138px minmax(0,1fr);align-items:end}
+/* each person: compact, labels level, nothing clipped. Person 1 sits to the left, Person 2 to the right, one above the other, both on one phone screen */
+html.red.obsidian #formStep #p1Block,html.red.obsidian #formStep #p2Section{width:min(300px,100%) !important}
+html.red.obsidian #formStep #p1Block{margin:14px auto 0 0 !important}
+html.red.obsidian #formStep #p2Section{margin:0 0 0 auto !important;padding-top:0 !important;position:relative}
+html.red.obsidian #formStep #p2Section.open{margin-top:30px !important}
+html.red.obsidian #formStep :is(#p1Block,#p2Section) .loc-field{width:100% !important}
+html.red.obsidian .person-tag,html.red.obsidian #p2Section .person-tag{font-size:24px;line-height:1.2;margin:0}
+html.red.obsidian #formStep :is(.section-lbl,.row-birth label:not(.chk)),html.red.obsidian #formStep .opt-lbl{font-size:15px;margin:5px 0 2px}
+html.red.obsidian #formStep .opt-lbl{margin:0}
+html.red.obsidian #formStep .line-field{height:34px}
+html.red.obsidian #formStep .line-field :is(input,select){height:34px}
+html.red.obsidian .row-id .line-field:nth-child(1),html.red.obsidian .row-id .line-field:nth-child(3){flex:1.35 1 0}
+html.red.obsidian .row-id .line-field:nth-child(2){flex:1 1 0}
+html.red.obsidian #formStep .row-birth{grid-template-columns:132px minmax(0,1fr);align-items:end}
 html.red.obsidian #formStep .row-birth .row-dob{margin-bottom:0}
-html.red.obsidian #formStep .form-panel:not(:has(#p2Section.open)) .row-birth .row-time{grid-template-columns:minmax(0,1fr) 84px;column-gap:8px !important}
+html.red.obsidian #formStep .row-birth .row-time{grid-template-columns:minmax(0,1fr) 80px;column-gap:8px !important}
 html.red.obsidian #formStep .row-time .ampm-field{margin-left:0 !important}
+html.red.obsidian #formStep .notime-row{margin-top:7px}
+html.red.obsidian #formStep .tz-toggle{margin-top:7px}
 /* no padlocks in this look: they covered the prompts in the narrow fields */
 html.red.obsidian #formStep.locked .line-field::after{display:none}
 html.red.obsidian #formStep.locked .line-field :is(input,select){padding-right:4px}
+/* between the two people: a fine braid of the two pink metals, in place of the wide ribbon */
+html.red.obsidian #p2Section.open::before{content:"";position:absolute;left:calc(300px - 100vw + 40px);right:0;top:-21px;height:12px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='12' viewBox='0 0 56 12'%3E%3Cpath d='M0 2C14 2 14 10 28 10S42 2 56 2' fill='none' stroke='%23f1a9bd' stroke-width='1.3'/%3E%3Cpath d='M0 10C14 10 14 2 28 2S42 10 56 10' fill='none' stroke='%23b8476c' stroke-width='1.3'/%3E%3Cpath d='M14 3.400l2.600 2.600L14 8.600 11.400 6zM42 3.400l2.600 2.600L42 8.600 39.400 6z' fill='%23fff'/%3E%3C/svg%3E") 0 0/56px 12px repeat-x}
+html.red.obsidian #formStep .submit-wrap.under-p2{width:auto;margin:20px 0 0 !important;justify-content:center !important}
+
+/* pressing a button: no browser tap-flash; the stone sinks, dims, and springs back with a glint */
+html.red.obsidian :is(.rbtn,.gen-btn,.rel-chip,.toggle-pill){-webkit-tap-highlight-color:transparent;outline:none}
+html.red.obsidian :is(.rbtn,.gen-btn,.rel-chip){transition:transform .28s cubic-bezier(.3,1.6,.5,1),filter .28s ease}
+html.red.obsidian :is(.rbtn,.gen-btn,.rel-chip):active{transform:translateY(3px) scale(.955) !important;filter:brightness(.72) saturate(1.15);transition-duration:.06s}
+html.red.obsidian :is(.rbtn,.gen-btn).kye-hit{animation:kyeGlint .5s ease-out}
+@keyframes kyeGlint{0%{filter:brightness(.72)}35%{filter:brightness(1.55) saturate(1.2)}100%{filter:brightness(1)}}
+html.red.obsidian .toggle-pill::after{transition:left .22s cubic-bezier(.3,1.5,.5,1),right .22s cubic-bezier(.3,1.5,.5,1)}

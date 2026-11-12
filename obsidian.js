@@ -11,3 +11,7 @@
     svg.innerHTML=`<defs><filter id="kyeBloom" x="-20%" y="-150%" width="140%" height="400%" filterUnits="objectBoundingBox"><feGaussianBlur stdDeviation="5"/></filter></defs>`+
       `<rect ${r} stroke="#f1a9bd" stroke-width="1.5"/>`+comet(0)+comet(500);};
   draw();new ResizeObserver(draw).observe(f);})();
+
+/* pressing: a glint as the stone springs back, and a short tick on phones that can vibrate */
+document.addEventListener('pointerup',e=>{const b=e.target.closest&&e.target.closest('.rbtn,.gen-btn,.rel-chip,.toggle-pill');if(!b)return;
+  if(navigator.vibrate)navigator.vibrate(12);b.classList.remove('kye-hit');void b.offsetWidth;b.classList.add('kye-hit');},{passive:true});
