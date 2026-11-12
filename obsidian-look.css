@@ -70,3 +70,18 @@ html.red.obsidian .hero-email-field:focus-within::before,html.red.obsidian .hero
 html.red.obsidian .line-field input,html.red.obsidian .line-field select{padding-left:10px}
 html.red.obsidian #formStep .row-time .ampm-field select{padding-left:8px !important}
 html.red.obsidian .line-field.hero-email-field input{padding-left:24px}
+/* the four promises above the email: bigger, each marked with a cut pink stone */
+html.red.obsidian .r-b22{gap:14px 16px}
+html.red.obsidian :is(#hookStep,#formStep) .r-b22 li{font-size:16.5px;line-height:1.25;font-weight:600;padding-left:19px}
+html.red.obsidian .r-b22 li:before{width:9px;height:9px;border-radius:0;top:.32em;transform:rotate(45deg);background:linear-gradient(135deg,#fff 0 30%,#f1a9bd 30% 62%,#a8355a 62%)}
+/* the email field: a light travels round the frame and its glow goes with it */
+@property --kyeA{syntax:"<angle>";inherits:false;initial-value:0deg}
+html.red.obsidian .hero-email-field{isolation:isolate}
+html.red.obsidian .hero-email-field::after{content:"";position:absolute;inset:-3px;border-radius:6px;z-index:-1;pointer-events:none;
+  background:conic-gradient(from var(--kyeA),#f1a9bd 0 55%,#ff9dbb 72%,#fff 86%,#fff 92%,#f1a9bd 94%);
+  filter:drop-shadow(0 0 4px #ff8fb3) drop-shadow(0 0 10px #ff4f8c);animation:kyeOrbit 3.6s linear infinite}
+html.red.obsidian .line-field.hero-email-field{box-shadow:none}
+html.red.obsidian .line-field.hero-email-field input{background:#030304 !important;border-radius:3px}
+@keyframes kyeOrbit{to{--kyeA:360deg}}
+@media (prefers-reduced-motion:reduce){html.red.obsidian .hero-email-field::after{animation:none}}
+html.red.obsidian .hero-email-wrap{padding-top:10px}
