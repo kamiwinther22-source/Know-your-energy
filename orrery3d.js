@@ -80,6 +80,6 @@ function frame(now){place(still?0:(now-t0)/1000);
   if(first){first=false;for(const q of pCubes){q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);}}
   capture(cubeCam,sun);const q=pCubes[pi=(pi+1)%pCubes.length];q.p.m.getWorldPosition(q.cc.position);capture(q.cc,q.p.m);
   renderer.render(scene,camera);if(window.__reflHook)window.__reflHook(cv);   // lets the page mirror the solar system in the sheet beneath it
-  if(svg.style.visibility!=='hidden'){svg.style.visibility='hidden';cv.style.visibility='visible';}   // swap only once the 3D version has actually drawn
+  if(svg.style.visibility!=='hidden'){svg.style.visibility='hidden';cv.style.visibility='visible';host.classList.add('live');}   // swap only once the 3D version has actually drawn
   if(!still)requestAnimationFrame(frame);}
 requestAnimationFrame(frame);
