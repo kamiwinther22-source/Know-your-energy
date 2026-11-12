@@ -86,3 +86,4 @@ html.red.obsidian .line-field.hero-email-field input{background:#030304 !importa
 @media (prefers-reduced-motion:reduce){html.red.obsidian .hero-email-field::after{animation:none}}
 html.red.obsidian .hero-email-wrap{padding-top:10px}
 html.red.obsidian .r-b22{grid-template-columns:1fr}
+html.red.obsidian.metal-ready #hookStep .rbtn,html.red.obsidian.metal-ready #hookStep .rbtn *,html.red.obsidian.metal-ready #formStep .gen-btn,html.red.obsidian.metal-ready #formStep .gen-btn *{color:#fff !important;-webkit-text-fill-color:#fff}

@@ -9,26 +9,23 @@ try{
   const eq=studio();eq.mapping=THREE.EquirectangularReflectionMapping;   // the same jewelry-studio light that the solar system sits in
   const pm=new THREE.PMREMGenerator(renderer),env=pm.fromEquirectangular(eq).texture;
   const scene=new THREE.Scene();scene.environment=env;
-  // a gentle cushion on the top face (as a normal map) so it carries a moving sweep of the room like the sphere does, instead of one flat tone
-  const dome=(()=>{const N=128,d=new Uint8Array(N*N*4);for(let y=0;y<N;y++)for(let x=0;x<N;x++){const u=x/(N-1)*2-1,v=y/(N-1)*2-1,n=new THREE.Vector3(u*.2,v*.34,1).normalize(),k=(y*N+x)*4;
-      d[k]=(n.x*.5+.5)*255;d[k+1]=(n.y*.5+.5)*255;d[k+2]=(n.z*.5+.5)*255;d[k+3]=255;}
-    const t=new THREE.DataTexture(d,N,N);t.magFilter=t.minFilter=THREE.LinearFilter;t.needsUpdate=true;return t;})();
-  const edge=new THREE.MeshStandardMaterial({color:PINK,metalness:1,roughness:.04,envMapIntensity:1.6});   // polished, rounded cut edge
   const shot=(w,h,objs)=>{renderer.setPixelRatio(1);renderer.setSize(Math.round(w*PR),Math.round(h*PR),false);
     const D=700,cam=new THREE.PerspectiveCamera(THREE.MathUtils.radToDeg(2*Math.atan(h/2/D)),w/h,10,2000);cam.position.z=D;
     scene.clear();objs.forEach(o=>scene.add(o));renderer.setClearColor(0,0);renderer.clear();renderer.render(scene,cam);return renderer.domElement.toDataURL('image/png');};
-  const hex=(w,h,c,b,col)=>{const s=new THREE.Shape(),x=w/2,y=h/2;s.moveTo(-x+c,-y);s.lineTo(x-c,-y);s.lineTo(x,0);s.lineTo(x-c,y);s.lineTo(-x+c,y);s.lineTo(-x,0);s.closePath();
-    const g=new THREE.ExtrudeGeometry(s,{depth:1,bevelEnabled:true,bevelThickness:b,bevelSize:b,bevelOffset:-b,bevelSegments:6,steps:1});g.translate(0,0,-(1+b));
-    const nm=dome.clone();nm.needsUpdate=true;nm.repeat.set(1/w,1/h);nm.offset.set(.5,.5);
-    const face=new THREE.MeshStandardMaterial({color:col||PINK,metalness:1,roughness:.16,envMapIntensity:1.5,normalMap:nm});   // top face: soft enough that the label stays clear
-    const ed=col?new THREE.MeshStandardMaterial({color:col,metalness:1,roughness:.04,envMapIntensity:1.6}):edge;
-    return new THREE.Mesh(g,[face,ed]);};
+  // each button is a cut hexagonal stone of polished metal, domed up from its outline to a centre point so every facet catches a different part of the room
+  const GARNET='#8a2f52';
+  const hex=(w,h,c,H,col)=>{w-=2;h-=2;const x=w/2,y=h/2,P=[[-x+c,-y],[x-c,-y],[x,0],[x-c,y],[-x+c,y],[-x,0]],pts=[],M=48,pos=[],idx=[];
+    for(let i=0;i<6;i++){const a=P[i],b=P[(i+1)%6];for(let k=0;k<40;k++)pts.push([a[0]+(b[0]-a[0])*k/40,a[1]+(b[1]-a[1])*k/40]);}
+    const n=pts.length;for(let k=0;k<=M;k++){const s=1-k/M,z=H*(1-s*s);for(const q of pts)pos.push(q[0]*s,q[1]*s,z-H);}
+    for(let k=0;k<M;k++)for(let i=0;i<n;i++){const a=k*n+i,b=k*n+(i+1)%n,c2=a+n,d=b+n;idx.push(a,b,c2,b,d,c2);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);g.computeVertexNormals();
+    return new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:col||GARNET,metalness:1,roughness:.05,envMapIntensity:1.6}));};
   const css=[];
   for(const [sel,w,h] of [['.rbtn',210,50],['.gen-btn',190,50]])
-    css.push(`html.red.obsidian.metal-ready ${sel}{background-image:url(${shot(w,h,[hex(w,h,25,8)])}) !important}`);
-  // the four relationship chips: the selected one in the bright metal, the others in a deeper tone of the same metal, all at full strength
+    css.push(`html.red.obsidian.metal-ready ${sel}{background-image:url(${shot(w,h,[hex(w,h,25,14)])}) !important}`);
+  // the four relationship chips: the selected one in the bright pink metal, the others in the garnet of the buttons, all at full strength
   [116,88,80,66].forEach((w,i)=>{const q=`html.red.obsidian.metal-ready .rel-row .glow-ring-sm:nth-child(${i+1}) .rel-chip`;
-    css.push(`${q}{background-image:url(${shot(w,32,[hex(w,32,9,4,'#9c4a63')])}) !important}`,`${q}.active{background-image:url(${shot(w,32,[hex(w,32,9,4)])}) !important}`);});
+    css.push(`${q}{background-image:url(${shot(w,32,[hex(w,32,9,9)])}) !important}`,`${q}.active{background-image:url(${shot(w,32,[hex(w,32,9,9,PINK)])}) !important}`);});
   const knob=shot(22,22,[new THREE.Mesh(new THREE.SphereGeometry(11,64,48),new THREE.MeshStandardMaterial({color:PINK,metalness:1,roughness:.05,envMapIntensity:1.6}))]);
   css.push(`html.red.obsidian{--kye-knob:url(${knob})}`);
   const st=document.createElement('style');st.textContent=css.join('\n');document.head.appendChild(st);
