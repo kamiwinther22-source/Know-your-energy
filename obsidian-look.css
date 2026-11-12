@@ -73,15 +73,14 @@ html.red.obsidian .kye-comet .c{animation:kyeRun 5.5s linear infinite}
 
 /* --- the form --- */
 html.red.obsidian .why{display:none}
-html.red.obsidian .flow-art{display:none}
 html.red.obsidian .person-tag,html.red.obsidian #p2Section .person-tag{font-size:26px}
 html.red.obsidian #formStep .row-birth input,html.red.obsidian #formStep .row-birth select,html.red.obsidian #formStep .row-birth .line-field{min-width:0}
 /* each person: compact, and never the full width. Person 1 against the left margin, Person 2 below it against the right margin;
-   the energy ribbon (obsidian.js) rises from the space left of Person 2 to the space right of Person 1 */
+   the page's own energy ribbon, drawn finer, rises from the space left of Person 2 to the space right of Person 1 */
 html.red.obsidian #formStep #p1Block,html.red.obsidian #formStep #p2Section{width:min(250px,80%) !important}
 html.red.obsidian #formStep #p1Block{margin:14px auto 0 0 !important}
 html.red.obsidian #formStep #p2Section{margin:0 0 0 auto !important;padding-top:0 !important;position:relative}
-html.red.obsidian #formStep #p2Section.open{margin-top:46px !important}
+html.red.obsidian #formStep #p2Section.open{margin-top:68px !important}
 html.red.obsidian #formStep :is(#p1Block,#p2Section) .loc-field{width:100% !important}
 html.red.obsidian .person-tag,html.red.obsidian #p2Section .person-tag{font-size:24px;line-height:1.2;margin:0}
 html.red.obsidian #formStep :is(.section-lbl,.row-birth label:not(.chk)),html.red.obsidian #formStep .opt-lbl{font-size:15px;margin:5px 0 2px}
@@ -102,7 +101,6 @@ html.red.obsidian #formStep.locked .line-field::after{display:none}
 html.red.obsidian #formStep.locked .line-field :is(input,select){padding-right:4px}
 html.red.obsidian #p2Section>.f{padding-bottom:4px}
 html.red.obsidian .form-col{position:relative}
-html.red.obsidian .kye-ribbon{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 html.red.obsidian #formStep .submit-wrap.under-p2{width:auto;margin:20px 0 0 !important;justify-content:center !important}
 
 /* pressing a button: no browser tap-flash; the stone sinks, dims, and springs back with a glint */
