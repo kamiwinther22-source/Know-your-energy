@@ -85,3 +85,4 @@ html.red.obsidian .line-field.hero-email-field input{background:#030304 !importa
 @keyframes kyeOrbit{to{--kyeA:360deg}}
 @media (prefers-reduced-motion:reduce){html.red.obsidian .hero-email-field::after{animation:none}}
 html.red.obsidian .hero-email-wrap{padding-top:10px}
+html.red.obsidian .r-b22{grid-template-columns:1fr}
