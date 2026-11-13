@@ -224,6 +224,7 @@ body{
 .mode-intro{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:0.95rem;line-height:1.35;text-align:center;color:#000000;margin:0.2rem 0 0.8rem;}
 
 .rel-row{display:flex;flex-wrap:nowrap;gap:0.22rem;justify-content:center;margin-bottom:0;}
+#formStep #relWrap{margin-top:20px !important;}
 
 .rel-chip{
   position:relative;overflow:hidden;
@@ -1001,12 +1002,6 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
             <span class="tog-lbl" id="lblRel">Relational</span>
           </div>
 
-          <div class="rel-row" id="relWrap" style="display:none;">
-            <span class="glow-ring-sm"><button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button></span>
-            <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="romantic">Romantic</button></span>
-            <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="friends">Friends</button></span>
-            <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="other">Other</button></span>
-          </div>
 
           
           <label id="hdOnlyTestWrap" style="display:none;font-size:0.8rem;opacity:0.85;">
@@ -1034,6 +1029,13 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
               <div class="tz-field" id="p1tzWrap" hidden><div class="line-field"><select id="p1tz" aria-label="Birth time zone"><option value="" selected>Time zone</option><option value="America/New_York">Eastern</option><option value="America/Chicago">Central</option><option value="America/Denver">Mountain</option><option value="America/Phoenix">Arizona</option><option value="America/Los_Angeles">Pacific</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></select></div><div class="why">Close enough for most people. Outside the US, pick the nearest big city above.</div></div>
             </div>
           </div>
+        </div>
+
+        <div class="rel-row" id="relWrap" style="display:none;">
+          <span class="glow-ring-sm"><button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button></span>
+          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="romantic">Romantic</button></span>
+          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="friends">Friends</button></span>
+          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="other">Other</button></span>
         </div>
 
         <div id="p2Section">
@@ -1348,7 +1350,10 @@ function drawFlow() {
   const r2 = p2Box.getBoundingClientRect();
   if (!open || r2.height < 40) { svg.classList.remove("on"); return; }
   const r1 = p1Block.getBoundingClientRect();
-  const T = p1Loc.getBoundingClientRect().bottom - fc.top + 8;
+  // the relationship buttons now sit between the two people, so the ribbon starts below them
+  const relRow = document.getElementById("relWrap");
+  const gapTop = (relRow && relRow.offsetHeight ? relRow : p1Loc).getBoundingClientRect().bottom;
+  const T = gapTop - fc.top + 8;
   const B = p2Lbl.getBoundingClientRect().top - fc.top - 6;
   const H = B - T;
   if (H < 60) { svg.classList.remove("on"); return; }
@@ -1374,7 +1379,7 @@ function drawFlow() {
   if(spk!==false)[[.12,12,1],[.22,-15,.9],[.34,17,1.1],[.44,-18,.9],[.56,19,1],[.66,-16,1.1],[.77,15,.9],[.88,-14,1]].forEach(([u,d,r])=>{const i=Math.round(N*u),x=pts[i][0]+nor[i][0]*d,y=pts[i][1]+nor[i][1]*d;body+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r*2.6}" fill="url(#flw0)" opacity=".6"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r*.8}" fill="#fff"/>`;});
   return defs+'</defs>'+body;};
   // the ribbon follows the path drawn by the owner: up from lower left, flat through the middle, sweeping up to the right
-  const base = p1Loc.getBoundingClientRect().bottom - fc.top, sx = fc.width / 350;
+  const base = gapTop - fc.top, sx = fc.width / 350;
   const PATH = [[55, 155], [59, 132], [70, 110], [91, 92], [118, 80], [153, 77], [191, 80], [226, 79], [260, 71], [287, 56], [310, 35], [327, 15]];
   const W = PATH.map(([x, dy]) => [(x - 16) * sx, base + dy]);
   const crm=(p0,p1,p2,p3,t)=>{const t2=t*t,t3=t2*t;return [0.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),0.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)];};
