@@ -225,6 +225,10 @@ body{
 
 .rel-row{display:flex;flex-wrap:nowrap;gap:0.22rem;justify-content:center;margin-bottom:0;}
 #formStep #relWrap{margin-top:20px !important;}
+/* iPhone zooms the page when a tapped field's text is under 16px. Typed text is 16px; the prompt text keeps its size so it still fits. */
+#hookStep input,#formStep input,#formStep select,#formStep textarea,.date-explorer-input{font-size:16px !important;}
+#formStep .line-field input::placeholder{font-size:15px;}
+html.obsidian #formStep .line-field input::placeholder{font-size:13.5px;}
 
 .rel-chip{
   position:relative;overflow:hidden;
