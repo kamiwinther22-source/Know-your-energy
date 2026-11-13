@@ -436,7 +436,40 @@ async function assemblePersonData(env, person) {
 
 const UNLIMITED_DURATION_MS = 366 * 24 * 60 * 60 * 1e3;
 
-const UNLIMITED_EMAILS = [ "kamiwinther22@gmail.com", "maddiewinther@gmail.com", "halliewinther@gmail.com" ];
+// Synchronous SHA-256 (hex). Used so the unlimited-access list below can hold fingerprints, not addresses.
+function sha256Hex(str) {
+  const K = [ 1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298 ];
+  const H = [ 1779033703, 3144134277, 1013904242, 2773480762, 1359893119, 2600822924, 528734635, 1541459225 ];
+  const bytes = Array.from(new TextEncoder().encode(str));
+  const bitLen = bytes.length * 8;
+  bytes.push(128);
+  while (bytes.length % 64 !== 56) bytes.push(0);
+  for (let i = 7; i >= 0; i--) bytes.push(i > 3 ? 0 : bitLen >>> i * 8 & 255);
+  const w = new Array(64), rr = (x, n) => x >>> n | x << 32 - n;
+  for (let o = 0; o < bytes.length; o += 64) {
+    for (let i = 0; i < 16; i++) w[i] = (bytes[o + i * 4] << 24 | bytes[o + i * 4 + 1] << 16 | bytes[o + i * 4 + 2] << 8 | bytes[o + i * 4 + 3]) >>> 0;
+    for (let i = 16; i < 64; i++) {
+      const s0 = rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ w[i - 15] >>> 3, s1 = rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ w[i - 2] >>> 10;
+      w[i] = w[i - 16] + s0 + w[i - 7] + s1 >>> 0;
+    }
+    let [a, b, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const t1 = h + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + (e & f ^ ~e & g) + K[i] + w[i] >>> 0;
+      const t2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + (a & b ^ a & c ^ b & c) >>> 0;
+      h = g; g = f; f = e; e = d + t1 >>> 0; d = c; c = b; b = a; a = t1 + t2 >>> 0;
+    }
+    H[0] = H[0] + a >>> 0; H[1] = H[1] + b >>> 0; H[2] = H[2] + c >>> 0; H[3] = H[3] + d >>> 0;
+    H[4] = H[4] + e >>> 0; H[5] = H[5] + f >>> 0; H[6] = H[6] + g >>> 0; H[7] = H[7] + h >>> 0;
+  }
+  return H.map(x => x.toString(16).padStart(8, "0")).join("");
+}
+
+// Addresses with unlimited access, stored as salted SHA-256 fingerprints so the addresses themselves are not in the code.
+const UNLIMITED_EMAIL_HASHES = ["d3537956dea4a7d3936ce446b67bad6b18a3461c4a448b8619dbeca3fc0ac04b","e11ce37d7b6d96139b5bd2a156284c2b7874e606b45966d0ecc516010f6ae48d","6c62a787fa8344697497c1ac159bf7b8c32a219b44f59daf997379d51bc371f0"];
+
+function isUnlimitedEmail(email) {
+  return UNLIMITED_EMAIL_HASHES.includes(sha256Hex("kye-unlimited-v1:" + String(email || "").trim().toLowerCase()));
+}
 
 function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
@@ -501,7 +534,7 @@ function sameKey(a, b) {
 
 async function adminUsers(env) {
   let [seen, free, passes, usageRaw] = await Promise.all([ listAll(env, "seen:"), listAll(env, "free:"), listAll(env, "pass:"), env.PASSES.get(USAGE_KV_KEY) ]);
-  const fam = k => UNLIMITED_EMAILS.includes(k.name.slice(k.name.indexOf(":") + 1));
+  const fam = k => isUnlimitedEmail(k.name.slice(k.name.indexOf(":") + 1));
   seen = seen.filter(k => !fam(k));
   free = free.filter(k => !fam(k));
   const users = new Map;
@@ -518,7 +551,7 @@ async function adminUsers(env) {
   for (const k of free) row(k.name.slice(5)).freeUsedAt = (k.metadata && k.metadata.t) || true;
   for (const k of passes) {
     const email = k.name.slice(5);
-    if (UNLIMITED_EMAILS.includes(email)) continue;
+    if (isUnlimitedEmail(email)) continue;
     const raw = await env.PASSES.get(k.name);
     if (!raw) continue;
     try {
@@ -592,7 +625,7 @@ async function checkPassRecord(env, email) {
   const used = await freeReadingUsed(env, email);
   const key = passKey(email);
   const raw = await env.PASSES.get(key);
-  if (UNLIMITED_EMAILS.includes(email.trim().toLowerCase())) {
+  if (isUnlimitedEmail(email)) {
     if (raw) {
       await cleanPassRecord(env, key, JSON.parse(raw), Math.ceil(UNLIMITED_DURATION_MS / 1e3));
     }
