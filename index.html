@@ -3845,6 +3845,14 @@ function track(name) {
   } catch (e) {}
 }
 
+// One anonymous page-load count per browser visit, so the admin page can show how many visitors go on to finish a reading.
+try {
+  if (!sessionStorage.getItem("kye_pl")) {
+    sessionStorage.setItem("kye_pl", "1");
+    track("page_load");
+  }
+} catch (e) {}
+
 const REMEMBERED_EMAIL_KEY = "kye_passEmail";
 
 function rememberPassEmail(email) {
