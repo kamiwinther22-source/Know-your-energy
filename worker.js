@@ -756,10 +756,44 @@ function buildHDConnectionLine(hd1, hd2, name1, name2) {
   return lines.join("\n");
 }
 
+// A two-person reading is built only from what both charts can supply. If either person's chart lacks the birth time or place,
+// every item that depends on them is left out for BOTH people, so the reading never has to explain what is missing.
+function relationalTimeLeftOut(rtype, p1, p2) {
+  if (rtype !== "two-person" || !p2) return false;
+  return [ p1, p2 ].some(p => {
+    const a = p && p.astrology || {};
+    return !!(a.timeUnknown || a.locationUnknown);
+  });
+}
+
+// What is left of one person's astrology when the time-based items are removed: no Ascendant, Midheaven, houses or house numbers,
+// and no planet or point whose sign could not be settled without the time (nor any aspect that names one).
+function withoutTimeBasedItems(a0) {
+  const points = [ ...a0.planets || [], a0.northNode, a0.southNode, a0.chiron, a0.lilith ];
+  const unsure = new Set(points.filter(b => b && b.signUncertain).map(b => b.name));
+  const keep = b => b && !b.signUncertain ? b : null;
+  const noAngles = x => ![ "Ascendant", "Midheaven" ].includes(x.point1) && ![ "Ascendant", "Midheaven" ].includes(x.point2);
+  return {
+    ...a0,
+    ascendant: null,
+    midheaven: null,
+    houses: [],
+    timeUnknown: false,
+    locationUnknown: false,
+    planets: (a0.planets || []).filter(b => keep(b)).map(({house: house, ...rest}) => rest),
+    northNode: keep(a0.northNode),
+    southNode: keep(a0.southNode),
+    chiron: keep(a0.chiron),
+    lilith: keep(a0.lilith),
+    aspects: (a0.aspects || []).filter(x => noAngles(x) && !unsure.has(x.point1) && !unsure.has(x.point2))
+  };
+}
+
 function buildReportUserPrompt(rtype, relLabel, p1, p2) {
+  const dropTimeItems = relationalTimeLeftOut(rtype, p1, p2);
   const personBlock = p => {
     const n = p.numerology || {};
-    const a = p.astrology || {};
+    const a = dropTimeItems ? withoutTimeBasedItems(p.astrology || {}) : p.astrology || {};
     const pinnacle = x => x ? `${x.value} (${x.ageRange})` : "unknown";
     const challenge = (val, pin) => `${val}${pin?.ageRange ? ` (age ${pin.ageRange})` : ""}`;
     const numerologyLines = [ `Life Path ${n.lifePath}, Expression ${n.expression}, Soul Urge ${n.soulUrge}, Personality ${n.personality}, Birthday ${n.birthday}`, `Attitude ${n.attitude}, Balance ${n.balance}, Maturity ${n.maturity}`, `Current cycle: Personal Year ${n.personalYear}, Personal Month ${n.personalMonth}, Personal Day ${n.personalDay}, Essence ${n.essenceCycle?.value} (age ${n.essenceCycle?.currentAge})`, `Pinnacles: 1) ${pinnacle(n.pinnacles?.pinnacle1)}  2) ${pinnacle(n.pinnacles?.pinnacle2)}  3) ${pinnacle(n.pinnacles?.pinnacle3)}  4) ${pinnacle(n.pinnacles?.pinnacle4)}`, `Challenges: 1) ${challenge(n.challengeNumbers?.challenge1, n.pinnacles?.pinnacle1)}  2) ${challenge(n.challengeNumbers?.challenge2, n.pinnacles?.pinnacle2)}  3) ${challenge(n.challengeNumbers?.challenge3, n.pinnacles?.pinnacle3)}  4) ${challenge(n.challengeNumbers?.challenge4, n.pinnacles?.pinnacle4)}`, `Period Cycles (3 long background chapters, each from one raw birthdate component -- distinct from Pinnacles above): 1) ${pinnacle(n.periodCycles?.period1)}  2) ${pinnacle(n.periodCycles?.period2)}  3) ${pinnacle(n.periodCycles?.period3)}`, `Karmic Lessons: ${n.karmicLessons?.length ? n.karmicLessons.join(", ") : "none"}`, `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(", ") : "none"}` ].join("\n  ");
@@ -943,7 +977,11 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
     throw lastError;
   }
   if (ctx) ctx.waitUntil(recordUsage(env, result.usage, usageType));
-  return { reading: result.parsed };
+  const reading = !hdOnly && result.parsed && relationalTimeLeftOut(rtype, p1, p2) ? {
+    ...result.parsed,
+    timeLeftOut: true
+  } : result.parsed;
+  return { reading: reading };
 }
 
 export default {
