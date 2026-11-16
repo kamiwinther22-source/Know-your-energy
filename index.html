@@ -3142,13 +3142,14 @@ function reportSlot(names, cardNames, report, reportError, rowNum, usedFallback,
     return `<div class="panel-error" id="readingSlot" style="grid-column:2;grid-row:${rowNum};"><div class="dp"><div class="dph">${escapeHtml(titleRaw)}</div><div class="dprow"><p class="report-body">Your chart data is ready, but the full reading couldn't be generated right now: ${escapeHtml(reportError)}</p></div></div></div>`;
   }
   const fallbackNoticeHtml = usedFallback ? `<div class="dprow"><p class="report-fallback-note">Your full reading couldn't be generated this time -- please try again.</p>${fallbackReason ? `<p class="report-fallback-reason">${escapeHtml(fallbackReason)}</p>` : ""}</div>` : "";
+  const timeNoteHtml = report.timeLeftOut ? `<div class="dprow"><p class="report-body" style="font-style:italic;">Details that depend on birth time and place are left out of this reading, because they were not entered for both people.</p></div>` : "";
   const sectionsHtml = (report.sections || []).map(s => {
     const head = s.eyebrow ? `${escapeHtml(s.eyebrow)} — ${escapeHtml(s.title)}` : escapeHtml(s.title);
     return `${dpsec(head)}<div class="dprow"><p class="report-body">${escapeHtml(s.body)}</p></div>`;
   }).join("");
   const sigHtml = report.signature ? `<div class="dprow"><p class="report-sig">${escapeHtml(report.signature)}</p></div>` : "";
   const refsHtml = report.references && report.references.length ? dpsec("References") + `<div class="dprow"><p class="report-body" style="color:var(--card-mid);font-style:italic;">${report.references.map(escapeHtml).join(" &middot; ")}</p></div>` : "";
-  const fullRows = fallbackNoticeHtml + sectionsHtml + sigHtml + refsHtml;
+  const fullRows = fallbackNoticeHtml + timeNoteHtml + sectionsHtml + sigHtml + refsHtml;
   const idx = cardRegistry.push({
     title: titleRaw,
     rows: fullRows,
