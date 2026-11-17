@@ -1,0 +1,50 @@
+<!doctype html><meta charset=utf-8><title>Jewelry button options</title>
+<style>
+body{margin:0;padding:28px;background:radial-gradient(ellipse at 50% 0,#4a0f1c,#1c0509 80%);color:#ddd;font:14px Arial,sans-serif}
+h2{font:600 15px Arial,sans-serif;letter-spacing:.08em;color:#f0b8e0;margin:34px 0 14px}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.b{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;
+ font:800 15px 'Arial Narrow',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0a0d12;text-shadow:0 0 6px rgba(255,255,255,.9),0 1px 0 #fff}
+.w{width:210px;height:58px}.s{width:140px;height:58px}
+.hex{clip-path:polygon(19px 0,calc(100% - 19px) 0,100% 50%,calc(100% - 19px) 100%,19px 100%,0 50%)}
+.b span{position:relative;z-index:3}
+/* 4-point star glint */
+.st{position:absolute;z-index:4;width:26px;height:26px;transform:translate(-50%,-50%) scale(.25);opacity:0;animation:tw 2.4s ease-in-out infinite;pointer-events:none}
+.st::before,.st::after{content:"";position:absolute;left:0;top:50%;width:100%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#fff 50%,transparent);box-shadow:0 0 6px 1px #fff}
+.st::after{transform:rotate(90deg)}
+.st i{position:absolute;inset:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px 3px #fff}
+@keyframes tw{0%,55%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}70%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}85%{opacity:.5;transform:translate(-50%,-50%) scale(.5) rotate(90deg)}}
+
+
+
+.k{position:relative;isolation:isolate}
+.b::before,.b::after{content:"";position:absolute;inset:4px 7px;clip-path:polygon(15px 0,calc(100% - 15px) 0,100% 50%,calc(100% - 15px) 100%,15px 100%,0 50%)}
+.b::before{z-index:-2}.b::after{z-index:-1}
+.gw{filter:drop-shadow(0 0 7px rgba(255,255,255,.75)) drop-shadow(0 0 18px rgba(255,235,245,.45))}
+/* 1 MIRROR POLISH: smooth chrome, sky above, dark horizon, ground reflection, no texture */
+.m1{background:linear-gradient(180deg,#fff,#c9d1d9 50%,#2c3239 100%)}
+.m1::before{background:linear-gradient(180deg,#ffffff 0,#e6ebf0 28%,#b9c2cc 56%,#566069 69%,#262c33 71%,#8f9aa6 75%,#dde3e9 90%,#fff 100%)}
+.m1::after{background:linear-gradient(100deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.55) 30%,rgba(255,255,255,0) 42%)}
+/* 2 SPARKLE: bright silver, dense glitter, many small stars twinkling at different moments */
+.m2{background:linear-gradient(135deg,#fff,#aab3bd 45%,#fff 70%,#8c96a1)}
+.m2::before{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='s'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' seed='9'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 14 -10.2'/></filter><rect width='100%' height='100%' filter='url(%23s)'/></svg>"),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  1.4 0 0 0 -.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),linear-gradient(180deg,#f5f7f9,#cdd3d9 55%,#e8ecf0);background-blend-mode:normal,overlay,normal}
+.m2::after{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='s'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' seed='9'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 14 -10.2'/></filter><rect width='100%' height='100%' filter='url(%23s)'/></svg>");opacity:.9;background-size:140px 55px;filter:brightness(1.2)}
+/* 3 GLOWING: luminous face, lit from within, soft halo spilling past the edge */
+.m3{background:linear-gradient(135deg,#fff,#d0d6dc 45%,#fff 70%,#bcc4cc)}
+.m3::before{background:radial-gradient(ellipse 70% 120% at 50% 50%,#ffffff 0,#f3f6f9 45%,#bfc8d1 100%)}
+.m3::after{background:radial-gradient(ellipse 45% 80% at 50% 50%,rgba(255,255,255,1) 0,rgba(255,255,255,0) 100%)}
+/* 4 WET GLOSS: clear glassy coat over silver: wide curved reflection on top, dark pool below, tiny hot spot */
+.m4{background:linear-gradient(180deg,#fff,#7f8993 55%,#e9edf1)}
+.m4::before{background:linear-gradient(180deg,#cfd6dd 0,#8f9aa6 48%,#3f464e 52%,#6e7985 70%,#c3cbd3 100%)}
+.m4::after{inset:5px 12px 50% 12px;clip-path:none;border-radius:50% 50% 45% 45%/70% 70% 30% 30%;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(255,255,255,.35))}
+.hot{position:absolute;z-index:3;width:12px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 6px 2px #fff;left:18%;top:20%}
+</style>
+<h2>1 — MIRROR POLISH: smooth chrome with a sky above, dark horizon, ground reflection. No texture.</h2><div class=row id=r1></div><h2>2 — SPARKLE: bright silver with glitter and many small stars twinkling at different moments</h2><div class=row id=r2></div><h2>3 — GLOWING: face lit from within, with light spilling past the edges</h2><div class=row id=r3></div><h2>4 — WET GLOSS: glassy clear coat, curved reflection across the top, tiny hot spot</h2><div class=row id=r4></div><script>
+function mk(id,cls,glow,stars,hot){const r=document.getElementById(id);
+ for(const [c,t] of [['w','Reveal Chart'],['s','Pass'],['w','Run / Save']]){
+  const wrap=document.createElement('div');if(glow)wrap.className='gw';
+  const b=document.createElement('button');b.className='b '+cls+' '+c+' hex';b.innerHTML='<span>'+t+'</span>'+(hot?'<i class=hot></i>':'');
+  for(let n=0;n<stars;n++){const s=document.createElement('b');s.className='st';s.style.left=(8+Math.random()*84)+'%';s.style.top=(12+Math.random()*76)+'%';s.style.animationDelay=(Math.random()*2.4).toFixed(2)+'s';s.style.animationDuration=(1.6+Math.random()*1.4).toFixed(2)+'s';s.style.width=s.style.height=(14+Math.random()*14)+'px';s.innerHTML='<i></i>';b.appendChild(s)}
+  wrap.appendChild(b);r.appendChild(wrap)}}
+mk('r1','m1',0,2,0);mk('r2','m2',0,13,0);mk('r3','m3',1,2,0);mk('r4','m4',0,1,1);
+</script>
