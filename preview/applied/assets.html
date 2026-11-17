@@ -1,0 +1,33 @@
+<!doctype html><meta charset=utf-8><body style="margin:0;background:transparent"><script>
+const F=[[['#ffffff','#e7ebf0'],['#cfd6de','#aab4bf']],[['#f6f8fa','#cdd4db'],['#9aa5b1','#6d7885']],[['#aab4bf','#7e8996'],['#6a7581','#48525d']],[['#98a3af','#c9d1d9'],['#59646f','#7f8a96']],[['#e0e5ea','#b4bdc7'],['#8a95a1','#5d6874']],[['#ffffff','#eef1f5'],['#c3cbd3','#9aa5b1']]];
+let uid=0;
+function gem(el,w,h,label,mode,tex,stars){
+  const id='u'+(uid++),R=h/58,k=20*R,d=11*R,c0=19*R;
+  const O=[[c0,0],[w-c0,0],[w,h/2],[w-c0,h],[c0,h],[0,h/2]];
+  const T=[[c0+k,d],[w-c0-k,d],[w-d-3*R,h/2],[w-c0-k,h-d],[c0+k,h-d],[d+3*R,h/2]];
+  const pt=a=>a.map(p=>p.join(',')).join(' '),mid=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
+  let defs='',body='';
+  const edge='stroke="rgba(255,255,255,.32)" stroke-width=".8" stroke-linejoin="round"';
+  for(let i=0;i<6;i++){const j=(i+1)%6,m1=mid(O[i],O[j]),m2=mid(T[i],T[j]);
+    for(let n=0;n<2;n++){const p=F[i][n];
+      defs+=`<linearGradient id="${id}g${i}${n}" gradientUnits="userSpaceOnUse" x1="${m1[0]}" y1="${m1[1]}" x2="${m2[0]}" y2="${m2[1]}"><stop offset="0" stop-color="${p[0]}"/><stop offset="1" stop-color="${p[1]}"/></linearGradient>`;}
+    if(mode=='G'){const p=F[i][0],q=F[i][1];
+      defs+=`<linearGradient id="${id}q${i}" gradientUnits="userSpaceOnUse" x1="${m1[0]}" y1="${m1[1]}" x2="${m2[0]}" y2="${m2[1]}"><stop offset="0" stop-color="${p[0]}"/><stop offset=".5" stop-color="${q[0]}"/><stop offset="1" stop-color="${q[1]}"/></linearGradient>`;
+      body+=`<polygon points="${pt([O[i],O[j],T[j],T[i]])}" fill="url(#${id}q${i})" ${edge}/>`;
+    }else{
+      body+=`<polygon points="${pt([O[i],O[j],T[j]])}" fill="url(#${id}g${i}1)" ${edge}/><polygon points="${pt([O[i],T[j],T[i]])}" fill="url(#${id}g${i}0)" ${edge}/>`;
+    }}
+  defs+=`<linearGradient id="${id}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#e9edf1"/><stop offset="1" stop-color="#bcc5ce"/></linearGradient>
+   <linearGradient id="${id}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#9aa4af"/><stop offset=".6" stop-color="#fff"/><stop offset="1" stop-color="#6e7985"/></linearGradient>
+   <clipPath id="${id}c"><polygon points="${pt(O)}"/></clipPath>
+   <filter id="${id}n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" result="a"/><feColorMatrix in="a" type="matrix" values="0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 1.4 0 0 0 -.2"/></filter>
+   <filter id="${id}s" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.1" seed="9" result="a"/><feColorMatrix in="a" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 14 -10.4"/></filter>`;
+  body+=`<polygon points="${pt(T)}" fill="url(#${id}t)" stroke="rgba(255,255,255,.4)" stroke-width=".8"/>`;
+  let texl='';
+  if(tex)texl=`<g clip-path="url(#${id}c)"><rect width="${w}" height="${h}" filter="url(#${id}n)" style="mix-blend-mode:overlay" opacity=".9"/><rect width="${w}" height="${h}" filter="url(#${id}s)" opacity=".85"/></g>`;
+  el.innerHTML=`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><defs>${defs}</defs><polygon points="${pt(O)}" fill="url(#${id}r)"/><g clip-path="url(#${id}c)">${body}</g>${texl}<polygon points="${pt(O)}" fill="none" stroke="rgba(40,48,58,.5)" stroke-width="1"/></svg><span>${label}</span>`+stars.map(s=>`<b class="st" style="left:${s[0]}%;top:${s[1]}%;animation-delay:${s[2]}s"><i></i></b>`).join('');
+}
+
+const SIZES={rbtn:[210,50],gen:[190,50],chip116:[116,32],chip88:[88,32],chip80:[80,32],chip66:[66,32],side:[110,50],wide:[170,56],short:[116,56]};
+for(const [n,[w,h]] of Object.entries(SIZES)){const d=document.createElement('div');d.id=n;d.style.cssText=`position:absolute;left:10px;top:${10+Object.keys(SIZES).indexOf(n)*70}px;width:${w}px;height:${h}px`;document.body.appendChild(d);gem(d,w,h,'', 'H',true,[]);d.querySelector('span').remove()}
+</script>

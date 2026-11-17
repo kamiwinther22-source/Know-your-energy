@@ -1,0 +1,14 @@
+
+/* PREVIEW ONLY: the 4 x 8 silver buttons applied across the page */
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip,html.red .fan-actions>.side-btn,html.red .side-btn{
+  clip-path:none !important;background-color:transparent !important;background-repeat:no-repeat !important;background-position:center !important;background-size:100% 100% !important;
+  text-shadow:0 0 5px rgba(255,255,255,.9),0 0 9px rgba(255,255,255,.7) !important}
+html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before,html.red .side-btn::before{display:none !important}
+html.red .rbtn{background-image:url(img/k/rbtn.png) !important}
+html.red .gen-btn{background-image:url(img/k/gen.png) !important}
+html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{background-image:url(img/k/chip116.png) !important}
+html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{background-image:url(img/k/chip88.png) !important}
+html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{background-image:url(img/k/chip80.png) !important}
+html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{background-image:url(img/k/chip66.png) !important}
+html.red .rel-chip.active{filter:drop-shadow(0 0 6px rgba(255,255,255,.95)) brightness(1.08)}
+html.red .fan-actions>.side-btn,html.red .side-btn{background-image:url(img/k/side.png) !important}
