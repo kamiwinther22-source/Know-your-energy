@@ -598,6 +598,12 @@ html.obsidian #formStep .line-field input::placeholder{font-size:13.5px;}
 }
 .side-btn .btn-icon{flex-shrink:0;width:11px;height:11px;display:block;}
 .side-btn:active{transform:translateY(2px) scale(0.97);box-shadow:0 1px 4px -1px rgba(15,25,45,0.4), inset 0 1px 0 rgba(255,255,255,0.2);}
+/* Every button is polished silver with a white face and black text. No blue anywhere. */
+.side-btn{isolation:isolate;border:0 !important;border-radius:0 !important;color:#0b0b10 !important;box-shadow:none !important;
+  background:linear-gradient(135deg,#ffffff 0%,#d9dee4 10%,#8c959f 24%,#4a525c 38%,#8f98a2 50%,#eef1f4 60%,#ffffff 66%,#aeb6bf 78%,#6a737d 90%,#3f4650 100%) !important;
+  clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
+.side-btn::before{content:"";position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+.side-btn span,.side-btn .btn-icon{color:#0b0b10 !important;stroke:#0b0b10}
 
 .card-expand{
   display:none;position:fixed;inset:0;width:100dvw;height:100dvh;z-index:300;overflow-y:auto;
