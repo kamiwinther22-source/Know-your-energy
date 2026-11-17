@@ -1,0 +1,32 @@
+<!doctype html><meta charset=utf-8><title>Jewelry button options</title>
+<style>
+body{margin:0;padding:28px;background:radial-gradient(ellipse at 50% 0,#4a0f1c,#1c0509 80%);color:#ddd;font:14px Arial,sans-serif}
+h2{font:600 15px Arial,sans-serif;letter-spacing:.08em;color:#f0b8e0;margin:34px 0 14px}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.b{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;
+ font:800 15px 'Arial Narrow',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0a0d12;text-shadow:0 0 6px rgba(255,255,255,.9),0 1px 0 #fff}
+.w{width:210px;height:58px}.s{width:140px;height:58px}
+.hex{clip-path:polygon(19px 0,calc(100% - 19px) 0,100% 50%,calc(100% - 19px) 100%,19px 100%,0 50%)}
+.b span{position:relative;z-index:3}
+/* 4-point star glint */
+.st{position:absolute;z-index:4;width:26px;height:26px;transform:translate(-50%,-50%) scale(.25);opacity:0;animation:tw 2.4s ease-in-out infinite;pointer-events:none}
+.st::before,.st::after{content:"";position:absolute;left:0;top:50%;width:100%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#fff 50%,transparent);box-shadow:0 0 6px 1px #fff}
+.st::after{transform:rotate(90deg)}
+.st i{position:absolute;inset:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px 3px #fff}
+@keyframes tw{0%,55%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}70%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}85%{opacity:.5;transform:translate(-50%,-50%) scale(.5) rotate(90deg)}}
+
+
+.E3{background:linear-gradient(135deg,#fff,#8c97a3 40%,#fff 60%,#7f8993)}
+.E3::before,.E3::after{content:"";position:absolute;inset:3px 6px;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%)}
+.E3::before{z-index:-2;background:conic-gradient(from 0deg at 50% 50%,#fff 0 60deg,#9aa5b0 60deg 120deg,#eef1f5 120deg 180deg,#5f6a76 180deg 240deg,#e2e7ec 240deg 300deg,#a4aeb9 300deg 360deg)}
+.E3::after{z-index:-1;background:radial-gradient(ellipse 52% 75% at 50% 50%,#fff 0,rgba(255,255,255,.93) 62%,rgba(255,255,255,0) 100%)}
+/* W1: add light-to-dark shading inside each of the 6 facets (edges between facets stay) */
+.W1::before{background:conic-gradient(from 0deg at 50% 50%,#fff 0deg,#e4e9ee 59.5deg,#b9c3cd 60deg,#8a95a1 119.5deg,#f6f8fa 120deg,#dce1e7 179.5deg,#74808c 180deg,#4d5864 239.5deg,#f1f4f7 240deg,#cfd6dd 299.5deg,#b4bdc7 300deg,#97a2ae 360deg)}
+/* W2: add deeper contrast: darker darks, brighter lights, smaller white blob so more facet shows */
+.W2::before{background:conic-gradient(from 0deg at 50% 50%,#fff 0 60deg,#7b8692 60deg 120deg,#fff 120deg 180deg,#38424e 180deg 240deg,#f4f7fa 240deg 300deg,#8793a0 300deg 360deg)}
+.W2::after{background:radial-gradient(ellipse 40% 62% at 50% 50%,#fff 0,rgba(255,255,255,.9) 55%,rgba(255,255,255,0) 100%)}
+/* W3: add a sharp diagonal specular band across the facets and a stronger metal rim */
+.W3{background:linear-gradient(160deg,#fff 0,#7f8a96 28%,#fff 50%,#56616d 75%,#dfe5ea 100%)}
+.W3::after{background:linear-gradient(112deg,transparent 40%,rgba(255,255,255,.95) 46%,rgba(255,255,255,.95) 54%,transparent 60%),radial-gradient(ellipse 52% 75% at 50% 50%,#fff 0,rgba(255,255,255,.93) 62%,rgba(255,255,255,0) 100%)}
+</style>
+<h2>CHANGE 3 AS IT WAS (reference)</h2><div class=row><button class="b E3  w hex"><span>Reveal Chart</span></button><button class="b E3  s hex"><span>Pass</span></button></div><h2>ADD 1 ONLY: shading inside each facet</h2><div class=row><button class="b E3 W1 w hex"><span>Reveal Chart</span></button><button class="b E3 W1 s hex"><span>Pass</span></button></div><h2>ADD 2 ONLY: deeper contrast (darker darks, brighter lights)</h2><div class=row><button class="b E3 W2 w hex"><span>Reveal Chart</span></button><button class="b E3 W2 s hex"><span>Pass</span></button></div><h2>ADD 3 ONLY: sharp diagonal highlight band + stronger metal rim</h2><div class=row><button class="b E3 W3 w hex"><span>Reveal Chart</span></button><button class="b E3 W3 s hex"><span>Pass</span></button></div>
