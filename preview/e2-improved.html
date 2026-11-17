@@ -1,0 +1,52 @@
+<!doctype html><meta charset=utf-8><title>E2 improved</title>
+<style>
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+body{margin:0;padding:28px;background:radial-gradient(ellipse at 50% 0,#4a0f1c,#1c0509 80%);color:#ddd;font:14px Arial,sans-serif}
+h2{font:600 15px Arial,sans-serif;letter-spacing:.08em;color:#f0b8e0;margin:34px 0 14px}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.b{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;
+ font:800 15px 'Arial Narrow',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#07090d;
+ text-shadow:0 0 5px #fff,0 0 9px rgba(255,255,255,.95),0 0 14px rgba(255,255,255,.8)}
+.w{width:210px;height:58px}.s{width:140px;height:58px}
+.hex{clip-path:polygon(19px 0,calc(100% - 19px) 0,100% 50%,calc(100% - 19px) 100%,19px 100%,0 50%)}
+.b span{position:relative;z-index:3}
+.st{position:absolute;z-index:4;width:26px;height:26px;transform:translate(-50%,-50%);animation:tw 2.4s ease-in-out infinite;pointer-events:none}
+.st::before,.st::after{content:"";position:absolute;left:0;top:50%;width:100%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#fff 50%,transparent);box-shadow:0 0 6px 1px #fff}
+.st::after{transform:rotate(90deg)}
+.st i{position:absolute;inset:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px 3px #fff}
+@keyframes tw{0%,55%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2)}70%{opacity:1;transform:translate(-50%,-50%) scale(1)}85%{opacity:.5;transform:translate(-50%,-50%) scale(.5)}}
+@keyframes spin{to{--a:360deg}}
+/* rim: smooth metal gradient, no outline lines */
+.rim{background:linear-gradient(160deg,#ffffff 0,#9ea8b3 30%,#f3f6f9 52%,#6d7884 78%,#d8dee4 100%)}
+.rim::before,.rim::after{content:"";position:absolute}
+.rim::before{inset:4px;z-index:-2}
+.rim::after{inset:4px;z-index:-1}
+.hex.rim::before,.hex.rim::after{inset:4px 7px;clip-path:polygon(15px 0,calc(100% - 15px) 0,100% 50%,calc(100% - 15px) 100%,15px 100%,0 50%)}
+
+/* P: SOFT conic — 12 facets blended smoothly, deep contrast, no hard edges */
+.P::before{background:conic-gradient(from 20deg at 50% 50%,#ffffff,#8f9aa6 8%,#f4f7fa 17%,#59646f 26%,#e3e8ed 34%,#a2acb7 42%,#ffffff 50%,#7b8692 58%,#f4f7fa 67%,#4f5a66 76%,#dfe4e9 84%,#a9b3be 92%,#ffffff)}
+.P::after{background:radial-gradient(ellipse 46% 62% at 50% 50%,rgba(255,255,255,.78),rgba(255,255,255,0) 100%)}
+
+/* Q: 8 broad facets, higher contrast + a darker pavilion falloff to the edges for depth */
+.Q::before{background:conic-gradient(from 0deg at 50% 50%,#ffffff,#b4bec8 6%,#6a7580 14%,#eef2f5 25%,#ffffff 32%,#98a3af 42%,#4d5864 50%,#e9edf1 62%,#ffffff 70%,#a5afba 80%,#69747f 88%,#f2f5f8 100%)}
+.Q::after{background:radial-gradient(ellipse 50% 70% at 50% 50%,rgba(255,255,255,.82) 0,rgba(255,255,255,.35) 60%,rgba(20,26,33,.28) 100%)}
+
+/* R: the P facets, with the light moving: the highlight travels around the stone */
+.R::before{background:conic-gradient(from var(--a) at 50% 50%,#ffffff,#8f9aa6 8%,#f4f7fa 17%,#59646f 26%,#e3e8ed 34%,#a2acb7 42%,#ffffff 50%,#7b8692 58%,#f4f7fa 67%,#4f5a66 76%,#dfe4e9 84%,#a9b3be 92%,#ffffff);animation:spin 7s linear infinite}
+.R::after{background:radial-gradient(ellipse 46% 62% at 50% 50%,rgba(255,255,255,.78),rgba(255,255,255,0) 100%)}
+</style>
+<h2>P — E2 with soft blended facets and deep contrast (no hard slice edges, no outlines)</h2>
+<div class=row>
+<button class="b rim P w hex"><span>Reveal Chart</span><b class=st style="left:15%;top:28%;animation-delay:.3s"><i></i></b><b class=st style="left:87%;top:72%;animation-delay:1.4s"><i></i></b></button>
+<button class="b rim P s hex"><span>Pass</span><b class=st style="left:80%;top:28%;animation-delay:.9s"><i></i></b></button>
+<button class="b rim P w hex"><span>Run / Save</span><b class=st style="left:12%;top:72%;animation-delay:.2s"><i></i></b></button></div>
+<h2>Q — fewer, broader facets with a darker falloff toward the edges for depth</h2>
+<div class=row>
+<button class="b rim Q w hex"><span>Reveal Chart</span><b class=st style="left:15%;top:28%;animation-delay:.3s"><i></i></b><b class=st style="left:87%;top:72%;animation-delay:1.4s"><i></i></b></button>
+<button class="b rim Q s hex"><span>Pass</span><b class=st style="left:80%;top:28%;animation-delay:.9s"><i></i></b></button>
+<button class="b rim Q w hex"><span>Run / Save</span><b class=st style="left:12%;top:72%;animation-delay:.2s"><i></i></b></button></div>
+<h2>R — same as P, but the light slowly travels around the stone so the shine keeps moving</h2>
+<div class=row>
+<button class="b rim R w hex"><span>Reveal Chart</span><b class=st style="left:15%;top:28%;animation-delay:.3s"><i></i></b><b class=st style="left:87%;top:72%;animation-delay:1.4s"><i></i></b></button>
+<button class="b rim R s hex"><span>Pass</span><b class=st style="left:80%;top:28%;animation-delay:.9s"><i></i></b></button>
+<button class="b rim R w hex"><span>Run / Save</span><b class=st style="left:12%;top:72%;animation-delay:.2s"><i></i></b></button></div>
