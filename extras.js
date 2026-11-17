@@ -66,28 +66,30 @@
       /* timeline */
       ".tl{color:#000;font-family:'DM Sans',sans-serif}",
       ".tl-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:2px 0 8px}",
-      ".tl-ctl label{font:800 11px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase}",
-      ".tl-ctl input{font:700 14px 'DM Sans',sans-serif;border:0;border-bottom:2px solid #000;background:#fff;color:#000;padding:2px 2px}",
-      ".tl-chip{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;border:2px solid #000;background:#fff;color:#000;padding:2px 10px;cursor:pointer}",
-      ".tl-chip.on{background:#000 !important;color:#fff !important}.tl-chip{color:#000 !important;background:#fff}",
-      ".tl-info{border:2px solid #000;padding:8px 10px;margin:0 0 8px;font:500 13px/1.45 'DM Sans',sans-serif;min-height:92px;max-height:150px;overflow:auto;color:#000;background:#fff}",
-      ".tl-info b{font-weight:800}",
-      ".tl-info .tt{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}",
-      ".tl-head{display:flex;margin-left:34px;border-bottom:2px solid #000}",
-      ".tl-head div{flex:1;height:78px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font:800 9.5px 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#000}",
-      ".tl-scroll{height:44vh;min-height:260px;overflow-y:auto;position:relative;border-bottom:2px solid #000;-webkit-overflow-scrolling:touch}",
-      ".tl-body{position:relative;margin-left:34px}",
-      ".tl-col{position:absolute;top:0;bottom:0;border-left:1px solid #b9bec6}",
-      ".tl-tick{position:absolute;left:-34px;width:30px;text-align:right;font:700 9px 'DM Sans',sans-serif;color:#000;transform:translateY(-5px)}",
-      ".tl-gl{position:absolute;left:0;right:0;border-top:1px solid #dfe3e8}",
-      ".tl-bar{position:absolute;display:flex;justify-content:center;align-items:flex-start;overflow:hidden;font:800 12px 'DM Sans',sans-serif;border:1px solid #000;box-sizing:border-box;cursor:pointer}",
-      ".tl-bar.k{background:#000 !important;color:#fff !important}.tl-bar.s{background:#fff !important;color:#000 !important}.tl-bar span{color:inherit !important}",
-      ".tl-bar span{display:block;padding-top:3px;position:sticky;top:3px}",
-      ".tl-bar.v span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:8.5px;letter-spacing:.02em;white-space:nowrap;padding-top:0;position:static;margin-top:2px}",
-      ".tl-bar.sel{outline:3px solid #bd224b;outline-offset:-3px}",
-      "#cardExpand .tl .tl-bar.k,#cardExpand .tl .tl-bar.k *,#cardExpand .tl .tl-chip.on,#cardExpand .tl .tl-now i{color:#fff !important}",
-      ".tl-now{position:absolute;left:-30px;right:0;border-top:3px solid #000;z-index:5;pointer-events:none}",
-      ".tl-now i{position:absolute;left:0;top:-13px;background:#000;color:#fff;font:800 8px 'Barlow Condensed',sans-serif;letter-spacing:.1em;padding:1px 4px;font-style:normal}",
+      ".tl-ctl label{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#000}",
+      ".tl-ctl input{font:700 15px 'DM Sans',sans-serif;border:2px solid #000;border-radius:12px;background:#fff;color:#000;padding:4px 8px}",
+      ".tl-chip{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;border:2px solid #000;border-radius:12px;background:#fff;color:#000 !important;padding:3px 12px;cursor:pointer}",
+      ".tl-chip.on{background:#000 !important;color:#fff !important}",
+      ".tl-info{border:2.5px solid #000;border-radius:14px;padding:9px 12px;margin:0 0 8px;font:600 13.5px/1.45 'DM Sans',sans-serif;min-height:84px;max-height:150px;overflow:auto;color:#000;background:#fff}",
+      ".tl-info .tt{font:800 13px 'DM Sans',sans-serif;display:block;margin-bottom:2px}",
+      ".tl-head{display:flex;margin-left:38px;border-bottom:1.5px solid #000}",
+      ".tl-head div{flex:1;height:86px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font:800 10.5px Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#000;text-align:center}",
+      ".tl-scroll{height:46vh;min-height:280px;overflow-y:auto;position:relative;-webkit-overflow-scrolling:touch;scrollbar-width:none}",
+      ".tl-body{position:relative;margin-left:38px}",
+      ".tl-tick{position:absolute;left:-38px;width:34px;text-align:right;font:700 10px Arial,sans-serif;color:#000;transform:translateY(-6px)}",
+      ".tl-tick.yr{font-size:11px;font-weight:800}",
+      ".tl-bar{position:absolute;display:flex;justify-content:center;align-items:center;border-radius:9px;box-sizing:border-box;cursor:pointer;font:800 19px 'Fraunces',Georgia,serif;overflow:visible}",
+      ".tl-bar.tall{align-items:flex-start;font-size:24px}",
+      ".tl-bar.nolab span{display:none}",
+      ".tl-bar.n2{box-shadow:inset 0 0 0 2px #000}",
+      ".tl-bar.ev{border-radius:8px;font:800 11px/1.15 Arial,sans-serif}",
+      ".tl-bar span{display:block;white-space:pre-line;text-align:center;line-height:1}",
+      ".tl-bar.tall span{position:sticky;top:var(--stk,120px)}",
+      ".tl-bar.ev span{writing-mode:vertical-rl;transform:rotate(180deg)}",
+      ".tl-bar.out span{position:absolute;bottom:100%;margin-bottom:3px;top:auto;color:#000 !important}",
+      "#cardExpand .tl .tl-bar.wt span{color:#fff !important}",
+      ".tl-bar.sel{outline:3px solid #000;outline-offset:1px}",
+      ".tl-now{position:absolute;left:-38px;right:0;height:3px;background:#0b0b10;z-index:5;pointer-events:none}",
       /* map overlay */
       "#mapOverlay{position:fixed;inset:0;z-index:99999;background:linear-gradient(180deg,#bd224b 0%,#6a0e28 14%,#340513 46%,#4b0a1d 80%,#8b1d3d 100%);display:none;flex-direction:column;isolation:isolate}",
       "#mapOverlay.open{display:flex}",
@@ -261,36 +263,41 @@
     function person() { return people[me.idx]; }
     function build() {
       var p = person(), dob = parseDob(p.dob), num = p.numerology; if (!dob || !num) return;
-      var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), PX = 46, years = 90, total = PX * years, tpx = function (ms) { return Math.max(0, Math.min(total, (ms - birthMs) / MS_YEAR * PX)); };
-      var COLS = ["Year", "Essence", "Pinnacle", "Challenge", "Period", "Saturn", "Jupiter", "Uranus", "Neptune", "Pluto", "N. Node"], KEYS = ["py", "es", "pin", "ch", "per", "saturn", "jupiter", "uranus", "neptune", "pluto", "northnode"];
-      var items = []; // {col, a, b, label, title, text, cls}
-      for (var y = dob.y; y <= dob.y + years; y++) items.push({ col: "py", a: Date.UTC(y, 0, 1), b: Date.UTC(y + 1, 0, 1), label: personalYear(dob, y), title: "Personal Year " + personalYear(dob, y) + " · " + y, text: (NUM_DEFS.personalyear || {})[personalYear(dob, y)] || "" });
+      var NC = { 1: ["#ff9c1a", "#1a1200"], 2: ["#94b2ff", "#1a1200"], 3: ["#fefe8b", "#1a1200"], 4: ["#0b0b10", "#fff"], 5: ["#41a476", "#fff"], 6: ["#ffa3ff", "#1a1200"], 7: ["#a345bf", "#fff"], 8: ["#935734", "#fff"], 9: ["#d10000", "#fff"] };
+      NC[11] = NC[2]; NC[22] = NC[4]; NC[33] = NC[6];
+      var PC = { saturn: ["#14141f", "#fff"], jupiter: ["#d9a400", "#1a1200"], uranus: ["#2b7bff", "#fff"], neptune: ["#d11fb5", "#fff"], pluto: ["#ff1f5a", "#fff"], northnode: ["#2b7bff", "#fff"] };
+      var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), years = 90, endMs = birthMs + years * MS_YEAR, PX = me.zoom ? 264 : 40, total = PX * years;
+      var ypos = function (ms) { return Math.max(0, Math.min(total, (endMs - ms) / MS_YEAR * PX)); };
+      var COLS = ["Personal Year", "Essence", "Pinnacle", "Challenge", "Period", "Saturn", "Jupiter", "Uranus", "Neptune", "Pluto", "North Node"], KEYS = ["py", "es", "pin", "ch", "per", "saturn", "jupiter", "uranus", "neptune", "pluto", "northnode"];
+      var items = [];
+      for (var y = dob.y; y <= dob.y + years; y++) items.push({ col: "py", a: Math.max(Date.UTC(y, 0, 1), birthMs), b: Date.UTC(y + 1, 0, 1), label: personalYear(dob, y), n: personalYear(dob, y), title: "Personal Year " + personalYear(dob, y) + " · " + y, text: (NUM_DEFS.personalyear || {})[personalYear(dob, y)] || "" });
       var es = []; for (var a = 0; a <= years; a++) { var v = essenceAt(p, a); if (v == null) break; var l = es[es.length - 1]; if (l && l.v === v) l.hi = a; else es.push({ v: v, lo: a, hi: a }); }
-      es.forEach(function (e) { items.push({ col: "es", a: birthMs + e.lo * MS_YEAR, b: birthMs + (e.hi + 1) * MS_YEAR, label: e.v, title: "Essence " + e.v + " · ages " + e.lo + " to " + e.hi, text: (NUM_DEFS.essence || {})[e.v] || "" }); });
+      es.forEach(function (e) { items.push({ col: "es", a: birthMs + e.lo * MS_YEAR, b: birthMs + (e.hi + 1) * MS_YEAR, label: e.v, n: e.v, title: "Essence " + e.v + " · ages " + e.lo + " to " + e.hi, text: (NUM_DEFS.essence || {})[e.v] || "" }); });
       var pins = num.pinnacles || {}, chs = num.challengeNumbers || {};
       [1, 2, 3, 4].forEach(function (n) { var pn = pins["pinnacle" + n]; if (!pn) return; var r = rangeAges(pn.ageRange), hiAge = r.hi >= 999 ? years : r.hi, a2 = birthMs + r.lo * MS_YEAR, b2 = birthMs + (hiAge + 1) * MS_YEAR, rng = "ages " + r.lo + (r.hi >= 999 ? " onward" : " to " + r.hi);
-        items.push({ col: "pin", a: a2, b: b2, label: pn.value, title: "Pinnacle " + pn.value + " · " + rng, text: (NUM_DEFS.pinnacle || {})[pn.value] || "" });
-        var cv = chs["challenge" + n]; if (cv != null) items.push({ col: "ch", a: a2, b: b2, label: cv, title: "Challenge " + cv + " · " + rng, text: (NUM_DEFS.challenge || {})[cv] || "" }); });
-      var pers = num.periodCycles || {}; [1, 2, 3].forEach(function (n) { var pe = pers["period" + n]; if (!pe) return; var r = rangeAges(pe.ageRange), hiAge = r.hi >= 999 ? years : r.hi; items.push({ col: "per", a: birthMs + r.lo * MS_YEAR, b: birthMs + (hiAge + 1) * MS_YEAR, label: pe.value, title: "Period " + pe.value + " · ages " + r.lo + (r.hi >= 999 ? " onward" : " to " + r.hi), text: (NUM_DEFS.periodcycle || {})[pe.value] || "" }); });
+        items.push({ col: "pin", a: a2, b: b2, label: pn.value, n: pn.value, title: "Pinnacle " + pn.value + " · " + rng, text: (NUM_DEFS.pinnacle || {})[pn.value] || "" });
+        var cv = chs["challenge" + n]; if (cv != null) items.push({ col: "ch", a: a2, b: b2, label: cv, n: cv, title: "Challenge " + cv + " · " + rng, text: (NUM_DEFS.challenge || {})[cv] || "" }); });
+      var pers = num.periodCycles || {}; [1, 2, 3].forEach(function (n) { var pe = pers["period" + n]; if (!pe) return; var r = rangeAges(pe.ageRange), hiAge = r.hi >= 999 ? years : r.hi; items.push({ col: "per", a: birthMs + r.lo * MS_YEAR, b: birthMs + (hiAge + 1) * MS_YEAR, label: pe.value, n: pe.value, title: "Period " + pe.value + " · ages " + r.lo + (r.hi >= 999 ? " onward" : " to " + r.hi), text: (NUM_DEFS.periodcycle || {})[pe.value] || "" }); });
       (me.events || []).forEach(function (e) { var nm = e.pl === "nn" ? "North Node" : e.pl.charAt(0).toUpperCase() + e.pl.slice(1), asp = e.asp === "Return" ? "return" : e.asp.toLowerCase(), tgt = e.tg === "Own" ? (e.asp === "Return" ? "" : "your own " + nm) : "your " + e.tg;
-        var lab = e.asp === "Return" ? "return" : (e.asp === "Conjunction" ? "conj." : e.asp === "Square" ? "sq." : "opp.") + " " + (e.tg === "Own" ? "own" : e.tg === "Ascendant" ? "Asc" : e.tg);
-        items.push({ col: e.col, a: e.a, b: e.b, label: lab, v: true, title: nm + " " + asp + (tgt ? " " + tgt : "") + " · " + fmtDate(e.a) + " to " + fmtDate(e.b), text: e.text }); });
+        var lab = e.asp === "Return" ? nm + " Return" : nm + " " + e.asp + (e.tg === "Own" ? "" : "\nYour " + e.tg);
+        items.push({ col: e.col, a: e.a, b: e.b, label: lab, ev: true, title: nm + " " + asp + (tgt ? " " + tgt : "") + " · " + fmtDate(e.a) + " to " + fmtDate(e.b), text: e.text }); });
       var colW = 100 / COLS.length, html = '<div class="tl-body" style="height:' + total + 'px">';
-      for (var yy = 0; yy <= years; yy += 1) html += '<div class="tl-gl" style="top:' + yy * PX + 'px"></div><div class="tl-tick" style="top:' + yy * PX + 'px">' + yy + '</div>';
-      KEYS.forEach(function (k, i) { html += '<div class="tl-col" style="left:' + i * colW + '%;width:' + colW + '%"></div>'; });
-      var shades = {}; items.forEach(function (it, ix) { var ci = KEYS.indexOf(it.col); if (ci < 0) return; var top = tpx(it.a), h = Math.max(4, tpx(it.b) - top); shades[it.col] = (shades[it.col] || 0) + 1;
-        html += '<div class="tl-bar ' + (it.v ? "v " : "") + (shades[it.col] % 2 ? "k" : "s") + '" data-i="' + ix + '" style="left:calc(' + ci * colW + '% + 1px);width:calc(' + colW + '% - 2px);top:' + top + 'px;height:' + h + 'px"><span>' + esc(it.label) + '</span></div>'; });
-      var nowY = tpx(me.selDate); html += '<div class="tl-now" id="tlNow" style="top:' + nowY + 'px"><i>' + (me.selIsNow ? "NOW" : "DATE") + '</i></div></div>';
-      me.items = items; me.tpx = tpx; me.birthMs = birthMs;
+      if (me.zoom) { var c0 = new Date(me.selDate), my = c0.getUTCFullYear() * 12 + c0.getUTCMonth(); for (var mm = my - 36; mm <= my + 36; mm++) { var yr = Math.floor(mm / 12), mo = mm % 12, t0 = Date.UTC(yr, mo, 1), t1 = Date.UTC(yr, mo + 1, 1); if (t1 <= birthMs || t0 >= endMs) continue; html += '<div class="tl-tick' + (mo === 0 ? " yr" : "") + '" style="top:' + (ypos((t0 + t1) / 2)) + 'px">' + (mo === 0 ? yr : MONTHS[mo]) + "</div>"; } }
+      else for (var yy = dob.y + 1; yy <= dob.y + years; yy++) html += '<div class="tl-tick yr" style="top:' + ypos(Date.UTC(yy, 0, 1)) + 'px">' + yy + "</div>";
+      items.forEach(function (it, ix) { var ci = KEYS.indexOf(it.col); if (ci < 0) return; var top = ypos(it.b), h = Math.max(5, ypos(it.a) - top - 3), c = it.ev ? PC[it.col] : (NC[it.n] || NC[8]), cls = "tl-bar" + (it.ev ? " ev" : "") + (!it.ev && (it.n === 2 || it.n === 11) ? " n2" : "") + (it.ev && h < 78 ? (me.zoom ? " out" : " nolab") : "") + (h >= 160 ? " tall" : "") + (c[1] === "#fff" && !(it.ev && h < 78) ? " wt" : "");
+        html += '<div class="' + cls + '" data-i="' + ix + '" style="left:calc(' + ci * colW + '% + 2px);width:calc(' + colW + '% - 4px);top:' + top + 'px;height:' + h + 'px;background:' + c[0] + ";color:" + c[1] + '"><span>' + esc(it.label) + "</span></div>"; });
+      var nowY = ypos(me.selDate); html += '<div class="tl-now" id="tlNow" style="top:' + nowY + 'px"></div></div>';
+      me.items = items; me.birthMs = birthMs;
       var head = '<div class="tl-head">' + COLS.map(function (c) { return "<div>" + c + "</div>"; }).join("") + "</div>";
       var chips = people.length > 1 ? people.map(function (q, i) { return '<button class="tl-chip' + (i === me.idx ? " on" : "") + '" data-p="' + i + '">' + esc(q.first) + "</button>"; }).join("") : "";
       var ds = new Date(me.selDate), iso = ds.getUTCFullYear() + "-" + String(ds.getUTCMonth() + 1).padStart(2, "0") + "-" + String(ds.getUTCDate()).padStart(2, "0");
-      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Check a date</label><input type="date" id="tlDate" value="' + iso + '">' + chips + '</div><div class="tl-info" id="tlInfo"></div>' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div>";
+      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Type a date</label><input type="date" id="tlDate" value="' + iso + '">' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div>";
       showActive();
-      var sc = document.getElementById("tlScroll"); var go = function () { sc.scrollTop = Math.max(0, nowY - sc.clientHeight / 2); }; go(); setTimeout(go, 120); setTimeout(go, 450);
+      var sc = document.getElementById("tlScroll"); var go = function () { sc.style.setProperty("--stk", Math.round(sc.clientHeight * 0.42) + "px"); sc.scrollTop = Math.max(0, nowY - sc.clientHeight / 2); }; go(); setTimeout(go, 120); setTimeout(go, 450);
       sc.addEventListener("click", function (e) { var bar = e.target.closest(".tl-bar"); if (!bar) return; var it = me.items[+bar.dataset.i]; [].forEach.call(sc.querySelectorAll(".tl-bar.sel"), function (x) { x.classList.remove("sel"); }); bar.classList.add("sel"); document.getElementById("tlInfo").innerHTML = '<span class="tt">' + esc(it.title) + "</span>" + esc(it.text || "").replace(/\n/g, "<br>"); });
-      document.getElementById("tlDate").onchange = function (e) { var v = e.target.value.split("-"); if (v.length === 3) { me.selDate = Date.UTC(+v[0], +v[1] - 1, +v[2]); me.selIsNow = false; build(); } };
-      [].forEach.call(body.querySelectorAll(".tl-chip"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; loadEvents(); }; });
+      document.getElementById("tlDate").onchange = function (e) { var v = e.target.value.split("-"); if (v.length === 3) { me.selDate = Date.UTC(+v[0], +v[1] - 1, +v[2]); me.selIsNow = false; me.zoom = true; build(); } };
+      var wh = document.getElementById("tlWhole"); if (wh) wh.onclick = function () { me.zoom = false; build(); };
+      [].forEach.call(body.querySelectorAll(".tl-chip[data-p]"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; loadEvents(); }; });
     }
     function showActive() {
       var info = document.getElementById("tlInfo"); if (!info) return; var d = me.selDate, act = me.items.filter(function (it) { return it.a <= d && d < it.b; });
