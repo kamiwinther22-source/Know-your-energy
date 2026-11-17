@@ -1,0 +1,29 @@
+<!doctype html><meta charset=utf-8><title>Jewelry button options</title>
+<style>
+body{margin:0;padding:28px;background:radial-gradient(ellipse at 50% 0,#4a0f1c,#1c0509 80%);color:#ddd;font:14px Arial,sans-serif}
+h2{font:600 15px Arial,sans-serif;letter-spacing:.08em;color:#f0b8e0;margin:34px 0 14px}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.b{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;
+ font:800 15px 'Arial Narrow',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0a0d12;text-shadow:0 0 6px rgba(255,255,255,.9),0 1px 0 #fff}
+.w{width:210px;height:58px}.s{width:140px;height:58px}
+.hex{clip-path:polygon(19px 0,calc(100% - 19px) 0,100% 50%,calc(100% - 19px) 100%,19px 100%,0 50%)}
+.b span{position:relative;z-index:3}
+/* 4-point star glint */
+.st{position:absolute;z-index:4;width:26px;height:26px;transform:translate(-50%,-50%) scale(.25);opacity:0;animation:tw 2.4s ease-in-out infinite;pointer-events:none}
+.st::before,.st::after{content:"";position:absolute;left:0;top:50%;width:100%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#fff 50%,transparent);box-shadow:0 0 6px 1px #fff}
+.st::after{transform:rotate(90deg)}
+.st i{position:absolute;inset:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px 3px #fff}
+@keyframes tw{0%,55%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}70%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}85%{opacity:.5;transform:translate(-50%,-50%) scale(.5) rotate(90deg)}}
+
+
+.E2{background:linear-gradient(135deg,#fff,#8c97a3 40%,#fff 60%,#7f8993)}
+.E2::before{content:"";position:absolute;inset:3px 6px;z-index:-2;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%);background:conic-gradient(from 15deg at 50% 50%,#fff 0 30deg,#9aa5b0 30deg 60deg,#f1f4f7 60deg 90deg,#5f6a76 90deg 120deg,#e2e7ec 120deg 150deg,#a4aeb9 150deg 180deg,#fff 180deg 210deg,#8893a0 210deg 240deg,#f1f4f7 240deg 270deg,#68737f 270deg 300deg,#e2e7ec 300deg 330deg,#aab4bf 330deg 360deg)}
+.E2::after{content:"";position:absolute;inset:3px 6px;z-index:-1;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%);background:radial-gradient(ellipse 52% 75% at 50% 50%,#fff 0,rgba(255,255,255,.93) 62%,rgba(255,255,255,0) 100%)}
+/* 1: only change — the white blob is removed (facets run all the way through) */
+.V1::after{display:none}
+/* 2: only change — each facet now has light-to-dark inside it (same 12 facets, same blob) */
+.V2::before{background:conic-gradient(from 15deg at 50% 50%,#fff 0deg,#c3ccd5 29.5deg,#9aa5b0 30deg,#f1f4f7 59.5deg,#f1f4f7 60deg,#7d8995 89.5deg,#5f6a76 90deg,#e2e7ec 119.5deg,#e2e7ec 120deg,#a4aeb9 149.5deg,#a4aeb9 150deg,#fff 179.5deg,#fff 180deg,#b0bac4 209.5deg,#8893a0 210deg,#f1f4f7 239.5deg,#f1f4f7 240deg,#68737f 269.5deg,#68737f 270deg,#e2e7ec 299.5deg,#e2e7ec 300deg,#aab4bf 329.5deg,#aab4bf 330deg,#fff 360deg)}
+/* 3: only change — 6 facets instead of 12 (same blob) */
+.V3::before{background:conic-gradient(from 0deg at 50% 50%,#fff 0 60deg,#9aa5b0 60deg 120deg,#eef1f5 120deg 180deg,#5f6a76 180deg 240deg,#e2e7ec 240deg 300deg,#a4aeb9 300deg 360deg)}
+</style>
+<h2>E2 EXACTLY AS IT WAS (reference)</h2><div class=row><button class="b E2  w hex"><span>Reveal Chart</span></button><button class="b E2  s hex"><span>Pass</span></button></div><h2>CHANGE 1 ONLY: white blob removed</h2><div class=row><button class="b E2 V1 w hex"><span>Reveal Chart</span></button><button class="b E2 V1 s hex"><span>Pass</span></button></div><h2>CHANGE 2 ONLY: shading inside each facet</h2><div class=row><button class="b E2 V2 w hex"><span>Reveal Chart</span></button><button class="b E2 V2 s hex"><span>Pass</span></button></div><h2>CHANGE 3 ONLY: 6 facets instead of 12</h2><div class=row><button class="b E2 V3 w hex"><span>Reveal Chart</span></button><button class="b E2 V3 s hex"><span>Pass</span></button></div>
