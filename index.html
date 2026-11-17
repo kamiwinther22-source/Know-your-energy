@@ -950,6 +950,11 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
 .fan-actions>.side-btn::before{content:"";position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
 .fan-actions>.side-btn svg{display:none}.fan-actions>.side-btn span{font:700 11.5px/1.15 'Fraunces',Georgia,serif;color:#0b0b10 !important}
 .fan-reading{flex:0 0 150px;position:relative;filter:drop-shadow(0 8px 8px rgba(0,0,0,.5))}
+/* The row of two buttons and the reading card always fits the screen and stays centered. */
+.fan-actions{box-sizing:border-box;width:100%;max-width:420px;margin:0 auto;padding:6px 12px 4px}
+.fan-actions>.side-btn{flex:1 1 0 !important;min-width:0;box-sizing:border-box;padding:0 4px !important}
+.fan-reading{flex:0 1 clamp(112px,34vw,150px);min-width:0}
+.fan-actions>.side-btn span{font-size:clamp(8.5px,2.9vw,11.5px) !important;letter-spacing:0}
 .fan-reading>.panel-auto,.fan-reading>.panel-error{height:auto !important;min-height:150px !important;padding:16px !important;--card-text:#0b0b10;--card-dim:#0b0b10;--card-mid:#0b0b10;--card-accent:#8c1034}
 .fan-reading .dp *{color:#0b0b10 !important;-webkit-text-fill-color:#0b0b10 !important;background:transparent !important;opacity:1 !important;text-shadow:none !important;filter:none !important}
 .fan-reading .dp *::before,.fan-reading .dp *::after{display:none !important}
