@@ -140,11 +140,8 @@
       var W = 1440, H = 720, eq = document.createElement("canvas"); eq.width = W; eq.height = H;
       var g = eq.getContext("2d"), X = function (lo) { return (lo + 180) / 360 * W; }, Y = function (la) { return (90 - la) / 180 * H; };
       g.fillStyle = "#1b0712"; g.fillRect(0, 0, W, H);
-      g.strokeStyle = "rgba(255,255,255,.22)"; g.lineWidth = 1.6;
-      for (var lo = -180; lo <= 180; lo += 30) { g.beginPath(); g.moveTo(X(lo), 0); g.lineTo(X(lo), H); g.stroke(); }
-      for (var la = -60; la <= 60; la += 30) { g.beginPath(); g.moveTo(0, Y(la)); g.lineTo(W, Y(la)); g.stroke(); }
       g.fillStyle = "#e9ecf1"; g.strokeStyle = "#ffffff"; g.lineWidth = 1.6;
-      rings.forEach(function (r) { var x = r[0], y = r[1]; g.beginPath(); g.moveTo(X(x / 10), Y(y / 10)); for (var i = 2; i < r.length; i += 2) { x += r[i]; y += r[i + 1]; g.lineTo(X(x / 10), Y(y / 10)); } g.closePath(); g.fill(); g.stroke(); });
+      rings.forEach(function (r) { var x = r[0], y = r[1]; if (y < -600) return; var ex0 = r[0], ey0 = r[1], mnx = ex0, mxx = ex0, mny = ey0, mxy = ey0; for (var q = 2; q < r.length; q += 2) { ex0 += r[q]; ey0 += r[q + 1]; if (ex0 < mnx) mnx = ex0; if (ex0 > mxx) mxx = ex0; if (ey0 < mny) mny = ey0; if (ey0 > mxy) mxy = ey0; } if (mxx - mnx > 3000 && mxy - mny < 60) return; g.beginPath(); g.moveTo(X(x / 10), Y(y / 10)); for (var i = 2; i < r.length; i += 2) { x += r[i]; y += r[i + 1]; g.lineTo(X(x / 10), Y(y / 10)); } g.closePath(); g.fill(); g.stroke(); });
       if (birth) { g.fillStyle = "#ffffff"; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 9, 0, 7); g.fill(); g.strokeStyle = "#ffffff"; g.lineWidth = 3; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 18, 0, 7); g.stroke(); }
       var src = g.getImageData(0, 0, W, H).data, S = canvas.width, c = canvas.getContext("2d"), out = c.createImageData(S, S), od = out.data;
       var lam0 = (birth ? birth.lng : -96) * Math.PI / 180, phi0 = 20 * Math.PI / 180, R = S / 2 - 6, sp = Math.sin(phi0), cp = Math.cos(phi0);
