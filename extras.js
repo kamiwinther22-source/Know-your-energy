@@ -140,14 +140,6 @@
       for (var la = -60; la <= 60; la += 30) { g.beginPath(); g.moveTo(0, Y(la)); g.lineTo(W, Y(la)); g.stroke(); }
       g.fillStyle = "#e9ecf1"; g.strokeStyle = "#ffffff"; g.lineWidth = 1.6;
       rings.forEach(function (r) { var x = r[0], y = r[1]; g.beginPath(); g.moveTo(X(x / 10), Y(y / 10)); for (var i = 2; i < r.length; i += 2) { x += r[i]; y += r[i + 1]; g.lineTo(X(x / 10), Y(y / 10)); } g.closePath(); g.fill(); g.stroke(); });
-      var L = allLines(acg);
-      PLANET_NAMES.forEach(function (k) {
-        var l = L[k]; if (!l) return; g.lineWidth = 5;
-        g.strokeStyle = PLANET_COLOR[k];
-        [["MC", [], l.MC], ["IC", [16, 12], l.IC]].forEach(function (a) { g.setLineDash(a[1]); [-360, 0, 360].forEach(function (off) { g.beginPath(); g.moveTo(X(a[2] + off), 0); g.lineTo(X(a[2] + off), H); g.stroke(); }); });
-        [["ASC", [], l.ASC], ["DSC", [16, 12], l.DSC]].forEach(function (a) { g.setLineDash(a[1]); splitWrap(a[2]).forEach(function (s) { g.beginPath(); s.forEach(function (p, i) { i ? g.lineTo(X(p[1]), Y(p[0])) : g.moveTo(X(p[1]), Y(p[0])); }); g.stroke(); }); });
-        g.setLineDash([]);
-      });
       if (birth) { g.fillStyle = "#ffffff"; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 9, 0, 7); g.fill(); g.strokeStyle = "#ffffff"; g.lineWidth = 3; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 18, 0, 7); g.stroke(); }
       var src = g.getImageData(0, 0, W, H).data, S = canvas.width, c = canvas.getContext("2d"), out = c.createImageData(S, S), od = out.data;
       var lam0 = (birth ? birth.lng : -96) * Math.PI / 180, phi0 = 20 * Math.PI / 180, R = S / 2 - 6, sp = Math.sin(phi0), cp = Math.cos(phi0);
