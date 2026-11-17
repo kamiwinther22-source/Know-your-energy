@@ -55,10 +55,10 @@
 
 
       ".xpass .cols{display:flex;gap:8px;padding:0 8px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.55))}",
-      ".xpass .p{flex:1 1 0;min-width:0;position:relative;isolation:isolate;border:0;cursor:pointer;height:92px;padding:0 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;font-family:inherit;-webkit-tap-highlight-color:transparent;background:" + SILVER + ";clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}",
-      ".xpass .p::before{content:'';position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% calc(100% - 9px),calc(100% - 9px) 100%,9px 100%,0 calc(100% - 9px),0 9px)}",
-      ".xpass .p .n{font:900 30px/1 'Fraunces',Georgia,serif;color:#000}",
-      ".xpass .p .l{font:800 13px 'Barlow Condensed',sans-serif;letter-spacing:.12em;margin-top:5px;text-transform:uppercase;color:#000}",
+      ".xpass .p{flex:1 1 0;min-width:0;position:relative;isolation:isolate;border:0;cursor:pointer;height:64px;padding:0 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;font-family:inherit;-webkit-tap-highlight-color:transparent;background:" + SILVER + ";clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}",
+      ".xpass .p::before{content:'';position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}",
+      ".xpass .p .n{font:900 22px/1 'Fraunces',Georgia,serif;color:#000}",
+      ".xpass .p .l{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;margin-top:3px;text-transform:uppercase;color:#000}",
       ".xpass .p .d{font:700 11px 'Barlow Condensed',sans-serif;letter-spacing:.12em;margin-top:1px;color:#000}",
       ".xpass .note{text-align:center;font:700 13px/1.4 'Fraunces',serif;min-height:18px;margin:10px 8px 0}",
       ".xpass .pol{text-align:center;font:600 11.5px/1.5 'Fraunces',serif;margin:6px 8px 0}",
@@ -265,7 +265,7 @@
       var p = person(), dob = parseDob(p.dob), num = p.numerology; if (!dob || !num) return;
       var NC = { 1: ["#ff9c1a", "#1a1200"], 2: ["#94b2ff", "#1a1200"], 3: ["#fefe8b", "#1a1200"], 4: ["#0b0b10", "#fff"], 5: ["#41a476", "#fff"], 6: ["#ffa3ff", "#1a1200"], 7: ["#a345bf", "#fff"], 8: ["#935734", "#fff"], 9: ["#d10000", "#fff"] };
       NC[11] = NC[2]; NC[22] = NC[4]; NC[33] = NC[6];
-      var PC = { saturn: ["#14141f", "#fff"], jupiter: ["#d9a400", "#1a1200"], uranus: ["#2b7bff", "#fff"], neptune: ["#d11fb5", "#fff"], pluto: ["#ff1f5a", "#fff"], northnode: ["#2b7bff", "#fff"] };
+      var PC = { saturn: ["#14141f", "#fff"], jupiter: ["#d9a400", "#1a1200"], uranus: ["#2b7bff", "#fff"], neptune: ["#d11fb5", "#fff"], pluto: ["#ff1f5a", "#fff"], northnode: ["#00b8c4", "#0b0b10"] };
       var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), years = 90, endMs = birthMs + years * MS_YEAR, PX = me.zoom ? 264 : 40, total = PX * years;
       var ypos = function (ms) { return Math.max(0, Math.min(total, (endMs - ms) / MS_YEAR * PX)); };
       var COLS = ["Personal Year", "Essence", "Pinnacle", "Challenge", "Period", "Saturn", "Jupiter", "Uranus", "Neptune", "Pluto", "North Node"], KEYS = ["py", "es", "pin", "ch", "per", "saturn", "jupiter", "uranus", "neptune", "pluto", "northnode"];
@@ -349,7 +349,7 @@
       g.appendChild(links);
       var ps = document.createElement("div"); ps.className = "xpass";
       var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
-      ps.innerHTML = '<div class="h">Your energy, every day</div><div class="s">Read anyone, compare any two people, and check in on your day and your friends\' days.</div><div class="cols">' + P.map(function (x, i) { return '<button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div><div class="l">' + x[1] + '</div><div class="d">' + x[2].toUpperCase() + "</div></button>"; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">One payment per pass. Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
+      ps.innerHTML = '<div class="h">Your energy, every day</div><div class="s">Read anyone, compare any two people, and check in on your day and your friends\' days.</div><div class="cols">' + P.map(function (x, i) { return '<button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div><div class="l">' + x[1] + '</div></button>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">One payment per pass. Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
       g.appendChild(ps);
       [].forEach.call(ps.querySelectorAll(".p"), function (b) { b.onclick = function () { var n = document.getElementById("passNote"); n.textContent = "Passes are not on sale yet."; }; });
     } catch (e) { if (window.console) console.error("extras", e); }
