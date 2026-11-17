@@ -285,6 +285,7 @@ function getAstrologyLocal(dob, timeStr, ampm, city, state, country, tz) {
     result.midheaven = null;
     result.houses = [];
     result.aspects = result.aspects.filter(a => a.point1 !== "Ascendant" && a.point2 !== "Ascendant" && a.point1 !== "Midheaven" && a.point2 !== "Midheaven");
+    result.acg = null;   // the map needs the exact birth time and place
     result.timeUnknown = !hasRealTime;
     result.locationUnknown = !hasRealLocation;
   }
@@ -656,6 +657,24 @@ async function checkPassRecord(env, email) {
 
 const USAGE_KV_KEY = "usage:totals";
 
+// Countries whose visitors are turned away (two-letter codes, e.g. ["XX"]). Empty means no country is blocked.
+const BLOCKED_COUNTRIES = [];
+
+// Most the free readings may cost per day (US dollars), and a conservative estimate of what one costs. When the day's free readings reach the cap,
+// the next free reading waits until tomorrow. Pass holders are never held back by it. Override with the DAILY_FREE_CAP_USD variable.
+const DAILY_FREE_CAP_USD = 10;
+const FREE_READING_COST_USD = 0.15;
+const dayKey = () => `freecount:${new Date().toISOString().slice(0, 10)}`;
+async function freeCapReached(env) {
+  const cap = Number(env.DAILY_FREE_CAP_USD) > 0 ? Number(env.DAILY_FREE_CAP_USD) : DAILY_FREE_CAP_USD;
+  const n = Number(await env.PASSES.get(dayKey())) || 0;
+  return n * FREE_READING_COST_USD >= cap;
+}
+async function countFreeReading(env) {
+  const n = Number(await env.PASSES.get(dayKey())) || 0;
+  await env.PASSES.put(dayKey(), String(n + 1), { expirationTtl: 3 * 86400 });
+}
+
 const USAGE_LOG_TTL_SECONDS = 90 * 24 * 60 * 60;
 
 function bumpUsageBucket(bucket, usage) {
@@ -995,6 +1014,9 @@ export default {
       });
     }
     const url = new URL(request.url);
+    if (BLOCKED_COUNTRIES.length && BLOCKED_COUNTRIES.includes(request.cf?.country)) {
+      return jsonResponse({ error: "This service is not available in your region." }, 403);
+    }
     if (url.pathname === "/robots.txt") {
       return new Response("User-agent: *\nDisallow: /\n", {
         headers: {
@@ -1244,6 +1266,13 @@ export default {
           code: "reading_in_progress"
         }, 429);
       }
+      if (await freeCapReached(env)) {
+        return jsonResponse({
+          error: "Today's free readings are all taken. Please come back tomorrow.",
+          code: "daily_cap"
+        }, 429);
+      }
+      await countFreeReading(env);
       claimKey = claimKeyFor(passEmail);
       await env.PASSES.put(claimKey, String(Date.now()), {
         expirationTtl: 600

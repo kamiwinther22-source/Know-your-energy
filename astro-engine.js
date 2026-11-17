@@ -106,6 +106,22 @@ export function computeAstrology(input) {
     };
   });
 
+  // Data for the astrocartography map: each planet's apparent right ascension and declination, and Greenwich sidereal time at the birth moment.
+  // The page draws the lines from this, so nothing heavy is sent.
+  let acg = null;
+  try {
+    const jd = origin.julianDate, T = (jd - 2451545.0) / 36525;
+    const gmst = (((280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T - T * T * T / 38710000) % 360) + 360) % 360;
+    const bodies = {};
+    for (const key of PLANET_KEYS) {
+      const r = horoscope.Ephemeris?.Results?.find((x) => x.key === key)?.position?.apparent;
+      if (r && typeof r.dRA === "number" && typeof r.dDec === "number") {
+        bodies[key] = { ra: Math.round(r.dRA * 180 / Math.PI * 1000) / 1000, dec: Math.round(r.dDec * 180 / Math.PI * 1000) / 1000 };
+      }
+    }
+    if (Object.keys(bodies).length === PLANET_KEYS.length) acg = { gmst: Math.round(gmst * 1000) / 1000, bodies };
+  } catch (_) {}
+
   const aspects = skipAspects ? [] : (horoscope.Aspects?.all || []).map((a) => ({
     point1: a?.point1Label ?? a?.point1Key ?? null,
     point2: a?.point2Label ?? a?.point2Key ?? null,
@@ -132,5 +148,6 @@ export function computeAstrology(input) {
     lilith,
     houses,
     aspects,
+    acg,
   };
 }
