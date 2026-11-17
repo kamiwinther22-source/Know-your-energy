@@ -174,9 +174,19 @@ const MAJOR_CITIES = [
 
 let lowerData = null;
 
+// The lowercase copy of the city list is searched, and the positions found are then used to read the original list, so both must be exactly
+// the same length. A plain toLowerCase() makes some characters longer (for example a capital dotted I becomes two characters), which shifted every
+// position after the first such name and made searches read the wrong cities. Here a character is only lowercased if it stays one character long.
+function buildLowerData() {
+  return "\n" + CITIES_DATA.replace(/[A-Z]|[^\x00-\x7f]/g, (ch) => {
+    const l = ch.toLowerCase();
+    return l.length === ch.length ? l : ch;
+  });
+}
+
 function datasetMatches(q, cc) {
   if (!CITIES_DATA || CITIES_DATA.length === 0) return [];
-  if (lowerData === null) lowerData = "\n" + CITIES_DATA.toLowerCase();
+  if (lowerData === null) lowerData = buildLowerData();
   const ccl = cc.toLowerCase();
   const starts = new Set();
   let i = lowerData.indexOf(`\n${q}|`);
@@ -256,7 +266,7 @@ const STATE_NAME_BY_CODE = Object.fromEntries(Object.entries(US_STATE_CODES).map
 
 export function searchCities(rawQuery, limit = 7) {
   if (!CITIES_DATA || CITIES_DATA.length === 0) return [];
-  if (lowerData === null) lowerData = "\n" + CITIES_DATA.toLowerCase();
+  if (lowerData === null) lowerData = buildLowerData();
   const text = (rawQuery || "").toLowerCase().replace(/\s+/g, " ").trim();
   if (text.length < 2) return [];
   const comma = text.indexOf(",");
