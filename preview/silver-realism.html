@@ -1,0 +1,30 @@
+<!doctype html><meta charset=utf-8><title>Jewelry button options</title>
+<style>
+body{margin:0;padding:28px;background:radial-gradient(ellipse at 50% 0,#4a0f1c,#1c0509 80%);color:#ddd;font:14px Arial,sans-serif}
+h2{font:600 15px Arial,sans-serif;letter-spacing:.08em;color:#f0b8e0;margin:34px 0 14px}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.b{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;
+ font:800 15px 'Arial Narrow',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0a0d12;text-shadow:0 0 6px rgba(255,255,255,.9),0 1px 0 #fff}
+.w{width:210px;height:58px}.s{width:140px;height:58px}
+.hex{clip-path:polygon(19px 0,calc(100% - 19px) 0,100% 50%,calc(100% - 19px) 100%,19px 100%,0 50%)}
+.b span{position:relative;z-index:3}
+/* 4-point star glint */
+.st{position:absolute;z-index:4;width:26px;height:26px;transform:translate(-50%,-50%) scale(.25);opacity:0;animation:tw 2.4s ease-in-out infinite;pointer-events:none}
+.st::before,.st::after{content:"";position:absolute;left:0;top:50%;width:100%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#fff 50%,transparent);box-shadow:0 0 6px 1px #fff}
+.st::after{transform:rotate(90deg)}
+.st i{position:absolute;inset:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px 3px #fff}
+@keyframes tw{0%,55%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}70%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}85%{opacity:.5;transform:translate(-50%,-50%) scale(.5) rotate(90deg)}}
+
+
+.M{background:linear-gradient(160deg,#f3f5f7 0,#8b929a 30%,#e4e8eb 52%,#5d646c 78%,#c9cfd5 100%)}
+.M::before,.M::after{content:"";position:absolute;inset:3px 6px;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%)}
+.M::before{z-index:-2}
+.M::after{z-index:-1;background:radial-gradient(ellipse 36% 60% at 50% 50%,rgba(238,241,244,.8) 0,rgba(238,241,244,.45) 65%,rgba(238,241,244,0) 100%);box-shadow:inset 0 2px 3px rgba(255,255,255,.7),inset 0 -3px 4px rgba(0,0,0,.35)}
+/* X1: realistic mid-grey silver, fine grain, crisp facets */
+.X1::before{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  1.4 0 0 0 -.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),conic-gradient(from 0deg at 50% 50%,#e8ebee 0deg 58.5deg,#8d949c 61.5deg 118.5deg,#d3d8dc 121.5deg 178.5deg,#4f565e 181.5deg 238.5deg,#dde1e5 241.5deg 298.5deg,#9ba2aa 301.5deg 358.5deg);background-blend-mode:overlay,normal}
+/* X2: X1 plus tiny bright glints scattered in the metal */
+.X2::before{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='s'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' seed='9'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 14 -10.2'/></filter><rect width='100%' height='100%' filter='url(%23s)'/></svg>"),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  1.4 0 0 0 -.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),conic-gradient(from 0deg at 50% 50%,#e8ebee 0deg 58.5deg,#8d949c 61.5deg 118.5deg,#d3d8dc 121.5deg 178.5deg,#4f565e 181.5deg 238.5deg,#dde1e5 241.5deg 298.5deg,#9ba2aa 301.5deg 358.5deg);background-blend-mode:normal,overlay,normal}
+/* X3: X2 with the facet edges softened a little (between crisp and blurry) */
+.X3::before{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='s'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' seed='9'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 14 -10.2'/></filter><rect width='100%' height='100%' filter='url(%23s)'/></svg>"),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  1.4 0 0 0 -.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),conic-gradient(from 0deg at 50% 50%,#e8ebee 0deg 53deg,#8d949c 67deg 113deg,#d3d8dc 127deg 173deg,#4f565e 187deg 233deg,#dde1e5 247deg 293deg,#9ba2aa 307deg 353deg);background-blend-mode:normal,overlay,normal}
+</style>
+<h2>X1: real mid-grey silver + fine metal grain, crisp facets</h2><div class=row><button class="b M X1 w hex"><span>Reveal Chart</span></button><button class="b M X1 s hex"><span>Pass</span></button></div><h2>X2: X1 + tiny glints scattered in the metal</h2><div class=row><button class="b M X2 w hex"><span>Reveal Chart</span></button><button class="b M X2 s hex"><span>Pass</span></button></div><h2>X3: X2 with facet edges softened slightly</h2><div class=row><button class="b M X3 w hex"><span>Reveal Chart</span></button><button class="b M X3 s hex"><span>Pass</span></button></div>
