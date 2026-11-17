@@ -1,0 +1,54 @@
+<!doctype html><meta charset=utf-8><title>Gem-cut buttons</title>
+<style>
+body{margin:0;padding:28px;background:radial-gradient(ellipse at 50% 0,#4a0f1c,#1c0509 80%);color:#ddd;font:14px Arial,sans-serif}
+h2{font:600 15px Arial,sans-serif;letter-spacing:.08em;color:#f0b8e0;margin:34px 0 14px}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.b{position:relative;display:block;border:0;padding:0;background:none;cursor:pointer}
+.b svg{position:absolute;inset:0;display:block;overflow:visible}
+.b span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 15px 'Arial Narrow',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0a0d12;z-index:2}
+.w{width:210px;height:58px}.s{width:140px;height:58px}
+.st{position:absolute;z-index:4;width:28px;height:28px;transform:translate(-50%,-50%);animation:tw 2.4s ease-in-out infinite;pointer-events:none}
+.st::before,.st::after{content:"";position:absolute;left:0;top:50%;width:100%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#fff 50%,transparent);box-shadow:0 0 6px 1px #fff}
+.st::after{transform:rotate(90deg)}
+.st i{position:absolute;inset:10px;border-radius:50%;background:#fff;box-shadow:0 0 8px 3px #fff}
+@keyframes tw{0%,55%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2)}70%{opacity:1;transform:translate(-50%,-50%) scale(1)}85%{opacity:.5;transform:translate(-50%,-50%) scale(.5)}}
+</style>
+<h2>G — CUT STONE: six facets around a flat table, each lit from a different side, bright edge lines</h2>
+<div class=row id=g></div>
+<h2>H — CUT STONE, BRILLIANT: same, each facet split into a light and a dark half so it flashes</h2>
+<div class=row id=h></div>
+<script>
+const SH={ // [light,dark] per facet: top, upper-right, lower-right, bottom, lower-left, upper-left
+ g:[['#ffffff','#e1e6ec'],['#f3f6f9','#a9b3be'],['#8f9aa6','#5c6773'],['#7a8591','#b2bcc6'],['#cdd4dc','#8893a0'],['#ffffff','#e8ecf0']]};
+let uid=0;
+function gem(el,w,h,label,mode,stars){
+  const id='u'+(uid++),k=20,d=11;
+  const O=[[19,0],[w-19,0],[w,h/2],[w-19,h],[19,h],[0,h/2]];
+  const T=[[19+k,d],[w-19-k,d],[w-d-3,h/2],[w-19-k,h-d],[19+k,h-d],[d+3,h/2]];
+  const pt=a=>a.map(p=>p.join(',')).join(' ');
+  let defs='',body='';
+  // vertical/horizontal light directions per facet
+  const dirs=[[0,0,0,1],[0,0,1,1],[0,0,1,0],[0,1,0,0],[1,0,0,0],[1,0,0,1]];
+  for(let i=0;i<6;i++){
+    const j=(i+1)%6,[a,b]=SH.g[i];
+    defs+=`<linearGradient id='${id}f${i}' x1='0' y1='0' x2='${i==0||i==3?0:1}' y2='${i==0?1:(i==3?-1:1)}'><stop offset='0' stop-color='${a}'/><stop offset='1' stop-color='${b}'/></linearGradient>`;
+    if(mode=='g'){
+      body+=`<polygon points="${pt([O[i],O[j],T[j],T[i]])}" fill="url(#${id}f${i})" stroke="#fff" stroke-opacity=".9" stroke-width="1" stroke-linejoin="round"/>`;
+    }else{
+      // split quad along diagonal Oi-Tj: one half light, one half dark
+      body+=`<polygon points="${pt([O[i],O[j],T[j]])}" fill="${b}" stroke="#fff" stroke-opacity=".9" stroke-width="1" stroke-linejoin="round"/>`;
+      body+=`<polygon points="${pt([O[i],T[j],T[i]])}" fill="${a}" stroke="#fff" stroke-opacity=".9" stroke-width="1" stroke-linejoin="round"/>`;
+    }
+  }
+  defs+=`<linearGradient id='${id}t' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#ffffff'/><stop offset='.55' stop-color='#e6eaee'/><stop offset='1' stop-color='#c3cbd4'/></linearGradient>`;
+  body+=`<polygon points="${pt(T)}" fill="url(#${id}t)" stroke="#fff" stroke-width="1"/>`;
+  el.innerHTML=`<svg width=${w} height=${h} viewBox="0 0 ${w} ${h}">${'<defs>'+defs+'</defs>'}<polygon points="${pt(O)}" fill="#fff"/>${body}<polygon points="${pt(O)}" fill="none" stroke="#6b7682" stroke-opacity=".55" stroke-width="1"/></svg><span>${label}</span>`+
+   stars.map((s,n)=>`<b class=st style="left:${s[0]}%;top:${s[1]}%;animation-delay:${s[2]}s"><i></i></b>`).join('');
+}
+for(const [id,mode] of [['g','g'],['h','h']]){
+  const row=document.getElementById(id);
+  for(const [cls,w,label,st] of [['w',210,'Reveal Chart',[[9,50,.3],[84,14,1.4]]],['s',140,'Pass',[[88,50,.9]]],['w',210,'Run / Save',[[14,16,.2],[90,50,1.2]]]]){
+    const b=document.createElement('button');b.className='b '+cls;row.appendChild(b);gem(b,w,58,label,mode,st);
+  }
+}
+</script>
