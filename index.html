@@ -3351,7 +3351,7 @@ function render(p1, p2, r, reportErr, reportUsedFallback, pending, fallbackReaso
   document.getElementById("mainGrid").innerHTML = h;
   arrangeFan(p1, p2);
   const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
-  document.getElementById("bottomBtns").innerHTML = (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print Reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print Reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on this device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="downloadReadingFile(false)">Download my reading</button><button type="button" class="util-link" id="forgetBtn" onclick="forgetMyDetails()">Forget my details</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div>';
+  document.getElementById("bottomBtns").innerHTML = (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print Reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print Reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on this device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="downloadReadingFile(false)">Download my reading</button><button type="button" class="util-link" id="forgetBtn" onclick="forgetMyDetails()">Forget my details</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div><p class="tiny-contact">Questions: <a href="mailto:Know-your-energy@proton.me">Know-your-energy@proton.me</a></p>';
   stopLoadingTimer();
   document.getElementById("loading").style.display = "none";
   document.getElementById("resultsWrap").style.display = "block";
@@ -4217,5 +4217,7 @@ document.addEventListener("click", e => {
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 <script type="module" src="orrery3d.js"></script>
 <script type="module">if(document.documentElement.classList.contains("obsidian"))import("./obsidian.js");</script>
+<div class="site-foot">&copy; 2026 Know Your Energy &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></div>
+<style>.site-foot{text-align:center;font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;padding:18px 12px 26px}.site-foot a{color:#fff;font-weight:500}.tiny-contact{font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;text-align:center;margin:6px 0 0}.tiny-contact a{color:#fff}</style>
 </body>
 </html>
