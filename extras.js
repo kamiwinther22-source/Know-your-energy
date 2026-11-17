@@ -32,18 +32,23 @@
     if (document.getElementById("extrasCss")) return;
     var s = document.createElement("style"); s.id = "extrasCss";
     s.textContent = [
-      ".xrow{display:flex;gap:18px;justify-content:center;align-items:flex-start;margin:22px auto 0;max-width:420px}",
-      ".xcard{position:relative;width:150px;height:100px;margin-top:22px;cursor:pointer;filter:drop-shadow(0 8px 8px rgba(0,0,0,.5));-webkit-tap-highlight-color:transparent}",
+      ".xacts{align-items:flex-start !important;gap:6px !important}",
+      ".xacts>.fan-reading,.xacts>.xglobe,.xacts>.xtlwrap{flex:1 1 0 !important;min-width:0;max-width:150px}",
+      
+      ".xlinks{display:flex;gap:26px;justify-content:center;margin:18px 0 0;flex-wrap:wrap}",
+      ".xlinks a{color:#fff;font:700 14px 'Fraunces',Georgia,serif;text-decoration:underline;cursor:pointer}",
+      ".xcard .nm{font:400 clamp(17px,5vw,22px)/1 'Alex Brush',cursive;color:#000;margin-top:6px;overflow-wrap:anywhere}",
+      ".xcard{position:relative;width:100%;height:230px;cursor:pointer;filter:drop-shadow(0 8px 8px rgba(0,0,0,.5));-webkit-tap-highlight-color:transparent}",
       ".xcard>i{position:absolute;inset:0;background:" + SILVER + ";clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px)}",
       ".xcard>b{position:absolute;inset:9px;background:#fff;color:#000;font-weight:400;padding:8px 8px 6px;text-align:center;clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px)}",
       ".xcard .cap{font:800 10px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-align:left;margin-left:4px;color:#000}",
       ".xcard .rl{border-top:2px solid #000;margin:4px 0 3px}",
-      ".xcard .sc{font:400 30px/1.1 'Alex Brush',cursive;color:#000}",
+      ".xcard .sc{font:400 clamp(22px,7vw,30px)/1.1 'Alex Brush',cursive;color:#000;white-space:nowrap}",
       ".xcard .ln{font:800 10.5px 'Barlow Condensed',sans-serif;letter-spacing:.12em;color:#000}",
-      ".xglobe{width:150px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}",
-      ".xglobe canvas{display:block;margin:0 auto;width:150px;height:150px;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 8px 8px rgba(0,0,0,.5))}",
+      ".xglobe{text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}",
+      ".xglobe canvas{display:block;margin:0 auto;width:100%;max-width:150px;aspect-ratio:1;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 8px 8px rgba(0,0,0,.5))}",
       ".xglobe .gl{font:400 30px/1 'Alex Brush',cursive;color:#fff;margin-top:6px}",
-      ".xcap{max-width:300px;margin:8px auto 0;text-align:center;font:500 12px/1.4 'DM Sans',sans-serif;color:#fff}",
+      ".xcap{margin:4px auto 0;text-align:center;font:500 11.5px/1.35 'DM Sans',sans-serif;color:#fff}",
       ".xpass{max-width:390px;margin:28px auto 0;font-family:'Fraunces',Georgia,serif;color:#fff}",
       ".xpass .h{text-align:center;font:400 36px/1 'Alex Brush',cursive;margin-bottom:6px}",
       ".xpass .s{text-align:center;font:600 13px/1.4 'Fraunces',serif;margin:0 6px 18px}",
@@ -311,16 +316,28 @@
     try {
       addStyles();
       var g = document.getElementById("mainGrid"); if (!g) return;
-      [].forEach.call(g.querySelectorAll(".xrow,.xcap,.xpass"), function (x) { x.remove(); });
+      [].forEach.call(g.querySelectorAll(".xlinks,.xpass"), function (x) { x.remove(); });
       var people = peopleOf(p1, p2), withMap = people.filter(function (p) { return p.acg && p.birth; }), now = new Date(), nowLab = MONTHS[now.getMonth()] + " " + now.getDate();
-      var row = document.createElement("div"); row.className = "xrow";
-      row.innerHTML = frameCard("xtl", '<div class="cap">TIMELINE</div><div class="rl"></div><div class="sc">' + nowLab + '</div><div class="rl"></div>');
-      var gl = null;
-      if (withMap.length) { gl = document.createElement("div"); gl.className = "xglobe"; gl.setAttribute("role", "button"); gl.innerHTML = '<canvas width="300" height="300"></canvas><div class="gl">Globe</div>'; row.insertBefore(gl, row.firstChild); }
-      g.appendChild(row);
-      row.querySelector(".xtl").onclick = function () { openTimeline(people); };
-      var cap = null;
-      if (gl) { cap = document.createElement("div"); cap.className = "xcap"; cap.textContent = "A map of the world drawn from the moment you were born. It shows where on Earth each planet's energy is strongest for you."; g.appendChild(cap); gl.onclick = function () { openMap(withMap); }; drawGlobe(gl.querySelector("canvas"), withMap[0].acg, withMap[0].birth).catch(function () {}); }
+      var acts = g.querySelector(".fan-actions"), names = people.map(function (p) { return p.first; }).join(" & ");
+      var tl = document.createElement("div"); tl.className = "xtlwrap";
+      tl.innerHTML = frameCard("xtl", '<div class="cap">TIMELINE</div><div class="sc">' + nowLab + '</div><div class="rl"></div><div class="ln">NUMEROLOGY</div><div class="rl"></div><div class="ln">ASTROLOGY</div><div class="rl"></div><div class="ln">HUMAN DESIGN</div><div class="nm">' + esc(names) + "</div>");
+      tl.firstChild.onclick = function () { openTimeline(people); };
+      var links = document.createElement("div"); links.className = "xlinks";
+      links.innerHTML = '<a href="#" id="xRun">Run another reading</a><a href="#" id="xSave">Save / Print reading</a>';
+      links.querySelector("#xRun").onclick = function (e) { e.preventDefault(); resetToForm(); };
+      links.querySelector("#xSave").onclick = function (e) { e.preventDefault(); savePrintReading(); };
+      if (acts) {
+        [].forEach.call(acts.querySelectorAll(".side-btn"), function (x) { x.remove(); });
+        acts.classList.add("xacts");
+        if (withMap.length) {
+          var gl = document.createElement("div"); gl.className = "xglobe"; gl.setAttribute("role", "button");
+          gl.innerHTML = '<canvas width="300" height="300"></canvas><div class="gl">Globe</div><div class="xcap">A map of the world drawn from the moment you were born. It shows where on Earth each planet\'s energy is strongest for you.</div>';
+          acts.appendChild(gl); gl.onclick = function () { openMap(withMap); };
+          drawGlobe(gl.querySelector("canvas"), withMap[0].acg, withMap[0].birth).catch(function () {});
+        }
+        acts.appendChild(tl);
+      } else { g.appendChild(tl); }
+      g.appendChild(links);
       var ps = document.createElement("div"); ps.className = "xpass";
       var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
       ps.innerHTML = '<div class="h">Your energy, every day</div><div class="s">Read anyone, compare any two people, and check in on your day and your friends\' days.</div><div class="cols">' + P.map(function (x, i) { return '<button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div><div class="l">' + x[1] + '</div><div class="d">' + x[2].toUpperCase() + "</div></button>"; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">One payment per pass. Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
