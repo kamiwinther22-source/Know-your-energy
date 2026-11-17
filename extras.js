@@ -75,6 +75,7 @@
       ".tl-chip.on{background:#000 !important;color:#fff !important}",
       ".tl-info{border:2.5px solid #000;border-radius:14px;padding:9px 12px;margin:0 0 8px;font:600 13.5px/1.45 'DM Sans',sans-serif;min-height:84px;max-height:150px;overflow:auto;color:#000;background:#fff}",
       ".tl-info .tt{font:800 13px 'DM Sans',sans-serif;display:block;margin-bottom:2px}",
+      ".tl-frame{border:3px solid #000;border-radius:18px;overflow:hidden;background:#fff}",
       ".tl-head{display:flex;margin-left:38px;border-bottom:1.5px solid #000}",
       ".tl-head div{flex:1;height:86px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font:800 10.5px Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#000;text-align:center}",
       ".tl-scroll{height:46vh;min-height:280px;overflow-y:auto;position:relative;-webkit-overflow-scrolling:touch;scrollbar-width:none}",
@@ -133,17 +134,18 @@
     return loadLand().then(function (rings) {
       var W = 1440, H = 720, eq = document.createElement("canvas"); eq.width = W; eq.height = H;
       var g = eq.getContext("2d"), X = function (lo) { return (lo + 180) / 360 * W; }, Y = function (la) { return (90 - la) / 180 * H; };
-      g.fillStyle = "#07070a"; g.fillRect(0, 0, W, H);
-      g.strokeStyle = "rgba(255,255,255,.12)"; g.lineWidth = 1.4;
+      g.fillStyle = "#1b0712"; g.fillRect(0, 0, W, H);
+      g.strokeStyle = "rgba(255,255,255,.22)"; g.lineWidth = 1.6;
       for (var lo = -180; lo <= 180; lo += 30) { g.beginPath(); g.moveTo(X(lo), 0); g.lineTo(X(lo), H); g.stroke(); }
       for (var la = -60; la <= 60; la += 30) { g.beginPath(); g.moveTo(0, Y(la)); g.lineTo(W, Y(la)); g.stroke(); }
       g.fillStyle = "#e9ecf1"; g.strokeStyle = "#ffffff"; g.lineWidth = 1.6;
       rings.forEach(function (r) { var x = r[0], y = r[1]; g.beginPath(); g.moveTo(X(x / 10), Y(y / 10)); for (var i = 2; i < r.length; i += 2) { x += r[i]; y += r[i + 1]; g.lineTo(X(x / 10), Y(y / 10)); } g.closePath(); g.fill(); g.stroke(); });
       var L = allLines(acg);
       PLANET_NAMES.forEach(function (k) {
-        var l = L[k]; if (!l) return; g.lineWidth = 3.2;
-        [["MC", [], l.MC], ["IC", [14, 12], l.IC]].forEach(function (a) { g.setLineDash(a[1]); g.strokeStyle = a[0] === "MC" ? "#ffffff" : "#d8dde4"; [-360, 0, 360].forEach(function (off) { g.beginPath(); g.moveTo(X(a[2] + off), 0); g.lineTo(X(a[2] + off), H); g.stroke(); }); });
-        [["ASC", [], l.ASC], ["DSC", [14, 12], l.DSC]].forEach(function (a) { g.setLineDash(a[1]); g.strokeStyle = a[0] === "ASC" ? "#ffffff" : "#d8dde4"; splitWrap(a[2]).forEach(function (s) { g.beginPath(); s.forEach(function (p, i) { i ? g.lineTo(X(p[1]), Y(p[0])) : g.moveTo(X(p[1]), Y(p[0])); }); g.stroke(); }); });
+        var l = L[k]; if (!l) return; g.lineWidth = 5;
+        g.strokeStyle = PLANET_COLOR[k];
+        [["MC", [], l.MC], ["IC", [16, 12], l.IC]].forEach(function (a) { g.setLineDash(a[1]); [-360, 0, 360].forEach(function (off) { g.beginPath(); g.moveTo(X(a[2] + off), 0); g.lineTo(X(a[2] + off), H); g.stroke(); }); });
+        [["ASC", [], l.ASC], ["DSC", [16, 12], l.DSC]].forEach(function (a) { g.setLineDash(a[1]); splitWrap(a[2]).forEach(function (s) { g.beginPath(); s.forEach(function (p, i) { i ? g.lineTo(X(p[1]), Y(p[0])) : g.moveTo(X(p[1]), Y(p[0])); }); g.stroke(); }); });
         g.setLineDash([]);
       });
       if (birth) { g.fillStyle = "#ffffff"; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 9, 0, 7); g.fill(); g.strokeStyle = "#ffffff"; g.lineWidth = 3; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 18, 0, 7); g.stroke(); }
@@ -294,7 +296,7 @@
       var head = '<div class="tl-head">' + COLS.map(function (c) { return "<div>" + c + "</div>"; }).join("") + "</div>";
       var chips = people.length > 1 ? people.map(function (q, i) { return '<button class="tl-chip' + (i === me.idx ? " on" : "") + '" data-p="' + i + '">' + esc(q.first) + "</button>"; }).join("") : "";
       var ds = new Date(me.selDate), iso = ds.getUTCFullYear() + "-" + String(ds.getUTCMonth() + 1).padStart(2, "0") + "-" + String(ds.getUTCDate()).padStart(2, "0");
-      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Type a date</label><input type="date" id="tlDate" value="' + iso + '">' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div>";
+      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Type a date</label><input type="date" id="tlDate" value="' + iso + '">' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
       showActive();
       var sc = document.getElementById("tlScroll"); var go = function () { sc.style.setProperty("--stk", Math.round(sc.clientHeight * 0.42) + "px"); sc.scrollTop = Math.max(0, nowY - sc.clientHeight / 2); }; go(); setTimeout(go, 120); setTimeout(go, 450);
       sc.addEventListener("click", function (e) { var bar = e.target.closest(".tl-bar"); if (!bar) return; var it = me.items[+bar.dataset.i]; [].forEach.call(sc.querySelectorAll(".tl-bar.sel"), function (x) { x.classList.remove("sel"); }); bar.classList.add("sel"); document.getElementById("tlInfo").innerHTML = '<span class="tt">' + esc(it.title) + "</span>" + esc(it.text || "").replace(/\n/g, "<br>"); });
@@ -343,7 +345,7 @@
         acts.classList.add("xacts");
         if (withMap.length) {
           var gl = document.createElement("div"); gl.className = "xglobe"; gl.setAttribute("role", "button");
-          gl.innerHTML = '<canvas width="300" height="300"></canvas><div class="gl">Globe</div><div class="xcap">A map of the world drawn from the moment you were born. It shows where on Earth each planet\'s energy is strongest for you.</div>';
+          gl.innerHTML = '<canvas width="300" height="300"></canvas><div class="gl">Globe</div><div class="xcap">Your birth map of the world: where each planet\'s energy is strongest for you.</div>';
           acts.appendChild(gl); gl.onclick = function () { openMap(withMap); };
           drawGlobe(gl.querySelector("canvas"), withMap[0].acg, withMap[0].birth).catch(function () {});
         }
