@@ -598,10 +598,11 @@ html.obsidian #formStep .line-field input::placeholder{font-size:13.5px;}
 }
 .side-btn .btn-icon{flex-shrink:0;width:11px;height:11px;display:block;}
 .side-btn:active{transform:translateY(2px) scale(0.97);box-shadow:0 1px 4px -1px rgba(15,25,45,0.4), inset 0 1px 0 rgba(255,255,255,0.2);}
-/* Every button is solid polished silver with black text. No white panel, no blue. */
+/* Every button is polished silver with a white face and black text. No blue anywhere. */
 .side-btn{isolation:isolate;border:0 !important;border-radius:0 !important;color:#0b0b10 !important;box-shadow:none !important;
-  background:linear-gradient(135deg,#ffffff 0%,#dde2e8 18%,#a9b2bc 38%,#f4f6f8 55%,#cfd5dc 78%,#ffffff 100%) !important;
+  background:linear-gradient(135deg,#ffffff 0%,#d9dee4 10%,#8c959f 24%,#4a525c 38%,#8f98a2 50%,#eef1f4 60%,#ffffff 66%,#aeb6bf 78%,#6a737d 90%,#3f4650 100%) !important;
   clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
+.side-btn::before{content:"";position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
 .side-btn span,.side-btn .btn-icon{color:#0b0b10 !important;stroke:#0b0b10}
 
 .card-expand{
@@ -945,7 +946,8 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
 .fan-card .quad-item .dprow{background:transparent !important}
 .fan-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 4px}
 .fan-actions>.side-btn{flex:0 0 96px;position:relative;isolation:isolate;display:flex !important;align-items:center;justify-content:center;border:0 !important;border-radius:0 !important;height:56px;color:#0b0b10 !important;font-weight:700;text-align:center;
-  background:linear-gradient(135deg,#ffffff 0%,#dde2e8 18%,#a9b2bc 38%,#f4f6f8 55%,#cfd5dc 78%,#ffffff 100%) !important;box-shadow:none !important;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
+  background:linear-gradient(135deg,#ffffff 0%,#d9dee4 10%,#8c959f 24%,#4a525c 38%,#8f98a2 50%,#eef1f4 60%,#ffffff 66%,#aeb6bf 78%,#6a737d 90%,#3f4650 100%) !important;box-shadow:none !important;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
+.fan-actions>.side-btn::before{content:"";position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
 .fan-actions>.side-btn svg{display:none}.fan-actions>.side-btn span{font:700 11.5px/1.15 'Fraunces',Georgia,serif;color:#0b0b10 !important}
 .fan-reading{flex:0 0 150px;position:relative;filter:drop-shadow(0 8px 8px rgba(0,0,0,.5))}
 .fan-reading>.panel-auto,.fan-reading>.panel-error{height:auto !important;min-height:150px !important;padding:16px !important;--card-text:#0b0b10;--card-dim:#0b0b10;--card-mid:#0b0b10;--card-accent:#8c1034}
