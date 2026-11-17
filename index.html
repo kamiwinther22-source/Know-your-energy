@@ -598,11 +598,10 @@ html.obsidian #formStep .line-field input::placeholder{font-size:13.5px;}
 }
 .side-btn .btn-icon{flex-shrink:0;width:11px;height:11px;display:block;}
 .side-btn:active{transform:translateY(2px) scale(0.97);box-shadow:0 1px 4px -1px rgba(15,25,45,0.4), inset 0 1px 0 rgba(255,255,255,0.2);}
-/* Every button is polished silver with a white face and black text. No blue anywhere. */
+/* Every button is solid polished silver with black text. No white panel, no blue. */
 .side-btn{isolation:isolate;border:0 !important;border-radius:0 !important;color:#0b0b10 !important;box-shadow:none !important;
-  background:linear-gradient(135deg,#ffffff 0%,#d9dee4 10%,#8c959f 24%,#4a525c 38%,#8f98a2 50%,#eef1f4 60%,#ffffff 66%,#aeb6bf 78%,#6a737d 90%,#3f4650 100%) !important;
+  background:linear-gradient(135deg,#ffffff 0%,#dde2e8 18%,#a9b2bc 38%,#f4f6f8 55%,#cfd5dc 78%,#ffffff 100%) !important;
   clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
-.side-btn::before{content:"";position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
 .side-btn span,.side-btn .btn-icon{color:#0b0b10 !important;stroke:#0b0b10}
 
 .card-expand{
@@ -616,9 +615,7 @@ html.obsidian #formStep .line-field input::placeholder{font-size:13.5px;}
 .card-expand.open{display:block;}
 .card-expand-close{position:sticky;top:0;float:right;background:none;border:none;font-size:1.8rem;color:#000000;cursor:pointer;padding:0.3rem;line-height:1;}
 
-.card-expand-listen{position:sticky;top:0.3rem;float:left;z-index:1;}
 
-#cardExpandListenBtn[hidden]{display:none!important;}
 .card-expand-title{max-width:760px;margin:0 auto 0.9rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:0.02em;text-transform:uppercase;color:#000000;clear:both;}
 .card-expand-body{max-width:600px;margin:0 auto;font-size:1.25rem;}
 .card-expand-body .dplist{overflow:visible;}
@@ -847,7 +844,6 @@ html:has(#resultsWrap[style*="block"]),body:has(#resultsWrap[style*="block"]){ba
 #hookStep div[style*="12161e"]{color:#FFFFFF !important;}
 #p1Block .person-tag,#p2Section .person-tag,.person-tag{color:#FFFFFF !important;}
 #hookStep>div[style*="292px"]>div{color:#FFFFFF !important;}
-#listenBtn,#cardExpandListenBtn,.card-expand-listen{display:none !important;}
 html,body{overflow-x:clip !important;}
 #p2Section.open{padding-top:4rem;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
@@ -949,8 +945,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
 .fan-card .quad-item .dprow{background:transparent !important}
 .fan-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 4px}
 .fan-actions>.side-btn{flex:0 0 96px;position:relative;isolation:isolate;display:flex !important;align-items:center;justify-content:center;border:0 !important;border-radius:0 !important;height:56px;color:#0b0b10 !important;font-weight:700;text-align:center;
-  background:linear-gradient(135deg,#ffffff 0%,#d9dee4 10%,#8c959f 24%,#4a525c 38%,#8f98a2 50%,#eef1f4 60%,#ffffff 66%,#aeb6bf 78%,#6a737d 90%,#3f4650 100%) !important;box-shadow:none !important;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
-.fan-actions>.side-btn::before{content:"";position:absolute;inset:5px;z-index:-1;background:#fff;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+  background:linear-gradient(135deg,#ffffff 0%,#dde2e8 18%,#a9b2bc 38%,#f4f6f8 55%,#cfd5dc 78%,#ffffff 100%) !important;box-shadow:none !important;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
 .fan-actions>.side-btn svg{display:none}.fan-actions>.side-btn span{font:700 11.5px/1.15 'Fraunces',Georgia,serif;color:#0b0b10 !important}
 .fan-reading{flex:0 0 150px;position:relative;filter:drop-shadow(0 8px 8px rgba(0,0,0,.5))}
 .fan-reading>.panel-auto,.fan-reading>.panel-error{height:auto !important;min-height:150px !important;padding:16px !important;--card-text:#0b0b10;--card-dim:#0b0b10;--card-mid:#0b0b10;--card-accent:#8c1034}
@@ -1144,7 +1139,6 @@ animateHourglass(document.getElementById("loading"));
 
 <div class="card-expand" id="cardExpand">
   <button type="button" class="card-expand-close" id="cardExpandClose">&#10005;</button>
-  <div class="card-expand-listen side-btn" id="cardExpandListenBtn" onclick="toggleModalListen()"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 9 9 9 13 5 13 19 9 15 5 15 5 9"/><path d="M17 8a5 5 0 010 8M20 5a9 9 0 010 14"/></svg><span>Listen</span></div>
   <div class="ce-wrap"><div class="ce-body">
     <div class="card-expand-title" id="cardExpandTitle"></div>
     <div class="card-expand-body" id="cardExpandBody"></div>
@@ -1200,10 +1194,8 @@ const NUMS = [ {
 } ];
 
 function openNumberDef(item) {
-  stopListening();
   document.getElementById("cardExpandTitle").textContent = `Number ${item.n} — ${item.lbl}`;
   document.getElementById("cardExpandBody").innerHTML = `<div class="dprow"><p class="report-body">${NUM_DEFS.core[item.n] || ""}</p></div>`;
-  document.getElementById("cardExpandListenBtn").hidden = true;
   document.getElementById("cardExpand").classList.add("open");
 }
 
@@ -1622,10 +1614,8 @@ function buildGlossaryHTML() {
 }
 
 function openGlossary() {
-  stopListening();
   document.getElementById("cardExpandTitle").textContent = "Glossary";
   document.getElementById("cardExpandBody").innerHTML = buildGlossaryHTML();
-  document.getElementById("cardExpandListenBtn").hidden = true;
   document.getElementById("cardExpand").classList.add("open");
 }
 
@@ -2994,132 +2984,12 @@ let cardRegistry = [];
 
 let PEOPLE_FOR_DATE_EXPLORER = [];
 
-let speechQueue = [];
-
-let activeListenBtnId = null;
-
-let listenKeepAlive = null;
-
-function stripHtmlToText(html) {
-  const d = document.createElement("div");
-  d.innerHTML = html;
-  return d.textContent.replace(/\s+/g, " ").trim();
-}
-
-function getReadableSegments() {
-  return cardRegistry.filter(entry => entry.isReading).map(entry => {
-    const body = stripHtmlToText((entry.preHtml || "") + entry.rows);
-    return body ? `${entry.title}. ${body}` : "";
-  }).filter(Boolean);
-}
-
-function updateListenBtn(active) {
-  if (!activeListenBtnId) return;
-  const btn = document.getElementById(activeListenBtnId);
-  const label = btn && btn.querySelector("span");
-  if (label) label.textContent = active ? "Stop" : "Listen";
-}
-
-let bestVoice = null;
-
-function pickBestVoice() {
-  if (!window.speechSynthesis) return null;
-  const voices = speechSynthesis.getVoices();
-  if (!voices.length) return null;
-  const english = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("en"));
-  const pool = english.length ? english : voices;
-  const byName = re => pool.find(v => re.test(v.name));
-  return byName(/natural/i) || byName(/online|google/i) || pool[0];
-}
-
-if (window.speechSynthesis) {
-  bestVoice = pickBestVoice();
-  speechSynthesis.onvoiceschanged = () => {
-    bestVoice = pickBestVoice();
-  };
-}
-
-function speakNext() {
-  if (!speechQueue.length) {
-    stopListenKeepAlive();
-    updateListenBtn(false);
-    activeListenBtnId = null;
-    return;
-  }
-  const utter = new SpeechSynthesisUtterance(speechQueue.shift());
-  if (bestVoice) utter.voice = bestVoice;
-  utter.onend = speakNext;
-  utter.onerror = speakNext;
-  speechSynthesis.speak(utter);
-}
-
-function stopListenKeepAlive() {
-  if (listenKeepAlive) {
-    clearInterval(listenKeepAlive);
-    listenKeepAlive = null;
-  }
-}
-
-function stopListening() {
-  speechQueue = [];
-  if (window.speechSynthesis) speechSynthesis.cancel();
-  stopListenKeepAlive();
-  updateListenBtn(false);
-  activeListenBtnId = null;
-}
-
-function startListening(segments, btnId) {
-  activeListenBtnId = btnId;
-  speechQueue = segments.flatMap(seg => seg.match(/[^.!?]+[.!?]*/g) || [ seg ]);
-  updateListenBtn(true);
-  stopListenKeepAlive();
-  listenKeepAlive = setInterval(() => {
-    if (window.speechSynthesis && speechSynthesis.speaking) {
-      speechSynthesis.pause();
-      speechSynthesis.resume();
-    }
-  }, 5e3);
-  speakNext();
-}
-
-function toggleListen() {
-  if (!window.speechSynthesis) {
-    alert("Your browser doesn't support reading text aloud.");
-    return;
-  }
-  if (activeListenBtnId === "listenBtn") {
-    stopListening();
-    return;
-  }
-  const segments = getReadableSegments();
-  if (!segments.length) return;
-  stopListening();
-  startListening(segments, "listenBtn");
-}
-
-function toggleModalListen() {
-  if (!window.speechSynthesis) {
-    alert("Your browser doesn't support reading text aloud.");
-    return;
-  }
-  if (activeListenBtnId === "cardExpandListenBtn") {
-    stopListening();
-    return;
-  }
-  const title = document.getElementById("cardExpandTitle").textContent.trim();
-  const body = document.getElementById("cardExpandBody").textContent.replace(/\s+/g, " ").trim();
-  if (!body) return;
-  stopListening();
-  startListening([ title ? `${title}. ${body}` : body ], "cardExpandListenBtn");
-}
-
 const BTN_ICON_REFRESH = '<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 106.3 16.3M20 11V5M20 11h-6"/></svg>';
 
 const BTN_ICON_PRINT = '<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4.5A1.5 1.5 0 013 16.5v-5A1.5 1.5 0 014.5 10h15a1.5 1.5 0 011.5 1.5v5a1.5 1.5 0 01-1.5 1.5H18M6 14h12v7H6z"/></svg>';
 
 const BTN_ICON_SHARE = '<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>';
 
-const BTN_ICON_LISTEN = '<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 9 9 9 13 5 13 19 9 15 5 15 5 9"/><path d="M17 8a5 5 0 010 8M20 5a9 9 0 010 14"/></svg>';
 
 function topBtn(label, onclick, icon, gridPos, id) {
   const style = gridPos ? ` style="${gridPos}"` : "";
@@ -3474,7 +3344,7 @@ function render(p1, p2, r, reportErr, reportUsedFallback, pending, fallbackReaso
   document.getElementById("mainGrid").innerHTML = h;
   arrangeFan(p1, p2);
   const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
-  document.getElementById("bottomBtns").innerHTML = topBtn("Listen", "toggleListen()", BTN_ICON_LISTEN, null, "listenBtn") + (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print Reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print Reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on this device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="downloadReadingFile(false)">Download my reading</button><button type="button" class="util-link" id="forgetBtn" onclick="forgetMyDetails()">Forget my details</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div>';
+  document.getElementById("bottomBtns").innerHTML = (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print Reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print Reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on this device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="downloadReadingFile(false)">Download my reading</button><button type="button" class="util-link" id="forgetBtn" onclick="forgetMyDetails()">Forget my details</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div>';
   stopLoadingTimer();
   document.getElementById("loading").style.display = "none";
   document.getElementById("resultsWrap").style.display = "block";
@@ -3632,7 +3502,6 @@ function forgetMyDetails() {
 
 function resetToForm() {
   stopLoadingTimer();
-  stopListening();
   clearSavedResult();
   clearDraft();
   document.getElementById("resultsWrap").style.display = "none";
@@ -4295,18 +4164,15 @@ document.addEventListener("click", e => {
   }
   const closeExpand = e.target.closest("#cardExpandClose");
   if (closeExpand) {
-    stopListening();
-    document.getElementById("cardExpand").classList.remove("open");
+      document.getElementById("cardExpand").classList.remove("open");
     return;
   }
   const card = e.target.closest(".quad-item[data-card-idx], .panel-auto[data-card-idx]");
   if (card) {
     const entry = cardRegistry[card.dataset.cardIdx];
     if (entry) {
-      stopListening();
-      document.getElementById("cardExpandTitle").textContent = entry.title;
+          document.getElementById("cardExpandTitle").textContent = entry.title;
       document.getElementById("cardExpandBody").innerHTML = (entry.preHtml || "") + entry.rows;
-      document.getElementById("cardExpandListenBtn").hidden = !entry.isReading;
       document.getElementById("cardExpand").classList.add("open");
       setChartFrame(entry.title);
     }
