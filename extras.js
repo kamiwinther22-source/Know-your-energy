@@ -32,6 +32,12 @@
     if (document.getElementById("extrasCss")) return;
     var s = document.createElement("style"); s.id = "extrasCss";
     s.textContent = [
+      "@keyframes kyeSweep{0%,55%{background-position:160% 0}100%{background-position:-60% 0}}",
+      ".fan-card>.quad-item::after,.fan-reading>.panel-auto::after,.xcard::after,.xpass .p::after,.xlinks a::after{content:'';position:absolute;inset:0;z-index:5;pointer-events:none;background:linear-gradient(104deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.95) 49%,rgba(255,255,255,0) 60%) no-repeat;background-size:260% 100%;background-position:160% 0;animation:kyeSweep 6s ease-in-out infinite;mix-blend-mode:overlay}",
+      ".fan-card:nth-child(2)>.quad-item::after{animation-delay:.5s}.fan-card:nth-child(3)>.quad-item::after{animation-delay:1s}.xcard::after{animation-delay:1.6s}.xlinks a:nth-child(2)::after{animation-delay:.6s}.xpass .p:nth-child(2)::after{animation-delay:.5s}.xpass .p:nth-child(3)::after{animation-delay:1s}",
+      "@media (prefers-reduced-motion:reduce){.fan-card>.quad-item::after,.fan-reading>.panel-auto::after,.xcard::after,.xpass .p::after,.xlinks a::after{animation:none}}",
+      "#resultsWrap .fan-name,#resultsWrap .ttl,.xpass .h,.xglobe .gl{color:#fff !important;-webkit-text-fill-color:#fff !important;-webkit-text-stroke:.8px #fff;text-shadow:0 0 12px rgba(255,255,255,.6),0 0 2px #fff,0 2px 3px rgba(0,0,0,.6) !important}",
+      "#resultsWrap .xpass .s,#resultsWrap .xcap,#resultsWrap .xpass .pol,#resultsWrap .xpass .note,#resultsWrap .device-note,#resultsWrap .device-note *,#resultsWrap .tiny-contact,#resultsWrap .site-foot{font-weight:800 !important;color:#fff !important;-webkit-text-fill-color:#fff !important;text-shadow:0 0 6px rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.75) !important}",
       ".xacts{align-items:flex-start !important;gap:6px !important}",
       ".xtlwrap{display:flex}",
       ".xacts>.fan-reading,.xacts>.xglobe,.xacts>.xtlwrap{flex:1 1 0 !important;min-width:0;max-width:150px}",
