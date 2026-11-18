@@ -2419,6 +2419,82 @@ function escapeHtml(s) {
   }[c]));
 }
 
+const CROSS_ANGLE = {"RA": "A Right Angle Cross is a personal path: your purpose plays out through your own life and the people close to you.", "JX": "A Juxtaposition Cross is a fixed path: your purpose is set from birth, you meet it on your own terms, and it leaves little room to be reshaped.", "LA": "A Left Angle Cross is a transpersonal path: your purpose plays out through other people, and your best work happens in shared projects and in service to a larger group."};
+const CROSS_SUN = {
+  1: "Your purpose is to bring something into the world that is recognizably yours. You find your direction by creating, and the work speaks for you. Gate 2, the sense of where things are headed, grounds the effort.",
+  2: "Your purpose is to hold direction for other people. You sense where things should go, and your steadiness lets others trust the route. Gate 1, your own creative drive, keeps you grounded.",
+  3: "Your purpose is to bring order to new beginnings. You turn a mess into a workable shape and keep it moving. Gate 50, the care for shared values and rules, steadies the work.",
+  4: "Your purpose is to answer questions. You build the formula that explains how things work, then test it against what people need. Gate 49, principles about what is acceptable, tells you when an answer is worth giving.",
+  5: "Your purpose is to keep a steady rhythm and show others how it is done. Routine and timing are your craft. Gate 35, the hunger for new experience, keeps the rhythm from going stale.",
+  6: "Your purpose is to build closeness through friction. You move tension and disagreement toward trust. Gate 36, which has been through crisis, gives you the experience to stay steady in it.",
+  7: "Your purpose is to lead by how you carry a role. People follow your style, not your orders. Gate 13, the listener who holds other people's stories, shows you what the group needs.",
+  8: "Your purpose is to contribute something that is unmistakably your own, and to let it be seen. Gate 14, the power to sustain effort, gives that contribution the resources to last.",
+  9: "Your purpose is to focus. You narrow a wide field to the detail that matters and stay with it until it works. Gate 16, practiced skill and enthusiasm, supplies the follow-through.",
+  10: "Your purpose is to live as yourself and show others it can be done. How you conduct your own life is the example. Gate 15, the acceptance of extremes in people and rhythms, keeps you open.",
+  11: "Your purpose is to generate ideas and offer them for others to pick up. You see possibilities before they have a use. Gate 12, caution about when and how to speak, shapes how they land.",
+  12: "Your purpose is to speak carefully and at the right moment. A chosen word from you can change a room. Gate 11, the stream of ideas, gives you plenty to choose from.",
+  13: "Your purpose is to listen and to keep what you hear. You carry other people's stories and turn them into perspective. Gate 7, leadership by role, gives that perspective a place to be used.",
+  14: "Your purpose is to put your energy behind work that matters and sustain it. Skill and resources gather around your commitment. Gate 8, the need to contribute, points the energy at something worth doing.",
+  15: "Your purpose is to accept people at every extreme and to move through your own. Rhythm and variety come easily to you. Gate 10, behaving as yourself, keeps the range honest.",
+  16: "Your purpose is to master a skill and bring enthusiasm to it. Repetition is where you become exceptional. Gate 9, focus, narrows the practice to what counts.",
+  17: "Your purpose is to form opinions and share them. You see patterns and offer a view of where things are going. Gate 18, the eye for what needs correcting, sharpens the view.",
+  18: "Your purpose is to find what is wrong and improve it. You notice flaws in systems and in people, and you work toward repair. Gate 17, the view of how things should be, gives the fix its direction.",
+  19: "Your purpose is to want what supports you and to teach others how to ask for what they need. Sensitivity to need is your guide. Gate 33, privacy and retreat, lets you rest and process.",
+  20: "Your purpose is to be present and to say what is true right now. Your attention stays in the moment. Gate 34, raw power, gives that presence force.",
+  21: "Your purpose is to take control of a domain and run it well. You want authority over your own resources and results. Gate 48, depth of skill, backs the control with competence.",
+  22: "Your purpose is to be open to others and to move them with grace. A sense of timing and mood is your tool. Gate 47, the effort to find meaning in past experience, gives your openness substance.",
+  23: "Your purpose is to make complicated things simple and say them plainly. You take what is strange and make it understood. Gate 43, the sudden insight, supplies what you explain.",
+  24: "Your purpose is to return to an idea until it makes sense. You go over what has happened, and the answer arrives. Gate 44, alertness to patterns from the past, sharpens what you recognize.",
+  25: "Your purpose is to meet life with an open heart and keep that openness. You love without conditions and stay unguarded. Gate 46, determination and love of the body, anchors it in daily life.",
+  26: "Your purpose is to persuade and to sell what is worth selling. You know how to shape a message and to hold what you have gathered. Gate 45, the gatherer of resources, gives you something to work with.",
+  27: "Your purpose is to care for others and to set the terms of that care. Nourishment, protection and fairness are your concern. Gate 28, the risk for a life that matters, keeps the care purposeful.",
+  28: "Your purpose is to risk something for a life that feels meaningful. You test your limits, and what you learn helps others. Gate 27, the care for people, gives the risk a reason.",
+  29: "Your purpose is to commit and see it through. You say yes to experience and stay with it past the point where others stop. Gate 30, desire and feeling, keeps the commitment alive.",
+  30: "Your purpose is to feel strongly and to pursue what you desire. Longing is your engine. Gate 29, perseverance, keeps you committed long enough to find out what the desire was for.",
+  31: "Your purpose is to lead through voice. You speak for a group when the group has chosen you. Gate 41, the pressure of new experience, feeds what you have to say.",
+  32: "Your purpose is to protect what lasts. You sense what will endure and what will fail, and you keep the first. Gate 42, the drive to complete cycles, gives that instinct somewhere to land.",
+  33: "Your purpose is to withdraw, absorb experience, and return with the lesson. Privacy is part of the work. Gate 19, sensitivity to need, tells you what to bring back.",
+  34: "Your purpose is to use your power for what you are built for. Strength comes in bursts and needs a direction. Gate 20, presence in the moment, aims it.",
+  35: "Your purpose is to seek change and to learn from experience. A new chapter is where you grow. Gate 5, steady rhythm, gives you something to return to between them.",
+  36: "Your purpose is to go through crisis and come out with experience others can use. Emotional turbulence is where you learn. Gate 6, friction toward intimacy, teaches you to stay in the room.",
+  37: "Your purpose is to build community through loyalty. You keep agreements and treat people as family. Gate 40, the need for rest and your own time, keeps that giving sustainable.",
+  38: "Your purpose is to fight for what matters. You hold on when others give up, and the struggle gives your life meaning. Gate 39, provocation, shows you what is worth fighting for.",
+  39: "Your purpose is to provoke so that people find what they feel. You press where it is tender, and spirit is released. Gate 38, the fighter, gives the provocation a cause.",
+  40: "Your purpose is to work, rest, and make time that belongs to you. Your commitments hold because you protect your solitude. Gate 37, loyalty to others, tells you where to give it.",
+  41: "Your purpose is to start things from a felt pressure to experience something new. You imagine what has not been lived, and then you set it moving. Gate 31, leadership by voice, helps others follow.",
+  42: "Your purpose is to finish cycles. You carry things through to a natural end and move on. Gate 32, the instinct for what endures, tells you which cycles are worth finishing.",
+  43: "Your purpose is to bring insight that arrives suddenly and fully formed. You hear something no one else has heard. Gate 23, the ability to explain simply, lets others receive it.",
+  44: "Your purpose is to recognize patterns from the past and use them for what comes next. Memory is your tool. Gate 24, the review of old ideas, refines what you recognize.",
+  45: "Your purpose is to gather people and resources and to lead what is gathered. You hold the group together with a clear sense of who belongs. Gate 26, the persuader, shapes the offer.",
+  46: "Your purpose is to love the body and the life it lives. You succeed by being in the right place at the right time. Gate 25, innocence, keeps your openness alive through setbacks.",
+  47: "Your purpose is to make sense of past experience. Pressure builds until meaning drops into place. Gate 22, grace with other people, helps you carry that meaning out.",
+  48: "Your purpose is to go deep in what you know and to solve problems at the root. Depth is your standard. Gate 21, control, gives that depth a field to work in.",
+  49: "Your purpose is to hold to principles and to change them when the group no longer fits them. Revolution comes from conviction, not mood. Gate 4, the question that needs answering, gives the change a reason.",
+  50: "Your purpose is to care for shared values and keep the rules that protect a group. Responsibility is your craft. Gate 3, ordering new beginnings, keeps the rules alive.",
+  51: "Your purpose is to shock people awake and to lead by going first. A sudden jolt is your gift. Gate 57, intuition, helps you sense where to aim it.",
+  52: "Your purpose is to be still and to concentrate. Held attention lets you finish what scattered effort cannot. Gate 58, vitality and the drive to improve things, gives the stillness something to serve.",
+  53: "Your purpose is to begin things and carry the pressure of growth. You start cycles that others finish. Gate 54, ambition, takes what you have begun upward.",
+  54: "Your purpose is to rise. You carry a strong drive for success, and you work to raise others with you. Gate 53, beginnings, supplies new ground to climb.",
+  55: "Your purpose is to live your spirit as it is, through highs and lows. Emotional depth gives your life its meaning. Gate 59, closeness and bonding, gives that feeling a place to go.",
+  56: "Your purpose is to stimulate. You tell stories that open other people's minds and leave them wanting more. Gate 60, acceptance of limits, keeps your reach practical.",
+  57: "Your purpose is to hear what is true in the moment. Intuition arrives as a clear signal, and you follow it. Gate 51, the shock that wakes you up, tests what you hear.",
+  58: "Your purpose is to improve things. A drive for vitality and a dislike of what is poor push you to fix what others tolerate. Gate 52, stillness, lets you hold the standard.",
+  59: "Your purpose is to break through barriers to closeness. You open the way to intimacy and bonding, one person at a time. Gate 55, spirit, gives that closeness its depth.",
+  60: "Your purpose is to accept limits and work inside them. Constraint gives your energy a shape, and change comes at the right time. Gate 56, stimulation, keeps the work alive.",
+  61: "Your purpose is to look for what is true beneath the surface. A mind full of questions drives you toward mystery. Gate 62, details, gives you the language to share what you find.",
+  62: "Your purpose is to name things precisely. You turn thought into detail that others can use. Gate 61, inner truth, gives the detail something worth naming.",
+  63: "Your purpose is to doubt and to test. You question what others accept until the evidence holds. Gate 64, confusion, gives you the raw material to sort.",
+  64: "Your purpose is to sort confusion into meaning. Images and old impressions pile up until a story drops into place. Gate 63, doubt, keeps the story honest."
+};
+function crossKey(str) {
+  const a = /^(Right Angle|Juxtaposition|Left Angle)/i.exec(str || ""), g = /\((\d+)\s*\//.exec(str || "");
+  if (!a || !g) return null;
+  const code = /^right/i.test(a[1]) ? "RA" : /^juxta/i.test(a[1]) ? "JX" : "LA", n = parseInt(g[1], 10), k = code + "-" + n;
+  if (!HD_DEFS.hdcross) HD_DEFS.hdcross = {};
+  if (!HD_DEFS.hdcross[k] && CROSS_SUN[n]) HD_DEFS.hdcross[k] = CROSS_ANGLE[code] + " " + CROSS_SUN[n];
+  return k;
+}
+
 function arow(l, v, defKey, defNum, note, altNum) {
   let specific;
   if (defKey && defNum != null && NUM_DEFS[defKey] && NUM_DEFS[defKey][defNum]) {
@@ -3002,7 +3078,7 @@ function hdr(hd, errMsg) {
     h += core.join("");
   }
   if (hd.incarnation_cross) {
-    h += arow("Incarnation Cross", hd.incarnation_cross, "hdcross");
+    h += arow("Incarnation Cross", hd.incarnation_cross, "hdcross", crossKey(hd.incarnation_cross));
   }
   if (hd.gates && hd.gates.length) {
     h += dpsec("Gates");
