@@ -850,7 +850,7 @@ html,body{overflow-x:clip !important;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
 
 </style>
-<link rel="stylesheet" href="red-look.css?v=20261122">
+<link rel="stylesheet" href="red-look.css?v=20261123">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
 <style id="chartFrameCss">
 /* Numerology chart: opens in an angled silver frame (the front page's cut corners and silver rim) around a white sheet. */
@@ -1034,8 +1034,8 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
               <div><label for="p1t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
               <div class="line-field ampm-field"><select id="p1ap" aria-label="AM or PM"><option value="" selected>AM/PM</option><option value="AM">AM</option><option value="PM">PM</option></select></div>
             </div>
-            <div class="notime-row"><label class="chk"><input type="checkbox" id="p1notime"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">I don't know my birth time</span></label><div class="why">Time sets your rising sign and your Human Design chart.</div></div>
-            <div class="loc-field"><label for="p1loc">Birth city <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1loc" placeholder="Start typing a city" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="p1locList"></div><ul class="loc-list" id="p1locList" role="listbox" hidden></ul><div class="why">Sets the exact moment of your birth and your rising sign.</div>
+            <div class="notime-row"><label class="chk"><input type="checkbox" id="p1notime"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">I don't know my birth time</span></label></div>
+            <div class="loc-field"><label for="p1loc">Birth city <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p1loc" placeholder="Start typing a city" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="p1locList"></div><ul class="loc-list" id="p1locList" role="listbox" hidden></ul><div class="why">Time and city set your rising sign and Human Design chart.</div>
               <button type="button" class="tz-toggle" id="p1tzToggle" aria-expanded="false" aria-controls="p1tzWrap">Don't know the city? Choose a time zone</button>
               <div class="tz-field" id="p1tzWrap" hidden><div class="line-field"><select id="p1tz" aria-label="Birth time zone"><option value="" selected>Time zone</option><option value="America/New_York">Eastern</option><option value="America/Chicago">Central</option><option value="America/Denver">Mountain</option><option value="America/Phoenix">Arizona</option><option value="America/Los_Angeles">Pacific</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></select></div><div class="why">Close enough for most people. Outside the US, pick the nearest big city above.</div></div>
             </div>
@@ -1064,8 +1064,8 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
                 <div><label for="p2t">Time <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2t" placeholder="HH:MM" maxlength="5" inputmode="numeric" oninput="fmtTime(this)"></div></div>
                 <div class="line-field ampm-field"><select id="p2ap" aria-label="AM or PM"><option value="" selected>AM/PM</option><option value="AM">AM</option><option value="PM">PM</option></select></div>
               </div>
-              <div class="notime-row"><label class="chk"><input type="checkbox" id="p2notime"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">I don't know my birth time</span></label><div class="why">Time sets your rising sign and your Human Design chart.</div></div>
-            <div class="loc-field"><label for="p2loc">Birth city <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2loc" placeholder="Start typing a city" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="p2locList"></div><ul class="loc-list" id="p2locList" role="listbox" hidden></ul><div class="why">Sets the exact moment of your birth and your rising sign.</div>
+              <div class="notime-row"><label class="chk"><input type="checkbox" id="p2notime"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">I don't know my birth time</span></label></div>
+            <div class="loc-field"><label for="p2loc">Birth city <span class="opt-lbl">(optional)</span></label><div class="line-field"><input id="p2loc" placeholder="Start typing a city" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="p2locList"></div><ul class="loc-list" id="p2locList" role="listbox" hidden></ul><div class="why">Time and city set your rising sign and Human Design chart.</div>
               <button type="button" class="tz-toggle" id="p2tzToggle" aria-expanded="false" aria-controls="p2tzWrap">Don't know the city? Choose a time zone</button>
               <div class="tz-field" id="p2tzWrap" hidden><div class="line-field"><select id="p2tz" aria-label="Birth time zone"><option value="" selected>Time zone</option><option value="America/New_York">Eastern</option><option value="America/Chicago">Central</option><option value="America/Denver">Mountain</option><option value="America/Phoenix">Arizona</option><option value="America/Los_Angeles">Pacific</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></select></div><div class="why">Close enough for most people. Outside the US, pick the nearest big city above.</div></div>
             </div>
@@ -4219,6 +4219,6 @@ document.addEventListener("click", e => {
 <script type="module">if(document.documentElement.classList.contains("obsidian"))import("./obsidian.js");</script>
 <div class="site-foot">&copy; 2026 Know Your Energy &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></div>
 <style>.site-foot{text-align:center;font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;padding:18px 12px 26px}.site-foot a{color:#fff;font-weight:500}.tiny-contact{font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;text-align:center;margin:6px 0 0}.tiny-contact a{color:#fff}</style>
-<script src="extras.js?v=16" defer></script>
+<script src="extras.js?v=17" defer></script>
 </body>
 </html>
