@@ -1,4 +1,4 @@
-/* The front page: garnet, Fraunces, silver hex buttons, cut-in dark fields. Default look (no ?look= in the URL).
+/* The front page: garnet, Fraunces, silver hex buttons, cut-in dark fields. This is the site look.
    Scoped to html.red; the results page keeps its own look. */
 html.red{--acc:#8c1034;background:#2a0510;overflow-x:clip;max-width:100%}
 html.red body{overflow-x:clip;max-width:100%}
