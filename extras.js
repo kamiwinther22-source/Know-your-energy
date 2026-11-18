@@ -34,7 +34,7 @@
     s.textContent = [
       "@keyframes kyeSweep{0%,55%{background-position:160% 0}100%{background-position:-60% 0}}",
       ".fan-card>.quad-item::after,.fan-reading>.panel-auto::after,.xcard::after,.xpass .p::after,.xlinks a::after{content:'';position:absolute;inset:0;z-index:5;pointer-events:none;background:linear-gradient(104deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.95) 49%,rgba(255,255,255,0) 60%) no-repeat;background-size:260% 100%;background-position:160% 0;animation:kyeSweep 6s ease-in-out infinite;mix-blend-mode:overlay}",
-      ".fan-card:nth-child(2)>.quad-item::after{animation-delay:.5s}.fan-card:nth-child(3)>.quad-item::after{animation-delay:1s}.xcard::after{animation-delay:1.6s}.xlinks a:nth-child(2)::after{animation-delay:.6s}.xpass .p:nth-child(2)::after{animation-delay:.5s}.xpass .p:nth-child(3)::after{animation-delay:1s}",
+      ".fan-card:nth-child(2)>.quad-item::after{animation-delay:.5s}.fan-card:nth-child(3)>.quad-item::after{animation-delay:1s}.xcard::after{animation-delay:1.6s}.xlinks a:nth-child(2)::after{animation-delay:.6s}.xpass .pw:nth-child(2) .p::after{animation-delay:.5s}.xpass .pw:nth-child(3) .p::after{animation-delay:1s}",
       ".xpass .p::after,.xlinks a::after{clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,18px 100%,0 50%)}",
       "@media (prefers-reduced-motion:reduce){.fan-card>.quad-item::after,.fan-reading>.panel-auto::after,.xcard::after,.xpass .p::after,.xlinks a::after{animation:none}}",
       "#resultsWrap .fan-name,#resultsWrap .ttl,.xpass .h,.xglobe .gl{color:#fff !important;-webkit-text-fill-color:#fff !important;-webkit-text-stroke:.8px #fff;text-shadow:0 0 12px rgba(255,255,255,.6),0 0 2px #fff,0 2px 3px rgba(0,0,0,.6) !important}",
@@ -64,7 +64,9 @@
 
 
       ".xpass .cols{display:flex;gap:8px;padding:0 8px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.55))}",
-      ".xpass .p{flex:1 1 0;min-width:0;position:relative;isolation:isolate;border:0;cursor:pointer;height:56px;padding:0 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;font-family:inherit;-webkit-tap-highlight-color:transparent;background:url(img/btn-short-k2.webp) center/100% 100% no-repeat !important}",
+      ".xpass .pw{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px}",
+      ".xpass .pl{font:700 14px 'Fraunces',Georgia,serif;color:#fff;text-align:center}",
+      ".xpass .p{width:100%;min-width:0;position:relative;isolation:isolate;border:0;cursor:pointer;height:46px;padding:0 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;font-family:inherit;-webkit-tap-highlight-color:transparent;background:url(img/btn-short-k2.webp) center/100% 100% no-repeat !important}",
       ".xpass .p .n{text-shadow:0 1px 0 rgba(255,255,255,.6);font:900 21px/1 'Fraunces',Georgia,serif;color:#000}",
       ".xpass .p .l{text-shadow:0 1px 0 rgba(255,255,255,.6);font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;margin-top:3px;text-transform:uppercase;color:#000}",
       ".xpass .p .d{font:700 11px 'Barlow Condensed',sans-serif;letter-spacing:.12em;margin-top:1px;color:#000}",
@@ -337,18 +339,18 @@
       if (acts) {
         [].forEach.call(acts.querySelectorAll(".side-btn"), function (x) { x.remove(); });
         acts.classList.add("xacts");
-        if (withMap.length) {
-          var gl = document.createElement("div"); gl.className = "xglobe"; gl.setAttribute("role", "button");
-          gl.innerHTML = '<canvas width="300" height="300"></canvas><div class="gl">Globe</div><div class="xcap">Your birth map of the world: where each planet\'s energy is strongest for you.</div>';
-          acts.appendChild(gl); gl.onclick = function () { openMap(withMap); };
-          drawGlobe(gl.querySelector("canvas"), withMap[0].acg, withMap[0].birth).catch(function () {});
-        }
+        var gl = document.createElement("div"); gl.className = "xglobe"; gl.setAttribute("role", "button");
+        var capTxt = withMap.length ? "Your birth map of the world: where each planet\'s energy is strongest for you." : "Add a birth city and time to see where each planet\'s energy is strongest for you.";
+        gl.innerHTML = '<canvas width="300" height="300"></canvas><div class="gl">Globe</div><div class="xcap">' + capTxt + '</div>';
+        acts.appendChild(gl);
+        if (withMap.length) { gl.onclick = function () { openMap(withMap); }; drawGlobe(gl.querySelector("canvas"), withMap[0].acg, withMap[0].birth).catch(function () {}); }
+        else { drawGlobe(gl.querySelector("canvas"), null, null).catch(function () {}); }
         acts.appendChild(tl);
       } else { g.appendChild(tl); }
       g.appendChild(links);
       var ps = document.createElement("div"); ps.className = "xpass";
       var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
-      ps.innerHTML = '<div class="h">Your energy, every day</div><div class="s">Read anyone, compare any two people, and check in on your day and your friends\' days.</div><div class="cols">' + P.map(function (x, i) { return '<button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div><div class="l">' + x[1] + '</div></button>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">One payment per pass. Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
+      ps.innerHTML = '<div class="h">Your energy, every day</div><div class="s">Read your partner, your kids, your friends. See how you fit together, and check in on today whenever you want.</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div></button><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">One payment per pass. Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
       g.appendChild(ps);
       [].forEach.call(ps.querySelectorAll(".p"), function (b) { b.onclick = function () { var n = document.getElementById("passNote"); n.textContent = "Passes are not on sale yet."; }; });
     } catch (e) { if (window.console) console.error("extras", e); }
