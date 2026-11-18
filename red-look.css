@@ -214,3 +214,13 @@ html.red .rel-row{display:grid !important;grid-template-columns:repeat(4,1fr);ga
 html.red .rel-row .glow-ring-sm{display:block !important;width:100% !important;min-width:0}
 html.red .rel-row .glow-ring-sm .rel-chip{width:100% !important;height:38px !important;padding:0 6px !important;display:flex !important;align-items:center;justify-content:center;text-align:center;white-space:normal !important;font-size:11.5px !important;letter-spacing:.02em !important;line-height:1.05 !important}
 html.red .rel-row .glow-ring-sm:nth-child(n) .rel-chip{background-image:url(img/k2/chip66.png) !important}
+
+/* Reading and chart sheets: smooth, contained scrolling.
+   - the sheet no longer repaints a fixed background on every scroll frame
+   - a swipe at the end of the sheet no longer scrolls the page behind it
+   - while a sheet is open the page behind it is hidden and its animations are paused */
+html:has(#cardExpand.open),html:has(#cardExpand.open) body{overflow:hidden !important}
+#cardExpand{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background-attachment:scroll !important}
+html:has(#cardExpand.open) body>*:not(#cardExpand):not(script):not(style):not(link){visibility:hidden}
+html:has(#cardExpand.open) #cardExpand{visibility:visible}
+html:has(#cardExpand.open) *{animation-play-state:paused !important}
