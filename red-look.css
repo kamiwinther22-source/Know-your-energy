@@ -61,7 +61,7 @@ html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{width:88px}
 html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{width:80px}
 html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{width:66px}
 html.red .rel-chip.active::before{background:linear-gradient(180deg,#e2e6eb 0%,#aeb6c0 46%,#8b949f 54%,#b9c0c9 100%)}
-html.red .rel-chip:not(.active){opacity:.78}
+html.red .rel-chip:not(.active){opacity:1}
 
 /* choose + toggle */
 html.red .r-choose{text-align:center;font-size:18px;line-height:1.3;margin:8px 0 0;font-weight:700}
@@ -204,3 +204,7 @@ html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{background-image:url(img/
 html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{background-image:url(img/k2/chip66.png) !important}
 html.red .rel-chip.active{filter:drop-shadow(0 0 6px rgba(255,255,255,.95)) brightness(1.08)}
 html.red .fan-actions>.side-btn,html.red .side-btn{background-image:url(img/k2/side.png) !important}
+
+/* All text is full strength: the browser's default grey for disabled or locked fields (the AM/PM box, time and name boxes) is replaced with white */
+html.red #formStep input:disabled,html.red #formStep select:disabled,html.red #formStep select,html.red #formStep.locked .line-field select,html.red #formStep.locked .line-field input{color:#fff !important;-webkit-text-fill-color:#fff !important;opacity:1 !important}
+html.red #formStep input:disabled::placeholder{color:#fff !important;-webkit-text-fill-color:#fff !important;opacity:1 !important}
