@@ -208,3 +208,9 @@ html.red .fan-actions>.side-btn,html.red .side-btn{background-image:url(img/k2/s
 /* All text is full strength: the browser's default grey for disabled or locked fields (the AM/PM box, time and name boxes) is replaced with white */
 html.red #formStep input:disabled,html.red #formStep select:disabled,html.red #formStep select,html.red #formStep.locked .line-field select,html.red #formStep.locked .line-field input{color:#fff !important;-webkit-text-fill-color:#fff !important;opacity:1 !important}
 html.red #formStep input:disabled::placeholder{color:#fff !important;-webkit-text-fill-color:#fff !important;opacity:1 !important}
+
+/* Relationship buttons: all four exactly the same size (2 x 2), same picture */
+html.red .rel-row{display:grid !important;grid-template-columns:1fr 1fr;gap:10px !important;width:100%;max-width:340px;margin-left:auto !important;margin-right:auto !important}
+html.red .rel-row .glow-ring-sm{display:block !important;width:100% !important}
+html.red .rel-row .glow-ring-sm .rel-chip{width:100% !important;height:46px !important;padding:0 8px !important;display:flex !important;align-items:center;justify-content:center;white-space:nowrap}
+html.red .rel-row .glow-ring-sm:nth-child(n) .rel-chip{background-image:url(img/k2/chip116.png) !important}
