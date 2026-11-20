@@ -81,7 +81,7 @@
       ".tl-ctl input{font:700 15px 'DM Sans',sans-serif;border:2px solid #000;border-radius:12px;background:#fff;color:#000;padding:4px 8px}",
       ".tl-chip{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;border:2px solid #000;border-radius:12px;background:#fff;color:#000 !important;padding:3px 12px;cursor:pointer}",
       ".tl-chip.on{background:#000 !important;color:#fff !important}",
-      ".tl-info{border:2.5px solid #000;border-radius:14px;padding:9px 12px;margin:0 0 8px;font:600 13.5px/1.45 'DM Sans',sans-serif;min-height:84px;max-height:150px;overflow:auto;color:#000;background:#fff}",
+      ".tl-info{border:2.5px solid #000;border-radius:14px;padding:9px 12px;margin:0 0 8px;font:600 13.5px/1.45 'DM Sans',sans-serif;min-height:84px;max-height:176px;overflow:auto;color:#000;background:#fff}",
       ".tl-info .tt{font:800 13px 'DM Sans',sans-serif;display:block;margin-bottom:2px}",
       ".tl-frame{border:3px solid #000;border-radius:18px;overflow:hidden;background:#fff}",
       ".tl-head{display:flex;margin-left:38px;border-bottom:1.5px solid #000}",
@@ -219,11 +219,11 @@
   // ---------- timeline ----------
   var transitsPromise = null;
   function loadTransits() {
-    if (!transitsPromise) transitsPromise = Promise.all([fetch("data/transits.bin").then(function (r) { return r.arrayBuffer(); }), fetch("data/timeline-meanings.json").then(function (r) { return r.json(); })]).then(function (a) {
+    if (!transitsPromise) transitsPromise = Promise.all([fetch("data/transits.bin").then(function (r) { return r.arrayBuffer(); }), fetch("data/timeline-milestones.json").then(function (r) { return r.json(); })]).then(function (a) {
       var b = a[0], dv = new DataView(b), n = dv.getUint32(10, true), np = dv.getUint8(14), step = dv.getUint16(8, true), start = dv.getInt32(4, true);
       var u = new Uint16Array(b, 16, n * np), names = ["jupiter", "saturn", "uranus", "neptune", "pluto", "northnode"], t = { start: start, step: step, n: n, lon: {} };
       names.forEach(function (nm, j) { t.lon[nm] = u.subarray(j * n, (j + 1) * n); });
-      return { t: t, meanings: a[1].events };
+      return { t: t, ms: a[1] };
     });
     return transitsPromise;
   }
@@ -232,22 +232,37 @@
     var hasTime = !(a.timeUnknown || a.locationUnknown);
     return { hasTime: hasTime, sun: get("Sun"), moon: hasTime ? get("Moon") : null, asc: hasTime && a.ascendant ? a.ascendant.absoluteDegrees : null, jupiter: get("Jupiter"), saturn: get("Saturn"), uranus: get("Uranus"), neptune: get("Neptune"), pluto: get("Pluto"), northnode: a.northNode ? a.northNode.absoluteDegrees : null };
   }
+  // The planet bars: one bar for each turning point of a planet's cycle (square, opposition, return) at your own birth position.
+  var SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+  var CYCLE_RULES = {
+    saturn: { orb: 8, dir: 1, keep: function (k) { return k <= 16; }, idx: function (k) { return k; } },
+    jupiter: { orb: 15, dir: 1, keep: function (k) { return k % 4 === 0; }, idx: function (k) { return k / 4; } },
+    uranus: { orb: 5, dir: 1, keep: function (k) { return k <= 5; }, idx: function (k) { return k; } },
+    neptune: { orb: 4, dir: 1, keep: function (k) { return k <= 2; }, idx: function (k) { return k; } },
+    pluto: { orb: 3, dir: 1, keep: function (k) { return k <= 2; }, idx: function (k) { return k; } },
+    northnode: { orb: 10, dir: -1, keep: function (k) { return k % 2 === 0; }, idx: function (k) { return k; } }
+  };
+  function phaseName(k) { return k % 4 === 0 ? "Return" : k % 4 === 2 ? "Opposition" : "Square"; }
   function computeEvents(p, data) {
     var nat = natalOf(p), dob = parseDob(p.dob); if (!dob) return [];
-    var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), endMs = birthMs + TL_YEARS * MS_YEAR, t = data.t, out = [], ASP = { Conjunction: 0, Return: 0, Square: 90, Opposition: 180 };
-    Object.keys(data.meanings).forEach(function (key) {
-      var parts = key.split("."), pl = parts[0], asp = parts[1], tg = parts[2] || "Own", col = pl === "nn" ? "northnode" : pl, arr = t.lon[col]; if (!arr) return;
-      var target = tg === "Sun" ? nat.sun : tg === "Moon" ? nat.moon : tg === "Ascendant" ? nat.asc : nat[col];
-      if (target == null) return;
-      var offs = ASP[asp] === 0 ? [0] : ASP[asp] === 180 ? [180] : [90, -90], i0 = Math.max(0, Math.floor((birthMs / MS_DAY - t.start) / t.step) - 1), i1 = Math.min(t.n - 1, Math.ceil((endMs / MS_DAY - t.start) / t.step) + 1), run = null, runs = [];
-      for (var i = i0; i <= i1; i++) {
-        var lon = arr[i] / 100, d = 999; offs.forEach(function (o) { d = Math.min(d, Math.abs(norm180(lon - (target + o)))); });
-        var ms = (t.start + i * t.step) * MS_DAY;
-        if (d <= 2) { if (!run) run = { a: ms - t.step * MS_DAY / 2, b: ms }; run.b = ms + t.step * MS_DAY / 2; } else if (run) { runs.push(run); run = null; }
+    var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), endMs = birthMs + TL_YEARS * MS_YEAR, t = data.t, out = [];
+    var i0 = Math.floor((birthMs / MS_DAY - t.start) / t.step), i1 = Math.min(t.n - 1, Math.ceil((endMs / MS_DAY - t.start) / t.step));
+    if (i0 < 0) return out;
+    Object.keys(CYCLE_RULES).forEach(function (pl) {
+      var rule = CYCLE_RULES[pl], target = nat[pl], arr = t.lon[pl]; if (target == null || !arr) return;
+      var x0 = rule.dir * arr[i0] / 100, cum = norm180(x0 - rule.dir * target), prev = x0, win = {};
+      for (var i = i0 + 1; i <= i1; i++) {
+        var x = rule.dir * arr[i] / 100; cum += norm180(x - prev); prev = x;
+        var k = Math.round(cum / 90); if (k < 1 || Math.abs(cum - 90 * k) > rule.orb || !rule.keep(k)) continue;
+        if (!win[k]) win[k] = { a: i, b: i }; else win[k].b = i;
       }
-      if (run) runs.push(run);
-      var merged = []; runs.forEach(function (r) { var l = merged[merged.length - 1]; if (l && r.a - l.b < 60 * MS_DAY) l.b = r.b; else merged.push({ a: r.a, b: r.b }); });
-      merged.forEach(function (r) { if (r.b < birthMs || r.a > endMs) return; out.push({ col: col, key: key, a: Math.max(r.a, birthMs), b: Math.min(r.b, endMs), text: data.meanings[key], pl: pl, asp: asp, tg: tg }); });
+      Object.keys(win).forEach(function (ks) {
+        var k = +ks, w = win[k], a = (t.start + w.a * t.step) * MS_DAY - t.step * MS_DAY / 2, b = (t.start + w.b * t.step) * MS_DAY + t.step * MS_DAY / 2;
+        if (b < birthMs || a > endMs) return;
+        var mid = Math.round((w.a + w.b) / 2), sign = SIGN_NAMES[Math.floor(arr[mid] / 100 / 30) % 12];
+        var txt = (((data.ms.milestones || {})[pl] || {})[String(rule.idx(k))] || ""), sg = (((data.ms.signs || {})[pl] || {})[sign] || "");
+        out.push({ col: pl, k: k, a: Math.max(a, birthMs), b: Math.min(b, endMs), text: (txt + (sg ? "\n" + sg : "")).trim(), pl: pl, phase: phaseName(k) });
+      });
     });
     return out;
   }
@@ -280,9 +295,8 @@
         items.push({ col: "pin", a: a2, b: b2, label: pn.value, n: pn.value, title: "Pinnacle " + pn.value + " · " + rng, text: (NUM_DEFS.pinnacle || {})[pn.value] || "" });
         var cv = chs["challenge" + n]; if (cv != null) items.push({ col: "ch", a: a2, b: b2, label: cv, n: cv, title: "Challenge " + cv + " · " + rng, text: (NUM_DEFS.challenge || {})[cv] || "" }); });
       var pers = num.periodCycles || {}; [1, 2, 3].forEach(function (n) { var pe = pers["period" + n]; if (!pe) return; var r = rangeAges(pe.ageRange), hiAge = r.hi >= 999 ? years : r.hi; items.push({ col: "per", a: birthMs + r.lo * MS_YEAR, b: birthMs + (hiAge + 1) * MS_YEAR, label: pe.value, n: pe.value, title: "Period " + pe.value + " · ages " + r.lo + (r.hi >= 999 ? " onward" : " to " + r.hi), text: (NUM_DEFS.periodcycle || {})[pe.value] || "" }); });
-      (me.events || []).forEach(function (e) { var nm = e.pl === "nn" ? "North Node" : e.pl.charAt(0).toUpperCase() + e.pl.slice(1), asp = e.asp === "Return" ? "return" : e.asp.toLowerCase(), tgt = e.tg === "Own" ? (e.asp === "Return" ? "" : "your own " + nm) : "your " + e.tg;
-        var lab = e.asp === "Return" ? nm + " Return" : nm + " " + e.asp + (e.tg === "Own" ? "" : "\nYour " + e.tg);
-        items.push({ col: e.col, a: e.a, b: e.b, label: lab, ev: true, title: nm + " " + asp + (tgt ? " " + tgt : "") + " · " + fmtDate(e.a) + " to " + fmtDate(e.b), text: e.text }); });
+      (me.events || []).forEach(function (e) { var nm = e.pl === "northnode" ? "North Node" : e.pl.charAt(0).toUpperCase() + e.pl.slice(1), lo = Math.floor((e.a - birthMs) / MS_YEAR), hi = Math.ceil((e.b - birthMs) / MS_YEAR);
+        items.push({ col: e.col, a: e.a, b: e.b, label: nm + " " + e.phase, ev: true, title: nm + " " + e.phase.toLowerCase() + " · ages " + lo + " to " + hi + " · " + fmtDate(e.a) + " to " + fmtDate(e.b), text: e.text }); });
       var colW = 100 / COLS.length, html = '<div class="tl-body" style="height:' + total + 'px">';
       if (me.zoom) { var c0 = new Date(me.selDate), my = c0.getUTCFullYear() * 12 + c0.getUTCMonth(); for (var mm = my - 36; mm <= my + 36; mm++) { var yr = Math.floor(mm / 12), mo = mm % 12, t0 = Date.UTC(yr, mo, 1), t1 = Date.UTC(yr, mo + 1, 1); if (t1 <= birthMs || t0 >= endMs) continue; html += '<div class="tl-tick' + (mo === 0 ? " yr" : "") + '" style="top:' + (ypos((t0 + t1) / 2)) + 'px">' + (mo === 0 ? yr : MONTHS[mo]) + "</div>"; } }
       else for (var yy = dob.y + 1; yy <= dob.y + years; yy++) html += '<div class="tl-tick yr" style="top:' + ypos(Date.UTC(yy, 0, 1)) + 'px">' + yy + "</div>";
