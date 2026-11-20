@@ -3,6 +3,7 @@
 (function () {
   "use strict";
   var MS_DAY = 864e5, MS_YEAR = 365.25 * MS_DAY;
+  var TL_YEARS = 120; // the timeline runs from birth to this age
   var PLANET_NAMES = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"];
   var PLANET_COLOR = { sun: "#e0a800", moon: "#6b7a99", mercury: "#2e9e5b", venus: "#d6336c", mars: "#e8590c", jupiter: "#c27c0e", saturn: "#495057", uranus: "#0c8599", neptune: "#3b5bdb", pluto: "#862e9c" };
   var PLANET_THEME = {
@@ -233,7 +234,7 @@
   }
   function computeEvents(p, data) {
     var nat = natalOf(p), dob = parseDob(p.dob); if (!dob) return [];
-    var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), endMs = birthMs + 95 * MS_YEAR, t = data.t, out = [], ASP = { Conjunction: 0, Return: 0, Square: 90, Opposition: 180 };
+    var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), endMs = birthMs + TL_YEARS * MS_YEAR, t = data.t, out = [], ASP = { Conjunction: 0, Return: 0, Square: 90, Opposition: 180 };
     Object.keys(data.meanings).forEach(function (key) {
       var parts = key.split("."), pl = parts[0], asp = parts[1], tg = parts[2] || "Own", col = pl === "nn" ? "northnode" : pl, arr = t.lon[col]; if (!arr) return;
       var target = tg === "Sun" ? nat.sun : tg === "Moon" ? nat.moon : tg === "Ascendant" ? nat.asc : nat[col];
@@ -267,7 +268,7 @@
       var NC = { 1: ["#ff9c1a", "#1a1200"], 2: ["#94b2ff", "#1a1200"], 3: ["#fefe8b", "#1a1200"], 4: ["#0b0b10", "#fff"], 5: ["#41a476", "#fff"], 6: ["#ffa3ff", "#1a1200"], 7: ["#a345bf", "#fff"], 8: ["#935734", "#fff"], 9: ["#d10000", "#fff"] };
       NC[11] = NC[2]; NC[22] = NC[4]; NC[33] = NC[6];
       var PC = { saturn: ["#14141f", "#fff"], jupiter: ["#d9a400", "#1a1200"], uranus: ["#2b7bff", "#fff"], neptune: ["#d11fb5", "#fff"], pluto: ["#ff1f5a", "#fff"], northnode: ["#00b8c4", "#0b0b10"] };
-      var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), years = 90, endMs = birthMs + years * MS_YEAR, PX = me.zoom ? 264 : 40, total = PX * years;
+      var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), years = TL_YEARS, endMs = birthMs + years * MS_YEAR, PX = me.zoom ? 264 : 40, total = PX * years;
       var ypos = function (ms) { return Math.max(0, Math.min(total, (endMs - ms) / MS_YEAR * PX)); };
       var COLS = ["Personal Year", "Essence", "Pinnacle", "Challenge", "Period", "Saturn", "Jupiter", "Uranus", "Neptune", "Pluto", "North Node"], KEYS = ["py", "es", "pin", "ch", "per", "saturn", "jupiter", "uranus", "neptune", "pluto", "northnode"];
       var items = [];
