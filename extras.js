@@ -222,7 +222,7 @@
   function loadTransits() {
     if (!transitsPromise) transitsPromise = Promise.all([fetch("data/transits.bin").then(function (r) { return r.arrayBuffer(); }), fetch("data/timeline-milestones.json").then(function (r) { return r.json(); }), fetch("data/timeline-houses.json").then(function (r) { return r.json(); })]).then(function (a) {
       var b = a[0], dv = new DataView(b), n = dv.getUint32(10, true), np = dv.getUint8(14), step = dv.getUint16(8, true), start = dv.getInt32(4, true);
-      var u = new Uint16Array(b, 16, n * np), names = ["jupiter", "saturn", "uranus", "neptune", "pluto", "northnode"], t = { start: start, step: step, n: n, lon: {} };
+      var u = new Uint16Array(b, 16, n * np), names = ["jupiter", "saturn", "uranus", "neptune", "pluto", "northnode", "chiron"], t = { start: start, step: step, n: n, lon: {} };
       names.forEach(function (nm, j) { t.lon[nm] = u.subarray(j * n, (j + 1) * n); });
       return { t: t, ms: a[1], hs: a[2] };
     });
@@ -233,7 +233,7 @@
     var hasTime = !(a.timeUnknown || a.locationUnknown);
     var cusps = hasTime ? (a.houses || []).filter(function (x) { return typeof x.absoluteDegrees === "number" && typeof x.house === "number"; }).sort(function (x, y) { return x.house - y.house; }) : [];
     var hOf = function (nm) { var x = (a.planets || []).filter(function (q) { return q.name === nm; })[0]; return hasTime && x && typeof x.house === "number" ? x.house : null; };
-    return { hasTime: hasTime, sun: get("Sun"), moon: hasTime ? get("Moon") : null, asc: hasTime && a.ascendant ? a.ascendant.absoluteDegrees : null, jupiter: get("Jupiter"), saturn: get("Saturn"), uranus: get("Uranus"), neptune: get("Neptune"), pluto: get("Pluto"), northnode: a.northNode ? a.northNode.absoluteDegrees : null, cusps: cusps.length === 12 ? cusps.map(function (x) { return x.absoluteDegrees; }) : null, house: { jupiter: hOf("Jupiter"), saturn: hOf("Saturn"), uranus: hOf("Uranus"), neptune: hOf("Neptune"), pluto: hOf("Pluto"), northnode: hasTime && a.northNode && typeof a.northNode.house === "number" ? a.northNode.house : null } };
+    return { hasTime: hasTime, sun: get("Sun"), moon: hasTime ? get("Moon") : null, asc: hasTime && a.ascendant ? a.ascendant.absoluteDegrees : null, jupiter: get("Jupiter"), saturn: get("Saturn"), uranus: get("Uranus"), neptune: get("Neptune"), pluto: get("Pluto"), northnode: a.northNode ? a.northNode.absoluteDegrees : null, chiron: a.chiron && typeof a.chiron.absoluteDegrees === "number" ? a.chiron.absoluteDegrees : null, cusps: cusps.length === 12 ? cusps.map(function (x) { return x.absoluteDegrees; }) : null, house: { jupiter: hOf("Jupiter"), saturn: hOf("Saturn"), uranus: hOf("Uranus"), neptune: hOf("Neptune"), pluto: hOf("Pluto"), chiron: hasTime && a.chiron && typeof a.chiron.house === "number" ? a.chiron.house : null, northnode: hasTime && a.northNode && typeof a.northNode.house === "number" ? a.northNode.house : null } };
   }
   // The planet bars: one bar for each turning point of a planet's cycle (square, opposition, return) at your own birth position.
   var SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
@@ -243,8 +243,11 @@
     uranus: { orb: 5, dir: 1, keep: function (k) { return k <= 5; }, idx: function (k) { return k; } },
     neptune: { orb: 4, dir: 1, keep: function (k) { return k <= 2; }, idx: function (k) { return k; } },
     pluto: { orb: 3, dir: 1, keep: function (k) { return k <= 2; }, idx: function (k) { return k; } },
+    chiron: { orb: 5, dir: 1, keep: function (k) { return k >= 2 && k <= 8; }, idx: function (k) { return k; } },
     northnode: { orb: 10, dir: -1, keep: function (k) { return k % 2 === 0; }, idx: function (k) { return k; } }
   };
+  var HOUSE_AREA = { 1: "you, your body and identity", 2: "money and what you value", 3: "communication and learning", 4: "home and family", 5: "creativity, romance and children", 6: "work routine and health", 7: "close partnership", 8: "shared money, intimacy and endings", 9: "beliefs, study and travel", 10: "career and public standing", 11: "friends, groups and hopes", 12: "the hidden side of life" };
+  function ordinal(n) { return n + (n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"); }
   function fmtDay(ms) { var d = new Date(ms); return MONTHS[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear(); }
   function explainEvent(pl, phase) {
     var nm = pl === "northnode" ? "The North Node" : pl.charAt(0).toUpperCase() + pl.slice(1);
@@ -276,9 +279,9 @@
         if (((a + b) / 2 - birthMs) / MS_YEAR < TL_MIN_AGE) return;
         var mid = Math.round((w.a + w.b) / 2), isRet = phaseName(k) === "Return", sign = SIGN_NAMES[Math.floor((isRet ? target : arr[mid] / 100) / 30) % 12];
         var txt = (((data.ms.milestones || {})[pl] || {})[String(rule.idx(k))] || ""), sg = (((data.ms.signs || {})[pl] || {})[sign] || "");
-        var ph = phaseName(k).toLowerCase(), house = ph === "return" ? nat.house[pl] : houseAt(arr[mid] / 100, nat.cusps), ht = house ? ((data.hs || {})[pl + "." + ph + "." + house] || "") : "";
+        var ph = phaseName(k).toLowerCase(), house = ph === "return" ? nat.house[pl] : houseAt(arr[mid] / 100, nat.cusps), ht = house ? ((data.hs || {})[pl + "." + ph + "." + house] || "") : "", nh = nat.house[pl], link = ht && ph !== "return" && nh ? (" It also touches your natal " + (pl === "northnode" ? "North Node" : pl.charAt(0).toUpperCase() + pl.slice(1)) + ", which is in your " + ordinal(nh) + " house (" + HOUSE_AREA[nh] + "), so that area is involved too.") : "";
         var ex = (exact[k] || []).filter(function (m) { return m >= birthMs && m <= endMs; }), exTxt = ex.length ? (" " + (ex.length === 1 ? "It is exact on " + fmtDay(ex[0]) + "." : "It is exact on " + ex.slice(0, -1).map(fmtDay).join(", ") + " and " + fmtDay(ex[ex.length - 1]) + ", because the planet moves back and forth over the point.")) : "";
-        out.push({ col: pl, k: k, a: Math.max(a, birthMs), b: Math.min(b, endMs), text: (ht ? (leadOf(txt) + " " + explainEvent(pl, phaseName(k)) + " " + ht) : (txt + (sg ? "\n" + sg : ""))).trim() + (exTxt ? (ht ? " " : "\n") + exTxt.trim() : ""), pl: pl, phase: phaseName(k), house: ht ? house : null, sign: sign });
+        out.push({ col: pl, k: k, a: Math.max(a, birthMs), b: Math.min(b, endMs), text: (ht ? (leadOf(txt) + " " + explainEvent(pl, phaseName(k)) + " " + ht + link) : (txt + (sg ? "\n" + sg : ""))).trim() + (exTxt ? (ht ? " " : "\n") + exTxt.trim() : ""), pl: pl, phase: phaseName(k), house: ht ? house : null, sign: sign });
       });
     });
     return out;
@@ -299,10 +302,10 @@
       var p = person(), dob = parseDob(p.dob), num = p.numerology; if (!dob || !num) return;
       var NC = { 1: ["#ff9c1a", "#1a1200"], 2: ["#94b2ff", "#1a1200"], 3: ["#fefe8b", "#1a1200"], 4: ["#0b0b10", "#fff"], 5: ["#41a476", "#fff"], 6: ["#ffa3ff", "#1a1200"], 7: ["#a345bf", "#fff"], 8: ["#935734", "#fff"], 9: ["#d10000", "#fff"] };
       NC[11] = NC[2]; NC[22] = NC[4]; NC[33] = NC[6];
-      var PC = { saturn: ["#14141f", "#fff"], jupiter: ["#d9a400", "#1a1200"], uranus: ["#2b7bff", "#fff"], neptune: ["#d11fb5", "#fff"], pluto: ["#ff1f5a", "#fff"], northnode: ["#00b8c4", "#0b0b10"] };
+      var PC = { saturn: ["#14141f", "#fff"], jupiter: ["#d9a400", "#1a1200"], uranus: ["#2b7bff", "#fff"], neptune: ["#d11fb5", "#fff"], pluto: ["#ff1f5a", "#fff"], chiron: ["#6f4cff", "#fff"], northnode: ["#00b8c4", "#0b0b10"] };
       var birthMs = Date.UTC(dob.y, dob.m - 1, dob.d), years = TL_YEARS, endMs = birthMs + years * MS_YEAR, PX = me.zoom ? 264 : 40, total = PX * years;
       var ypos = function (ms) { return Math.max(0, Math.min(total, (endMs - ms) / MS_YEAR * PX)); };
-      var COLS = ["Personal Year", "Essence", "Pinnacle", "Challenge", "Period", "Saturn", "Jupiter", "Uranus", "Neptune", "Pluto", "North Node"], KEYS = ["py", "es", "pin", "ch", "per", "saturn", "jupiter", "uranus", "neptune", "pluto", "northnode"];
+      var COLS = ["Personal Year", "Essence", "Pinnacle", "Challenge", "Period", "Saturn", "Jupiter", "Uranus", "Neptune", "Pluto", "Chiron", "North Node"], KEYS = ["py", "es", "pin", "ch", "per", "saturn", "jupiter", "uranus", "neptune", "pluto", "chiron", "northnode"];
       var items = [];
       for (var y = dob.y; y <= dob.y + years; y++) items.push({ col: "py", a: Math.max(Date.UTC(y, 0, 1), birthMs), b: Date.UTC(y + 1, 0, 1), label: personalYear(dob, y), n: personalYear(dob, y), title: "Personal Year " + personalYear(dob, y) + " · " + y, text: (NUM_DEFS.personalyear || {})[personalYear(dob, y)] || "" });
       var es = []; for (var a = 0; a <= years; a++) { var v = essenceAt(p, a); if (v == null) break; var l = es[es.length - 1]; if (l && l.v === v) l.hi = a; else es.push({ v: v, lo: a, hi: a }); }
@@ -335,7 +338,7 @@
     function showActive() {
       var info = document.getElementById("tlInfo"); if (!info) return; var d = me.selDate, act = me.items.filter(function (it) { return it.a <= d && d < it.b; });
       var dt = new Date(d), lab = MONTHS[dt.getUTCMonth()] + " " + dt.getUTCDate() + ", " + dt.getUTCFullYear();
-      info.innerHTML = '<span class="tt">What is active on ' + lab + "</span>" + (act.length ? act.map(function (it) { return esc(it.title.split(" · ")[0]); }).join(" &middot; ") : "Nothing is recorded for this date.") + '<br><span style="font-weight:700">Tap any bar to read what it means.</span>';
+      info.innerHTML = '<span class="tt">What is active on ' + lab + "</span>" + (act.length ? act.map(function (it) { return esc(it.title.split(" · ")[0]); }).join(" &middot; ") : "Nothing is recorded for this date.") + '<br><span style="font-weight:700">Tap any bar to read what it means. The planet bars follow traditional astrology.</span>';
     }
     var ex = document.getElementById("cardExpand"), body = document.getElementById("cardExpandBody"), ttl = document.getElementById("cardExpandTitle");
     function loadEvents() {
