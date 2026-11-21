@@ -1003,6 +1003,217 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
   return { reading: reading };
 }
 
+// ---------- Day reading ----------
+// One reading for one person on one chosen date, written by the model from the birth chart, the numerology as of that date and the sky on that date.
+// Pass holders only. A repeat request for the same person and date is answered from a saved copy and costs nothing.
+const DAY_READING_NEW_PER_DAY = 12;
+const DAY_READING_CACHE_SECONDS = 14 * 24 * 3600;
+
+const DAY_SYSTEM_PROMPT = `Check the person's age on the reading date before writing anything about love, dating, or sex. Under 18: none of it, ever.
+
+### ABSOLUTE RULES (zero exceptions)
+1. Address the person as "you" in every sentence. Never their name, never "she/he/her/him/they."
+2. Never name a placement, aspect, transit, cycle, return, number, or degree in the prose. State what it produces for this person on this day. Cite each one once, in references.
+3. Never intensify a claim before stating it ("real tension," "genuine need," "deep restlessness," and any synonym doing the same job). State it as settled fact.
+4. Return one JSON object only -- no markdown, no text before or after it.
+5. One point, one place. State each trait, need, or pattern once, in the paragraph where it matters most. A later paragraph may point back to it in a few words. It never explains it again.
+6. Do not predict events, outcomes, or what other people will do. Describe what the day asks of this person, what comes easier and what comes harder, and what to attend to. No medical, legal, or financial advice.
+
+### ROLE
+You are an expert astrologer and numerologist, and an expert in Human Design when a Human Design chart is given. Use your full depth in each system, never a shortened or generic version. You already know what every placement and number means, so skip the definition: dig past the first meaning that comes to mind for what it means for this person on this day. Write in plain, practical language: what the person feels, notices, handles, or decides. Never use mystical or dressed-up phrasing that sounds profound but says little.
+
+### WHAT YOU ARE GIVEN
+- The person's birth chart and, when available, their houses.
+- Their numerology as of the reading date: Personal Day inside Personal Month inside Personal Year, inside the current Essence, Pinnacle, Challenge, and Period Cycle.
+- The sky on the reading date, with the contacts it makes to the birth chart and the houses the moving planets pass through.
+- Longer astrological cycles that are active on that date.
+- Their Human Design (type, authority, profile, Incarnation Cross) when given.
+
+### HOW TO READ IT
+- Weigh the data by strength. A contact within one degree outweighs a wide one. The Moon changes fastest and sets the day's feeling. The slow planets describe the background of the whole stretch, not just today. A moving planet's house says which area of life the energy lands in.
+- Combine the numerology cycles into one picture of the day. The Personal Day means something different inside a Personal Year 1 than inside a Personal Year 9.
+- Build every point around the astrology and numerology together, never one system alone. If both point at the same thing, say it once, using both as evidence. If they pull apart, state what each produces and what the day feels like with both. If Human Design is given, use it for how this person best acts on the day's energy and for the theme it frames. Use only what is given.
+- Describe the person, not the chart. State what they do, want, or feel, never the mechanism producing it.
+
+### HOW TO WRITE
+- Cover what the data supports: the overall feeling of the day, where attention and energy go, what comes easily, what is better done slowly or left alone, how closeness and work are likely to feel, and the body and mood as the data supports. Cover only what the data supports.
+- Do not pad or reword to fill space. There is no target length. The more directly something is stated, the more content fits.
+- Never parrot this prompt's instructions back in the reading.
+
+### OUTPUT FORMAT
+{
+  "headline": "One short, specific line about this day. Follows ABSOLUTE RULE 2.",
+  "body": "The reading, in short paragraphs separated by a blank line. Each paragraph is one theme. Follows ABSOLUTE RULES 1 to 6.",
+  "references": ["Every placement, contact, cycle, and number the reading draws on, short technical shorthand, degrees included, one per entry."]
+}
+
+Before you finish: check every sentence against the ABSOLUTE RULES above and fix any violation.`;
+
+const DAY_SIGNS = [ "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces" ];
+
+function dayAbs(x) {
+  if (!x) return null;
+  if (typeof x.absoluteDegrees === "number") return x.absoluteDegrees;
+  const i = DAY_SIGNS.indexOf(x.sign), d = parseFloat(x.degreesInSign);
+  return i >= 0 && isFinite(d) ? i * 30 + d : null;
+}
+
+function dayLonLabel(lon) {
+  const l = (lon % 360 + 360) % 360;
+  return `${DAY_SIGNS[Math.floor(l / 30)]} ${(l % 30).toFixed(1)}°`;
+}
+
+function dayHouseOf(lon, houses) {
+  const cusps = (houses || []).filter(h => typeof h.absoluteDegrees === "number" && typeof h.house === "number").sort((a, b) => a.house - b.house);
+  if (cusps.length !== 12) return null;
+  for (let i = 0; i < 12; i++) {
+    const s = cusps[i].absoluteDegrees, e = cusps[(i + 1) % 12].absoluteDegrees;
+    if (((lon - s) % 360 + 360) % 360 < ((e - s) % 360 + 360) % 360) return cusps[i].house;
+  }
+  return null;
+}
+
+function dayMoonPhase(sunLon, moonLon) {
+  const e = ((moonLon - sunLon) % 360 + 360) % 360;
+  if (e < 22.5 || e >= 337.5) return "new";
+  if (e < 67.5) return "waxing crescent";
+  if (e < 112.5) return "first quarter";
+  if (e < 157.5) return "waxing gibbous";
+  if (e < 202.5) return "full";
+  if (e < 247.5) return "waning gibbous";
+  if (e < 292.5) return "last quarter";
+  return "waning crescent";
+}
+
+function dayRangeAges(str) {
+  const s = String(str || "");
+  const m = /^(birth|\d+)\D+(onward|\d+)$/.exec(s);
+  if (!m) return null;
+  return { lo: m[1] === "birth" ? 0 : +m[1], hi: m[2] === "onward" ? 999 : +m[2] };
+}
+
+function dayCurrentStage(n) {
+  const age = n.essenceCycle?.currentAge;
+  const pick = (obj, prefix, count) => {
+    for (let i = 1; i <= count; i++) {
+      const x = obj?.[prefix + i];
+      const r = x && dayRangeAges(x.ageRange);
+      if (r && age >= r.lo && age <= r.hi) return { n: i, x: x };
+    }
+    return null;
+  };
+  const pin = pick(n.pinnacles, "pinnacle", 4), per = pick(n.periodCycles, "period", 3);
+  const ch = pin ? n.challengeNumbers?.["challenge" + pin.n] : null;
+  return { pin: pin, per: per, ch: ch };
+}
+
+function dayAspects(transitPts, natalPts) {
+  const A = [ [ "conjunct", 0 ], [ "sextile", 60 ], [ "square", 90 ], [ "trine", 120 ], [ "opposite", 180 ] ];
+  const out = [];
+  for (const t of transitPts) for (const nt of natalPts) {
+    const sep = Math.abs(((t.lon - nt.lon) % 360 + 360) % 360);
+    const fold = sep > 180 ? 360 - sep : sep;
+    for (const [name, ang] of A) {
+      const orb = Math.abs(fold - ang);
+      if (orb <= 2) out.push({ t: t, n: nt, name: name, orb: orb });
+    }
+  }
+  return out.sort((a, b) => a.orb - b.orb);
+}
+
+function buildDayUserPrompt(person, natalAstro, humanDesign, dateISO, activeCycles) {
+  const [yy, mm, dd] = dateISO.split("-").map(Number);
+  const mdy = `${pad(mm)}/${pad(dd)}/${yy}`;
+  const n = calculateFullChart({ first: person.first, middle: person.mid || "", last: person.last, dob: dobToMMDDYYYY(person.dob), currentDate: mdy });
+  const sky = computeAstrology({ year: yy, month: mm, day: dd, hour: 12, minute: 0, cityName: "", countryCode: "", state: "", skipAspects: true });
+  const a = natalAstro || {};
+  const hasHouses = !(a.timeUnknown || a.locationUnknown) && (a.houses || []).length === 12;
+  const natalPts = [];
+  (a.planets || []).forEach(p => { const l = dayAbs(p); if (l != null && !p.signUncertain) natalPts.push({ name: p.name, lon: l }); });
+  [ [ "North Node", a.northNode ], [ "Chiron", a.chiron ] ].forEach(([nm, p]) => { const l = dayAbs(p); if (l != null && !p?.signUncertain) natalPts.push({ name: nm, lon: l }); });
+  if (hasHouses) [ [ "Ascendant", a.ascendant ], [ "Midheaven", a.midheaven ] ].forEach(([nm, p]) => { const l = dayAbs(p); if (l != null) natalPts.push({ name: nm, lon: l }); });
+  const skyPts = (sky.planets || []).map(p => ({ name: p.name, lon: p.absoluteDegrees, rx: p.retrograde })).filter(p => typeof p.lon === "number");
+  if (sky.chiron && typeof sky.chiron.absoluteDegrees === "number") skyPts.push({ name: "Chiron", lon: sky.chiron.absoluteDegrees, rx: sky.chiron.retrograde });
+  const sun = skyPts.find(p => p.name === "Sun"), moon = skyPts.find(p => p.name === "Moon");
+  const skyLines = skyPts.map(p => `${p.name} ${dayLonLabel(p.lon)}${p.rx ? " Rx" : ""}${hasHouses ? ` (natal house ${dayHouseOf(p.lon, a.houses)})` : ""}`).join(", ");
+  const contacts = dayAspects(skyPts, natalPts).slice(0, 16).map(c => `${c.t.name} ${c.name} natal ${c.n.name}, orb ${c.orb.toFixed(1)}°`);
+  const pinnacle = x => x ? `${x.value} (${x.ageRange})` : "unknown";
+  const stage = dayCurrentStage(n);
+  const numerologyLines = [ `Life Path ${n.lifePath}, Expression ${n.expression}, Soul Urge ${n.soulUrge}, Personality ${n.personality}, Birthday ${n.birthday}`, `Attitude ${n.attitude}, Balance ${n.balance}, Maturity ${n.maturity}`, `On the reading date: Personal Year ${n.personalYear}, Personal Month ${n.personalMonth}, Personal Day ${n.personalDay}, Essence ${n.essenceCycle?.value}`, `Current stage: Pinnacle ${stage.pin ? pinnacle(stage.pin.x) : "unknown"}, Challenge ${stage.ch != null ? stage.ch : "unknown"}, Period Cycle ${stage.per ? pinnacle(stage.per.x) : "unknown"}`, `Karmic Lessons: ${n.karmicLessons?.length ? n.karmicLessons.join(", ") : "none"}`, `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(", ") : "none"}` ].join("\n  ");
+  const planetLine = pl => `${pl.name} in ${pl.sign} ${pl.degreesInSign}°${pl.house && hasHouses ? ` (house ${pl.house})` : ""}${pl.retrograde ? " Rx" : ""}`;
+  const angle = (label, x) => x ? `${label}: ${x.sign} ${x.degreesInSign}°` : null;
+  const natalLines = [ !hasHouses ? "Birth time or birth location not provided, so the Ascendant, Midheaven, and houses are unavailable. Do not guess or invent them; read the chart by sign only." : null, (a.planets || []).map(planetLine).join(", "), [ angle("North Node", a.northNode), angle("Chiron", a.chiron), hasHouses ? angle("Ascendant", a.ascendant) : null, hasHouses ? angle("Midheaven", a.midheaven) : null ].filter(Boolean).join(", "), hasHouses ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(", ")}` : null ].filter(Boolean).join("\n  ");
+  const h = humanDesign || {};
+  const hdLines = h.type ? `${h.type} type, ${h.profile || "unknown"} profile, ${h.authority || "unknown"} authority${h.incarnation_cross ? `\n  Incarnation Cross: ${h.incarnation_cross}` : ""}` : null;
+  const dateLabel = new Date(Date.UTC(yy, mm - 1, dd)).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+  const cycles = (activeCycles || []).filter(s => typeof s === "string").slice(0, 8).map(s => s.slice(0, 200));
+  return [ `Date of the reading: ${dateLabel}`, `Person: ${person.first} (age ${n.essenceCycle?.currentAge ?? "unknown"} on this date)`, `Numerology as of this date:\n  ${numerologyLines}`, `Birth chart:\n  ${natalLines}`, `The sky on this date (planets at noon UT): ${skyLines}`, sun && moon ? `Moon phase: ${dayMoonPhase(sun.lon, moon.lon)}` : null, `Contacts the sky makes to the birth chart (within 2 degrees): ${contacts.length ? contacts.join("; ") : "none"}`, cycles.length ? `Longer astrological cycles active on this date: ${cycles.join("; ")}` : null, hdLines ? `Human Design:\n  ${hdLines}` : null ].filter(Boolean).join("\n\n");
+}
+
+async function handleDayReading(request, env, ctx) {
+  if (!fromOurSite(request)) return notFromOurSite();
+  let body;
+  try {
+    body = await request.json();
+  } catch (e) {
+    return jsonResponse({ error: "Invalid request body." }, 400);
+  }
+  const email = typeof body.passEmail === "string" ? body.passEmail.trim() : "";
+  if (!/^[^\s@]+@[^\s@]+$/.test(email)) return jsonResponse({ error: "An email address is needed to read a day.", code: "email_needed" }, 400);
+  const dateISO = typeof body.date === "string" ? body.date : "";
+  const dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateISO);
+  if (!dm || +dm[1] < 1900 || +dm[1] > 2100 || +dm[2] < 1 || +dm[2] > 12 || +dm[3] < 1 || +dm[3] > 31) return jsonResponse({ error: "A valid date is needed." }, 400);
+  const person = body.person || {};
+  if (typeof person.first !== "string" || !person.first.trim() || typeof person.last !== "string" || !person.last.trim() || typeof person.dob !== "string") return jsonResponse({ error: "The person's name and date of birth are needed." }, 400);
+  let status;
+  try {
+    status = await checkPassRecord(env, email);
+  } catch (e) {
+    return jsonResponse({ error: "Your email could not be checked just now. Please try again in a moment." }, 503);
+  }
+  if (!status.active) return jsonResponse({ error: "Day readings are part of a pass, and passes are not available yet.", code: "pass_needed" }, 402);
+  const cacheKey = "day:" + sha256Hex(["day-v1", email.toLowerCase(), person.first.trim().toLowerCase(), person.last.trim().toLowerCase(), person.dob.trim(), dateISO].join("|"));
+  const saved = await env.PASSES.get(cacheKey);
+  if (saved) {
+    try {
+      return jsonResponse({ report: JSON.parse(saved), cached: true });
+    } catch (e) {}
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  const countKey = "daycount:" + sha256Hex(email.toLowerCase()) + ":" + today;
+  const used = parseInt(await env.PASSES.get(countKey) || "0", 10);
+  if (used >= DAY_READING_NEW_PER_DAY) return jsonResponse({ error: "That is the limit of new day readings for today. A day you have already read can be opened again, and the limit resets tomorrow.", code: "day_limit" }, 429);
+  let prompt;
+  try {
+    prompt = buildDayUserPrompt(person, body.astrology || null, body.humanDesign || null, dateISO, body.activeCycles);
+  } catch (e) {
+    return jsonResponse({ error: "The reading could not be set up: " + e.message }, 400);
+  }
+  await env.PASSES.put(countKey, String(used + 1), { expirationTtl: 2 * 24 * 3600 });
+  let result, lastError;
+  const failed = [];
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      result = await generateSingleCallReading(env, prompt, DAY_SYSTEM_PROMPT);
+      if (!result.parsed || typeof result.parsed.body !== "string") throw new Error("The reading came back in an unexpected form.");
+      lastError = null;
+      break;
+    } catch (error) {
+      lastError = error;
+      if (error.usage) failed.push(error.usage);
+    }
+  }
+  const sumUsage = list => list.reduce((t, u) => ({ input_tokens: (t.input_tokens || 0) + (u.input_tokens || 0), output_tokens: (t.output_tokens || 0) + (u.output_tokens || 0), cache_creation_input_tokens: (t.cache_creation_input_tokens || 0) + (u.cache_creation_input_tokens || 0), cache_read_input_tokens: (t.cache_read_input_tokens || 0) + (u.cache_read_input_tokens || 0) }), {});
+  if (lastError) {
+    if (failed.length) ctx.waitUntil(recordUsage(env, sumUsage(failed), "day"));
+    return jsonResponse({ error: "The reading could not be written just now. Please try again in a moment." }, 502);
+  }
+  ctx.waitUntil(recordUsage(env, result.usage, "day"));
+  const report = { headline: String(result.parsed.headline || ""), body: result.parsed.body, references: Array.isArray(result.parsed.references) ? result.parsed.references.map(String) : [] };
+  await env.PASSES.put(cacheKey, JSON.stringify(report), { expirationTtl: DAY_READING_CACHE_SECONDS });
+  return jsonResponse({ report: report, cached: false });
+}
+
 export default {
   async fetch(request, env, ctx) {
     if (request.method === "OPTIONS") {
@@ -1221,6 +1432,7 @@ export default {
       }
       return jsonResponse(JSON.parse(raw));
     }
+    if (url.pathname === "/day-reading") return handleDayReading(request, env, ctx);
     if (url.pathname !== "/report") {
       return jsonResponse({
         error: "Unknown endpoint"

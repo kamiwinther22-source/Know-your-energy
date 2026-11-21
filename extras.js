@@ -76,7 +76,14 @@
       ".xpass .pol{text-align:center;font:600 11.5px/1.5 'Fraunces',serif;margin:6px 8px 0}",
       ".xpass .pol a{color:#fff}",
       /* timeline */
-      ".tl{color:#000;font-family:'DM Sans',sans-serif}",
+      ".tl{color:#000;font-family:'DM Sans',sans-serif;position:relative}",
+      ".tl-day{position:absolute;left:0;right:0;top:0;bottom:0;z-index:6;background:#fff;border:2.5px solid #000;border-radius:14px;padding:14px 14px 18px;overflow:auto;color:#000;-webkit-overflow-scrolling:touch}",
+      ".tl-day .dt{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}",
+      ".tl-day h3{font:800 20px/1.25 'DM Sans',sans-serif;margin:0 0 10px;color:#000}",
+      ".tl-day p{font:500 15px/1.6 'DM Sans',sans-serif;margin:0 0 11px;color:#000}",
+      ".tl-day details{margin:12px 0 4px;font:600 13px/1.5 'DM Sans',sans-serif}",
+      ".tl-day details summary{cursor:pointer;font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase}",
+      ".tl-day .x{float:right}",
       ".tl-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:2px 0 8px}",
       ".tl-ctl label{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#000}",
       ".tl-ctl input{font:700 15px 'DM Sans',sans-serif;border:2px solid #000;border-radius:12px;background:#fff;color:#000;padding:4px 8px}",
@@ -296,7 +303,7 @@
 
   function openTimeline(people) {
     addStyles();
-    var me = { idx: 0, data: null, sel: null, selDate: Date.now() };
+    var nowD = new Date(), me = { idx: 0, data: null, sel: null, selDate: Date.UTC(nowD.getFullYear(), nowD.getMonth(), nowD.getDate()) };
     function person() { return people[me.idx]; }
     function build() {
       var p = person(), dob = parseDob(p.dob), num = p.numerology; if (!dob || !num) return;
@@ -327,13 +334,34 @@
       var head = '<div class="tl-head">' + COLS.map(function (c) { return "<div>" + c + "</div>"; }).join("") + "</div>";
       var chips = people.length > 1 ? people.map(function (q, i) { return '<button class="tl-chip' + (i === me.idx ? " on" : "") + '" data-p="' + i + '">' + esc(q.first) + "</button>"; }).join("") : "";
       var ds = new Date(me.selDate), iso = ds.getUTCFullYear() + "-" + String(ds.getUTCMonth() + 1).padStart(2, "0") + "-" + String(ds.getUTCDate()).padStart(2, "0");
-      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Type a date</label><input type="date" id="tlDate" value="' + iso + '">' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
+      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Type a date</label><input type="date" id="tlDate" value="' + iso + '"><button class="tl-chip" id="tlRead">Read this day</button>' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
       showActive();
       var sc = document.getElementById("tlScroll"); var go = function () { sc.style.setProperty("--stk", Math.round(sc.clientHeight * 0.42) + "px"); sc.scrollTop = Math.max(0, nowY - sc.clientHeight / 2); }; go(); setTimeout(go, 120); setTimeout(go, 450);
       sc.addEventListener("click", function (e) { var bar = e.target.closest(".tl-bar"); if (!bar) return; var it = me.items[+bar.dataset.i]; [].forEach.call(sc.querySelectorAll(".tl-bar.sel"), function (x) { x.classList.remove("sel"); }); bar.classList.add("sel"); document.getElementById("tlInfo").innerHTML = '<span class="tt">' + esc(it.title) + "</span>" + esc(it.text || "").replace(/\n/g, "<br>"); });
       document.getElementById("tlDate").onchange = function (e) { var v = e.target.value.split("-"); if (v.length === 3) { me.selDate = Date.UTC(+v[0], +v[1] - 1, +v[2]); me.selIsNow = false; me.zoom = true; build(); } };
       var wh = document.getElementById("tlWhole"); if (wh) wh.onclick = function () { me.zoom = false; build(); };
+      var rd = document.getElementById("tlRead"); if (rd) rd.onclick = readDay;
       [].forEach.call(body.querySelectorAll(".tl-chip[data-p]"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; loadEvents(); }; });
+    }
+    function readDay() {
+      var p = person(), el = document.getElementById("tlDate"), iso = el && el.value, host = body.querySelector(".tl"); if (!iso || !host) return;
+      var old = host.querySelector(".tl-day"); if (old) old.remove();
+      var panel = document.createElement("div"); panel.className = "tl-day"; host.appendChild(panel);
+      var parts = iso.split("-"), when = Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0];
+      var close = '<button class="tl-chip x" id="tlDayX">Close</button>';
+      var say = function (msg) { panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><p>" + esc(msg) + "</p>"; document.getElementById("tlDayX").onclick = function () { panel.remove(); }; };
+      var email = ""; try { var f = document.getElementById("pEmail"); email = ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) {}
+      if (!email) { say("Enter the email address of your pass on the first page, then open this again."); return; }
+      say("Writing your reading for " + lab + ". This takes up to a minute.");
+      var ast = Object.assign({}, p.astro || {}); delete ast.acg; delete ast.aspects;
+      var cycles = (me.items || []).filter(function (it) { return it.ev && it.a <= when && when < it.b; }).map(function (it) { return it.title; });
+      var api = typeof W_API !== "undefined" ? W_API : "https://know-your-energy.kwdoanchor.workers.dev";
+      var timer = new Promise(function (_, rej) { setTimeout(function () { rej(new Error("This is taking longer than expected. Please try again.")); }, 150000); });
+      Promise.race([fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ passEmail: email, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: ast, humanDesign: p.hd || null, activeCycles: cycles }) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) throw new Error(j.error || "Something went wrong. Please try again."); return j; }); }), timer]).then(function (j) {
+        var r = j.report || {}, paras = String(r.body || "").split(/\n\s*\n/).filter(function (s) { return s.trim(); });
+        panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
+        document.getElementById("tlDayX").onclick = function () { panel.remove(); };
+      }).catch(function (e) { say(e && e.message ? e.message : "Something went wrong. Please try again."); });
     }
     function showActive() {
       var info = document.getElementById("tlInfo"); if (!info) return; var d = me.selDate, act = me.items.filter(function (it) { return it.a <= d && d < it.b; });
@@ -353,7 +381,7 @@
   function peopleOf(p1, p2) {
     return [p1, p2].filter(Boolean).map(function (p) {
       var a = p.astro || {}, loc = a.location || {};
-      return { first: p.first, mid: p.mid, last: p.last, dob: p.dob, numerology: p.numerology, astro: p.astro, acg: a.acg || null, birth: a.acg && loc.latitude != null ? { lat: loc.latitude, lng: loc.longitude } : null };
+      return { first: p.first, mid: p.mid, last: p.last, dob: p.dob, numerology: p.numerology, astro: p.astro, hd: p.hd || null, acg: a.acg || null, birth: a.acg && loc.latitude != null ? { lat: loc.latitude, lng: loc.longitude } : null };
     });
   }
   function frameCard(cls, inner) { return '<div class="xcard ' + cls + '" role="button" tabindex="0"><i></i><b>' + inner + "</b></div>"; }
