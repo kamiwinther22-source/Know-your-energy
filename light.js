@@ -60,6 +60,81 @@
    *  The lit surface
    * ---------------------------------------------------------------- */
 
+  /* ---- A: RAKED SHEET -------------------------------------------------
+     No pattern at all. The page is one sheet of polished stone and the
+     light rakes across it from the sun's side, so the brightness travels in
+     a straight direction rather than spreading out of a point. Smooth, deep,
+     nothing to notice — the opposite of a texture.                      */
+  function surfaceRaked(w, h, sx, sy) {
+    /* the rake runs from the sun across the page, so its angle is the
+       direction from the sun to the page's centre */
+    var cx = w / 2, cy = h * 0.55;
+    var vx = cx - sx, vy = cy - sy;
+    var d = Math.sqrt(vx * vx + vy * vy) || 1;
+    var ux = vx / d, uy = vy / d;
+    /* a gradient line long enough to cross the whole page on that heading */
+    var span = Math.abs(ux) * w + Math.abs(uy) * h;
+    var x1 = sx - ux * span * 0.18, y1 = sy - uy * span * 0.18;
+    var x2 = sx + ux * span * 1.05, y2 = sy + uy * span * 1.05;
+
+    return '' +
+'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" ' +
+     'viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" style="display:block">' +
+  '<defs>' +
+    '<linearGradient id="kyeRake" gradientUnits="userSpaceOnUse" ' +
+      'x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" ' +
+      'x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '">' +
+      '<stop offset="0"    stop-color="#A82B55"/>' +
+      '<stop offset=".10"  stop-color="#8E1A3E"/>' +
+      '<stop offset=".26"  stop-color="#6E1030"/>' +
+      '<stop offset=".48"  stop-color="#520A22"/>' +
+      '<stop offset=".72"  stop-color="#49091F"/>' +
+      '<stop offset="1"    stop-color="#2E0512"/>' +
+    '</linearGradient>' +
+    /* the sheet's own edges turn away, the way a thick polished slab does */
+    '<linearGradient id="kyeEdge" x1="0" y1="0" x2="1" y2="0">' +
+      '<stop offset="0"    stop-color="#1A0309" stop-opacity=".55"/>' +
+      '<stop offset=".14"  stop-color="#1A0309" stop-opacity="0"/>' +
+      '<stop offset=".86"  stop-color="#1A0309" stop-opacity="0"/>' +
+      '<stop offset="1"    stop-color="#1A0309" stop-opacity=".55"/>' +
+    '</linearGradient>' +
+  '</defs>' +
+  '<rect width="' + w + '" height="' + h + '" fill="url(#kyeRake)"/>' +
+  '<rect width="' + w + '" height="' + h + '" fill="url(#kyeEdge)"/>' +
+'</svg>';
+  }
+
+  /* ---- B: ENGINE TURNING ---------------------------------------------
+     All pattern. Fine rays struck out from the sun and fine rings around
+     it, the way a watch dial or a silver case is engine-turned. Each line
+     is a cut in the surface, so it catches light on the side facing the sun
+     and goes dark on the other. The figure radiates from the sun because
+     the sun is literally its centre.                                     */
+  function surfaceTurned(w, h, sx, sy) {
+    var far = Math.sqrt(Math.max(sx, w - sx) * Math.max(sx, w - sx) +
+                        Math.max(sy, h - sy) * Math.max(sy, h - sy));
+    return '' +
+'<div style="position:absolute;inset:0;overflow:hidden;' +
+  'background:' +
+    /* the rays: a fine comb struck out from the sun */
+    'repeating-conic-gradient(from 0deg at ' + sx + 'px ' + sy + 'px,' +
+      'rgba(255,228,238,.085) 0deg .22deg,' +
+      'rgba(20,2,9,.16) .22deg .52deg,' +
+      'rgba(255,228,238,.02) .52deg .78deg,' +
+      'rgba(20,2,9,.06) .78deg 1.1deg),' +
+    /* the rings: concentric cuts, crossing the rays */
+    'repeating-radial-gradient(circle at ' + sx + 'px ' + sy + 'px,' +
+      'rgba(255,228,238,.055) 0 2px,' +
+      'rgba(20,2,9,.10) 2px 5px,' +
+      'rgba(255,228,238,.012) 5px 7px,' +
+      'rgba(20,2,9,.035) 7px 11px),' +
+    /* the metal under the engraving, deepening with distance from the sun */
+    'radial-gradient(' + Math.round(far * 1.15) + 'px ' + Math.round(far * 1.5) + 'px' +
+      ' at ' + sx + 'px ' + sy + 'px,' +
+      '#99244C 0%,#7E1A3C 16%,#64112E 34%,#4C0B22 56%,#350716 78%,#20040D 100%);' +
+  '"></div>';
+  }
+
   function surfaceSVG(w, h, sx, sy) {
     /* The light's height above the page. Low puts a tight pool under the
        sun; high spreads it. This is the single number that decides how
@@ -74,25 +149,27 @@
     '<filter id="kyeLit" x="0" y="0" width="100%" height="100%" ' +
             'filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">' +
 
-      /* The relief. Several octaves so the surface has both broad mottling
-         and fine tooth, the way a deep lacquer or a stone slab does. One
-         scale alone reads as noise; several read as material. */
-      '<feTurbulence type="fractalNoise" baseFrequency="0.0032 0.0041" ' +
-                    'numOctaves="5" seed="11" result="relief"/>' +
+      /* The relief. Fine tooth, not cloud: a coarse, high-amplitude noise
+         reads as a stain or a blotch. Tight frequency and few octaves give
+         the surface a grain you feel rather than a pattern you notice. */
+      '<feTurbulence type="fractalNoise" baseFrequency="0.019 0.023" ' +
+                    'numOctaves="3" seed="11" result="relief"/>' +
 
-      /* A real point light at the sun, lighting that relief. */
-      '<feDiffuseLighting in="relief" surfaceScale="9" diffuseConstant="1.0" ' +
-                         'lighting-color="#ffd2de" result="lit">' +
+      /* A real point light at the sun, lighting that relief. The grain is
+         shallow, so most of the variation across the page comes from the
+         light's own falloff rather than from the texture. */
+      '<feDiffuseLighting in="relief" surfaceScale="2.4" diffuseConstant="1.0" ' +
+                         'lighting-color="#ffd7e2" result="lit">' +
         '<fePointLight x="' + sx + '" y="' + sy + '" z="' + z + '"/>' +
       '</feDiffuseLighting>' +
 
       /* Lift the floor so the far end of the page keeps its colour instead
-         of crushing to black, and keep some ceiling so highlights do not
-         blow out to white. */
+         of crushing to black, and hold the ceiling so highlights near the
+         sun do not blow out. */
       '<feComponentTransfer in="lit" result="shaped">' +
-        '<feFuncR type="linear" slope="0.78" intercept="0.30"/>' +
-        '<feFuncG type="linear" slope="0.78" intercept="0.26"/>' +
-        '<feFuncB type="linear" slope="0.78" intercept="0.27"/>' +
+        '<feFuncR type="linear" slope="0.62" intercept="0.52"/>' +
+        '<feFuncG type="linear" slope="0.62" intercept="0.46"/>' +
+        '<feFuncB type="linear" slope="0.62" intercept="0.48"/>' +
       '</feComponentTransfer>' +
 
       /* Multiply the garnet by the light. */
@@ -105,9 +182,9 @@
        further off. */
     '<filter id="kyeSheen" x="0" y="0" width="100%" height="100%" ' +
             'filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">' +
-      '<feTurbulence type="fractalNoise" baseFrequency="0.0075 0.0092" ' +
-                    'numOctaves="3" seed="4" result="grain"/>' +
-      '<feSpecularLighting in="grain" surfaceScale="4" specularConstant="0.62" ' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.03 0.035" ' +
+                    'numOctaves="2" seed="4" result="grain"/>' +
+      '<feSpecularLighting in="grain" surfaceScale="1.6" specularConstant="0.5" ' +
                           'specularExponent="22" lighting-color="#fff0f4">' +
         '<fePointLight x="' + sx + '" y="' + sy + '" z="' + Math.round(z * 0.52) + '"/>' +
       '</feSpecularLighting>' +
@@ -116,7 +193,7 @@
 
   '<rect width="' + w + '" height="' + h + '" fill="#6A1230" filter="url(#kyeLit)"/>' +
   '<rect width="' + w + '" height="' + h + '" filter="url(#kyeSheen)" ' +
-        'style="mix-blend-mode:screen;opacity:.42"/>' +
+        'style="mix-blend-mode:screen;opacity:.30"/>' +
 '</svg>';
   }
 
@@ -138,7 +215,11 @@
     el.style.cssText =
       "position:absolute;top:0;left:0;width:100%;height:" + h + "px;" +
       "z-index:0;pointer-events:none;overflow:hidden;";
-    el.innerHTML = surfaceSVG(w, h, sx, sy);
+
+    var which = (/[?&]bg=([a-z]+)/.exec(location.search) || [])[1] || "turned";
+    if (which === "raked")       el.innerHTML = surfaceRaked(w, h, sx, sy);
+    else if (which === "noise")  el.innerHTML = surfaceSVG(w, h, sx, sy);
+    else                         el.innerHTML = surfaceTurned(w, h, sx, sy);
   }
 
   /* ---------------------------------------------------------------- *

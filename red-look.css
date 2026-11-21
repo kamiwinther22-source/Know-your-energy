@@ -68,7 +68,7 @@ html.red #hookStep{display:block}
 html.red #hookStep h1.r-h1{
   font-family:'Alex Brush',cursive !important;
   font-weight:400 !important;
-  font-size:clamp(30px,13.2vw,76px);
+  font-size:clamp(24px,10.6vw,62px);
   line-height:1.0;
   white-space:nowrap;
   margin:2px 0 0;
@@ -80,25 +80,24 @@ html.red #hookStep h1.r-h1{
       rgba(255,255,255,.9) 0%,
       rgba(255,255,255,.3) 14%,
       rgba(255,255,255,0) 32%),
-    /* The same world the buttons reflect: sky above, one hard horizon, and
-       below it the garnet page coming back up into the metal. One horizon,
-       no repeating bands. */
+    /* The metal's own sweep: unbroken, no line across it and no repeating
+       bands. The shine has to come from the edges catching the light, not
+       from a stripe painted through the middle. The garnet the page throws
+       back rises into the lower part on its own. */
     linear-gradient(180deg,
       #ffffff 0%,
-      #f4f8fb 22%,
-      #d8e2eb 40%,
-      #b2bec9 48%,
-      #5d6771 50%,
-      #b98b94 54%,
-      #d8b4ba 66%,
-      #efe3e5 84%,
-      #ffffff 100%);
-  /* One full reflection per line of the mark. Stretched once over the whole
-     block, line one gets the sky and line two gets the ground, which is why
-     the second line went pink. */
-  background-size:100% 0.86em;
-  background-position:0 0.10em;
-  background-repeat:repeat;
+      #f1f5f9 14%,
+      #d6dfe8 32%,
+      #b6c0cb 48%,
+      #a4a2ab 60%,
+      #b59aa1 72%,
+      #d4bcc1 84%,
+      #ece0e2 94%,
+      #fbf7f8 100%);
+  /* one line, so one sweep across it */
+  background-size:100% 0.80em;
+  background-position:0 0.13em;
+  background-repeat:no-repeat;
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent !important;
@@ -280,15 +279,14 @@ html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before{
        the lower wall catches the bright sky. Running it opposite to the rim
        is what makes the top read as pressed in rather than printed on. */
     linear-gradient(180deg,
-      #4a3038 0%,
-      #7b5560 7%,
-      #9a8a8a 18%,
-      #c3bcb8 38%,
-      #ddd6d2 49%,
-      #f6f2ef 51%,
-      #e9e3df 68%,
-      #cfc7c3 86%,
-      #ada5a2 100%);
+      #4e343c 0%,
+      #7d5a64 8%,
+      #a08f8f 20%,
+      #c6bfbb 40%,
+      #e2dbd7 58%,
+      #f3efec 76%,
+      #ddd5d1 90%,
+      #b8b0ad 100%);
   clip-path:polygon(var(--d) 0,calc(100% - var(--d)) 0,100% 50%,calc(100% - var(--d)) 100%,var(--d) 100%,0 50%);
 }
 html.red .rbtn,html.red .gen-btn{width:210px;height:50px;font-size:19px;padding:0}
