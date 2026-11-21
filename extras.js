@@ -4,6 +4,7 @@
   "use strict";
   var MS_DAY = 864e5, MS_YEAR = 365.25 * MS_DAY;
   var TL_YEARS = 120; // the timeline runs from birth to this age
+  var TL_MIN_AGE = 18; // planet bars are not shown before this age
   var PLANET_NAMES = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"];
   var PLANET_COLOR = { sun: "#e0a800", moon: "#6b7a99", mercury: "#2e9e5b", venus: "#d6336c", mars: "#e8590c", jupiter: "#c27c0e", saturn: "#495057", uranus: "#0c8599", neptune: "#3b5bdb", pluto: "#862e9c" };
   var PLANET_THEME = {
@@ -244,6 +245,13 @@
     pluto: { orb: 3, dir: 1, keep: function (k) { return k <= 2; }, idx: function (k) { return k; } },
     northnode: { orb: 10, dir: -1, keep: function (k) { return k % 2 === 0; }, idx: function (k) { return k; } }
   };
+  function fmtDay(ms) { var d = new Date(ms); return MONTHS[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear(); }
+  function explainEvent(pl, phase) {
+    var nm = pl === "northnode" ? "The North Node" : pl.charAt(0).toUpperCase() + pl.slice(1);
+    if (phase === "Return") return nm + " is back at the position it held when you were born.";
+    if (phase === "Opposition") return nm + " is halfway around its cycle, directly opposite the position it held when you were born, which brings the matter into view from the other side.";
+    return nm + " is a quarter turn from the position it held when you were born, a right angle called a square, which brings pressure.";
+  }
   function houseAt(lon, cusps) { if (!cusps) return null; for (var i = 0; i < 12; i++) { var s = cusps[i], e = cusps[(i + 1) % 12]; if (((lon - s) % 360 + 360) % 360 < ((e - s) % 360 + 360) % 360) return i + 1; } return null; }
   function leadOf(txt) { var m = /^(.*?\.)(\s|$)/.exec(txt || ""); return m ? m[1] : (txt || ""); }
   function phaseName(k) { return k % 4 === 0 ? "Return" : k % 4 === 2 ? "Opposition" : "Square"; }
@@ -254,19 +262,23 @@
     if (i0 < 0) return out;
     Object.keys(CYCLE_RULES).forEach(function (pl) {
       var rule = CYCLE_RULES[pl], target = nat[pl], arr = t.lon[pl]; if (target == null || !arr) return;
-      var x0 = rule.dir * arr[i0] / 100, cum = norm180(x0 - rule.dir * target), prev = x0, win = {};
+      var x0 = rule.dir * arr[i0] / 100, cum = norm180(x0 - rule.dir * target), prev = x0, win = {}, exact = {};
       for (var i = i0 + 1; i <= i1; i++) {
-        var x = rule.dir * arr[i] / 100; cum += norm180(x - prev); prev = x;
+        var pc = cum, x = rule.dir * arr[i] / 100; cum += norm180(x - prev); prev = x;
+        var kk = Math.round((pc + cum) / 2 / 90);
+        if (kk >= 1 && rule.keep(kk) && Math.abs(cum - 90 * kk) <= rule.orb && (pc - 90 * kk) * (cum - 90 * kk) <= 0 && pc !== cum) { (exact[kk] = exact[kk] || []).push((t.start + (i - 1 + (90 * kk - pc) / (cum - pc)) * t.step) * MS_DAY); }
         var k = Math.round(cum / 90); if (k < 1 || Math.abs(cum - 90 * k) > rule.orb || !rule.keep(k)) continue;
         if (!win[k]) win[k] = { a: i, b: i }; else win[k].b = i;
       }
       Object.keys(win).forEach(function (ks) {
         var k = +ks, w = win[k], a = (t.start + w.a * t.step) * MS_DAY - t.step * MS_DAY / 2, b = (t.start + w.b * t.step) * MS_DAY + t.step * MS_DAY / 2;
         if (b < birthMs || a > endMs) return;
+        if (((a + b) / 2 - birthMs) / MS_YEAR < TL_MIN_AGE) return;
         var mid = Math.round((w.a + w.b) / 2), isRet = phaseName(k) === "Return", sign = SIGN_NAMES[Math.floor((isRet ? target : arr[mid] / 100) / 30) % 12];
         var txt = (((data.ms.milestones || {})[pl] || {})[String(rule.idx(k))] || ""), sg = (((data.ms.signs || {})[pl] || {})[sign] || "");
         var ph = phaseName(k).toLowerCase(), house = ph === "return" ? nat.house[pl] : houseAt(arr[mid] / 100, nat.cusps), ht = house ? ((data.hs || {})[pl + "." + ph + "." + house] || "") : "";
-        out.push({ col: pl, k: k, a: Math.max(a, birthMs), b: Math.min(b, endMs), text: ht ? (leadOf(txt) + " " + ht) : (txt + (sg ? "\n" + sg : "")).trim(), pl: pl, phase: phaseName(k), house: ht ? house : null, sign: sign });
+        var ex = (exact[k] || []).filter(function (m) { return m >= birthMs && m <= endMs; }), exTxt = ex.length ? (" " + (ex.length === 1 ? "It is exact on " + fmtDay(ex[0]) + "." : "It is exact on " + ex.slice(0, -1).map(fmtDay).join(", ") + " and " + fmtDay(ex[ex.length - 1]) + ", because the planet moves back and forth over the point.")) : "";
+        out.push({ col: pl, k: k, a: Math.max(a, birthMs), b: Math.min(b, endMs), text: (ht ? (leadOf(txt) + " " + explainEvent(pl, phaseName(k)) + " " + ht) : (txt + (sg ? "\n" + sg : ""))).trim() + (exTxt ? (ht ? " " : "\n") + exTxt.trim() : ""), pl: pl, phase: phaseName(k), house: ht ? house : null, sign: sign });
       });
     });
     return out;
