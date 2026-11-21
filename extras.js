@@ -219,18 +219,20 @@
   // ---------- timeline ----------
   var transitsPromise = null;
   function loadTransits() {
-    if (!transitsPromise) transitsPromise = Promise.all([fetch("data/transits.bin").then(function (r) { return r.arrayBuffer(); }), fetch("data/timeline-milestones.json").then(function (r) { return r.json(); })]).then(function (a) {
+    if (!transitsPromise) transitsPromise = Promise.all([fetch("data/transits.bin").then(function (r) { return r.arrayBuffer(); }), fetch("data/timeline-milestones.json").then(function (r) { return r.json(); }), fetch("data/timeline-houses.json").then(function (r) { return r.json(); })]).then(function (a) {
       var b = a[0], dv = new DataView(b), n = dv.getUint32(10, true), np = dv.getUint8(14), step = dv.getUint16(8, true), start = dv.getInt32(4, true);
       var u = new Uint16Array(b, 16, n * np), names = ["jupiter", "saturn", "uranus", "neptune", "pluto", "northnode"], t = { start: start, step: step, n: n, lon: {} };
       names.forEach(function (nm, j) { t.lon[nm] = u.subarray(j * n, (j + 1) * n); });
-      return { t: t, ms: a[1] };
+      return { t: t, ms: a[1], hs: a[2] };
     });
     return transitsPromise;
   }
   function natalOf(p) {
     var a = p.astro || {}, get = function (nm) { var x = (a.planets || []).filter(function (q) { return q.name === nm; })[0]; return x && !x.signUncertain ? x.absoluteDegrees : null; };
     var hasTime = !(a.timeUnknown || a.locationUnknown);
-    return { hasTime: hasTime, sun: get("Sun"), moon: hasTime ? get("Moon") : null, asc: hasTime && a.ascendant ? a.ascendant.absoluteDegrees : null, jupiter: get("Jupiter"), saturn: get("Saturn"), uranus: get("Uranus"), neptune: get("Neptune"), pluto: get("Pluto"), northnode: a.northNode ? a.northNode.absoluteDegrees : null };
+    var cusps = hasTime ? (a.houses || []).filter(function (x) { return typeof x.absoluteDegrees === "number" && typeof x.house === "number"; }).sort(function (x, y) { return x.house - y.house; }) : [];
+    var hOf = function (nm) { var x = (a.planets || []).filter(function (q) { return q.name === nm; })[0]; return hasTime && x && typeof x.house === "number" ? x.house : null; };
+    return { hasTime: hasTime, sun: get("Sun"), moon: hasTime ? get("Moon") : null, asc: hasTime && a.ascendant ? a.ascendant.absoluteDegrees : null, jupiter: get("Jupiter"), saturn: get("Saturn"), uranus: get("Uranus"), neptune: get("Neptune"), pluto: get("Pluto"), northnode: a.northNode ? a.northNode.absoluteDegrees : null, cusps: cusps.length === 12 ? cusps.map(function (x) { return x.absoluteDegrees; }) : null, house: { jupiter: hOf("Jupiter"), saturn: hOf("Saturn"), uranus: hOf("Uranus"), neptune: hOf("Neptune"), pluto: hOf("Pluto"), northnode: hasTime && a.northNode && typeof a.northNode.house === "number" ? a.northNode.house : null } };
   }
   // The planet bars: one bar for each turning point of a planet's cycle (square, opposition, return) at your own birth position.
   var SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
@@ -242,6 +244,8 @@
     pluto: { orb: 3, dir: 1, keep: function (k) { return k <= 2; }, idx: function (k) { return k; } },
     northnode: { orb: 10, dir: -1, keep: function (k) { return k % 2 === 0; }, idx: function (k) { return k; } }
   };
+  function houseAt(lon, cusps) { if (!cusps) return null; for (var i = 0; i < 12; i++) { var s = cusps[i], e = cusps[(i + 1) % 12]; if (((lon - s) % 360 + 360) % 360 < ((e - s) % 360 + 360) % 360) return i + 1; } return null; }
+  function leadOf(txt) { var m = /^(.*?\.)(\s|$)/.exec(txt || ""); return m ? m[1] : (txt || ""); }
   function phaseName(k) { return k % 4 === 0 ? "Return" : k % 4 === 2 ? "Opposition" : "Square"; }
   function computeEvents(p, data) {
     var nat = natalOf(p), dob = parseDob(p.dob); if (!dob) return [];
@@ -259,9 +263,10 @@
       Object.keys(win).forEach(function (ks) {
         var k = +ks, w = win[k], a = (t.start + w.a * t.step) * MS_DAY - t.step * MS_DAY / 2, b = (t.start + w.b * t.step) * MS_DAY + t.step * MS_DAY / 2;
         if (b < birthMs || a > endMs) return;
-        var mid = Math.round((w.a + w.b) / 2), sign = SIGN_NAMES[Math.floor(arr[mid] / 100 / 30) % 12];
+        var mid = Math.round((w.a + w.b) / 2), isRet = phaseName(k) === "Return", sign = SIGN_NAMES[Math.floor((isRet ? target : arr[mid] / 100) / 30) % 12];
         var txt = (((data.ms.milestones || {})[pl] || {})[String(rule.idx(k))] || ""), sg = (((data.ms.signs || {})[pl] || {})[sign] || "");
-        out.push({ col: pl, k: k, a: Math.max(a, birthMs), b: Math.min(b, endMs), text: (txt + (sg ? "\n" + sg : "")).trim(), pl: pl, phase: phaseName(k) });
+        var ph = phaseName(k).toLowerCase(), house = ph === "return" ? nat.house[pl] : houseAt(arr[mid] / 100, nat.cusps), ht = house ? ((data.hs || {})[pl + "." + ph + "." + house] || "") : "";
+        out.push({ col: pl, k: k, a: Math.max(a, birthMs), b: Math.min(b, endMs), text: ht ? (leadOf(txt) + " " + ht) : (txt + (sg ? "\n" + sg : "")).trim(), pl: pl, phase: phaseName(k), house: ht ? house : null, sign: sign });
       });
     });
     return out;
@@ -296,7 +301,7 @@
         var cv = chs["challenge" + n]; if (cv != null) items.push({ col: "ch", a: a2, b: b2, label: cv, n: cv, title: "Challenge " + cv + " · " + rng, text: (NUM_DEFS.challenge || {})[cv] || "" }); });
       var pers = num.periodCycles || {}; [1, 2, 3].forEach(function (n) { var pe = pers["period" + n]; if (!pe) return; var r = rangeAges(pe.ageRange), hiAge = r.hi >= 999 ? years : r.hi; items.push({ col: "per", a: birthMs + r.lo * MS_YEAR, b: birthMs + (hiAge + 1) * MS_YEAR, label: pe.value, n: pe.value, title: "Period " + pe.value + " · ages " + r.lo + (r.hi >= 999 ? " onward" : " to " + r.hi), text: (NUM_DEFS.periodcycle || {})[pe.value] || "" }); });
       (me.events || []).forEach(function (e) { var nm = e.pl === "northnode" ? "North Node" : e.pl.charAt(0).toUpperCase() + e.pl.slice(1), lo = Math.floor((e.a - birthMs) / MS_YEAR), hi = Math.ceil((e.b - birthMs) / MS_YEAR);
-        items.push({ col: e.col, a: e.a, b: e.b, label: nm + " " + e.phase, ev: true, title: nm + " " + e.phase.toLowerCase() + " · ages " + lo + " to " + hi + " · " + fmtDate(e.a) + " to " + fmtDate(e.b), text: e.text }); });
+        items.push({ col: e.col, a: e.a, b: e.b, label: nm + " " + e.phase, ev: true, title: nm + " " + e.phase.toLowerCase() + " · ages " + lo + " to " + hi + " · " + fmtDate(e.a) + " to " + fmtDate(e.b) + " · in " + e.sign + (e.house ? ", house " + e.house : ""), text: e.text }); });
       var colW = 100 / COLS.length, html = '<div class="tl-body" style="height:' + total + 'px">';
       if (me.zoom) { var c0 = new Date(me.selDate), my = c0.getUTCFullYear() * 12 + c0.getUTCMonth(); for (var mm = my - 36; mm <= my + 36; mm++) { var yr = Math.floor(mm / 12), mo = mm % 12, t0 = Date.UTC(yr, mo, 1), t1 = Date.UTC(yr, mo + 1, 1); if (t1 <= birthMs || t0 >= endMs) continue; html += '<div class="tl-tick' + (mo === 0 ? " yr" : "") + '" style="top:' + (ypos((t0 + t1) / 2)) + 'px">' + (mo === 0 ? yr : MONTHS[mo]) + "</div>"; } }
       else for (var yy = dob.y + 1; yy <= dob.y + years; yy++) html += '<div class="tl-tick yr" style="top:' + ypos(Date.UTC(yy, 0, 1)) + 'px">' + yy + "</div>";
