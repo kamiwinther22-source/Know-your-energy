@@ -334,7 +334,7 @@
       var head = '<div class="tl-head">' + COLS.map(function (c) { return "<div>" + c + "</div>"; }).join("") + "</div>";
       var chips = people.length > 1 ? people.map(function (q, i) { return '<button class="tl-chip' + (i === me.idx ? " on" : "") + '" data-p="' + i + '">' + esc(q.first) + "</button>"; }).join("") : "";
       var ds = new Date(me.selDate), iso = ds.getUTCFullYear() + "-" + String(ds.getUTCMonth() + 1).padStart(2, "0") + "-" + String(ds.getUTCDate()).padStart(2, "0");
-      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Type a date</label><input type="date" id="tlDate" value="' + iso + '"><button class="tl-chip" id="tlRead">Read this day</button>' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
+      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate">Type a date</label><input type="date" id="tlDate" value="' + iso + '"><button class="tl-chip" id="tlRead">' + (me.pass ? "Read this day" : "Read today") + '</button>' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
       showActive();
       var sc = document.getElementById("tlScroll"); var go = function () { sc.style.setProperty("--stk", Math.round(sc.clientHeight * 0.42) + "px"); sc.scrollTop = Math.max(0, nowY - sc.clientHeight / 2); }; go(); setTimeout(go, 120); setTimeout(go, 450);
       sc.addEventListener("click", function (e) { var bar = e.target.closest(".tl-bar"); if (!bar) return; var it = me.items[+bar.dataset.i]; [].forEach.call(sc.querySelectorAll(".tl-bar.sel"), function (x) { x.classList.remove("sel"); }); bar.classList.add("sel"); document.getElementById("tlInfo").innerHTML = '<span class="tt">' + esc(it.title) + "</span>" + esc(it.text || "").replace(/\n/g, "<br>"); });
@@ -344,7 +344,7 @@
       [].forEach.call(body.querySelectorAll(".tl-chip[data-p]"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; loadEvents(); }; });
     }
     function readDay() {
-      var p = person(), el = document.getElementById("tlDate"), iso = el && el.value, host = body.querySelector(".tl"); if (!iso || !host) return;
+      var p = person(), el = document.getElementById("tlDate"), host = body.querySelector(".tl"), t0 = new Date(), todayIso = t0.getFullYear() + "-" + String(t0.getMonth() + 1).padStart(2, "0") + "-" + String(t0.getDate()).padStart(2, "0"), iso = me.pass ? (el && el.value) : todayIso; if (!iso || !host) return;
       var old = host.querySelector(".tl-day"); if (old) old.remove();
       var panel = document.createElement("div"); panel.className = "tl-day"; host.appendChild(panel);
       var parts = iso.split("-"), when = Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0];
@@ -369,9 +369,12 @@
       info.innerHTML = '<span class="tt">What is active on ' + lab + "</span>" + (act.length ? act.map(function (it) { return esc(it.title.split(" · ")[0]); }).join(" &middot; ") : "Nothing is recorded for this date.") + '<br><span style="font-weight:700">Tap any bar to read what it means. The planet bars follow traditional astrology.</span>';
     }
     var ex = document.getElementById("cardExpand"), body = document.getElementById("cardExpandBody"), ttl = document.getElementById("cardExpandTitle");
+    function passEmailNow() { try { var f = document.getElementById("pEmail"); return ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) { return ""; } }
+    function checkPassNow() { var em = passEmailNow(); if (!em || typeof checkPassStatus !== "function") { me.pass = false; return; } checkPassStatus(em).then(function (r) { me.pass = !!(r && r.active); var b = document.getElementById("tlRead"); if (b) b.textContent = me.pass ? "Read this day" : "Read today"; }).catch(function () {}); }
     function loadEvents() {
       ttl.textContent = person().first + " · Timeline"; if (typeof setChartFrame === "function") setChartFrame("Numerology");
       body.innerHTML = '<div class="tl"><div class="tl-info">Loading your timeline&hellip;</div></div>';
+      checkPassNow();
       loadTransits().then(function (d) { me.events = computeEvents(person(), d); build(); }).catch(function () { body.innerHTML = '<div class="tl"><div class="tl-info">The timeline could not load. Please check your connection and try again.</div></div>'; });
     }
     me.selIsNow = true; ex.classList.add("open"); loadEvents();
