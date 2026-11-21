@@ -209,14 +209,14 @@ html.red .rbtn,html.red .gen-btn,html.red .rel-chip,html.red .fan-actions>.side-
   clip-path:none !important;background-color:transparent !important;background-repeat:no-repeat !important;background-position:center !important;background-size:100% 100% !important;
   text-shadow:0 0 5px rgba(255,255,255,.9),0 0 9px rgba(255,255,255,.7) !important}
 html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before,html.red .side-btn::before{display:none !important}
-html.red .rbtn{background-image:url(img/k2/rbtn.png) !important}
-html.red .gen-btn{background-image:url(img/k2/gen.png) !important}
-html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{background-image:url(img/k2/chip116.png) !important}
-html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{background-image:url(img/k2/chip88.png) !important}
-html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{background-image:url(img/k2/chip80.png) !important}
-html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{background-image:url(img/k2/chip66.png) !important}
+html.red .rbtn{background-image:url(img/k2/rbtn.png?v=2) !important}
+html.red .gen-btn{background-image:url(img/k2/gen.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{background-image:url(img/k2/chip116.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{background-image:url(img/k2/chip88.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{background-image:url(img/k2/chip80.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{background-image:url(img/k2/chip66.png?v=2) !important}
 html.red .rel-chip.active{filter:drop-shadow(0 0 6px rgba(255,255,255,.95)) brightness(1.08)}
-html.red .fan-actions>.side-btn,html.red .side-btn{background-image:url(img/k2/side.png) !important}
+html.red .fan-actions>.side-btn,html.red .side-btn{background-image:url(img/k2/side.png?v=2) !important}
 
 /* All text is full strength: the browser's default grey for disabled or locked fields (the AM/PM box, time and name boxes) is replaced with white */
 html.red #formStep input:disabled,html.red #formStep select:disabled,html.red #formStep select,html.red #formStep.locked .line-field select,html.red #formStep.locked .line-field input{color:#fff !important;-webkit-text-fill-color:#fff !important;opacity:1 !important}
@@ -226,7 +226,7 @@ html.red #formStep input:disabled::placeholder{color:#fff !important;-webkit-tex
 html.red .rel-row{display:grid !important;grid-template-columns:repeat(4,1fr);gap:5px !important;width:100%;flex-wrap:nowrap}
 html.red .rel-row .glow-ring-sm{display:block !important;width:100% !important;min-width:0}
 html.red .rel-row .glow-ring-sm .rel-chip{width:100% !important;height:38px !important;padding:0 6px !important;display:flex !important;align-items:center;justify-content:center;text-align:center;white-space:normal !important;font-size:11.5px !important;letter-spacing:.02em !important;line-height:1.05 !important}
-html.red .rel-row .glow-ring-sm:nth-child(n) .rel-chip{background-image:url(img/k2/chip66.png) !important}
+html.red .rel-row .glow-ring-sm:nth-child(n) .rel-chip{background-image:url(img/k2/chip66.png?v=2) !important}
 
 /* Reading and chart sheets: smooth, contained scrolling.
    - the sheet no longer repaints a fixed background on every scroll frame
