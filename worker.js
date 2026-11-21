@@ -1005,9 +1005,8 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
 
 // ---------- Day reading ----------
 // One reading for one person on one chosen date, written by the model from the birth chart, the numerology as of that date and the sky on that date.
-// For anyone who has a pass or has had their free reading. A repeat request for the same person and date is answered from a saved copy and costs nothing.
-const DAY_READING_NEW_PER_DAY = 12; // pass holders
-const DAY_READING_NEW_PER_DAY_FREE = 3; // people on their free reading
+// Open to anyone who has a pass or has had their free reading; a free reading gets one day (the day it is run). A repeat request for the same person and date is answered from a saved copy and costs nothing.
+const DAY_READING_NEW_PER_DAY = 12; // pass holders. A free reading includes one day reading, for the day it is run, and no other date.
 const DAY_READING_CACHE_SECONDS = 14 * 24 * 3600;
 
 const DAY_SYSTEM_PROMPT = `Check the person's age on the reading date before writing anything about love, dating, or sex. Under 18: none of it, ever.
@@ -1176,6 +1175,17 @@ async function handleDayReading(request, env, ctx) {
   let allowed = status.active || status.freeReadingUsed;
   if (!allowed && await env.PASSES.get(claimKeyFor(email))) allowed = true;
   if (!allowed) return jsonResponse({ error: "Run your reading first, then you can read any day.", code: "reading_first" }, 402);
+  // the free reading includes the reading for the day it is run and nothing else: one date, no other dates, no second reading
+  const emailHash = sha256Hex(email.toLowerCase());
+  const pinKey = "dayfree:" + emailHash, claimDay = "dayclaim:" + emailHash;
+  const FREE_MSG = "Your free reading includes the reading for the day you run it. Another day needs a pass, and passes are not available yet.";
+  let pinned = null;
+  if (!status.active) {
+    const now = new Date, todayMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+    if (Math.abs(Date.UTC(+dm[1], +dm[2] - 1, +dm[3]) - todayMs) > 864e5) return jsonResponse({ error: FREE_MSG, code: "pass_needed" }, 402);
+    pinned = await env.PASSES.get(pinKey);
+    if (pinned && pinned !== dateISO) return jsonResponse({ error: FREE_MSG, code: "pass_needed" }, 402);
+  }
   const cacheKey = "day:" + sha256Hex(["day-v1", email.toLowerCase(), person.first.trim().toLowerCase(), person.last.trim().toLowerCase(), person.dob.trim(), dateISO].join("|"));
   const saved = await env.PASSES.get(cacheKey);
   if (saved) {
@@ -1184,10 +1194,10 @@ async function handleDayReading(request, env, ctx) {
     } catch (e) {}
   }
   const today = new Date().toISOString().slice(0, 10);
-  const countKey = "daycount:" + sha256Hex(email.toLowerCase()) + ":" + today;
+  const countKey = "daycount:" + emailHash + ":" + today;
   const used = parseInt(await env.PASSES.get(countKey) || "0", 10);
-  const dayLimit = status.active ? DAY_READING_NEW_PER_DAY : DAY_READING_NEW_PER_DAY_FREE;
-  if (used >= dayLimit) return jsonResponse({ error: "That is the limit of new day readings for today. A day you have already read can be opened again, and the limit resets tomorrow.", code: "day_limit" }, 429);
+  if (!status.active && await env.PASSES.get(claimDay)) return jsonResponse({ error: "Your reading for this day is already being written. Please wait for it to finish.", code: "reading_in_progress" }, 429);
+  if (status.active && used >= DAY_READING_NEW_PER_DAY) return jsonResponse({ error: "That is the limit of new day readings for today. A day you have already read can be opened again, and the limit resets tomorrow.", code: "day_limit" }, 429);
   let prompt;
   try {
     prompt = buildDayUserPrompt(person, body.astrology || null, body.humanDesign || null, dateISO, body.activeCycles);
@@ -1195,6 +1205,7 @@ async function handleDayReading(request, env, ctx) {
     return jsonResponse({ error: "The reading could not be set up: " + e.message }, 400);
   }
   await env.PASSES.put(countKey, String(used + 1), { expirationTtl: 2 * 24 * 3600 });
+  if (!status.active) await env.PASSES.put(claimDay, "1", { expirationTtl: 300 });
   let result, lastError;
   const failed = [];
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -1209,6 +1220,7 @@ async function handleDayReading(request, env, ctx) {
     }
   }
   const sumUsage = list => list.reduce((t, u) => ({ input_tokens: (t.input_tokens || 0) + (u.input_tokens || 0), output_tokens: (t.output_tokens || 0) + (u.output_tokens || 0), cache_creation_input_tokens: (t.cache_creation_input_tokens || 0) + (u.cache_creation_input_tokens || 0), cache_read_input_tokens: (t.cache_read_input_tokens || 0) + (u.cache_read_input_tokens || 0) }), {});
+  if (!status.active) await env.PASSES.delete(claimDay);
   if (lastError) {
     if (failed.length) ctx.waitUntil(recordUsage(env, sumUsage(failed), "day"));
     return jsonResponse({ error: "The reading could not be written just now. Please try again in a moment." }, 502);
@@ -1216,6 +1228,7 @@ async function handleDayReading(request, env, ctx) {
   ctx.waitUntil(recordUsage(env, result.usage, "day"));
   const report = { headline: String(result.parsed.headline || ""), body: result.parsed.body, references: Array.isArray(result.parsed.references) ? result.parsed.references.map(String) : [] };
   await env.PASSES.put(cacheKey, JSON.stringify(report), { expirationTtl: DAY_READING_CACHE_SECONDS });
+  if (!status.active && !pinned) await env.PASSES.put(pinKey, dateISO, { expirationTtl: 800 * 24 * 3600 });
   return jsonResponse({ report: report, cached: false });
 }
 
