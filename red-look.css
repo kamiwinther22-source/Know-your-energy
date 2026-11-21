@@ -237,3 +237,6 @@ html:has(#cardExpand.open),html:has(#cardExpand.open) body{overflow:hidden !impo
 html:has(#cardExpand.open) body>*:not(#cardExpand):not(script):not(style):not(link){visibility:hidden}
 html:has(#cardExpand.open) #cardExpand{visibility:visible}
 html:has(#cardExpand.open) *{animation-play-state:paused !important}
+
+/* phone view: the wordmark is centred on the screen */
+@media (max-width:600px){html.red #hookStep h1.r-h1{text-align:center}}
