@@ -1005,8 +1005,9 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
 
 // ---------- Day reading ----------
 // One reading for one person on one chosen date, written by the model from the birth chart, the numerology as of that date and the sky on that date.
-// Pass holders only. A repeat request for the same person and date is answered from a saved copy and costs nothing.
-const DAY_READING_NEW_PER_DAY = 12;
+// For anyone who has a pass or has had their free reading. A repeat request for the same person and date is answered from a saved copy and costs nothing.
+const DAY_READING_NEW_PER_DAY = 12; // pass holders
+const DAY_READING_NEW_PER_DAY_FREE = 3; // people on their free reading
 const DAY_READING_CACHE_SECONDS = 14 * 24 * 3600;
 
 const DAY_SYSTEM_PROMPT = `Check the person's age on the reading date before writing anything about love, dating, or sex. Under 18: none of it, ever.
@@ -1171,7 +1172,10 @@ async function handleDayReading(request, env, ctx) {
   } catch (e) {
     return jsonResponse({ error: "Your email could not be checked just now. Please try again in a moment." }, 503);
   }
-  if (!status.active) return jsonResponse({ error: "Day readings are part of a pass, and passes are not available yet.", code: "pass_needed" }, 402);
+  // everyone who reaches the Timeline has a pass or has had their free reading; an email with neither (or no reading under way) is not let through, so a made-up email cannot run readings
+  let allowed = status.active || status.freeReadingUsed;
+  if (!allowed && await env.PASSES.get(claimKeyFor(email))) allowed = true;
+  if (!allowed) return jsonResponse({ error: "Run your reading first, then you can read any day.", code: "reading_first" }, 402);
   const cacheKey = "day:" + sha256Hex(["day-v1", email.toLowerCase(), person.first.trim().toLowerCase(), person.last.trim().toLowerCase(), person.dob.trim(), dateISO].join("|"));
   const saved = await env.PASSES.get(cacheKey);
   if (saved) {
@@ -1182,7 +1186,8 @@ async function handleDayReading(request, env, ctx) {
   const today = new Date().toISOString().slice(0, 10);
   const countKey = "daycount:" + sha256Hex(email.toLowerCase()) + ":" + today;
   const used = parseInt(await env.PASSES.get(countKey) || "0", 10);
-  if (used >= DAY_READING_NEW_PER_DAY) return jsonResponse({ error: "That is the limit of new day readings for today. A day you have already read can be opened again, and the limit resets tomorrow.", code: "day_limit" }, 429);
+  const dayLimit = status.active ? DAY_READING_NEW_PER_DAY : DAY_READING_NEW_PER_DAY_FREE;
+  if (used >= dayLimit) return jsonResponse({ error: "That is the limit of new day readings for today. A day you have already read can be opened again, and the limit resets tomorrow.", code: "day_limit" }, 429);
   let prompt;
   try {
     prompt = buildDayUserPrompt(person, body.astrology || null, body.humanDesign || null, dateISO, body.activeCycles);
