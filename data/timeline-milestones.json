@@ -59,6 +59,15 @@
    "22": "North Node opposition, around age 103. A rare half-cycle.",
    "24": "Sixth North Node return, around age 112. A rare reset of direction.",
    "26": "North Node opposition, around age 121."
+  },
+  "chiron": {
+   "2": "Chiron opposition. Chiron is halfway around its cycle, directly opposite where it stood at your birth. Old hurts show up through close relationships and work, and you begin to see how they shape the way you live.",
+   "3": "Chiron square. Chiron is a quarter turn from its birth position. Pressure builds around an old hurt and forces you to deal with it instead of working around it.",
+   "4": "Chiron return. Chiron is back at its birth position, which happens about every fifty years. You meet your oldest hurt with the experience of a lifetime. Many people turn what they learned from it into help for others.",
+   "5": "Chiron square. Chiron is a quarter turn from its birth position. In later life, an old hurt returns as pressure to settle it.",
+   "6": "Chiron opposition. Chiron is halfway around its second cycle. In later life, old hurts come into view through the people around you.",
+   "7": "Chiron square. Chiron is a quarter turn from its birth position in a second cycle. An old hurt asks to be settled before the next return.",
+   "8": "Second Chiron return. Chiron is back at its birth position for a second time, which few people live to see. An old hurt is met for a last time with all that you have learned."
   }
  },
  "signs": {
@@ -145,6 +154,20 @@
    "Capricorn": "North Node in Capricorn: the Nodes point you toward responsibility and long-term work.",
    "Aquarius": "North Node in Aquarius: the Nodes point you toward community and a shared future.",
    "Pisces": "North Node in Pisces: the Nodes point you toward faith, imagination and surrender."
+  },
+  "chiron": {
+   "Aries": "Chiron in Aries: the old hurt and its healing center on identity and asserting yourself.",
+   "Taurus": "Chiron in Taurus: the old hurt and its healing center on worth, security and the body.",
+   "Gemini": "Chiron in Gemini: the old hurt and its healing center on being heard and understood.",
+   "Cancer": "Chiron in Cancer: the old hurt and its healing center on belonging and emotional safety.",
+   "Leo": "Chiron in Leo: the old hurt and its healing center on being seen and expressing yourself.",
+   "Virgo": "Chiron in Virgo: the old hurt and its healing center on being good enough and useful.",
+   "Libra": "Chiron in Libra: the old hurt and its healing center on relationships and fairness.",
+   "Scorpio": "Chiron in Scorpio: the old hurt and its healing center on trust, intimacy and loss.",
+   "Sagittarius": "Chiron in Sagittarius: the old hurt and its healing center on beliefs and meaning.",
+   "Capricorn": "Chiron in Capricorn: the old hurt and its healing center on authority and achievement.",
+   "Aquarius": "Chiron in Aquarius: the old hurt and its healing center on belonging in a group.",
+   "Pisces": "Chiron in Pisces: the old hurt and its healing center on boundaries, faith and compassion."
   }
  },
  "signNames": [
