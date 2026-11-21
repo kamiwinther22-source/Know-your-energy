@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Button studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,800&family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#58102A;min-height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    color:#fff;
+    padding:26px 18px 60px;
+    position:relative;
+  }
+  #surface{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  body>*:not(#surface){position:relative;z-index:1}
+
+  .sunmark{
+    width:150px;height:150px;margin:0 auto 6px;border-radius:50%;
+    background:radial-gradient(circle at 50% 50%,#fff 0%,#ffe9ef 26%,#f5bdcc 46%,#c75e7f 68%,rgba(140,20,55,0) 100%);
+    filter:blur(.5px);
+  }
+  .sunlabel{text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:1;margin-bottom:28px}
+
+  h1{font-family:'Fraunces',serif;font-size:21px;font-weight:700;margin:0 0 4px}
+  .intro{font-size:14px;line-height:1.5;margin-bottom:30px;max-width:46ch}
+
+  .study{margin:0 0 34px}
+  .study .name{font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:3px}
+  .study .note{font-size:13px;line-height:1.45;margin-bottom:12px}
+  .btnrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .btn{display:block;border:0;background:none;padding:0;cursor:pointer;line-height:0}
+  .btn svg{display:block;overflow:visible}
+  .btn:active{transform:translateY(1.5px)}
+</style>
+</head>
+<body>
+
+<div id="surface"></div>
+
+<div class="sunmark"></div>
+<div class="sunlabel">the light — every button below is lit from here</div>
+
+<h1>Button studies</h1>
+<p class="intro">Six takes. All of them: the top is dished in, not domed out. The word is cut
+into the surface. Red appears only in the side walls, where the metal faces the page and
+reflects it. One horizon, no stripes. Every highlight is computed from the light above —
+move the light and all of them change together.</p>
+
+<div class="study">
+  <div class="name">01 — Softened bar</div>
+  <div class="note">Rounded rectangle, broad polished rim, deep dish. The most restrained of the six.</div>
+  <div class="btnrow">
+    <button class="btn" data-shape="bar"></button>
+  </div>
+</div>
+
+<div class="study">
+  <div class="name">02 — Shallow cut</div>
+  <div class="note">The end cuts, but shallow — so the ends are still face, not solid bevel. This is the current shape, fixed.</div>
+  <div class="btnrow">
+    <button class="btn" data-shape="cut"></button>
+  </div>
+</div>
+
+<div class="study">
+  <div class="name">03 — Lozenge</div>
+  <div class="note">Fully round ends. The rim never breaks, so the reflection runs continuously around it.</div>
+  <div class="btnrow">
+    <button class="btn" data-shape="lozenge"></button>
+  </div>
+</div>
+
+<div class="study">
+  <div class="name">04 — Keyed</div>
+  <div class="note">One end squared, one end cut. Asymmetric, so it reads as a specific object rather than a generic shape.</div>
+  <div class="btnrow">
+    <button class="btn" data-shape="keyed"></button>
+  </div>
+</div>
+
+<div class="study">
+  <div class="name">05 — Sunk plate</div>
+  <div class="note">The button is a plate set down inside a raised collar, the way a machined control key sits in its panel. Two levels of relief instead of one.</div>
+  <div class="btnrow">
+    <button class="btn" data-shape="plate"></button>
+  </div>
+</div>
+
+<div class="study">
+  <div class="name">06 — Tapered</div>
+  <div class="note">Sides draft inward very slightly, like something cast rather than cut. The taper catches more red on one side than the other.</div>
+  <div class="btnrow">
+    <button class="btn" data-shape="taper"></button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var W = 258, H = 62, uid = 0;
+
+  function path(shape){
+    var w=W,h=H;
+    switch(shape){
+      case 'bar':
+        return 'M14,2 H'+(w-14)+' a12,12 0 0 1 12,12 V'+(h-14)+' a12,12 0 0 1 -12,12 H14 a12,12 0 0 1 -12,-12 V14 a12,12 0 0 1 12,-12 Z';
+      case 'cut':
+        return 'M16,2 H'+(w-16)+' L'+(w-2)+','+(h/2)+' L'+(w-16)+','+(h-2)+' H16 L2,'+(h/2)+' Z';
+      case 'lozenge':
+        return 'M'+(h/2)+',2 H'+(w-h/2)+' a'+(h/2-2)+','+(h/2-2)+' 0 0 1 0,'+(h-4)+' H'+(h/2)+' a'+(h/2-2)+','+(h/2-2)+' 0 0 1 0,'+(-(h-4))+' Z';
+      case 'keyed':
+        return 'M6,2 H'+(w-20)+' L'+(w-2)+','+(h/2)+' L'+(w-20)+','+(h-2)+' H6 a4,4 0 0 1 -4,-4 V6 a4,4 0 0 1 4,-4 Z';
+      case 'plate':
+        return 'M10,2 H'+(w-10)+' a8,8 0 0 1 8,8 V'+(h-10)+' a8,8 0 0 1 -8,8 H10 a8,8 0 0 1 -8,-8 V10 a8,8 0 0 1 8,-8 Z';
+      case 'taper':
+        return 'M18,2 H'+(w-18)+' L'+(w-6)+','+(h-8)+' a6,6 0 0 1 -6,8 H12 a6,6 0 0 1 -6,-8 Z';
+    }
+  }
+
+  /* The inner face, inset from the rim. Scaled about the centre so the inset
+     stays parallel-ish on every shape without hand-solving each outline. */
+  function inner(shape, t){
+    return path(shape);
+  }
+
+  function svg(shape, label){
+    var id = 'b'+(++uid);
+    var rimBlur = 3.4, dishBlur = 5.5;
+    return ''+
+'<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+
+ '<defs>'+
+
+  /* ---- the world the metal reflects: sky above, ONE hard horizon,
+          garnet page below. No repeating bands. ---- */
+  '<linearGradient id="env'+id+'" x1="0" y1="0" x2="0" y2="1">'+
+    '<stop offset="0"    stop-color="#ffffff"/>'+
+    '<stop offset=".26"  stop-color="#eef3f8"/>'+
+    '<stop offset=".44"  stop-color="#c3ced9"/>'+
+    '<stop offset=".495" stop-color="#9aa6b2"/>'+
+    '<stop offset=".505" stop-color="#4d5159"/>'+
+    '<stop offset=".58"  stop-color="#8e5a66"/>'+
+    '<stop offset=".78"  stop-color="#c49aa2"/>'+
+    '<stop offset="1"    stop-color="#efe6e7"/>'+
+  '</linearGradient>'+
+
+  /* ---- the dish: the top is pressed in, so it reflects the world the
+          other way up from the rim ---- */
+  '<linearGradient id="dish'+id+'" x1="0" y1="0" x2="0" y2="1">'+
+    '<stop offset="0"    stop-color="#55343c"/>'+
+    '<stop offset=".14"  stop-color="#8d7278"/>'+
+    '<stop offset=".40"  stop-color="#cfc7c6"/>'+
+    '<stop offset=".495" stop-color="#e6dfdd"/>'+
+    '<stop offset=".505" stop-color="#fbf8f6"/>'+
+    '<stop offset=".74"  stop-color="#ded6d3"/>'+
+    '<stop offset="1"    stop-color="#b3aaa8"/>'+
+  '</linearGradient>'+
+
+  /* ---- the page reflected in the SIDE walls only: strongest at the very
+          edge where the wall turns to face the field, gone by the time the
+          surface is flat and pointing at the sky ---- */
+  '<linearGradient id="side'+id+'" x1="0" y1="0" x2="1" y2="0">'+
+    '<stop offset="0"    stop-color="#a81844" stop-opacity=".80"/>'+
+    '<stop offset=".035" stop-color="#8e1038" stop-opacity=".46"/>'+
+    '<stop offset=".085" stop-color="#8c1034" stop-opacity=".16"/>'+
+    '<stop offset=".15"  stop-color="#8c1034" stop-opacity="0"/>'+
+    '<stop offset=".85"  stop-color="#8c1034" stop-opacity="0"/>'+
+    '<stop offset=".915" stop-color="#8c1034" stop-opacity=".16"/>'+
+    '<stop offset=".965" stop-color="#8e1038" stop-opacity=".46"/>'+
+    '<stop offset="1"    stop-color="#a81844" stop-opacity=".80"/>'+
+  '</linearGradient>'+
+
+  /* ---- rim relief: a real bevel. The shape's own alpha, blurred, is the
+          height map; a point light at the sun lights it. This is why the
+          highlight wraps the corners instead of running straight across. ---- */
+  '<filter id="rim'+id+'" x="-20%" y="-40%" width="140%" height="180%" color-interpolation-filters="sRGB">'+
+    '<feGaussianBlur in="SourceAlpha" stdDeviation="'+rimBlur+'" result="h"/>'+
+    '<feSpecularLighting in="h" surfaceScale="4" specularConstant="0.50" '+
+       'specularExponent="30" lighting-color="#ffffff" result="s">'+
+      '<fePointLight class="lamp" x="0" y="-120" z="70"/>'+
+    '</feSpecularLighting>'+
+    '<feComposite in="s" in2="SourceAlpha" operator="in" result="sc"/>'+
+    '<feComposite in="SourceGraphic" in2="sc" operator="arithmetic" k1="0" k2="1" k3="0.8" k4="0"/>'+
+  '</filter>'+
+
+  /* ---- the shadow the rim throws down into the dish: strongest at the
+          wall nearest the light, gone by the middle of the face ---- */
+  '<linearGradient id="occl'+id+'" x1="0" y1="0" x2="0" y2="1">'+
+    '<stop offset="0"   stop-color="#2b1016" stop-opacity=".62"/>'+
+    '<stop offset=".22" stop-color="#2b1016" stop-opacity=".20"/>'+
+    '<stop offset=".48" stop-color="#2b1016" stop-opacity="0"/>'+
+    '<stop offset=".88" stop-color="#ffffff" stop-opacity=".13"/>'+
+    '<stop offset="1"   stop-color="#ffffff" stop-opacity=".22"/>'+
+  '</linearGradient>'+
+
+  '<clipPath id="clip'+id+'"><path d="'+path(shape)+'"/></clipPath>'+
+ '</defs>'+
+
+ /* cast shadow */
+ '<g class="cast">'+
+   '<path d="'+path(shape)+'" fill="#13030a" opacity=".62" transform="translate(0,5)" filter="url(#blurcast'+id+')"/>'+
+ '</g>'+
+ '<defs><filter id="blurcast'+id+'" x="-30%" y="-30%" width="160%" height="190%">'+
+   '<feGaussianBlur stdDeviation="3.2"/></filter></defs>'+
+
+ /* the rim: environment + bevel lighting */
+ '<g filter="url(#rim'+id+')">'+
+   '<path d="'+path(shape)+'" fill="url(#env'+id+')"/>'+
+ '</g>'+
+
+ /* the page reflected in the side walls, clipped to the button */
+ '<g clip-path="url(#clip'+id+')">'+
+   '<rect width="'+W+'" height="'+H+'" fill="url(#side'+id+')"/>'+
+ '</g>'+
+
+ /* the dished face: the gradient already carries the concavity — the top
+    wall is turned away from the light and the bottom wall catches it — and
+    the occlusion layer is the rim's own shadow falling into the dish */
+ '<g transform="translate('+(W/2)+','+(H/2)+') scale(.90,.74) translate('+(-W/2)+','+(-H/2)+')">'+
+   '<path d="'+path(shape)+'" fill="url(#dish'+id+')"/>'+
+   '<path d="'+path(shape)+'" fill="url(#occl'+id+')"/>'+
+ '</g>'+
+
+ /* the word, cut into the face: dark wall on the side the light comes from,
+    lit wall on the far side */
+ '<g class="lettering" font-family="Fraunces, Georgia, serif" font-weight="700" '+
+    'font-size="21" text-anchor="middle" dominant-baseline="central">'+
+   '<text class="eng-dark" x="'+(W/2)+'" y="'+(H/2+1)+'" fill="#1b1f25" opacity=".9">'+label+'</text>'+
+   '<text class="eng-lite" x="'+(W/2)+'" y="'+(H/2+1)+'" fill="#ffffff" opacity=".55">'+label+'</text>'+
+   '<text class="eng-core" x="'+(W/2)+'" y="'+(H/2+1)+'" fill="#2a2f36">'+label+'</text>'+
+ '</g>'+
+'</svg>';
+  }
+
+  document.querySelectorAll('.btn').forEach(function(b){
+    b.innerHTML = svg(b.dataset.shape, 'Continue');
+  });
+
+  /* ---- point every lamp and every engraved letter at the real light ---- */
+  function aim(){
+    var sunEl = document.querySelector('.sunmark');
+    var sr = sunEl.getBoundingClientRect();
+    var sx = sr.left + sr.width/2 + scrollX;
+    var sy = sr.top  + sr.height/2 + scrollY;
+
+    document.querySelectorAll('.btn svg').forEach(function(s){
+      var r = s.getBoundingClientRect();
+      var ox = r.left + scrollX, oy = r.top + scrollY;
+      /* the light, expressed in this button's own coordinates */
+      var lx = sx - ox, ly = sy - oy;
+      var d  = Math.hypot(sx-(ox+W/2), sy-(oy+H/2));
+      s.querySelectorAll('fePointLight').forEach(function(l){
+        l.setAttribute('x', lx.toFixed(1));
+        l.setAttribute('y', ly.toFixed(1));
+      });
+      /* engraving: offsets along the light direction */
+      var ux = ((ox+W/2)-sx)/d, uy = ((oy+H/2)-sy)/d;
+      var g = s.querySelector('.lettering');
+      g.querySelector('.eng-dark').setAttribute('transform','translate('+(-ux*1.1).toFixed(2)+','+(-uy*1.1).toFixed(2)+')');
+      g.querySelector('.eng-lite').setAttribute('transform','translate('+( ux*1.2).toFixed(2)+','+( uy*1.2).toFixed(2)+')');
+      /* cast shadow runs away from the light and lengthens with distance */
+      var len = 3 + Math.min(7, d/120);
+      s.querySelector('.cast path').setAttribute('transform',
+        'translate('+(ux*len).toFixed(2)+','+(uy*len).toFixed(2)+')');
+    });
+  }
+
+  /* ---- the lit surface behind everything, same method as the real page ---- */
+  function paint(){
+    var sunEl = document.querySelector('.sunmark');
+    var sr = sunEl.getBoundingClientRect();
+    var sx = Math.round(sr.left + sr.width/2 + scrollX);
+    var sy = Math.round(sr.top + sr.height/2 + scrollY);
+    var w = document.documentElement.clientWidth;
+    var h = Math.max(document.documentElement.scrollHeight, innerHeight);
+    var z = Math.round(Math.max(w,560)*0.62);
+    var s = document.getElementById('surface');
+    s.style.height = h+'px';
+    s.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" style="display:block">'+
+      '<defs><filter id="lit" x="0" y="0" width="100%" height="100%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">'+
+        '<feTurbulence type="fractalNoise" baseFrequency="0.0032 0.0041" numOctaves="5" seed="11" result="r"/>'+
+        '<feDiffuseLighting in="r" surfaceScale="9" diffuseConstant="1.0" lighting-color="#ffd2de" result="l">'+
+          '<fePointLight x="'+sx+'" y="'+sy+'" z="'+z+'"/></feDiffuseLighting>'+
+        '<feComponentTransfer in="l" result="sh">'+
+          '<feFuncR type="linear" slope="0.78" intercept="0.30"/>'+
+          '<feFuncG type="linear" slope="0.78" intercept="0.26"/>'+
+          '<feFuncB type="linear" slope="0.78" intercept="0.27"/>'+
+        '</feComponentTransfer>'+
+        '<feComposite in="sh" in2="SourceGraphic" operator="arithmetic" k1="1" k2="0" k3="0" k4="0"/>'+
+      '</filter></defs>'+
+      '<rect width="'+w+'" height="'+h+'" fill="#6A1230" filter="url(#lit)"/>'+
+    '</svg>';
+  }
+
+  function go(){ paint(); aim(); }
+  go();
+  addEventListener('resize', go);
+  addEventListener('load', go);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+})();
+</script>
+</body>
+</html>
