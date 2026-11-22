@@ -31,7 +31,7 @@ Updated 22 Nov 2026. The owner's time is the cost, but NEVER trade quality for s
 
 ## 3. Open items (none of these is live)
 - Classy first-screen preview (centred labels, centred bullets with small silver diamonds): shown to the owner, never answered. Its Didone FREE! and Jost text are already live; only the silver diamond bullets and the centred layout of the labels and bullets are not.
-- Fields: the owner wants something "opposite of average": real lighting (SVG lighting filter, light from the sun's direction), a lit state on tap, a frosted-glass locked state. Not built.
+- Input fields: the owner wants them obviously to be input fields and "the opposite of average", made with real abilities, not cheap quick fixes. No black, no outline box, text in the boxes stays 16px, the padlock stays on every field. How to do it is not decided; the owner has given no direction beyond this.
 - Solar system: owner says it does not look like silver, looks broken, and is not worth ~530 KB of load. Not changed.
 - Not touched: the "Please wait" screen, the results page, the expanded cards.
 - Old unlimited-family email hashes still sit unused in `worker.js`. A test device (unlimited) was created during a live test; rotating the key signs it out. The key was shown in chat once; rotate it if the chat leaks.
