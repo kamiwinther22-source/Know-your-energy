@@ -72,6 +72,6 @@ Updated 22 Nov 2026. The owner's time is the cost, but NEVER trade quality for s
 
 **Shown as previews only, never shipped:** the classy centred layout with silver diamond bullets; tilted and silver FREE!; dark carved fields; about nine typeface and alignment options.
 
-**Not done:** fields with real lighting; the solar system; the "Please wait" and results screens; deleting the ~142 old branches (the owner will do it by hand; the environment cannot).
+**Not done:** the input-field work (section 3); the solar system; the "Please wait" and results screens; deleting the ~142 old branches (the owner will do it by hand; the environment cannot).
 
 **Where the time went (qualitative, not measured):** most of it on the front-page look, about ten rounds of previews the owner rejected before the simple headline shipped; then on my own mistakes (too-literal readings, a stale comparison copy, unmeasured claims); then on permission blocks that held up saves.
