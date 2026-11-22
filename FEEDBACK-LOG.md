@@ -1,5 +1,9 @@
 # Owner feedback log (results page design)
 
+## RULE 0 (22 Nov 2026, owner, outranks everything, read before touching any text)
+- **Words get absolute contrast. Pure white (#FFFFFF) on dark, pure black (#000000) on light. Never a tint, never faded, never gold or yellow.** Measure the contrast of every word against the real background behind it (brightest part of that area), report the lowest number, and fix the background if white text cannot reach a high ratio there. Do not call any tinted color "full strength."
+- When the owner asks "what can you do", show several concrete options as pictures to choose from. Do not just pick one.
+
 ## RULE 1 (22 Nov 2026, owner, applies to every design direction, read first)
 - **Never put a line, band or gradient stripe through anything and call it metallic.** A chrome-text gradient with a horizon band is a line through the letters, not metal. Metal is real light reflecting off a real surface, or it is not claimed.
 - **Words must read as full-strength white (or deep black), never gray.** No faded text, no opacity below 1 on text, no thin weights that wash out on the background. The owner's complaint: "every word on the page looks gray."
