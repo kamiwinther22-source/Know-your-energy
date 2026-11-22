@@ -18,7 +18,7 @@ Updated 22 Nov 2026. The owner's time is the cost. Be fast, do exactly what is s
 - "Classy, elegant, sleek, powerful, bold" is the brief for the look. Typography alone cannot reach it; it needs real lit surfaces (see Open items).
 
 ## 3. Open items (none of these is live)
-- Classy first-screen layout (centred Didone headline, silver diamond bullets) was shown; the owner did not approve it as a whole.
+- Classy first-screen preview (centred labels, centred bullets with small silver diamonds): shown to the owner, never answered. Its Didone FREE! and Jost text are already live; only the silver diamond bullets and the centred layout of the labels and bullets are not.
 - Fields: the owner wants something "opposite of average": real lighting (SVG lighting filter, light from the sun's direction), a lit state on tap, a frosted-glass locked state. Not built.
 - Solar system: owner says it does not look like silver, looks broken, and is not worth ~530 KB of load. Not changed.
 - Not touched: the "Please wait" screen, the results page, the expanded cards.
@@ -42,7 +42,7 @@ Updated 22 Nov 2026. The owner's time is the cost. Be fast, do exactly what is s
   `grep '^  - ' _config.yml | sed 's/^  - //' | while read f; do printf "%s -> " "$f"; curl -s -o /dev/null -w "%{http_code}\n" "https://know-your-energy.com/$f"; done`
   Then confirm the site itself still loads: `/`, `/privacy.html`, `/red-look.css` (and any file the page needs) must answer 200.
 - **Never write into any repo file:** per-reading costs, token counts, keys, passwords, the owner key, or the owner's personal data. Costs live only on the private `/usage` page.
-- **The GitHub project itself is PUBLIC.** Hiding a file from the website does NOT hide it on github.com, and old versions (history and about 144 branches) still hold older text, including the old cost figures and, per `DESIGN-CONCEPTS.md`, the owner's own birth details on the `design-concepts` branch. Cleaning that is destructive. The owner was offered "wipe it" (back everything up to one file first, delete the old branches, rewrite history) and has NOT said yes. Ask before doing it; some old branches hold unmerged work listed in `HANDOFF-NOT-LIVE.md`.
+- **The GitHub project itself is PUBLIC.** Hiding a file from the website does NOT hide it on github.com. DONE 22 Nov: a full backup (192 MB bundle of every branch) was sent to the owner, and `main` and the working branch were collapsed to a single commit, so their old history is gone (files identical). NOT DONE: about 142 old branches still exist on GitHub and still hold older text (the old cost figures and, per `DESIGN-CONCEPTS.md`, the owner's birth details on `design-concepts`). This environment is refused (HTTP 403) when deleting branches, so the OWNER will delete them by hand on github.com (keep only `main` and `ccr-e89eec5a-kcp1di`). Do not touch them or try to work around the 403. Closed pull requests, forks and caches may still show old text; GitHub Support can purge those on request.
 - `worker.js` must stay in the repo for the Worker to deploy, so its daily free-reading cap and the key's hash are visible on github.com while the repo is public. Making the repo private would probably take the GitHub-hosted pages down (it likely needs a paid plan; unchecked). Do not do it without a plan.
 
 ## 7. What this thread completed, and how long it took (22 Nov 2026, times in UTC)
@@ -60,6 +60,6 @@ Updated 22 Nov 2026. The owner's time is the cost. Be fast, do exactly what is s
 
 **Shown as previews only, never shipped:** the classy centred layout with silver diamond bullets; tilted and silver FREE!; dark carved fields; about nine typeface and alignment options.
 
-**Not done:** fields with real lighting; the solar system; the "Please wait" and results screens; wiping old versions and branches (waiting on the owner's "wipe it").
+**Not done:** fields with real lighting; the solar system; the "Please wait" and results screens; deleting the ~142 old branches (the owner will do it by hand; the environment cannot).
 
 **Where the time went (qualitative, not measured):** most of it on the front-page look, about ten rounds of previews the owner rejected before the simple headline shipped; then on my own mistakes (too-literal readings, a stale comparison copy, unmeasured claims); then on permission blocks that held up saves.
