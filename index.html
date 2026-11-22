@@ -862,17 +862,18 @@ html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{background-image:url(img/
 html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{background-image:url(img/k3/chip66.png?v=1) !important}
 html.red .rel-row .glow-ring-sm:nth-child(n) .rel-chip{background-image:url(img/k3/chip66.png?v=1) !important}
 html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
-  filter:drop-shadow(0 2px 1px rgba(0,0,0,.55)) drop-shadow(0 7px 7px rgba(0,0,0,.5)) drop-shadow(0 14px 14px rgba(0,0,0,.35)) !important;
-  transform:translateY(-3px);transition:transform .09s ease,filter .09s ease}
-html.red .rbtn:hover,html.red .gen-btn:hover,html.red .rel-chip:hover{transform:translateY(-3px)}
-/* pushed in: same size, settles down onto the surface with a tight shadow, lit up */
+  /* one smooth wall: a single silver that deepens gradually, no bands */
+  filter:drop-shadow(0 1px 0 #d6dbe1) drop-shadow(0 1px 0 #cfd5db) drop-shadow(0 1px 0 #c9ced5) drop-shadow(0 1px 0 #c2c8cf) drop-shadow(0 1px 0 #bbc2c9) drop-shadow(0 1px 0 #b4bbc3) drop-shadow(0 1px 0 #aeb5be) drop-shadow(0 1px 0 #a7aeb8) drop-shadow(0 1px 0 #a0a8b2) drop-shadow(0 1px 0 #99a2ac) drop-shadow(0 1px 0 #939ba6) drop-shadow(0 1px 0 #8c95a0) drop-shadow(0 6px 7px rgba(0,0,0,.5)) !important;
+  transform:translateY(0);transition:transform .09s ease,filter .09s ease}
+html.red .rbtn:hover,html.red .gen-btn:hover,html.red .rel-chip:hover{transform:translateY(0)}
+/* pushed in: same size, sits down at the foot of the wall, lit up */
 html.red .rbtn:active,html.red .gen-btn:active,html.red .rel-chip:active,html.red .rel-chip.active,html.red .rel-chip.active:hover{
-  transform:translateY(6px) !important;
+  transform:translateY(12px) !important;
   filter:brightness(1.22) drop-shadow(0 0 1px rgba(0,0,0,.7)) drop-shadow(0 0 7px rgba(255,255,255,.95)) drop-shadow(0 0 16px rgba(255,255,255,.6)) !important}
 /* engraved words: cut into the face; the near wall is in shadow, the lower lip catches light (filter #kyeEngrave) */
 html.red .rbtn .eng,html.red .gen-btn .eng,html.red .rel-chip .eng{display:inline-block;color:#3d4550 !important;-webkit-text-fill-color:#3d4550 !important;text-shadow:none !important;filter:url(#kyeEngrave)}
-html.red .rel-row{padding-bottom:12px}
-html.red .submit-wrap{padding-bottom:10px}
+html.red .rel-row{padding-bottom:16px}
+html.red .submit-wrap{padding-bottom:14px}
 </style>
 <style id="chartFrameCss">
 /* Numerology chart: opens in an angled silver frame (the front page's cut corners and silver rim) around a white sheet. */
