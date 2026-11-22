@@ -1,6 +1,6 @@
 # Handoff: Know Your Energy (read this first, 3 minutes)
 
-Updated 22 Nov 2026. The owner's time is the cost. Be fast, do exactly what is said, show ONE picture, and when told "push", push to `main` that minute.
+Updated 22 Nov 2026. The owner's time is the cost, but NEVER trade quality for speed: no shortcuts, no cheap fixes, no bare-minimum work. Do exactly what is said, do it properly the first time, show ONE picture, and when told "push", push to `main` that minute.
 
 ## 0. The owner's instruction to you (the last thread broke every one of these)
 1. **Do exactly what I say and nothing more.** No extra files, backups, previews, option sets or "while I'm at it" work. If you think something extra is needed, say it in one line and wait.
@@ -8,7 +8,7 @@ Updated 22 Nov 2026. The owner's time is the cost. Be fast, do exactly what is s
 3. **If I describe a visible change, make it visibly different.** Never ship a change I cannot see. If my words allow two readings, pick the one that changes what I see and tell me which you picked.
 4. **Nothing gets smaller. No grey, faded, thin or smeared text, and no black INPUT FIELDS.** (Text may be full-strength white or deep black; black text is not banned.)
 5. **Measure, do not claim.** State a number or a fact only after you have checked it; if you have not checked, say so.
-6. **Be fast.** Edit the real files, show ONE picture, no before/after sets, no re-checking what is already checked. A simple change like a font size takes minutes. When I say "push", push to `main` that minute, check the live site yourself, and never ask me to type addresses.
+6. **Do the real work, properly, the first time. No shortcuts and no cheap or quick fixes, ever.** Time is lost to REDOING work, not to doing it carefully: so no extra previews, no option sets, no before/after sets, no re-checking what is already checked, no stale copies. Edit the real files and show ONE picture. When I say "push", push to `main` that minute, check the live site yourself, and never ask me to type addresses.
 7. **Short answers.** No tables, no explaining your process: what changed, what it looks like, what is next.
 8. **If something is blocked, stop and tell me in two lines.** Do not work around it.
 9. **Do not ask me to approve what I have not seen.** Show it first.
