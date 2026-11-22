@@ -483,7 +483,7 @@ function passKey(email) {
 const PAYMENTS_ENABLED = false;
 
 // Anonymous counters for what people do after a reading. No email, no name, no birth details.
-const EVENT_NAMES = [ "run_another", "date_check", "save_print", "page_load" ];
+const EVENT_NAMES = [ "run_another", "date_check", "save_print", "page_load", "real_visit" ];
 
 async function eventTotals(env) {
   const keys = await listAll(env, "evt:");

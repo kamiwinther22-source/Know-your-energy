@@ -4002,6 +4002,18 @@ try {
   }
 } catch (e) {}
 
+// "Real visitor": counted once per visit, only after a real touch, click, key press or scroll, and never for automated browsers.
+try {
+  if (!navigator.webdriver && !sessionStorage.getItem("kye_rv")) {
+    const realVisit = () => {
+      ["pointerdown", "keydown", "touchstart", "wheel", "scroll"].forEach(e => window.removeEventListener(e, realVisit, true));
+      try { sessionStorage.setItem("kye_rv", "1"); } catch (e) {}
+      track("real_visit");
+    };
+    ["pointerdown", "keydown", "touchstart", "wheel", "scroll"].forEach(e => window.addEventListener(e, realVisit, { capture: true, passive: true }));
+  }
+} catch (e) {}
+
 const REMEMBERED_EMAIL_KEY = "kye_passEmail";
 
 function rememberPassEmail(email) {
