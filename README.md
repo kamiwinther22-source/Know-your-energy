@@ -1,0 +1,1 @@
+Western astrology, pythagorean numerology, human design charts results combined and sent to claude to generate a reading highlighting the most influential aspects and how they work together or create friction for an individual or 2 people in a relationship of any type. 

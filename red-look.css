@@ -1,0 +1,299 @@
+/* The front page: garnet, Fraunces, silver hex buttons, cut-in dark fields. This is the site look.
+   Scoped to html.red; the results page keeps its own look. */
+html.red{--acc:#8c1034;background:#2a0510;overflow-x:clip;max-width:100%}
+html.red body{overflow-x:clip;max-width:100%}
+html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#2a0510}
+html.red:not(:has(#resultsWrap[style*="block"])) body{
+  background:
+   radial-gradient(ellipse 600px 30% at 100% 97%,rgba(206,48,92,.8) 0,rgba(160,24,64,.42) 45%,rgba(130,14,50,0) 100%),
+   radial-gradient(ellipse 340px 16% at 8% 100%,rgba(176,28,70,.5) 0,rgba(130,14,50,0) 100%),
+   radial-gradient(ellipse 560px 22% at 55% 33.7%,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),
+   radial-gradient(ellipse 520px 14.5% at 18% 0%,rgba(255,255,255,.26) 0,rgba(255,255,255,.08) 55%,rgba(255,255,255,0) 100%),
+   radial-gradient(ellipse 620px 38.6% at 22% 4.1%,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%);
+  background-color:#2a0510;
+  padding:22px 20px 40px;
+}
+html.red #hookStep,html.red #formStep{font-family:'Fraunces',Georgia,serif;font-weight:700;color:#fff}
+html.red #hookStep *,html.red #formStep *{font-family:'Fraunces',Georgia,serif !important;font-weight:700;color:#fff !important;text-transform:none !important;letter-spacing:0 !important;font-style:normal !important}
+html.red .content{max-width:350px;width:100%}
+html.red #formStep{margin:0;padding:0}
+html.red #hookStep{display:block}
+
+/* first screen */
+html.red .r-h1{font-size:32px;line-height:1.05;font-weight:800;margin:4px 0 0;text-align:left}
+/* the wordmark: cursive, one line, plain white until the colouring is done properly */
+html.red #hookStep h1.r-h1{
+  font-family:'Alex Brush',cursive !important;
+  font-weight:400 !important;
+  font-size:clamp(22px,9.8vw,55px);
+  line-height:1.18;
+  white-space:nowrap;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff;
+  margin:2px 0 2px;
+  text-align:left;
+}
+
+html.red .r-sys{margin-top:12px;font-size:17.5px;line-height:1.35;font-weight:800;white-space:nowrap}
+html.red .r-fcr{margin-top:4px;font-size:17.5px;line-height:1.35;font-weight:800}
+html.red .hero-illustration{position:relative;width:350px;max-width:none;height:164px;margin:6px 0 0;transform:none}
+html.red .hero-illustration svg{overflow:visible}
+html.red .r-free{margin-top:6px;text-align:center;font-size:44px;line-height:1;font-weight:800}
+html.red .r-b22{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:16px 0 0;padding:0;width:350px}
+html.red .r-b22 li{position:relative;padding-left:14px;font-size:14px;line-height:1.25;font-weight:700}
+html.red .r-b22 li:before{content:"";position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:#fff}
+html.red .hero-email-wrap{max-width:none;width:310px;margin:16px auto 0}
+html.red .field,html.red .line-field,html.red .line-field.hero-email-field{
+  background:linear-gradient(180deg,#14020a,#2a0612) !important;border:0 !important;border-radius:2px !important;
+  box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2 !important}
+html.red .line-field:focus-within{box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #fff,0 0 0 2px rgba(255,255,255,.55) !important}
+html.red .hero-email-field{height:40px}
+html.red .hero-email-field input{height:40px;padding:0 10px;font-size:17px;line-height:20px;background:transparent !important;border:0 !important;box-shadow:none !important;width:100%;color:#fff !important}
+html.red .line-field input,html.red .line-field select{background:transparent !important;border:0 !important;box-shadow:none !important;color:#fff !important;font-size:15px;line-height:20px;height:36px;padding:0 2px 0 6px;font-style:normal !important;-webkit-text-fill-color:#fff}
+html.red .line-field input::placeholder{color:#fff !important;opacity:1;-webkit-text-fill-color:#fff;font-style:normal}
+html.red .line-field select option{background:#2a0612;color:#fff}
+html.red .hero-email-wrap .err,html.red .err{text-align:center;margin-top:6px;font-size:15px}
+
+/* silver hex buttons: outer silver hex, inner dark hex */
+html.red .rb-wrap,html.red .glow-ring,html.red .glow-ring-sm{display:block;position:relative;background:none !important;padding:0 !important;overflow:visible !important;border-radius:0 !important;width:fit-content;filter:drop-shadow(0 3px 0 rgba(10,10,15,.6))}
+html.red .glow-ring::before,html.red .glow-ring-sm::before{display:none !important}
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
+  position:relative;isolation:isolate;display:flex !important;align-items:center;justify-content:center;border:0 !important;margin:0 !important;cursor:pointer;
+  background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#8a9099 82%,#eef1f5 92%,#fff 100%) !important;
+  box-shadow:none !important;text-shadow:none !important;overflow:visible !important;color:#fff !important;font-weight:700;--c:25px;--d:18px;--vy:7px;--hx:14px;
+  clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% 50%,calc(100% - var(--c)) 100%,var(--c) 100%,0 50%);border-radius:0 !important}
+html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before{display:block !important;content:"";position:absolute;inset:var(--vy) var(--hx);z-index:-1;background:linear-gradient(180deg,#fbfcfd 0%,#dfe4ea 42%,#b4bcc6 52%,#d6dbe1 78%,#f1f3f6 100%);
+  clip-path:polygon(var(--d) 0,calc(100% - var(--d)) 0,100% 50%,calc(100% - var(--d)) 100%,var(--d) 100%,0 50%)}
+html.red .rbtn,html.red .gen-btn{width:210px;height:50px;font-size:19px;padding:0}
+html.red .gen-btn{width:190px}
+html.red .rb-wrap{margin:14px auto 22px}
+html.red .rel-row{gap:3px !important;justify-content:center;margin:0 -4px 0 -5px !important;flex-wrap:nowrap}
+html.red .rel-chip{--c:9px;--d:8px;--vy:4px;--hx:7px;height:32px;font-size:13px !important;padding:0 !important;line-height:1}
+html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{width:116px}
+html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{width:88px}
+html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{width:80px}
+html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{width:66px}
+html.red .rel-chip.active::before{background:linear-gradient(180deg,#e2e6eb 0%,#aeb6c0 46%,#8b949f 54%,#b9c0c9 100%)}
+html.red .rel-chip:not(.active){opacity:1}
+
+/* choose + toggle */
+html.red .r-choose{text-align:center;font-size:18px;line-height:1.3;margin:8px 0 0;font-weight:700}
+html.red .rel-picker{margin-top:0}
+html.red .toggle-row{gap:12px !important;margin:28px 0 14px !important;font-size:17px;font-weight:800;justify-content:center}
+html.red .tog-lbl{font-size:17px;font-weight:800;color:#fff !important}
+html.red .toggle-pill{width:34px !important;height:16px !important;border-radius:9px !important;background:linear-gradient(#c9d0d8,#f2f4f7) !important;border:0 !important;box-shadow:inset 0 2px 0 rgba(20,20,30,.3) !important;position:relative}
+html.red .toggle-pill::after{content:"" !important;position:absolute;top:2px !important;left:auto;right:2px;width:12px !important;height:12px !important;border-radius:50% !important;background:radial-gradient(circle at 35% 30%,#fff 0,#cfd5dc 30%,#20262d 52%,#8c1034 80%) !important;box-shadow:none !important;transform:none !important}
+html.red .toggle-pill:not(.on)::after{right:auto;left:2px}
+
+/* person blocks */
+html.red #formStep #p1Block,html.red #formStep #p2Section{width:310px;max-width:100%;margin:26px 0 0}
+html.red #formStep #p2Section{margin-top:0}
+html.red .form-panel .f{margin:0}
+html.red .person-tag,html.red #p2Section .person-tag{position:static !important;left:auto !important;font-size:28px;line-height:1.35;font-weight:800;margin:0 0 4px}
+html.red #p2Section .person-tag{text-align:right}
+html.red .section-lbl,html.red .row-birth label{font-size:17px;font-weight:800;margin:8px 0 3px;display:block}
+html.red .opt-lbl{font-weight:700;font-size:17px}
+html.red .row-id{display:flex !important;gap:8px;background:none !important;border:0 !important;box-shadow:none !important;margin:0}
+html.red .row-id .line-field{border-right:0 !important}
+html.red .row-id .line-field:nth-child(1){flex:0 0 108px}html.red .row-id .line-field:nth-child(2){flex:0 0 78px}html.red .row-id .line-field:nth-child(3){flex:0 0 108px}
+html.red #formStep .row-birth{display:grid;grid-template-columns:136px 1fr;column-gap:8px}
+html.red #formStep .row-birth .row-time{display:grid;grid-template-columns:80px 66px;column-gap:8px;margin:0;align-items:end}
+html.red .row-birth .row-time>div:first-child .line-field,html.red .row-birth .row-time .ampm-field{border-radius:2px !important}
+html.red .row-time .ampm-field{padding:0 !important}
+html.red .row-birth>.loc-field{grid-column:1 / -1;margin-top:0}
+html.red #p1Block .loc-field,html.red #formStep #p1Block .loc-field{width:230px}
+html.red #p2Section .loc-field{width:310px}
+html.red #p2Section.open{padding-top:152px}
+html.red .r-note{font-size:16px;line-height:1.3;text-align:center;width:340px;max-width:100%;margin:22px auto 0}
+html.red .r-note+.r-note{margin-top:12px}
+html.red .submit-wrap,html.red .submit-wrap.under-p2{justify-content:center !important;margin:22px 0 0 !important;width:auto}
+html.red .state-banner{font-size:16px;text-align:center;margin:0 0 10px}
+
+/* waiting screen on the red page */
+html.red:not(:has(#resultsWrap[style*="block"])) .loading,html.red:not(:has(#resultsWrap[style*="block"])) .loading *{color:#fff !important}
+html.red .hg-outline{stroke:#fff}
+html.red .hg-sand-top,html.red .hg-sand-bottom,html.red .hg-drop{fill:#fff}
+
+/* fixes from the first render */
+html.red .hero-continue-label,html.red .gen-btn{text-shadow:none !important;-webkit-text-stroke:0 !important}
+html.red .glow-ring .gen-btn,html.red .glow-ring-sm .rel-chip{z-index:auto !important}
+html.red .line-field{padding:0 !important;height:36px}
+html.red .hero-email-field{height:40px}
+html.red #formStep .row-time .ampm-field,html.red #formStep .row-time .ampm-field select{background:transparent !important}
+html.red #formStep .row-time .ampm-field{background:linear-gradient(180deg,#14020a,#2a0612) !important;border-left-width:0 !important;padding:0 !important}
+html.red .row-time .ampm-field select{padding:0 2px 0 6px;font-size:15px;width:100%;height:36px;-webkit-appearance:none;appearance:none}
+html.red .hero-illustration{transform:translateX(96px) translateY(10px) rotate(12deg) scale(1.55);transform-origin:50% 50%}
+html.red:not(:has(#resultsWrap[style*="block"])) .loading *{font-family:'Fraunces',Georgia,serif !important;letter-spacing:0 !important;text-transform:none !important;font-style:normal !important;font-weight:700}
+html.red:not(:has(#resultsWrap[style*="block"])) .loading-warn{background:rgba(42,6,18,.6) !important;border:1px solid rgba(255,255,255,.4) !important}
+html.red:not(:has(#resultsWrap[style*="block"])) .loading-txt{font-size:22px}
+
+/* narrow phones: nothing wider than the screen */
+html.red .r-b22{width:100%}
+html.red .hero-email-wrap{width:min(310px,100%)}
+html.red #formStep #p1Block,html.red #formStep #p2Section{width:min(310px,100%)}
+html.red #p2Section .loc-field,html.red #formStep #p1Block .loc-field{max-width:100%}
+html.red .r-note{width:100%}
+html.red .rel-row{width:calc(100% + 9px);gap:1% !important}
+html.red .rel-row .glow-ring-sm:nth-child(1){width:32%}
+html.red .rel-row .glow-ring-sm:nth-child(2){width:24.2%}
+html.red .rel-row .glow-ring-sm:nth-child(3){width:22%}
+html.red .rel-row .glow-ring-sm:nth-child(4){width:18.2%}
+html.red .rel-row .glow-ring-sm .rel-chip{width:100% !important}
+html.red .row-id .line-field:nth-child(1){flex:1 1 0;min-width:0}html.red .row-id .line-field:nth-child(2){flex:.72 1 0;min-width:0}html.red .row-id .line-field:nth-child(3){flex:1 1 0;min-width:0}
+html.red #formStep .row-birth{grid-template-columns:minmax(0,1.7fr) minmax(0,2fr)}
+html.red #formStep .row-birth .row-time{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+
+/* the form stays greyed out until an email has been accepted */
+/* locked: only the boxes change (darker, with a small padlock); nothing else on the page is dimmed */
+html.red #formStep .form-col{position:relative}
+html.red #lockCover{position:absolute;inset:0;z-index:6;cursor:not-allowed;background:none !important;opacity:0}
+html.red #formStep.locked .line-field{background:#0d0105 !important;position:relative}
+html.red #formStep.locked .line-field::after{content:"";position:absolute;right:7px;top:50%;width:13px;height:15px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 15'%3E%3Crect x='1' y='6' width='11' height='8' rx='1.5' fill='%23d7dce2'/%3E%3Cpath d='M3.5 6V4.5a3 3 0 0 1 6 0V6' fill='none' stroke='%23d7dce2' stroke-width='1.6'/%3E%3C/svg%3E")}
+html.red #formStep.locked .line-field input{-webkit-text-fill-color:#fff}
+html.red #formStep.locked .line-field input,html.red #formStep.locked .line-field select{padding-right:22px}
+
+/* Person 2's data entry sits at the right margin */
+html.red #formStep #p2Section{margin-left:auto}
+html.red .submit-wrap{margin:22px 0 0 !important}
+html.red .row-time .ampm-field select{padding-left:8px !important}
+
+/* Time and AM/PM are one box, not two */
+html.red #formStep .row-birth .row-time{column-gap:0 !important}
+html.red .row-birth .row-time>div:first-child .line-field{border-radius:2px 0 0 2px !important}
+html.red .row-birth .row-time .ampm-field{border-radius:0 2px 2px 0 !important;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),inset 1px 0 0 rgba(215,220,226,.5),0 1.5px 0 #d7dce2 !important}
+
+/* nothing on the front page moves left to right */
+html.red [class*="orbit-bead-"]{animation:none !important}
+
+/* birth time / city helpers */
+html.red .notime-row{grid-column:1 / -1;margin-top:10px}
+html.red .chk{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:15px;line-height:1.2}
+html.red .chk input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+html.red .chk-box{display:block;flex:0 0 20px;width:20px;height:20px;border-radius:2px;background:linear-gradient(180deg,#14020a,#2a0612);box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2;position:relative}
+html.red .chk input:checked+.chk-box::after{content:"";position:absolute;left:6px;top:1px;width:6px;height:12px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+html.red .chk input:focus-visible+.chk-box{box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 1.5px 0 #d7dce2,0 0 0 2px rgba(255,255,255,.7)}
+html.red .why{font-size:13px;line-height:1.3;margin:6px 0 0;font-weight:700}
+html.red .loc-field{position:relative}
+html.red .loc-list{list-style:none;position:absolute;left:0;width:100%;min-width:230px;z-index:30;margin:2px 0 0;padding:4px 0;background:linear-gradient(180deg,#2a0612,#14020a);border-radius:2px;box-shadow:0 10px 22px rgba(0,0,0,.55),0 1.5px 0 #d7dce2}
+html.red .loc-list[hidden]{display:none}
+html.red .loc-list li{padding:11px 12px;font-size:15.5px;line-height:1.2;cursor:pointer}
+html.red .loc-list li.on,html.red .loc-list li:hover{background:#6e0b29}
+html.red .tz-toggle{display:block;background:none !important;border:0 !important;box-shadow:none !important;padding:0;margin:12px 0 0;font-size:14px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:left}
+html.red .tz-field{margin-top:8px;width:min(230px,100%)}
+html.red .tz-field[hidden]{display:none}
+html.red .row-time.is-off .line-field{background:#0d0105 !important}
+html.red #formStep #p2Section .loc-field,html.red #formStep #p1Block .loc-field{width:min(310px,100%)}
+html.red .row-birth .notime-row label.chk{display:flex;font-size:15px;margin:0}
+
+/* form boxes take the page background; autofill no longer paints them light */
+html.red .field,html.red .line-field,html.red .line-field.hero-email-field,html.red #formStep .row-time .ampm-field,html.red .chk-box{background:transparent !important;box-shadow:0 1.5px 0 #d7dce2 !important}
+html.red .line-field:focus-within{box-shadow:0 1.5px 0 #fff,0 0 0 2px rgba(255,255,255,.55) !important}
+html.red .line-field input:-webkit-autofill,html.red .line-field input:-webkit-autofill:hover,html.red .line-field input:-webkit-autofill:focus,html.red .line-field input:-webkit-autofill:active{-webkit-text-fill-color:#fff !important;caret-color:#fff;transition:background-color 99999s ease-in-out 0s !important;box-shadow:none !important;-webkit-box-shadow:none !important}
+
+/* button faces are polished steel with ink lettering (no red, no flat black) */
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip,html.red .rbtn *,html.red .gen-btn *,html.red .rel-chip *,html.red #hookStep .rbtn,html.red #hookStep .rbtn *,html.red #hookStep .hero-continue-btn,html.red #hookStep .hero-continue-btn *,html.red #formStep .rbtn *,html.red #formStep .gen-btn,html.red #formStep .gen-btn *,html.red #formStep .rel-chip,html.red #formStep .rel-chip *,html.red .hero-continue-label{color:#12161c !important;-webkit-text-fill-color:#12161c;text-shadow:none !important}
+
+/* one button for the whole site: the front page's silver hex rim and polished steel face, ink lettering */
+html.red .fan-actions>.side-btn{
+  height:50px;flex:0 0 110px;border:0 !important;border-radius:0 !important;box-shadow:none !important;color:#12161c !important;
+  background:linear-gradient(180deg,#fff 0%,#b8c0c9 8%,#14181d 15%,#7d8791 19%,#dfe4ea 50%,#8a9099 82%,#eef1f5 92%,#fff 100%) !important;
+  clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,18px 100%,0 50%) !important}
+html.red .fan-actions>.side-btn::before{inset:6px 11px;background:linear-gradient(180deg,#fbfcfd 0%,#dfe4ea 42%,#b4bcc6 52%,#d6dbe1 78%,#f1f3f6 100%);
+  clip-path:polygon(13px 0,calc(100% - 13px) 0,100% 50%,calc(100% - 13px) 100%,13px 100%,0 50%) !important}
+html.red .fan-actions>.side-btn span,html.red .fan-actions>.side-btn *{color:#12161c !important}
+html.red .chart-hd .gate-chip.active,html.red .chart-hd .gate-chip[aria-pressed="true"]{background:linear-gradient(180deg,#e2e6eb 0%,#aeb6c0 46%,#8b949f 54%,#b9c0c9 100%) !important;color:#12161c !important}
+
+
+/* Buttons: cut silver stone with fine metal grain and glints (rendered images in img/k) */
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip,html.red .fan-actions>.side-btn,html.red .side-btn{
+  clip-path:none !important;background-color:transparent !important;background-repeat:no-repeat !important;background-position:center !important;background-size:100% 100% !important;
+  text-shadow:0 0 5px rgba(255,255,255,.9),0 0 9px rgba(255,255,255,.7) !important}
+html.red .rbtn::before,html.red .gen-btn::before,html.red .rel-chip::before,html.red .side-btn::before{display:none !important}
+html.red .rbtn{background-image:url(img/k2/rbtn.png?v=2) !important}
+html.red .gen-btn{background-image:url(img/k2/gen.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{background-image:url(img/k2/chip116.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{background-image:url(img/k2/chip88.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{background-image:url(img/k2/chip80.png?v=2) !important}
+html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{background-image:url(img/k2/chip66.png?v=2) !important}
+html.red .rel-chip.active{filter:drop-shadow(0 0 6px rgba(255,255,255,.95)) brightness(1.08)}
+html.red .fan-actions>.side-btn,html.red .side-btn{background-image:url(img/k2/side.png?v=2) !important}
+
+/* All text is full strength: the browser's default grey for disabled or locked fields (the AM/PM box, time and name boxes) is replaced with white */
+html.red #formStep input:disabled,html.red #formStep select:disabled,html.red #formStep select,html.red #formStep.locked .line-field select,html.red #formStep.locked .line-field input{color:#fff !important;-webkit-text-fill-color:#fff !important;opacity:1 !important}
+html.red #formStep input:disabled::placeholder{color:#fff !important;-webkit-text-fill-color:#fff !important;opacity:1 !important}
+
+/* Relationship buttons: all four exactly the same size, on one line */
+html.red .rel-row{display:grid !important;grid-template-columns:repeat(4,1fr);gap:5px !important;width:100%;flex-wrap:nowrap}
+html.red .rel-row .glow-ring-sm{display:block !important;width:100% !important;min-width:0}
+html.red .rel-row .glow-ring-sm .rel-chip{width:100% !important;height:38px !important;padding:0 6px !important;display:flex !important;align-items:center;justify-content:center;text-align:center;white-space:normal !important;font-size:11.5px !important;letter-spacing:.02em !important;line-height:1.05 !important}
+html.red .rel-row .glow-ring-sm:nth-child(n) .rel-chip{background-image:url(img/k2/chip66.png?v=2) !important}
+
+/* Reading and chart sheets: smooth, contained scrolling.
+   - the sheet no longer repaints a fixed background on every scroll frame
+   - a swipe at the end of the sheet no longer scrolls the page behind it
+   - while a sheet is open the page behind it is hidden and its animations are paused */
+html:has(#cardExpand.open),html:has(#cardExpand.open) body{overflow:hidden !important}
+#cardExpand{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background-attachment:scroll !important}
+html:has(#cardExpand.open) body>*:not(#cardExpand):not(script):not(style):not(link){visibility:hidden}
+html:has(#cardExpand.open) #cardExpand{visibility:visible}
+html:has(#cardExpand.open) *{animation-play-state:paused !important}
+
+/* phone view: the wordmark is centred on the screen */
+@media (max-width:600px){html.red #hookStep h1.r-h1{text-align:center}}
+
+/* The headline: "First reading is" in the page font over a large FREE! in a high-contrast serif (only these characters are loaded, from index.html) */
+html.red #hookStep .r-free{text-align:center;line-height:1;margin-top:30px}
+html.red #hookStep .r-free .r-free-lead{display:block;font-size:30px;line-height:1.1}
+html.red #hookStep .r-free .r-free-word{display:block;font-family:'Bodoni Moda','Fraunces',Georgia,serif !important;font-weight:600 !important;font-size:min(118px,30.2vw);line-height:.92;letter-spacing:-.012em;margin-top:2px}
+
+/* Person 1 and Person 2 in the wordmark's cursive (Alex Brush, already loaded); Person 2's right padding keeps the tail of the 2 from being clipped */
+html.red #formStep .person-tag,html.red #formStep #p2Section .person-tag{font-family:'Alex Brush',cursive !important;font-weight:400 !important;font-size:46px !important;line-height:1.1 !important;margin:0 0 2px !important}
+html.red #formStep #p2Section .person-tag{padding-right:16px !important}
+
+
+/* ---- the text: a clean sans in a clear size scale (biggest = most important). White, medium to semibold. Not the buttons, the wordmark, Person 1 / Person 2 or FREE! ---- */
+/* level 2: what this is, and the lead-in to FREE! */
+html.red #hookStep .r-sys{font-family:'Jost',sans-serif !important;font-weight:600 !important;font-size:max(17.5px,min(21px,4.9vw)) !important;white-space:normal !important}
+html.red #hookStep .r-fcr{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:18px !important}
+html.red #hookStep .r-free .r-free-lead{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:30px}
+/* level 5: the two facts */
+html.red #hookStep .r-b22 li{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:17px !important;line-height:1.35 !important}
+html.red #hookStep .unlock-sub,html.red #hookStep .unlock-sub a{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:15px !important}
+html.red #hookStep .err,html.red #formStep .err{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:15px !important}
+/* level 3: the first decision on the form */
+html.red #formStep .r-choose{font-family:'Jost',sans-serif !important;font-weight:600 !important;font-size:26px !important;line-height:1.2 !important;text-wrap:balance}
+html.red #formStep .tog-lbl{font-family:'Jost',sans-serif !important;font-weight:600 !important;font-size:21px !important}
+html.red #formStep .state-banner-ttl{font-family:'Jost',sans-serif !important;font-weight:700 !important;font-size:26px !important}
+html.red #formStep .state-banner-sub{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:15px !important}
+/* level 4: field labels, larger than what is typed */
+html.red #formStep .section-lbl,html.red #formStep .row-birth label{font-family:'Jost',sans-serif !important;font-weight:600 !important;font-size:20px !important}
+html.red #formStep .opt-lbl{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:22px !important}
+/* level 5: what is typed */
+html.red #formStep .line-field input,html.red #formStep .line-field select,html.red #formStep .line-field input::placeholder{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:16px !important}
+/* level 6: helper text */
+html.red #formStep .tz-toggle{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:15px !important}
+html.red #formStep .chk-txt{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:16px !important}
+html.red #formStep .why{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:14px !important;line-height:1.4 !important}
+html.red #formStep .r-note{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:16px !important}
+html.red .site-foot,html.red .site-foot a{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:12.5px !important}
+
+/* ---- the form: bigger labels, and fields that look like fields. Each is a lit well set into the surface: a translucent wine-rose fill lighter than the page (never black, grey or white), a dark inner shadow along the top edge where it is cut in, and a bright lip along the bottom edge. No outline box. ---- */
+html.red #formStep .section-lbl,html.red #formStep .row-birth label{font-size:22px !important;margin:16px 0 8px !important}
+html.red .field,html.red .line-field,html.red #formStep .row-time .ampm-field,html.red #formStep.locked .line-field,html.red .row-time.is-off .line-field{
+  background:linear-gradient(180deg,rgba(255,150,178,.22) 0%,rgba(255,120,150,.12) 100%) !important;
+  border-radius:10px !important;height:48px !important;
+  box-shadow:inset 0 3px 8px rgba(30,0,10,.6),inset 0 1px 1px rgba(30,0,10,.5),0 1.5px 0 rgba(255,222,230,.7) !important}
+html.red #formStep .line-field input,html.red #formStep .line-field select{height:48px !important;padding-left:10px !important;caret-color:#fff}
+html.red .line-field:focus-within{box-shadow:inset 0 3px 8px rgba(30,0,10,.6),inset 0 1px 1px rgba(30,0,10,.5),0 1.5px 0 #fff,0 0 0 2px rgba(255,255,255,.75) !important}
+html.red .row-birth .row-time>div:first-child .line-field{border-radius:10px 0 0 10px !important}
+html.red .row-birth .row-time .ampm-field{border-radius:0 10px 10px 0 !important;box-shadow:inset 0 3px 8px rgba(30,0,10,.6),inset 0 1px 1px rgba(30,0,10,.5),inset 1px 0 0 rgba(255,222,230,.35),0 1.5px 0 rgba(255,222,230,.7) !important}
+html.red .chk-box{flex:0 0 24px !important;width:24px !important;height:24px !important;border-radius:7px !important;background:linear-gradient(180deg,rgba(255,150,178,.22),rgba(255,120,150,.12)) !important;box-shadow:inset 0 3px 7px rgba(30,0,10,.6),0 1.5px 0 rgba(255,222,230,.7) !important}
+html.red .chk input:checked+.chk-box::after{left:8px !important;top:2px !important;width:7px !important;height:13px !important}
+/* The padlock stays on every field while the form is locked: a visitor gets one free reading, so nobody should be able to type into fields they cannot use. The form uses the full column width so the short date/time/AM-PM fields have room for their text and the padlock. */
+html.red #formStep #p1Block,html.red #formStep #p2Section{width:100% !important;max-width:350px}
+html.red #formStep #p1Block .loc-field,html.red #formStep #p2Section .loc-field,html.red #formStep #p1Block .row-birth>.loc-field{width:100% !important;max-width:100% !important}
+html.red #formStep .row-birth{grid-template-columns:minmax(0,1fr) min(184px,54%) !important}
+html.red #formStep .row-birth .row-time{grid-template-columns:minmax(0,1.08fr) minmax(0,1fr) !important}
+html.red #formStep.locked .line-field::after{right:4px !important;width:10px !important;height:12px !important;margin-top:-6px !important}
+html.red #formStep.locked .line-field input,html.red #formStep.locked .line-field select{padding-right:15px !important}
+html.red #formStep .row-time .ampm-field select,html.red #formStep.locked .row-time .ampm-field select{padding-left:7px !important}

@@ -1,0 +1,365 @@
+import { CITIES_DATA } from "./cities-data.js";
+
+const MAJOR_CITIES = [
+  ["new york", "US", "NY", 40.71, -74.01],
+  ["los angeles", "US", "CA", 34.05, -118.24],
+  ["chicago", "US", "IL", 41.88, -87.63],
+  ["houston", "US", "TX", 29.76, -95.37],
+  ["phoenix", "US", "AZ", 33.45, -112.07],
+  ["philadelphia", "US", "PA", 39.95, -75.17],
+  ["san antonio", "US", "TX", 29.42, -98.49],
+  ["san diego", "US", "CA", 32.72, -117.16],
+  ["dallas", "US", "TX", 32.78, -96.80],
+  ["austin", "US", "TX", 30.27, -97.74],
+  ["jacksonville", "US", "FL", 30.33, -81.66],
+  ["san jose", "US", "CA", 37.34, -121.89],
+  ["fort worth", "US", "TX", 32.75, -97.33],
+  ["columbus", "US", "OH", 39.96, -83.00],
+  ["charlotte", "US", "NC", 35.23, -80.84],
+  ["indianapolis", "US", "IN", 39.77, -86.16],
+  ["san francisco", "US", "CA", 37.77, -122.42],
+  ["seattle", "US", "WA", 47.61, -122.33],
+  ["denver", "US", "CO", 39.74, -104.99],
+  ["washington", "US", "DC", 38.90, -77.04],
+  ["boston", "US", "MA", 42.36, -71.06],
+  ["el paso", "US", "TX", 31.76, -106.49],
+  ["nashville", "US", "TN", 36.16, -86.78],
+  ["detroit", "US", "MI", 42.33, -83.05],
+  ["oklahoma city", "US", "OK", 35.47, -97.52],
+  ["portland", "US", "OR", 45.52, -122.68],
+  ["las vegas", "US", "NV", 36.17, -115.14],
+  ["memphis", "US", "TN", 35.15, -90.05],
+  ["louisville", "US", "KY", 38.25, -85.76],
+  ["baltimore", "US", "MD", 39.29, -76.61],
+  ["milwaukee", "US", "WI", 43.04, -87.91],
+  ["albuquerque", "US", "NM", 35.08, -106.65],
+  ["tucson", "US", "AZ", 32.22, -110.97],
+  ["fresno", "US", "CA", 36.75, -119.77],
+  ["sacramento", "US", "CA", 38.58, -121.49],
+  ["kansas city", "US", "MO", 39.10, -94.58],
+  ["mesa", "US", "AZ", 33.42, -111.83],
+  ["atlanta", "US", "GA", 33.75, -84.39],
+  ["omaha", "US", "NE", 41.26, -95.94],
+  ["colorado springs", "US", "CO", 38.83, -104.82],
+  ["raleigh", "US", "NC", 35.78, -78.64],
+  ["miami", "US", "FL", 25.76, -80.19],
+  ["virginia beach", "US", "VA", 36.85, -75.98],
+  ["oakland", "US", "CA", 37.80, -122.27],
+  ["minneapolis", "US", "MN", 44.98, -93.27],
+  ["tulsa", "US", "OK", 36.15, -95.99],
+  ["tampa", "US", "FL", 27.95, -82.46],
+  ["orlando", "US", "FL", 28.54, -81.38],
+  ["new orleans", "US", "LA", 29.95, -90.07],
+  ["cleveland", "US", "OH", 41.50, -81.69],
+  ["pittsburgh", "US", "PA", 40.44, -79.99],
+  ["cincinnati", "US", "OH", 39.10, -84.51],
+  ["st louis", "US", "MO", 38.63, -90.20],
+  ["saint louis", "US", "MO", 38.63, -90.20],
+  ["salt lake city", "US", "UT", 40.76, -111.89],
+  ["honolulu", "US", "HI", 21.31, -157.86],
+  ["anchorage", "US", "AK", 61.22, -149.90],
+  ["buffalo", "US", "NY", 42.89, -78.88],
+  ["richmond", "US", "VA", 37.54, -77.44],
+  ["birmingham", "US", "AL", 33.52, -86.80],
+  ["grand rapids", "US", "MI", 42.96, -85.67],
+  ["boise", "US", "ID", 43.62, -116.20],
+  ["des moines", "US", "IA", 41.59, -93.62],
+  ["little rock", "US", "AR", 34.75, -92.29],
+  ["jackson", "US", "MS", 32.30, -90.18],
+  ["charleston", "US", "SC", 32.78, -79.93],
+  ["savannah", "US", "GA", 32.08, -81.09],
+  ["toronto", "CA", "", 43.65, -79.38],
+  ["montreal", "CA", "", 45.50, -73.57],
+  ["vancouver", "CA", "", 49.28, -123.12],
+  ["calgary", "CA", "", 51.05, -114.07],
+  ["ottawa", "CA", "", 45.42, -75.70],
+  ["edmonton", "CA", "", 53.55, -113.49],
+  ["winnipeg", "CA", "", 49.90, -97.14],
+  ["mexico city", "MX", "", 19.43, -99.13],
+  ["guadalajara", "MX", "", 20.66, -103.35],
+  ["monterrey", "MX", "", 25.67, -100.31],
+  ["london", "GB", "", 51.51, -0.13],
+  ["manchester", "GB", "", 53.48, -2.24],
+  ["birmingham", "GB", "", 52.48, -1.90],
+  ["glasgow", "GB", "", 55.86, -4.25],
+  ["edinburgh", "GB", "", 55.95, -3.19],
+  ["liverpool", "GB", "", 53.41, -2.98],
+  ["dublin", "IE", "", 53.35, -6.26],
+  ["paris", "FR", "", 48.86, 2.35],
+  ["marseille", "FR", "", 43.30, 5.37],
+  ["lyon", "FR", "", 45.76, 4.84],
+  ["berlin", "DE", "", 52.52, 13.40],
+  ["hamburg", "DE", "", 53.55, 9.99],
+  ["munich", "DE", "", 48.14, 11.58],
+  ["frankfurt", "DE", "", 50.11, 8.68],
+  ["madrid", "ES", "", 40.42, -3.70],
+  ["barcelona", "ES", "", 41.39, 2.17],
+  ["lisbon", "PT", "", 38.72, -9.14],
+  ["rome", "IT", "", 41.89, 12.48],
+  ["milan", "IT", "", 45.46, 9.19],
+  ["naples", "IT", "", 40.85, 14.27],
+  ["amsterdam", "NL", "", 52.37, 4.90],
+  ["brussels", "BE", "", 50.85, 4.35],
+  ["zurich", "CH", "", 47.37, 8.54],
+  ["geneva", "CH", "", 46.20, 6.14],
+  ["vienna", "AT", "", 48.21, 16.37],
+  ["stockholm", "SE", "", 59.33, 18.06],
+  ["oslo", "NO", "", 59.91, 10.75],
+  ["copenhagen", "DK", "", 55.68, 12.57],
+  ["helsinki", "FI", "", 60.17, 24.94],
+  ["warsaw", "PL", "", 52.23, 21.01],
+  ["moscow", "RU", "", 55.76, 37.62],
+  ["kyiv", "UA", "", 50.45, 30.52],
+  ["kiev", "UA", "", 50.45, 30.52],
+  ["athens", "GR", "", 37.98, 23.73],
+  ["istanbul", "TR", "", 41.01, 28.98],
+  ["ankara", "TR", "", 39.93, 32.86],
+  ["tel aviv", "IL", "", 32.09, 34.78],
+  ["jerusalem", "IL", "", 31.77, 35.21],
+  ["riyadh", "SA", "", 24.71, 46.68],
+  ["dubai", "AE", "", 25.20, 55.27],
+  ["abu dhabi", "AE", "", 24.45, 54.38],
+  ["cairo", "EG", "", 30.04, 31.24],
+  ["lagos", "NG", "", 6.52, 3.38],
+  ["nairobi", "KE", "", -1.29, 36.82],
+  ["accra", "GH", "", 5.56, -0.20],
+  ["johannesburg", "ZA", "", -26.20, 28.05],
+  ["cape town", "ZA", "", -33.92, 18.42],
+  ["casablanca", "MA", "", 33.57, -7.59],
+  ["mumbai", "IN", "", 19.08, 72.88],
+  ["delhi", "IN", "", 28.61, 77.21],
+  ["new delhi", "IN", "", 28.61, 77.21],
+  ["bangalore", "IN", "", 12.97, 77.59],
+  ["kolkata", "IN", "", 22.57, 88.36],
+  ["chennai", "IN", "", 13.08, 80.27],
+  ["hyderabad", "IN", "", 17.39, 78.49],
+  ["karachi", "PK", "", 24.86, 67.01],
+  ["lahore", "PK", "", 31.55, 74.34],
+  ["islamabad", "PK", "", 33.69, 73.06],
+  ["dhaka", "BD", "", 23.81, 90.41],
+  ["colombo", "LK", "", 6.93, 79.85],
+  ["kathmandu", "NP", "", 27.72, 85.32],
+  ["beijing", "CN", "", 39.90, 116.41],
+  ["shanghai", "CN", "", 31.23, 121.47],
+  ["hong kong", "HK", "", 22.32, 114.17],
+  ["taipei", "TW", "", 25.03, 121.57],
+  ["tokyo", "JP", "", 35.68, 139.69],
+  ["osaka", "JP", "", 34.69, 135.50],
+  ["seoul", "KR", "", 37.57, 126.98],
+  ["bangkok", "TH", "", 13.76, 100.50],
+  ["hanoi", "VN", "", 21.03, 105.85],
+  ["ho chi minh city", "VN", "", 10.82, 106.63],
+  ["saigon", "VN", "", 10.82, 106.63],
+  ["jakarta", "ID", "", -6.21, 106.85],
+  ["manila", "PH", "", 14.60, 120.98],
+  ["kuala lumpur", "MY", "", 3.14, 101.69],
+  ["singapore", "SG", "", 1.35, 103.82],
+  ["sydney", "AU", "", -33.87, 151.21],
+  ["melbourne", "AU", "", -37.81, 144.96],
+  ["brisbane", "AU", "", -27.47, 153.03],
+  ["perth", "AU", "", -31.95, 115.86],
+  ["adelaide", "AU", "", -34.93, 138.60],
+  ["auckland", "NZ", "", -36.85, 174.76],
+  ["wellington", "NZ", "", -41.29, 174.78],
+  ["sao paulo", "BR", "", -23.55, -46.63],
+  ["rio de janeiro", "BR", "", -22.91, -43.17],
+  ["buenos aires", "AR", "", -34.60, -58.38],
+  ["bogota", "CO", "", 4.71, -74.07],
+  ["santiago", "CL", "", -33.45, -70.67],
+  ["lima", "PE", "", -12.05, -77.04],
+  ["havana", "CU", "", 23.11, -82.37],
+  ["kingston", "JM", "", 17.97, -76.79],
+  ["santo domingo", "DO", "", 18.49, -69.93],
+];
+
+let lowerData = null;
+
+// The lowercase copy of the city list is searched, and the positions found are then used to read the original list, so both must be exactly
+// the same length. A plain toLowerCase() makes some characters longer (for example a capital dotted I becomes two characters), which shifted every
+// position after the first such name and made searches read the wrong cities. Here a character is only lowercased if it stays one character long.
+function buildLowerData() {
+  return "\n" + CITIES_DATA.replace(/[A-Z]|[^\x00-\x7f]/g, (ch) => {
+    const l = ch.toLowerCase();
+    return l.length === ch.length ? l : ch;
+  });
+}
+
+function datasetMatches(q, cc) {
+  if (!CITIES_DATA || CITIES_DATA.length === 0) return [];
+  if (lowerData === null) lowerData = buildLowerData();
+  const ccl = cc.toLowerCase();
+  const starts = new Set();
+  let i = lowerData.indexOf(`\n${q}|`);
+  while (i !== -1) {
+    starts.add(i + 1);
+    i = lowerData.indexOf(`\n${q}|`, i + 1);
+  }
+  i = lowerData.indexOf(`|${q}|${ccl}|`);
+  while (i !== -1) {
+    starts.add(lowerData.lastIndexOf("\n", i) + 1);
+    i = lowerData.indexOf(`|${q}|${ccl}|`, i + 1);
+  }
+  const found = [];
+  for (const start of starts) {
+    let end = lowerData.indexOf("\n", start);
+    if (end === -1) end = lowerData.length;
+    const parts = CITIES_DATA.slice(start - 1, end - 1).split("|");
+    if (parts.length < 7 || parts[2].toLowerCase() !== ccl) continue;
+    found.push({
+      name: parts[0],
+      country: parts[2],
+      admin1: parts[3],
+      lat: parseFloat(parts[4]),
+      lng: parseFloat(parts[5]),
+      pop: parseInt(parts[6], 10) || 0,
+    });
+  }
+  return found;
+}
+
+const US_STATE_CODES = {
+  alabama: "al", alaska: "ak", arizona: "az", arkansas: "ar", california: "ca", colorado: "co",
+  connecticut: "ct", delaware: "de", "district of columbia": "dc", florida: "fl", georgia: "ga",
+  hawaii: "hi", idaho: "id", illinois: "il", indiana: "in", iowa: "ia", kansas: "ks", kentucky: "ky",
+  louisiana: "la", maine: "me", maryland: "md", massachusetts: "ma", michigan: "mi", minnesota: "mn",
+  mississippi: "ms", missouri: "mo", montana: "mt", nebraska: "ne", nevada: "nv", "new hampshire": "nh",
+  "new jersey": "nj", "new mexico": "nm", "new york": "ny", "north carolina": "nc", "north dakota": "nd",
+  ohio: "oh", oklahoma: "ok", oregon: "or", pennsylvania: "pa", "rhode island": "ri",
+  "south carolina": "sc", "south dakota": "sd", tennessee: "tn", texas: "tx", utah: "ut", vermont: "vt",
+  virginia: "va", washington: "wa", "west virginia": "wv", wisconsin: "wi", wyoming: "wy",
+};
+
+function normState(state) {
+  const st = (state || "").trim().toLowerCase();
+  return US_STATE_CODES[st] || st;
+}
+
+const COUNTRY_WORDS = new Set(["usa", "us", "u.s.", "u.s.a.", "united", "states", "america", "of"]);
+
+function tidy(s) {
+  return (s || "").toLowerCase().replace(/[.,;]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function tolerantMatch(rawQuery, cc, stateHint) {
+  const words = tidy(rawQuery).split(" ").filter(Boolean);
+  while (words.length > 1 && (COUNTRY_WORDS.has(words[words.length - 1]) || /^\d{4,6}(-\d{4})?$/.test(words[words.length - 1]))) {
+    words.pop();
+  }
+  for (let drop = 0; drop <= 3 && words.length - drop >= 1; drop++) {
+    const name = words.slice(0, words.length - drop).join(" ");
+    const tail = words.slice(words.length - drop).join(" ");
+    if (drop > 0 && !normState(tail) && !US_STATE_CODES[tail] && !Object.values(US_STATE_CODES).includes(tail) && !COUNTRY_WORDS.has(tail)) continue;
+    const hits = datasetMatches(name, cc);
+    if (hits.length === 0) continue;
+    const st = normState(tail) || normState(stateHint);
+    let pick = hits;
+    if (st) {
+      const stateHits = hits.filter((h) => h.admin1 && h.admin1.toLowerCase() === st);
+      if (stateHits.length > 0) pick = stateHits;
+    }
+    return pick.reduce((a, b) => (b.pop > a.pop ? b : a));
+  }
+  return null;
+}
+
+const STATE_NAME_BY_CODE = Object.fromEntries(Object.entries(US_STATE_CODES).map(([name, code]) => [code, name.replace(/\b\w/g, (c) => c.toUpperCase())]));
+
+export function searchCities(rawQuery, limit = 7) {
+  if (!CITIES_DATA || CITIES_DATA.length === 0) return [];
+  if (lowerData === null) lowerData = buildLowerData();
+  const text = (rawQuery || "").toLowerCase().replace(/\s+/g, " ").trim();
+  if (text.length < 2) return [];
+  const comma = text.indexOf(",");
+  const namePart = (comma === -1 ? text : text.slice(0, comma)).trim();
+  const hint = (comma === -1 ? "" : text.slice(comma + 1)).replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
+  if (namePart.length < 2) return [];
+  const rows = [];
+  let i = lowerData.indexOf("\n" + namePart);
+  while (i !== -1 && rows.length < 6000) {
+    let end = lowerData.indexOf("\n", i + 1);
+    if (end === -1) end = lowerData.length;
+    const parts = CITIES_DATA.slice(i, end - 1).split("|");
+    if (parts.length >= 7) {
+      rows.push({
+        name: parts[0],
+        cc: parts[2],
+        admin1: parts[3],
+        lat: parseFloat(parts[4]),
+        lng: parseFloat(parts[5]),
+        pop: parseInt(parts[6], 10) || 0,
+      });
+    }
+    i = lowerData.indexOf("\n" + namePart, end);
+  }
+  let pool = rows;
+  if (hint) {
+    const code = normState(hint);
+    const narrowed = rows.filter((r) => {
+      const stName = (r.cc === "US" && STATE_NAME_BY_CODE[r.admin1.toLowerCase()]) || "";
+      return (r.cc === "US" && (r.admin1.toLowerCase() === code || stName.toLowerCase().startsWith(hint))) || r.cc.toLowerCase() === hint;
+    });
+    if (narrowed.length > 0) pool = narrowed;
+  }
+  pool.sort((a, b) => b.pop - a.pop);
+  const seen = new Set();
+  const out = [];
+  for (const r of pool) {
+    const key = `${r.name}|${r.cc}|${r.admin1}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      city: r.name,
+      country: r.cc,
+      state: r.cc === "US" ? r.admin1 : "",
+      stateName: r.cc === "US" ? STATE_NAME_BY_CODE[r.admin1.toLowerCase()] || r.admin1 : "",
+      pop: r.pop,
+    });
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+export function findCity(cityName, countryCode, state) {
+  const q = (cityName || "").trim().toLowerCase();
+  const cc = (countryCode || "US").toUpperCase();
+  const st = normState(state);
+  if (!q) return fallbackNewYork();
+
+  let hits = datasetMatches(q, cc);
+  if (hits.length === 0) {
+    const loose = tolerantMatch(cityName, cc, state);
+    if (loose) {
+      return { name: loose.name, country: loose.country, lat: loose.lat, lng: loose.lng, source: "dataset" };
+    }
+  }
+  if (hits.length > 0) {
+    let pick = hits;
+    if (st) {
+      const stateHits = hits.filter(
+        (h) => h.admin1 && (h.admin1.toLowerCase() === st || h.admin1.toLowerCase().startsWith(st))
+      );
+      if (stateHits.length > 0) pick = stateHits;
+    }
+    const best = pick.reduce((a, b) => (b.pop > a.pop ? b : a));
+    return { name: best.name, country: best.country, lat: best.lat, lng: best.lng, source: "dataset" };
+  }
+
+  let candidates = MAJOR_CITIES.filter(([n, c]) => n === q && c === cc);
+  if (candidates.length === 0) {
+    candidates = MAJOR_CITIES.filter(([n]) => n === q);
+  }
+  if (candidates.length > 0) {
+    let pick = candidates[0];
+    if (st) {
+      const stMatch = candidates.find(([, , a1]) => a1 && a1.toLowerCase() === st);
+      if (stMatch) pick = stMatch;
+    }
+    return { name: pick[0], country: pick[1], lat: pick[3], lng: pick[4], source: "fallback" };
+  }
+
+  return fallbackNewYork();
+}
+
+function fallbackNewYork() {
+  return { name: "new york", country: "US", lat: 40.71, lng: -74.01, source: "fallback-default" };
+}

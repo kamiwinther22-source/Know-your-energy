@@ -1,0 +1,8 @@
+{
+  "name": "know-your-energy",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "circular-natal-horoscope-js": "^1.1.0"
+  }
+}

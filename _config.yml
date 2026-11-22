@@ -1,0 +1,13 @@
+# Files that are in the project but must not be published on the public site
+# (the Worker deploys from the repository, not from the site).
+exclude:
+  - FEEDBACK-LOG.md
+  - HANDOFF.md
+  - HANDOFF-NOT-LIVE.md
+  - DESIGN-CONCEPTS.md
+  - README.md
+  - worker.js
+  - wrangler.toml
+  - package.json
+  - package-lock.json
+  - build-cities.mjs
