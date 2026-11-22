@@ -1,5 +1,11 @@
 # Owner feedback log (results page design)
 
+## RULE 1 (22 Nov 2026, owner, applies to every design direction, read first)
+- **Never put a line, band or gradient stripe through anything and call it metallic.** A chrome-text gradient with a horizon band is a line through the letters, not metal. Metal is real light reflecting off a real surface, or it is not claimed.
+- **Words must read as full-strength white (or deep black), never gray.** No faded text, no opacity below 1 on text, no thin weights that wash out on the background. The owner's complaint: "every word on the page looks gray."
+- No dividing lines and no color blocking anywhere on the page (same day).
+
+
 Read this before any design work. Add to it every time the owner reacts. Each entry says which screen the comment was about. Do not stretch a comment beyond that screen. Never re-offer something marked DEAD.
 
 ## Likes (steer toward these)
