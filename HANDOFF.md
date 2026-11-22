@@ -2,6 +2,18 @@
 
 Updated 22 Nov 2026. The owner's time is the cost. Be fast, do exactly what is said, show ONE picture, and when told "push", push to `main` that minute.
 
+## 0. The owner's instruction to you (the last thread broke every one of these)
+1. **Do exactly what I say and nothing more.** No extra files, backups, previews, option sets or "while I'm at it" work. If you think something extra is needed, say it in one line and wait.
+2. **Never do anything irreversible, or anything that gives me more to clean up, without my exact words.** No deleting, no history rewrites, no backups I did not ask for.
+3. **If I describe a visible change, make it visibly different.** Never ship a change I cannot see. If my words allow two readings, pick the one that changes what I see and tell me which you picked.
+4. **Nothing gets smaller. No grey, faded, thin or black text or fields.**
+5. **Measure, do not claim.** State a number or a fact only after you have checked it; if you have not checked, say so.
+6. **Be fast.** Edit the real files, show ONE picture, no before/after sets, no re-checking what is already checked. A simple change like a font size takes minutes. When I say "push", push to `main` that minute, check the live site yourself, and never ask me to type addresses.
+7. **Short answers.** No tables, no explaining your process: what changed, what it looks like, what is next.
+8. **If something is blocked, stop and tell me in two lines.** Do not work around it.
+9. **Do not ask me to approve what I have not seen.** Show it first.
+10. **Anything you tell me to understand or keep (a key, a file, an address) goes where I can find it, in plain words, as a file.**
+
 ## 1. What is live (on `main`; a push deploys the site and the Worker in about 40 seconds)
 - **Login:** phone unlock (passkey). No email anywhere. One free reading per phone. Visitors who unlocked before the switch unlock once.
 - **Padlock (important, owner's reason):** the form is locked until the phone is unlocked, and every field shows a padlock. A visitor gets ONE free reading; nobody should type into fields they cannot use ("I am not in favor of wasting people's time"). Keep the padlock on every field.
