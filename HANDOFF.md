@@ -6,7 +6,7 @@ Updated 22 Nov 2026. The owner's time is the cost. Be fast, do exactly what is s
 1. **Do exactly what I say and nothing more.** No extra files, backups, previews, option sets or "while I'm at it" work. If you think something extra is needed, say it in one line and wait.
 2. **Never do anything irreversible, or anything that gives me more to clean up, without my exact words.** No deleting, no history rewrites, no backups I did not ask for.
 3. **If I describe a visible change, make it visibly different.** Never ship a change I cannot see. If my words allow two readings, pick the one that changes what I see and tell me which you picked.
-4. **Nothing gets smaller. No grey, faded, thin or black text or fields.**
+4. **Nothing gets smaller. No grey, faded, thin or smeared text, and no black INPUT FIELDS.** (Text may be full-strength white or deep black; black text is not banned.)
 5. **Measure, do not claim.** State a number or a fact only after you have checked it; if you have not checked, say so.
 6. **Be fast.** Edit the real files, show ONE picture, no before/after sets, no re-checking what is already checked. A simple change like a font size takes minutes. When I say "push", push to `main` that minute, check the live site yourself, and never ask me to type addresses.
 7. **Short answers.** No tables, no explaining your process: what changed, what it looks like, what is next.
