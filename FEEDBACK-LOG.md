@@ -5,6 +5,19 @@
 - **Words must read as full-strength white (or deep black), never gray.** No faded text, no opacity below 1 on text, no thin weights that wash out on the background. The owner's complaint: "every word on the page looks gray."
 - No dividing lines and no color blocking anywhere on the page (same day).
 
+## Owner's standing instructions (22 Nov 2026). Read before touching the front page. Do not make the owner repeat any of these.
+- **Never make anything plainer than it is now.** The site is not enough as it is. A fix changes only the flaw named; never swap a rendered asset for a simpler one. If a piece can't be improved, leave it exactly as is and say so.
+- **Show before live.** Anything that changes how the page looks is shown to the owner first (phone-sharp screenshots, 3x). Fixes to wording or behaviour that do not change the look may go live.
+- **Work from what the owner said, not from experiments.** No random experimenting. Everything done must move toward something the owner described.
+- **Front page design intent:** the solar system is deliberately off the right edge of the screen and tilted; the owner wants the tagline area in the shape of a wedge in the upper left; the page is not a "sky" (no night-sky or pale-blue-wash looks); the whole site should read as a substance/material, not as flat blocks. Do not enlarge the solar system beyond what it is unless asked. Tilt direction was never settled: ask only if it matters.
+- **Taglines:** the owner does not want help writing a tagline unless asked. Never start a line with "Stop". Do not suggest "never just a sun sign", "where your stars agree", or "one reading, three ways of seeing you".
+- **Relationship buttons (Parent-Child, Romantic, Friends, Other):** all four exactly the same size; the chosen one must clearly look physically pressed in (no blue film, no turning black); lettering looks engraved; no dot in "Parent-Child"; no speckled noise over any button.
+- **Person 1 / Person 2 labels are cursive** (the wordmark script). Labels are a different (larger) size than the text typed into fields. Entry fields are never just an underline.
+- **Type is elegant, not heavy.** Bold at every size smears and goes blurry; weight and size must make a clear order (headline, label, entry) with fine strokes and room around it.
+- **Daily readings** are not worded well enough to charge for (choppy, not brought together). A pass is only worth selling once they read as one flowing piece.
+- **Login/pass design (agreed):** no email as the key. Phone unlock (passkey), nothing saved about the person, readings stay in the browser. Family free access by a private code on a non-public page, not a visible link. One free reading per person; leaks via other devices are accepted.
+- **Process:** answer the question asked; do not add. Be fast and correct. If a task takes long, say what is happening in a few words.
+
 
 Read this before any design work. Add to it every time the owner reacts. Each entry says which screen the comment was about. Do not stretch a comment beyond that screen. Never re-offer something marked DEAD.
 
