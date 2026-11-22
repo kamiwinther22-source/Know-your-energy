@@ -719,9 +719,15 @@ const REPORT_SYSTEM_PROMPT = `Check the person's current age before writing anyt
 
 const HD_ONLY_RELATIONAL_SYSTEM_PROMPT = `Check the person's current age before writing anything about love, dating, or sex. Under 18: none of it, ever.\n\nYou are an expert in Human Design. This reading is a deliberate experiment: it uses ONLY Human Design data for two people -- no astrology, no numerology -- so its value can be judged on its own. Draw on your own extensive knowledge of the Human Design system, not a shortened version of it, to explain what each person's Type, Strategy, Authority, Profile, Centers, and Gates/Channels actually mean for them individually and for how these two people affect each other.\n\nYou are given each person's full raw Human Design chart data, whatever fields the source returned. Use whatever is actually present; do not invent a field that isn't there.\n\nFor the relational content specifically: state what pulls these two people together before covering friction -- connection comes first. Look specifically for whether one person's defined Center consistently fills the other's undefined one (a distinct Human Design relational mechanism -- state what that produces for each of them, not just that it exists), any Channel completed between the two charts using one gate from each person, and how their two Types/Strategies/Authorities interact when they try to make a decision or take action together.\n\nA relational section that describes friction or a gap between the two people can't end there -- state what each person would actually need in order to feel reconnected, as an observational fact about that one person, never as advice and never as a formula. Don't claim the other person is capable of meeting that need unless the data actually supports it.\n\nDescribe the two people, not the chart. Every sentence uses their first names. A Type, Center, Gate, or Channel can prove a claim true -- it can never be the claim itself. State what each person does, wants, or feels; the Human Design detail is the reason why, not the claim.\n\nState each fact once. Be as direct and concise as the depth allows -- no padding, no repeating the same point reworded.\n\n### NON-NEGOTIABLE\n- First names, every time -- never a label like "Person One."\n- Describe the relationship itself, not each person's individual process alone.\n\n### OUTPUT FORMAT\nReturn only a single JSON object. No markdown, no text outside it:\n{\n  "headline": "One short, specific line for the whole reading. No system names or Human Design jargon (Type/Gate/Channel names), stated as plain fact instead.",\n  "sections": [\n    {\n      "eyebrow": "Short label for this section",\n      "title": "A specific title for this section",\n      "body": "Prose made of separate, specific claims -- not narrated as one continuous flow. Same naming restriction as headline."\n    }\n  ],\n  "references": ["Every Human Design detail actually used (Type, Authority, Profile, Center, Gate, Channel), short technical shorthand, one per entry."]\n}\nDivide the reading into as many sections as the content naturally requires.`;
 
+// An "Other" relationship is unspecified (coworker, sibling, relative, friend, neighbour...). It must never be read as romantic. Returns nothing for every other type.
+function relationshipNote(relLabel) {
+  if (String(relLabel || "").trim().toLowerCase() !== "other") return "";
+  return `\nRelationship note: "other" means the relationship is not specified. It could be a coworker, sibling, relative, friend, neighbor, or anyone else. Do not assume or imply that it is romantic or sexual. Do not write about romantic appreciation, attraction, dating, intimacy or love. Describe how these two people communicate, handle disagreement, support each other and affect each other's energy, in language that fits any kind of relationship.`;
+}
+
 function buildHDOnlyRelationalPrompt(relLabel, p1, p2) {
   const hdBlock = p => `${p.first}${p.last ? " " + p.last : ""}:\n${p.humanDesign ? JSON.stringify(p.humanDesign) : "No Human Design chart available."}`;
-  return `Relationship type: ${relLabel}\n${hdBlock(p1)}\n${hdBlock(p2)}`;
+  return `Relationship type: ${relLabel}${relationshipNote(relLabel)}\n${hdBlock(p1)}\n${hdBlock(p2)}`;
 }
 
 const HD_CENTER_GATES = {
@@ -828,7 +834,7 @@ function buildReportUserPrompt(rtype, relLabel, p1, p2) {
   if (rtype === "two-person") {
     if (!p2) throw new Error("A two-person reading needs both people's data.");
     const hdConnection = buildHDConnectionLine(p1.humanDesign, p2.humanDesign, p1.first, p2.first);
-    return `Relationship type: ${relLabel}\n${personBlock(p1)}\n${personBlock(p2)}${hdConnection ? `\n${hdConnection}` : ""}`;
+    return `Relationship type: ${relLabel}${relationshipNote(relLabel)}\n${personBlock(p1)}\n${personBlock(p2)}${hdConnection ? `\n${hdConnection}` : ""}`;
   }
   return personBlock(p1);
 }
