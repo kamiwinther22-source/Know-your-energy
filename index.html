@@ -899,27 +899,28 @@ html.red .side-btn:active,html.red .fan-actions>.side-btn:active{transform:trans
 html.red .side-btn:active::before,html.red .fan-actions>.side-btn:active::before{display:none !important}
 html.red .side-btn span,html.red .fan-actions>.side-btn span{display:inline-block;color:#3d4550 !important;-webkit-text-fill-color:#3d4550 !important;text-shadow:none !important;filter:url(#kyeEngrave)}
 }
-/* ---- Form look: cursive person labels, warm full-strength type, recessed glass entry wells (never an underline, never a black/white/grey box) ---- */
+/* ---- Form look: cursive person labels, full-strength blush-pearl type, recessed glass entry wells (never an underline, never a black/white/grey box) ---- */
 @layer base{
-html.red{--ivory:#FFF4E4;--gold:#FFD9A0;--well-rim:#F2C98A}
+html.red{--ivory:#FFF0F4;--gold:#FFC2D2;--well-rim:#EDB9C8}
 html.red #formStep .person-tag,html.red #formStep #p2Section .person-tag,html.red #formStep #p1Block .person-tag{
   font-family:'Alex Brush',cursive !important;font-weight:400 !important;font-size:60px !important;line-height:1.05 !important;margin:6px 0 2px !important;
-  color:var(--ivory) !important;-webkit-text-fill-color:var(--ivory) !important;padding-right:18px !important;overflow:visible !important;text-shadow:0 0 22px rgba(255,190,140,.55),0 2px 0 rgba(90,10,35,.6) !important}
+  color:var(--ivory) !important;-webkit-text-fill-color:var(--ivory) !important;padding-right:18px !important;overflow:visible !important;text-shadow:0 0 7px rgba(255,175,205,.45),0 2px 0 rgba(90,10,35,.6) !important}
+html.red #formStep #p2Section>.f{padding:0 5px 0 0 !important}
 html.red #formStep .section-lbl,html.red #formStep .row-birth label,html.red #formStep .opt-lbl{
   font-size:21px !important;font-weight:500 !important;color:var(--gold) !important;-webkit-text-fill-color:var(--gold) !important;margin:12px 0 6px !important;letter-spacing:.01em !important}
 html.red #formStep .opt-lbl{font-size:17px !important;font-weight:500 !important;margin:0 !important}
 html.red #formStep .r-choose,html.red #formStep .tog-lbl{font-weight:500 !important;color:var(--ivory) !important}
 html.red #formStep .r-note,html.red #formStep .why,html.red #formStep .chk-txt,html.red #formStep .state-banner,html.red #formStep .state-banner *{font-weight:500 !important;color:var(--ivory) !important}
 html.red #formStep .tz-toggle{font-weight:500 !important;color:var(--gold) !important;text-decoration-color:var(--gold) !important}
-/* the entry wells: rose glass set into the surface, warm gold rim, lit lower lip */
+/* the entry wells: rose glass set into the surface, pearl-rose rim, lit lower lip */
 html.red .field,html.red .line-field,html.red .line-field.hero-email-field,html.red #formStep .row-time .ampm-field,html.red #formStep.locked .line-field{
   background:linear-gradient(180deg,rgba(255,150,185,.20) 0%,rgba(255,110,150,.11) 100%) !important;
   border:0 !important;border-radius:12px !important;height:46px !important;
-  box-shadow:inset 0 3px 8px rgba(30,0,12,.65),inset 0 -1px 0 rgba(255,235,205,.22),0 0 0 1.5px var(--well-rim),0 2px 0 1.5px rgba(255,236,205,.35) !important;
+  box-shadow:inset 0 3px 8px rgba(30,0,12,.65),inset 0 -1px 0 rgba(255,230,238,.22),0 0 0 1.5px var(--well-rim),0 2px 0 1.5px rgba(255,225,235,.35) !important;
   transition:box-shadow .15s ease,background .15s ease}
 html.red .line-field:focus-within,html.red #formStep .row-time .ampm-field:focus-within{
   background:linear-gradient(180deg,rgba(255,170,200,.30) 0%,rgba(255,130,165,.18) 100%) !important;
-  box-shadow:inset 0 3px 8px rgba(30,0,12,.6),0 0 0 2.5px var(--gold),0 0 20px 3px rgba(255,205,140,.55) !important}
+  box-shadow:inset 0 3px 8px rgba(30,0,12,.6),0 0 0 2.5px var(--gold),0 0 20px 3px rgba(255,170,198,.6) !important}
 html.red .line-field input,html.red .line-field select,html.red .hero-email-field input{
   height:46px !important;font-size:17px !important;font-weight:500 !important;color:var(--ivory) !important;-webkit-text-fill-color:var(--ivory) !important;caret-color:var(--gold);padding:0 12px !important}
 html.red .line-field input::placeholder,html.red .hero-email-field input::placeholder{color:var(--gold) !important;-webkit-text-fill-color:var(--gold) !important;opacity:1 !important;font-weight:500 !important}
@@ -929,12 +930,13 @@ html.red .line-field select option{background:#3a0a1c;color:var(--ivory)}
 /* checkbox: a visible well you can see and tap */
 html.red .chk-box{flex:0 0 28px !important;width:28px !important;height:28px !important;border-radius:8px !important;
   background:linear-gradient(180deg,rgba(255,150,185,.20),rgba(255,110,150,.11)) !important;
-  box-shadow:inset 0 3px 7px rgba(30,0,12,.65),0 0 0 1.5px var(--well-rim),0 2px 0 1.5px rgba(255,236,205,.35) !important}
+  box-shadow:inset 0 3px 7px rgba(30,0,12,.65),0 0 0 1.5px var(--well-rim),0 2px 0 1.5px rgba(255,225,235,.35) !important}
 html.red .chk input:checked+.chk-box::after{left:9px !important;top:3px !important;width:7px !important;height:14px !important;border-color:var(--gold) !important}
-html.red .chk input:focus-visible+.chk-box{box-shadow:inset 0 3px 7px rgba(30,0,12,.6),0 0 0 2.5px var(--gold),0 0 16px 2px rgba(255,205,140,.55) !important}
-html.red .row-id{gap:10px !important}
-html.red #formStep .row-birth .row-time{grid-template-columns:84px 88px !important;column-gap:10px !important}
-html.red #formStep .row-birth{column-gap:10px !important}
+html.red .chk input:focus-visible+.chk-box{box-shadow:inset 0 3px 7px rgba(30,0,12,.6),0 0 0 2.5px var(--gold),0 0 16px 2px rgba(255,170,198,.6) !important}
+html.red .row-id{gap:8px !important}
+html.red #formStep .row-birth .row-time{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;column-gap:8px !important}
+html.red .row-id .line-field:nth-child(n){flex:1 1 0 !important;min-width:0 !important}html.red .row-id .line-field:nth-child(2){flex:.75 1 0 !important}
+html.red #formStep .row-birth{grid-template-columns:132px minmax(0,1fr) !important;column-gap:8px !important}
 html.red .line-field{padding:0 !important}
 }
 html.red .rel-row{padding-bottom:16px}
