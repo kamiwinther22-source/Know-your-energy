@@ -1,18 +1,12 @@
+# NEVER TRADE QUALITY FOR SPEED. ABSOLUTELY.
+
 # Handoff: Know Your Energy (read this first, 3 minutes)
 
-Updated 22 Nov 2026. The owner's time is the cost, but NEVER trade quality for speed: no shortcuts, no cheap fixes, no bare-minimum work. Do exactly what is said, do it properly the first time, show ONE picture, and when told "push", push to `main` that minute.
+Updated 22 Nov 2026.
 
-## 0. The owner's instruction to you (the last thread broke every one of these)
-1. **Do exactly what I say and nothing more.** No extra files, backups, previews, option sets or "while I'm at it" work. If you think something extra is needed, say it in one line and wait.
-2. **Never do anything irreversible, or anything that gives me more to clean up, without my exact words.** No deleting, no history rewrites, no backups I did not ask for.
-3. **If I describe a visible change, make it visibly different.** Never ship a change I cannot see. If my words allow two readings, pick the one that changes what I see and tell me which you picked.
-4. **Nothing gets smaller. No grey, faded, thin or smeared text, and no black INPUT FIELDS.** (Text may be full-strength white or deep black; black text is not banned.)
-5. **Be careful and thoughtful, and do ONE step at a time, correctly, so nothing has to be redone.** MEASURE UP FRONT, before the first change: read the real files, and measure what is on the live page now (sizes, colours, what overrides what) so the change is right the first time. Never measure after ten rounds of guessing. State a number or a fact only after you have checked it; if you have not checked, say so.
-6. **Do the real work properly the first time. No shortcuts and no cheap or quick fixes, ever.** Time is lost to REDOING work, not to doing it carefully: so no extra previews, no option sets, no before/after sets, no stale copies. Edit the real files and show ONE picture. When I say "push", push to `main` that minute, check the live site yourself, and never ask me to type addresses.
-7. **Short answers.** No tables, no explaining your process: what changed, what it looks like, what is next.
-8. **If something is blocked, stop and tell me in two lines.** Do not work around it.
-9. **Do not ask me to approve what I have not seen.** Show it first.
-10. **Anything you tell me to understand or keep (a key, a file, an address) goes where I can find it, in plain words, as a file.**
+## 0. The owner's own words, verbatim (22 Nov 2026). This is the instruction.
+
+> Okay, so the first one is just wrong. I want it gone. The second, the show one picture, it goes right along with the first one. The third one, don't measure what was already measured. Well, that depends if it's accurate or not. Do not widen a request. I don't even know what that means. Short answers. Don't explain the process. Well, you know what? Yeah, for the most part, I don't need to know how you're doing it. Other than if what you're doing is some cheap-ass shortcut, I need to know what it is to specifically say not to do it again. So the cautiousness is not in, I'm looking for help. I'm fucking looking for help. I don't have the answers. I don't know what to do. I have no idea what you are capable of. Because you know what? It took me fucking months to get buttons to look as good as they do. Because you weren't showing me that you had the ability to do that. It took me forever to get any sort of like, now I know you can make a fucking ribbon. Do you know it took probably 6 months before I got you to show me you can make a fucking ribbon? You just drew stupid ass lines before for a long time, and I don't know what I did or said that got the higher quality work when I got it, because I don't know that I said anything different. I don't know what you can do. So I cannot give you exact directions most of the time. I need you to show me what you're capable of. I need you to take everything I say when you are showing me something and I'm like, no, I don't like that. You need to pay attention to what it is and what it is I don't like about it and go from there. It should be building towards something. It should not be starting over every fucking time.
 
 ## 1. What is live (on `main`; a push deploys the site and the Worker in about 40 seconds)
 - **Login:** phone unlock (passkey). No email anywhere. One free reading per phone. Visitors who unlocked before the switch unlock once.
@@ -23,10 +17,9 @@ Updated 22 Nov 2026. The owner's time is the cost, but NEVER trade quality for s
 - **The form screens:** Jost for all text; labels 22px; text typed in the boxes 16px (the least an iPhone allows without zooming; do not make it bigger, the labels must stay the larger text); "Date of Birth" spelled out; the "Choose either individual or relational" heading removed (the toggle says it); "Person 1" / "Person 2" in the cursive; fields are lit wells (translucent wine-rose, never black, grey or white, no outline box).
 
 ## 2. The owner's rules (do not make them repeat these)
-- Nothing may get smaller than it is. Never thin, faded, grey-looking or darker/smeared text. Pure white at full strength; contrast is the rule.
+- Nothing may get smaller than it is. Never thin, faded, grey-looking or darker/smeared text. Contrast is the rule, not text colour.
 - No black fields. No locked features, ever. No email.
-- LEAVE ALONE unless told: the silver buttons (including "Parent · Child" with its dot), Person 1 / Person 2 (cursive), the wordmark, FREE!, the solar system's position.
-- Do not widen a request. Do not offer option sets. Show one picture. Do not re-measure what was measured. Say what rule you are applying so the owner can correct it.
+- LEAVE ALONE: the silver buttons (including "Parent · Child" with its dot). The earlier list also named Person 1 / Person 2, the wordmark, FREE! and the solar system's position; the owner did not confirm those.
 - "Classy, elegant, sleek, powerful, bold" is the brief for the look. Typography alone cannot reach it; it needs real lit surfaces (see Open items).
 
 ## 3. Open items (none of these is live)
