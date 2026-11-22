@@ -853,17 +853,24 @@ html,body{overflow-x:clip !important;}
 <link rel="stylesheet" href="red-look.css?v=20261126">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
 <style id="btn3d">
-/* 3D buttons: same images and shapes as before; depth added only. A pushed-in button sits lower with almost no wall, so it is clearly shorter than the raised ones. */
+/* Buttons: same shapes; speckle-free copies of the button images (img/k3), real depth, words engraved into the face. */
+html.red .rbtn{background-image:url(img/k3/rbtn.png?v=1) !important}
+html.red .gen-btn{background-image:url(img/k3/gen.png?v=1) !important}
+html.red .rel-row .glow-ring-sm:nth-child(1) .rel-chip{background-image:url(img/k3/chip66.png?v=1) !important}
+html.red .rel-row .glow-ring-sm:nth-child(2) .rel-chip{background-image:url(img/k3/chip66.png?v=1) !important}
+html.red .rel-row .glow-ring-sm:nth-child(3) .rel-chip{background-image:url(img/k3/chip66.png?v=1) !important}
+html.red .rel-row .glow-ring-sm:nth-child(4) .rel-chip{background-image:url(img/k3/chip66.png?v=1) !important}
+html.red .rel-row .glow-ring-sm:nth-child(n) .rel-chip{background-image:url(img/k3/chip66.png?v=1) !important}
 html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
   filter:drop-shadow(0 4px 0 #c4cad2) drop-shadow(0 4px 0 #8b949f) drop-shadow(0 4px 0 #4a5058) !important;
   transform:translateY(0);transition:transform .09s ease,filter .09s ease}
 html.red .rbtn:hover,html.red .gen-btn:hover,html.red .rel-chip:hover{transform:translateY(0)}
+/* pushed in: same size, sits flush at the bottom of the wall, lit up */
 html.red .rbtn:active,html.red .gen-btn:active,html.red .rel-chip:active,html.red .rel-chip.active,html.red .rel-chip.active:hover{
   transform:translateY(12px) !important;
-  filter:brightness(1.18) drop-shadow(0 1px 0 #8b949f) !important}
-/* words carved into the face (color unchanged) */
-html.red .rbtn,html.red .rbtn *,html.red .gen-btn,html.red .gen-btn *,html.red .rel-chip,html.red .rel-chip *,html.red .hero-continue-label{
-  text-shadow:0 1px 0 rgba(255,255,255,.95),0 -1px 0 rgba(0,0,0,.5) !important}
+  filter:brightness(1.22) drop-shadow(0 0 7px rgba(255,255,255,.95)) drop-shadow(0 0 16px rgba(255,255,255,.6)) !important}
+/* engraved words: cut into the face; the near wall is in shadow, the lower lip catches light (filter #kyeEngrave) */
+html.red .rbtn .eng,html.red .gen-btn .eng,html.red .rel-chip .eng{display:inline-block;color:#3d4550 !important;-webkit-text-fill-color:#3d4550 !important;text-shadow:none !important;filter:url(#kyeEngrave)}
 html.red .rel-row{padding-bottom:16px}
 html.red .submit-wrap{padding-bottom:14px}
 </style>
@@ -976,6 +983,21 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
 <link rel="modulepreload" href="orrery-fast.js?v=3"><link rel="preload" href="hdri/studio-log.jpg" as="image">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<filter id="kyeEngrave" x="-8%" y="-20%" width="116%" height="150%" color-interpolation-filters="sRGB">
+  <feComponentTransfer in="SourceAlpha" result="inv"><feFuncA type="table" tableValues="1 0"/></feComponentTransfer>
+  <feOffset in="inv" dx="0" dy="2.4" result="invOff"/>
+  <feGaussianBlur in="invOff" stdDeviation="0.9" result="invBlur"/>
+  <feFlood flood-color="#05070b" flood-opacity="0.95" result="dark"/>
+  <feComposite in="dark" in2="invBlur" operator="in" result="darkShade"/>
+  <feComposite in="darkShade" in2="SourceAlpha" operator="in" result="innerShadow"/>
+  <feOffset in="SourceAlpha" dx="0" dy="1.4" result="lipOff"/>
+  <feGaussianBlur in="lipOff" stdDeviation="0.35" result="lipBlur"/>
+  <feFlood flood-color="#ffffff" flood-opacity="1" result="white"/>
+  <feComposite in="white" in2="lipBlur" operator="in" result="lipWhite"/>
+  <feComposite in="lipWhite" in2="SourceAlpha" operator="out" result="lip"/>
+  <feMerge><feMergeNode in="lip"/><feMergeNode in="SourceGraphic"/><feMergeNode in="innerShadow"/></feMerge>
+</filter></defs></svg>
 
 
 
@@ -996,7 +1018,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
   <div class="hero-email-wrap">
     <div class="line-field hero-email-field"><input id="heroEmail" type="email" inputmode="email" autocomplete="email" placeholder="Email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <div class="rb-wrap"><button type="button" class="rbtn hero-continue-btn" aria-label="Continue" onclick="revealForm()"><span class="hero-continue-label">Continue</span></button></div>
+    <div class="rb-wrap"><button type="button" class="rbtn hero-continue-btn" aria-label="Continue" onclick="revealForm()"><span class="hero-continue-label eng">Continue</span></button></div>
   </div>
 </div>
 
@@ -1058,10 +1080,10 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
         </div>
 
         <div class="rel-row" id="relWrap" style="display:none;">
-          <span class="glow-ring-sm"><button type="button" class="rel-chip active" data-rel="parent-child">Parent · Child</button></span>
-          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="romantic">Romantic</button></span>
-          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="friends">Friends</button></span>
-          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="other">Other</button></span>
+          <span class="glow-ring-sm"><button type="button" class="rel-chip active" data-rel="parent-child"><span class="eng">Parent · Child</span></button></span>
+          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="romantic"><span class="eng">Romantic</span></button></span>
+          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="friends"><span class="eng">Friends</span></button></span>
+          <span class="glow-ring-sm"><button type="button" class="rel-chip" data-rel="other"><span class="eng">Other</span></button></span>
         </div>
 
         <div id="p2Section">
@@ -1096,7 +1118,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
       </div>
 
       <div class="submit-wrap">
-        <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()">Calculate</button></span>
+        <span class="glow-ring"><button type="button" class="gen-btn" id="genBtn" onclick="generate()"><span class="eng">Calculate</span></button></span>
       </div>
       <div class="err" id="err"></div>
       <p class="r-note">Birth time and place are needed for a full reading. Without them you still get every part that does not depend on them.</p>
