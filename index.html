@@ -852,6 +852,21 @@ html,body{overflow-x:clip !important;}
 </style>
 <link rel="stylesheet" href="red-look.css?v=20261126">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
+<style id="btn3d">
+/* 3D buttons: same images and shapes as before; depth added only. A pushed-in button sits lower with a short wall, so it is clearly shorter than the raised ones. */
+html.red .rbtn,html.red .gen-btn,html.red .rel-chip{
+  filter:drop-shadow(0 2px 0 #b9c0c9) drop-shadow(0 2px 0 #8b949f) drop-shadow(0 2px 0 #4a5058) !important;
+  transform:translateY(0);transition:transform .09s ease,filter .09s ease}
+html.red .rbtn:hover,html.red .gen-btn:hover,html.red .rel-chip:hover{transform:translateY(0)}
+html.red .rbtn:active,html.red .gen-btn:active,html.red .rel-chip:active,html.red .rel-chip.active,html.red .rel-chip.active:hover{
+  transform:translateY(5px) !important;
+  filter:brightness(1.12) drop-shadow(0 1px 0 #8b949f) !important}
+/* words carved into the face (color unchanged) */
+html.red .rbtn,html.red .rbtn *,html.red .gen-btn,html.red .gen-btn *,html.red .rel-chip,html.red .rel-chip *,html.red .hero-continue-label{
+  text-shadow:0 1px 0 rgba(255,255,255,.95),0 -1px 0 rgba(0,0,0,.5) !important}
+html.red .rel-row{padding-bottom:8px}
+html.red .submit-wrap{padding-bottom:6px}
+</style>
 <style id="chartFrameCss">
 /* Numerology chart: opens in an angled silver frame (the front page's cut corners and silver rim) around a white sheet. */
 .card-expand.chart-frame{background:rgba(20,3,9,.88) !important;background-image:none !important;box-shadow:none !important;padding:16px 12px 40px !important}
