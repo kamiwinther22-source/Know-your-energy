@@ -476,223 +476,6 @@ function passKey(email) {
   return `pass:${email.trim().toLowerCase()}`;
 }
 
-// ---- Phone unlock (passkeys). The site stores a random public code per phone, never a name, email, face or fingerprint. ----
-const WA_RP_ID = "know-your-energy.com";
-const WA_ORIGINS = ["https://know-your-energy.com", "https://www.know-your-energy.com"];
-const WA_TOKEN_TTL_S = 60 * 86400;
-const WA_NEW_PER_IP_PER_DAY = 10;
-
-function b64uToBytes(s) {
-  s = String(s || "").replace(/-/g, "+").replace(/_/g, "/");
-  while (s.length % 4) s += "=";
-  const bin = atob(s);
-  const out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
-}
-
-function bytesToB64u(b) {
-  let s = "";
-  for (let i = 0; i < b.length; i++) s += String.fromCharCode(b[i]);
-  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
-function bytesToHex(b) {
-  return Array.from(b).map(x => x.toString(16).padStart(2, "0")).join("");
-}
-
-async function sha256Bytes(bytes) {
-  return new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
-}
-
-function bytesEqual(a, b) {
-  if (a.length !== b.length) return false;
-  let d = 0;
-  for (let i = 0; i < a.length; i++) d |= a[i] ^ b[i];
-  return d === 0;
-}
-
-// Minimal CBOR reader: enough for passkey attestation objects and public keys.
-function cborDecode(buf, pos = 0) {
-  const first = buf[pos++];
-  const major = first >> 5;
-  const info = first & 31;
-  let val;
-  if (info < 24) val = info;
-  else if (info === 24) { val = buf[pos]; pos += 1; }
-  else if (info === 25) { val = (buf[pos] << 8) | buf[pos + 1]; pos += 2; }
-  else if (info === 26) { val = ((buf[pos] << 24) | (buf[pos + 1] << 16) | (buf[pos + 2] << 8) | buf[pos + 3]) >>> 0; pos += 4; }
-  else if (major === 7) val = 0;
-  else throw new Error("cbor: unsupported length");
-  if (major === 0) return [val, pos];
-  if (major === 1) return [-1 - val, pos];
-  if (major === 2) return [buf.slice(pos, pos + val), pos + val];
-  if (major === 3) return [new TextDecoder().decode(buf.slice(pos, pos + val)), pos + val];
-  if (major === 4) {
-    const arr = [];
-    for (let i = 0; i < val; i++) { const [v, p] = cborDecode(buf, pos); arr.push(v); pos = p; }
-    return [arr, pos];
-  }
-  if (major === 5) {
-    const m = new Map();
-    for (let i = 0; i < val; i++) {
-      const [k, p1] = cborDecode(buf, pos);
-      const [v, p2] = cborDecode(buf, p1);
-      m.set(k, v);
-      pos = p2;
-    }
-    return [m, pos];
-  }
-  if (major === 7) return [info === 20 ? false : info === 21 ? true : null, pos];
-  throw new Error("cbor: unsupported type");
-}
-
-function parseClientData(b64) {
-  const raw = b64uToBytes(b64);
-  return { raw, json: JSON.parse(new TextDecoder().decode(raw)) };
-}
-
-async function checkClientData(env, cd, type) {
-  if (cd.json.type !== type) throw new Error("wrong type");
-  if (!WA_ORIGINS.includes(cd.json.origin)) throw new Error("wrong origin");
-  const ck = "chal:" + cd.json.challenge;
-  if (!(await env.PASSES.get(ck))) throw new Error("challenge expired");
-  await env.PASSES.delete(ck);
-}
-
-async function checkAuthData(ad, needAttested) {
-  if (ad.length < 37) throw new Error("short authData");
-  if (!bytesEqual(ad.slice(0, 32), await sha256Bytes(new TextEncoder().encode(WA_RP_ID)))) throw new Error("wrong rp");
-  if (!(ad[32] & 1)) throw new Error("no user presence");
-  if (needAttested && !(ad[32] & 64)) throw new Error("no credential data");
-}
-
-// Stores the new phone's public key. Returns the credential's stable id.
-async function waRegister(env, body) {
-  const cd = parseClientData(body.clientDataJSON);
-  await checkClientData(env, cd, "webauthn.create");
-  const [att] = cborDecode(b64uToBytes(body.attestationObject));
-  const ad = att.get("authData");
-  await checkAuthData(ad, true);
-  let p = 37 + 16;
-  const idLen = (ad[p] << 8) | ad[p + 1];
-  p += 2;
-  const credId = ad.slice(p, p + idLen);
-  p += idLen;
-  const [cose] = cborDecode(ad, p);
-  const kty = cose.get(1), alg = cose.get(3);
-  let jwk, algo;
-  if (kty === 2 && alg === -7) {
-    jwk = { kty: "EC", crv: "P-256", x: bytesToB64u(cose.get(-2)), y: bytesToB64u(cose.get(-3)) };
-    algo = "es256";
-  } else if (kty === 3 && alg === -257) {
-    jwk = { kty: "RSA", alg: "RS256", n: bytesToB64u(cose.get(-1)), e: bytesToB64u(cose.get(-2)), ext: true };
-    algo = "rs256";
-  } else throw new Error("unsupported key");
-  const id = bytesToHex(await sha256Bytes(credId)).slice(0, 32);
-  await env.PASSES.put("cred:" + id, JSON.stringify({ algo, jwk, created: Date.now() }));
-  return id;
-}
-
-function derToRaw(der) {
-  // ECDSA signature from DER (SEQUENCE of two INTEGERs) to 64-byte r||s
-  let p = 2;
-  if (der[1] & 0x80) p += der[1] & 0x7f;
-  const rd = i => {
-    if (der[i] !== 2) throw new Error("bad sig");
-    const len = der[i + 1], s = i + 2;
-    let v = der.slice(s, s + len);
-    while (v.length > 32 && v[0] === 0) v = v.slice(1);
-    const out = new Uint8Array(32);
-    out.set(v, 32 - v.length);
-    return [out, s + len];
-  };
-  const [r, n] = rd(p);
-  const [s] = rd(n);
-  const raw = new Uint8Array(64);
-  raw.set(r, 0);
-  raw.set(s, 32);
-  return raw;
-}
-
-// Checks a phone's unlock. Returns the credential's stable id.
-async function waAuthenticate(env, body) {
-  const cd = parseClientData(body.clientDataJSON);
-  await checkClientData(env, cd, "webauthn.get");
-  const ad = b64uToBytes(body.authenticatorData);
-  await checkAuthData(ad, false);
-  const credId = b64uToBytes(body.credentialId);
-  const id = bytesToHex(await sha256Bytes(credId)).slice(0, 32);
-  const rec = await env.PASSES.get("cred:" + id);
-  if (!rec) throw new Error("unknown phone");
-  const { algo, jwk } = JSON.parse(rec);
-  const signed = new Uint8Array(ad.length + 32);
-  signed.set(ad, 0);
-  signed.set(await sha256Bytes(cd.raw), ad.length);
-  const sig = b64uToBytes(body.signature);
-  let ok;
-  if (algo === "es256") {
-    const key = await crypto.subtle.importKey("jwk", jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
-    ok = await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, key, derToRaw(sig), signed);
-  } else {
-    const key = await crypto.subtle.importKey("jwk", jwk, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
-    ok = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, sig, signed);
-  }
-  if (!ok) throw new Error("bad signature");
-  return id;
-}
-
-async function waIssueToken(env, id) {
-  const t = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
-  await env.PASSES.put("tok:" + sha256Hex(t), JSON.stringify({ id, t: Date.now() }), { expirationTtl: WA_TOKEN_TTL_S });
-  return t;
-}
-
-// A request's "email" is now "<token>@kye.device". Returns the phone's stable identity string, or null if the token is unknown or expired.
-async function resolveIdentity(env, value) {
-  const m = /^([a-f0-9]{64})@kye\.device$/.exec(String(value || "").trim().toLowerCase());
-  if (!m) return null;
-  const raw = await env.PASSES.get("tok:" + sha256Hex(m[1]));
-  if (!raw) return null;
-  return JSON.parse(raw).id + "@kye.device";
-}
-
-async function handleAuth(request, env, url) {
-  let body = {};
-  try { body = await request.json(); } catch (e) {}
-  try {
-    if (url.pathname === "/auth/start") {
-      const ip = request.headers.get("CF-Connecting-IP") || "";
-      if (body.mode === "create") {
-        const day = new Date().toISOString().slice(0, 10);
-        const k = "newcred:" + sha256Hex("kye-ip-v1:" + ip) + ":" + day;
-        const n = parseInt(await env.PASSES.get(k) || "0", 10);
-        if (n >= WA_NEW_PER_IP_PER_DAY) return jsonResponse({ error: "Too many new phones from this connection today. Please try again tomorrow." }, 429);
-        await env.PASSES.put(k, String(n + 1), { expirationTtl: 2 * 86400 });
-      }
-      const challenge = bytesToB64u(crypto.getRandomValues(new Uint8Array(32)));
-      await env.PASSES.put("chal:" + challenge, "1", { expirationTtl: 300 });
-      const userId = bytesToB64u(crypto.getRandomValues(new Uint8Array(16)));
-      return jsonResponse({ challenge, userId, rpId: WA_RP_ID });
-    }
-    if (url.pathname === "/auth/finish") {
-      const id = body.mode === "create" ? await waRegister(env, body) : await waAuthenticate(env, body);
-      const token = await waIssueToken(env, id);
-      return jsonResponse({ ok: true, email: token + "@kye.device" });
-    }
-    if (url.pathname === "/auth/family") {
-      const identity = await resolveIdentity(env, body.token);
-      if (!identity) return jsonResponse({ error: "Please unlock first.", code: "unlock_needed" }, 401);
-      if (!isUnlimitedEmail(body.familyEmail)) return jsonResponse({ error: "That email is not on the family list." }, 403);
-      await env.PASSES.put("fam:" + identity, "1");
-      return jsonResponse({ ok: true });
-    }
-  } catch (e) {
-    return jsonResponse({ error: "The unlock could not be verified. Please try again." }, 400);
-  }
-  return jsonResponse({ error: "Not found." }, 404);
-}
-
 // Free-reading tracking. One record per email once their first reading has been delivered.
 // The one-free-reading limit is always enforced at /report: an email that is not on the unlimited list, has no active
 // pass and has already had its free reading is refused. (The page also locks the form for such an email.)
@@ -843,7 +626,7 @@ async function checkPassRecord(env, email) {
   const used = await freeReadingUsed(env, email);
   const key = passKey(email);
   const raw = await env.PASSES.get(key);
-  if (isUnlimitedEmail(email) || await env.PASSES.get("fam:" + email)) {
+  if (isUnlimitedEmail(email)) {
     if (raw) {
       await cleanPassRecord(env, key, JSON.parse(raw), Math.ceil(UNLIMITED_DURATION_MS / 1e3));
     }
@@ -1380,8 +1163,8 @@ async function handleDayReading(request, env, ctx) {
   } catch (e) {
     return jsonResponse({ error: "Invalid request body." }, 400);
   }
-  const email = await resolveIdentity(env, typeof body.passEmail === "string" ? body.passEmail : "");
-  if (!email) return jsonResponse({ error: "Please unlock with your phone first.", code: "unlock_needed" }, 401);
+  const email = typeof body.passEmail === "string" ? body.passEmail.trim() : "";
+  if (!/^[^\s@]+@[^\s@]+$/.test(email)) return jsonResponse({ error: "An email address is needed to read a day.", code: "email_needed" }, 400);
   const dateISO = typeof body.date === "string" ? body.date : "";
   const dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateISO);
   if (!dm || +dm[1] < 1900 || +dm[1] > 2100 || +dm[2] < 1 || +dm[2] > 12 || +dm[3] < 1 || +dm[3] > 31) return jsonResponse({ error: "A valid date is needed." }, 400);
@@ -1391,7 +1174,7 @@ async function handleDayReading(request, env, ctx) {
   try {
     status = await checkPassRecord(env, email);
   } catch (e) {
-    return jsonResponse({ error: "Your unlock could not be checked just now. Please try again in a moment." }, 503);
+    return jsonResponse({ error: "Your email could not be checked just now. Please try again in a moment." }, 503);
   }
   // everyone who reaches the Timeline has a pass or has had their free reading; an email with neither (or no reading under way) is not let through, so a made-up email cannot run readings
   let allowed = status.active || status.freeReadingUsed;
@@ -1568,7 +1351,6 @@ export default {
         }
       });
     }
-    if (url.pathname.startsWith("/auth/")) return handleAuth(request, env, url);
     if (url.pathname === "/check-pass") {
       let body;
       try {
@@ -1579,9 +1361,17 @@ export default {
         }, 400);
       }
       try {
-        const who = await resolveIdentity(env, body.email);
-        if (!who) return jsonResponse({ active: false, freeReadingUsed: false, code: "unlock_needed" });
-        const result = await checkPassRecord(env, who);
+        const result = await checkPassRecord(env, body.email);
+        if (body.email && /^[^\s@]+@[^\s@]+$/.test(String(body.email).trim())) {
+          const seenId = seenKeyFor(body.email);
+          if (!(await env.PASSES.get(seenId))) {
+            ctx.waitUntil(env.PASSES.put(seenId, String(Date.now()), {
+              metadata: {
+                t: Date.now()
+              }
+            }));
+          }
+        }
         return jsonResponse(result);
       } catch (error) {
         return jsonResponse({
@@ -1687,12 +1477,12 @@ export default {
       }, 400);
     }
     // who is asking: a pass holder (including the unlimited family emails) or someone with their one free reading still to use
-    const passEmail = await resolveIdentity(env, typeof body.passEmail === "string" ? body.passEmail : "");
-    if (!passEmail) {
+    const passEmail = typeof body.passEmail === "string" ? body.passEmail.trim() : "";
+    if (!/^[^\s@]+@[^\s@]+$/.test(passEmail)) {
       return jsonResponse({
-        error: "Please unlock with your phone first.",
-        code: "unlock_needed"
-      }, 401);
+        error: "An email address is needed to run a reading.",
+        code: "email_needed"
+      }, 400);
     }
     let askerStatus;
     try {
@@ -1700,7 +1490,7 @@ export default {
     } catch (e) {
       // if the check cannot be made, no reading is written: failing open would let a free reading through unchecked
       return jsonResponse({
-        error: "Your unlock could not be checked just now. Please try again in a moment."
+        error: "Your email could not be checked just now. Please try again in a moment."
       }, 503);
     }
     let claimKey = null;
@@ -1713,7 +1503,7 @@ export default {
       }
       if (await env.PASSES.get(claimKeyFor(passEmail))) {
         return jsonResponse({
-          error: "A reading for this phone is already being written. Please wait for it to finish.",
+          error: "A reading for this email is already being written. Please wait for it to finish.",
           code: "reading_in_progress"
         }, 429);
       }

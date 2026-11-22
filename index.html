@@ -115,9 +115,6 @@ body{
   margin:-5rem auto 2.6rem;
 }
 .hero-email-wrap .err{text-align:center;}
-html.red #hookStep .r-b22{grid-template-columns:1fr !important;}
-.unlock-sub{text-align:center;font-size:0.85rem;margin:0.9rem 0 0;}
-.unlock-sub a{color:inherit;text-decoration:underline;}
 
 .line-field.hero-email-field{
   box-shadow:
@@ -979,25 +976,13 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
   </div>
 
   <div class="r-free">First reading is FREE!</div>
-  <ul class="r-b22">
-    <li>Your first reading is free: a full individual reading, or a relational reading that shows the dynamics between two people. No credit card.</li>
-    <li>If you find it entertaining or helpful, you are invited to buy a time-limited pass. It is time-limited so that we never have to auto-charge you.</li>
-    <li>When you tap the button, your phone asks for the face, fingerprint or PIN you already use to unlock it. That is your key. No email, no password.</li>
-    <li>We save no name, email or birth details. Your phone gives us a random code that only says whether your free reading has been used or your pass is active.</li>
-    <li>A VPN or a change of location makes no difference. Another device may count as new unless your phone syncs your unlock.</li>
-    <li>Your results are saved only in this browser. Clearing the browser's data or deleting the app erases them, so save or print before you leave.</li>
-  </ul>
+  <ul class="r-b22"><li>No Credit Card - try before you buy</li><li>Email works as your pass and will not be sent messages or shared</li></ul>
 
   <div class="hero-email-wrap">
+    <div class="line-field hero-email-field"><input id="heroEmail" type="email" inputmode="email" autocomplete="email" placeholder="Email" aria-label="Email address"></div>
     <div class="err" id="heroEmailErr" style="display:none;"></div>
-    <div class="rb-wrap"><button type="button" class="rbtn hero-continue-btn" aria-label="Unlock with your phone" onclick="revealForm()"><span class="hero-continue-label">Unlock &amp; begin</span></button></div>
-    <p class="unlock-sub"><a href="#" onclick="event.preventDefault();revealForm(true)">Already unlocked on this phone?</a> &middot; <a href="#" onclick="event.preventDefault();document.getElementById('famBox').style.display='block'">Family access</a></p>
-    <div id="famBox" style="display:none;">
-      <div class="line-field hero-email-field"><input id="famEmail" type="email" inputmode="email" autocomplete="email" placeholder="Family email" aria-label="Family email"></div>
-      <div class="rb-wrap"><button type="button" class="rbtn hero-continue-btn" onclick="famApply()"><span class="hero-continue-label">Apply</span></button></div>
-    </div>
+    <div class="rb-wrap"><button type="button" class="rbtn hero-continue-btn" aria-label="Continue" onclick="revealForm()"><span class="hero-continue-label">Continue</span></button></div>
   </div>
-</div>
 </div>
 
 
@@ -4046,7 +4031,19 @@ function getRememberedPassEmail() {
 }
 
 
-setFormLocked(true);
+(function() {
+  setFormLocked(true);
+  const he = document.getElementById("heroEmail");
+  if (he) he.addEventListener("input", () => setFormLocked(true));
+})();
+
+(function() {
+  const remembered = getRememberedPassEmail();
+  if (remembered) {
+    const heroEmail = document.getElementById("heroEmail");
+    if (heroEmail) heroEmail.value = remembered;
+  }
+})();
 
 // Kept for when a payment processor exists. It does not control the free-reading lock: an email whose one free reading
 // is used, and that holds no pass, is always locked out of the form.
@@ -4063,9 +4060,9 @@ function setFormLocked(locked) {
     cover.id = "lockCover";
     cover.addEventListener("click", () => {
       const e = document.getElementById("heroEmailErr");
-      e.textContent = "Tap Unlock & begin above to start.";
+      e.textContent = "Enter your email above to begin.";
       e.style.display = "block";
-      document.getElementById("hookStep").scrollIntoView({
+      document.getElementById("heroEmail").scrollIntoView({
         behavior: "smooth",
         block: "center"
       });
@@ -4086,91 +4083,16 @@ function setFormLocked(locked) {
   // The Individual / Relational toggle stays usable while the fields are locked, so both layouts can be seen before an email is entered.
 }
 
-const KYE_HINT_KEY = "kye_hasUnlock";
-
-function kyeB64u(buf) {
-  let s = "";
-  new Uint8Array(buf).forEach(c => s += String.fromCharCode(c));
-  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
-function kyeFromB64u(s) {
-  s = s.replace(/-/g, "+").replace(/_/g, "/");
-  while (s.length % 4) s += "=";
-  const bin = atob(s), out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
-}
-
-async function kyePost(path, body) {
-  const res = await fetch(W_API + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-  const j = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(j.error || "Something went wrong. Please try again.");
-  return j;
-}
-
-// Unlocks with the phone's own lock. Returns the "email" value that stands in for this phone, or null.
-async function kyeUnlock(useExisting) {
+async function revealForm() {
+  const emailInput = document.getElementById("heroEmail");
+  const email = (emailInput.value || "").trim();
   const errEl = document.getElementById("heroEmailErr");
-  const fail = m => { errEl.textContent = m; errEl.style.display = "block"; return null; };
-  errEl.style.display = "none";
-  const saved = getRememberedPassEmail();
-  if (saved && /@kye\.device$/.test(saved)) {
-    const st = await checkPassStatus(saved);
-    if (st && st.code !== "unlock_needed" && !st.error) return saved;
-    try { localStorage.removeItem(REMEMBERED_EMAIL_KEY); } catch (e) {}
-  }
-  if (!window.PublicKeyCredential || !navigator.credentials) return fail("This browser can't use phone unlock. Please open the site in Chrome or Safari.");
-  let hint = false;
-  try { hint = !!localStorage.getItem(KYE_HINT_KEY); } catch (e) {}
-  const mode = (useExisting || hint) ? "get" : "create";
-  try {
-    const o = await kyePost("/auth/start", { mode });
-    const challenge = kyeFromB64u(o.challenge);
-    let out;
-    if (mode === "create") {
-      const c = await navigator.credentials.create({ publicKey: {
-        rp: { name: "Know Your Energy", id: o.rpId },
-        user: { id: kyeFromB64u(o.userId), name: "visitor", displayName: "Know Your Energy visitor" },
-        challenge, pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
-        authenticatorSelection: { residentKey: "required", requireResidentKey: true, userVerification: "preferred" },
-        attestation: "none", timeout: 120000 } });
-      out = await kyePost("/auth/finish", { mode: "create", clientDataJSON: kyeB64u(c.response.clientDataJSON), attestationObject: kyeB64u(c.response.attestationObject) });
-    } else {
-      const c = await navigator.credentials.get({ publicKey: { challenge, rpId: o.rpId, userVerification: "preferred", timeout: 120000 } });
-      out = await kyePost("/auth/finish", { mode: "get", credentialId: kyeB64u(c.rawId), clientDataJSON: kyeB64u(c.response.clientDataJSON), authenticatorData: kyeB64u(c.response.authenticatorData), signature: kyeB64u(c.response.signature) });
-    }
-    try { localStorage.setItem(KYE_HINT_KEY, "1"); } catch (e) {}
-    rememberPassEmail(out.email);
-    return out.email;
-  } catch (e) {
-    if (e && e.name === "NotAllowedError") return fail(mode === "get" ? "No unlock was found on this phone, or it was cancelled. If this is your first time, close this and tap Unlock & begin again." : "The unlock was cancelled. Tap Unlock & begin to try again.");
-    return fail((e && e.message) || "The unlock didn't work. Please try again.");
-  }
-}
-
-async function famApply() {
-  const errEl = document.getElementById("heroEmailErr");
-  const fe = (document.getElementById("famEmail").value || "").trim();
-  if (!fe) return;
-  const email = await kyeUnlock();
-  if (!email) return;
-  try {
-    await kyePost("/auth/family", { token: email, familyEmail: fe });
-    errEl.textContent = "Family access is on for this phone.";
+  if (!email) {
+    errEl.textContent = "Enter your email to begin.";
     errEl.style.display = "block";
-    document.getElementById("famBox").style.display = "none";
-    revealForm();
-  } catch (e) {
-    errEl.textContent = e.message;
-    errEl.style.display = "block";
+    emailInput.focus();
+    return;
   }
-}
-
-async function revealForm(useExisting) {
-  const errEl = document.getElementById("heroEmailErr");
-  const email = await kyeUnlock(useExisting === true);
-  if (!email) return;
   errEl.style.display = "none";
   document.getElementById("pEmail").value = email;
   const cta = document.getElementById("freeReadingCta");
