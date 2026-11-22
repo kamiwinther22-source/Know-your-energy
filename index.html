@@ -853,7 +853,7 @@ html,body{overflow-x:clip !important;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
 
 </style>
-<link rel="stylesheet" href="red-look.css?v=20261136">
+<link rel="stylesheet" href="red-look.css?v=20261137">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
 <style id="btn3d">
 /* Buttons: same shapes; speckle-free copies of the button images (img/k3), real depth, words engraved into the face. */
@@ -1011,7 +1011,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
 .fan-reading>.panel-auto,.fan-reading>.panel-error{padding:18px 20px !important}
 .fan-reading .dph{background:transparent !important;color:#8c1034 !important;border-bottom:1px solid #0b0b10 !important}
 </style>
-<link rel="modulepreload" href="orrery-fast.js?v=3"><link rel="preload" href="hdri/studio-log.jpg" as="image">
+<link rel="preload" href="img/jewel/hero.webp" as="image" type="image/webp">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
@@ -1038,9 +1038,9 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
   <div class="r-sys">Astrology-Numerology-Human Design</div>
   <div class="r-fcr">FULL charts and combined reading</div>
 
-  <div class="hero-illustration">
-    <div id="heroIllustration"></div>
-    <button type="button" class="sun-cta" id="freeReadingCta" aria-label="Start your free full reading" onclick="revealForm()"><span id="sunCtaLabel"></span></button>
+  <div class="hero-illustration" aria-hidden="true">
+    <img class="jewel" src="img/jewel/hero.webp" width="542" height="214" alt="" decoding="async" fetchpriority="high">
+    <i class="glint g1"></i><i class="glint g2"></i><i class="glint g3"></i>
   </div>
 
   <div class="r-free"><span class="r-free-lead">First reading is</span> <span class="r-free-word">FREE!</span></div>
@@ -1271,103 +1271,8 @@ function openNumberDef(item) {
   document.getElementById("cardExpand").classList.add("open");
 }
 
-(function() {
-  const host = document.getElementById("heroIllustration");
-  if (!host) return;
-  const cx = 180, cy = 100, r = 46;
-  const RING_ROTATION_DEG = -8;
-  const RING_RX = [ 64, 86, 108, 130, 152, 175 ];
-  function ringPoint(ringIdx, angleDeg, beadR) {
-    const rx = RING_RX[ringIdx], ry = rx * .26;
-    const t = angleDeg * Math.PI / 180, rot = RING_ROTATION_DEG * Math.PI / 180;
-    const ex = rx * Math.cos(t), ey = ry * Math.sin(t);
-    const x = ex * Math.cos(rot) - ey * Math.sin(rot);
-    const y = ex * Math.sin(rot) + ey * Math.cos(rot);
-    return {
-      cx: Math.round(cx + x),
-      cy: Math.round(cy + y),
-      r: beadR
-    };
-  }
-  const BEAD_SPECS = [ [ 1, 205, 10 ], [ 2, 20, 10 ], [ 4, 335, 9 ], [ 1, 15, 9 ] ];
-  const BEAD_GRAD = [ "bd0", "bd1", "bd2", "bd0" ];
-  const BEADS = BEAD_SPECS.map(([ring, angle, br]) => ringPoint(ring, angle, br));
-  const ORBIT_STEPS = 96, ORBIT_PERIOD_S = 48;
-  function wrap360(a) {
-    const m = a % 360;
-    return m < 0 ? m + 360 : m;
-  }
-  let orbitCSS = "", BACK_BEADS_SVG = "", FRONT_BEADS_SVG = "";
-  BEADS.forEach((b, i) => {
-    const [ringIdx, angle0] = BEAD_SPECS[i];
-    let kfFront = "", kfBack = "";
-    for (let s = 0; s <= ORBIT_STEPS; s++) {
-      const frac = s / ORBIT_STEPS;
-      const pct = (frac * 100).toFixed(3);
-      const curAngle = angle0 + frac * 360;
-      const p = ringPoint(ringIdx, curAngle, b.r);
-      const dx = (p.cx - b.cx).toFixed(2), dy = (p.cy - b.cy).toFixed(2);
-      const isFront = wrap360(curAngle) < 180;
-      kfFront += `${pct}%{transform:translate(${dx}px,${dy}px);opacity:${isFront ? 1 : 0}}`;
-      kfBack += `${pct}%{transform:translate(${dx}px,${dy}px);opacity:${isFront ? 0 : 1}}`;
-    }
-    orbitCSS += `@keyframes orbitBeadF${i}{${kfFront}}@keyframes orbitBeadB${i}{${kfBack}}`;
-    orbitCSS += `.orbit-bead-f-${i}{animation:orbitBeadF${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
-    orbitCSS += `.orbit-bead-b-${i}{animation:orbitBeadB${i} ${ORBIT_PERIOD_S}s linear infinite;}`;
-    const bead = cls => `<circle class="${cls}" cx="${b.cx + 1.8}" cy="${b.cy + 2.6}" r="${b.r}" fill="#000000"/>` + `<circle class="${cls}" cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="url(#${BEAD_GRAD[i]})" stroke="#FFFFFF" stroke-width="0.9"/>` + `<path class="${cls}" d="M ${(b.cx - b.r * .62).toFixed(1)} ${(b.cy - b.r * .1).toFixed(1)} A ${(b.r * .64).toFixed(1)} ${(b.r * .64).toFixed(1)} 0 0 1 ${(b.cx + b.r * .1).toFixed(1)} ${(b.cy - b.r * .62).toFixed(1)}" fill="none" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round"/>`;
-    BACK_BEADS_SVG += bead(`orbit-bead-b-${i}`);
-    FRONT_BEADS_SVG += bead(`orbit-bead-f-${i}`);
-  });
-  const orbitStyleTag = document.createElement("style");
-  orbitStyleTag.textContent = orbitCSS;
-  document.head.appendChild(orbitStyleTag);
-  const xf = `translate(${cx} ${cy}) rotate(${RING_ROTATION_DEG})`;
-  function ringLayers(d) {
-    return `<path d="${d}" fill="none" stroke="url(#metal)" stroke-width="5.2" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#000000" stroke-width="1.5" transform="${xf}"/>` + `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="0.7" transform="${xf} translate(0 -1.9)"/>`;
-  }
-  const FULL_RINGS = RING_RX.map(rx => {
-    const ry = Math.round(rx * .26);
-    return ringLayers(`M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0 A ${rx} ${ry} 0 0 1 ${-rx} 0`);
-  }).join("");
-  const FRONT_RINGS = RING_RX.map(rx => {
-    const ry = Math.round(rx * .26);
-    return ringLayers(`M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`);
-  }).join("");
-  let engraving = "";
-  [ -62, -38, -14, 10, 34, 58 ].forEach((lat, i) => {
-    const a = lat * Math.PI / 180, R = r * Math.cos(a), yc = cy - r * Math.sin(a) * .97;
-    engraving += `<path d="M ${(cx - R).toFixed(1)} ${yc.toFixed(1)} A ${R.toFixed(1)} ${(R * .26).toFixed(1)} 0 0 0 ${(cx + R).toFixed(1)} ${yc.toFixed(1)}" fill="none" stroke="${i % 2 ? "#8E9CAD" : "#C2BDB8"}" stroke-width="0.8" transform="rotate(-8 ${cx} ${cy})"/>`;
-  });
-  const STAR = "M12 26 L14.4 35.6 L24 38 L14.4 40.4 L12 50 L9.6 40.4 L0 38 L9.6 35.6 Z";
-  const svg = `<svg viewBox="-8 20 376 185" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="-175" y1="-20" x2="175" y2="20"><stop offset="0" stop-color="#F6F6F6"/><stop offset=".3" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#C2BDB8"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
-      <radialGradient id="lit" cx="0.5" cy="0.5" r="0.62" fx="0.33" fy="0.28"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#FFFFFF"/><stop offset=".85" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
-      <clipPath id="sphere"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
-      <radialGradient id="bd0" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
-      <radialGradient id="bd1" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
-      <radialGradient id="bd2" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F6F6F6"/><stop offset="1" stop-color="#C2BDB8"/></radialGradient>
-    </defs>
-    ${FULL_RINGS}
-    ${BACK_BEADS_SVG}
-    <circle cx="${cx + 3}" cy="${cy + 5}" r="${r}" fill="#000000"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#000000"/>
-    <g clip-path="url(#sphere)">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#lit)"/>
 
-    </g>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#FFFFFF" stroke-width="1.3"/>
-    <path d="M ${cx - 33} ${cy - 18} A ${r - 4} ${r - 4} 0 0 1 ${cx - 10} ${cy - 42}" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
-    ${FRONT_RINGS}
-    <path d="${STAR}" fill="#FFFFFF" transform="translate(322,10) scale(0.6)"/>
-    <path d="${STAR}" fill="#FFFFFF" transform="translate(30,150) scale(0.42)"/>
-    <path d="${STAR}" fill="#FFFFFF" transform="translate(190,182) scale(0.34)"/>
-    ${FRONT_BEADS_SVG}
-  </svg>`;
-  host.innerHTML = svg;
-})();
 
-document.getElementById("sunCtaLabel").innerHTML = "";
 
 const togPill = document.getElementById("togPill");
 
@@ -4206,14 +4111,7 @@ async function revealForm(useExisting) {
   if (!email) return;
   errEl.style.display = "none";
   document.getElementById("pEmail").value = email;
-  const cta = document.getElementById("freeReadingCta");
-  const labelEl = document.getElementById("sunCtaLabel");
-  const originalLabel = labelEl.innerHTML;
-  cta.disabled = true;
-  labelEl.innerHTML = "<span class=\"sun-cta-tap\">Checking&hellip;</span>";
   const statusResult = await checkEmailStatus();
-  cta.disabled = false;
-  labelEl.innerHTML = originalLabel;
   if (statusResult && statusResult.freeReadingUsed && !statusResult.active) {
     setFormLocked(true);
     errEl.textContent = "Your free reading has been used. A pass is needed for another reading, and passes are not available yet.";
@@ -4595,7 +4493,6 @@ document.addEventListener("click", e => {
 })();
 </script>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
-<script type="module">const legacy=document.documentElement.classList.contains("obsidian")||/[?&](look|refl)=/.test(location.search)||/[?&]orrery=legacy\b/.test(location.search);import(legacy?"./orrery3d.js":"./orrery-fast.js?v=3");</script>
 <script type="module">if(document.documentElement.classList.contains("obsidian"))import("./obsidian.js");</script>
 <div class="site-foot">&copy; 2026 Know Your Energy &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></div>
 <style>.site-foot{text-align:center;font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;padding:18px 12px 26px}.site-foot a{color:#fff;font-weight:500}.tiny-contact{font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;text-align:center;margin:6px 0 0}.tiny-contact a{color:#fff}</style>
