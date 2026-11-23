@@ -1490,7 +1490,7 @@ const GLOSSARY = {
   personalmonth: "The theme of your current personal month number.",
   personalday: "The theme of your current personal day number.",
   essence: "The background theme of your current stage of life.",
-  pinnacle: "A multi-year chapter of life and the opportunity it offers.",
+  pinnacle: "A multi-year chapter of life and the opportunity it offers. You have four, worked out from your birth date. Your Life Path is the broad lesson of your whole life; a Pinnacle is the specific classroom you are in for one stretch of it, and the Challenge beside it is the obstacle in that same stretch. Changeovers between Pinnacles tend to be abrupt and are often felt coming, from a few months to about two years ahead.",
   challenge: "A recurring obstacle to work through during that chapter.",
   periodcycle: "Three life periods, one after another, each pulled from a single piece of your birth date rather than a blend the way a Pinnacle is: the first reduces your birth month, the second your birth day, the third your birth year. Your Life Path number sets exactly where the cutoffs fall, so the ages differ person to person, but the pattern is the same for everyone — the first period generally runs from birth into your late twenties to mid-thirties, the second covers the next 27 years, and the third runs from there for the rest of your life. Because those boundaries roughly track youth, the long adult stretch of career and family, and the later years, each period sets a steady undertone for whatever is happening in that stretch — not the events themselves, but the flavor of how you move through them.",
   karmiclessons: "Numbers missing from your name. The tradition treats each as a lesson.",
@@ -2168,6 +2168,12 @@ const NUM_DEFS = {
     11: "A Personality 11 comes across as intuitive, magnetic, and a little otherworldly. People feel your sensitivity and idealism, and they sense that you perceive more than you say. You tend to inspire and to stand out. You can seem tense or high-strung at times.",
     22: "A Personality 22 comes across as capable, grounded, and quietly powerful. People see someone who can get large things done, and they respect your seriousness and competence. You give an impression of vision backed by practicality. Some find you formidable.",
     33: "A Personality 33 comes across as warm, gentle, and devoted. People see someone who cares about them, and they open up to you easily. You give an impression of sincerity and healing, and people often seek you out for guidance. Some may see you as so selfless that you put yourself last."
+  },
+  pinnaclePos: {
+    1: "Your first Pinnacle is the formative chapter. It runs from birth until 36 minus your Life Path number, which lands between the late 20s and the mid-30s, and it is where you discover who you are. The number here describes the quality of that discovery.",
+    2: "Your second Pinnacle is the chapter of obligation and output. It lasts nine years, and the work is building: a career, a family, and the responsibilities that come with them. The number here describes the opportunity inside that work.",
+    3: "Your third Pinnacle is the harvest. It lasts nine years, and the task shifts from building to integrating, pulling together what the first two chapters taught you. The number here describes the opportunity inside that integration.",
+    4: "Your fourth Pinnacle is the chapter of reflection. It begins when the third ends and lasts for the rest of your life, and it is about looking back over the whole arc and what it meant. The number here describes the opportunity of that look. Nothing follows it, so this is the last changeover."
   },
   pinnacle: {
     1: "A 1 Pinnacle is a chapter about starting fresh and standing on your own. A new job, venture, or direction opens, and you are expected to lead and decide for yourself. Initiative and self-reliance are rewarded here. Impatience or self-doubt can lead you to go it alone when help would serve you.",
@@ -3123,12 +3129,13 @@ function ar(astro, errMsg) {
   return h || apend("Unavailable");
 }
 
-function pcCol(label, value, defKey, defNum, specKey, showGeneral) {
+function pcCol(label, value, defKey, defNum, specKey, showGeneral, posKey) {
   const lookupKey = specKey || defKey;
   let specific = lookupKey && defNum != null && NUM_DEFS[lookupKey] && NUM_DEFS[lookupKey][defNum];
   const general = showGeneral !== false && defKey && GLOSSARY[defKey] ? GLOSSARY[defKey] : null;
   let def = null;
-  if (general && specific) def = `<p>${general}</p><p>${specific}</p>`; else if (specific) def = `<p>${specific}</p>`; else if (general) def = `<p>${general}</p>`;
+  const position = posKey != null && NUM_DEFS.pinnaclePos && NUM_DEFS.pinnaclePos[posKey] ? `<p>${NUM_DEFS.pinnaclePos[posKey]}</p>` : "";
+  if (general && specific) def = `<p>${general}</p>${position}<p>${specific}</p>`; else if (specific) def = `${position}<p>${specific}</p>`; else if (general) def = `<p>${general}</p>${position}`;
   const lbl = def ? `<span class="dprl term" data-def="${defKey}">${label}</span>` : `<span class="dprl">${label}</span>`;
   return `<div class="pc-col"><div class="dpr">${lbl}<span class="dprv">${escapeHtml(value)}</span></div>${def ? `<div class="dpdef" hidden>${def}</div>` : ""}</div>`;
 }
@@ -3136,7 +3143,7 @@ function pcCol(label, value, defKey, defNum, specKey, showGeneral) {
 function pinnacleChallengeRow(n, pinnacle, challengeVal) {
   const pinnSpec = n === 1 ? "pinnacle1child" : null;
   const chalSpec = n === 1 ? "challenge1child" : null;
-  return `<div class="dprow"><div class="stage-range">${escapeHtml(pinnacle.ageRange)}</div><div class="stage-pair">${pcCol("Pinnacle " + n, pinnacle.value, "pinnacle", pinnacle.value, pinnSpec)}${pcCol("Challenge " + n, challengeVal, "challenge", challengeVal, chalSpec)}</div></div>`;
+  return `<div class="dprow"><div class="stage-range">${escapeHtml(pinnacle.ageRange)}</div><div class="stage-pair">${pcCol("Pinnacle " + n, pinnacle.value, "pinnacle", pinnacle.value, pinnSpec, n === 1, n)}${pcCol("Challenge " + n, challengeVal, "challenge", challengeVal, chalSpec)}</div></div>`;
 }
 
 function periodCycleRow(n, period) {
@@ -3357,7 +3364,7 @@ function dateExplorerRows(chart, age, dob) {
   h += arow("Maturity", chart.maturity, "maturity", chart.maturity, `At age ${age}, this number's influence is ${maturityBand(age)} -- Maturity strengthens gradually rather than switching on at one exact date.`);
   h += `<div class="dprow"><div class="stage-range">${escapeHtml(period.obj.ageRange)}</div><div class="stage-pair">${pcCol("Period " + period.n, period.obj.value, "periodcycle", period.obj.value)}</div></div>`;
   const upcoming = dob ? comingUpRows(chart, age, dob) : "";
-  h += `<div class="dprow"><div class="stage-range">${escapeHtml(pinn.ageRange)}</div><div class="stage-pair">${pcCol("Pinnacle " + pinn.n, pinn.value, "pinnacle", pinn.value)}${pcCol("Challenge " + pinn.n, pinn.challengeValue, "challenge", pinn.challengeValue)}</div></div>`;
+  h += `<div class="dprow"><div class="stage-range">${escapeHtml(pinn.ageRange)}</div><div class="stage-pair">${pcCol("Pinnacle " + pinn.n, pinn.value, "pinnacle", pinn.value, undefined, undefined, pinn.n)}${pcCol("Challenge " + pinn.n, pinn.challengeValue, "challenge", pinn.challengeValue)}</div></div>`;
   return h + upcoming;
 }
 
