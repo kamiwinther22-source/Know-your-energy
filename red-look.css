@@ -315,3 +315,11 @@ html.red #formStep .r-keep{display:block;font-family:'Jost',sans-serif !importan
 
 /* Relationship type buttons exist only for a Relational reading. The stylesheet's display:grid !important used to override the page's own hide, so they showed for Individual too. */
 html.red #formStep:not(.is-rel) #relWrap{display:none !important}
+
+/* An opened definition (Pinnacle, Challenge, Period) spans the whole row under both columns, instead of being squeezed into half the width. */
+.chart-frame .stage-pair:not(.birthdate-row){grid-auto-flow:row dense}
+.chart-frame .stage-pair:not(.birthdate-row) .pc-col{display:contents}
+.chart-frame .stage-pair:not(.birthdate-row) .pc-col>.dpr{grid-row:1;border-bottom:1px solid #0b0b10;margin-bottom:12px}
+.chart-frame .stage-pair:not(.birthdate-row) .pc-col>.dpdef{grid-column:1 / -1;margin-bottom:12px}
+/* The "Pinnacle (Opportunity)" / "Challenge (Internal Resistance)" headings each get their own full-width line so each stays on one line at a readable size. */
+.chart-frame .stage-pair:has(> .pc-col > .dpsec){grid-template-columns:1fr}
