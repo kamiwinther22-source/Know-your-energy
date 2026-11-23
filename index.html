@@ -853,7 +853,7 @@ html,body{overflow-x:clip !important;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
 
 </style>
-<link rel="stylesheet" href="red-look.css?v=20261147">
+<link rel="stylesheet" href="red-look.css?v=20261149">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
 <style id="btn3d">
 /* Buttons: same shapes; speckle-free copies of the button images (img/k3), real depth, words engraved into the face. */
@@ -907,7 +907,7 @@ html.red .submit-wrap{padding-bottom:14px}
 </style>
 <style id="chartFrameCss">
 /* Numerology chart: opens in an angled silver frame (the front page's cut corners and silver rim) around a white sheet. */
-.card-expand.chart-frame{background:rgba(20,3,9,.88) !important;background-image:none !important;box-shadow:none !important;padding:16px 12px 40px !important}
+.card-expand.chart-frame{background:rgba(0,0,0,.94) !important;background-image:none !important;box-shadow:none !important;padding:16px 12px 40px !important}
 .chart-frame .card-expand-close{position:fixed;top:8px;right:10px;color:#fff;z-index:6}
 .chart-frame .ce-wrap{position:relative;width:min(358px,calc(100vw - 24px));margin:0 auto}
 .chart-frame .ce-body{position:relative;z-index:2;padding:64px clamp(40px,14vw,58px) 78px}
@@ -918,9 +918,9 @@ html.red .submit-wrap{padding-bottom:14px}
 .chart-frame .date-explorer{background:transparent !important;border-left:0 !important;padding:0 !important;margin:0 0 22px}
 .chart-frame .date-explorer-head{display:flex;justify-content:space-between;align-items:baseline}
 .chart-frame .date-explorer-input{border-bottom:1px solid #0b0b10 !important}
-.chart-frame .dpsec{font:400 25px 'Alex Brush',cursive !important;color:#8c1034 !important;text-transform:none !important;letter-spacing:0 !important;display:flex !important;align-items:center;white-space:nowrap;margin:34px 0 8px !important;padding:0 !important;background:none !important;border:0 !important}
-.chart-frame .ce-wrap .dpsec{color:#8c1034 !important}
-.chart-frame .dpsec::before{content:'';flex:none;width:13px;height:13px;margin-right:11px;background:#8c1034;clip-path:polygon(26% 0,74% 0,100% 50%,74% 100%,26% 100%,0 50%)}
+.chart-frame .dpsec{font:400 25px 'Alex Brush',cursive !important;color:#0b0b10 !important;text-transform:none !important;letter-spacing:0 !important;display:flex !important;align-items:center;white-space:normal;line-height:1.15;margin:34px 0 8px !important;padding:0 !important;background:none !important;border:0 !important}
+.chart-frame .ce-wrap .dpsec{color:#0b0b10 !important}
+.chart-frame .dpsec::before{content:'';flex:none;width:13px;height:13px;margin-right:11px;background:#0b0b10;clip-path:polygon(26% 0,74% 0,100% 50%,74% 100%,26% 100%,0 50%)}
 .chart-frame .dprow{background:transparent !important;border-bottom:1px solid #0b0b10;padding:0 !important;margin:0 0 14px}
 .chart-frame .dprow:has(.stage-pair){border-bottom:0 !important;margin-bottom:6px !important}
 .chart-frame .dpr{display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;gap:0 !important;justify-content:space-between;align-items:baseline;padding:6px 0 2px !important;margin-left:0 !important}
@@ -938,7 +938,9 @@ html.red .submit-wrap{padding-bottom:14px}
 .chart-frame .birthdate-row .pc-col{display:block;margin-bottom:14px}
 .chart-frame .birthdate-row .pc-col .dprv{font-size:40px !important}
 .chart-frame .dprow.kar .dprv{font-size:28px !important;white-space:nowrap}
-.chart-frame .dpdef{font:500 15px/1.58 'Fraunces',Georgia,serif !important;font-style:normal !important;padding:6px 0 10px 14px !important;margin:2px 0 12px !important;border-left:2px solid #8c1034;background:none !important}
+.chart-frame .tl-chip.on{background:#0b0b10 !important;color:#fff !important;-webkit-text-fill-color:#fff !important}
+.chart-frame .tl-chip:not(.on){background:#fff !important;color:#0b0b10 !important;-webkit-text-fill-color:#0b0b10 !important}
+.chart-frame .dpdef{font:500 15px/1.58 'Fraunces',Georgia,serif !important;font-style:normal !important;padding:6px 0 10px 14px !important;margin:2px 0 12px !important;border-left:2px solid #0b0b10;background:none !important}
 .chart-frame .dpdef p{margin:0 0 9px;font:500 15px/1.58 'Fraunces',Georgia,serif !important}
 .chart-frame .dpdef p:first-child{font-weight:700;font-size:16.5px !important}
 .chart-frame .dprv{min-width:0}
@@ -956,9 +958,9 @@ html.red .submit-wrap{padding-bottom:14px}
 .chart-hd .dpsec{margin:44px 0 16px !important}
 .chart-hd .gates-grid{display:flex !important;flex-wrap:wrap;gap:10px !important;padding:6px 0 10px !important}
 .chart-hd .gate-chip{background:#fff !important;border:1.5px solid #0b0b10 !important;border-radius:0 !important;font:800 17px 'Barlow Condensed',sans-serif !important;padding:8px 14px !important;min-width:52px;border-radius:3px !important;box-shadow:none !important}
-.chart-hd .gate-chip.active,.chart-hd .gate-chip[aria-pressed="true"]{background:#8c1034 !important;color:#fff !important}
+.chart-hd .gate-chip.active,.chart-hd .gate-chip[aria-pressed="true"]{background:#0b0b10 !important;color:#fff !important}
 .chart-hd .gate-def,.chart-hd .gate-def *{font-weight:500 !important}
-.chart-hd .gate-def{font:500 15px/1.58 'Fraunces',Georgia,serif !important;border-left:2px solid #8c1034 !important;background:none !important;padding:6px 0 10px 14px !important;margin:6px 0 12px !important}
+.chart-hd .gate-def{font:500 15px/1.58 'Fraunces',Georgia,serif !important;border-left:2px solid #0b0b10 !important;background:none !important;padding:6px 0 10px 14px !important;margin:6px 0 12px !important}
 .chart-hd .dprow:has(.gates-grid){border-bottom:0 !important}
 .chart-frame .wheel-wrap{width:100%;max-width:300px;aspect-ratio:1/1;margin:10px auto 44px}
 .chart-frame .wheel-wrap [stroke="#1C2CA9"]{stroke:#0b0b10}
@@ -967,9 +969,9 @@ html.red .submit-wrap{padding-bottom:14px}
 </style>
 
 <style id="fanCss">
-/* Results page: a fan of three cards per person in the front page's angled silver frames, on the garnet ground. */
-html.red:has(#resultsWrap[style*="block"]),html.red:has(#resultsWrap[style*="block"]) body{background-color:#2a0510 !important}
-html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellipse 600px 30% at 100% 97%,rgba(206,48,92,.8) 0,rgba(160,24,64,.42) 45%,rgba(130,14,50,0) 100%),radial-gradient(ellipse 340px 16% at 8% 100%,rgba(176,28,70,.5) 0,rgba(130,14,50,0) 100%),radial-gradient(ellipse 560px 22% at 55% 33.7%,rgba(196,37,79,.62) 0,rgba(140,16,52,.3) 45%,rgba(140,16,52,0) 100%),radial-gradient(ellipse 620px 38.6% at 22% 4.1%,#c4254f 0,#8c1034 34%,#560a21 66%,#2a0510 100%) !important}
+/* Results page: a fan of three cards per person in the front page's angled silver frames, on the black ground. */
+html.red:has(#resultsWrap[style*="block"]),html.red:has(#resultsWrap[style*="block"]) body{background-color:#000 !important}
+html.red:has(#resultsWrap[style*="block"]) body{background:#000 !important}
 #resultsWrap .ttl{color:#fff !important;-webkit-text-fill-color:#fff !important;background:none !important;text-shadow:none !important}
 #resultsWrap .r-note,#resultsWrap p,#resultsWrap a,#resultsWrap .bottom-btns *:not(.side-btn){color:#fff !important}
 .main-grid.fan-grid{display:block;max-width:420px;width:100%;margin:0 auto}
@@ -989,7 +991,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
 .fan-card>.quad-item{padding:22px 20px 16px !important}
 .fan-card .quad-title{color:#0b0b10 !important;font-size:.5rem !important}
 .fan-card .dprl,.fan-card .dpr *{color:#0b0b10 !important}
-.fan-card .quad-item .dpsec{color:#8c1034 !important}
+.fan-card .quad-item .dpsec{color:#0b0b10 !important}
 .fan-card .quad-item [stroke="#1C2CA9"]{stroke:#0b0b10}
 .fan-card .quad-item svg text{fill:#0b0b10 !important}
 .fan-card .quad-item [fill="#1C2CA9"]{fill:#0b0b10}
@@ -1005,11 +1007,11 @@ html.red:has(#resultsWrap[style*="block"]) body{background:radial-gradient(ellip
 .fan-actions>.side-btn{flex:1 1 0 !important;min-width:0;box-sizing:border-box;padding:0 4px !important}
 .fan-reading{flex:0 1 clamp(112px,34vw,150px);min-width:0}
 .fan-actions>.side-btn span{font-size:clamp(8.5px,2.9vw,11.5px) !important;letter-spacing:0}
-.fan-reading>.panel-auto,.fan-reading>.panel-error{height:auto !important;min-height:150px !important;padding:16px !important;--card-text:#0b0b10;--card-dim:#0b0b10;--card-mid:#0b0b10;--card-accent:#8c1034}
+.fan-reading>.panel-auto,.fan-reading>.panel-error{height:auto !important;min-height:150px !important;padding:16px !important;--card-text:#0b0b10;--card-dim:#0b0b10;--card-mid:#0b0b10;--card-accent:#0b0b10}
 .fan-reading .dp *{color:#0b0b10 !important;-webkit-text-fill-color:#0b0b10 !important;background:transparent !important;opacity:1 !important;text-shadow:none !important;filter:none !important}
 .fan-reading .dp *::before,.fan-reading .dp *::after{display:none !important}
 .fan-reading>.panel-auto,.fan-reading>.panel-error{padding:18px 20px !important}
-.fan-reading .dph{background:transparent !important;color:#8c1034 !important;border-bottom:1px solid #0b0b10 !important}
+.fan-reading .dph{background:transparent !important;color:#0b0b10 !important;border-bottom:1px solid #0b0b10 !important}
 </style>
 <link rel="preload" href="img/jewel/hero.webp?v=4" as="image" type="image/webp">
 </head>
@@ -4400,7 +4402,7 @@ function drawChartFrame() {
 let chartFrameObserver = null;
 function setChartFrame(title) {
   const ex = document.getElementById("cardExpand");
-  const on = /Numerology|Astrology|Human Design/i.test(title || "");
+  const on = /Numerology|Astrology|Human Design|Reading|Timeline/i.test(title || "");
   ex.classList.toggle("chart-frame", on);
   ex.classList.toggle("chart-astro", on && /Astrology/i.test(title));
   ex.classList.toggle("chart-hd", on && /Human Design/i.test(title));
