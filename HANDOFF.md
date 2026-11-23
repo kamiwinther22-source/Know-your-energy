@@ -34,9 +34,10 @@ The owner could not keep working with the previous session and asked for this ha
 - The owner is unable to name what they want in words ("I don't know the words to use to get the picture across"). They react to what they see. Build from every reaction; do not restart.
 
 ### What has been tried and REJECTED (do not offer any of these again)
-- White page with black text, in any serif or sans: "looks like it is copying The Pattern" (The Pattern is an astrology app; that is the owner's reference for "copying").
+**Important, owner correction at the very end of the session: they rejected the WAYS these were done, not black, not white, not any colour. "I didn't reject black and white. I rejected the way that you were doing it. And there are 100 other ways that it could be done." Black, white, silver and colour are all still open. Every item below is a rejected execution, not a banned colour or idea.**
+- The way white-with-black-text was done (white page, black serif or sans text, that sizing and those fonts): "looks like it is copying The Pattern" (an astrology app; the owner's reference for "copying"). White and black themselves are not banned.
 - The structure of The Pattern: big heading, large lead sentence, short blocks, a pulled line. Also "number two" (varied section rhythm and broken-up paragraphs) was called "exactly what The Pattern looks like".
-- A black page with text on it ("heavy", "dark", "dead"); and a "Credits" layout on black.
+- The way black was done: a plain flat black page with text on it ("heavy", "dead", no presence), and the "Credits" layout. A well-made black is not banned; the owner asked for black with presence and lit surfaces.
 - Frames of every kind: the bare silver frame was called "nothingness" and "in every dollar general"; wavy, curved, twisted, inward-bowed frames; frames with pearls, diamond squares or stones on the corners (owner: do not).
 - Cards, swiping, posters with one sentence per screen ("copying another site"), a map, a fan, a "listen" screen (the owner wants read-aloud eventually; not now).
 - Many small windows on one screen (six panels): "doesn't fix anything".
@@ -59,7 +60,7 @@ The owner could not keep working with the previous session and asked for this ha
 - Do not start by building. First read: HARD RULES at the top of this file, FEEDBACK-LOG.md top, and this section.
 - Get a REAL reading. Readings exist only in each visitor's browser; none is saved in the repo. The owner gave only the first screen of one (a section called "The Pull", with a label above the title, then prose). Ask them for screenshots of a whole reading, or a pasted one, so the design is judged on real material. The real format is: sections, each with a small label, a title and a long prose body, then a signature and a long list of technical references.
 - Then make ONE thing at full effort, using the renderer (tools/render, Blender via pip, path-traced like the pearl) or truly crafted work, whole screen first. Show the WHOLE phone screen, large, and let the owner react. Build from the reaction.
-- The unresolved tension: the site is black with diamonds, but the owner rejects a black reading page, a white one, and any added colour. Polished silver as the reading surface was proposed once; the owner had not answered (they have also said "gray" is banned, though shading on rendered metal is allowed). Ask the owner exactly that, once, in one short question, with a picture if you can.
+- Black, white, silver and colour are all open; only the rejected executions above are out. The owner has also said the colour must come from the site's own theme (black with diamonds) and not be grabbed at random, and that gray as a painted colour is banned (shading on rendered metal is allowed). Polished silver as the reading surface was proposed once and the owner did not answer. There are "100 other ways"; find one at full effort instead of asking the owner to choose.
 - Never narrate process. Short, plain, exact. Say what you will do before you do it and pause if it is big.
 - Test scripts and the renderer are in tools/; the page tests need Playwright; see tools/README.md. Reading prototypes were kept out of the repo because they contained the owner's real names and text; the repo is PUBLIC. Never commit the owner's reading text or names.
 
