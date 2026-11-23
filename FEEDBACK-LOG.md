@@ -1,5 +1,21 @@
 # Owner feedback log (results page design)
 
+## HARD RULE 0 (23 Nov 2026, owner). Sits above every other rule. Read first.
+**Nothing on the site, and nothing shown to the owner, may ever resemble a multicolour ribbon: a tangle of red, orange, yellow, green, teal, blue, purple and pink strands.** The assistant once drew the energy ribbon with every strand in its own bright colour just to tell the strands apart. Owner: "the dumbest thing you've done ... childish looking. Tacky looking. Fucking dumb looking ... at no point will I ever want any aspect of the site to resemble that."
+- No rainbow, neon or multi-colour lines, strands, glows, gradients, sparkles or fire anywhere on the site, in any form. This includes the earlier "no yellowed look, no rainbow colour in any manner".
+- This also covers anything shown to the owner while working (diagnostics, debug pictures, comparisons). To tell parts apart, use plain white or one calm colour with numbers; never a colour per part.
+- If it is unclear which parts the owner means, ask. Do not guess, and do not invent a way of showing it.
+
+## Stated by the owner on 23 Nov 2026 (their words, in this order of work)
+- "When I give a clear direction, get it live immediately." Done completely, not halfway. (A change that is only on a branch is not done.)
+- Phone view only. How the site looks on a PC is irrelevant.
+- The solar system / jewel stays in exactly the position it had, or it is replaced by something completely different. It is never moved. The sun is not a button; there is no button there.
+- Never red. No snowflakes (star glints, top-down diamonds). No yellowed look and no rainbow colour in any manner. When a diamond is shown, its pointed bottom is not shown.
+- A flat colour swapped for a flat colour is pointless; nothing about the look should be only a colour change. Black page was requested: black ground, black fields with a lit edge. The old "no black fields" rule belonged to the garnet page only; applying it to a black page was out of context. No green fields on black.
+- Legibility is #1. No busy detail running behind text. Titles never wrap: make the text smaller and keep each title on one line.
+- Answer the question asked, keep messages short, do not widen a request. Show the owner before anything that changes the look goes live; a clear direction about wording or behaviour goes live at once.
+
+
 ## RULE 1 (22 Nov 2026, owner, applies to every design direction, read first)
 - **Never put a line, band or gradient stripe through anything and call it metallic.** A chrome-text gradient with a horizon band is a line through the letters, not metal. Metal is real light reflecting off a real surface, or it is not claimed.
 - **Words must read as full-strength white (or deep black), never gray.** No faded text, no opacity below 1 on text, no thin weights that wash out on the background. The owner's complaint: "every word on the page looks gray."
