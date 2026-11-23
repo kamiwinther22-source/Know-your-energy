@@ -1347,8 +1347,8 @@ function drawFlow() {
   const pts=[];for(let i=0;i<=N;i++)pts.push(center(i/N));
   const nor=pts.map((p,i)=>{const q=pts[Math.min(N,i+1)],r=pts[Math.max(0,i-1)];let tx=q[0]-r[0],ty=q[1]-r[1];const m=Math.hypot(tx,ty)||1;return [-ty/m,tx/m];});
   let defs='<defs><radialGradient id="flw'+(EK)+'"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".4" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
-  const strand=(amp,cyc,ph,u0,u1,sp)=>{sp=sp||0;const i0=Math.round(u0*N),i1=Math.round(u1*N);let d='',a=null,z=null;
-   for(let i=i0;i<=i1;i++){const t=(i-i0)/(i1-i0),o=amp*Math.pow(Math.sin(Math.PI*t),.6)*Math.sin(2*Math.PI*cyc*t+ph)+sp*Math.pow(Math.abs(2*t-1),1.5),x=pts[i][0]+nor[i][0]*o,y=pts[i][1]+nor[i][1]*o;d+=(i>i0?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';if(i===i0)a=[x,y];z=[x,y];}
+  const strand=(amp,cyc,ph,u0,u1,sp)=>{sp=sp||0;const off=tt=>amp*Math.pow(Math.sin(Math.PI*tt),.6)*Math.sin(2*Math.PI*cyc*tt+ph)+sp*Math.pow(Math.abs(2*tt-1),1.5),wl=tt=>{const x=Math.min(1,Math.max(0,(tt-.1)/.28));return 1-x*x*(3-2*x);};const i0=Math.round(u0*N),i1=Math.round(u1*N);let d='',a=null,z=null;
+   for(let i=i0;i<=i1;i++){const t=(i-i0)/(i1-i0),o=(1-wl(t))*off(t)-wl(t)*off(1-t),x=pts[i][0]+nor[i][0]*o,y=pts[i][1]+nor[i][1]*o;d+=(i>i0?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';if(i===i0)a=[x,y];z=[x,y];}
    const id='sg'+(EK++);defs+=`<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${a[0]}" y1="${a[1]}" x2="${z[0]}" y2="${z[1]}"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".25" stop-color="#fff" stop-opacity="1"/><stop offset=".75" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
    return {d,id};};
   const S=[[12,2,0,0,1,.9,5],[12,2,Math.PI,0,1,.9,-5],[15,1.7,2.4,.03,.97,.55,-8],[9,2.6,1.2,0,1,.5,-11],[21,1.4,5.2,.15,.85,.5,3],[14,1.9,3.3,0,1,.5,-3]].slice(0,nS||8).map(a=>({...strand(a[0]*sc,a[1],a[2],a[3],a[4],a[6]*sc),w:a[5]}));
