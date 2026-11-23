@@ -853,7 +853,7 @@ html,body{overflow-x:clip !important;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
 
 </style>
-<link rel="stylesheet" href="red-look.css?v=20261149">
+<link rel="stylesheet" href="red-look.css?v=20261150">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
 <style id="btn3d">
 /* Buttons: same shapes; speckle-free copies of the button images (img/k3), real depth, words engraved into the face. */
@@ -918,7 +918,7 @@ html.red .submit-wrap{padding-bottom:14px}
 .chart-frame .date-explorer{background:transparent !important;border-left:0 !important;padding:0 !important;margin:0 0 22px}
 .chart-frame .date-explorer-head{display:flex;justify-content:space-between;align-items:baseline}
 .chart-frame .date-explorer-input{border-bottom:1px solid #0b0b10 !important}
-.chart-frame .dpsec{font:400 25px 'Alex Brush',cursive !important;color:#0b0b10 !important;text-transform:none !important;letter-spacing:0 !important;display:flex !important;align-items:center;white-space:normal;line-height:1.15;margin:34px 0 8px !important;padding:0 !important;background:none !important;border:0 !important}
+.chart-frame .dpsec{font:400 25px 'Alex Brush',cursive !important;color:#0b0b10 !important;text-transform:none !important;letter-spacing:0 !important;display:flex !important;align-items:center;white-space:nowrap;margin:34px 0 8px !important;padding:0 !important;background:none !important;border:0 !important}
 .chart-frame .ce-wrap .dpsec{color:#0b0b10 !important}
 .chart-frame .dpsec::before{content:'';flex:none;width:13px;height:13px;margin-right:11px;background:#0b0b10;clip-path:polygon(26% 0,74% 0,100% 50%,74% 100%,26% 100%,0 50%)}
 .chart-frame .dprow{background:transparent !important;border-bottom:1px solid #0b0b10;padding:0 !important;margin:0 0 14px}
@@ -932,7 +932,7 @@ html.red .submit-wrap{padding-bottom:14px}
 .chart-frame .pc-col{border-bottom:1px solid #0b0b10;margin-bottom:12px}
 .chart-frame .pc-col .dprv{font-size:26px !important}
 .chart-frame .pc-col .dprl{font-size:11.5px !important;letter-spacing:.08em !important}
-.chart-frame .stage-pair .dpsec{font:800 12px 'Barlow Condensed',sans-serif !important;text-transform:uppercase !important;letter-spacing:.1em !important;white-space:normal !important;margin:0 0 6px !important;display:block !important}
+.chart-frame .stage-pair .dpsec{font:800 12px 'Barlow Condensed',sans-serif !important;text-transform:uppercase !important;letter-spacing:.1em !important;white-space:nowrap !important;margin:0 0 6px !important;display:block !important}
 .chart-frame .stage-pair .dpsec::before{display:none !important}
 .chart-frame .birthdate-row{display:block !important}
 .chart-frame .birthdate-row .pc-col{display:block;margin-bottom:14px}
@@ -4399,6 +4399,18 @@ function drawChartFrame() {
   if (old) old.remove();
   wrap.insertAdjacentHTML("afterbegin", svg);
 }
+function fitTitles() {
+  document.querySelectorAll("#cardExpand .dpsec").forEach(el => {
+    el.style.removeProperty("font-size");
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    const start = size;
+    while (el.scrollWidth > el.clientWidth + 1 && size > 9) {
+      size -= 0.5;
+      el.style.setProperty("font-size", size + "px", "important");
+    }
+    el.dataset.fitFrom = String(start);
+  });
+}
 let chartFrameObserver = null;
 function setChartFrame(title) {
   const ex = document.getElementById("cardExpand");
@@ -4418,7 +4430,9 @@ function setChartFrame(title) {
   if (!chartFrameObserver && typeof ResizeObserver === "function") chartFrameObserver = new ResizeObserver(() => drawChartFrame());
   if (chartFrameObserver) { chartFrameObserver.disconnect(); chartFrameObserver.observe(wrap); }
   drawChartFrame();
-  setTimeout(drawChartFrame, 400);
+  fitTitles();
+  setTimeout(() => { drawChartFrame(); fitTitles(); }, 400);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitles);
 }
 
 document.addEventListener("click", e => {

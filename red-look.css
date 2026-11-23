@@ -342,3 +342,6 @@ html.red .loc-list li.on,html.red .loc-list li:hover{background:#262626}
 .chart-frame .stage-pair:not(.birthdate-row) .pc-col{display:contents}
 .chart-frame .stage-pair:not(.birthdate-row) .pc-col>.dpr{grid-row:1;border-bottom:1px solid #0b0b10;margin-bottom:12px}
 .chart-frame .stage-pair:not(.birthdate-row) .pc-col>.dpdef{grid-column:1 / -1;margin-bottom:12px}
+
+/* The "Pinnacle (Opportunity)" / "Challenge (Internal Resistance)" headings each get their own full-width line, so each stays on one line at a readable size (side by side the longer one would have needed about 7px type). */
+.chart-frame .stage-pair:has(> .pc-col > .dpsec){grid-template-columns:1fr}
