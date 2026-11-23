@@ -318,4 +318,4 @@ html.red #formStep .r-keep{display:block;font-family:'Jost',sans-serif !importan
 html.red .hero-illustration{transform:none;width:350px;height:164px;margin:6px 0 0;pointer-events:none}
 html.red .hero-illustration .jewel{position:absolute;left:-1px;top:-31px;width:542px;height:auto;max-width:none;display:block;user-select:none;-webkit-user-select:none}
 /* ornaments: the rendered diamond, no hairlines */
-html.red #hookStep .r-b22 li:before,html.red #hookStep .r-b22:after,html.red #formStep .r-note:last-of-type:before{background:url(img/jewel/gem.webp) center/32px auto no-repeat !important}
+html.red #hookStep .r-b22 li:before,html.red #hookStep .r-b22:after,html.red #formStep .r-note:last-of-type:before{background:url(img/jewel/gem.webp?v=2) center/32px auto no-repeat !important}
