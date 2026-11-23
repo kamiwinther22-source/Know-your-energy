@@ -320,13 +320,19 @@ html.red .hero-illustration .jewel{position:absolute;left:-1px;top:-31px;width:5
 /* ornaments: the rendered diamond, no hairlines */
 html.red #hookStep .r-b22 li:before,html.red #hookStep .r-b22:after,html.red #formStep .r-note:last-of-type:before{background:url(img/jewel/gem.webp?v=2) center/32px auto no-repeat !important}
 
-/* ---- emerald satin ground: a rendered drape (img/jewel/drape.webp) replaces the old flat gradient. Highlights in the image are capped so white words keep 4.5:1 contrast everywhere there is text. The jewel (img/jewel/hero.webp) carries its own soft shadow. ---- */
-html.red{background:#042f24}
-html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#042f24}
-html.red:not(:has(#resultsWrap[style*="block"])) body{background:none}
-html.red:not(:has(#resultsWrap[style*="block"]))::before{content:"";position:absolute;left:0;right:0;top:0;height:230.77vw;z-index:-1;pointer-events:none;background:#042f24 url(img/jewel/drape.webp?v=2) center top/100% 100% no-repeat}
+/* ---- black ground. Flat on purpose: the jewel (img/jewel/hero.webp, rendered in a black scene) and the silver buttons are the lit objects. White on black is 21:1. ---- */
+html.red,html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background:#000}
 html.red #hookStep::before{display:none}
 html.red .hero-illustration .jewel{left:-20px;top:-98px;width:470px;height:auto}
 
 /* Relationship type buttons exist only for a Relational reading. The stylesheet's display:grid !important used to override the page's own hide, so they showed for Individual too. */
 html.red #formStep:not(.is-rel) #relWrap{display:none !important}
+/* fields on a black page: black wells with a lit lip along the bottom edge and a faint rise from the top, so they read as inset fields. Padlocks and focus ring stay white. */
+html.red .field,html.red .line-field,html.red #formStep .row-time .ampm-field,html.red #formStep.locked .line-field,html.red .row-time.is-off .line-field{
+  background:linear-gradient(180deg,#000 0%,#151515 100%) !important;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.5),0 1.5px 0 1px rgba(255,255,255,.85) !important}
+html.red .line-field:focus-within{box-shadow:inset 0 3px 8px rgba(0,0,0,.9),0 1.5px 0 #fff,0 0 0 2px rgba(255,255,255,.85) !important}
+html.red .row-birth .row-time .ampm-field{box-shadow:inset 0 3px 8px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.5),0 1.5px 0 1px rgba(255,255,255,.85) !important}
+html.red .chk-box{background:linear-gradient(180deg,#000,#151515) !important;box-shadow:inset 0 3px 7px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.5),0 1.5px 0 1px rgba(255,255,255,.85) !important}
+html.red .loc-list{background:#000 !important;box-shadow:0 10px 22px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.6) !important}
+html.red .loc-list li.on,html.red .loc-list li:hover{background:#262626}
