@@ -321,9 +321,9 @@ html.red .hero-illustration .jewel{position:absolute;left:-1px;top:-31px;width:5
 html.red #hookStep .r-b22 li:before,html.red #hookStep .r-b22:after,html.red #formStep .r-note:last-of-type:before{background:url(img/jewel/gem.webp?v=2) center/32px auto no-repeat !important}
 
 /* ---- emerald satin ground: a rendered drape (img/jewel/drape.webp) replaces the old flat gradient. Highlights in the image are capped so white words keep 4.5:1 contrast everywhere there is text. The jewel (img/jewel/hero.webp) carries its own soft shadow. ---- */
-html.red{background:#03170f}
-html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#03170f}
+html.red{background:#042f24}
+html.red:not(:has(#resultsWrap[style*="block"])),html.red:not(:has(#resultsWrap[style*="block"])) body{background-color:#042f24}
 html.red:not(:has(#resultsWrap[style*="block"])) body{background:none}
-html.red:not(:has(#resultsWrap[style*="block"]))::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:#03170f url(img/jewel/drape.webp?v=1) center top/cover no-repeat}
+html.red:not(:has(#resultsWrap[style*="block"]))::before{content:"";position:absolute;left:0;right:0;top:0;height:230.77vw;z-index:-1;pointer-events:none;background:#042f24 url(img/jewel/drape.webp?v=2) center top/100% 100% no-repeat}
 html.red #hookStep::before{display:none}
 html.red .hero-illustration .jewel{left:-20px;top:-98px;width:470px;height:auto}
