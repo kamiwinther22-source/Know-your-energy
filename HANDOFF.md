@@ -1,3 +1,10 @@
+# NO GRAY ANYWHERE ON THE PAGE. EVER AGAIN. (owner, 23 Nov 2026)
+Owner, exact words: "Don't put gray anywhere on my goddamn page ever again." This outranks every other rule in this file.
+- No gray or gray-tinted colour on any page, screen, preview or prototype: not as a background, band, panel, text, border, shadow, gradient or tint. This includes cool gray, blue-gray and silver-gray washes (for example #e8ecf1, #eef0f4, #c9ced4).
+- Before you ship or show anything, scan its colours for gray. Do not rely on how it looks.
+- The silver lit metal on the buttons and card frames was not named by the owner in this rule. Do not change it on your own and do not assume it counts either way; ask the owner in one short question if it matters.
+- The live site today still contains gray in places (older results-page frames and tints, form shadows, the Terms page). The owner has NOT yet asked for those to be changed. Do not change them unasked; find them and ask.
+
 # NEVER TRADE QUALITY FOR SPEED. ABSOLUTELY.
 
 # Know Your Energy: handoff (read this first, 3 minutes)
