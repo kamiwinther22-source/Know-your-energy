@@ -1,9 +1,11 @@
 # NO GRAY ANYWHERE ON THE PAGE. EVER AGAIN. (owner, 23 Nov 2026)
-Owner, exact words: "Don't put gray anywhere on my goddamn page ever again." This outranks every other rule in this file.
-- No gray or gray-tinted colour on any page, screen, preview or prototype: not as a background, band, panel, text, border, shadow, gradient or tint. This includes cool gray, blue-gray and silver-gray washes (for example #e8ecf1, #eef0f4, #c9ced4).
-- Before you ship or show anything, scan its colours for gray. Do not rely on how it looks.
-- The silver lit metal on the buttons and card frames was not named by the owner in this rule. Do not change it on your own and do not assume it counts either way; ask the owner in one short question if it matters.
-- The live site today still contains gray in places (older results-page frames and tints, form shadows, the Terms page). The owner has NOT yet asked for those to be changed. Do not change them unasked; find them and ask.
+Owner, exact words: "Don't put gray anywhere on my goddamn page ever again." And: "That does not include shading when shading is appropriate. When shading is the correct way to render an image, then that's what should be done. Don't fucking color anything or make my text gray." This outranks every other rule in this file.
+- BANNED: using gray as a colour. No gray or gray-tinted fills, backgrounds, bands, panels, borders or tints, and never gray text. This includes cool gray, blue-gray and silver-gray washes (for example #e8ecf1, #eef0f4, #c9ced4).
+- ALLOWED: shading that is the correct way to render something real: light, shadow and reflection on the jewel, the silver metal, glass, frames and other rendered objects. Do not remove that; it is what makes them look real.
+- Test: is this gray a colour I chose to paint something with (banned), or the light and shadow on a rendered object (allowed)? When unsure, ask the owner in one short question.
+- Text is always full-strength: black or white as the page needs, never gray.
+- Before you ship or show anything, scan its colours for gray fills and gray text. Do not rely on how it looks.
+- The live site today still has gray fills in places (older results-page tints, the Terms page background). The owner has NOT yet asked for those to be changed. Do not change them unasked; find them and ask.
 
 # NEVER TRADE QUALITY FOR SPEED. ABSOLUTELY.
 
