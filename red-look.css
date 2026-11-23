@@ -327,3 +327,6 @@ html.red:not(:has(#resultsWrap[style*="block"])) body{background:none}
 html.red:not(:has(#resultsWrap[style*="block"]))::before{content:"";position:absolute;left:0;right:0;top:0;height:230.77vw;z-index:-1;pointer-events:none;background:#042f24 url(img/jewel/drape.webp?v=2) center top/100% 100% no-repeat}
 html.red #hookStep::before{display:none}
 html.red .hero-illustration .jewel{left:-20px;top:-98px;width:470px;height:auto}
+
+/* Relationship type buttons exist only for a Relational reading. The stylesheet's display:grid !important used to override the page's own hide, so they showed for Individual too. */
+html.red #formStep:not(.is-rel) #relWrap{display:none !important}
