@@ -18,6 +18,51 @@ Owner, exact words: "Don't put gray anywhere on my goddamn page ever again." And
 # Know Your Energy: handoff (read this first, 3 minutes)
 Updated 23 Nov 2026.
 
+## READ THIS BEFORE YOU TOUCH THE READING (end of 23 Nov 2026 session)
+The owner could not keep working with the previous session and asked for this handoff. Owner's words: "all of your cheap, fucking easy shit doesn't fucking work." **Cheap and quick is against the rules.** A CSS gradient, a soft glow, a pale wash, a colour block, a recoloured box, a different font on the same layout: the owner sees every one of these as faded, dead, bland or a copy, and says so each time. Do not show them. Do not build them "to get something on screen".
+
+### What the owner wants for the reading (their own statements, collected)
+- It must look and feel like it belongs to this site: black ground, diamonds, silver, the pearl, the charts. The whole site must work together.
+- It must still feel different from the charts, and it must use the colour method of the OLD reading screenshot (colour at the outer edge, fading inward to a clear centre), but NOT those colours, NOT blue, NOT gray, NOT a random colour "because the site has a theme".
+- Colour must be bold, sharp, clear and dense. Never faded, pastel, ghost-like, "dead", or a pale wash. "I am absolutely not asking for something more subtle."
+- Surfaces must be lit: real light and shadow and variation. A flat fill, even a nice colour, is rejected ("absolutely no variation in anything to do with lighting").
+- Effort. "I want effort. I want like a hunt." The standard is the rendered pearl: a path-traced render, crisp, real. The owner said of the pearl: "an example of high quality work" and asked why every earlier attempt was not that.
+- A jewelry display case, high-end, precious glass, delicate, beautiful. If it is not beautiful it is wrong.
+- All the content stays. The problem is not length; it is that opening it "looks like I have just opened a journal article for a college class ... a textbook". It must feel different in how it looks.
+- Legibility is first: high contrast, text not huge, not dense, not overwhelming. Headings modest. Titles never wrap (shrink to one line).
+- The owner works on a PHONE. Nothing for desktop.
+- The owner is unable to name what they want in words ("I don't know the words to use to get the picture across"). They react to what they see. Build from every reaction; do not restart.
+
+### What has been tried and REJECTED (do not offer any of these again)
+- White page with black text, in any serif or sans: "looks like it is copying The Pattern" (The Pattern is an astrology app; that is the owner's reference for "copying").
+- The structure of The Pattern: big heading, large lead sentence, short blocks, a pulled line. Also "number two" (varied section rhythm and broken-up paragraphs) was called "exactly what The Pattern looks like".
+- A black page with text on it ("heavy", "dark", "dead"); and a "Credits" layout on black.
+- Frames of every kind: the bare silver frame was called "nothingness" and "in every dollar general"; wavy, curved, twisted, inward-bowed frames; frames with pearls, diamond squares or stones on the corners (owner: do not).
+- Cards, swiping, posters with one sentence per screen ("copying another site"), a map, a fan, a "listen" screen (the owner wants read-aloud eventually; not now).
+- Many small windows on one screen (six panels): "doesn't fix anything".
+- Colour blocks and bands behind text. HARD RULE: no colour blocking.
+- Huge headlines. HARD RULE.
+- Pastel or soft colour: sapphire/teal glows and gradients ("a baby's poster", "a child's poster").
+- Colour from the old screenshot (cream, teal, blue). Emerald and plum and sapphire as flat page colours. Black-to-emerald or black-to-white fades ("newspaper", "gray", "doesn't match").
+- Anything gray or blue-gray as a fill, and any gray text. (Shading on a rendered object is allowed; see the top rule.)
+- Italic type: "makes it harder to read". Cursive is fine.
+- Diamonds (rotated squares) as bullets, dividers or markers: "squares on corners", and top-down diamonds read as "snowflakes". Star glints: no.
+
+### Why the last session failed (so you do not repeat it)
+1. It kept answering with CSS gradients and soft shadows, which the owner reads as "a faded wash". Real jewelry-quality work needs real rendering or real crafted detail, not a gradient.
+2. It built things before it understood, then asked questions in loops. Every rejected build cost the owner usage and patience.
+3. It showed too many small near-identical options, or tiny ones the owner could not see. The owner wants a few options that are GENUINELY different from each other and each large enough to see and scroll; "I have never said not to give me more than one example at a time ... I've said the opposite". One at a time is right only when you are unsure what they mean.
+4. It added rules the owner had not made (for example, carrying "no black fields" from the old garnet page onto a black page) and read "subtle" into "calm". Take the words exactly.
+5. It tried to fix fine detail before the overall look existed. The owner: "You don't have an overall general look. What does it look like when the page hits the screen?" Get the whole-screen feel right first.
+
+### What to do instead
+- Do not start by building. First read: HARD RULES at the top of this file, FEEDBACK-LOG.md top, and this section.
+- Get a REAL reading. Readings exist only in each visitor's browser; none is saved in the repo. The owner gave only the first screen of one (a section called "The Pull", with a label above the title, then prose). Ask them for screenshots of a whole reading, or a pasted one, so the design is judged on real material. The real format is: sections, each with a small label, a title and a long prose body, then a signature and a long list of technical references.
+- Then make ONE thing at full effort, using the renderer (tools/render, Blender via pip, path-traced like the pearl) or truly crafted work, whole screen first. Show the WHOLE phone screen, large, and let the owner react. Build from the reaction.
+- The unresolved tension: the site is black with diamonds, but the owner rejects a black reading page, a white one, and any added colour. Polished silver as the reading surface was proposed once; the owner had not answered (they have also said "gray" is banned, though shading on rendered metal is allowed). Ask the owner exactly that, once, in one short question, with a picture if you can.
+- Never narrate process. Short, plain, exact. Say what you will do before you do it and pause if it is big.
+- Test scripts and the renderer are in tools/; the page tests need Playwright; see tools/README.md. Reading prototypes were kept out of the repo because they contained the owner's real names and text; the repo is PUBLIC. Never commit the owner's reading text or names.
+
 ## 0. How to work with the owner. Their words, not mine.
 > "show me the full extent of your abilities - never taking short cuts - working efficiently and correctly with every move that I give permission for and concise communication with laser sharp attention to what I say that combines and is used as information to guide future work."
 
