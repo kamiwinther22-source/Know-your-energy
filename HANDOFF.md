@@ -7,6 +7,12 @@ Owner, exact words: "Don't put gray anywhere on my goddamn page ever again." And
 - Before you ship or show anything, scan its colours for gray fills and gray text. Do not rely on how it looks.
 - The live site today still has gray fills in places (older results-page tints, the Terms page background). The owner has NOT yet asked for those to be changed. Do not change them unasked; find them and ask.
 
+## HARD RULES from the reading work (23 Nov 2026, owner)
+- **NO COLOUR BLOCKING. Ever.** No solid or gradient blocks of colour as bands, panels or headers behind text. Owner: "You just did color blocking ... That should be one of the first rules." Colour goes around the edge of the page and fades from the outside in toward the centre, not in blocks.
+- **NO HUGE HEADLINES.** Large headlines make the reading feel longer and more overwhelming. Section headings stay modest in size.
+- **Get the overall feel first, before any fine detail.** Owner: "You don't have an overall general look. So fine detail work like that isn't it. What I need is when the page hits the screen, what does it look like? What's it feel like to read it?" The reading must not feel dense, dull or overwhelming. Do not polish rendered detail (facets, bezels, engraving) until the whole-screen feel is right.
+- Colour is allowed and wanted, text included, and it must be bold, sharp and clear, never faded, pastel or soft ("I am absolutely not asking for something more subtle").
+
 # NEVER TRADE QUALITY FOR SPEED. ABSOLUTELY.
 
 # Know Your Energy: handoff (read this first, 3 minutes)
