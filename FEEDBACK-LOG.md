@@ -7,6 +7,8 @@
 - If it is unclear which parts the owner means, ask. Do not guess, and do not invent a way of showing it.
 
 ## Stated by the owner on 23 Nov 2026 (their words, in this order of work)
+- Black is the "least bad" stand-in, not the decided look: "I am not going to have a black and white site." Do not spend time polishing parts (the hourglass) before a look is chosen. There should be no full-page waiting screen: straight to the results page, the reading fills in later.
+- "I said to push approved changes to live site": approved changes go live the same minute. State what you will do before you do it, pause before anything big, keep every message short and plain, and show the WHOLE page.
 - "When I give a clear direction, get it live immediately." Done completely, not halfway. (A change that is only on a branch is not done.)
 - Phone view only. How the site looks on a PC is irrelevant.
 - The solar system / jewel stays in exactly the position it had, or it is replaced by something completely different. It is never moved. The sun is not a button; there is no button there.

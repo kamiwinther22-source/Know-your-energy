@@ -1,85 +1,67 @@
 # NEVER TRADE QUALITY FOR SPEED. ABSOLUTELY.
 
-# Handoff: Know Your Energy (read this first, 3 minutes)
+# Know Your Energy: handoff (read this first, 3 minutes)
+Updated 23 Nov 2026.
 
-Updated 22 Nov 2026.
+## 0. How to work with the owner. Their words, not mine.
+> "show me the full extent of your abilities - never taking short cuts - working efficiently and correctly with every move that I give permission for and concise communication with laser sharp attention to what I say that combines and is used as information to guide future work."
 
-## 0. The owner's own words, verbatim (22 Nov 2026). This is the instruction.
+What that means in practice, each line from the owner:
+- **Full ability, no shortcuts.** "You have all knowledge about web design available to you ... Find it. Use it." Do not hold back what you can do, and do not fake it with a cheap trick.
+- **Finish what is approved, live, at once.** "When I give a clear direction get it live immediately." "I said to push approved changes to live site." A change sitting on a branch is not done. Look changes are shown (the whole page) before going live; once the owner approves, push the same minute and check the live site.
+- **Say what you will do, then do it. Pause before anything big.** "State what you're doing before you do it and at least pause to give me time to prevent wasted usage." For a long render, a big restructure or anything the owner did not ask for: one plain sentence, then wait.
+- **Short and plain.** "Directly what you are planning, doing, asking ... I do not need 1 line of jargon." No process narration. Answer the question asked. Do not widen a request.
+- **Exact words.** "Do not add. Do not subtract. Do not change my words." If it is unclear which part the owner means, ASK (they invited it), with the simplest possible picture.
+- **Never claim what you did not measure.** "You either just lied to me with some cheap short cut ... about it being a mirror image or you just did a shit job." Measure it, show the number and the picture (see tools/).
+- **Show the WHOLE page.** "I cannot tell you until you show me the whole damn page." Not crops, not diagnostics.
+- **Get it right the first time.** "Just get it exactly correct the 1st try."
+- **Do not spend the owner's usage on what they did not ask for.** Unasked notes, unasked experiments and unasked options cost them.
 
-> Okay, so the first one is just wrong. I want it gone. The second, the show one picture, it goes right along with the first one. The third one, don't measure what was already measured. Well, that depends if it's accurate or not. Do not widen a request. I don't even know what that means. Short answers. Don't explain the process. Well, you know what? Yeah, for the most part, I don't need to know how you're doing it. Other than if what you're doing is some cheap-ass shortcut, I need to know what it is to specifically say not to do it again. So the cautiousness is not in, I'm looking for help. I'm fucking looking for help. I don't have the answers. I don't know what to do. I have no idea what you are capable of. Because you know what? It took me fucking months to get buttons to look as good as they do. Because you weren't showing me that you had the ability to do that. It took me forever to get any sort of like, now I know you can make a fucking ribbon. Do you know it took probably 6 months before I got you to show me you can make a fucking ribbon? You just drew stupid ass lines before for a long time, and I don't know what I did or said that got the higher quality work when I got it, because I don't know that I said anything different. I don't know what you can do. So I cannot give you exact directions most of the time. I need you to show me what you're capable of. I need you to take everything I say when you are showing me something and I'm like, no, I don't like that. You need to pay attention to what it is and what it is I don't like about it and go from there. It should be building towards something. It should not be starting over every fucking time.
+## HARD RULE (above every other rule)
+Nothing on the site, and nothing shown to the owner, may ever look like a multicolour ribbon: a tangle of red, orange, yellow, green, blue, purple and pink strands. The owner: "childish looking. Tacky looking ... at no point will I ever want any aspect of the site to resemble that." No rainbow, neon or multi-colour lines, glows, gradients or sparkle anywhere, including in debug pictures. To tell parts apart, use plain white and numbers.
 
-## HARD RULE 0 (23 Nov 2026, owner). Sits above every other rule. Read first.
-**Nothing on the site, and nothing shown to the owner, may ever resemble a multicolour ribbon: a tangle of red, orange, yellow, green, teal, blue, purple and pink strands.** The assistant once drew the energy ribbon with every strand in its own bright colour just to tell the strands apart. Owner: "the dumbest thing you've done ... childish looking. Tacky looking. Fucking dumb looking ... at no point will I ever want any aspect of the site to resemble that."
-- No rainbow, neon or multi-colour lines, strands, glows, gradients, sparkles or fire anywhere on the site, in any form. This includes the earlier "no yellowed look, no rainbow colour in any manner".
-- This also covers anything shown to the owner while working (diagnostics, debug pictures, comparisons). To tell parts apart, use plain white or one calm colour with numbers; never a colour per part.
-- If it is unclear which parts the owner means, ask. Do not guess, and do not invent a way of showing it.
+## 1. The look: NOT decided
+- Black with silver and diamonds is live as "the least bad", not as the answer: "I am not going to have a black and white site. We are still working in context of default to least bad." The owner is sick of the red. Do not polish details of the look (the hourglass, for example) until a look is chosen: "You will not hit the quality level required in the first try so I'm not doing it right now."
+- The owner wants it UPGRADED and interesting: "I want it to look interesting. You have a way of making everything look dead." A flat colour swapped for a flat colour is pointless. Needs real lit surfaces (the pearl is the proof it can be done: "an example of high quality work").
+- **Yes:** the pearl; real lit objects; silver buttons; classy, elegant, sleek, powerful, bold; a lighter page than near-black was liked earlier; seeing the WHOLE page.
+- **No:** red (ever), grey, pale blue wash, heavy all-blue, yellowed look, rainbow colour in any manner, snowflake sparkles (star glints, top-down diamonds), stripes or thin streaks as "shine", fake metal made by a gradient line through something, a diamond's pointed bottom shown, busy detail behind words, anything that looks like every other astrology site.
+- **Legibility is #1.** White words at full strength, never thin or faded. Titles never wrap: shrink to one line. Nothing may get smaller than it is, except a title that must shrink to fit.
+- **Black page means black fields** (with a lit edge). The old "no black fields" belonged to the garnet page. No green fields on black.
+- **The solar system / jewel spot never moves.** It is not a button. Phone view only: "How this site appears on a PC is pretty irrelevant."
+- Ideas offered to the owner, none chosen yet: A light that plays across the jewel and silver buttons as the phone tilts or the page scrolls (pre-rendered frames). B black glass floor under the jewel with a reflection. C a rendered waiting graphic. D polished-platinum "FREE!" and wordmark (both on the leave-alone list: ask first). E a slow pulse of light through the energy ribbon (earlier rule: nothing on the front page moves left to right: ask). F opened cards catch light once. G scroll depth. And a dark-on-dark living ground (black silk with folds at under 5% brightness, so white words keep about 14:1 contrast, light placed only where there are no words): proposed, not approved.
 
-## Stated by the owner on 23 Nov 2026 (their words, in this order of work)
-- "When I give a clear direction, get it live immediately." Done completely, not halfway. (A change that is only on a branch is not done.)
-- Phone view only. How the site looks on a PC is irrelevant.
-- The solar system / jewel stays in exactly the position it had, or it is replaced by something completely different. It is never moved. The sun is not a button; there is no button there.
-- Never red. No snowflakes (star glints, top-down diamonds). No yellowed look and no rainbow colour in any manner. When a diamond is shown, its pointed bottom is not shown.
-- A flat colour swapped for a flat colour is pointless; nothing about the look should be only a colour change. Black page was requested: black ground, black fields with a lit edge. The old "no black fields" rule belonged to the garnet page only; applying it to a black page was out of context. No green fields on black.
-- Legibility is #1. No busy detail running behind text. Titles never wrap: make the text smaller and keep each title on one line.
-- Answer the question asked, keep messages short, do not widen a request. Show the owner before anything that changes the look goes live; a clear direction about wording or behaviour goes live at once.
+## 2. State of the site (23 Nov 2026)
+**Live on `main`:** black ground on every page except Terms (the owner had the black Terms removed: original kept); the rendered jewel in the old solar-system spot (190 KB, replacing about 580 KB of 3D script); diamond dividers; black form fields with lit edge and padlocks; the relationship buttons only for Relational; "Birth City"; Pinnacle descriptions say where each sits in life and how it relates to the Life Path and Challenge; card titles on one line (floor 9px); opened Pinnacle/Challenge/Period text at full width; Reading and Timeline cards in the silver frame; Timeline chip readable; energy ribbon without strands 3 and 5 and with its two ends matched (98% overlap; the owner has not confirmed it).
+**Not done / waiting on the owner:**
+- The look (above). The waiting screen: the owner says there should be none, straight to the results page with the reading filling in later. Today the full-page "Reading your chart" screen shows while the server works out the Astrology and Human Design charts (seconds, up to 45), and the Reading card then shows the hourglass for minutes. The hourglass is "unusable and should never be seen as it is." Decide the look first.
+- Reading titles come from the AI with no length limit (the prompt says only "a specific title"); a very long one shrinks to 9px. Cap them at about five words in the prompt (not done, owner has not answered).
+- The ribbon-end match: confirm with the owner.
 
-## 1. What is live (on `main`; a push deploys the site and the Worker in about 40 seconds)
-- **Login:** phone unlock (passkey). No email anywhere. One free reading per phone. Visitors who unlocked before the switch unlock once.
-- **Padlock (important, owner's reason):** the form is locked until the phone is unlocked, and every field shows a padlock. A visitor gets ONE free reading; nobody should type into fields they cannot use ("I am not in favor of wasting people's time"). Keep the padlock on every field.
-- **Private pages**, on `https://know-your-energy.kwdoanchor.workers.dev`: `/owner` (enter the key once; the device is remembered forever; "Open the site" unlocks that device with unlimited use) and `/usage` (costs, people, visits). One key for the owner and both daughters, once per device. No Cloudflare login. The key exists only as a hash in `worker.js` (`OWNER_KEY_HASH`); the key itself is NOT in the repo. To sign every device out: new hash + raise `OWNER_KEY_EPOCH`. The old public `/usage`, `/admin/users` and `admin.html` are gone.
-- **Privacy and Terms** match phone unlock: no email, nothing offered for deletion (the only record kept is whether a phone's free reading was used / a pass is active). There is no "Forget my details".
-- **Front page:** original look; two short bullets; button "Unlock & begin"; link "Already unlocked on this phone?"; headline "First reading is" over a big Didone FREE!.
-- **The form screens:** Jost for all text; labels 22px; text typed in the boxes 16px (the least an iPhone allows without zooming; do not make it bigger, the labels must stay the larger text); "Date of Birth" spelled out; the "Choose either individual or relational" heading removed (the toggle says it); "Person 1" / "Person 2" in the cursive; fields are lit wells (translucent wine-rose, never black, grey or white, no outline box).
+## 3. Things that work and must not break
+- **Login:** phone unlock (passkey). No email anywhere. One free reading per phone. **Padlock on every field while locked** ("I am not in favor of wasting people's time"). No locked features. No email.
+- **Private pages** on `https://know-your-energy.kwdoanchor.workers.dev`: `/owner` and `/usage` (one key, once per device). The key exists only as a hash in `worker.js` (`OWNER_KEY_HASH`); never write the key or any cost, token count, password or personal data in the repo.
+- **Privacy and Terms** match phone unlock: nothing offered for deletion, no "Forget my details". Not legal advice; may need a legal check.
+- **Pinnacles:** the sums match Decoz's method (First = month + day, Second = day + year, Third = First + Second, Fourth = month + year; first ends at 36 minus the Life Path). Only Decoz (worldnumerology.com) is a credentialed source found; numerologist.com is NOT Decoz's site (it is a self-described practitioner, pen name Blair Andrews). Numerology is traditional, not scientifically validated.
+- **Statements about the owner's text:** never change the owner's words on the page (headline, bullets, button).
 
-## 2. The owner's rules (do not make them repeat these)
-- Nothing may get smaller than it is. Never thin, faded, grey-looking or darker/smeared text. Contrast is the rule, not text colour.
-- No black fields. No locked features, ever. No email.
-- LEAVE ALONE: the silver buttons (including "Parent · Child" with its dot). The earlier list also named Person 1 / Person 2, the wordmark, FREE! and the solar system's position; the owner did not confirm those.
-- "Classy, elegant, sleek, powerful, bold" is the brief for the look. Typography alone cannot reach it; it needs real lit surfaces (see Open items).
+## 4. How to build and ship (saves an hour)
+- Files: `index.html` (markup, inline CSS in `@layer base`, scripts), `red-look.css` (the look; append at the end; bump `?v=` on its link in `index.html` after every change), `extras.js` (timeline and globe), `worker.js` (server), `img/jewel/` (rendered pictures), `tools/` (see `tools/README.md`).
+- **A layered `!important` rule beats an unlayered `!important` rule.** If a rule in `red-look.css` does not apply, look for an inline `!important` rule in `index.html` and edit that.
+- Ship: make a clean copy of `main` (`git worktree add /tmp/kye-main origin/main`), apply ONLY the approved edits, test with `tools/`, `git push origin HEAD:main`, wait about 40 seconds, then check the live site with `curl` (the changed text is there; `/`, `/privacy.html`, `/terms.html`, `/red-look.css` answer 200; every file in `_config.yml`'s `exclude:` answers 404).
+- Claude Code's auto-mode check sometimes blocks a push to `main`. Say so in one line and ask for a plain "yes". Do not work around it.
+- The working branch `ccr-bd4ce419-ztpc7o` holds the history of this look; `main` is what is live.
+- Keep private files off the website: add every new notes, script or number file to `exclude:` in `_config.yml` in the same commit (done for notes, `worker.js`, `tools`). The GitHub project is public; about 142 old branches still hold old text. The owner will delete them by hand; this environment is refused. Do not touch them.
 
-## 3. Open items (none of these is live)
-- Classy first-screen preview (centred labels, centred bullets with small silver diamonds): shown to the owner, never answered. Its Didone FREE! and Jost text are already live; only the silver diamond bullets and the centred layout of the labels and bullets are not.
-- Input fields: the owner wants them obviously to be input fields and "the opposite of average", made with real abilities, not cheap quick fixes. No black, no outline box, text in the boxes stays 16px, the padlock stays on every field. How to do it is not decided; the owner has given no direction beyond this.
-- Solar system: owner says it does not look like silver, looks broken, and is not worth ~530 KB of load. Not changed.
-- Not touched: the "Please wait" screen, the results page, the expanded cards.
-- Old unlimited-family email hashes still sit unused in `worker.js`. A test device (unlimited) was created during a live test; rotating the key signs it out. The key was shown in chat once; rotate it if the chat leaks.
-- Privacy wording is not legal advice; the "we do not erase it" position may need a legal check. Cloudflare keeps request logs; Privacy does not mention them.
+## 5. Mistakes made in this thread. Do not repeat.
+- Showed the owner a multicolour ribbon (debug colours). See the hard rule.
+- Said "mirror image" without measuring. It scored 61%, then 77%, then 98% after real fixes.
+- Applied the garnet page's "no black fields" rule to a black page, and put green fields on black.
+- Held finished, approved changes on a branch instead of pushing them.
+- Wrote long messages and unasked notes, ran unasked renders and experiments, and offered options when one picture was asked for.
+- Guessed which ribbon strands the owner meant instead of asking with one clear picture.
+- Said numerologist.com was Decoz's site. It is not.
+- Produced flat, calm grounds to satisfy legibility, which killed the page. Aim for depth that stays dark enough for the words.
 
-## 4. Technical landmarks (saves an hour)
-- Files: `index.html` (markup + inline CSS), `red-look.css` (the front-page look; changes are appended at the end; bump `?v=` on its link in `index.html` after every change), `worker.js` (server), `FEEDBACK-LOG.md` (rules; see the guide below).
-- **The inline CSS is inside `@layer base`: a layered `!important` rule beats an unlayered `!important` rule.** If a size or colour in `red-look.css` does not apply, look for an inline `!important` rule (this cost an hour once).
-- Verify on the real page with a headless browser (computed styles at 320, 360 and 390 px), not by eye. The test scripts were in a scratch folder and are not saved.
-- Claude Code's Auto mode sometimes blocks commits and pushes; a plain "yes" from the owner lets them through.
-
-## 5. What is worth reading, and what is a waste of time
-- **Read:** this file. `FEEDBACK-LOG.md`: "RULE 1" and "Owner's standing instructions" at the top, and the last entries (the "STATE OF THE SITE" ones).
-- **Skip:** the long middle of `FEEDBACK-LOG.md` (Oct 17 to 25) about the results page: fan layout, timeline, colour placements. It is a history of dead ends; read it only if you work on the results page. Skip `DESIGN-CONCEPTS.md`, `HANDOFF-NOT-LIVE.md` (older), the 100+ old branches on GitHub, and `vendor/`, `hdri/`, `data/`.
-- **Mistakes not to repeat:** reading an instruction too literally; building options nobody asked for; showing a comparison made from a stale copy; stating a measurement you have not taken.
-
-## 6. Keeping private files off the public site (do this EVERY time)
-- **How it works:** the website (GitHub Pages) publishes every file in the repo unless `_config.yml` lists it under `exclude:`. Hidden now: `FEEDBACK-LOG.md`, `HANDOFF.md`, `HANDOFF-NOT-LIVE.md`, `DESIGN-CONCEPTS.md`, `README.md`, `worker.js`, `wrangler.toml`, `package.json`, `package-lock.json`, `build-cities.mjs`.
-- **Any NEW file** that is notes, a test, a script, or holds costs, keys, names or business numbers: add its filename to `exclude:` in `_config.yml` in the same commit. After the push (about 40 seconds) CLAUDE runs the check itself and reports the result: the owner never types addresses and never searches the thread for them. Run this, which checks every file on the hide list (404 or a 503 error page is fine; 200 means it is still public):
-  `grep '^  - ' _config.yml | sed 's/^  - //' | while read f; do printf "%s -> " "$f"; curl -s -o /dev/null -w "%{http_code}\n" "https://know-your-energy.com/$f"; done`
-  Then confirm the site itself still loads: `/`, `/privacy.html`, `/red-look.css` (and any file the page needs) must answer 200.
-- **Never write into any repo file:** per-reading costs, token counts, keys, passwords, the owner key, or the owner's personal data. Costs live only on the private `/usage` page.
-- **The GitHub project itself is PUBLIC.** Hiding a file from the website does NOT hide it on github.com. DONE 22 Nov: a full backup (192 MB bundle of every branch) was sent to the owner, and `main` and the working branch were collapsed to a single commit, so their old history is gone (files identical). NOT DONE: about 142 old branches still exist on GitHub and still hold older text (the old cost figures and, per `DESIGN-CONCEPTS.md`, the owner's birth details on `design-concepts`). This environment is refused (HTTP 403) when deleting branches, so the OWNER will delete them by hand on github.com (keep only `main` and `ccr-e89eec5a-kcp1di`). Do not touch them or try to work around the 403. Closed pull requests, forks and caches may still show old text; GitHub Support can purge those on request.
-- `worker.js` must stay in the repo for the Worker to deploy, so its daily free-reading cap and the key's hash are visible on github.com while the repo is public. Making the repo private would probably take the GitHub-hosted pages down (it likely needs a paid plan; unchecked). Do not do it without a plan.
-
-## 7. What this thread completed, and how long it took (22 Nov 2026, times in UTC)
-**Time:** the first work file was made at 08:01 and the last commit was at 11:18: about **3 hours 20 minutes of elapsed time**, plus a few minutes of reading before the first file. That is wall-clock time, including waiting on the owner, interruptions and permission blocks; active working time was not measured. The first change to the live site was at 09:58.
-
-**Completed and live (on `main`):**
-- 09:14 Phone unlock restored; the public "Family access" link removed.
-- 09:29 to 09:31 Private `/owner` and `/usage` pages with the remembered-device key; the public cost and count leaks closed; the public `admin.html` removed. (25 server checks and a browser test passed.)
-- 09:41 to 09:43 Privacy and Terms rewritten for phone unlock (no email, nothing offered for deletion); "Forget my details" removed.
-- 09:58 Front page: the six long bullets replaced by two short ones; decisions recorded in `FEEDBACK-LOG.md`.
-- 10:02 to 10:13 Headline: big Didone FREE! with an upright lead line; Person 1 / Person 2 in the cursive.
-- 10:34 to 10:39 Jost text font in a size scale where nothing is smaller (fields were briefly 17px; corrected to 16px at 11:02).
-- 11:02 to 11:11 Form: labels 22px, "Date of Birth" spelled out, the "Choose either..." heading removed, fields no longer black (lit wells), padlock kept on every field, "(optional)" labels 22px.
-- 11:09 to 11:18 Notes, handoff and server code hidden from the public site; cost figures removed from the notes; this handoff file written.
-
-**Shown as previews only, never shipped:** the classy centred layout with silver diamond bullets; tilted and silver FREE!; dark carved fields; about nine typeface and alignment options.
-
-**Not done:** the input-field work (section 3); the solar system; the "Please wait" and results screens; deleting the ~142 old branches (the owner will do it by hand; the environment cannot).
-
-**Where the time went (qualitative, not measured):** most of it on the front-page look, about ten rounds of previews the owner rejected before the simple headline shipped; then on my own mistakes (too-literal readings, a stale comparison copy, unmeasured claims); then on permission blocks that held up saves.
+## 6. Read and skip
+- **Read:** this file; `FEEDBACK-LOG.md` top ("HARD RULE 0", "Stated by the owner on 23 Nov") and last entries; `tools/README.md`.
+- **Skip:** the long middle of `FEEDBACK-LOG.md` (Oct 17 to 25 results-page history, dead ends); `DESIGN-CONCEPTS.md`; `HANDOFF-NOT-LIVE.md`; `vendor/`, `hdri/`, `data/`; the old 3D files (`orrery-fast.js`, `orrery3d.js`, `obsidian*`), which the page no longer loads.
