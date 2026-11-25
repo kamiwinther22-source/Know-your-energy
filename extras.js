@@ -39,14 +39,39 @@
       ".fan-card:nth-child(2)>.quad-item::after{animation-delay:.5s}.fan-card:nth-child(3)>.quad-item::after{animation-delay:1s}.xcard::after{animation-delay:1.6s}.xlinks a:nth-child(2)::after{animation-delay:.6s}.xpass .pw:nth-child(2) .p::after{animation-delay:.5s}.xpass .pw:nth-child(3) .p::after{animation-delay:1s}",
       ".xpass .p::after,.xlinks a::after{clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,18px 100%,0 50%)}",
       "@media (prefers-reduced-motion:reduce){.fan-card>.quad-item::after,.fan-reading>.panel-auto::after,.xcard::after,.xpass .p::after,.xlinks a::after{animation:none}}",
-      "#resultsWrap .fan-name,#resultsWrap .ttl,.xpass .h,.xglobe .gl{color:#fff !important;-webkit-text-fill-color:#fff !important;-webkit-text-stroke:.8px #fff;text-shadow:0 0 12px rgba(255,255,255,.6),0 0 2px #fff,0 2px 3px rgba(0,0,0,.6) !important}",
-      "#resultsWrap .xpass .s,#resultsWrap .xcap,#resultsWrap .xpass .pol,#resultsWrap .xpass .note,#resultsWrap .device-note,#resultsWrap .device-note *,#resultsWrap .tiny-contact,#resultsWrap .site-foot{font-weight:800 !important;color:#fff !important;-webkit-text-fill-color:#fff !important;text-shadow:0 0 6px rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.75) !important}",
+      "#resultsWrap .fan-name,#resultsWrap .ttl,.xpass .h,.xglobe .gl{color:#fff !important;-webkit-text-fill-color:#fff !important;-webkit-text-stroke:.8px #fff;text-shadow:none !important}",
+      "#resultsWrap .xpass .s,#resultsWrap .xcap,#resultsWrap .xpass .pol,#resultsWrap .xpass .note,#resultsWrap .device-note,#resultsWrap .device-note *,#resultsWrap .tiny-contact,#resultsWrap .site-foot{font-weight:800 !important;color:#fff !important;-webkit-text-fill-color:#fff !important;text-shadow:none !important}",
+      ".xpass{margin-top:36px !important}",
+      ".kb{font-family:'Fraunces',Georgia,serif !important;font-weight:700 !important;text-transform:none !important;letter-spacing:normal !important}",
+      "html.red .xsv{display:flex;gap:12px;max-width:390px;margin:52px auto 0;padding:0 8px;box-sizing:border-box;width:100%}",
+      "html.red .xsv .rb-wrap{margin:0 !important;flex:1 1 0;width:auto !important;min-width:0}",
+      "html.red .xsv .rbtn{width:100% !important;height:46px !important;font-size:14px !important}",
+      "html.red .xnext{display:flex;justify-content:center;margin:44px 0 0}",
+      "html.red .xnext .rb-wrap{margin:0 auto !important}",
+      "html.red .xnext .rbtn{width:210px !important;height:38px !important;font-size:17px !important}",
+      "html.red .xpass{margin-top:64px !important}",
+      "html.red .xpass .cols{filter:none !important;gap:12px !important}",
+      "html.red .xpass .pw{gap:24px !important}",
+      "html.red .xpass .pw .glow-ring{width:100% !important;margin:0}",
+      "html.red .xpass .pw .gen-btn{width:100% !important;height:46px !important;font:900 21px/1 'Fraunces',Georgia,serif !important;letter-spacing:0 !important}",
+      "html.red .xpass .note{margin-top:22px !important}",
+      "html.red .xpass .pol{margin-top:14px !important;line-height:1.65 !important}",
+      "html.red #resultsWrap .device-note{margin-top:2.6rem !important}",
+      "html.red #resultsWrap .xpass .s,html.red #resultsWrap .xpass .pl,html.red #resultsWrap .xpass .note,html.red #resultsWrap .xpass .pol,html.red #resultsWrap .xpass .pol a,html.red #resultsWrap .xcap,html.red #resultsWrap .tiny-contact,html.red #resultsWrap .tiny-contact a,html.red #resultsWrap .site-foot{font-family:'Jost',sans-serif !important;font-weight:600 !important}",
+      "html.red #resultsWrap .xpass .s{font-size:16px !important;line-height:1.45 !important}",
+      "html.red #resultsWrap .xpass .pl{font-size:17px !important}",
+      "html.red #resultsWrap .xpass .note{font-size:15px !important}",
+      "html.red #resultsWrap .xpass .pol{font-size:14px !important}",
+      "html.red #resultsWrap .xcap{font-size:15px !important;line-height:1.4 !important}",
+      "html.red .kb{font-family:'Jost',sans-serif !important;font-weight:600 !important}",
+      "html.red .xsv .rbtn{font-size:15px !important}",
+      "html.red .xnext .rbtn{font-size:18px !important}",
+      "html.red .xpass .pw .gen-btn{font-family:'Jost',sans-serif !important;font-weight:600 !important;font-size:24px !important}",
       ".xacts{align-items:flex-start !important;gap:6px !important}",
       ".xtlwrap{display:flex}",
       ".xacts>.fan-reading,.xacts>.xglobe,.xacts>.xtlwrap{flex:1 1 0 !important;min-width:0;max-width:150px}",
       
       ".xlinks{display:flex;gap:8px;justify-content:center;margin:18px 0 0;padding:0 8px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.55))}",
-      ".xlinks a{flex:1 1 0;min-width:0;position:relative;isolation:isolate;height:56px;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 6px;box-sizing:border-box;color:#000 !important;-webkit-text-fill-color:#000;text-shadow:0 1px 0 rgba(255,255,255,.6);font:800 12px/1.15 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;background:url(img/btn-wide-k2.webp) center/100% 100% no-repeat !important}",
       ".xacts .fan-reading>.panel-auto,.xacts .fan-reading>.panel-error{min-height:200px !important}",
       ".xcard .nm{font:400 clamp(17px,5vw,22px)/1 'Alex Brush',cursive;color:#000;margin-top:6px;overflow-wrap:anywhere}",
       ".xcard{position:relative;width:100%;height:200px;cursor:pointer;filter:drop-shadow(0 8px 8px rgba(0,0,0,.5));-webkit-tap-highlight-color:transparent}",
@@ -57,7 +82,7 @@
       ".xcard .sc{font:400 clamp(22px,7vw,30px)/1.1 'Alex Brush',cursive;color:#000;white-space:nowrap}",
       ".xcard .ln{font:800 10.5px 'Barlow Condensed',sans-serif;letter-spacing:.12em;color:#000}",
       ".xglobe{text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}",
-      ".xglobe canvas{display:block;margin:0 auto;width:100%;max-width:150px;aspect-ratio:1;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 8px 8px rgba(0,0,0,.5))}",
+      ".xglobe canvas{display:block;margin:0 auto;width:100%;max-width:150px;aspect-ratio:1;filter:none}",
       ".xglobe .gl{font:400 30px/1 'Alex Brush',cursive;color:#fff;margin-top:6px}",
       ".xcap{margin:4px auto 0;text-align:center;font:700 12px/1.35 'Fraunces',Georgia,serif;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7)}",
       ".xpass{max-width:390px;margin:28px auto 0;font-family:'Fraunces',Georgia,serif;color:#fff}",
@@ -68,7 +93,6 @@
       ".xpass .cols{display:flex;gap:8px;padding:0 8px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.55))}",
       ".xpass .pw{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px}",
       ".xpass .pl{font:700 14px 'Fraunces',Georgia,serif;color:#fff;text-align:center}",
-      ".xpass .p{width:100%;min-width:0;position:relative;isolation:isolate;border:0;cursor:pointer;height:46px;padding:0 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;font-family:inherit;-webkit-tap-highlight-color:transparent;background:url(img/btn-short-k2.webp) center/100% 100% no-repeat !important}",
       ".xpass .p .n{text-shadow:0 1px 0 rgba(255,255,255,.6);font:900 21px/1 'Fraunces',Georgia,serif;color:#000}",
       ".xpass .p .l{text-shadow:0 1px 0 rgba(255,255,255,.6);font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;margin-top:3px;text-transform:uppercase;color:#000}",
       ".xpass .p .d{font:700 11px 'Barlow Condensed',sans-serif;letter-spacing:.12em;margin-top:1px;color:#000}",
@@ -151,8 +175,8 @@
     return loadLand().then(function (rings) {
       var W = 1440, H = 720, eq = document.createElement("canvas"); eq.width = W; eq.height = H;
       var g = eq.getContext("2d"), X = function (lo) { return (lo + 180) / 360 * W; }, Y = function (la) { return (90 - la) / 180 * H; };
-      var GC = window.KYE_GLOBE || {}; g.fillStyle = GC.ocean || "#1b0712"; g.fillRect(0, 0, W, H);
-      g.fillStyle = GC.land || "#e9ecf1"; g.strokeStyle = GC.edge || "#ffffff"; g.lineWidth = 1.6;
+      g.fillStyle = "#1b0712"; g.fillRect(0, 0, W, H);
+      g.fillStyle = "#e9ecf1"; g.strokeStyle = "#ffffff"; g.lineWidth = 1.6;
       rings.forEach(function (r) { var x = r[0], y = r[1]; if (y < -600) return; var ex0 = r[0], ey0 = r[1], mnx = ex0, mxx = ex0, mny = ey0, mxy = ey0; for (var q = 2; q < r.length; q += 2) { ex0 += r[q]; ey0 += r[q + 1]; if (ex0 < mnx) mnx = ex0; if (ex0 > mxx) mxx = ex0; if (ey0 < mny) mny = ey0; if (ey0 > mxy) mxy = ey0; } if (mxx - mnx > 3000 && mxy - mny < 60) return; g.beginPath(); g.moveTo(X(x / 10), Y(y / 10)); for (var i = 2; i < r.length; i += 2) { x += r[i]; y += r[i + 1]; g.lineTo(X(x / 10), Y(y / 10)); } g.closePath(); g.fill(); g.stroke(); });
       if (birth) { g.fillStyle = "#ffffff"; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 9, 0, 7); g.fill(); g.strokeStyle = "#ffffff"; g.lineWidth = 3; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 18, 0, 7); g.stroke(); }
       var src = g.getImageData(0, 0, W, H).data, S = canvas.width, c = canvas.getContext("2d"), out = c.createImageData(S, S), od = out.data;
@@ -396,20 +420,50 @@
     });
   }
   function frameCard(cls, inner) { return '<div class="xcard ' + cls + '" role="button" tabindex="0"><i></i><b>' + inner + "</b></div>"; }
+  function passEmailNow2() { try { var f = document.getElementById("pEmail"); return ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) { return ""; } }
+  function applyPassTally(ps) {
+    var em = passEmailNow2(); if (!em || typeof checkPassStatus !== "function") return;
+    var hide = function () { ["cols", "note", "pol"].forEach(function (c) { var n = ps.querySelector("." + c); if (n) n.style.display = "none"; }); };
+    var say = function (h, sub) { ps.querySelector(".h").textContent = h; ps.querySelector(".s").textContent = sub; };
+    checkPassStatus(em).then(function (st) {
+      if (st && st.active) {
+        if (st.plan === "unlimited") { ps.style.display = "none"; return; }
+        try { localStorage.setItem("kye_passUntil", String(st.expiresAt)); } catch (e) {}
+        var days = Math.max(1, Math.ceil((st.expiresAt - Date.now()) / 864e5)), nm = { week: "7-day", monthly: "30-day", threemonth: "90-day" }[st.plan] || "",
+            d = new Date(st.expiresAt), lab = MONTHS[d.getMonth()] + " " + d.getDate();
+        if (days > 3) { say(days + " days left", "on your " + (nm ? nm + " " : "") + "pass \u00b7 active through " + lab); hide(); }
+        else say(days + (days === 1 ? " day left" : " days left"), "Get another pass before this one ends");
+      } else {
+        var until = 0; try { until = +localStorage.getItem("kye_passUntil") || 0; } catch (e) {}
+        if (until && until < Date.now()) say("Your pass has ended", "Get another pass to keep your readings going");
+      }
+    }).catch(function () {});
+  }
   window.addExtras = function (p1, p2) {
     try {
       addStyles();
       var g = document.getElementById("mainGrid"); if (!g) return;
-      [].forEach.call(g.querySelectorAll(".xlinks,.xpass"), function (x) { x.remove(); });
+      [].forEach.call(g.querySelectorAll(".xlinks,.xpass,.xsv,.xnext"), function (x) { x.remove(); });
       var people = peopleOf(p1, p2), withMap = people.filter(function (p) { return p.acg && p.birth; }), now = new Date(), nowLab = MONTHS[now.getMonth()] + " " + now.getDate();
       var acts = g.querySelector(".fan-actions"), names = people.map(function (p) { return p.first; }).join(" & ");
       var tl = document.createElement("div"); tl.className = "xtlwrap";
       tl.innerHTML = frameCard("xtl", '<div class="cap">TIMELINE</div><div class="sc">' + nowLab + '</div><div class="rl"></div><div class="ln">NUMEROLOGY</div><div class="rl"></div><div class="ln">ASTROLOGY</div><div class="rl"></div><div class="ln">HUMAN DESIGN</div><div class="nm">' + esc(names) + "</div>");
       tl.firstChild.onclick = function () { openTimeline(people); };
-      var links = document.createElement("div"); links.className = "xlinks";
-      links.innerHTML = '<a href="#" id="xRun">Run another reading</a><a href="#" id="xSave">Save / Print reading</a>';
-      links.querySelector("#xRun").onclick = function (e) { e.preventDefault(); resetToForm(); };
+      var links = document.createElement("div"); links.className = "xsv";
+      links.innerHTML = '<span class="rb-wrap"><button type="button" class="rbtn kb" id="xSave"><span class="eng">Save / Print reading</span></button></span><span class="rb-wrap"><button type="button" class="rbtn kb" id="xShare"><span class="eng">Share the site</span></button></span>';
       links.querySelector("#xSave").onclick = function (e) { e.preventDefault(); savePrintReading(); };
+      links.querySelector("#xShare").onclick = function (e) { e.preventDefault(); shareSite(); };
+      var nextWrap = document.createElement("div"); nextWrap.className = "xnext";
+      nextWrap.innerHTML = '<span class="rb-wrap"><button type="button" class="rbtn kb" id="xRun"><span class="eng">Next Reading</span></button></span>';
+      nextWrap.querySelector("#xRun").onclick = function (e) {
+        e.preventDefault();
+        var em = passEmailNow2(), go = function () { resetToForm(); };
+        if (!em || typeof checkPassStatus !== "function") { go(); return; }
+        checkPassStatus(em).then(function (st) {
+          if (st && !st.active && st.freeReadingUsed) { var t = document.querySelector(".xpass"); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); else go(); }
+          else go();
+        }).catch(go);
+      };
       if (acts) {
         [].forEach.call(acts.querySelectorAll(".side-btn"), function (x) { x.remove(); });
         acts.classList.add("xacts");
@@ -421,12 +475,12 @@
         else { drawGlobe(gl.querySelector("canvas"), null, null).catch(function () {}); }
         acts.appendChild(tl);
       } else { g.appendChild(tl); }
-      g.appendChild(links);
+      g.appendChild(links); g.appendChild(nextWrap);
       var ps = document.createElement("div"); ps.className = "xpass";
       var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
-      ps.innerHTML = '<div class="h">Know Your Energy Daily!</div><div class="s">Get readings to understand relationship dynamics and how underlying cycles flow together or apart</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div></button><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
-      g.appendChild(ps);
-      [].forEach.call(ps.querySelectorAll(".p"), function (b) { b.onclick = function () { var n = document.getElementById("passNote"); n.textContent = "Passes are not on sale yet."; }; });
+      ps.innerHTML = '<div class="h">Know Your Energy Daily!</div><div class="s">Get readings to understand relationship dynamics and how underlying cycles flow together or apart</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><span class="glow-ring"><button type="button" class="gen-btn" data-pass="' + i + '"><span class="eng">' + x[0] + '</span></button></span><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
+      g.appendChild(ps); applyPassTally(ps);
+      [].forEach.call(ps.querySelectorAll("[data-pass]"), function (b) { b.onclick = function () { var n = document.getElementById("passNote"); n.textContent = "Passes are not on sale yet."; }; });
     } catch (e) { if (window.console) console.error("extras", e); }
   };
   if (window.__lastP) window.addExtras(window.__lastP[0], window.__lastP[1]);
