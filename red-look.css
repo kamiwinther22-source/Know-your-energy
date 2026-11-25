@@ -346,14 +346,30 @@ html.red .loc-list li.on,html.red .loc-list li:hover{background:#262626}
 /* The "Pinnacle (Opportunity)" / "Challenge (Internal Resistance)" headings each get their own full-width line, so each stays on one line at a readable size (side by side the longer one would have needed about 7px type). */
 .chart-frame .stage-pair:has(> .pc-col > .dpsec){grid-template-columns:1fr}
 
-/* ---- front page, phone only: the unlock button sits directly under the planets (above "First reading is FREE!"), so it is above the fold. Desktop and tablet keep the original order. ---- */
+/* the two facts are two lists (so phones can put the button between them); together they look exactly like the original single list */
+html.red #hookStep .r-b22-1:after{display:none !important}
+html.red #hookStep .r-b22.r-b22-2{margin-top:6px !important}
+
+/* ---- front page, phone only: order on phones: planets, "First reading is FREE!", the first fact, the unlock button, then the second fact. Desktop and tablet keep the original order. ---- */
 @media (max-width:600px){
 html.red #hookStep{display:flex;flex-direction:column}
 html.red #hookStep .r-h1{order:1}
 html.red #hookStep .r-sys{order:2}
 html.red #hookStep .r-fcr{order:3}
 html.red #hookStep .hero-illustration{order:4}
-html.red #hookStep .hero-email-wrap{order:5}
-html.red #hookStep .r-free{order:6}
-html.red #hookStep .r-b22{order:7}
+html.red #hookStep .r-free{order:5}
+html.red #hookStep .r-b22-1{order:6}
+html.red #hookStep .hero-email-wrap{order:7}
+html.red #hookStep .r-b22-2{order:8}
+}
+
+/* ---- front page, PHONE ONLY: design pass. Clear type hierarchy, one typeface for the statement, white 3D FREE!, planet art fades out instead of ending in a hard cut. ---- */
+.free3d{display:none}
+@media (max-width:600px){
+html.red #hookStep .r-sys{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:12px !important;letter-spacing:.17em !important;text-transform:uppercase !important;margin:12px 0 0 !important;line-height:1.2 !important}
+html.red #hookStep .r-fcr{font-family:'Fraunces',Georgia,serif !important;font-weight:700 !important;font-size:30px !important;line-height:1.08 !important;letter-spacing:0 !important;max-width:330px;margin:8px auto 0 !important;text-wrap:balance}
+html.red #hookStep .jewel{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 90%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0,#000 90%,transparent 100%)}
+html.red #hookStep .r-free .r-free-lead{font-family:'Jost',sans-serif !important;font-weight:500 !important;font-size:17px !important;letter-spacing:.26em !important;text-transform:uppercase !important}
+html.red #hookStep .r-free .r-free-word{display:block !important;font-size:0 !important;line-height:0 !important;margin:6px 0 0 !important;text-align:center}
+html.red #hookStep .r-free .r-free-word .free3d{display:inline-block;width:340px;max-width:none;height:auto}
 }

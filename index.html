@@ -853,7 +853,7 @@ html,body{overflow-x:clip !important;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
 
 </style>
-<link rel="stylesheet" href="red-look.css?v=20261151">
+<link rel="stylesheet" href="red-look.css?v=20261154">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
 <style id="btn3d">
 /* Buttons: same shapes; speckle-free copies of the button images (img/k3), real depth, words engraved into the face. */
@@ -1044,8 +1044,9 @@ html.red:has(#resultsWrap[style*="block"]) body{background:#000 !important}
     <img class="jewel" src="img/jewel/hero.webp?v=4" width="470" height="250" alt="" decoding="async" fetchpriority="high">
   </div>
 
-  <div class="r-free"><span class="r-free-lead">First reading is</span> <span class="r-free-word">FREE!</span></div>
-  <ul class="r-b22"><li>No Credit Card&nbsp;- try before you buy</li><li>Your phone's unlock is your pass&nbsp;- nothing you enter is saved</li></ul>
+  <div class="r-free"><span class="r-free-lead">First reading is</span> <span class="r-free-word">FREE!<img class="free3d" src="img/free3d.webp?v=1" width="1327" height="395" alt="" decoding="async"></span></div>
+  <ul class="r-b22 r-b22-1"><li>No Credit Card&nbsp;- try before you buy</li></ul>
+  <ul class="r-b22 r-b22-2"><li>Your phone's unlock is your pass&nbsp;- nothing you enter is saved</li></ul>
 
   <div class="hero-email-wrap">
     <div class="err" id="heroEmailErr" style="display:none;"></div>
@@ -1060,7 +1061,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:#000 !important}
   function fit(){
     var hs=document.getElementById('hookStep');
     if(!hs||!window.CSS||!CSS.supports||!CSS.supports('zoom','0.5'))return;
-    var kids=[].slice.call(hs.children),last=hs.querySelector('.r-b22'),ill=hs.querySelector('.hero-illustration');
+    var kids=[].slice.call(hs.children),last=hs.querySelector('.r-b22-2'),ill=hs.querySelector('.hero-illustration');
     function setZ(z){kids.forEach(function(k){k.style.zoom=z<1?z:''});if(ill)ill.style.marginLeft=z<1?'auto':''}
     setZ(1);
     if(!mq.matches||!last||hs.offsetParent===null)return;
