@@ -417,7 +417,7 @@
       g.appendChild(links);
       var ps = document.createElement("div"); ps.className = "xpass";
       var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
-      ps.innerHTML = '<div class="h">Your energy, every day</div><div class="s">Read your partner, your kids, your friends. See how you fit together, and check in on today whenever you want.</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div></button><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">One payment per pass. Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
+      ps.innerHTML = '<div class="h">Know Your Energy Daily!</div><div class="s">Get readings to understand relationship dynamics and how underlying cycles flow together or apart</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div></button><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">One payment per pass. Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
       g.appendChild(ps);
       [].forEach.call(ps.querySelectorAll(".p"), function (b) { b.onclick = function () { var n = document.getElementById("passNote"); n.textContent = "Passes are not on sale yet."; }; });
     } catch (e) { if (window.console) console.error("extras", e); }
