@@ -67,6 +67,7 @@ The owner could not keep working with the previous session and asked for this ha
 ## 0. How to work with the owner. Their words, not mine.
 - **(25 Nov 2026) One rule overrides every working-style note below: follow the owner's directions in the moment.** Whether to ask first, preview, or show one screen or several is decided by what they say right then.
 - **(25 Nov 2026) Colour options must come from the site's own palette** (black, silver, white). Never show random colours (blue, green, teal, gold) as "options"; show one or two that fit the site, never six. The owner said the six globe colours were a waste of credits. Globe colours are parked (not urgent); the outline is removed.
+- **(25 Nov 2026) Show every option in place, on the actual page at phone size, never as a loose sheet of samples.** The owner cannot judge a colour or a look that is not on the page.
 - **(25 Nov 2026) Previews:** show real phone screens (390 x 844, one screen at a time at true size) when asked how it looks to a visitor; a whole-page image is zoomed out and is not what they mean.
 > "show me the full extent of your abilities - never taking short cuts - working efficiently and correctly with every move that I give permission for and concise communication with laser sharp attention to what I say that combines and is used as information to guide future work."
 
