@@ -151,8 +151,8 @@
     return loadLand().then(function (rings) {
       var W = 1440, H = 720, eq = document.createElement("canvas"); eq.width = W; eq.height = H;
       var g = eq.getContext("2d"), X = function (lo) { return (lo + 180) / 360 * W; }, Y = function (la) { return (90 - la) / 180 * H; };
-      g.fillStyle = "#1b0712"; g.fillRect(0, 0, W, H);
-      g.fillStyle = "#e9ecf1"; g.strokeStyle = "#ffffff"; g.lineWidth = 1.6;
+      var GC = window.KYE_GLOBE || {}; g.fillStyle = GC.ocean || "#1b0712"; g.fillRect(0, 0, W, H);
+      g.fillStyle = GC.land || "#e9ecf1"; g.strokeStyle = GC.edge || "#ffffff"; g.lineWidth = 1.6;
       rings.forEach(function (r) { var x = r[0], y = r[1]; if (y < -600) return; var ex0 = r[0], ey0 = r[1], mnx = ex0, mxx = ex0, mny = ey0, mxy = ey0; for (var q = 2; q < r.length; q += 2) { ex0 += r[q]; ey0 += r[q + 1]; if (ex0 < mnx) mnx = ex0; if (ex0 > mxx) mxx = ex0; if (ey0 < mny) mny = ey0; if (ey0 > mxy) mxy = ey0; } if (mxx - mnx > 3000 && mxy - mny < 60) return; g.beginPath(); g.moveTo(X(x / 10), Y(y / 10)); for (var i = 2; i < r.length; i += 2) { x += r[i]; y += r[i + 1]; g.lineTo(X(x / 10), Y(y / 10)); } g.closePath(); g.fill(); g.stroke(); });
       if (birth) { g.fillStyle = "#ffffff"; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 9, 0, 7); g.fill(); g.strokeStyle = "#ffffff"; g.lineWidth = 3; g.beginPath(); g.arc(X(birth.lng), Y(birth.lat), 18, 0, 7); g.stroke(); }
       var src = g.getImageData(0, 0, W, H).data, S = canvas.width, c = canvas.getContext("2d"), out = c.createImageData(S, S), od = out.data;
@@ -169,7 +169,6 @@
       c.putImageData(out, 0, 0);
       var rg = c.createRadialGradient(S * .34, S * .28, S * .02, S * .34, S * .28, S * .5); rg.addColorStop(0, "rgba(255,255,255,.55)"); rg.addColorStop(1, "rgba(255,255,255,0)");
       c.globalCompositeOperation = "source-atop"; c.fillStyle = rg; c.fillRect(0, 0, S, S); c.globalCompositeOperation = "source-over";
-      c.strokeStyle = "rgba(255,255,255,.85)"; c.lineWidth = 2.5; c.beginPath(); c.arc(S / 2, S / 2, R, 0, 7); c.stroke();
     });
   }
 
