@@ -42,7 +42,7 @@ vs = [bm.verts.new((x * S, y * S, 0)) for x, y in pts]
 f = bm.faces.new(vs)
 bm.normal_update()
 if f.normal.z < 0: f.normal_flip(); bm.normal_update()
-bmesh.ops.inset_individual(bm, faces=[f], thickness=1.0 * S, depth=0.70 * S, use_even_offset=True)
+bmesh.ops.inset_individual(bm, faces=[f], thickness=1.2 * S, depth=0.85 * S, use_even_offset=True)
 bm.normal_update()
 top = [fc for fc in bm.faces if fc.normal.z > 0.99]
 print('top faces', len(top), 'faces', len(bm.faces))
@@ -57,8 +57,8 @@ ob = bpy.data.objects.new('b', me); sc.collection.objects.link(ob)
 ob.data.materials.append(m_bevel); ob.data.materials.append(m_face)
 for p in ob.data.polygons: p.use_smooth = False
 # camera
-cam = bpy.data.cameras.new('c'); cam.type = 'ORTHO'; cam.ortho_scale = max(W, H) * S * 1.03
-co = bpy.data.objects.new('c', cam); sc.collection.objects.link(co); co.location = (0, 0, 0.5); co.rotation_euler = (0, 0, 0); sc.camera = co
+cam = bpy.data.cameras.new('c'); cam.type = 'PERSP'; cam.lens = 50; cam.sensor_width = 36; cam.sensor_fit = 'VERTICAL'
+co = bpy.data.objects.new('c', cam); sc.collection.objects.link(co); co.location = (0, 0, H * S * 1.03 / 36 * 50); co.rotation_euler = (0, 0, 0); sc.camera = co
 # world: dark studio with strip lights, so the bevels catch crisp reflections
 w = bpy.data.worlds.new('w'); w.use_nodes = True; sc.world = w
 nt = w.node_tree; nt.nodes.clear()
