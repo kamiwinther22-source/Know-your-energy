@@ -8,7 +8,7 @@ Owner, exact words: "Don't put gray anywhere on my goddamn page ever again." And
 - The live site today still has gray fills in places (older results-page tints, the Terms page background). The owner has NOT yet asked for those to be changed. Do not change them unasked; find them and ask.
 
 ## HARD RULES from the reading work (23 Nov 2026, owner)
-- **NO COLOUR BLOCKING. Ever.** No solid or gradient blocks of colour as bands, panels or headers behind text. Owner: "You just did color blocking ... That should be one of the first rules." Colour goes around the edge of the page and fades from the outside in toward the centre, not in blocks.
+- **NO COLOUR BLOCKING. Ever.** No solid or gradient blocks of colour as bands, panels or headers behind text. Owner: "You just did color blocking ... That should be one of the first rules." 
 - **NO HUGE HEADLINES.** Large headlines make the reading feel longer and more overwhelming. Section headings stay modest in size.
 - **Get the overall feel first, before any fine detail.** Owner: "You don't have an overall general look. So fine detail work like that isn't it. What I need is when the page hits the screen, what does it look like? What's it feel like to read it?" The reading must not feel dense, dull or overwhelming. Do not polish rendered detail (facets, bezels, engraving) until the whole-screen feel is right.
 - Colour is allowed and wanted, text included, and it must be bold, sharp and clear, never faded, pastel or soft ("I am absolutely not asking for something more subtle").
@@ -23,7 +23,7 @@ The owner could not keep working with the previous session and asked for this ha
 
 ### What the owner wants for the reading (their own statements, collected)
 - It must look and feel like it belongs to this site: black ground, diamonds, silver, the charts. The whole site must work together.
-- It must still feel different from the charts, and it must use the colour method of the OLD reading screenshot (colour at the outer edge, fading inward to a clear centre), but NOT those colours, NOT blue, NOT gray, NOT a random colour "because the site has a theme".
+- It must still feel different from the charts. NOT blue, NOT gray, NOT a random colour "because the site has a theme".
 - Colour must be bold, sharp, clear and dense. Never faded, pastel, ghost-like, "dead", or a pale wash. "I am absolutely not asking for something more subtle."
 - Surfaces must be lit: real light and shadow and variation. A flat fill, even a nice colour, is rejected ("absolutely no variation in anything to do with lighting").
 - Effort. "I want effort. I want like a hunt." The standard is the quality of the path-traced render work (the rendered jewel): crisp, real. Of the pearl the owner said it was "an example of high quality work" and, later, "The pearl is okay." Do NOT call it their favourite or build around it; they asked not to overdo it. They said that quality is what they want to see more of, not the pearl itself and asked why every earlier attempt was not that.
