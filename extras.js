@@ -407,7 +407,7 @@
         [].forEach.call(acts.querySelectorAll(".side-btn"), function (x) { x.remove(); });
         acts.classList.add("xacts");
         var gl = document.createElement("div"); gl.className = "xglobe"; gl.setAttribute("role", "button");
-        var capTxt = withMap.length ? "Your birth map of the world: where each planet\'s energy is strongest for you." : "Add a birth city and time to see where each planet\'s energy is strongest for you.";
+        var capTxt = withMap.length ? "Where each planet\'s energy is strongest for you." : "Add a birth city and time to see where each planet\'s energy is strongest for you.";
         gl.innerHTML = '<canvas width="300" height="300"></canvas><div class="gl">Globe</div><div class="xcap">' + capTxt + '</div>';
         acts.appendChild(gl);
         if (withMap.length) { gl.onclick = function () { openMap(withMap); }; drawGlobe(gl.querySelector("canvas"), withMap[0].acg, withMap[0].birth).catch(function () {}); }
