@@ -1012,6 +1012,11 @@ html.red:has(#resultsWrap[style*="block"]) body{background:#000 !important}
 .fan-reading .dp *::before,.fan-reading .dp *::after{display:none !important}
 .fan-reading>.panel-auto,.fan-reading>.panel-error{padding:18px 20px !important}
 .fan-reading .dph{background:transparent !important;color:#0b0b10 !important;border-bottom:1px solid #0b0b10 !important}
+.saved-readings{margin:0 0 18px;text-align:center}
+.saved-ttl{font:400 30px/1.1 'Alex Brush',cursive;color:#fff;margin-bottom:8px;text-shadow:0 0 10px rgba(255,255,255,.5)}
+.saved-row{display:flex;justify-content:center;align-items:baseline;gap:14px;margin:4px 0}
+.saved-open{background:none;border:0;padding:6px 4px;font:700 18px 'Fraunces',Georgia,serif;color:#fff;text-decoration:underline;cursor:pointer;min-height:44px}
+.saved-del{background:none;border:0;padding:6px 4px;font:700 13px 'Fraunces',Georgia,serif;color:#fff;text-decoration:underline;cursor:pointer;min-height:44px}
 </style>
 <link rel="preload" href="img/jewel/hero.webp?v=4" as="image" type="image/webp">
 </head>
@@ -1058,6 +1063,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:#000 !important}
 
 
 <div class="content" id="formStep">
+  <div class="saved-readings" id="savedReadings"></div>
   
   
 
@@ -3420,6 +3426,7 @@ function personRow(person, rowNum, personIdx) {
 const SAVED_RESULT_KEY = "kye_lastResult";
 
 function saveResult(p1, p2, r, reportErr, reportUsedFallback, fallbackReason) {
+  keepReading(p1, p2, r, reportErr, reportUsedFallback, fallbackReason);
   try {
     localStorage.setItem(SAVED_RESULT_KEY, JSON.stringify({
       p1: p1,
@@ -3430,6 +3437,46 @@ function saveResult(p1, p2, r, reportErr, reportUsedFallback, fallbackReason) {
       fallbackReason: fallbackReason
     }));
   } catch (_) {}
+}
+
+// every finished reading is kept in the visitor's own browser (never sent to the server); only the visitor removes one
+const SAVED_LIST_KEY = "kye_readings";
+function readingId(p1, p2) {
+  return [p1, p2].filter(Boolean).map(p => [p.first, p.last, p.dob].join("|").toLowerCase()).join("||");
+}
+function readSavedList() {
+  try { const l = JSON.parse(localStorage.getItem(SAVED_LIST_KEY) || "[]"); return Array.isArray(l) ? l : []; } catch (_) { return []; }
+}
+function writeSavedList(l) {
+  try { localStorage.setItem(SAVED_LIST_KEY, JSON.stringify(l)); } catch (_) {}
+}
+function keepReading(p1, p2, r, reportErr, reportUsedFallback, fallbackReason) {
+  if (!r && !reportErr) return;
+  const id = readingId(p1, p2);
+  const list = readSavedList().filter(e => e.id !== id);
+  list.unshift({ id: id, time: Date.now(), p1: p1, p2: p2, r: r, reportErr: reportErr, reportUsedFallback: reportUsedFallback, fallbackReason: fallbackReason });
+  writeSavedList(list);
+}
+function openSavedReading(id) {
+  const e = readSavedList().find(x => x.id === id);
+  if (!e) return;
+  try { localStorage.setItem(SAVED_RESULT_KEY, JSON.stringify(e)); } catch (_) {}
+  render(e.p1, e.p2, e.r, e.reportErr, e.reportUsedFallback, false, e.fallbackReason);
+  window.scrollTo(0, 0);
+}
+function removeSavedReading(id) {
+  writeSavedList(readSavedList().filter(x => x.id !== id));
+  renderSavedList();
+}
+function renderSavedList() {
+  const box = document.getElementById("savedReadings");
+  if (!box) return;
+  const list = readSavedList();
+  if (!list.length) { box.innerHTML = ""; return; }
+  const nm = e => e.p2 ? e.p1.first + " & " + e.p2.first : e.p1.first;
+  box.innerHTML = '<div class="saved-ttl">Your readings</div>' + list.map(e => '<div class="saved-row"><button type="button" class="saved-open" data-id="' + escapeHtml(e.id) + '">' + escapeHtml(nm(e)) + '</button><button type="button" class="saved-del" data-id="' + escapeHtml(e.id) + '" aria-label="Remove ' + escapeHtml(nm(e)) + '">Remove</button></div>').join("");
+  box.querySelectorAll(".saved-open").forEach(b => { b.onclick = () => openSavedReading(b.dataset.id); });
+  box.querySelectorAll(".saved-del").forEach(b => { b.onclick = () => removeSavedReading(b.dataset.id); });
 }
 
 function clearSavedResult() {
@@ -3738,6 +3785,7 @@ function resetToForm() {
   stopLoadingTimer();
   clearSavedResult();
   clearDraft();
+  renderSavedList();
   document.getElementById("resultsWrap").style.display = "none";
   document.getElementById("formStep").style.display = "block";
   document.getElementById("loading").style.display = "none";
@@ -4513,12 +4561,13 @@ document.addEventListener("click", e => {
     }
   } catch (_) {}
   restoreDraft();
+  renderSavedList();
 })();
 </script>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 <script type="module">if(document.documentElement.classList.contains("obsidian"))import("./obsidian.js");</script>
 <div class="site-foot">&copy; 2026 Know Your Energy &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></div>
 <style>.site-foot{text-align:center;font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;padding:18px 12px 26px}.site-foot a{color:#fff;font-weight:500}.tiny-contact{font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;text-align:center;margin:6px 0 0}.tiny-contact a{color:#fff}</style>
-<script src="extras.js?v=29" defer></script>
+<script src="extras.js?v=30" defer></script>
 </body>
 </html>
