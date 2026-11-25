@@ -3581,14 +3581,14 @@ function render(p1, p2, r, reportErr, reportUsedFallback, pending, fallbackReaso
   const namesForTitle = p2 ? p1.first + " & " + p2.first : n1;
   window.readingNames = namesForTitle;
   const cardNames = p2 ? p1.first + " & " + p2.first : p1.first;
-  let h = personRow(p1, 1, 0) + topBtn("Run Another Reading", "resetToForm()", BTN_ICON_REFRESH, "grid-column:1;grid-row:2;") + reportSlot(namesForTitle, cardNames, r, reportErr, 2, reportUsedFallback, pending, fallbackReason) + topBtn("Save / Print Reading", "savePrintReading()", BTN_ICON_PRINT, "grid-column:3;grid-row:2;");
+  let h = personRow(p1, 1, 0) + topBtn("Next Reading", "resetToForm()", BTN_ICON_REFRESH, "grid-column:1;grid-row:2;") + reportSlot(namesForTitle, cardNames, r, reportErr, 2, reportUsedFallback, pending, fallbackReason) + topBtn("Save / Print Reading", "savePrintReading()", BTN_ICON_PRINT, "grid-column:3;grid-row:2;");
   if (p2) h += personRow(p2, 3, 1);
   document.getElementById("mainGrid").innerHTML = h;
   arrangeFan(p1, p2);
   window.__lastP = [p1, p2];
   if (window.addExtras) window.addExtras(p1, p2);
   const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
-  document.getElementById("bottomBtns").innerHTML = (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print Reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print Reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="downloadReadingFile(false)">Download my reading</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div><p class="tiny-contact">Questions: <a href="mailto:Know-your-energy@proton.me">Know-your-energy@proton.me</a></p>';
+  document.getElementById("bottomBtns").innerHTML = (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="savePrintReading()">Save / Print reading</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div><p class="tiny-contact">Questions: <a href="mailto:Know-your-energy@proton.me">Know-your-energy@proton.me</a></p>';
   stopLoadingTimer();
   document.getElementById("loading").style.display = "none";
   document.getElementById("resultsWrap").style.display = "block";
@@ -4498,7 +4498,7 @@ document.addEventListener("click", e => {
           (async () => {
             const pollResult = await pollReportStatus(jobId);
             if (pollResult.timedOut) {
-              fillReading(p1, p2, null, 'Your reading was still generating when this page reloaded. Tap "Run Another Reading" to try again.', false);
+              fillReading(p1, p2, null, 'Your reading was still generating when this page reloaded. Tap "Next Reading" to try again.', false);
               return;
             }
             if (!pollResult.reportError) clearDraft();
@@ -4506,7 +4506,7 @@ document.addEventListener("click", e => {
           })();
           return;
         }
-        const reportErrToShow = !r && !reportErr ? 'Your reading was still generating when this page reloaded. Tap "Run Another Reading" to try again.' : reportErr;
+        const reportErrToShow = !r && !reportErr ? 'Your reading was still generating when this page reloaded. Tap "Next Reading" to try again.' : reportErr;
         render(p1, p2, r, reportErrToShow, reportUsedFallback, false, fallbackReason);
         return;
       }

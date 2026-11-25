@@ -45,8 +45,8 @@
       ".xtlwrap{display:flex}",
       ".xacts>.fan-reading,.xacts>.xglobe,.xacts>.xtlwrap{flex:1 1 0 !important;min-width:0;max-width:150px}",
       
-      ".xlinks{display:flex;gap:8px;justify-content:center;margin:18px 0 0;padding:0 8px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.55))}",
-      ".xlinks a{flex:1 1 0;min-width:0;position:relative;isolation:isolate;height:56px;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 6px;box-sizing:border-box;color:#000 !important;-webkit-text-fill-color:#000;text-shadow:0 1px 0 rgba(255,255,255,.6);font:800 12px/1.15 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;background:url(img/btn-wide-k2.webp) center/100% 100% no-repeat !important}",
+      ".xlinks{display:flex;gap:8px;justify-content:center;margin:4px 0 18px;padding:0 8px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.55))}",
+      ".xlinks a{flex:0 1 220px;min-width:0;position:relative;isolation:isolate;height:40px;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 6px;box-sizing:border-box;color:#000 !important;-webkit-text-fill-color:#000;text-shadow:0 1px 0 rgba(255,255,255,.6);font:800 12px/1.15 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;background:url(img/btn-wide-k2.webp) center/100% 100% no-repeat !important}",
       ".xacts .fan-reading>.panel-auto,.xacts .fan-reading>.panel-error{min-height:200px !important}",
       ".xcard .nm{font:400 clamp(17px,5vw,22px)/1 'Alex Brush',cursive;color:#000;margin-top:6px;overflow-wrap:anywhere}",
       ".xcard{position:relative;width:100%;height:200px;cursor:pointer;filter:drop-shadow(0 8px 8px rgba(0,0,0,.5));-webkit-tap-highlight-color:transparent}",
@@ -393,16 +393,16 @@
     try {
       addStyles();
       var g = document.getElementById("mainGrid"); if (!g) return;
-      [].forEach.call(g.querySelectorAll(".xlinks,.xpass"), function (x) { x.remove(); });
+      [].forEach.call(document.querySelectorAll("#resultsWrap .xlinks,#resultsWrap .xpass"), function (x) { x.remove(); });
       var people = peopleOf(p1, p2), withMap = people.filter(function (p) { return p.acg && p.birth; }), now = new Date(), nowLab = MONTHS[now.getMonth()] + " " + now.getDate();
       var acts = g.querySelector(".fan-actions"), names = people.map(function (p) { return p.first; }).join(" & ");
       var tl = document.createElement("div"); tl.className = "xtlwrap";
       tl.innerHTML = frameCard("xtl", '<div class="cap">TIMELINE</div><div class="sc">' + nowLab + '</div><div class="rl"></div><div class="ln">NUMEROLOGY</div><div class="rl"></div><div class="ln">ASTROLOGY</div><div class="rl"></div><div class="ln">HUMAN DESIGN</div><div class="nm">' + esc(names) + "</div>");
       tl.firstChild.onclick = function () { openTimeline(people); };
       var links = document.createElement("div"); links.className = "xlinks";
-      links.innerHTML = '<a href="#" id="xRun">Run another reading</a><a href="#" id="xSave">Save / Print reading</a>';
-      links.querySelector("#xRun").onclick = function (e) { e.preventDefault(); resetToForm(); };
-      links.querySelector("#xSave").onclick = function (e) { e.preventDefault(); savePrintReading(); };
+      links.innerHTML = '<a href="#" id="xRun">Next Reading</a>';
+      var passSt = null, passEm = ""; try { passEm = localStorage.getItem("kye_passEmail") || ""; } catch (e) {}
+      links.querySelector("#xRun").onclick = function (e) { e.preventDefault(); var pz = document.querySelector("#resultsWrap .xpass"); if (passSt && !passSt.active && passSt.freeReadingUsed && pz) { pz.scrollIntoView({ behavior: "smooth", block: "start" }); } else { resetToForm(); } };
       if (acts) {
         [].forEach.call(acts.querySelectorAll(".side-btn"), function (x) { x.remove(); });
         acts.classList.add("xacts");
@@ -414,11 +414,12 @@
         else { drawGlobe(gl.querySelector("canvas"), null, null).catch(function () {}); }
         acts.appendChild(tl);
       } else { g.appendChild(tl); }
-      g.appendChild(links);
+      g.parentNode.insertBefore(links, g);
       var ps = document.createElement("div"); ps.className = "xpass";
       var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
       ps.innerHTML = '<div class="h">Know Your Energy Daily!</div><div class="s">Get readings to understand relationship dynamics and how underlying cycles flow together or apart</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div></button><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
       g.appendChild(ps);
+      if (passEm && typeof checkPassStatus === "function") checkPassStatus(passEm).then(function (r) { passSt = r || null; if (passSt && passSt.active) ps.style.display = "none"; }).catch(function () {});
       [].forEach.call(ps.querySelectorAll(".p"), function (b) { b.onclick = function () { var n = document.getElementById("passNote"); n.textContent = "Passes are not on sale yet."; }; });
     } catch (e) { if (window.console) console.error("extras", e); }
   };
