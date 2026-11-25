@@ -345,3 +345,15 @@ html.red .loc-list li.on,html.red .loc-list li:hover{background:#262626}
 
 /* The "Pinnacle (Opportunity)" / "Challenge (Internal Resistance)" headings each get their own full-width line, so each stays on one line at a readable size (side by side the longer one would have needed about 7px type). */
 .chart-frame .stage-pair:has(> .pc-col > .dpsec){grid-template-columns:1fr}
+
+/* ---- front page, phone only: the unlock button sits directly under the planets (above "First reading is FREE!"), so it is above the fold. Desktop and tablet keep the original order. ---- */
+@media (max-width:600px){
+html.red #hookStep{display:flex;flex-direction:column}
+html.red #hookStep .r-h1{order:1}
+html.red #hookStep .r-sys{order:2}
+html.red #hookStep .r-fcr{order:3}
+html.red #hookStep .hero-illustration{order:4}
+html.red #hookStep .hero-email-wrap{order:5}
+html.red #hookStep .r-free{order:6}
+html.red #hookStep .r-b22{order:7}
+}
