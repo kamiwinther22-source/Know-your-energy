@@ -1274,7 +1274,6 @@ async function generateReport(env, rtype, relLabel, p1, p2, ctx, hdOnly) {
 const DAY_READING_NEW_PER_DAY = 3;
 const DAY_READING_UNLIMITED_PER_DAY = 12;
 const DAY_READING_PASS_TOTAL = { week: 8, monthly: 36, threemonth: 90 };
-const DAY_READING_CACHE_SECONDS = 14 * 24 * 3600;
 
 const DAY_SYSTEM_PROMPT = `Check the person's age on the reading date before writing anything about love, dating, or sex. Under 18: none of it, ever.
 
@@ -1452,13 +1451,7 @@ async function handleDayReading(request, env, ctx) {
     if (Math.abs(Date.UTC(+dm[1], +dm[2] - 1, +dm[3]) - todayMs) > 864e5) return jsonResponse({ error: FREE_MSG, code: "pass_needed" }, 402);
     pinned = await env.PASSES.get(pinKey);
     if (pinned && pinned !== dateISO) return jsonResponse({ error: FREE_MSG, code: "pass_needed" }, 402);
-  }
-  const cacheKey = "day:" + sha256Hex(["day-v1", email.toLowerCase(), person.first.trim().toLowerCase(), person.last.trim().toLowerCase(), person.dob.trim(), dateISO].join("|"));
-  const saved = await env.PASSES.get(cacheKey);
-  if (saved) {
-    try {
-      return jsonResponse({ report: JSON.parse(saved), cached: true });
-    } catch (e) {}
+    if (pinned && pinned === dateISO) return jsonResponse({ error: "You have already read this day. It is saved on the device where you read it.", code: "day_already_read" }, 409);
   }
   const today = new Date().toISOString().slice(0, 10);
   const countKey = "daycount:" + emailHash + ":" + today;
@@ -1468,8 +1461,8 @@ async function handleDayReading(request, env, ctx) {
   const passCap = unlimited ? null : (DAY_READING_PASS_TOTAL[status.plan] || DAY_READING_PASS_TOTAL.week);
   const totalKey = "daypass:" + emailHash + ":" + status.expiresAt;
   const usedTotal = status.active && !unlimited ? parseInt(await env.PASSES.get(totalKey) || "0", 10) : 0;
-  if (status.active && !unlimited && usedTotal >= passCap) return jsonResponse({ error: "You have used all the day readings included in this pass. A day you have already read can still be opened again.", code: "pass_total" }, 429);
-  if (status.active && used >= (unlimited ? DAY_READING_UNLIMITED_PER_DAY : DAY_READING_NEW_PER_DAY)) return jsonResponse({ error: "That is the limit of new day readings for today. A day you have already read can be opened again, and the limit resets tomorrow.", code: "day_limit" }, 429);
+  if (status.active && !unlimited && usedTotal >= passCap) return jsonResponse({ error: "You have used all the day readings included in this pass. A day you have already read stays saved on your device and opens from there.", code: "pass_total" }, 429);
+  if (status.active && used >= (unlimited ? DAY_READING_UNLIMITED_PER_DAY : DAY_READING_NEW_PER_DAY)) return jsonResponse({ error: "That is the limit of new day readings for today. A day you have already read stays saved on your device and opens from there. The limit resets tomorrow.", code: "day_limit" }, 429);
   let prompt;
   try {
     prompt = buildDayUserPrompt(person, body.astrology || null, body.humanDesign || null, dateISO, body.activeCycles);
@@ -1500,7 +1493,6 @@ async function handleDayReading(request, env, ctx) {
   }
   ctx.waitUntil(recordUsage(env, result.usage, "day"));
   const report = { headline: String(result.parsed.headline || ""), body: result.parsed.body, references: Array.isArray(result.parsed.references) ? result.parsed.references.map(String) : [] };
-  await env.PASSES.put(cacheKey, JSON.stringify(report), { expirationTtl: DAY_READING_CACHE_SECONDS });
   if (!status.active && !pinned) await env.PASSES.put(pinKey, dateISO, { expirationTtl: 800 * 24 * 3600 });
   return jsonResponse({ report: report, cached: false });
 }
