@@ -23,16 +23,25 @@ def metal(name, rough, col=(0.93, 0.93, 0.93), aniso=0.0):
     b.inputs['Base Color'].default_value = (*col, 1); b.inputs['Metallic'].default_value = 1.0; b.inputs['Roughness'].default_value = rough
     if aniso: b.inputs['Anisotropic'].default_value = aniso
     return m
-m_bevel = metal('bevel', 0.10); m_face = metal('face', 0.30, (0.96, 0.96, 0.96), 0.0)
+m_bevel = metal('bevel', 0.10); m_face = metal('face', 0.22, (0.96, 0.96, 0.96), 0.0)
+# a very slight crown along the face (peak in the middle), so its reflection falls off toward the ends like polished metal
+_nt = m_face.node_tree; _b = _nt.nodes['Principled BSDF']
+_tc = _nt.nodes.new('ShaderNodeTexCoord'); _mp = _nt.nodes.new('ShaderNodeMapping')
+_mp.inputs['Scale'].default_value = (1 / 0.21, 1, 1); _mp.inputs['Location'].default_value = (0.5, 0, 0)
+_g = _nt.nodes.new('ShaderNodeTexGradient'); _g.gradient_type = 'LINEAR'
+_pp = _nt.nodes.new('ShaderNodeMath'); _pp.operation = 'PINGPONG'; _pp.inputs[1].default_value = 0.5
+_bp = _nt.nodes.new('ShaderNodeBump'); _bp.inputs['Distance'].default_value = float(os.environ.get('CROWN', '0.03')); _bp.inputs['Strength'].default_value = 1.0
+_nt.links.new(_tc.outputs['Object'], _mp.inputs['Vector']); _nt.links.new(_mp.outputs['Vector'], _g.inputs['Vector'])
+_nt.links.new(_g.outputs['Fac'], _pp.inputs[0]); _nt.links.new(_pp.outputs['Value'], _bp.inputs['Height']); _nt.links.new(_bp.outputs['Normal'], _b.inputs['Normal'])
 # geometry: hexagon (points left/right), bevel ring rising to a flat face
-c = H * 0.5
+c = H * 0.40
 pts = [(-W/2, 0), (-W/2 + c, H/2), (W/2 - c, H/2), (W/2, 0), (W/2 - c, -H/2), (-W/2 + c, -H/2)]
 bm = bmesh.new()
 vs = [bm.verts.new((x * S, y * S, 0)) for x, y in pts]
 f = bm.faces.new(vs)
 bm.normal_update()
 if f.normal.z < 0: f.normal_flip(); bm.normal_update()
-bmesh.ops.inset_individual(bm, faces=[f], thickness=H * 0.19 * S, depth=H * 0.13 * S, use_even_offset=True)
+bmesh.ops.inset_individual(bm, faces=[f], thickness=H * 0.12 * S, depth=H * 0.085 * S, use_even_offset=True)
 bm.normal_update()
 top = [fc for fc in bm.faces if fc.normal.z > 0.99]
 print('top faces', len(top), 'faces', len(bm.faces))
@@ -52,7 +61,7 @@ co = bpy.data.objects.new('c', cam); sc.collection.objects.link(co); co.location
 # world: dark studio with strip lights, so the bevels catch crisp reflections
 w = bpy.data.worlds.new('w'); w.use_nodes = True; sc.world = w
 nt = w.node_tree; nt.nodes.clear()
-bgn = nt.nodes.new('ShaderNodeBackground'); bgn.inputs['Color'].default_value = (1, 1, 1, 1); bgn.inputs['Strength'].default_value = float(os.environ.get('WORLD', '0.10'))
+bgn = nt.nodes.new('ShaderNodeBackground'); bgn.inputs['Color'].default_value = (1, 1, 1, 1); bgn.inputs['Strength'].default_value = float(os.environ.get('WORLD', '0.02'))
 out = nt.nodes.new('ShaderNodeOutputWorld'); nt.links.new(bgn.outputs['Background'], out.inputs['Surface'])
 def strip(loc, size, energy, tgt=(0, 0, 0)):
     bpy.ops.mesh.primitive_plane_add(size=1, location=loc); o = bpy.context.active_object
@@ -66,12 +75,16 @@ def area(loc, size, energy):
     l = bpy.data.lights.new('l', 'AREA'); l.size = size[0]; l.size_y = size[1]; l.energy = energy
     o = bpy.data.objects.new('l', l); sc.collection.objects.link(o); o.location = loc
     d = Vector((0, 0, 0)) - Vector(loc); o.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
-E_ = float(os.environ.get('E', '6'))
-strip((-0.22, 0.00, 0.16), (0.04, 0.30), E_)
-strip((0.22, 0.00, 0.12), (0.03, 0.30), E_ * 0.7)
-strip((0.00, 0.14, 0.14), (0.40, 0.03), E_ * 0.9)
-strip((0.00, -0.14, 0.10), (0.40, 0.02), E_ * 0.35)
-area((-0.08, 0.05, 0.10), (0.30, 0.06), float(os.environ.get('KEY', '3')))
+# A bevel tilted t from flat reflects light arriving 2t from straight up, in the direction it tilts.
+# With t = ~34 deg, that is a light 22 deg above the horizon. Eight lights around the button, each a different strength,
+# give every slanted facet its own crisp reflection.
+E_ = float(os.environ.get('E', '3'))
+R = 0.5; EL = math.radians(22)
+for ang, k in ((0, 1.0), (45, 0.45), (90, 0.95), (135, 0.2), (180, 0.65), (225, 0.12), (270, 0.4), (315, 0.8)):
+    a_ = math.radians(ang)
+    strip((R * math.cos(EL) * math.cos(a_), R * math.cos(EL) * math.sin(a_), R * math.sin(EL)), (0.30, 0.20), E_ * k)
+# overhead panel: lights the flat face to a bright silver, not white
+strip((0.0, 0.0, 0.9), (0.9, 0.5), float(os.environ.get('TOP', '0.55')))
 bpy.ops.render.render(write_still=False)
 img = bpy.data.images['Render Result']; img.save_render(OUT)
 print('saved', OUT)
