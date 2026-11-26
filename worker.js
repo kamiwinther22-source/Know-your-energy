@@ -927,8 +927,19 @@ async function freeCapReached(env) {
   return n * FREE_READING_COST_USD >= cap;
 }
 async function countFreeReading(env) {
-  const n = Number(await env.PASSES.get(dayKey())) || 0;
-  await env.PASSES.put(dayKey(), String(n + 1), { expirationTtl: 3 * 86400 });
+  const key = dayKey();
+  const n = Number(await env.PASSES.get(key)) || 0;
+  await env.PASSES.put(key, String(n + 1), { expirationTtl: 3 * 86400 });
+  return key;
+}
+// Gives one back when a free reading was counted but never delivered, so a failed reading does not use up someone else's place in the day's free readings.
+async function uncountFreeReading(env, key) {
+  try {
+    const n = Number(await env.PASSES.get(key)) || 0;
+    if (n > 0) await env.PASSES.put(key, String(n - 1), { expirationTtl: 3 * 86400 });
+  } catch (e) {
+    console.error(`[report] could not give back the free-reading count: ${e.message}`);
+  }
 }
 
 const USAGE_LOG_TTL_SECONDS = 90 * 24 * 60 * 60;
@@ -1900,7 +1911,7 @@ export default {
         error: "Your unlock could not be checked just now. Please try again in a moment."
       }, 503);
     }
-    let claimKey = null;
+    let claimKey = null, countedKey = null, freeDelivered = false;
     if (!askerStatus.active) {
       if (askerStatus.freeReadingUsed) {
         return jsonResponse({
@@ -1920,7 +1931,7 @@ export default {
           code: "daily_cap"
         }, 429);
       }
-      await countFreeReading(env);
+      countedKey = await countFreeReading(env);
       claimKey = claimKeyFor(passEmail);
       await env.PASSES.put(claimKey, String(Date.now()), {
         expirationTtl: 600
@@ -1962,6 +1973,7 @@ export default {
         }
         // the free reading counts as used once a reading has actually been delivered to someone without a pass
         if (!askerStatus.active && report && !reportError) {
+          freeDelivered = true;
           try {
             await env.PASSES.put(freeKey(passEmail), String(Date.now()), {
               metadata: {
@@ -1994,6 +2006,8 @@ export default {
         };
       }
       clearInterval(heartbeat);
+      // a free reading that was counted but not delivered is given back to the day's total
+      if (countedKey && !freeDelivered) await uncountFreeReading(env, countedKey);
       // the reading has either been delivered (the free record above is already saved) or failed (the email may try again)
       if (claimKey) {
         try {
