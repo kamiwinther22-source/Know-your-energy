@@ -373,3 +373,6 @@ html.red #hookStep .r-free .r-free-lead{font-family:'Jost',sans-serif !important
 html.red #hookStep .r-free .r-free-word{display:block !important;font-size:0 !important;line-height:0 !important;margin:6px 0 0 !important;text-align:center}
 html.red #hookStep .r-free .r-free-word .free3d{display:inline-block;width:340px;max-width:none;height:auto}
 }
+
+/* the diamond above "Save or print your results" is removed */
+html.red #formStep .r-note:last-of-type:before{display:none !important}
