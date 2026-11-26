@@ -4117,12 +4117,13 @@ async function kyeUnlock(useExisting) {
   if (!window.PublicKeyCredential || !navigator.credentials) return fail("This browser can't use phone unlock. Please open the site in Chrome or Safari.");
   let hint = false;
   try { hint = !!localStorage.getItem(KYE_HINT_KEY); } catch (e) {}
-  const mode = (useExisting || hint) ? "get" : "create";
-  try {
-    const o = await kyePost("/auth/start", { mode });
+  let mode = (useExisting || hint) ? "get" : "create";
+  // one unlock attempt in the given mode; returns the value that stands in for this phone
+  const attempt = async (m) => {
+    const o = await kyePost("/auth/start", { mode: m });
     const challenge = kyeFromB64u(o.challenge);
     let out;
-    if (mode === "create") {
+    if (m === "create") {
       const c = await navigator.credentials.create({ publicKey: {
         rp: { name: "Know Your Energy", id: o.rpId },
         user: { id: kyeFromB64u(o.userId), name: "visitor", displayName: "Know Your Energy visitor" },
@@ -4133,6 +4134,17 @@ async function kyeUnlock(useExisting) {
     } else {
       const c = await navigator.credentials.get({ publicKey: { challenge, rpId: o.rpId, userVerification: "preferred", timeout: 120000 } });
       out = await kyePost("/auth/finish", { mode: "get", credentialId: kyeB64u(c.rawId), clientDataJSON: kyeB64u(c.response.clientDataJSON), authenticatorData: kyeB64u(c.response.authenticatorData), signature: kyeB64u(c.response.signature) });
+    }
+    return out;
+  };
+  try {
+    let out;
+    if (!useExisting && !hint) {
+      // no marker on this browser: look for an existing unlock on the phone first (new phone, cleared browser data), and only make a new one if there is none
+      try { out = await attempt("get"); }
+      catch (firstErr) { mode = "create"; out = await attempt("create"); }
+    } else {
+      out = await attempt(mode);
     }
     try { localStorage.setItem(KYE_HINT_KEY, "1"); } catch (e) {}
     rememberPassEmail(out.email);
