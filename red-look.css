@@ -379,3 +379,42 @@ html.red #formStep .r-note:last-of-type:before{display:none !important}
 
 /* the "Save or print your results before you close the page." notice is set in the same clear bold typeface as the line under it */
 html.red #formStep .r-save{font-family:'Jost',sans-serif !important;font-weight:600 !important;font-size:24px !important;line-height:1.3 !important;letter-spacing:.02em !important}
+
+/* form screen, phones: everything sits on the same left edge as the fields (the button, notice, note and footer were centered) */
+@media (max-width:600px){
+html.red #formStep .toggle-row{justify-content:flex-start}
+html.red #formStep .r-note,html.red #formStep .r-save,html.red #formStep .r-keep{text-align:left}
+html.red #formStep .glow-ring{display:block;margin-left:0 !important;margin-right:auto !important}
+html.red #formStep .glow-ring:has(.gen-btn){margin-left:0 !important}
+html.red .site-foot{text-align:left;align-self:center;width:100%;max-width:350px;padding-left:0;padding-right:0}
+}
+
+/* form screen, phones: a tighter form (same fields, same words), so it takes far less scrolling */
+@media (max-width:600px){
+html.red #formStep .toggle-row{margin:14px 0 8px}
+html.red #formStep #p1Block{margin-top:12px}
+html.red #formStep .person-tag,html.red #formStep #p2Section .person-tag{font-size:34px !important;line-height:1 !important;margin:0 !important}
+html.red #formStep #p1Ttl{margin:6px 0 4px}
+html.red #formStep .section-lbl,html.red #formStep .row-birth label{font-size:15px !important;margin:4px 0 1px !important;line-height:1.15 !important}
+html.red #formStep .tz-toggle{margin:6px 0 0 !important;font-size:14px !important}
+html.red #formStep .notime-row{margin-top:4px !important}
+html.red #formStep .row-id .line-field,html.red #formStep .row-birth .line-field,html.red #formStep .row-birth .line-field input,html.red #formStep .row-birth .line-field select,html.red #formStep .row-id .line-field input{height:36px !important}
+html.red #formStep .notime-row{margin-top:6px}
+html.red #formStep .why{font-size:12px;margin:4px 0 0}
+html.red #formStep #relWrap{margin-top:10px}
+html.red #formStep .row-birth label span,html.red #formStep .section-lbl span{font-size:inherit !important}
+html.red #formStep .row-birth{row-gap:0}
+html.red #formStep .form-after{margin-top:0}
+html.red #formStep .submit-wrap{margin-top:14px}
+html.red #formStep .r-note:last-of-type{margin-top:18px !important}
+html.red #formStep .r-save{font-size:21px !important}
+html.red #formStep .r-keep{font-size:17px !important;margin-top:6px}
+}
+@media (max-width:600px){html.red #formStep #p2Section.open{padding-top:56px}}
+/* nothing in the form is smaller than 16px */
+@media (max-width:600px){
+html.red #formStep .line-field input,html.red #formStep .line-field select,html.red #formStep .line-field input::placeholder{font-size:16px !important}
+html.red #formStep .section-lbl,html.red #formStep .row-birth label,html.red #formStep .tz-toggle,html.red #formStep .why,html.red #formStep .chk-txt,html.red #formStep .r-keep,html.red #formStep .r-save,html.red .site-foot,html.red .site-foot *{font-size:16px !important}
+html.red #formStep .r-save{font-size:21px !important}
+}
+@media (max-width:600px){html.red .site-foot a{font-size:16px !important}}

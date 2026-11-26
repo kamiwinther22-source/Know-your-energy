@@ -853,7 +853,7 @@ html,body{overflow-x:clip !important;}
 .row-birth .row-time>div:first-child label{white-space:nowrap;}
 
 </style>
-<link rel="stylesheet" href="red-look.css?v=20261157">
+<link rel="stylesheet" href="red-look.css?v=20261159">
 <link rel="stylesheet" href="obsidian-look.css?v=8">
 <style id="btn3d">
 /* Buttons: same shapes; speckle-free copies of the button images (img/k3), real depth, words engraved into the face. */
@@ -1390,7 +1390,9 @@ function drawFlow() {
   // the ribbon follows the path drawn by the owner: up from lower left, flat through the middle, sweeping up to the right
   const base = gapTop - fc.top, sx = fc.width / 350;
   const PATH = [[55, 143], [72, 123], [95, 102], [122, 87], [156, 79], [191, 79], [226, 79], [260, 71], [287, 56], [310, 35], [327, 15]];
-  const W = PATH.map(([x, dy]) => [(x - 16) * sx, base + dy]);
+  const phoneRib = window.matchMedia('(max-width:600px)').matches;
+  /* phones: the ribbon is stretched across the full width and flattened to about a third of its height */
+  const W = PATH.map(([x, dy]) => phoneRib ? [(x - 55) / 272 * fc.width * 0.98 + fc.width * 0.01, base + 15 + (dy - 15) * 0.3] : [(x - 16) * sx, base + dy]);
   const crm=(p0,p1,p2,p3,t)=>{const t2=t*t,t3=t2*t;return [0.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),0.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)];};
   const raw=[];for(let i=0;i<W.length-1;i++){const p0=W[Math.max(0,i-1)],p1=W[i],p2=W[i+1],p3=W[Math.min(W.length-1,i+2)];for(let j=0;j<30;j++)raw.push(crm(p0,p1,p2,p3,j/30));}raw.push(W[W.length-1]);
   const cum=[0];for(let i=1;i<raw.length;i++)cum.push(cum[i-1]+Math.hypot(raw[i][0]-raw[i-1][0],raw[i][1]-raw[i-1][1]));
@@ -1398,7 +1400,7 @@ function drawFlow() {
   const rib=u=>{const d=tot*u;let k=1;while(k<cum.length-1&&cum[k]<d)k++;const f=(d-cum[k-1])/((cum[k]-cum[k-1])||1);return [raw[k-1][0]+(raw[k][0]-raw[k-1][0])*f,raw[k-1][1]+(raw[k][1]-raw[k-1][1])*f];};
   const defs='<defs><filter id="hot" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.6"/></filter><radialGradient id="fl"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" stop-color="#ffffff" stop-opacity=".45"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>';
   svg.setAttribute("viewBox", "0 0 " + fc.width.toFixed(1) + " " + fc.height.toFixed(1));
-  svg.innerHTML = defs + '<g id="enr">' + energy(rib) + '</g>';
+  svg.innerHTML = defs + '<g id="enr">' + (phoneRib ? energy(rib, 0.6) : energy(rib)) + '</g>';
   svg.classList.add("on");
 }
 
