@@ -76,11 +76,11 @@
       ".xpass .pol{text-align:center;font:600 11.5px/1.5 'Fraunces',serif;margin:6px 8px 0}",
       ".xpass .pol a{color:#fff}",
       /* timeline */
-      ".tl{color:#000;font-family:'DM Sans',sans-serif;position:relative;min-height:72vh}",
-      ".tl-day{position:absolute;left:0;right:0;top:0;bottom:0;z-index:6;background:#fff;border:2.5px solid #000;border-radius:14px;padding:14px 14px 18px;overflow:auto;color:#000;-webkit-overflow-scrolling:touch}",
+      ".tl{color:#000;font-family:'DM Sans',sans-serif;position:relative}",
+      ".tl-day{position:relative;background:#fff;border:2.5px solid #000;border-radius:14px;padding:14px 14px 18px;margin:0 0 8px;color:#000;-webkit-overflow-scrolling:touch}",
       ".tl-day .dt{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}",
       ".tl-day h3{font:800 20px/1.25 'DM Sans',sans-serif;margin:0 0 10px;color:#000}",
-      ".tl-day p{font:500 15px/1.6 'DM Sans',sans-serif;margin:0 0 11px;color:#000}",
+      ".tl-day p{font:500 16px/1.6 'DM Sans',sans-serif;margin:0 0 11px;color:#000}",
       ".tl-day details{margin:12px 0 4px;font:600 13px/1.5 'DM Sans',sans-serif}",
       ".tl-day details summary{cursor:pointer;font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase}",
       ".tl-day .x{float:right}",
@@ -90,12 +90,13 @@
       ".tl-ctl input{font:700 16px 'DM Sans',sans-serif;border:2px solid #000;border-radius:12px;background:#fff;color:#000;padding:4px 8px}",
       ".tl-chip{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;border:2px solid #000;border-radius:12px;background:#fff;color:#000 !important;padding:3px 12px;cursor:pointer}",
       ".tl-chip.on{background:#000 !important;color:#fff !important}",
-      ".tl-info{border:2.5px solid #000;border-radius:14px;padding:9px 12px;margin:0 0 8px;font:600 16px/1.5 'DM Sans',sans-serif;min-height:40vh;max-height:52vh;overflow:auto;color:#000;background:#fff}",
+      ".tl-info{border:2.5px solid #000;border-radius:14px;padding:9px 12px;margin:0 0 8px;font:600 15px/1.5 'DM Sans',sans-serif;max-height:40vh;overflow:auto;color:#000;background:#fff}",
+      ".tl.has-day .tl-info{display:none}",
       ".tl-info .tt{font:800 13px 'DM Sans',sans-serif;display:block;margin-bottom:2px}",
       ".tl-frame{border:3px solid #000;border-radius:18px;overflow:hidden;background:#fff}",
       ".tl-head{display:flex;margin-left:38px;border-bottom:1.5px solid #000}",
-      ".tl-head div{flex:1;height:84px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font:800 10.5px Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#000;text-align:center}",
-      ".tl-scroll{height:15vh;min-height:110px;overflow-y:auto;position:relative;-webkit-overflow-scrolling:touch;scrollbar-width:none}",
+      ".tl-head div{flex:1;min-width:0;height:112px;display:flex;align-items:center;justify-content:flex-start;writing-mode:vertical-rl;transform:rotate(180deg);font:800 10.5px Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#000;white-space:nowrap;padding-top:6px;box-sizing:border-box}",
+      ".tl-scroll{height:44vh;min-height:280px;overflow-y:auto;position:relative;-webkit-overflow-scrolling:touch;scrollbar-width:none}",
       ".tl-body{position:relative;margin-left:38px}",
       ".tl-tick{position:absolute;left:-38px;width:34px;text-align:right;font:700 10px Arial,sans-serif;color:#000;transform:translateY(-6px)}",
       ".tl-tick.yr{font-size:11px;font-weight:800}",
@@ -302,6 +303,39 @@
   function essenceAt(p, age) { var parts = [p.first, p.mid, p.last].filter(function (s) { return s && String(s).trim(); }); if (!parts.length) return null; return redMaster(parts.reduce(function (s, n) { return s + activeLetter(n, age); }, 0)); }
   function rangeAges(str) { var m = /^(birth|\d+)\D+(onward|\d+)$/.exec(String(str || "").replace(/[–—-]/, "–")); if (!m) { var r = String(str || "").split("–"); return { lo: r[0] === "birth" ? 0 : +r[0], hi: r[1] === "onward" ? 999 : +r[1] }; } return { lo: m[1] === "birth" ? 0 : +m[1], hi: m[2] === "onward" ? 999 : +m[2] }; }
 
+  // ---------- the reading for the day: requested as soon as the results page appears, kept in the browser ----------
+  var DAYS_KEY = "kye_dayReadings";
+  function dayKeyOf(p, iso) { return [p.first, p.last, p.dob, iso].join("|").toLowerCase(); }
+  function todayIsoLocal() { var t = new Date(); return t.getFullYear() + "-" + String(t.getMonth() + 1).padStart(2, "0") + "-" + String(t.getDate()).padStart(2, "0"); }
+  function readSavedDays() { try { return JSON.parse(localStorage.getItem(DAYS_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  function keepDay(dkey, r) { var m = readSavedDays(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); if (typeof renderReadingList === "function") renderReadingList(); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } }
+  function passEmailNowG() { try { var f = document.getElementById("pEmail"); return ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) { return ""; } }
+  function eventTitle(e, birthMs) { var nm = e.pl === "northnode" ? "North Node" : e.pl.charAt(0).toUpperCase() + e.pl.slice(1), lo = Math.floor((e.a - birthMs) / MS_YEAR), hi = Math.ceil((e.b - birthMs) / MS_YEAR); return nm + " " + e.phase.toLowerCase() + " \u00b7 ages " + lo + " to " + hi + " \u00b7 " + fmtDate(e.a) + " to " + fmtDate(e.b) + " \u00b7 in " + e.sign + (e.house ? ", house " + e.house : ""); }
+  window.__dayJobs = window.__dayJobs || {};
+  // one request per person and day; the same request is shared by the prefetch and by the card
+  function dayJob(p, iso, events, email) {
+    var dkey = dayKeyOf(p, iso); if (window.__dayJobs[dkey]) return window.__dayJobs[dkey];
+    var parts = iso.split("-"), when = Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12), dob = parseDob(p.dob), birthMs = Date.UTC(dob.y, dob.m - 1, dob.d);
+    var cycles = (events || []).filter(function (e) { return e.a <= when && when < e.b; }).map(function (e) { return eventTitle(e, birthMs); });
+    var ast = Object.assign({}, p.astro || {}); delete ast.acg; delete ast.aspects;
+    var api = typeof W_API !== "undefined" ? W_API : "https://know-your-energy.kwdoanchor.workers.dev";
+    var again = function () { return (typeof kyeUnlock === "function" ? kyeUnlock(true) : Promise.resolve(null)).then(function (e2) { if (!e2) throw new Error("We could not confirm your phone just now. Please try again."); return e2; }); };
+    var send = function (em) { return fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ passEmail: em, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: ast, humanDesign: p.hd || null, activeCycles: cycles }) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) { var er = new Error(j.error || "Something went wrong. Please try again."); er.code = j.code; throw er; } return j; }); }); };
+    var timer = new Promise(function (_, rej) { setTimeout(function () { rej(new Error("This is taking longer than expected. Please try again.")); }, 150000); });
+    var go = (email ? send(email) : again().then(send)).catch(function (e) { if (e && e.code === "unlock_needed") return again().then(send); throw e; });
+    var job = Promise.race([go, timer]).then(function (j) { var r = j.report || {}; keepDay(dkey, r); return r; });
+    job.catch(function () { delete window.__dayJobs[dkey]; });
+    window.__dayJobs[dkey] = job; return job;
+  }
+  function prefetchDay(people) {
+    try {
+      var p = people && people[0]; if (!p || !p.numerology || !parseDob(p.dob)) return;
+      var email = passEmailNowG(); if (!email) return;
+      var iso = todayIsoLocal(); if (readSavedDays()[dayKeyOf(p, iso)] || window.__dayJobs[dayKeyOf(p, iso)]) return;
+      loadTransits().then(function (d) { return dayJob(p, iso, computeEvents(p, d), email); }).catch(function () {});
+    } catch (e) {}
+  }
+
   function openTimeline(people) {
     addStyles();
     var nowD = new Date(), me = { idx: 0, data: null, sel: null, selDate: Date.UTC(nowD.getFullYear(), nowD.getMonth(), nowD.getDate()) };
@@ -338,40 +372,31 @@
       body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate" id="tlDateLab">' + (me.pass ? "Type a date" : "Today") + '</label><input type="date" id="tlDate" value="' + iso + '"' + (me.pass ? "" : " disabled") + '><button class="tl-chip" id="tlRead">' + (me.pass ? "Read this day" : "Read today") + '</button>' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
       showActive();
       var sc = document.getElementById("tlScroll"); var go = function () { sc.style.setProperty("--stk", Math.round(sc.clientHeight * 0.42) + "px"); sc.scrollTop = Math.max(0, nowY - sc.clientHeight / 2); }; go(); setTimeout(go, 120); setTimeout(go, 450);
-      sc.addEventListener("click", function (e) { var bar = e.target.closest(".tl-bar"); if (!bar) return; var it = me.items[+bar.dataset.i]; [].forEach.call(sc.querySelectorAll(".tl-bar.sel"), function (x) { x.classList.remove("sel"); }); bar.classList.add("sel"); document.getElementById("tlInfo").innerHTML = '<span class="tt">' + esc(it.title) + "</span>" + esc(it.text || "").replace(/\n/g, "<br>"); });
+      sc.addEventListener("click", function (e) { var bar = e.target.closest(".tl-bar"); if (!bar) return; var dd = body.querySelector(".tl-day"); if (dd) { dd.remove(); body.querySelector(".tl").classList.remove("has-day"); } var it = me.items[+bar.dataset.i]; [].forEach.call(sc.querySelectorAll(".tl-bar.sel"), function (x) { x.classList.remove("sel"); }); bar.classList.add("sel"); document.getElementById("tlInfo").innerHTML = '<span class="tt">' + esc(it.title) + "</span>" + esc(it.text || "").replace(/\n/g, "<br>"); });
       document.getElementById("tlDate").onchange = function (e) { var v = e.target.value.split("-"); if (v.length === 3) { me.selDate = Date.UTC(+v[0], +v[1] - 1, +v[2]); me.selIsNow = false; me.zoom = true; build(); } };
       var wh = document.getElementById("tlWhole"); if (wh) wh.onclick = function () { me.zoom = false; build(); };
-      var rd = document.getElementById("tlRead"); if (rd) rd.onclick = readDay;
+      var rd = document.getElementById("tlRead"); if (rd) rd.onclick = function () { readDay(false); };
+      me.autoFor = me.autoFor || {}; if (me.idx === 0 && !me.autoFor[0]) { me.autoFor[0] = 1; readDay(true); }
       [].forEach.call(body.querySelectorAll(".tl-chip[data-p]"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; loadEvents(); }; });
     }
-    function readDay() {
-      var p = person(), el = document.getElementById("tlDate"), host = body.querySelector(".tl"), t0 = new Date(), todayIso = t0.getFullYear() + "-" + String(t0.getMonth() + 1).padStart(2, "0") + "-" + String(t0.getDate()).padStart(2, "0"), iso = me.pass ? (el && el.value) : todayIso; if (!iso || !host) return;
+    function readDay(auto) {
+      var p = person(), el = document.getElementById("tlDate"), host = body.querySelector(".tl"), iso = me.pass ? (el && el.value) : todayIsoLocal(); if (!iso || !host) return;
+      var email = passEmailNowG(); if (auto && !email && !readSavedDays()[dayKeyOf(p, iso)]) return;
       var old = host.querySelector(".tl-day"); if (old) old.remove();
-      var panel = document.createElement("div"); panel.className = "tl-day"; host.appendChild(panel);
-      var parts = iso.split("-"), when = Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0];
+      var panel = document.createElement("div"); panel.className = "tl-day"; host.insertBefore(panel, host.querySelector(".tl-info")); host.classList.add("has-day");
+      var parts = iso.split("-"), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0];
       var close = '<button class="tl-chip x" id="tlDayX">Close</button>';
-      var say = function (msg) { panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><p>" + esc(msg) + "</p>"; document.getElementById("tlDayX").onclick = function () { panel.remove(); }; };
-      var DAYS_KEY = "kye_dayReadings", dkey = [p.first, p.last, p.dob, iso].join("|").toLowerCase();
-      var readSaved = function () { try { return JSON.parse(localStorage.getItem(DAYS_KEY) || "{}") || {}; } catch (e) { return {}; } };
+      var shut = function () { panel.remove(); host.classList.remove("has-day"); };
+      var say = function (msg) { panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><p>" + esc(msg) + "</p>"; document.getElementById("tlDayX").onclick = shut; };
       var show = function (r) {
+        if (!panel.parentNode) return;
         var paras = String(r.body || "").split(/\n\s*\n/).filter(function (s) { return s.trim(); });
         panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
-        document.getElementById("tlDayX").onclick = function () { panel.remove(); };
+        document.getElementById("tlDayX").onclick = shut;
       };
-      var keep = function (r) { var m = readSaved(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); if (typeof renderReadingList === "function") renderReadingList(); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } };
-      var have = readSaved()[dkey]; if (have) { show(have); return; }
-      var email = ""; try { var f = document.getElementById("pEmail"); email = ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) {}
-      var again = function () { return (typeof kyeUnlock === "function" ? kyeUnlock(true) : Promise.resolve(null)).then(function (e2) { if (!e2) throw new Error("We could not confirm your phone just now. Please try again."); return e2; }); };
+      var have = readSavedDays()[dayKeyOf(p, iso)]; if (have) { show(have); return; }
       say("Writing your reading for " + lab + ". This takes up to a minute.");
-      var ast = Object.assign({}, p.astro || {}); delete ast.acg; delete ast.aspects;
-      var cycles = (me.items || []).filter(function (it) { return it.ev && it.a <= when && when < it.b; }).map(function (it) { return it.title; });
-      var api = typeof W_API !== "undefined" ? W_API : "https://know-your-energy.kwdoanchor.workers.dev";
-      var timer = new Promise(function (_, rej) { setTimeout(function () { rej(new Error("This is taking longer than expected. Please try again.")); }, 150000); });
-      var send = function (em) { return fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ passEmail: em, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: ast, humanDesign: p.hd || null, activeCycles: cycles }) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) { var er = new Error(j.error || "Something went wrong. Please try again."); er.code = j.code; throw er; } return j; }); }); };
-      var go = (email ? send(email) : again().then(send)).catch(function (e) { if (e && e.code === "unlock_needed") return again().then(send); throw e; });
-      Promise.race([go, timer]).then(function (j) {
-        var r = j.report || {}; keep(r); show(r);
-      }).catch(function (e) { say(e && e.message ? e.message : "Something went wrong. Please try again."); });
+      dayJob(p, iso, me.events, email).then(show).catch(function (e) { if (panel.parentNode) say(e && e.message ? e.message : "Something went wrong. Please try again."); });
     }
     function showActive() {
       var info = document.getElementById("tlInfo"); if (!info) return; var d = me.selDate, act = me.items.filter(function (it) { return it.a <= d && d < it.b; });
@@ -410,6 +435,7 @@
     try {
       addStyles();
       var g = document.getElementById("mainGrid"); if (!g) return;
+      prefetchDay(peopleOf(p1, p2));
       [].forEach.call(g.querySelectorAll(".xlinks,.xpass"), function (x) { x.remove(); });
       var people = peopleOf(p1, p2), withMap = people.filter(function (p) { return p.acg && p.birth; }), now = new Date(), nowLab = MONTHS[now.getMonth()] + " " + now.getDate();
       var acts = g.querySelector(".fan-actions"), names = people.map(function (p) { return p.first; }).join(" & ");
