@@ -1325,15 +1325,16 @@ You are an expert astrologer and numerologist, and an expert in Human Design whe
 
 ### WHAT YOU ARE GIVEN
 - The person's birth chart and, when available, their houses.
-- Their numerology as of the reading date: Personal Day inside Personal Month inside Personal Year, inside the current Essence, Pinnacle, Challenge, and Period Cycle.
-- The sky on the reading date, with the contacts it makes to the birth chart and the houses the moving planets pass through.
+- Their numerology as of the reading date: Personal Day inside Personal Month inside Personal Year, inside the current Essence, Pinnacle, Challenge, and Period Cycle, and the Universal Day.
+- The sky on the reading date: the Moon's sign and phase, the contacts the fast-moving planets (Moon, Sun, Mercury, Venus, Mars) make to the birth chart, the contacts the slow planets make to it, the aspects between planets in the sky itself, and the houses the moving planets pass through.
 - Longer astrological cycles that are active on that date.
-- Their Human Design (type, authority, profile, Incarnation Cross) when given.
+- Their Human Design (type, authority, profile, Incarnation Cross) when given, and the Human Design gates the Sun, Earth, Moon and planets occupy on the reading date, with which of them match or complete the person's own gates and channels.
 
 ### HOW TO READ IT
 - Weigh the data by strength. A contact within one degree outweighs a wide one. The Moon changes fastest and sets the day's feeling. The slow planets describe the background of the whole stretch, not just today. A moving planet's house says which area of life the energy lands in.
-- Combine the numerology cycles into one picture of the day. The Personal Day means something different inside a Personal Year 1 than inside a Personal Year 9.
-- Build every point around the astrology and numerology together, never one system alone. If both point at the same thing, say it once, using both as evidence. If they pull apart, state what each produces and what the day feels like with both. If Human Design is given, use it for how this person best acts on the day's energy and for the theme it frames. Use only what is given.
+- Read the numerology cycles as one combined picture, never one number alone. The Personal Day means something different inside a Personal Year 1 than inside a Personal Year 7, and different again inside the Personal Month, the Essence, the Pinnacle, and the Challenge. State what that whole combination produces on this day.
+- Every paragraph must say something that is true of this day and would not be true of the day before or after it. The Moon, the fast planets, the day's Human Design gates, the Personal Day, and the Personal Month are what make the day specific. The long cycles and the slow planets set the conditions those land in: use them to say how the day's points show up for this person, and never spend a paragraph describing them.
+- Build every point around the astrology and numerology together, never one system alone. If both point at the same thing, say it once, using both as evidence. If they pull apart, state what each produces and what the day feels like with both. If Human Design is given, use it for how this person best acts on the day's energy and for the theme it frames. A gate in the sky that the person already has in their chart is amplified today; a gate in the sky that completes a channel with one of their gates brings a connection they do not have on their own, for this day only. Use only what is given.
 - Describe the person, not the chart. State what they do, want, or feel, never the mechanism producing it.
 
 ### HOW TO WRITE
@@ -1356,7 +1357,10 @@ const DAY_RELATIONAL_SYSTEM_PROMPT = DAY_SYSTEM_PROMPT
   .replace('1. Address the person as "you" in every sentence. Never their name, never "she/he/her/him/they."', `1. Use each person's first name in every sentence about them. Never a label like "Partner A." Never address either person as "you."`)
   .replace("State what it produces for this person on this day.", "State what it produces between these two people on this day.")
   .replace("Describe what the day asks of this person, what comes easier and what comes harder, and what to attend to.", "Describe what the day asks of each of them and of the two of them together, what comes easier and what comes harder between them, and what to attend to.")
-  .replace("### WHAT YOU ARE GIVEN\n- The person's birth chart and, when available, their houses.", "This is one reading about the relationship between the two people on this day, not two separate readings. Describe how the day lands between them.\n\n### WHAT YOU ARE GIVEN\n- Each person's birth chart and, when available, their houses.");
+  .replace("### WHAT YOU ARE GIVEN\n- The person's birth chart and, when available, their houses.", "This is one reading about the relationship between the two people on this day, not two separate readings. Describe how the day lands between them.\n\n### WHAT YOU ARE GIVEN\n- Each person's birth chart and, when available, their houses.")
+  .replace("use them to say how the day's points show up for this person, and never spend a paragraph describing them.", "use them to say how the day's points show up between these two people, and never spend a paragraph describing them.")
+  .replace("that completes a channel with one of their gates brings a connection they do not have on their own, for this day only.", "that completes a channel with one of their gates brings a connection they do not have on their own, for this day only. Where one person's gate and the other's gate meet in the sky's gate, say what that does between them.")
+  .replace("with which of them match or complete the person's own gates and channels.", "with which of them match or complete each person's own gates and channels.");
 
 const DAY_SIGNS = [ "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces" ];
 
@@ -1416,18 +1420,51 @@ function dayCurrentStage(n) {
   return { pin: pin, per: per, ch: ch };
 }
 
-function dayAspects(transitPts, natalPts) {
+function dayAspects(transitPts, natalPts, maxOrb) {
   const A = [ [ "conjunct", 0 ], [ "sextile", 60 ], [ "square", 90 ], [ "trine", 120 ], [ "opposite", 180 ] ];
   const out = [];
   for (const t of transitPts) for (const nt of natalPts) {
     const sep = Math.abs(((t.lon - nt.lon) % 360 + 360) % 360);
     const fold = sep > 180 ? 360 - sep : sep;
+    const lim = maxOrb ? maxOrb(t) : 2;
     for (const [name, ang] of A) {
       const orb = Math.abs(fold - ang);
-      if (orb <= 2) out.push({ t: t, n: nt, name: name, orb: orb });
+      if (orb <= lim) out.push({ t: t, n: nt, name: name, orb: orb });
     }
   }
   return out.sort((a, b) => a.orb - b.orb);
+}
+
+const DAY_FAST = [ "Moon", "Sun", "Mercury", "Venus", "Mars" ];
+const dayFastOrb = t => t.name === "Moon" ? 3 : 2;
+
+// aspects between the planets in the sky itself, where at least one is a fast planet
+function daySkyAspects(skyPts) {
+  const A = [ [ "conjunct", 0 ], [ "sextile", 60 ], [ "square", 90 ], [ "trine", 120 ], [ "opposite", 180 ] ];
+  const out = [];
+  for (let i = 0; i < skyPts.length; i++) for (let j = i + 1; j < skyPts.length; j++) {
+    const a = skyPts[i], b = skyPts[j];
+    if (!DAY_FAST.includes(a.name) && !DAY_FAST.includes(b.name)) continue;
+    const lim = a.name === "Moon" || b.name === "Moon" ? 3 : 2;
+    const sep = Math.abs(((a.lon - b.lon) % 360 + 360) % 360);
+    const fold = sep > 180 ? 360 - sep : sep;
+    for (const [name, ang] of A) {
+      const orb = Math.abs(fold - ang);
+      if (orb <= lim) out.push({ a: a, b: b, name: name, orb: orb });
+    }
+  }
+  return out.sort((x, y) => x.orb - y.orb);
+}
+
+// the standard Human Design gate wheel: 64 gates of 5.625 degrees, the first (gate 41) starting at 2 degrees Aquarius
+const DAY_GATE_WHEEL = [ 41, 19, 13, 49, 30, 55, 37, 63, 22, 36, 25, 17, 21, 51, 42, 3, 27, 24, 2, 23, 8, 20, 16, 35, 45, 12, 15, 52, 39, 53, 62, 56, 31, 33, 7, 4, 29, 59, 40, 64, 47, 6, 46, 18, 48, 57, 32, 50, 28, 44, 1, 43, 14, 34, 9, 5, 26, 11, 10, 58, 38, 54, 61, 60 ];
+function dayGateOf(lon) {
+  return DAY_GATE_WHEEL[Math.floor((((lon - 302) % 360 + 360) % 360) / 5.625) % 64];
+}
+
+function dayReduceNumber(n) {
+  while (n > 9 && n !== 11 && n !== 22 && n !== 33) n = String(n).split("").reduce((t, d) => t + +d, 0);
+  return n;
 }
 
 function buildDayUserPrompt(person, natalAstro, humanDesign, dateISO, activeCycles) {
@@ -1445,7 +1482,12 @@ function buildDayUserPrompt(person, natalAstro, humanDesign, dateISO, activeCycl
   if (sky.chiron && typeof sky.chiron.absoluteDegrees === "number") skyPts.push({ name: "Chiron", lon: sky.chiron.absoluteDegrees, rx: sky.chiron.retrograde });
   const sun = skyPts.find(p => p.name === "Sun"), moon = skyPts.find(p => p.name === "Moon");
   const skyLines = skyPts.map(p => `${p.name} ${dayLonLabel(p.lon)}${p.rx ? " Rx" : ""}${hasHouses ? ` (natal house ${dayHouseOf(p.lon, a.houses)})` : ""}`).join(", ");
-  const contacts = dayAspects(skyPts, natalPts).slice(0, 16).map(c => `${c.t.name} ${c.name} natal ${c.n.name}, orb ${c.orb.toFixed(1)}°`);
+  const fastSky = skyPts.filter(p => DAY_FAST.includes(p.name)), slowSky = skyPts.filter(p => !DAY_FAST.includes(p.name));
+  const fmtContact = c => `${c.t.name} ${c.name} natal ${c.n.name}, orb ${c.orb.toFixed(1)}°`;
+  const fastContacts = dayAspects(fastSky, natalPts, dayFastOrb).slice(0, 12).map(fmtContact);
+  const slowContacts = dayAspects(slowSky, natalPts).slice(0, 10).map(fmtContact);
+  const skyAspects = daySkyAspects(skyPts).slice(0, 12).map(c => `${c.a.name} ${c.name} ${c.b.name}, orb ${c.orb.toFixed(1)}°`);
+  const universalDay = dayReduceNumber(String(mm).split("").reduce((t, d) => t + +d, 0) + String(dd).split("").reduce((t, d) => t + +d, 0) + String(yy).split("").reduce((t, d) => t + +d, 0));
   const pinnacle = x => x ? `${x.value} (${x.ageRange})` : "unknown";
   const stage = dayCurrentStage(n);
   const numerologyLines = [ `Life Path ${n.lifePath}, Expression ${n.expression}, Soul Urge ${n.soulUrge}, Personality ${n.personality}, Birthday ${n.birthday}`, `Attitude ${n.attitude}, Balance ${n.balance}, Maturity ${n.maturity}`, `On the reading date: Personal Year ${n.personalYear}, Personal Month ${n.personalMonth}, Personal Day ${n.personalDay}, Essence ${n.essenceCycle?.value}`, `Current stage: Pinnacle ${stage.pin ? pinnacle(stage.pin.x) : "unknown"}, Challenge ${stage.ch != null ? stage.ch : "unknown"}, Period Cycle ${stage.per ? pinnacle(stage.per.x) : "unknown"}`, `Karmic Lessons: ${n.karmicLessons?.length ? n.karmicLessons.join(", ") : "none"}`, `Karmic Debt: ${n.karmicDebtNumbers?.length ? n.karmicDebtNumbers.join(", ") : "none"}` ].join("\n  ");
@@ -1454,9 +1496,24 @@ function buildDayUserPrompt(person, natalAstro, humanDesign, dateISO, activeCycl
   const natalLines = [ !hasHouses ? "Birth time or birth location not provided, so the Ascendant, Midheaven, and houses are unavailable. Do not guess or invent them; read the chart by sign only." : null, (a.planets || []).map(planetLine).join(", "), [ angle("North Node", a.northNode), angle("Chiron", a.chiron), hasHouses ? angle("Ascendant", a.ascendant) : null, hasHouses ? angle("Midheaven", a.midheaven) : null ].filter(Boolean).join(", "), hasHouses ? `House cusps: ${a.houses.map(h => `${h.house}:${h.sign} ${h.cuspDegrees}°`).join(", ")}` : null ].filter(Boolean).join("\n  ");
   const h = humanDesign || {};
   const hdLines = h.type ? `${h.type} type, ${h.profile || "unknown"} profile, ${h.authority || "unknown"} authority${h.incarnation_cross ? `\n  Incarnation Cross: ${h.incarnation_cross}` : ""}` : null;
+  let gateLines = null;
+  if (h.type) {
+    const pick = nm => skyPts.find(p => p.name === nm);
+    const sunP = pick("Sun");
+    const skyGates = [];
+    if (sunP) { skyGates.push([ "Sun", dayGateOf(sunP.lon) ], [ "Earth", dayGateOf(sunP.lon + 180) ]); }
+    [ "Moon", "Mercury", "Venus", "Mars" ].forEach(nm => { const q = pick(nm); if (q) skyGates.push([ nm, dayGateOf(q.lon) ]); });
+    const own = new Set((h.gates || []).map(g => parseInt(g, 10)).filter(g => !isNaN(g)));
+    const matches = [], completes = [];
+    if (own.size) skyGates.forEach(([nm, g]) => {
+      if (own.has(g)) { matches.push(`${nm} gate ${g}`); return; }
+      HD_CHANNELS.forEach(([x, y]) => { const partner = x === g ? y : y === g ? x : null; if (partner != null && own.has(partner)) completes.push(`${nm} gate ${g} (with their gate ${partner})`); });
+    });
+    gateLines = [ `Human Design gates in the sky today: ${skyGates.map(([nm, g]) => `${nm} ${g}`).join(", ")}`, own.size ? `Gates in the sky today that match the person's own gates: ${matches.length ? matches.join(", ") : "none"}. Gates that complete a channel with one of the person's gates: ${completes.length ? completes.join(", ") : "none"}` : null ].filter(Boolean).join("\n\n");
+  }
   const dateLabel = new Date(Date.UTC(yy, mm - 1, dd)).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
   const cycles = (activeCycles || []).filter(s => typeof s === "string").slice(0, 8).map(s => s.slice(0, 200));
-  return [ `Date of the reading: ${dateLabel}`, `Person: ${person.first} (age ${n.essenceCycle?.currentAge ?? "unknown"} on this date)`, `Numerology as of this date:\n  ${numerologyLines}`, `Birth chart:\n  ${natalLines}`, `The sky on this date (planets at noon UT): ${skyLines}`, sun && moon ? `Moon phase: ${dayMoonPhase(sun.lon, moon.lon)}` : null, `Contacts the sky makes to the birth chart (within 2 degrees): ${contacts.length ? contacts.join("; ") : "none"}`, cycles.length ? `Longer astrological cycles active on this date: ${cycles.join("; ")}` : null, hdLines ? `Human Design:\n  ${hdLines}` : null ].filter(Boolean).join("\n\n");
+  return [ `Date of the reading: ${dateLabel}`, `Person: ${person.first} (age ${n.essenceCycle?.currentAge ?? "unknown"} on this date)`, `Numerology as of this date:\n  ${numerologyLines}`, `Universal Day: ${universalDay}`, `Birth chart:\n  ${natalLines}`, `The sky on this date (planets at noon UT): ${skyLines}`, sun && moon ? `Moon phase: ${dayMoonPhase(sun.lon, moon.lon)}` : null, `Contacts the fast-moving planets (Moon, Sun, Mercury, Venus, Mars) make to the birth chart (Moon within 3 degrees, the others within 2): ${fastContacts.length ? fastContacts.join("; ") : "none"}`, `Contacts the slow planets make to the birth chart (within 2 degrees): ${slowContacts.length ? slowContacts.join("; ") : "none"}`, `Aspects between planets in the sky today (Moon within 3 degrees, the others within 2): ${skyAspects.length ? skyAspects.join("; ") : "none"}`, cycles.length ? `Longer astrological cycles active on this date: ${cycles.join("; ")}` : null, hdLines ? `Human Design:\n  ${hdLines}` : null, gateLines ].filter(Boolean).join("\n\n");
 }
 
 function buildRelationalDayUserPrompt(p1, a1, h1, p2, a2, h2, dateISO, c1, c2, relLabel) {
