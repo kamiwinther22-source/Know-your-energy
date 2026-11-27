@@ -620,8 +620,8 @@ html.obsidian #formStep .line-field input::placeholder{font-size:13.5px;}
 .card-expand-close{position:sticky;top:0;float:right;background:none;border:none;font-size:1.8rem;color:#000000;cursor:pointer;padding:0.3rem;line-height:1;}
 
 
-.rl{max-width:760px;margin:0 auto .9rem;padding:0 .3rem;clear:both;font-family:'DM Sans',sans-serif;font-size:12px;color:#222;}
-.rl:empty{display:none;}
+.yrl{max-width:760px;margin:0 auto .9rem;padding:0 .3rem;clear:both;font-family:'DM Sans',sans-serif;font-size:12px;color:#222;}
+.yrl:empty{display:none;}
 .rl-lab{font-size:12px;color:#666;margin:0 0 .15rem;}
 .rl-list{width:min(235px,100%);max-height:66px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#777 #eee;}
 .rl-row{position:relative;display:flex;align-items:center;gap:.35rem;height:22px;padding:0 .2rem 0 .5rem;font-size:12px;color:#222;}
@@ -1255,7 +1255,7 @@ animateHourglass(document.getElementById("loading"));
 <div class="card-expand" id="cardExpand">
   <button type="button" class="card-expand-close" id="cardExpandClose">&#10005;</button>
   <div class="ce-wrap"><div class="ce-body">
-    <div class="rl" id="cardExpandReadings"></div>
+    <div class="yrl" id="cardExpandReadings"></div>
     <div class="card-expand-title" id="cardExpandTitle"></div>
     <div class="card-expand-body" id="cardExpandBody"></div>
   </div></div>
@@ -4523,7 +4523,7 @@ function setChartFrame(title, isReading) {
 // ---- Your readings: every reading kept in this browser, in one running list, newest first ----
 const DAY_READINGS_KEY = "kye_dayReadings";
 const RL_MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-let rlEntry = null, rlSelected = "cur", rlConfirm = null, rlCache = [];
+let rlEntry = null, rlSelected = "cur", rlConfirm = null, rlCache = [], rlMode = "full";
 
 function rlDate(ms) {
   const d = new Date(ms);
@@ -4536,23 +4536,23 @@ function rlNames(o) {
 
 function rlItems() {
   const items = [];
-  try {
+  if (rlMode === "full") try {
     const cur = JSON.parse(localStorage.getItem(SAVED_RESULT_KEY) || "null");
     if (cur && cur.p1) items.push({ id: "cur", kind: "cur", t: (cur.t || Date.now()) + 1, label: rlNames(cur) + " · " + rlDate(cur.t || Date.now()) });
   } catch (_) {}
-  try {
+  if (rlMode === "full") try {
     const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]") || [];
     h.forEach((o, i) => {
       if (o && o.p1) items.push({ id: "h" + i, kind: "hist", idx: i, t: o.t || o.savedAt || 0, label: rlNames(o) + " · " + rlDate(o.t || o.savedAt || 0) });
     });
   } catch (_) {}
-  try {
+  if (rlMode === "day") try {
     const d = JSON.parse(localStorage.getItem(DAY_READINGS_KEY) || "{}") || {};
     Object.keys(d).forEach(k => {
       const parts = k.split("|");
       const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(parts[3] || "");
       const name = parts[0] ? parts[0].charAt(0).toUpperCase() + parts[0].slice(1) : "Day";
-      items.push({ id: "d:" + k, kind: "day", key: k, t: m ? Date.UTC(+m[1], +m[2] - 1, +m[3], 12) : 0, label: name + " · Day " + (m ? RL_MONTHS[+m[2] - 1] + " " + +m[3] : "") });
+      items.push({ id: "d:" + k, kind: "day", key: k, t: m ? Date.UTC(+m[1], +m[2] - 1, +m[3], 12) : 0, label: name + " · " + (m ? RL_MONTHS[+m[2] - 1] + " " + +m[3] : "") });
     });
   } catch (_) {}
   items.sort((a, b) => b.t - a.t);
@@ -4564,7 +4564,7 @@ function renderReadingList() {
   if (!box) return;
   rlCache = rlItems();
   if (!rlCache.length) { box.innerHTML = ""; return; }
-  box.innerHTML = '<div class="rl-lab">Your readings</div><div class="rl-list">' + rlCache.map((it, i) => {
+  box.innerHTML = '<div class="rl-lab">' + (rlMode === "day" ? "Your day readings" : "Your readings") + '</div><div class="rl-list">' + rlCache.map((it, i) => {
     if (rlConfirm === it.id) return '<div class="rl-row ask"><span class="nm">Delete it?</span><span class="yn"><button type="button" class="rl-yes">Yes, delete</button><button type="button" class="rl-no">Keep</button></span></div>';
     return '<div class="rl-row' + (it.id === rlSelected ? " on" : "") + '"><button type="button" class="rl-open" data-i="' + i + '"><span class="nm">' + escapeHtml(it.label) + '</span><span class="go">&rarr;</span></button><button type="button" class="rl-del" data-i="' + i + '">Delete</button></div>';
   }).join("") + "</div>";
@@ -4582,11 +4582,24 @@ function rlShowDay(it) {
   try { r = (JSON.parse(localStorage.getItem(DAY_READINGS_KEY) || "{}") || {})[it.key]; } catch (_) {}
   if (!r) return;
   r = r.r || r;
+  const host = document.querySelector("#cardExpandBody .tl");
+  if (!host) return;
+  const old = host.querySelector(".tl-day");
+  if (old) old.remove();
   const paras = String(r.body || "").split(/\n\s*\n/).filter(x => x.trim());
-  document.getElementById("cardExpandTitle").textContent = it.label;
-  document.getElementById("cardExpandBody").innerHTML = (r.headline ? '<div class="dprow"><p class="report-body" style="font-weight:700;">' + escapeHtml(r.headline) + "</p></div>" : "") + paras.map(x => '<div class="dprow"><p class="report-body">' + escapeHtml(x.trim()) + "</p></div>").join("") + ((r.references || []).length ? dpsec("References") + '<div class="dprow"><p class="report-body" style="color:var(--card-mid);font-style:italic;">' + r.references.map(escapeHtml).join(" &middot; ") + "</p></div>" : "");
+  const panel = document.createElement("div");
+  panel.className = "tl-day";
+  panel.innerHTML = '<button class="tl-chip x" id="tlDayX">Close</button><div class="dt">' + escapeHtml(it.label) + "</div>" + (r.headline ? "<h3>" + escapeHtml(r.headline) + "</h3>" : "") + paras.map(x => "<p>" + escapeHtml(x.trim()) + "</p>").join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(x => "<div>" + escapeHtml(x) + "</div>").join("") + "</details>" : "");
+  host.appendChild(panel);
+  panel.querySelector("#tlDayX").onclick = () => panel.remove();
   rlSelected = it.id;
 }
+
+// the Timeline card calls this when it opens: its list holds the day readings
+window.rlOpenDayList = function () {
+  rlMode = "day"; rlSelected = null; rlConfirm = null;
+  renderReadingList();
+};
 
 function rlOpen(it) {
   if (!it) return;
@@ -4627,7 +4640,7 @@ function rlDelete(it) {
       const d = JSON.parse(localStorage.getItem(DAY_READINGS_KEY) || "{}") || {};
       delete d[it.key];
       localStorage.setItem(DAY_READINGS_KEY, JSON.stringify(d));
-      if (rlSelected === it.id) rlShowCurrent();
+      if (rlSelected === it.id) { const dp = document.querySelector("#cardExpandBody .tl-day"); if (dp) dp.remove(); rlSelected = null; }
     }
   } catch (_) {}
   rlConfirm = null;
@@ -4693,7 +4706,7 @@ document.addEventListener("click", e => {
           document.getElementById("cardExpandTitle").textContent = entry.title;
       document.getElementById("cardExpandBody").innerHTML = (entry.preHtml || "") + entry.rows;
       document.getElementById("cardExpand").classList.add("open");
-      if (entry.isReading) { rlEntry = entry; rlSelected = "cur"; rlConfirm = null; renderReadingList(); }
+      if (entry.isReading) { rlEntry = entry; rlMode = "full"; rlSelected = "cur"; rlConfirm = null; renderReadingList(); }
       else { const rb = document.getElementById("cardExpandReadings"); if (rb) rb.innerHTML = ""; }
       setChartFrame(entry.title, !!entry.isReading);
     }
@@ -4741,6 +4754,6 @@ document.addEventListener("click", e => {
 <script type="module">if(document.documentElement.classList.contains("obsidian"))import("./obsidian.js");</script>
 <div class="site-foot">&copy; 2026 Know Your Energy &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></div>
 <style>.site-foot{text-align:center;font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;padding:18px 12px 26px}.site-foot a{color:#fff;font-weight:500}.tiny-contact{font:500 9px/1.4 'Fraunces',Georgia,serif;color:#fff;text-align:center;margin:6px 0 0}.tiny-contact a{color:#fff}</style>
-<script src="extras.js?v=30" defer></script>
+<script src="extras.js?v=31" defer></script>
 </body>
 </html>

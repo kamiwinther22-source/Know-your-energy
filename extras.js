@@ -358,7 +358,7 @@
         panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
         document.getElementById("tlDayX").onclick = function () { panel.remove(); };
       };
-      var keep = function (r) { var m = readSaved(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } };
+      var keep = function (r) { var m = readSaved(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); if (typeof renderReadingList === "function") renderReadingList(); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } };
       var have = readSaved()[dkey]; if (have) { show(have); return; }
       var email = ""; try { var f = document.getElementById("pEmail"); email = ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) {}
       if (!email) { say("Enter the email address of your pass on the first page, then open this again."); return; }
@@ -385,7 +385,7 @@
       checkPassNow();
       loadTransits().then(function (d) { me.events = computeEvents(person(), d); build(); }).catch(function () { body.innerHTML = '<div class="tl"><div class="tl-info">The timeline could not load. Please check your connection and try again.</div></div>'; });
     }
-    me.selIsNow = true; ex.classList.add("open"); loadEvents();
+    me.selIsNow = true; ex.classList.add("open"); loadEvents(); if (typeof window.rlOpenDayList === "function") window.rlOpenDayList();
   }
 
   // ---------- put it all on the results page ----------
