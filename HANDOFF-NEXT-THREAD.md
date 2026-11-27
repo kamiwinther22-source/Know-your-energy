@@ -36,7 +36,6 @@ Paste this into the new thread as the first message. It was written from one lon
 - The render script was deleted at the owner's request. Three renders failed on quality: the tube method makes wire and cannot make liquid metal. Options if it comes up again: research a sculpted-surface technique first, or have a 3D artist make it.
 
 ## Open items (nothing approved)
-- Pass day-reading limits (8, 36, 90 and a daily cap) are in the code. The owner never approved them and the terms say a pass covers the whole site. The owner's answer on removing them is pending.
 - The code has an owner key (a private password for unlimited use and the `/owner` and `/usage` pages). The owner did not know about it. Find out who has it.
 - Check what Cloudflare's logs hold, such as connection addresses, and make the privacy page say so.
 - Someone can get a second free reading by cancelling the "find existing unlock" prompt and accepting "create". The owner declined lowering the per-connection limit. No recovery code (owner declined). No payment processor yet.
