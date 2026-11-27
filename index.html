@@ -4142,6 +4142,25 @@ function kyeFromB64u(s) {
   return out;
 }
 
+// Bot check (Cloudflare Turnstile). Paste the public site key here to switch it on; empty means off. Shows nothing to real visitors unless Cloudflare needs a tap.
+const KYE_TURNSTILE_SITEKEY = "";
+let kyeTsPending = null;
+function kyeTurnstileToken() {
+  if (!KYE_TURNSTILE_SITEKEY) return Promise.resolve(null);
+  return new Promise(resolve => {
+    let fin = false; const done = t => { if (!fin) { fin = true; resolve(t || null); } };
+    const go = () => {
+      let box = document.getElementById("kyeTs");
+      if (!box) { box = document.createElement("div"); box.id = "kyeTs"; box.style.cssText = "position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:100000"; document.body.appendChild(box); }
+      box.innerHTML = "";
+      try { window.turnstile.render(box, { sitekey: KYE_TURNSTILE_SITEKEY, appearance: "interaction-only", callback: t => done(t), "error-callback": () => done(null), "timeout-callback": () => done(null) }); } catch (e) { done(null); }
+    };
+    if (window.turnstile) go();
+    else { const sc = document.createElement("script"); sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"; sc.async = true; sc.onload = go; sc.onerror = () => done(null); document.head.appendChild(sc); }
+    setTimeout(() => done(null), 60000);
+  });
+}
+
 async function kyePost(path, body) {
   const res = await fetch(W_API + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
   const j = await res.json().catch(() => ({}));
@@ -4168,7 +4187,9 @@ async function kyeUnlock(useExisting) {
   let mode = forceCreate ? "create" : (useExisting || hint) ? "get" : "create";
   // one unlock attempt in the given mode; returns the value that stands in for this phone
   const attempt = async (m) => {
-    const o = await kyePost("/auth/start", { mode: m });
+    let ts = null;
+    if (m === "create") { ts = await (kyeTsPending || kyeTurnstileToken()); kyeTsPending = null; }
+    const o = await kyePost("/auth/start", m === "create" ? { mode: m, ts } : { mode: m });
     const challenge = kyeFromB64u(o.challenge);
     let out;
     if (m === "create") {
@@ -4190,7 +4211,7 @@ async function kyeUnlock(useExisting) {
     if (!useExisting && !hint && !forceCreate) {
       // no marker on this browser: look for an existing unlock on the phone first (new phone, cleared browser data). Cancelling that never makes a new unlock; the person has to choose that themselves.
       try { out = await attempt("get"); }
-      catch (firstErr) { kyeFindFailed = true; return fail("No unlock was found on this phone, or it was cancelled. If this is your first time, tap Unlock again."); }
+      catch (firstErr) { kyeFindFailed = true; kyeTsPending = kyeTurnstileToken(); return fail("No unlock was found on this phone, or it was cancelled. If this is your first time, tap Unlock again."); }
     } else {
       out = await attempt(mode);
     }
@@ -4199,6 +4220,7 @@ async function kyeUnlock(useExisting) {
     rememberPassEmail(out.email);
     return out.email;
   } catch (e) {
+    if (mode === "create") kyeTsPending = kyeTurnstileToken();
     if (e && e.name === "NotAllowedError") return fail(mode === "get" ? "No unlock was found on this phone, or it was cancelled. If this is your first time, close this and tap Unlock again." : "The unlock was cancelled. Tap Unlock to try again.");
     return fail((e && e.message) || "The unlock didn't work. Please try again.");
   }
