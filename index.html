@@ -967,6 +967,7 @@ html.red .submit-wrap{padding-bottom:14px}
 .chart-astro .glyph{font-size:1.15em;margin-right:6px}
 .chart-astro .dpsec{margin:48px 0 18px !important}
 .chart-hd .card-expand-title{font-size:25px !important}
+.chart-frame.is-reading .card-expand-title{font-size:36px !important;line-height:1.1 !important;-webkit-text-stroke:1px #0b0b10;white-space:normal !important;text-align:center !important;margin:0 0 22px !important}
 .chart-hd .dprow{margin:0 0 24px !important}
 .chart-hd .dprv{font-size:30px !important}
 .chart-hd .dpsec{margin:44px 0 16px !important}
@@ -3313,7 +3314,7 @@ function reportSlot(names, cardNames, report, reportError, rowNum, usedFallback,
   const refsHtml = report.references && report.references.length ? dpsec("References") + `<div class="dprow"><p class="report-body" style="color:var(--card-mid);font-style:italic;">${report.references.map(escapeHtml).join(" &middot; ")}</p></div>` : "";
   const fullRows = fallbackNoticeHtml + timeNoteHtml + sectionsHtml + sigHtml + refsHtml;
   const idx = cardRegistry.push({
-    title: titleRaw,
+    title: names,
     rows: fullRows,
     isReading: true
   }) - 1;
@@ -4495,9 +4496,10 @@ function fitTitles() {
   });
 }
 let chartFrameObserver = null;
-function setChartFrame(title) {
+function setChartFrame(title, isReading) {
   const ex = document.getElementById("cardExpand");
-  const on = /Numerology|Astrology|Human Design|Reading|Timeline/i.test(title || "");
+  const on = !!isReading || /Numerology|Astrology|Human Design|Reading|Timeline/i.test(title || "");
+  ex.classList.toggle("is-reading", !!isReading);
   ex.classList.toggle("chart-frame", on);
   ex.classList.toggle("chart-astro", on && /Astrology/i.test(title));
   ex.classList.toggle("chart-hd", on && /Human Design/i.test(title));
@@ -4693,7 +4695,7 @@ document.addEventListener("click", e => {
       document.getElementById("cardExpand").classList.add("open");
       if (entry.isReading) { rlEntry = entry; rlSelected = "cur"; rlConfirm = null; renderReadingList(); }
       else { const rb = document.getElementById("cardExpandReadings"); if (rb) rb.innerHTML = ""; }
-      setChartFrame(entry.title);
+      setChartFrame(entry.title, !!entry.isReading);
     }
   }
 });
