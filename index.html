@@ -1067,6 +1067,7 @@ html.red:has(#resultsWrap[style*="block"]) body{background:#000 !important}
 
   <div class="hero-email-wrap">
     <div class="err" id="heroEmailErr" style="display:none;"></div>
+    <div id="pricesStep" style="display:none;"></div>
     <div class="rb-wrap"><button type="button" class="rbtn hero-continue-btn" aria-label="Unlock with your phone" onclick="revealForm()"><span class="hero-continue-label eng">Unlock</span></button></div>
   </div>
 </div>
@@ -4149,7 +4150,7 @@ async function kyePost(path, body) {
 }
 
 // Unlocks with the phone's own lock. Returns the "email" value that stands in for this phone, or null.
-async function kyeUnlock(useExisting) {
+async function kyeUnlock(useExisting, forceCreate) {
   const errEl = document.getElementById("heroEmailErr");
   const fail = m => { errEl.textContent = m; errEl.style.display = "block"; return null; };
   errEl.style.display = "none";
@@ -4162,7 +4163,7 @@ async function kyeUnlock(useExisting) {
   if (!window.PublicKeyCredential || !navigator.credentials) return fail("This browser can't use phone unlock. Please open the site in Chrome or Safari.");
   let hint = false;
   try { hint = !!localStorage.getItem(KYE_HINT_KEY); } catch (e) {}
-  let mode = (useExisting || hint) ? "get" : "create";
+  let mode = forceCreate ? "create" : (useExisting || hint) ? "get" : "create";
   // one unlock attempt in the given mode; returns the value that stands in for this phone
   const attempt = async (m) => {
     const o = await kyePost("/auth/start", { mode: m });
@@ -4184,10 +4185,16 @@ async function kyeUnlock(useExisting) {
   };
   try {
     let out;
-    if (!useExisting && !hint) {
-      // no marker on this browser: look for an existing unlock on the phone first (new phone, cleared browser data), and only make a new one if there is none
+    if (!useExisting && !hint && !forceCreate) {
+      // no marker on this browser: look for an existing unlock on the phone first (new phone, cleared browser data). Cancelling that never makes a new unlock; the person has to choose that themselves.
       try { out = await attempt("get"); }
-      catch (firstErr) { mode = "create"; out = await attempt("create"); }
+      catch (firstErr) {
+        errEl.textContent = "No unlock was found on this phone, or it was cancelled. ";
+        const a = document.createElement("a"); a.href = "#"; a.style.cssText = "color:inherit;text-decoration:underline;font-weight:700"; a.textContent = "First time here? Create my unlock.";
+        a.onclick = ev => { ev.preventDefault(); revealForm(false, true); };
+        errEl.appendChild(a); errEl.style.display = "block";
+        return null;
+      }
     } else {
       out = await attempt(mode);
     }
@@ -4200,19 +4207,25 @@ async function kyeUnlock(useExisting) {
   }
 }
 
-async function revealForm(useExisting) {
+async function revealForm(useExisting, forceCreate) {
   const errEl = document.getElementById("heroEmailErr");
-  const email = await kyeUnlock(useExisting === true);
+  const email = await kyeUnlock(useExisting === true, forceCreate === true);
   if (!email) return;
   errEl.style.display = "none";
   document.getElementById("pEmail").value = email;
   const statusResult = await checkEmailStatus();
   if (statusResult && statusResult.freeReadingUsed && !statusResult.active) {
     setFormLocked(true);
-    errEl.textContent = "Your free reading has been used. A pass is needed for another reading, and passes are not available yet.";
+    errEl.textContent = "Your free reading on this phone has been used.";
     errEl.style.display = "block";
+    const box = document.getElementById("pricesStep");
+    if (box && typeof window.kyeBuildPass === "function") {
+      box.innerHTML = ""; box.appendChild(window.kyeBuildPass()); box.style.display = "block";
+      box.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     return;
   }
+  const pb = document.getElementById("pricesStep"); if (pb) pb.style.display = "none";
   setFormLocked(false);
   const target = document.getElementById("formStep");
   target.scrollIntoView({
