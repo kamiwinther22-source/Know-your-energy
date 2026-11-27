@@ -19,11 +19,13 @@ Paste this into the new thread as the first message. It was written from one lon
 ## What is live (all on `main`)
 1. A free reading that fails no longer uses up the day's free total.
 2. Privacy page lists everything the server keeps and for how long. The 14-day saved day reading is gone. Copies saved before Nov 27 expire by Dec 11.
-3. Every reading, full and day, is saved in the browser. "Run Another Reading" files the old one instead of deleting it.
+3. Every reading, full and day, is saved in the browser. "New Reading" (the button, formerly "Run Another Reading") files the old one instead of deleting it.
 4. "Your readings" list at the top of the open reading card: 12px, no lines, three rows tall and scrolls, no cap, Delete with a confirm, opens a past reading as a whole page. Full readings only. Day readings are in their own list at the top of the Timeline (day reading) card, same style.
 
 ## Also live
 5. The reading card's name is bold and centered with no "Reading" after it.
+6. The button that starts another reading says "New Reading".
+7. The pass day-reading limits were removed from the code (the owner never approved them). Pass holders have no cap on day readings. The privacy page matches.
 
 ## Not live, and the owner is leaving the frames as they are now
 - Bigger bold headings and a new frame were mock-ups only, and the owner told me to delete them. The owner rejected the thin ornament frames (looked like shelving, then clip art).
