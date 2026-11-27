@@ -87,7 +87,7 @@
       ".tl-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:2px 0 8px}",
       ".tl-ctl label{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#000}",
       ".tl-ctl input:disabled{opacity:1;background:#fff;color:#000;-webkit-text-fill-color:#000;cursor:default}",
-      ".tl-ctl input{font:700 15px 'DM Sans',sans-serif;border:2px solid #000;border-radius:12px;background:#fff;color:#000;padding:4px 8px}",
+      ".tl-ctl input{font:700 16px 'DM Sans',sans-serif;border:2px solid #000;border-radius:12px;background:#fff;color:#000;padding:4px 8px}",
       ".tl-chip{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;border:2px solid #000;border-radius:12px;background:#fff;color:#000 !important;padding:3px 12px;cursor:pointer}",
       ".tl-chip.on{background:#000 !important;color:#fff !important}",
       ".tl-info{border:2.5px solid #000;border-radius:14px;padding:9px 12px;margin:0 0 8px;font:600 13.5px/1.45 'DM Sans',sans-serif;min-height:84px;max-height:176px;overflow:auto;color:#000;background:#fff}",
@@ -361,7 +361,7 @@
       var keep = function (r) { var m = readSaved(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); if (typeof renderReadingList === "function") renderReadingList(); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } };
       var have = readSaved()[dkey]; if (have) { show(have); return; }
       var email = ""; try { var f = document.getElementById("pEmail"); email = ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) {}
-      if (!email) { say("Enter the email address of your pass on the first page, then open this again."); return; }
+      if (!email) { say("Unlock with your phone on the first page, then open this again."); return; }
       say("Writing your reading for " + lab + ". This takes up to a minute.");
       var ast = Object.assign({}, p.astro || {}); delete ast.acg; delete ast.aspects;
       var cycles = (me.items || []).filter(function (it) { return it.ev && it.a <= when && when < it.b; }).map(function (it) { return it.title; });
