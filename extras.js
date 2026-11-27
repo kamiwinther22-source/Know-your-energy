@@ -407,7 +407,7 @@
       tl.innerHTML = frameCard("xtl", '<div class="cap">TIMELINE</div><div class="sc">' + nowLab + '</div><div class="rl"></div><div class="ln">NUMEROLOGY</div><div class="rl"></div><div class="ln">ASTROLOGY</div><div class="rl"></div><div class="ln">HUMAN DESIGN</div><div class="nm">' + esc(names) + "</div>");
       tl.firstChild.onclick = function () { openTimeline(people); };
       var links = document.createElement("div"); links.className = "xlinks";
-      links.innerHTML = '<a href="#" id="xRun">Run another reading</a><a href="#" id="xSave">Save / Print reading</a>';
+      links.innerHTML = '<a href="#" id="xRun">New reading</a><a href="#" id="xSave">Save / Print reading</a>';
       links.querySelector("#xRun").onclick = function (e) { e.preventDefault(); resetToForm(); };
       links.querySelector("#xSave").onclick = function (e) { e.preventDefault(); savePrintReading(); };
       if (acts) {
