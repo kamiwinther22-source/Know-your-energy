@@ -43,23 +43,32 @@ def mat(name, **kw):
 PLAT = mat('platinum', Base_Color=(0.84, 0.85, 0.87, 1), Metallic=1.0, Roughness=float(os.environ.get('PR', '0.10')))
 ROSE = mat('rosegold', Base_Color=tuple(float(x) for x in os.environ.get('GOLD', '0.92,0.60,0.52').split(',')) + (1,), Metallic=1.0, Roughness=float(os.environ.get('GR', '0.12')))
 
-# world: the studio picture already in the repo, so the metal has something to reflect
+# world: a broad soft gradient (bright overhead, dark at the horizon), which is what gives liquid chrome its long smooth reflections
 w = bpy.data.worlds.new('w'); sc.world = w; w.use_nodes = True
 nt = w.node_tree
-bg = nt.nodes['Background']; bg.inputs['Strength'].default_value = float(os.environ.get('WORLD', '1.0'))
-if os.path.exists(HDRI):
-    env = nt.nodes.new('ShaderNodeTexEnvironment'); env.image = bpy.data.images.load(HDRI)
-    mp = nt.nodes.new('ShaderNodeMapping'); tc = nt.nodes.new('ShaderNodeTexCoord')
-    mp.inputs['Rotation'].default_value[2] = math.radians(float(os.environ.get('ROT', '40')))
-    nt.links.new(tc.outputs['Generated'], mp.inputs['Vector']); nt.links.new(mp.outputs['Vector'], env.inputs['Vector'])
-    nt.links.new(env.outputs['Color'], bg.inputs['Color'])
-else:
-    print('!! no hdri at', HDRI)
-    bg.inputs['Color'].default_value = (0.8, 0.8, 0.85, 1)
+bg = nt.nodes['Background']; bg.inputs['Strength'].default_value = 1.0
+tc = nt.nodes.new('ShaderNodeTexCoord'); sep = nt.nodes.new('ShaderNodeSeparateXYZ')
+nt.links.new(tc.outputs['Generated'], sep.inputs['Vector'])
+ramp = nt.nodes.new('ShaderNodeValToRGB'); ramp.color_ramp.interpolation = 'B_SPLINE'
+el = ramp.color_ramp.elements
+el[0].position = 0.5; el[0].color = (0.015, 0.015, 0.02, 1)      # horizon and below: nearly black
+el[1].position = 1.0; el[1].color = (float(os.environ.get('ZEN', '2.6')),) * 3 + (1,)   # straight overhead: bright
+m1 = ramp.color_ramp.elements.new(0.72); m1.color = (0.30, 0.30, 0.33, 1)
+m2 = ramp.color_ramp.elements.new(0.88); m2.color = (1.0, 1.0, 1.02, 1)
+nt.links.new(sep.outputs['Z'], ramp.inputs['Fac']); nt.links.new(ramp.outputs['Color'], bg.inputs['Color'])
 
-# the path: a rounded rectangle, walked in 0.5 px steps, with the outward direction at every step
-hw, hh = CW / 2 - MARGIN, CH / 2 - MARGIN
-pts = []   # (x, y, nx, ny) in px
+# the path: the outer edge of the frame is a rounded rectangle; the pair of strands runs just inside it, and the strands
+# swell where the frame has room (top, bottom, corners) and slim down along the sides, where the reading needs the width
+SIDE = float(os.environ.get('SIDE', '0.55'))     # thickness of the sides compared with the top and bottom
+EDGE = 3.0                                       # gap between the canvas edge and the outside of the metal
+hw, hh = CW / 2 - EDGE, CH / 2 - EDGE
+def sstep(a, b, x):
+    t = max(0.0, min(1.0, (x - a) / (b - a))); return t * t * (3 - 2 * t)
+def grow(x, y, s):
+    e = abs(y) / hh
+    f = SIDE + (1 - SIDE) * sstep(0.80, 0.97, e)
+    return f * (1 + 0.06 * math.sin(2 * math.pi * s / (L_REAL / 7.0)))   # a slow liquid ripple in the thickness
+pts = []   # (x, y, nx, ny) on the outer edge, in px
 def straight(x0, y0, x1, y1, nx, ny):
     n = max(1, int(math.hypot(x1 - x0, y1 - y0) / 0.5))
     for i in range(n):
@@ -76,21 +85,28 @@ straight(hw - RC, -hh, -(hw - RC), -hh, 0, -1)
 arc(-(hw - RC), -(hh - RC), -math.pi / 2, -math.pi)
 straight(-hw, -(hh - RC), -hw, hh - RC, -1, 0)
 arc(-(hw - RC), hh - RC, math.pi, math.pi / 2)
-N = len(pts); L = N * 0.5
+N = len(pts); L = N * 0.5; L_REAL = L
 PITCH = L / round(L / PITCH0)    # a whole number of twists, so the pattern closes without a seam
 print('path length %.1f px, %d points, pitch %.2f px, %d twists' % (L, N, PITCH, round(L / PITCH)))
+# per point: thickness of each strand, and where the middle of the pair sits (just inside the outer edge)
+LOC = []
+for i, (x, y, nx, ny) in enumerate(pts):
+    g = grow(x, y, i * 0.5); rt = RT * g; rh = RH * g
+    inset = rt + rh
+    LOC.append((x - nx * inset, y - ny * inset, nx, ny, rt, rh))
 
 def strand(name, phase, material):
     cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'
-    cu.bevel_depth = RT * PX; cu.bevel_resolution = 14; cu.resolution_u = 2; cu.use_fill_caps = False
+    cu.bevel_depth = PX; cu.bevel_resolution = 16; cu.resolution_u = 2; cu.use_fill_caps = False
     sp = cu.splines.new('POLY'); sp.points.add(N - 1); sp.use_cyclic_u = True
-    for i, (x, y, nx, ny) in enumerate(pts):
+    for i, (x, y, nx, ny, rt, rh) in enumerate(LOC):
         th = 2 * math.pi * (i * 0.5) / PITCH + phase
-        off = RH * math.cos(th); z = RH * math.sin(th)
+        off = rh * math.cos(th); z = rh * math.sin(th)
         sp.points[i].co = ((x + nx * off) * PX, (y + ny * off) * PX, z * PX, 1.0)
+        sp.points[i].radius = rt
     ob = bpy.data.objects.new(name, cu); bpy.context.scene.collection.objects.link(ob)
     ob.data.materials.append(material)
-    for s in cu.splines: s.use_smooth = True
+    for s_ in cu.splines: s_.use_smooth = True
     return ob
 strand('platinum_strand', 0.0, PLAT)
 strand('rose_strand', math.pi, ROSE)
@@ -105,8 +121,8 @@ def softbox(name, loc, w_mm, h_mm, watts):
     ob.rotation_euler = (Vector((0, 0, 0)) - ob.location).to_track_quat('-Z', 'Y').to_euler()
 SB = float(os.environ.get('SB', '1'))
 KW = float(os.environ.get('KEY', '300'))
-softbox('key', (-0.18, 0.30, 0.40), 420, 260, KW)
-softbox('fill', (0.28, -0.22, 0.34), 160, 520, KW * 0.45)
+softbox('key', (-0.18, 0.30, 0.40), 420, 260, KW * float(os.environ.get('KEYF', '0.0')))
+softbox('fill', (0.28, -0.22, 0.34), 160, 520, KW * float(os.environ.get('FILLF', '0.0')))
 softbox('top', (0.0, 0.0, 0.55), 700, 700, KW * float(os.environ.get('TOPF', '0.35')))
 
 t0 = time.time()
