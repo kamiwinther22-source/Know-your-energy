@@ -418,3 +418,10 @@ html.red #formStep .section-lbl,html.red #formStep .row-birth label,html.red #fo
 html.red #formStep .r-save{font-size:21px !important}
 }
 @media (max-width:600px){html.red .site-foot a{font-size:16px !important}}
+/* bigger invisible tap areas on phones; nothing changes in how they look */
+@media (max-width:600px){
+html.red .toggle-pill::before{content:'';position:absolute;left:-14px;right:-14px;top:-14px;bottom:-14px}
+html.red .site-foot a{display:inline-block;padding:11px 8px;margin:-11px -8px}
+html.red #formStep .tz-toggle{position:relative}
+html.red #formStep .tz-toggle::after{content:'';position:absolute;left:0;right:0;top:-11px;bottom:-11px}
+}
