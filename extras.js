@@ -369,15 +369,14 @@
       var head = '<div class="tl-head">' + COLS.map(function (c) { return "<div>" + c + "</div>"; }).join("") + "</div>";
       var chips = people.length > 1 ? people.map(function (q, i) { return '<button class="tl-chip' + (i === me.idx ? " on" : "") + '" data-p="' + i + '">' + esc(q.first) + "</button>"; }).join("") : "";
       var ds = new Date(me.selDate), iso = ds.getUTCFullYear() + "-" + String(ds.getUTCMonth() + 1).padStart(2, "0") + "-" + String(ds.getUTCDate()).padStart(2, "0");
-      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate" id="tlDateLab">' + (me.pass ? "Type a date" : "Today") + '</label><input type="date" id="tlDate" value="' + iso + '"' + (me.pass ? "" : " disabled") + '><button class="tl-chip" id="tlRead">' + (me.pass ? "Read this day" : "Read today") + '</button>' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
+      body.innerHTML = '<div class="tl"><div class="tl-ctl"><label for="tlDate" id="tlDateLab">' + (me.pass ? "Type a date" : "Today") + '</label><input type="date" id="tlDate" value="' + iso + '"' + (me.pass ? "" : " disabled") + '>' + chips + (me.zoom ? '<button class="tl-chip" id="tlWhole">Whole life</button>' : "") + '</div><div class="tl-info" id="tlInfo"></div>' + '<div class="tl-frame">' + head + '<div class="tl-scroll" id="tlScroll">' + html + "</div></div></div>";
       showActive();
       var sc = document.getElementById("tlScroll"); var go = function () { sc.style.setProperty("--stk", Math.round(sc.clientHeight * 0.42) + "px"); sc.scrollTop = Math.max(0, nowY - sc.clientHeight / 2); }; go(); setTimeout(go, 120); setTimeout(go, 450);
       sc.addEventListener("click", function (e) { var bar = e.target.closest(".tl-bar"); if (!bar) return; var dd = body.querySelector(".tl-day"); if (dd) { dd.remove(); body.querySelector(".tl").classList.remove("has-day"); } var it = me.items[+bar.dataset.i]; [].forEach.call(sc.querySelectorAll(".tl-bar.sel"), function (x) { x.classList.remove("sel"); }); bar.classList.add("sel"); document.getElementById("tlInfo").innerHTML = '<span class="tt">' + esc(it.title) + "</span>" + esc(it.text || "").replace(/\n/g, "<br>"); });
-      document.getElementById("tlDate").onchange = function (e) { var v = e.target.value.split("-"); if (v.length === 3) { me.selDate = Date.UTC(+v[0], +v[1] - 1, +v[2]); me.selIsNow = false; me.zoom = true; build(); } };
+      document.getElementById("tlDate").onchange = function (e) { var v = e.target.value.split("-"); if (v.length === 3) { me.selDate = Date.UTC(+v[0], +v[1] - 1, +v[2]); me.selIsNow = false; me.zoom = true; me.readAfter = true; build(); } };
       var wh = document.getElementById("tlWhole"); if (wh) wh.onclick = function () { me.zoom = false; build(); };
-      var rd = document.getElementById("tlRead"); if (rd) rd.onclick = function () { readDay(false); };
-      me.autoFor = me.autoFor || {}; if (me.idx === 0 && !me.autoFor[0]) { me.autoFor[0] = 1; readDay(true); }
-      [].forEach.call(body.querySelectorAll(".tl-chip[data-p]"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; loadEvents(); }; });
+      me.autoFor = me.autoFor || {}; if (me.readAfter) { me.readAfter = false; readDay(false); } else if (!me.autoFor[me.idx]) { me.autoFor[me.idx] = 1; readDay(true); }
+      [].forEach.call(body.querySelectorAll(".tl-chip[data-p]"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; me.autoFor = {}; loadEvents(); }; });
     }
     function readDay(auto) {
       var p = person(), el = document.getElementById("tlDate"), host = body.querySelector(".tl"), iso = me.pass ? (el && el.value) : todayIsoLocal(); if (!iso || !host) return;
@@ -385,14 +384,13 @@
       var old = host.querySelector(".tl-day"); if (old) old.remove();
       var panel = document.createElement("div"); panel.className = "tl-day"; host.insertBefore(panel, host.querySelector(".tl-info")); host.classList.add("has-day");
       var parts = iso.split("-"), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0];
-      var close = '<button class="tl-chip x" id="tlDayX">Close</button>';
+      var close = "";
       var shut = function () { panel.remove(); host.classList.remove("has-day"); };
-      var say = function (msg) { panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><p>" + esc(msg) + "</p>"; document.getElementById("tlDayX").onclick = shut; };
+      var say = function (msg) { panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><p>" + esc(msg) + "</p>"; };
       var show = function (r) {
         if (!panel.parentNode) return;
         var paras = String(r.body || "").split(/\n\s*\n/).filter(function (s) { return s.trim(); });
         panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
-        document.getElementById("tlDayX").onclick = shut;
       };
       var have = readSavedDays()[dayKeyOf(p, iso)]; if (have) { show(have); return; }
       say("Writing your reading for " + lab + ". This takes up to a minute.");
@@ -405,7 +403,7 @@
     }
     var ex = document.getElementById("cardExpand"), body = document.getElementById("cardExpandBody"), ttl = document.getElementById("cardExpandTitle");
     function passEmailNow() { try { var f = document.getElementById("pEmail"); return ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) { return ""; } }
-    function checkPassNow() { var em = passEmailNow(); if (!em || typeof checkPassStatus !== "function") { me.pass = false; return; } checkPassStatus(em).then(function (r) { me.pass = !!(r && r.active); var b = document.getElementById("tlRead"), d = document.getElementById("tlDate"), l = document.getElementById("tlDateLab"); if (b) b.textContent = me.pass ? "Read this day" : "Read today"; if (d) d.disabled = !me.pass; if (l) l.textContent = me.pass ? "Type a date" : "Today"; }).catch(function () {}); }
+    function checkPassNow() { var em = passEmailNow(); if (!em || typeof checkPassStatus !== "function") { me.pass = false; return; } checkPassStatus(em).then(function (r) { me.pass = !!(r && r.active); var d = document.getElementById("tlDate"), l = document.getElementById("tlDateLab"); if (d) d.disabled = !me.pass; if (l) l.textContent = me.pass ? "Type a date" : "Today"; }).catch(function () {}); }
     function loadEvents() {
       ttl.textContent = person().first + " · Timeline"; if (typeof setChartFrame === "function") setChartFrame("Numerology");
       body.innerHTML = '<div class="tl"><div class="tl-info">Loading your timeline&hellip;</div></div>';
