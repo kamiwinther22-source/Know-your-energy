@@ -41,7 +41,7 @@ def mat(name, **kw):
     return m
 
 PLAT = mat('platinum', Base_Color=(0.84, 0.85, 0.87, 1), Metallic=1.0, Roughness=float(os.environ.get('PR', '0.10')))
-ROSE = mat('rosegold', Base_Color=(0.92, 0.60, 0.52, 1), Metallic=1.0, Roughness=float(os.environ.get('GR', '0.12')))
+ROSE = mat('rosegold', Base_Color=tuple(float(x) for x in os.environ.get('GOLD', '0.92,0.60,0.52').split(',')) + (1,), Metallic=1.0, Roughness=float(os.environ.get('GR', '0.12')))
 
 # world: the studio picture already in the repo, so the metal has something to reflect
 w = bpy.data.worlds.new('w'); sc.world = w; w.use_nodes = True
@@ -82,7 +82,7 @@ print('path length %.1f px, %d points, pitch %.2f px, %d twists' % (L, N, PITCH,
 
 def strand(name, phase, material):
     cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'
-    cu.bevel_depth = RT * PX; cu.bevel_resolution = 8; cu.resolution_u = 2; cu.use_fill_caps = False
+    cu.bevel_depth = RT * PX; cu.bevel_resolution = 14; cu.resolution_u = 2; cu.use_fill_caps = False
     sp = cu.splines.new('POLY'); sp.points.add(N - 1); sp.use_cyclic_u = True
     for i, (x, y, nx, ny) in enumerate(pts):
         th = 2 * math.pi * (i * 0.5) / PITCH + phase
@@ -98,10 +98,15 @@ strand('rose_strand', math.pi, ROSE)
 cam_d = bpy.data.cameras.new('cam'); cam_d.type = 'ORTHO'; cam_d.ortho_scale = max(CW, CH) * PX
 cam = bpy.data.objects.new('cam', cam_d); bpy.context.scene.collection.objects.link(cam)
 cam.location = (0, 0, 1.0); cam.rotation_euler = (0, 0, 0); sc.camera = cam
-for name, loc, e in (('key', (-0.35, 0.6, 0.8), float(os.environ.get('KEY', '2.5'))), ('fill', (0.5, -0.5, 0.6), float(os.environ.get('FILL', '0.8')))):
-    ld = bpy.data.lights.new(name, 'SUN'); ld.energy = e; ld.angle = math.radians(6)
-    ob = bpy.data.objects.new(name, ld); bpy.context.scene.collection.objects.link(ob)
-    ob.rotation_euler = (Vector((0, 0, 0)) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
+# jewellery-style lighting: large soft boxes above give long clean highlights along each strand; a little of the studio picture fills the shadows
+def softbox(name, loc, w_mm, h_mm, watts):
+    ld = bpy.data.lights.new(name, 'AREA'); ld.shape = 'RECTANGLE'; ld.size = w_mm * 0.001; ld.size_y = h_mm * 0.001; ld.energy = watts
+    ob = bpy.data.objects.new(name, ld); bpy.context.scene.collection.objects.link(ob); ob.location = Vector(loc)
+    ob.rotation_euler = (Vector((0, 0, 0)) - ob.location).to_track_quat('-Z', 'Y').to_euler()
+KW = float(os.environ.get('KEY', '300'))
+softbox('key', (-0.18, 0.30, 0.40), 420, 260, KW)
+softbox('fill', (0.28, -0.22, 0.34), 160, 520, KW * 0.45)
+softbox('top', (0.0, 0.0, 0.55), 700, 700, KW * 0.35)
 
 t0 = time.time()
 sc.render.filepath = OUT
