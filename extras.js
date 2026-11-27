@@ -361,13 +361,15 @@
       var keep = function (r) { var m = readSaved(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); if (typeof renderReadingList === "function") renderReadingList(); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } };
       var have = readSaved()[dkey]; if (have) { show(have); return; }
       var email = ""; try { var f = document.getElementById("pEmail"); email = ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) {}
-      if (!email) { say("Unlock with your phone on the first page, then open this again."); return; }
+      var again = function () { return (typeof kyeUnlock === "function" ? kyeUnlock(true) : Promise.resolve(null)).then(function (e2) { if (!e2) throw new Error("We could not confirm your phone just now. Please try again."); return e2; }); };
       say("Writing your reading for " + lab + ". This takes up to a minute.");
       var ast = Object.assign({}, p.astro || {}); delete ast.acg; delete ast.aspects;
       var cycles = (me.items || []).filter(function (it) { return it.ev && it.a <= when && when < it.b; }).map(function (it) { return it.title; });
       var api = typeof W_API !== "undefined" ? W_API : "https://know-your-energy.kwdoanchor.workers.dev";
       var timer = new Promise(function (_, rej) { setTimeout(function () { rej(new Error("This is taking longer than expected. Please try again.")); }, 150000); });
-      Promise.race([fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ passEmail: email, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: ast, humanDesign: p.hd || null, activeCycles: cycles }) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) throw new Error(j.error || "Something went wrong. Please try again."); return j; }); }), timer]).then(function (j) {
+      var send = function (em) { return fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ passEmail: em, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: ast, humanDesign: p.hd || null, activeCycles: cycles }) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) { var er = new Error(j.error || "Something went wrong. Please try again."); er.code = j.code; throw er; } return j; }); }); };
+      var go = (email ? send(email) : again().then(send)).catch(function (e) { if (e && e.code === "unlock_needed") return again().then(send); throw e; });
+      Promise.race([go, timer]).then(function (j) {
         var r = j.report || {}; keep(r); show(r);
       }).catch(function (e) { say(e && e.message ? e.message : "Something went wrong. Please try again."); });
     }
