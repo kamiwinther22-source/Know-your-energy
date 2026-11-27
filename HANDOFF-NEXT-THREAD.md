@@ -22,15 +22,18 @@ Paste this into the new thread as the first message. It was written from one lon
 3. Every reading, full and day, is saved in the browser. "Run Another Reading" files the old one instead of deleting it.
 4. "Your readings" list at the top of the open reading card: 12px, no lines, three rows tall and scrolls, no cap, Delete with a confirm, opens a past reading as a whole page, includes day readings.
 
+## Also live
+5. The reading card's name is bold and centered with no "Reading" after it.
+
 ## Not live, and the owner is leaving the frames as they are now
-- Bigger bold headings, bold centered names with no "Reading", a new frame. All were mock-ups only. The owner rejected the thin ornament frames (looked like shelving, then clip art).
+- Bigger bold headings and a new frame were mock-ups only, and the owner told me to delete them. The owner rejected the thin ornament frames (looked like shelving, then clip art).
 - Reading layout: version B (numbers, boxes) is rejected for good. Version A is undecided. The owner does not want a bold first sentence.
 
 ## Frame direction the owner wants (if it is picked up again)
 - Two metals twisting around each other, a very loose twist, solid and thick, "liquid metal", not wire, not rope, no gemstones, not toy-like. Color with depth, not flat, not only black and white.
 - One family: the frame is shared by every opened card (Numerology, Astrology, Human Design, Reading, Timeline).
 - A fixed frame that fits the phone screen with the reading scrolling inside it. Light, softly lit surface.
-- `tools/render/frame.py` is the work in progress. Three renders failed on quality. The tube method makes wire and cannot make liquid metal. Options: research a sculpted-surface technique first, or have a 3D artist make it.
+- The render script was deleted at the owner's request. Three renders failed on quality: the tube method makes wire and cannot make liquid metal. Options if it comes up again: research a sculpted-surface technique first, or have a 3D artist make it.
 
 ## Open items (nothing approved)
 - Pass day-reading limits (8, 36, 90 and a daily cap) are in the code. The owner never approved them and the terms say a pass covers the whole site. The owner's answer on removing them is pending.
