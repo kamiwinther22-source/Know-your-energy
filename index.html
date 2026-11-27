@@ -4150,7 +4150,9 @@ async function kyePost(path, body) {
 }
 
 // Unlocks with the phone's own lock. Returns the "email" value that stands in for this phone, or null.
-async function kyeUnlock(useExisting, forceCreate) {
+let kyeFindFailed = false;
+async function kyeUnlock(useExisting) {
+  const forceCreate = kyeFindFailed;
   const errEl = document.getElementById("heroEmailErr");
   const fail = m => { errEl.textContent = m; errEl.style.display = "block"; return null; };
   errEl.style.display = "none";
@@ -4188,17 +4190,12 @@ async function kyeUnlock(useExisting, forceCreate) {
     if (!useExisting && !hint && !forceCreate) {
       // no marker on this browser: look for an existing unlock on the phone first (new phone, cleared browser data). Cancelling that never makes a new unlock; the person has to choose that themselves.
       try { out = await attempt("get"); }
-      catch (firstErr) {
-        errEl.textContent = "No unlock was found on this phone, or it was cancelled. ";
-        const a = document.createElement("a"); a.href = "#"; a.style.cssText = "color:inherit;text-decoration:underline;font-weight:700"; a.textContent = "First time here? Create my unlock.";
-        a.onclick = ev => { ev.preventDefault(); revealForm(false, true); };
-        errEl.appendChild(a); errEl.style.display = "block";
-        return null;
-      }
+      catch (firstErr) { kyeFindFailed = true; return fail("No unlock was found on this phone, or it was cancelled. If this is your first time, tap Unlock again."); }
     } else {
       out = await attempt(mode);
     }
     try { localStorage.setItem(KYE_HINT_KEY, "1"); } catch (e) {}
+    kyeFindFailed = false;
     rememberPassEmail(out.email);
     return out.email;
   } catch (e) {
@@ -4207,9 +4204,9 @@ async function kyeUnlock(useExisting, forceCreate) {
   }
 }
 
-async function revealForm(useExisting, forceCreate) {
+async function revealForm(useExisting) {
   const errEl = document.getElementById("heroEmailErr");
-  const email = await kyeUnlock(useExisting === true, forceCreate === true);
+  const email = await kyeUnlock(useExisting === true);
   if (!email) return;
   errEl.style.display = "none";
   document.getElementById("pEmail").value = email;
