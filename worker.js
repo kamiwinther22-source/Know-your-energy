@@ -650,9 +650,13 @@ async function waIssueToken(env, id) {
 
 // ---- The owner key. One private key for the owner and family, kept only as a one-way hash (never the key itself). ----
 // A device that enters it is remembered with no expiry and gets unlimited use of the site and access to the private page at /owner.
-// To sign every device out (for example if the key leaks), put a new key's hash below and raise OWNER_KEY_EPOCH by one.
-const OWNER_KEY_HASH = "0b3c1078669341d7f1237a2d4c7be3be67a9df60eeab9ba8a18907accf0d75f1";
-const OWNER_KEY_EPOCH = 1;
+// The hash (and the epoch, below) live only as Cloudflare secrets (env.OWNER_KEY_HASH, env.OWNER_KEY_EPOCH) -- never in this
+// public repository. Set or change them in the Cloudflare dashboard (Workers & Pages -> this worker -> Settings -> Variables
+// and Secrets), not here. If OWNER_KEY_HASH is not set, no key can unlock a new device, but devices already remembered keep
+// working. To sign every device out (for example if the key leaks), set a new key's hash and raise OWNER_KEY_EPOCH by one.
+function ownerKeyEpoch(env) {
+  return Number(env.OWNER_KEY_EPOCH) || 1;
+}
 const OWNER_KEY_TRIES_PER_IP_PER_DAY = 20;
 
 function ownerKeyHash(key) {
@@ -663,7 +667,7 @@ function ownerKeyHash(key) {
 async function issueOwnerToken(env) {
   const id = "own" + bytesToHex(crypto.getRandomValues(new Uint8Array(12)));
   const t = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
-  await env.PASSES.put("tok:" + sha256Hex(t), JSON.stringify({ id, t: Date.now(), owner: true, epoch: OWNER_KEY_EPOCH }));
+  await env.PASSES.put("tok:" + sha256Hex(t), JSON.stringify({ id, t: Date.now(), owner: true, epoch: ownerKeyEpoch(env) }));
   await env.PASSES.put("fam:" + id + "@kye.device", "1");
   return t;
 }
@@ -674,7 +678,7 @@ async function readToken(env, value) {
   const raw = await env.PASSES.get("tok:" + sha256Hex(m[1]));
   if (!raw) return null;
   const rec = JSON.parse(raw);
-  if (rec.owner && rec.epoch !== OWNER_KEY_EPOCH) return null;
+  if (rec.owner && rec.epoch !== ownerKeyEpoch(env)) return null;
   return rec;
 }
 
@@ -719,7 +723,7 @@ async function handleAuth(request, env, url) {
       const tk = "keytry:" + sha256Hex("kye-ip-v1:" + (request.headers.get("CF-Connecting-IP") || "")) + ":" + day;
       const tries = parseInt(await env.PASSES.get(tk) || "0", 10);
       if (tries >= OWNER_KEY_TRIES_PER_IP_PER_DAY) return jsonResponse({ error: "Too many tries from this connection today. Please try again tomorrow." }, 429);
-      if (!sameKey(ownerKeyHash(body.key), OWNER_KEY_HASH)) {
+      if (!env.OWNER_KEY_HASH || !sameKey(ownerKeyHash(body.key), env.OWNER_KEY_HASH)) {
         await env.PASSES.put(tk, String(tries + 1), { expirationTtl: 2 * 86400 });
         return jsonResponse({ error: "That key is not right." }, 403);
       }
