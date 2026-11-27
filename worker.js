@@ -479,7 +479,8 @@ function passKey(email) {
 // ---- Phone unlock (passkeys). The site stores a random public code per phone, never a name, email, face or fingerprint. ----
 const WA_RP_ID = "know-your-energy.com";
 const WA_ORIGINS = ["https://know-your-energy.com", "https://www.know-your-energy.com"];
-const WA_TOKEN_TTL_S = 60 * 86400;
+const WA_TOKEN_NO_PASS_TTL_S = 86400;
+const WA_TOKEN_MAX_TTL_S = 400 * 86400;
 const WA_NEW_PER_IP_PER_DAY = 10;
 
 function b64uToBytes(s) {
@@ -644,7 +645,13 @@ async function waAuthenticate(env, body) {
 
 async function waIssueToken(env, id) {
   const t = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
-  await env.PASSES.put("tok:" + sha256Hex(t), JSON.stringify({ id, t: Date.now() }), { expirationTtl: WA_TOKEN_TTL_S });
+  // the browser's sign-in lasts as long as the pass does; with no pass it lasts one day (enough for the free reading and its day reading)
+  let ttl = WA_TOKEN_NO_PASS_TTL_S;
+  try {
+    const st = await checkPassRecord(env, id + "@kye.device");
+    if (st.active && st.expiresAt) ttl = Math.min(WA_TOKEN_MAX_TTL_S, Math.max(60, Math.ceil((st.expiresAt - Date.now()) / 1e3)));
+  } catch (e) {}
+  await env.PASSES.put("tok:" + sha256Hex(t), JSON.stringify({ id, t: Date.now() }), { expirationTtl: ttl });
   return t;
 }
 
