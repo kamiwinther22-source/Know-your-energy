@@ -702,6 +702,21 @@ async function resolveOwner(env, value) {
   return !!(rec && rec.owner);
 }
 
+// Asks Cloudflare whether a Turnstile token is genuine, unused and from our own pages. Any failure to reach Cloudflare counts as not passed.
+async function verifyTurnstile(env, token) {
+  if (typeof token !== "string" || !token || token.length > 2048) return false;
+  try {
+    const form = new URLSearchParams();
+    form.set("secret", env.TURNSTILE_SECRET);
+    form.set("response", token);
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
+    const j = await r.json();
+    return !!(j && j.success === true && (!j.hostname || WA_ORIGINS.includes("https://" + j.hostname)));
+  } catch (e) {
+    return false;
+  }
+}
+
 async function handleAuth(request, env, url) {
   let body = {};
   try { body = await request.json(); } catch (e) {}
@@ -709,6 +724,8 @@ async function handleAuth(request, env, url) {
     if (url.pathname === "/auth/start") {
       const ip = request.headers.get("CF-Connecting-IP") || "";
       if (body.mode === "create") {
+        // bot check (Cloudflare Turnstile): a new unlock is only made for a visitor who passes it. Switched on when the TURNSTILE_SECRET secret is set.
+        if (env.TURNSTILE_SECRET && !(await verifyTurnstile(env, body.ts))) return jsonResponse({ error: "We could not confirm you are a person. Please try again." }, 403);
         const day = new Date().toISOString().slice(0, 10);
         const k = "newcred:" + sha256Hex("kye-ip-v1:" + ip) + ":" + day;
         const n = parseInt(await env.PASSES.get(k) || "0", 10);
