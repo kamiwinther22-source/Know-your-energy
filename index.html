@@ -4221,11 +4221,13 @@ async function revealForm(useExisting, forceCreate) {
     const box = document.getElementById("pricesStep");
     if (box && typeof window.kyeBuildPass === "function") {
       box.innerHTML = ""; box.appendChild(window.kyeBuildPass()); box.style.display = "block";
+      const ub = document.querySelector(".hero-email-wrap .rb-wrap"); if (ub) ub.style.display = "none";
       box.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     return;
   }
   const pb = document.getElementById("pricesStep"); if (pb) pb.style.display = "none";
+  const ub2 = document.querySelector(".hero-email-wrap .rb-wrap"); if (ub2) ub2.style.display = "";
   setFormLocked(false);
   const target = document.getElementById("formStep");
   target.scrollIntoView({
