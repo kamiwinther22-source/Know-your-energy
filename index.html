@@ -3461,8 +3461,29 @@ function saveResult(p1, p2, r, reportErr, reportUsedFallback, fallbackReason) {
   } catch (_) {}
 }
 
+const HISTORY_KEY = "kye_history";
+
+// Every finished reading stays in this browser. When a new one is started, the one on screen is filed here before it is cleared from the front.
+function archiveSavedResult() {
+  try {
+    const raw = localStorage.getItem(SAVED_RESULT_KEY);
+    if (!raw) return;
+    const obj = JSON.parse(raw);
+    if (!obj || !obj.p1 || !obj.r) return;
+    obj.savedAt = Date.now();
+    delete obj.jobId;
+    let list = [];
+    try { list = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]") || []; } catch (_) {}
+    list.push(obj);
+    while (list.length) {
+      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); return; } catch (_) { list.shift(); }
+    }
+  } catch (_) {}
+}
+
 function clearSavedResult() {
   try {
+    archiveSavedResult();
     localStorage.removeItem(SAVED_RESULT_KEY);
   } catch (_) {}
 }

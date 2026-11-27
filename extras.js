@@ -351,6 +351,15 @@
       var parts = iso.split("-"), when = Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0];
       var close = '<button class="tl-chip x" id="tlDayX">Close</button>';
       var say = function (msg) { panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><p>" + esc(msg) + "</p>"; document.getElementById("tlDayX").onclick = function () { panel.remove(); }; };
+      var DAYS_KEY = "kye_dayReadings", dkey = [p.first, p.last, p.dob, iso].join("|").toLowerCase();
+      var readSaved = function () { try { return JSON.parse(localStorage.getItem(DAYS_KEY) || "{}") || {}; } catch (e) { return {}; } };
+      var show = function (r) {
+        var paras = String(r.body || "").split(/\n\s*\n/).filter(function (s) { return s.trim(); });
+        panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
+        document.getElementById("tlDayX").onclick = function () { panel.remove(); };
+      };
+      var keep = function (r) { var m = readSaved(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } };
+      var have = readSaved()[dkey]; if (have) { show(have); return; }
       var email = ""; try { var f = document.getElementById("pEmail"); email = ((f && f.value) || "").trim() || localStorage.getItem("kye_passEmail") || ""; } catch (e) {}
       if (!email) { say("Enter the email address of your pass on the first page, then open this again."); return; }
       say("Writing your reading for " + lab + ". This takes up to a minute.");
@@ -359,9 +368,7 @@
       var api = typeof W_API !== "undefined" ? W_API : "https://know-your-energy.kwdoanchor.workers.dev";
       var timer = new Promise(function (_, rej) { setTimeout(function () { rej(new Error("This is taking longer than expected. Please try again.")); }, 150000); });
       Promise.race([fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ passEmail: email, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: ast, humanDesign: p.hd || null, activeCycles: cycles }) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) throw new Error(j.error || "Something went wrong. Please try again."); return j; }); }), timer]).then(function (j) {
-        var r = j.report || {}, paras = String(r.body || "").split(/\n\s*\n/).filter(function (s) { return s.trim(); });
-        panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
-        document.getElementById("tlDayX").onclick = function () { panel.remove(); };
+        var r = j.report || {}; keep(r); show(r);
       }).catch(function (e) { say(e && e.message ? e.message : "Something went wrong. Please try again."); });
     }
     function showActive() {
