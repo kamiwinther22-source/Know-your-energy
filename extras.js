@@ -40,7 +40,7 @@
       ".xpass .p::after,.xlinks a::after{clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,18px 100%,0 50%)}",
       "@media (prefers-reduced-motion:reduce){.fan-card>.quad-item::after,.fan-reading>.panel-auto::after,.xcard::after,.xpass .p::after,.xlinks a::after{animation:none}}",
       "#resultsWrap .fan-name,#resultsWrap .ttl,.xpass .h,.xglobe .gl{color:#fff !important;-webkit-text-fill-color:#fff !important;-webkit-text-stroke:.8px #fff;text-shadow:0 0 12px rgba(255,255,255,.6),0 0 2px #fff,0 2px 3px rgba(0,0,0,.6) !important}",
-      "#resultsWrap .xpass .s,#resultsWrap .xcap,#resultsWrap .xpass .pol,#resultsWrap .xpass .note,#resultsWrap .device-note,#resultsWrap .device-note *,#resultsWrap .tiny-contact,#resultsWrap .site-foot{font-weight:800 !important;color:#fff !important;-webkit-text-fill-color:#fff !important;text-shadow:0 0 6px rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.75) !important}",
+      "#pricesStep .xpass .s,#pricesStep .xpass .pol,#pricesStep .xpass .note,#resultsWrap .xpass .s,#resultsWrap .xcap,#resultsWrap .xpass .pol,#resultsWrap .xpass .note,#resultsWrap .device-note,#resultsWrap .device-note *,#resultsWrap .tiny-contact,#resultsWrap .site-foot{font-weight:800 !important;color:#fff !important;-webkit-text-fill-color:#fff !important;text-shadow:0 0 6px rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.75) !important}",
       ".xacts{align-items:flex-start !important;gap:6px !important}",
       ".xtlwrap{display:flex}",
       ".xacts>.fan-reading,.xacts>.xglobe,.xacts>.xtlwrap{flex:1 1 0 !important;min-width:0;max-width:150px}",
@@ -398,6 +398,14 @@
     });
   }
   function frameCard(cls, inner) { return '<div class="xcard ' + cls + '" role="button" tabindex="0"><i></i><b>' + inner + "</b></div>"; }
+  window.kyeBuildPass = function () {
+    addStyles();
+    var ps = document.createElement("div"); ps.className = "xpass";
+    var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
+    ps.innerHTML = '<div class="h">Know Your Energy Daily!</div><div class="s">Get readings to understand relationship dynamics and how underlying cycles flow together or apart</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div></button><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
+    [].forEach.call(ps.querySelectorAll(".p"), function (b) { b.onclick = function () { var n = ps.querySelector(".note"); n.textContent = "Passes are not on sale yet."; }; });
+    return ps;
+  };
   window.addExtras = function (p1, p2) {
     try {
       addStyles();
@@ -424,11 +432,8 @@
         acts.appendChild(tl);
       } else { g.appendChild(tl); }
       g.appendChild(links);
-      var ps = document.createElement("div"); ps.className = "xpass";
-      var P = [["$11", "A week", "7 days"], ["$22", "A month", "30 days"], ["$33", "3 months", "90 days"]];
-      ps.innerHTML = '<div class="h">Know Your Energy Daily!</div><div class="s">Get readings to understand relationship dynamics and how underlying cycles flow together or apart</div><div class="cols">' + P.map(function (x, i) { return '<div class="pw"><button type="button" class="p" data-pass="' + i + '"><div class="n">' + x[0] + '</div></button><div class="pl">' + x[2] + '</div></div>'; }).join("") + '</div><div class="note" id="passNote"></div><div class="pol">Never automatically charged. All sales final, no refunds. By choosing a pass you agree to the <a href="/terms.html">Terms</a>.</div>';
+      var ps = window.kyeBuildPass();
       g.appendChild(ps);
-      [].forEach.call(ps.querySelectorAll(".p"), function (b) { b.onclick = function () { var n = document.getElementById("passNote"); n.textContent = "Passes are not on sale yet."; }; });
     } catch (e) { if (window.console) console.error("extras", e); }
   };
   if (window.__lastP) window.addExtras(window.__lastP[0], window.__lastP[1]);
