@@ -100,13 +100,14 @@ cam = bpy.data.objects.new('cam', cam_d); bpy.context.scene.collection.objects.l
 cam.location = (0, 0, 1.0); cam.rotation_euler = (0, 0, 0); sc.camera = cam
 # jewellery-style lighting: large soft boxes above give long clean highlights along each strand; a little of the studio picture fills the shadows
 def softbox(name, loc, w_mm, h_mm, watts):
-    ld = bpy.data.lights.new(name, 'AREA'); ld.shape = 'RECTANGLE'; ld.size = w_mm * 0.001; ld.size_y = h_mm * 0.001; ld.energy = watts
+    ld = bpy.data.lights.new(name, 'AREA'); ld.shape = 'RECTANGLE'; ld.size = w_mm * SB * 0.001; ld.size_y = h_mm * SB * 0.001; ld.energy = watts
     ob = bpy.data.objects.new(name, ld); bpy.context.scene.collection.objects.link(ob); ob.location = Vector(loc)
     ob.rotation_euler = (Vector((0, 0, 0)) - ob.location).to_track_quat('-Z', 'Y').to_euler()
+SB = float(os.environ.get('SB', '1'))
 KW = float(os.environ.get('KEY', '300'))
 softbox('key', (-0.18, 0.30, 0.40), 420, 260, KW)
 softbox('fill', (0.28, -0.22, 0.34), 160, 520, KW * 0.45)
-softbox('top', (0.0, 0.0, 0.55), 700, 700, KW * 0.35)
+softbox('top', (0.0, 0.0, 0.55), 700, 700, KW * float(os.environ.get('TOPF', '0.35')))
 
 t0 = time.time()
 sc.render.filepath = OUT
