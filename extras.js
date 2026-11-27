@@ -78,6 +78,7 @@
       /* timeline */
       ".tl{color:#000;font-family:'DM Sans',sans-serif;position:relative}",
       ".tl-day{position:relative;background:#fff;border:2.5px solid #000;border-radius:14px;padding:14px 14px 18px;margin:0 0 8px;color:#000;-webkit-overflow-scrolling:touch}",
+      ".tl-day.full{min-height:55vh}",
       ".tl-day .dt{font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}",
       ".tl-day h3{font:800 20px/1.25 'DM Sans',sans-serif;margin:0 0 10px;color:#000}",
       ".tl-day p{font:500 16px/1.6 'DM Sans',sans-serif;margin:0 0 11px;color:#000}",
@@ -96,7 +97,7 @@
       ".tl-frame{border:3px solid #000;border-radius:18px;overflow:hidden;background:#fff}",
       ".tl-head{display:flex;margin-left:38px;border-bottom:1.5px solid #000}",
       ".tl-head div{flex:1;min-width:0;height:112px;display:flex;align-items:center;justify-content:flex-start;writing-mode:vertical-rl;transform:rotate(180deg);font:800 10.5px Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#000;white-space:nowrap;padding-top:6px;box-sizing:border-box}",
-      ".tl-scroll{height:44vh;min-height:280px;overflow-y:auto;position:relative;-webkit-overflow-scrolling:touch;scrollbar-width:none}",
+      ".tl-scroll{height:34vh;min-height:230px;overflow-y:auto;position:relative;-webkit-overflow-scrolling:touch;scrollbar-width:none}",
       ".tl-body{position:relative;margin-left:38px}",
       ".tl-tick{position:absolute;left:-38px;width:34px;text-align:right;font:700 10px Arial,sans-serif;color:#000;transform:translateY(-6px)}",
       ".tl-tick.yr{font-size:11px;font-weight:800}",
@@ -305,7 +306,7 @@
 
   // ---------- the reading for the day: requested as soon as the results page appears, kept in the browser ----------
   var DAYS_KEY = "kye_dayReadings";
-  function dayKeyOf(p, iso) { return [p.first, p.last, p.dob, iso].join("|").toLowerCase(); }
+  function dayKeyOf(p, iso, q) { return [p.first, p.last, p.dob].concat(q ? [q.first, q.last, q.dob] : []).concat([iso]).join("|").toLowerCase(); }
   function todayIsoLocal() { var t = new Date(); return t.getFullYear() + "-" + String(t.getMonth() + 1).padStart(2, "0") + "-" + String(t.getDate()).padStart(2, "0"); }
   function readSavedDays() { try { return JSON.parse(localStorage.getItem(DAYS_KEY) || "{}") || {}; } catch (e) { return {}; } }
   function keepDay(dkey, r) { var m = readSavedDays(); m[dkey] = r; for (;;) { try { localStorage.setItem(DAYS_KEY, JSON.stringify(m)); if (typeof renderReadingList === "function") renderReadingList(); return; } catch (e) { var ks = Object.keys(m).filter(function (k) { return k !== dkey; }); if (!ks.length) return; delete m[ks[0]]; } } }
@@ -313,14 +314,19 @@
   function eventTitle(e, birthMs) { var nm = e.pl === "northnode" ? "North Node" : e.pl.charAt(0).toUpperCase() + e.pl.slice(1), lo = Math.floor((e.a - birthMs) / MS_YEAR), hi = Math.ceil((e.b - birthMs) / MS_YEAR); return nm + " " + e.phase.toLowerCase() + " \u00b7 ages " + lo + " to " + hi + " \u00b7 " + fmtDate(e.a) + " to " + fmtDate(e.b) + " \u00b7 in " + e.sign + (e.house ? ", house " + e.house : ""); }
   window.__dayJobs = window.__dayJobs || {};
   // one request per person and day; the same request is shared by the prefetch and by the card
-  function dayJob(p, iso, events, email) {
-    var dkey = dayKeyOf(p, iso); if (window.__dayJobs[dkey]) return window.__dayJobs[dkey];
-    var parts = iso.split("-"), when = Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12), dob = parseDob(p.dob), birthMs = Date.UTC(dob.y, dob.m - 1, dob.d);
-    var cycles = (events || []).filter(function (e) { return e.a <= when && when < e.b; }).map(function (e) { return eventTitle(e, birthMs); });
-    var ast = Object.assign({}, p.astro || {}); delete ast.acg; delete ast.aspects;
+  function dayJob(p, iso, events, email, q, qEvents) {
+    var dkey = dayKeyOf(p, iso, q); if (window.__dayJobs[dkey]) return window.__dayJobs[dkey];
+    var parts = iso.split("-"), when = Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12);
+    var cyclesOf = function (x, evs) { var dob = parseDob(x.dob), birthMs = Date.UTC(dob.y, dob.m - 1, dob.d); return (evs || []).filter(function (e) { return e.a <= when && when < e.b; }).map(function (e) { return eventTitle(e, birthMs); }); };
+    var astOf = function (x) { var a = Object.assign({}, x.astro || {}); delete a.acg; delete a.aspects; return a; };
     var api = typeof W_API !== "undefined" ? W_API : "https://know-your-energy.kwdoanchor.workers.dev";
     var again = function () { return (typeof kyeUnlock === "function" ? kyeUnlock(true) : Promise.resolve(null)).then(function (e2) { if (!e2) throw new Error("We could not confirm your phone just now. Please try again."); return e2; }); };
-    var send = function (em) { return fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ passEmail: em, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: ast, humanDesign: p.hd || null, activeCycles: cycles }) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) { var er = new Error(j.error || "Something went wrong. Please try again."); er.code = j.code; throw er; } return j; }); }); };
+    var payload = function (em) {
+      var b = { passEmail: em, date: iso, person: { first: p.first, mid: p.mid, last: p.last, dob: p.dob }, astrology: astOf(p), humanDesign: p.hd || null, activeCycles: cyclesOf(p, events) };
+      if (q) { b.person2 = { first: q.first, mid: q.mid, last: q.last, dob: q.dob }; b.astrology2 = astOf(q); b.humanDesign2 = q.hd || null; b.activeCycles2 = cyclesOf(q, qEvents); b.relLabel = typeof relType !== "undefined" ? relType : ""; }
+      return b;
+    };
+    var send = function (em) { return fetch(api + "/day-reading", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload(em)) }).then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) { var er = new Error(j.error || "Something went wrong. Please try again."); er.code = j.code; throw er; } return j; }); }); };
     var timer = new Promise(function (_, rej) { setTimeout(function () { rej(new Error("This is taking longer than expected. Please try again.")); }, 150000); });
     var go = (email ? send(email) : again().then(send)).catch(function (e) { if (e && e.code === "unlock_needed") return again().then(send); throw e; });
     var job = Promise.race([go, timer]).then(function (j) { var r = j.report || {}; keepDay(dkey, r); return r; });
@@ -329,10 +335,10 @@
   }
   function prefetchDay(people) {
     try {
-      var p = people && people[0]; if (!p || !p.numerology || !parseDob(p.dob)) return;
+      var p = people && people[0], q = people && people[1] || null; if (!p || !p.numerology || !parseDob(p.dob) || (q && !parseDob(q.dob))) return;
       var email = passEmailNowG(); if (!email) return;
-      var iso = todayIsoLocal(); if (readSavedDays()[dayKeyOf(p, iso)] || window.__dayJobs[dayKeyOf(p, iso)]) return;
-      loadTransits().then(function (d) { return dayJob(p, iso, computeEvents(p, d), email); }).catch(function () {});
+      var iso = todayIsoLocal(), k = dayKeyOf(p, iso, q); if (readSavedDays()[k] || window.__dayJobs[k]) return;
+      loadTransits().then(function (d) { return dayJob(p, iso, computeEvents(p, d), email, q, q ? computeEvents(q, d) : null); }).catch(function () {});
     } catch (e) {}
   }
 
@@ -379,22 +385,21 @@
       [].forEach.call(body.querySelectorAll(".tl-chip[data-p]"), function (b) { b.onclick = function () { me.idx = +b.dataset.p; me.autoFor = {}; loadEvents(); }; });
     }
     function readDay(auto) {
-      var p = person(), el = document.getElementById("tlDate"), host = body.querySelector(".tl"), iso = me.pass ? (el && el.value) : todayIsoLocal(); if (!iso || !host) return;
-      var email = passEmailNowG(); if (auto && !email && !readSavedDays()[dayKeyOf(p, iso)]) return;
+      var q = people.length > 1 ? people[1] : null, p = q ? people[0] : person(), el = document.getElementById("tlDate"), host = body.querySelector(".tl"), iso = me.pass ? (el && el.value) : todayIsoLocal(); if (!iso || !host) return;
+      var dk = dayKeyOf(p, iso, q), email = passEmailNowG(); if (auto && !email && !readSavedDays()[dk]) return;
       var old = host.querySelector(".tl-day"); if (old) old.remove();
       var panel = document.createElement("div"); panel.className = "tl-day"; host.insertBefore(panel, host.querySelector(".tl-info")); host.classList.add("has-day");
-      var parts = iso.split("-"), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0];
-      var close = "";
-      var shut = function () { panel.remove(); host.classList.remove("has-day"); };
-      var say = function (msg) { panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><p>" + esc(msg) + "</p>"; };
+      var parts = iso.split("-"), lab = MONTHS[+parts[1] - 1] + " " + +parts[2] + ", " + parts[0], who = q ? p.first + " & " + q.first : p.first;
+      var head = '<div class="dt">' + esc(who) + " &middot; " + esc(lab) + "</div>";
+      var say = function (msg) { panel.innerHTML = head + "<p>" + esc(msg) + "</p>"; };
       var show = function (r) {
         if (!panel.parentNode) return;
         var paras = String(r.body || "").split(/\n\s*\n/).filter(function (s) { return s.trim(); });
-        panel.innerHTML = close + '<div class="dt">' + esc(p.first) + " &middot; " + esc(lab) + "</div><h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
+        panel.classList.add("full"); panel.innerHTML = head + "<h3>" + esc(r.headline || "") + "</h3>" + paras.map(function (s) { return "<p>" + esc(s.trim()) + "</p>"; }).join("") + ((r.references || []).length ? "<details><summary>What this draws on</summary>" + r.references.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</details>" : "");
       };
-      var have = readSavedDays()[dayKeyOf(p, iso)]; if (have) { show(have); return; }
+      var have = readSavedDays()[dk]; if (have) { show(have); return; }
       say("Writing your reading for " + lab + ". This takes up to a minute.");
-      dayJob(p, iso, me.events, email).then(show).catch(function (e) { if (panel.parentNode) say(e && e.message ? e.message : "Something went wrong. Please try again."); });
+      loadTransits().then(function (d) { return dayJob(p, iso, computeEvents(p, d), email, q, q ? computeEvents(q, d) : null); }).then(show).catch(function (e) { if (panel.parentNode) say(e && e.message ? e.message : "Something went wrong. Please try again."); });
     }
     function showActive() {
       var info = document.getElementById("tlInfo"); if (!info) return; var d = me.selDate, act = me.items.filter(function (it) { return it.a <= d && d < it.b; });

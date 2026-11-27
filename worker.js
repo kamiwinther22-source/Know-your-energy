@@ -1350,6 +1350,14 @@ You are an expert astrologer and numerologist, and an expert in Human Design whe
 
 Before you finish: check every sentence against the ABSOLUTE RULES above and fix any violation.`;
 
+// The same day prompt, for two people: one reading about the relationship on this day, each person named by first name (as in the two-person reading).
+const DAY_RELATIONAL_SYSTEM_PROMPT = DAY_SYSTEM_PROMPT
+  .replace("Check the person's age on the reading date before writing anything about love, dating, or sex. Under 18: none of it, ever.", "Check each person's age on the reading date before writing anything about love, dating, or sex. If either is under 18: none of it, ever.")
+  .replace('1. Address the person as "you" in every sentence. Never their name, never "she/he/her/him/they."', `1. Use each person's first name in every sentence about them. Never a label like "Partner A." Never address either person as "you."`)
+  .replace("State what it produces for this person on this day.", "State what it produces between these two people on this day.")
+  .replace("Describe what the day asks of this person, what comes easier and what comes harder, and what to attend to.", "Describe what the day asks of each of them and of the two of them together, what comes easier and what comes harder between them, and what to attend to.")
+  .replace("### WHAT YOU ARE GIVEN\n- The person's birth chart and, when available, their houses.", "This is one reading about the relationship between the two people on this day, not two separate readings. Describe how the day lands between them.\n\n### WHAT YOU ARE GIVEN\n- Each person's birth chart and, when available, their houses.");
+
 const DAY_SIGNS = [ "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces" ];
 
 function dayAbs(x) {
@@ -1451,6 +1459,12 @@ function buildDayUserPrompt(person, natalAstro, humanDesign, dateISO, activeCycl
   return [ `Date of the reading: ${dateLabel}`, `Person: ${person.first} (age ${n.essenceCycle?.currentAge ?? "unknown"} on this date)`, `Numerology as of this date:\n  ${numerologyLines}`, `Birth chart:\n  ${natalLines}`, `The sky on this date (planets at noon UT): ${skyLines}`, sun && moon ? `Moon phase: ${dayMoonPhase(sun.lon, moon.lon)}` : null, `Contacts the sky makes to the birth chart (within 2 degrees): ${contacts.length ? contacts.join("; ") : "none"}`, cycles.length ? `Longer astrological cycles active on this date: ${cycles.join("; ")}` : null, hdLines ? `Human Design:\n  ${hdLines}` : null ].filter(Boolean).join("\n\n");
 }
 
+function buildRelationalDayUserPrompt(p1, a1, h1, p2, a2, h2, dateISO, c1, c2, relLabel) {
+  const u1 = buildDayUserPrompt(p1, a1, h1, dateISO, c1), u2 = buildDayUserPrompt(p2, a2, h2, dateISO, c2);
+  const conn = buildHDConnectionLine(h1, h2, p1.first, p2.first);
+  return [ `Relationship type: ${relLabel || "unspecified"}${relationshipNote(relLabel)}`, `FIRST PERSON\n${u1}`, `SECOND PERSON\n${u2}`, conn ].filter(Boolean).join("\n\n");
+}
+
 async function handleDayReading(request, env, ctx) {
   if (!fromOurSite(request)) return notFromOurSite();
   let body;
@@ -1466,6 +1480,8 @@ async function handleDayReading(request, env, ctx) {
   if (!dm || +dm[1] < 1900 || +dm[1] > 2100 || +dm[2] < 1 || +dm[2] > 12 || +dm[3] < 1 || +dm[3] > 31) return jsonResponse({ error: "A valid date is needed." }, 400);
   const person = body.person || {};
   if (typeof person.first !== "string" || !person.first.trim() || typeof person.last !== "string" || !person.last.trim() || typeof person.dob !== "string") return jsonResponse({ error: "The person's name and date of birth are needed." }, 400);
+  const person2 = body.person2 && typeof body.person2 === "object" ? body.person2 : null;
+  if (person2 && (typeof person2.first !== "string" || !person2.first.trim() || typeof person2.last !== "string" || !person2.last.trim() || typeof person2.dob !== "string")) return jsonResponse({ error: "The second person's name and date of birth are needed." }, 400);
   let status;
   try {
     status = await checkPassRecord(env, email);
@@ -1492,7 +1508,7 @@ async function handleDayReading(request, env, ctx) {
   if (!status.active && await env.PASSES.get(claimDay)) return jsonResponse({ error: "Your reading for this day is already being written. Please wait for it to finish.", code: "reading_in_progress" }, 429);
   let prompt;
   try {
-    prompt = buildDayUserPrompt(person, body.astrology || null, body.humanDesign || null, dateISO, body.activeCycles);
+    prompt = person2 ? buildRelationalDayUserPrompt(person, body.astrology || null, body.humanDesign || null, person2, body.astrology2 || null, body.humanDesign2 || null, dateISO, body.activeCycles, body.activeCycles2, typeof body.relLabel === "string" ? body.relLabel.slice(0, 40) : "") : buildDayUserPrompt(person, body.astrology || null, body.humanDesign || null, dateISO, body.activeCycles);
   } catch (e) {
     return jsonResponse({ error: "The reading could not be set up: " + e.message }, 400);
   }
@@ -1501,7 +1517,7 @@ async function handleDayReading(request, env, ctx) {
   const failed = [];
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      result = await generateSingleCallReading(env, prompt, DAY_SYSTEM_PROMPT);
+      result = await generateSingleCallReading(env, prompt, person2 ? DAY_RELATIONAL_SYSTEM_PROMPT : DAY_SYSTEM_PROMPT);
       if (!result.parsed || typeof result.parsed.body !== "string") throw new Error("The reading came back in an unexpected form.");
       lastError = null;
       break;
