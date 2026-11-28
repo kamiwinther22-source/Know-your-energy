@@ -6,7 +6,7 @@
   var TL_YEARS = 120; // the timeline runs from birth to this age
   var TL_MIN_AGE = 18; // planet bars are not shown before this age
   var PLANET_NAMES = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"];
-  var PLANET_COLOR = { sun: "#e0a800", moon: "#6b7a99", mercury: "#2e9e5b", venus: "#d6336c", mars: "#e8590c", jupiter: "#c27c0e", saturn: "#495057", uranus: "#0c8599", neptune: "#3b5bdb", pluto: "#862e9c" };
+  var PLANET_COLOR = { sun: "#fcc419", moon: "#868e96", mercury: "#51cf66", venus: "#f783ac", mars: "#e03131", jupiter: "#fd7e14", saturn: "#7b4a1e", uranus: "#22b8cf", neptune: "#3b5bdb", pluto: "#862e9c" };
   var PLANET_THEME = {
     sun: "your core self and vitality", moon: "your feelings, needs and sense of safety", mercury: "thinking, talking, learning and deals",
     venus: "love, pleasure, money and taste", mars: "drive, courage, conflict and desire", jupiter: "growth, luck, optimism and expansion",
