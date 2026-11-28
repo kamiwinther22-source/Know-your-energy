@@ -1833,6 +1833,8 @@ export default {
         city: r.city,
         state: r.state,
         country: r.country,
+        lat: r.lat,
+        lng: r.lng,
         label: r.country === "US" ? `${r.city}, ${r.stateName}` : `${r.city}, ${names ? names.of(r.country) : r.country}`
       }));
       const res = jsonResponse(list);

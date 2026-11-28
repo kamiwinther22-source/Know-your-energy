@@ -127,7 +127,19 @@
       "#mapOverlay .ch i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid #fff}",
       "#mapOverlay .ch.off{opacity:.38}",
       "#mapOverlay .hint{text-align:center;font:600 11px 'DM Sans',sans-serif;color:#fff;margin-top:4px}",
-      ".leaflet-popup-content{font:500 13px/1.45 'DM Sans',sans-serif;color:#000}"
+ ".leaflet-popup-content{font:500 13px/1.45 'DM Sans',sans-serif;color:#000}",
+      ".mt .tt{font:400 34px/1 'Alex Brush',cursive}",
+      "#mapOverlay .ms{position:relative;z-index:1200;padding:0 14px 8px}","#mapEl{isolation:isolate}",
+      "#mapOverlay .ms input{width:100%;box-sizing:border-box;height:44px;border:0;border-radius:10px;padding:0 14px;font:600 16px 'DM Sans',sans-serif;color:#000;background:#fff}",
+      "#mapOverlay #mapSug{position:absolute;left:14px;right:14px;top:46px;z-index:5;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.5)}",
+      "#mapOverlay #mapSug button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #ddd;background:#fff;color:#000;padding:11px 14px;font:600 15px 'DM Sans',sans-serif;cursor:pointer}",
+      "#mapOverlay .ms-n{padding:11px 14px;color:#000;font:600 14px 'DM Sans',sans-serif}",
+      "#mapInfo{display:none;max-height:34vh;overflow:auto;margin:0;padding:10px 14px;background:#fff;color:#000;font:500 14px/1.45 'DM Sans',sans-serif}",
+      "#mapInfo p{margin:8px 0 0}#mapInfo .mi-h{font:800 15px 'DM Sans',sans-serif;margin-bottom:6px}#mapInfo .mi-l{margin:0 0 9px}#mapInfo .mi-l i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;border:1px solid #000}",
+      "#mapOverlay details.mleg{color:#fff;font:500 13px/1.45 'DM Sans',sans-serif;margin:4px 0}#mapOverlay details.mleg summary{cursor:pointer;font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase}#mapOverlay details.mleg p{margin:6px 0 0}",
+      ".kye-lbl{white-space:nowrap;font:700 11px 'DM Sans',sans-serif;color:#4a4334;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;transform:translate(-50%,-50%);width:auto!important;height:auto!important}",
+      ".kye-lbl.kye-cty{text-transform:uppercase;letter-spacing:.08em;font-size:10px;color:#7a6f55}",
+      ".kye-lbl.kye-city{transform:translate(6px,-50%)}.kye-lbl.kye-city i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#333;margin:0 4px 1px -10px}"
     ].join("\n");
     document.head.appendChild(s);
   }
@@ -185,13 +197,115 @@
     });
     return leafletPromise;
   }
+  // ---------- the map: drawn here from public-domain outlines, every name in English, no outside map server ----------
+  var OCEAN = "#bcd8e8", LAND = "#f3ecd9", BORDER = "#b8ab8c";
+  var CITY_LABELS = [
+    ["New York",40.7,-74,1],["Los Angeles",34.05,-118.24,1],["London",51.5,-0.12,1],["Paris",48.86,2.35,1],["Tokyo",35.68,139.69,1],["Delhi",28.61,77.21,1],["Mumbai",19.08,72.88,1],["Beijing",39.9,116.4,1],["Shanghai",31.23,121.47,1],["São Paulo",-23.55,-46.63,1],["Mexico City",19.43,-99.13,1],["Cairo",30.04,31.24,1],["Moscow",55.76,37.62,1],["Sydney",-33.87,151.21,1],["Istanbul",41.01,28.98,1],["Lagos",6.52,3.38,1],["Buenos Aires",-34.6,-58.38,1],["Johannesburg",-26.2,28.05,1],["Toronto",43.65,-79.38,1],["Singapore",1.35,103.82,1],["Dubai",25.2,55.27,1],["Bangkok",13.75,100.5,1],["Jakarta",-6.2,106.85,1],["Seoul",37.57,126.98,1],
+    ["Chicago",41.88,-87.63,2],["Houston",29.76,-95.37,2],["Miami",25.76,-80.19,2],["San Francisco",37.77,-122.42,2],["Seattle",47.61,-122.33,2],["Denver",39.74,-104.99,2],["Atlanta",33.75,-84.39,2],["Vancouver",49.28,-123.12,2],["Montreal",45.5,-73.57,2],["Havana",23.11,-82.37,2],["Bogotá",4.71,-74.07,2],["Lima",-12.05,-77.04,2],["Santiago",-33.45,-70.67,2],["Rio de Janeiro",-22.91,-43.17,2],["Caracas",10.48,-66.9,2],["Madrid",40.42,-3.7,2],["Rome",41.9,12.5,2],["Berlin",52.52,13.4,2],["Amsterdam",52.37,4.9,2],["Vienna",48.21,16.37,2],["Athens",37.98,23.73,2],["Stockholm",59.33,18.07,2],["Dublin",53.35,-6.26,2],["Lisbon",38.72,-9.14,2],["Kyiv",50.45,30.52,2],["Warsaw",52.23,21.01,2],["Nairobi",-1.29,36.82,2],["Addis Ababa",9.03,38.74,2],["Accra",5.6,-0.19,2],["Casablanca",33.57,-7.59,2],["Cape Town",-33.92,18.42,2],["Tehran",35.69,51.39,2],["Riyadh",24.71,46.68,2],["Baghdad",33.31,44.36,2],["Karachi",24.86,67.01,2],["Dhaka",23.81,90.41,2],["Kolkata",22.57,88.36,2],["Bangalore",12.97,77.59,2],["Hong Kong",22.32,114.17,2],["Manila",14.6,120.98,2],["Taipei",25.03,121.57,2],["Kuala Lumpur",3.14,101.69,2],["Ho Chi Minh City",10.82,106.63,2],["Melbourne",-37.81,144.96,2],["Perth",-31.95,115.86,2],["Auckland",-36.85,174.76,2],["Honolulu",21.31,-157.86,2],["Anchorage",61.22,-149.9,2],["Reykjavík",64.15,-21.94,2],["Tel Aviv",32.09,34.78,2],
+    ["Boston",42.36,-71.06,3],["Washington",38.9,-77.04,3],["Dallas",32.78,-96.8,3],["Phoenix",33.45,-112.07,3],["Las Vegas",36.17,-115.14,3],["San Diego",32.72,-117.16,3],["Portland",45.52,-122.68,3],["Minneapolis",44.98,-93.27,3],["New Orleans",29.95,-90.07,3],["Detroit",42.33,-83.05,3],["Philadelphia",39.95,-75.17,3],["Calgary",51.05,-114.07,3],["Edmonton",53.55,-113.49,3],["Ottawa",45.42,-75.7,3],["Halifax",44.65,-63.57,3],["Guadalajara",20.66,-103.35,3],["Monterrey",25.69,-100.32,3],["Panama City",8.98,-79.52,3],["San Juan",18.47,-66.11,3],["Quito",-0.18,-78.47,3],["La Paz",-16.5,-68.15,3],["Montevideo",-34.9,-56.16,3],["Brasília",-15.79,-47.88,3],["Manaus",-3.12,-60.02,3],["Salvador",-12.97,-38.51,3],["Barcelona",41.39,2.17,3],["Milan",45.46,9.19,3],["Munich",48.14,11.58,3],["Zurich",47.38,8.54,3],["Brussels",50.85,4.35,3],["Copenhagen",55.68,12.57,3],["Oslo",59.91,10.75,3],["Helsinki",60.17,24.94,3],["Prague",50.08,14.44,3],["Budapest",47.5,19.04,3],["Bucharest",44.43,26.1,3],["Edinburgh",55.95,-3.19,3],["Manchester",53.48,-2.24,3],["St. Petersburg",59.93,30.34,3],["Novosibirsk",55.03,82.92,3],["Vladivostok",43.12,131.89,3],["Algiers",36.75,3.06,3],["Tunis",36.81,10.18,3],["Dakar",14.72,-17.47,3],["Kinshasa",-4.44,15.27,3],["Luanda",-8.84,13.23,3],["Dar es Salaam",-6.79,39.21,3],["Khartoum",15.5,32.56,3],["Harare",-17.83,31.05,3],["Durban",-29.86,31.02,3],["Antananarivo",-18.88,47.51,3],["Jerusalem",31.77,35.21,3],["Beirut",33.89,35.5,3],["Amman",31.95,35.93,3],["Doha",25.29,51.53,3],["Kabul",34.53,69.17,3],["Tashkent",41.3,69.24,3],["Almaty",43.24,76.89,3],["Lahore",31.55,74.34,3],["Chennai",13.08,80.27,3],["Kathmandu",27.72,85.32,3],["Colombo",6.93,79.86,3],["Yangon",16.84,96.2,3],["Hanoi",21.03,105.85,3],["Guangzhou",23.13,113.26,3],["Chengdu",30.57,104.07,3],["Osaka",34.69,135.5,3],["Sapporo",43.06,141.35,3],["Busan",35.18,129.08,3],["Ulaanbaatar",47.89,106.91,3],["Brisbane",-27.47,153.03,3],["Adelaide",-34.93,138.6,3],["Darwin",-12.46,130.84,3],["Wellington",-41.29,174.78,3],["Port Moresby",-9.44,147.18,3],["Suva",-18.14,178.44,3],["Papeete",-17.54,-149.57,3],["Nuuk",64.18,-51.72,3]
+  ];
+  var COUNTRY_NAMES = { "Dem. Rep. Congo": "Democratic Republic of the Congo", "Central African Rep.": "Central African Republic", "Bosnia and Herz.": "Bosnia and Herzegovina", "S. Sudan": "South Sudan", "W. Sahara": "Western Sahara", "Dominican Rep.": "Dominican Republic", "Eq. Guinea": "Equatorial Guinea", "eSwatini": "Eswatini", "Fr. S. Antarctic Lands": "French Southern Lands", "Solomon Is.": "Solomon Islands", "Falkland Is.": "Falkland Islands", "N. Cyprus": "Northern Cyprus", "United States of America": "United States", "Czechia": "Czech Republic", "Macedonia": "North Macedonia" };
+  var geoPromise = null;
+  function loadScript(src) { return new Promise(function (res, rej) { var s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+  function loadGeo() {
+    if (!geoPromise) geoPromise = Promise.all([fetch("vendor/geo/countries-50m.json").then(function (r) { return r.json(); }), window.topojson ? Promise.resolve() : loadScript("vendor/geo/topojson-client.min.js")]).then(function (a) { return window.topojson.feature(a[0], a[0].objects.countries); });
+    return geoPromise;
+  }
+  // a label point for a country: the middle of its biggest piece
+  function biggestPiece(geom) {
+    var polys = geom.type === "Polygon" ? [geom.coordinates] : geom.coordinates, best = null, bestA = -1;
+    polys.forEach(function (p) { var r = p[0], mnx = 999, mxx = -999, mny = 999, mxy = -999; r.forEach(function (c) { if (c[0] < mnx) mnx = c[0]; if (c[0] > mxx) mxx = c[0]; if (c[1] < mny) mny = c[1]; if (c[1] > mxy) mxy = c[1]; }); var a = (mxx - mnx) * (mxy - mny); if (a > bestA) { bestA = a; best = { lat: (mny + mxy) / 2, lng: (mnx + mxx) / 2, area: a }; } });
+    return best;
+  }
+  function drawBase(map, st) {
+    map.getContainer().style.background = OCEAN;
+    map.createPane("land").style.zIndex = 220;
+    var lp = map.createPane("lbl"); lp.style.zIndex = 450; lp.style.pointerEvents = "none";
+    var rend = L.canvas({ pane: "land" });
+    return loadGeo().then(function (fc) {
+      if (!st || st.map !== map) return;
+      [-360, 0, 360].forEach(function (off) {
+        L.geoJSON(fc, { pane: "land", renderer: rend, interactive: false, style: { fillColor: LAND, fillOpacity: 1, color: BORDER, weight: .7 }, coordsToLatLng: function (c) { return L.latLng(c[1], c[0] + off); } }).addTo(map);
+      });
+      st.labels = [];
+      fc.features.forEach(function (f) {
+        var bp = biggestPiece(f.geometry); if (!bp || bp.area < 2) return;
+        var nm = COUNTRY_NAMES[f.properties.name] || f.properties.name, z = bp.area > 300 ? 2 : bp.area > 40 ? 3.5 : 4.5;
+        st.labels.push({ z: z, m: L.marker([bp.lat, bp.lng], { pane: "lbl", interactive: false, keyboard: false, icon: L.divIcon({ className: "kye-lbl kye-cty", html: nm, iconSize: null }) }) });
+      });
+      CITY_LABELS.forEach(function (c) { st.labels.push({ z: c[3] === 1 ? 3 : c[3] === 2 ? 4 : 5, m: L.marker([c[1], c[2]], { pane: "lbl", interactive: false, keyboard: false, icon: L.divIcon({ className: "kye-lbl kye-city", html: '<i></i>' + c[0], iconSize: null }) }) });
+      });
+      var upd = function () { var z = map.getZoom(); st.labels.forEach(function (l) { var on = z >= l.z; if (on && !map.hasLayer(l.m)) l.m.addTo(map); else if (!on && map.hasLayer(l.m)) map.removeLayer(l.m); }); };
+      map.on("zoomend", upd); upd();
+    }).catch(function () {});
+  }
+
+  // ---------- which lines are near a place, and what that means ----------
+  var D2R = Math.PI / 180, EARTH_KM = 6371;
+  function kmToMeridian(lat, lng, lon0) { var d = ((lng - lon0 + 540) % 360) - 180; if (Math.abs(d) > 90) return (90 - Math.abs(lat)) * 111.19; return Math.abs(Math.asin(Math.cos(lat * D2R) * Math.sin(d * D2R))) * EARTH_KM; }
+  function kmToCurve(lat, lng, pts) {
+    var best = 1e9, cl = Math.cos(lat * D2R);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var a = pts[i], b = pts[i + 1], dl1 = ((a[1] - lng + 540) % 360) - 180, dl2 = ((b[1] - lng + 540) % 360) - 180;
+      if (Math.abs(dl2 - dl1) > 90) continue;
+      var ax = dl1 * cl * 111.32, ay = (a[0] - lat) * 110.57, bx = dl2 * cl * 111.32, by = (b[0] - lat) * 110.57, vx = bx - ax, vy = by - ay, L2 = vx * vx + vy * vy, t = L2 ? Math.max(0, Math.min(1, -(ax * vx + ay * vy) / L2)) : 0, px = ax + t * vx, py = ay + t * vy, d = Math.sqrt(px * px + py * py);
+      if (d < best) best = d;
+    }
+    return best;
+  }
+  var NEAR_KM = 700;
+  function nearLines(person, lat, lng) {
+    var L2 = allLines(person.acg), out = [];
+    PLANET_NAMES.forEach(function (k) {
+      var l = L2[k]; if (!l) return;
+      [["MC", kmToMeridian(lat, lng, l.MC)], ["IC", kmToMeridian(lat, lng, l.IC)], ["ASC", kmToCurve(lat, lng, l.ASC)], ["DSC", kmToCurve(lat, lng, l.DSC)]].forEach(function (x) { if (x[1] <= NEAR_KM) out.push({ k: k, a: x[0], km: x[1] }); });
+    });
+    return out.sort(function (p, q) { return p.km - q.km; });
+  }
+  function strengthOf(km) { return km <= 150 ? "right on the line, strongest" : km <= 400 ? "close, strong" : "within range, milder"; }
+  function lineText(k, a) { var nm = k.charAt(0).toUpperCase() + k.slice(1); return nm + " is " + ANGLE[a][1] + " here. Its themes (" + PLANET_THEME[k] + ") show up " + ANGLE[a][2] + "."; }
+  function showNear(person, lat, lng, label) {
+    var box = document.getElementById("mapInfo"); if (!box || !person) return;
+    var near = nearLines(person, lat, lng), nm = function (k) { return k.charAt(0).toUpperCase() + k.slice(1); };
+    var head = '<div class="mi-h">Near ' + esc(label) + ' &middot; ' + esc(person.first) + "</div>";
+    var body;
+    if (!near.length) body = "<p>No line of " + esc(person.first) + "'s chart passes within " + NEAR_KM + " km of here, so no planet's theme is especially strong at this place.</p>";
+    else body = near.map(function (n) { return '<div class="mi-l"><b><i style="background:' + PLANET_COLOR[n.k] + '"></i>' + nm(n.k) + " " + ANGLE[n.a][1] + " (" + ANGLE[n.a][0] + ")</b> &middot; " + Math.round(n.km) + " km away (" + strengthOf(n.km) + ")<br>" + esc(lineText(n.k, n.a)) + "</div>"; }).join("") + (near.length > 1 ? "<p>With more than one line near, their themes combine here: " + near.map(function (n) { return PLANET_THEME[n.k]; }).filter(function (t, i, ar) { return ar.indexOf(t) === i; }).join("; ") + ".</p>" : "");
+    box.innerHTML = head + body; box.style.display = "block"; box.scrollTop = 0;
+    if (mapState && mapState.map) { if (!mapState.spot) mapState.spot = L.layerGroup().addTo(mapState.map); mapState.spot.clearLayers(); L.circleMarker([lat, lng], { radius: 8, color: "#000", weight: 3, fillColor: "#fff", fillOpacity: 1, interactive: false }).addTo(mapState.spot); setTimeout(function () { mapState.map.invalidateSize(); }, 30); }
+  }
+  function bindCitySearch(ov) {
+    var inp = ov.querySelector("#mapCity"), sug = ov.querySelector("#mapSug"), t = null, seq = 0;
+    var api = typeof W_API !== "undefined" ? W_API : "https://know-your-energy.kwdoanchor.workers.dev";
+    inp.addEventListener("input", function () {
+      clearTimeout(t); var q = inp.value.trim(); if (q.length < 2) { sug.innerHTML = ""; return; }
+      t = setTimeout(function () {
+        var my = ++seq;
+        fetch(api + "/places?q=" + encodeURIComponent(q)).then(function (r) { return r.json(); }).then(function (list) {
+          if (my !== seq) return; sug.innerHTML = "";
+          (list || []).slice(0, 6).forEach(function (c) {
+            var b = document.createElement("button"); b.type = "button"; b.textContent = c.label;
+            b.onclick = function () {
+              sug.innerHTML = ""; inp.value = c.label;
+              if (typeof c.lat !== "number" || typeof c.lng !== "number") { sug.innerHTML = '<div class="ms-n">That city’s position is not available just now. Please try again in a minute, or tap the map.</div>'; return; }
+              if (mapState && mapState.map) mapState.map.setView([c.lat, c.lng], 5);
+              showNear(mapState.person, c.lat, c.lng, c.label);
+            };
+            sug.appendChild(b);
+          });
+          if (!sug.children.length) sug.innerHTML = '<div class="ms-n">No city found. Check the spelling.</div>';
+        }).catch(function () { sug.innerHTML = '<div class="ms-n">The city list could not load. Please try again.</div>'; });
+      }, 250);
+    });
+  }
+
   function openMap(people) {
     addStyles();
     var ov = document.getElementById("mapOverlay");
     if (!ov) {
       ov = document.createElement("div"); ov.id = "mapOverlay";
-      ov.innerHTML = '<div class="mt"><div class="tt">Globe</div><button class="mx" aria-label="Close">&#10005;</button></div><div class="mp" id="mapPeople"></div><div id="mapEl"></div><div class="mb"><div class="row" id="mapPl"></div><div class="row" id="mapAn"></div><div class="hint">Zoom in to see the cities along each line. Tap a line to read what it means.</div></div>';
-      document.body.appendChild(ov); ov.querySelector(".mx").onclick = function () { ov.classList.remove("open"); };
+      ov.innerHTML = '<div class="mt"><div class="tt">Globe</div><button class="mx" aria-label="Close">&#10005;</button></div><div class="mp" id="mapPeople"></div><div class="ms"><input id="mapCity" type="text" placeholder="Enter a city to see which lines are near it" autocomplete="off" aria-label="City"><div id="mapSug"></div></div><div id="mapEl"></div><div id="mapInfo" aria-live="polite"></div><div class="mb"><div class="row" id="mapPl"></div><div class="row" id="mapAn"></div><details class="mleg"><summary>What the lines mean</summary><p>Each colored line is a planet from your birth chart, placed where it was rising, setting, overhead or underfoot at the moment you were born. A place near a line (within about 700 km, strongest within 150 km) carries that planet\u2019s themes in the part of life described below. When several lines are near a place, their themes combine.</p><p><b>Rising (Ascendant, solid curved line):</b> the planet shows up in you: your presence, body and the way people first meet you.</p><p><b>Overhead (Midheaven, solid straight line):</b> in your public life: career, reputation and what you are known for.</p><p><b>Setting (Descendant, dashed curved line):</b> in other people: partners, clients and close relationships, who tend to carry this energy.</p><p><b>Underfoot (Imum Coeli, dotted straight line):</b> in your private life: home, family, roots and inner security.</p></details><div class="hint">Enter a city above, or tap the map or a line, to read what is near it. Zoom in to see more places.</div></div>';
+      document.body.appendChild(ov); ov.querySelector(".mx").onclick = function () { ov.classList.remove("open"); }; bindCitySearch(ov);
     }
     ov.classList.add("open");
     var avail = people.filter(function (p) { return p.acg; });
@@ -207,8 +321,8 @@
       var el = document.getElementById("mapEl");
       if (!mapState.map) {
         if (el._leaflet_id) { el._leaflet_id = null; el.innerHTML = ""; }
-        mapState.map = L.map(el, { worldCopyJump: true, minZoom: 2, zoomSnap: .5 });
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "&copy; OpenStreetMap contributors" }).addTo(mapState.map);
+        mapState.map = L.map(el, { worldCopyJump: true, minZoom: 2, maxZoom: 7, zoomSnap: .5, preferCanvas: true });
+        mapState.map.attributionControl.setPrefix(false); mapState.map.attributionControl.addAttribution("Map data: Natural Earth"); drawBase(mapState.map, mapState); mapState.map.on("click", function (e) { var lng = ((e.latlng.lng + 540) % 360) - 180; showNear(mapState.person, e.latlng.lat, lng, "this spot"); });
         mapState.group = L.layerGroup().addTo(mapState.map);
       }
       drawLines(true); setTimeout(function () { mapState.map.invalidateSize(); }, 60);
@@ -220,8 +334,8 @@
     PLANET_NAMES.forEach(function (k) {
       if (!st.on[k] || !L2[k]) return; var l = L2[k], col = PLANET_COLOR[k];
       function pop(a) { var nm = k.charAt(0).toUpperCase() + k.slice(1); return "<b>" + nm + " " + a + "</b><br><i>" + ANGLE[a][0] + " line</i><br>" + nm + " is " + ANGLE[a][1] + " here. Its themes (" + PLANET_THEME[k] + ") show up " + ANGLE[a][2] + "."; }
-      ["MC", "IC"].forEach(function (a) { if (!st.ang[a]) return; [-360, 0, 360].forEach(function (off) { L.polyline([[-85, l[a] + off], [85, l[a] + off]], { color: col, weight: 3, dashArray: dash[a] }).bindPopup(pop(a)).addTo(st.group); }); });
-      ["ASC", "DSC"].forEach(function (a) { if (!st.ang[a]) return; splitWrap(l[a]).forEach(function (s) { [-360, 0, 360].forEach(function (off) { L.polyline(s.map(function (p) { return [p[0], p[1] + off]; }), { color: col, weight: 3, dashArray: dash[a] }).bindPopup(pop(a)).addTo(st.group); }); }); });
+      ["MC", "IC"].forEach(function (a) { if (!st.ang[a]) return; [-360, 0, 360].forEach(function (off) { L.polyline([[-85, l[a] + off], [85, l[a] + off]], { color: col, weight: 3, bubblingMouseEvents: false, dashArray: dash[a] }).bindPopup(pop(a)).addTo(st.group); }); });
+      ["ASC", "DSC"].forEach(function (a) { if (!st.ang[a]) return; splitWrap(l[a]).forEach(function (s) { [-360, 0, 360].forEach(function (off) { L.polyline(s.map(function (p) { return [p[0], p[1] + off]; }), { color: col, weight: 3, bubblingMouseEvents: false, dashArray: dash[a] }).bindPopup(pop(a)).addTo(st.group); }); }); });
     });
     if (st.person.birth) L.circleMarker([st.person.birth.lat, st.person.birth.lng], { radius: 7, color: "#fff", weight: 2, fillColor: "#000", fillOpacity: 1 }).bindPopup("Birthplace").addTo(st.group);
     if (fit && st.person.birth) st.map.setView([st.person.birth.lat, st.person.birth.lng], 3);
