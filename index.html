@@ -3663,7 +3663,7 @@ function render(p1, p2, r, reportErr, reportUsedFallback, pending, fallbackReaso
   window.__lastP = [p1, p2];
   if (window.addExtras) window.addExtras(p1, p2);
   const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
-  document.getElementById("bottomBtns").innerHTML = (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print Reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print Reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="downloadReadingFile(false)">Download my reading</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div><p class="tiny-contact">Questions: <a href="mailto:Know-your-energy@proton.me">Know-your-energy@proton.me</a></p>';
+  document.getElementById("bottomBtns").innerHTML = (isApple ? '<p class="ios-save-note">' + (/CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(navigator.userAgent) ? "To save your reading on an iPad or iPhone: tap Save / Print Reading, then choose Save to Files (or Print) in the sheet that opens." : "To save a PDF on an iPad or iPhone: tap Save / Print Reading, or tap the Share icon in Safari, choose Print, pinch outward on the page preview, tap Share again, then Save to Files.") + '</p>' : "") + '<div class="device-note" id="deviceNote"><p>Your details are kept on device only.</p><p><button type="button" class="util-link" id="shareSiteBtn" onclick="shareSite()">Share the site</button><button type="button" class="util-link" id="downloadBtn" onclick="askPrintColor().then(c => { if (c !== null) downloadReadingFile(false, c); })">Download my reading</button></p><p class="util-msg" id="shareMsg" role="status" aria-live="polite"></p></div><p class="tiny-contact">Questions: <a href="mailto:Know-your-energy@proton.me">Know-your-energy@proton.me</a></p>';
   stopLoadingTimer();
   document.getElementById("loading").style.display = "none";
   document.getElementById("resultsWrap").style.display = "block";
@@ -3722,7 +3722,7 @@ function prefetchOfflineFonts() {
 }
 setTimeout(prefetchOfflineFonts, 4000);
 
-async function readingFileHtml() {
+async function readingFileHtml(color) {
   const wrap = document.getElementById("resultsWrap");
   if (!wrap) return null;
   // the cards in page order: a person's three charts, then the reading, then the next person's three charts
@@ -3743,7 +3743,7 @@ async function readingFileHtml() {
     c.removeAttribute("data-card-idx"); c.removeAttribute("style"); c.removeAttribute("onclick");
     return c.outerHTML;
   }).join("");
-  return "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Know Your Energy reading</title><style>" + fonts + css + "html,body{background:#fff!important;color:#000!important;margin:0!important;padding:0!important;min-height:0!important;display:block!important}.main-grid{display:block!important;max-width:100%!important;padding:1rem!important}.quad-item,.panel-auto{margin:0 auto 1.2rem!important;position:static!important;transform:none!important}</style></head><body><div class=\"main-grid\">" + items + "</div></body></html>";
+  return "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Know Your Energy reading</title><style>" + fonts + css + "html,body{background:#fff!important;color:#000!important;margin:0!important;padding:0!important;min-height:0!important;display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}" + (color ? "" : "html{filter:grayscale(1)}") + "@page{margin:12mm}.main-grid{display:block!important;max-width:100%!important;padding:0!important}.quad-item,.panel-auto{margin:0 auto 1rem!important;position:static!important;transform:none!important;border:0!important;box-shadow:none!important;break-after:auto!important;page-break-after:auto!important;break-inside:auto!important;max-width:640px!important}.quad-item .quad-wheel{max-width:3.2in!important;margin:0 auto!important}.quad-item .quad-wheel svg{max-width:100%;height:auto}</style></head><body><div class=\"main-grid\">" + items + "</div></body></html>";
 }
 
 function readingFileName() {
@@ -3751,9 +3751,9 @@ function readingFileName() {
   return "Know-Your-Energy" + (names ? "-" + names : "") + ".html";
 }
 
-async function downloadReadingFile(askShare) {
+async function downloadReadingFile(askShare, color) {
   const msg = document.getElementById("shareMsg");
-  const html = await readingFileHtml();
+  const html = await readingFileHtml(color);
   if (!html) {
     if (msg) msg.textContent = "Run a reading first.";
     return;
@@ -3781,27 +3781,42 @@ async function downloadReadingFile(askShare) {
   if (msg) msg.textContent = "Your reading was saved as a file named " + name + ". Open it from Downloads (or Files) to read it or print it.";
 }
 
-function savePrintReading() {
+// asks once whether to print or save in black and white (the default, uses less ink) or in colour; resolves true for colour, false for black and white, null if cancelled
+function askPrintColor() {
+  return new Promise(resolve => {
+    const o = document.createElement("div");
+    o.style.cssText = "position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:20px";
+    const done = v => { o.remove(); resolve(v); };
+    o.innerHTML = '<div style="background:#000;border:2px solid #fff;border-radius:14px;max-width:340px;width:100%;padding:20px;color:#fff;font:600 17px/1.4 \'DM Sans\',sans-serif;text-align:center"><div style="margin-bottom:14px">Save or print in:</div><button type="button" data-c="bw" style="display:block;width:100%;margin:0 0 10px;padding:12px;border:0;border-radius:10px;background:#fff;color:#000;font:700 17px \'DM Sans\',sans-serif">Black and white</button><div style="font-size:13px;font-weight:500;margin:-4px 0 12px">Uses less ink.</div><button type="button" data-c="color" style="display:block;width:100%;margin:0 0 10px;padding:12px;border:2px solid #fff;border-radius:10px;background:#000;color:#fff;font:700 17px \'DM Sans\',sans-serif">Color</button><button type="button" data-c="x" style="background:none;border:0;color:#fff;text-decoration:underline;font:500 15px \'DM Sans\',sans-serif;padding:6px">Cancel</button></div>';
+    o.querySelectorAll("button").forEach(btn => { btn.onclick = () => done(btn.dataset.c === "x" ? null : btn.dataset.c === "color"); });
+    o.onclick = e => { if (e.target === o) done(null); };
+    document.body.appendChild(o);
+  });
+}
+
+async function savePrintReading() {
   track("save_print");
+  const color = await askPrintColor();
+  if (color === null) return;
   const ua = navigator.userAgent;
   const iosOther = (/iPad|iPhone|iPod/.test(ua) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) && /CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(ua);
   const android = /Android/.test(ua);
   if (!iosOther && !android && typeof window.print === "function") {
-    readingFileHtml().then(html => {
-      if (!html) { downloadReadingFile(true); return; }
+    readingFileHtml(color).then(html => {
+      if (!html) { downloadReadingFile(true, color); return; }
       // print the same document the file holds (never the results page itself)
       const f = document.createElement("iframe");
       f.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
       f.onload = () => setTimeout(() => {
-        try { f.contentWindow.focus(); f.contentWindow.print(); } catch (_) { downloadReadingFile(true); }
+        try { f.contentWindow.focus(); f.contentWindow.print(); } catch (_) { downloadReadingFile(true, color); }
         setTimeout(() => f.remove(), 6e4);
       }, 600);
       f.srcdoc = html;
       document.body.appendChild(f);
-    }).catch(() => downloadReadingFile(true));
+    }).catch(() => downloadReadingFile(true, color));
     return;
   }
-  downloadReadingFile(true);
+  downloadReadingFile(true, color);
 }
 
 async function shareSite() {
