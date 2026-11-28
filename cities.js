@@ -313,6 +313,8 @@ export function searchCities(rawQuery, limit = 7) {
       state: r.cc === "US" ? r.admin1 : "",
       stateName: r.cc === "US" ? STATE_NAME_BY_CODE[r.admin1.toLowerCase()] || r.admin1 : "",
       pop: r.pop,
+      lat: r.lat,
+      lng: r.lng,
     });
     if (out.length >= limit) break;
   }
