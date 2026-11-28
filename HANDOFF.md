@@ -2,6 +2,9 @@
 
 The owner does not code. Do not explain how you did things. Say what happened and what you need from them.
 
+## NO GREY (rule, not a taste signal)
+Never use flat grey as a main, background or large-area colour anywhere (maps, panels, frames, text blocks). Grey is not silver: silver is metallic with real light and depth, flat grey is not. Before showing any picture, run `python3 tools/test/grey_check.py <pictures>`; if it says FAIL, redo it first. The line under "What the owner reacted against" is this same rule.
+
 ## WORKING RULES
 1. **"Do it", "make it live", "push it", "go" or "yes I want that" means: do it and put it live NOW.** Merge to `main`, check the live site, send a picture. Never ask again. This is the most important rule. If they have not said go, show before live.
 2. **Answer the owner's message first**, in a few words, before doing anything else. They watch the thread and interrupt when they cannot tell what is happening.
