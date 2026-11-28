@@ -3725,6 +3725,9 @@ setTimeout(prefetchOfflineFonts, 4000);
 async function readingFileHtml() {
   const wrap = document.getElementById("resultsWrap");
   if (!wrap) return null;
+  // the cards in page order: a person's three charts, then the reading, then the next person's three charts
+  const cards = [ ...document.querySelectorAll("#mainGrid .quad-item[data-card-idx], #mainGrid .panel-auto[data-card-idx]") ];
+  if (!cards.length) return null;
   let css = "";
   for (const sheet of document.styleSheets) {
     let rules;
@@ -3734,10 +3737,13 @@ async function readingFileHtml() {
     }
   }
   const fonts = await Promise.race([ prefetchOfflineFonts(), new Promise(r => setTimeout(() => r(""), 3000)) ]);
-  const copy = wrap.cloneNode(true);
-  copy.querySelectorAll("script,canvas,button,.bottom-btns,.grid-nav-btn").forEach(e => e.remove());
-  copy.style.display = "block";
-  return "<!doctype html><html class=\"" + document.documentElement.className + "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Know Your Energy reading</title><style>" + fonts + css + "body{display:block!important;padding:1rem!important;min-height:0!important;background:#fff!important}</style></head><body class=\"" + document.body.className + "\">" + copy.outerHTML + "</body></html>";
+  const items = cards.map(el => {
+    const c = el.cloneNode(true);
+    c.querySelectorAll("script,canvas,button,input").forEach(x => x.remove());
+    c.removeAttribute("data-card-idx"); c.removeAttribute("style"); c.removeAttribute("onclick");
+    return c.outerHTML;
+  }).join("");
+  return "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Know Your Energy reading</title><style>" + fonts + css + "html,body{background:#fff!important;color:#000!important;margin:0!important;padding:0!important;min-height:0!important;display:block!important}.main-grid{display:block!important;max-width:100%!important;padding:1rem!important}.quad-item,.panel-auto{margin:0 auto 1.2rem!important;position:static!important;transform:none!important}</style></head><body><div class=\"main-grid\">" + items + "</div></body></html>";
 }
 
 function readingFileName() {
@@ -3781,10 +3787,19 @@ function savePrintReading() {
   const iosOther = (/iPad|iPhone|iPod/.test(ua) || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) && /CriOS|FxiOS|EdgiOS|OPiOS|GSA|DuckDuckGo|Brave/.test(ua);
   const android = /Android/.test(ua);
   if (!iosOther && !android && typeof window.print === "function") {
-    try {
-      window.print();
-      return;
-    } catch (_) {}
+    readingFileHtml().then(html => {
+      if (!html) { downloadReadingFile(true); return; }
+      // print the same document the file holds (never the results page itself)
+      const f = document.createElement("iframe");
+      f.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
+      f.onload = () => setTimeout(() => {
+        try { f.contentWindow.focus(); f.contentWindow.print(); } catch (_) { downloadReadingFile(true); }
+        setTimeout(() => f.remove(), 6e4);
+      }, 600);
+      f.srcdoc = html;
+      document.body.appendChild(f);
+    }).catch(() => downloadReadingFile(true));
+    return;
   }
   downloadReadingFile(true);
 }
